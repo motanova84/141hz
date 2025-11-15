@@ -58,19 +58,15 @@ def main():
     filename = os.path.join(data_dir, 'H1-GW150914-32s.hdf5')
     
     with h5py.File(filename, 'w') as hdf:
-        # Crear grupo strain
+        # Crear grupo strain (compatible con analizar_ringdown.py)
         strain_group = hdf.create_group('strain')
-        
-        # Guardar datos en el formato esperado por gwpy
         strain_group.create_dataset('Strain', data=strain)
-        strain_group.create_dataset('Xstart', data=gps_start)
-        strain_group.create_dataset('Xspacing', data=dt)
         
-        # Agregar metadatos
-        strain_group.attrs['name'] = 'H1:GWOSC-4KHZ_R1_STRAIN'
-        strain_group.attrs['channel'] = 'H1:DCS-CALIB_STRAIN_C02'
-        strain_group.attrs['epoch'] = gps_start
-        strain_group.attrs['sample_rate'] = 1.0/dt
+        # Crear grupo meta con los metadatos que espera el script de análisis
+        meta_group = hdf.create_group('meta')
+        meta_group.create_dataset('GPSstart', data=gps_start)
+        meta_group.create_dataset('SampleRate', data=1.0/dt)
+        meta_group.create_dataset('Duration', data=len(strain) * dt)
     
     print(f"Datos simulados guardados en: {filename}")
     print(f"  - Duración: {len(strain) * dt:.1f} segundos")

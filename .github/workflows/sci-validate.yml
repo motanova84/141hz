@@ -1,0 +1,41 @@
+name: sci-validate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Generate test data (offline-friendly)
+        run: python scripts/generar_datos_prueba.py
+      
+      - name: Analyze ringdown
+        run: python scripts/analizar_ringdown.py --detector H1 --event GW150914 --offline
+      
+      - name: Assert results
+        run: python scripts/assert_result.py --freq 141.7 --tol 0.5 --snr-min 5.0
+      
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results
+          path: results/**
