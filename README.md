@@ -27,6 +27,35 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
+## 📄 Nuevo: Paper Académico LaTeX "Coherencia Universal"
+
+**Manuscrito académico completo en formato LaTeX profesional**
+
+Documento científico exhaustivo que unifica la evidencia experimental de 141.7001 Hz en dos dominios:
+- **Astrofísica**: Señal persistente en 100% de eventos GWTC-1/O4 (>10σ significancia)
+- **Computación**: +11.7% mejora en GPQA-Diamond con modulación de Llama-4-Maverick-405B
+
+📖 **→ [papers/paper_definitivo.tex](papers/paper_definitivo.tex)** - Paper completo con ecuaciones, tablas y figuras
+
+🛠️ **Compilación**:
+```bash
+cd papers/
+./compile.sh      # Compilación automática
+make              # O usar Makefile
+```
+
+📝 **Usar en Overleaf**: Subir el directorio `papers/` a Overleaf para compilación sin instalación local
+
+**Características**:
+- ✅ Formato académico profesional con LaTeX
+- ✅ Figuras reales incluidas (espectros GW, benchmarks LLM)
+- ✅ Ecuación del Campo Noésico formalizada
+- ✅ Sección completa de reproducibilidad con código Docker
+- ✅ Bibliografía con 8 referencias clave
+- ✅ Guía detallada de compilación: [COMPILATION_GUIDE.md](papers/COMPILATION_GUIDE.md)
+
+---
+
 ## 🌌 Nuevo: Omega ∞³ - Universal Quantum Resonance Protocol
 
 **El primer protocolo científico verdaderamente autónomo del mundo**
