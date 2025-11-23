@@ -136,6 +136,9 @@ def resultados_gw150914():
     print(f"Estado Final: {resultado_completo['estado_validacion']}")
     print()
     
+    # Guardar resultados - Ahora se ejecuta dentro de la función
+    output_dir = Path('results')
+    output_dir.mkdir(parents=True, exist_ok=True)
     # Guardar resultados automáticamente
     output_dir = Path('results')
     output_dir.mkdir(exist_ok=True)
