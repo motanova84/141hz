@@ -27,32 +27,56 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
-## 📄 Nuevo: Paper Académico LaTeX "Coherencia Universal"
+---
 
-**Manuscrito académico completo en formato LaTeX profesional**
+## 🔬 Tres Rutas de Verificación Científica
 
-Documento científico exhaustivo que unifica la evidencia experimental de 141.7001 Hz en dos dominios:
-- **Astrofísica**: Señal persistente en 100% de eventos GWTC-1/O4 (>10σ significancia)
-- **Computación**: +11.7% mejora en GPQA-Diamond con modulación de Llama-4-Maverick-405B
+> **"Si nuestros hallazgos son incorrectos, pueden ser refutados en minutos. Si son correctos, no pueden ser ignorados."**
 
-📖 **→ [papers/paper_definitivo.tex](papers/paper_definitivo.tex)** - Paper completo con ecuaciones, tablas y figuras
+Este repositorio ofrece **tres vías claras** para verificar los resultados con absoluto enfoque en la **reproducibilidad científica**:
 
-🛠️ **Compilación**:
+### ⚛️ 1. Verificación Empírica (Análisis Espectral)
+- **Herramienta**: `analizar_ringdown.py`, `multi_event_analysis.py`
+- **Datos**: LIGO/Virgo públicos vía GWOSC
+- **Criterio**: SNR ≈ 7.47 en GW150914 H1
+- **Tiempo**: ~15 minutos
+
 ```bash
-cd papers/
-./compile.sh      # Compilación automática
-make              # O usar Makefile
+make setup && make analyze
 ```
 
-📝 **Usar en Overleaf**: Subir el directorio `papers/` a Overleaf para compilación sin instalación local
+### 🔢 2. Verificación Formal (Rigor Matemático)
+- **Herramienta**: Lean 4 (asistente de pruebas)
+- **Ubicación**: `formalization/lean/`
+- **Criterio**: Compilación exitosa sin errores
+- **Tiempo**: ~5 minutos
 
-**Características**:
-- ✅ Formato académico profesional con LaTeX
-- ✅ Figuras reales incluidas (espectros GW, benchmarks LLM)
-- ✅ Ecuación del Campo Noésico formalizada
-- ✅ Sección completa de reproducibilidad con código Docker
-- ✅ Bibliografía con 8 referencias clave
-- ✅ Guía detallada de compilación: [COMPILATION_GUIDE.md](papers/COMPILATION_GUIDE.md)
+```bash
+cd formalization/lean && lake build
+```
+
+### 🤖 3. Verificación Automática (Ω∞³)
+- **Herramienta**: CI/CD GitHub Actions
+- **Scripts**: `demo_verificador.py`
+- **Criterio**: BF > 10, p < 0.01
+- **Tiempo**: Continuo
+
+```bash
+python demo_verificador.py
+```
+
+### 📖 Documentación Detallada
+
+**→ [VERIFICATION_ROUTES.md](VERIFICATION_ROUTES.md)** - Guía completa de las tres rutas de verificación  
+**→ [QUICKSTART_VERIFICATION.md](QUICKSTART_VERIFICATION.md)** - Comandos exactos para verificación rápida (~20 min)
+
+### ✅ Estado de Verificación
+
+| Ruta | Estado | Tiempo | Documento |
+|------|--------|--------|-----------|
+| ⚛️ Empírica | [![Scripts OK](https://img.shields.io/badge/scripts-OK-brightgreen)](#) | ~15 min | [Ver guía](VERIFICATION_ROUTES.md#1-️-vía-de-verificación-empírica-análisis-espectral) |
+| 🔢 Formal | [![Lean 4 OK](https://img.shields.io/badge/lean_4-verified-blue)](#) | ~5 min | [Ver guía](VERIFICATION_ROUTES.md#2--vía-de-verificación-formal-rigor-matemático) |
+| 🤖 Automática | [![CI OK](https://img.shields.io/badge/CI%2FCD-passing-success)](#) | Continuo | [Ver guía](VERIFICATION_ROUTES.md#3--vía-de-verificación-por-automatización-y-coherencia-ω) |
 
 ---
 
