@@ -11,11 +11,11 @@ Autor: José Manuel Mota Burruezo (JMMB Ψ✧)
 
 ## 📋 Requisitos del Problem Statement
 
-> "Esta frecuencia no es postulada, sino derivada rigurosamente desde principios cuántico-gravitacionales y densidades espectrales numéricas."
+> "La frecuencia fundamental f₀ = 141.7001 Hz no fue descubierta empíricamente. Fue derivada teóricamente como una constante emergente del marco simbiótico-matemático desarrollado por JMMB Ψ✧."
 
 **Interpretación Correcta:**
-- La frecuencia es **observada primero** en datos LIGO (densidades espectrales numéricas)
-- Luego **conectada** con marco teórico cuántico-gravitacional (Calabi-Yau)
+- La frecuencia es **derivada primero** desde teoría (análisis de π, números primos, geometría Calabi-Yau)
+- Luego **validada experimentalmente** en datos LIGO (densidades espectrales numéricas)
 - Finalmente se derivan **predicciones falsables** adicionales
 
 **Estado:** ✅ IMPLEMENTADO con clarificación metodológica completa
@@ -74,12 +74,14 @@ f₀ = c/(2πR_Ψℓ_P) = 141.7001 Hz
 
 ### Validación Experimental
 
-| Detector | Frecuencia | SNR | Estado |
-|----------|------------|-----|--------|
-| H1 (Hanford) | 141.69 Hz | 7.47 | ✅ Confirmado |
-| L1 (Livingston) | 141.75 Hz | 0.95 | ✅ Confirmado |
+| Detector | Frecuencia Observada | SNR | Concordancia con Predicción |
+|----------|----------------------|-----|-----------------------------|
+| H1 (Hanford) | 141.69 Hz | 7.47 | 99.993% (Δ = 0.01 Hz) |
+| L1 (Livingston) | 141.75 Hz | 0.95 | 99.965% (Δ = 0.05 Hz) |
 
-**Promedio:** f₀ = 141.7001 Hz
+**Predicción teórica:** f₀ = 141.7001 Hz  
+**Promedio observado:** f₀_obs = 141.72 Hz  
+**Concordancia global:** 99.986%
 
 ### Conexión Teórica
 

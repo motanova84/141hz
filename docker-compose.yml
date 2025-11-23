@@ -1,0 +1,134 @@
+# Docker Compose for GW 141Hz Analysis
+#
+# Usage:
+#   # CPU-only mode
+#   docker-compose up analysis-cpu
+#
+#   # GPU mode
+#   docker-compose up analysis-gpu
+#
+#   # Dask cluster for distributed processing
+#   docker-compose up dask-scheduler dask-worker
+#
+#   # Full stack with Dask
+#   docker-compose up
+
+version: '3.8'
+
+services:
+  # CPU-based analysis
+  analysis-cpu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gw-141hz:cpu
+    container_name: gw-analysis-cpu
+    volumes:
+      - ./data:/workspace/data
+      - ./results:/workspace/results
+      - ./scripts:/workspace/scripts
+    environment:
+      - NUMEXPR_MAX_THREADS=8
+      - NUMEXPR_NUM_THREADS=4
+    command: python scripts/example_optimized_analysis.py --n-jobs 4
+    restart: unless-stopped
+
+  # GPU-accelerated analysis
+  analysis-gpu:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    image: gw-141hz:gpu
+    container_name: gw-analysis-gpu
+    volumes:
+      - ./data:/workspace/data
+      - ./results:/workspace/results
+      - ./scripts:/workspace/scripts
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - NUMEXPR_MAX_THREADS=8
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    command: python scripts/example_optimized_analysis.py --use-gpu
+    restart: unless-stopped
+
+  # Dask scheduler for distributed computing
+  dask-scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    image: gw-141hz:gpu
+    container_name: dask-scheduler
+    ports:
+      - "8786:8786"  # Scheduler port
+      - "8787:8787"  # Dashboard port
+    command: dask-scheduler
+    restart: unless-stopped
+
+  # Dask worker (can scale with docker-compose up --scale dask-worker=4)
+  dask-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    image: gw-141hz:gpu
+    volumes:
+      - ./data:/workspace/data
+      - ./results:/workspace/results
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - DASK_SCHEDULER_ADDRESS=tcp://dask-scheduler:8786
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    command: dask-worker tcp://dask-scheduler:8786 --nworkers 2 --nthreads 2
+    depends_on:
+      - dask-scheduler
+    restart: unless-stopped
+
+  # Jupyter notebook server for interactive analysis
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    image: gw-141hz:gpu
+    container_name: gw-jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/workspace/notebooks
+      - ./data:/workspace/data
+      - ./results:/workspace/results
+      - ./gw_141hz_tools:/workspace/gw_141hz_tools
+      - ./scripts:/workspace/scripts
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    command: >
+      bash -c "pip install jupyterlab &&
+               jupyter lab --ip=0.0.0.0 --port=8888 --no-browser 
+               --allow-root --NotebookApp.token='changeme'"
+    restart: unless-stopped
+
+volumes:
+  data:
+  results:
+
+networks:
+  default:
+    name: gw-analysis-network

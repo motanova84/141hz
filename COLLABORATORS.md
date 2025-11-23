@@ -201,6 +201,9 @@ Para discutir colaboraciones formales, publicaciones conjuntas o proyectos deriv
 
 **DOI:** [10.5281/zenodo.17445017](https://doi.org/10.5281/zenodo.17445017)
 
+**Lista completa de DOIs y derivación matemática:** [LISTA_DOIS_QCAL.md](LISTA_DOIS_QCAL.md)
+*Full DOI list and mathematical derivation:* [LISTA_DOIS_QCAL.md](LISTA_DOIS_QCAL.md)
+
 ### Para Software / For Software
 Ver [CITATION.cff](CITATION.cff) para formato machine-readable.
 *See [CITATION.cff](CITATION.cff) for machine-readable format.*

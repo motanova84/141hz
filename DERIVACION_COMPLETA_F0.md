@@ -1,3 +1,4 @@
+# Derivación Completa de f₀ = 141.7001 Hz: Paso a Paso con Análisis de Limitaciones
 
 ## Resumen Ejecutivo
 

@@ -1,224 +1,157 @@
 #!/usr/bin/env python3
 """
-Ejemplos de uso del sistema de verificación GW250114
-Demuestra diferentes modos de operación del verificador.
+Ejemplo de integración del verificador GW250114 con el pipeline existente
 """
 import sys
-import os
+from pathlib import Path
 
-# Añadir directorio scripts al path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Agregar directorio de scripts al path
+sys.path.insert(0, str(Path(__file__).parent))
 
 from verificador_gw250114 import VerificadorGW250114
 
-
-def ejemplo_verificacion_simple():
-    """
-    Ejemplo 1: Verificación simple de disponibilidad
-    
-    Verifica una sola vez si GW250114 está disponible en GWOSC.
-    """
-    print("="*70)
-    print("EJEMPLO 1: Verificación Simple")
-    print("="*70)
+def ejemplo_basico():
+    """Ejemplo 1: Verificación básica de disponibilidad"""
+    print("=" * 60)
+    print("EJEMPLO 1: Verificación básica")
+    print("=" * 60)
     
     verificador = VerificadorGW250114()
     
-    disponible, gps_time, mensaje = verificador.verificar_disponibilidad()
+    # Verificar si GW250114 está disponible
+    disponible = verificador.verificar_disponibilidad_evento()
     
     if disponible:
-        print(f"\n✅ GW250114 está disponible!")
-        print(f"   GPS Time: {gps_time}")
-        print(f"   Mensaje: {mensaje}")
+        print("✅ GW250114 disponible - iniciar análisis")
     else:
-        print(f"\n⏳ GW250114 aún no está disponible")
-        print(f"   Mensaje: {mensaje}")
+        print("⏳ GW250114 no disponible todavía")
     
-    return disponible, gps_time
+    print()
 
-
-def ejemplo_analisis_completo():
-    """
-    Ejemplo 2: Análisis completo del evento
-    
-    Si el evento está disponible, realiza análisis completo.
-    """
-    print("\n" + "="*70)
-    print("EJEMPLO 2: Análisis Completo")
-    print("="*70)
+def ejemplo_verificacion_eventos_similares():
+    """Ejemplo 2: Buscar eventos similares o preliminares"""
+    print("=" * 60)
+    print("EJEMPLO 2: Búsqueda de eventos similares")
+    print("=" * 60)
     
     verificador = VerificadorGW250114()
     
-    disponible, gps_time, mensaje = verificador.verificar_disponibilidad()
+    # Buscar eventos que puedan ser GW250114 o versiones preliminares
+    verificador.verificar_eventos_similares()
     
-    if disponible:
-        print(f"\n📊 Iniciando análisis completo...")
-        resultados = verificador.analizar_evento(gps_time)
-        
-        if 'error' not in resultados:
-            print(f"\n✅ Análisis completado exitosamente")
-            
-            # Mostrar resultados por detector
-            for detector, res in resultados.get('detectores', {}).items():
-                print(f"\n   {detector}:")
-                print(f"      Frecuencia pico: {res['frecuencia_pico']:.4f} Hz")
-                print(f"      SNR @ 141.7 Hz: {res['snr']:.2f}")
-                print(f"      Bayes Factor: {res['bayes_factor']:.2e}")
-                print(f"      Significancia: {res['significancia']}")
-            
-            # Evaluación combinada
-            if 'evaluacion_combinada' in resultados:
-                eval_comb = resultados['evaluacion_combinada']
-                print(f"\n   📋 Evaluación Combinada:")
-                print(f"      Status: {eval_comb['status']}")
-                print(f"      SNR medio: {eval_comb['snr_medio']:.2f}")
-                print(f"      Coherencia: {'Sí' if eval_comb['coherencia'] else 'No'}")
-        else:
-            print(f"\n❌ Error en análisis: {resultados['error']}")
+    print()
+
+def ejemplo_analisis_evento():
+    """Ejemplo 3: Análisis de un evento específico (si está disponible)"""
+    print("=" * 60)
+    print("EJEMPLO 3: Análisis de evento (ejemplo conceptual)")
+    print("=" * 60)
+    
+    verificador = VerificadorGW250114()
+    
+    # Este código se ejecutaría si GW250114 estuviera disponible:
+    print("📋 Si GW250114 estuviera disponible, se ejecutaría:")
+    print("   1. Descarga de datos de detectores H1, L1, V1")
+    print("   2. Análisis espectral en banda 140-143 Hz")
+    print("   3. Búsqueda de pico en 141.7001 Hz")
+    print("   4. Cálculo de SNR y significancia")
+    print("   5. Generación de informe JSON")
+    
+    print()
+
+def ejemplo_integracion_pipeline():
+    """Ejemplo 4: Integración con pipeline de validación existente"""
+    print("=" * 60)
+    print("EJEMPLO 4: Integración con pipeline existente")
+    print("=" * 60)
+    
+    print("📋 Flujo de integración:")
+    print("   1. Pipeline ejecuta validación GW150914 (control)")
+    print("   2. Si GW150914 pasa validación (BF > 10, p < 0.01):")
+    print("      → Verificador busca GW250114 en catálogo")
+    print("   3. Si GW250114 está disponible:")
+    print("      → Descarga automática de datos")
+    print("      → Aplicación de metodología validada")
+    print("      → Generación de resultados")
+    print("   4. Si GW250114 no disponible:")
+    print("      → Búsqueda de eventos similares")
+    print("      → Modo de monitoreo opcional")
+    
+    print()
+
+def ejemplo_resumen_resultados():
+    """Ejemplo 5: Interpretación de resultados"""
+    print("=" * 60)
+    print("EJEMPLO 5: Interpretación de resultados")
+    print("=" * 60)
+    
+    verificador = VerificadorGW250114()
+    
+    # Ejemplo de resultados que se generarían
+    resultados_ejemplo = {
+        'H1': {
+            'frecuencia_detectada': 141.7001,
+            'snr': 7.5,
+            'diferencia': 0.0001,
+            'significativo': True,
+            'potencia_pico': 1.2e-42
+        },
+        'L1': {
+            'frecuencia_detectada': 141.75,
+            'snr': 3.2,
+            'diferencia': 0.0499,
+            'significativo': False,
+            'potencia_pico': 5.6e-43
+        }
+    }
+    
+    resumen = verificador.generar_resumen(resultados_ejemplo)
+    
+    print("📊 Ejemplo de resultados:")
+    print(f"   Total detectores analizados: {resumen['total_detectores']}")
+    print(f"   Detectores con señal significativa: {resumen['exitosos']}")
+    print(f"   Tasa de éxito: {resumen['tasa_exito']*100:.1f}%")
+    print(f"   Detectores significativos: {resumen['detectores_significativos']}")
+    
+    print("\n💡 Interpretación:")
+    if resumen['exitosos'] >= 2:
+        print("   ✅ Señal confirmada en múltiples detectores")
+        print("   ✅ Alta confianza en detección")
+    elif resumen['exitosos'] == 1:
+        print("   ⚠️  Señal detectada en un solo detector")
+        print("   ⚠️  Se requiere análisis adicional")
     else:
-        print(f"\n⏳ No se puede realizar análisis: {mensaje}")
-
-
-def ejemplo_monitoreo_limitado():
-    """
-    Ejemplo 3: Monitoreo con límite de verificaciones
+        print("   ❌ No se detectó señal significativa")
+        print("   ❌ Posible falso positivo o señal débil")
     
-    Monitorea periódicamente hasta 3 verificaciones.
-    """
-    print("\n" + "="*70)
-    print("EJEMPLO 3: Monitoreo Limitado (3 verificaciones)")
-    print("="*70)
-    
-    # Verificador con intervalo corto para demostración
-    verificador = VerificadorGW250114(check_interval=5)
-    
-    print("\n🔄 Monitoreando disponibilidad de GW250114...")
-    print("   (máximo 3 verificaciones con intervalo de 5 segundos)")
-    
-    verificador.monitorear(max_checks=3)
-
-
-def ejemplo_monitoreo_continuo():
-    """
-    Ejemplo 4: Monitoreo continuo (modo producción)
-    
-    ADVERTENCIA: Este modo ejecuta indefinidamente.
-    Use Ctrl+C para detener.
-    """
-    print("\n" + "="*70)
-    print("EJEMPLO 4: Monitoreo Continuo")
-    print("="*70)
-    
-    print("\n⚠️  MODO PRODUCCIÓN:")
-    print("   Este modo ejecutará continuamente hasta detectar el evento.")
-    print("   Presione Ctrl+C para detener.")
-    
-    respuesta = input("\n¿Desea ejecutar en modo continuo? (s/N): ")
-    
-    if respuesta.lower() == 's':
-        # Verificador con intervalo de 1 hora
-        verificador = VerificadorGW250114(check_interval=3600)
-        
-        try:
-            verificador.monitorear()
-        except KeyboardInterrupt:
-            print("\n\n⏹️  Monitoreo detenido por el usuario")
-    else:
-        print("   Modo continuo cancelado")
-
-
-def ejemplo_configuracion_personalizada():
-    """
-    Ejemplo 5: Configuración personalizada
-    
-    Demuestra cómo configurar el verificador con parámetros personalizados.
-    """
-    print("\n" + "="*70)
-    print("EJEMPLO 5: Configuración Personalizada")
-    print("="*70)
-    
-    # Crear verificador con configuración personalizada
-    verificador = VerificadorGW250114(
-        check_interval=600  # 10 minutos
-    )
-    
-    print(f"\n📝 Configuración:")
-    print(f"   Evento objetivo: {verificador.event_name}")
-    print(f"   Frecuencia objetivo: {verificador.target_frequency} Hz")
-    print(f"   Intervalo de verificación: {verificador.check_interval} segundos")
-    print(f"   Directorio de resultados: {verificador.results_dir}")
-    
-    # Verificación única con esta configuración
-    print(f"\n🔍 Realizando verificación única...")
-    disponible, gps_time, mensaje = verificador.verificar_disponibilidad()
-    
-    print(f"\n   Resultado: {mensaje}")
-
-
-def mostrar_menu():
-    """Mostrar menú de ejemplos"""
-    print("\n" + "="*70)
-    print("SISTEMA DE VERIFICACIÓN GW250114 - EJEMPLOS DE USO")
-    print("="*70)
-    print("\nSeleccione un ejemplo:")
-    print("  1. Verificación simple de disponibilidad")
-    print("  2. Análisis completo del evento")
-    print("  3. Monitoreo limitado (3 verificaciones)")
-    print("  4. Monitoreo continuo (modo producción)")
-    print("  5. Configuración personalizada")
-    print("  6. Ejecutar todos los ejemplos (1-3, 5)")
-    print("  0. Salir")
-    print("="*70)
-
+    print()
 
 def main():
-    """Función principal"""
+    """Ejecutar todos los ejemplos"""
+    print("\n🌌 EJEMPLOS DE USO - VERIFICADOR GW250114")
+    print("=" * 60)
+    print()
     
-    while True:
-        mostrar_menu()
-        
+    ejemplos = [
+        ejemplo_basico,
+        ejemplo_verificacion_eventos_similares,
+        ejemplo_analisis_evento,
+        ejemplo_integracion_pipeline,
+        ejemplo_resumen_resultados
+    ]
+    
+    for ejemplo in ejemplos:
         try:
-            opcion = input("\nOpción: ").strip()
-            
-            if opcion == "0":
-                print("\n👋 Saliendo...")
-                break
-            elif opcion == "1":
-                ejemplo_verificacion_simple()
-            elif opcion == "2":
-                ejemplo_analisis_completo()
-            elif opcion == "3":
-                ejemplo_monitoreo_limitado()
-            elif opcion == "4":
-                ejemplo_monitoreo_continuo()
-            elif opcion == "5":
-                ejemplo_configuracion_personalizada()
-            elif opcion == "6":
-                # Ejecutar todos los ejemplos seguros
-                ejemplo_verificacion_simple()
-                ejemplo_analisis_completo()
-                ejemplo_monitoreo_limitado()
-                ejemplo_configuracion_personalizada()
-                print("\n✅ Todos los ejemplos ejecutados")
-            else:
-                print(f"\n❌ Opción '{opcion}' no válida")
-            
-            input("\nPresione Enter para continuar...")
-            
-        except KeyboardInterrupt:
-            print("\n\n👋 Saliendo...")
-            break
+            ejemplo()
         except Exception as e:
-            print(f"\n❌ Error: {e}")
-            input("\nPresione Enter para continuar...")
-
+            print(f"❌ Error en ejemplo {ejemplo.__name__}: {e}")
+    
+    print("=" * 60)
+    print("📚 Para más información:")
+    print("   - Ver: scripts/verificador_gw250114.py")
+    print("   - Test: scripts/test_verificador_gw250114.py")
+    print("   - Pipeline: scripts/pipeline_validacion.py")
+    print("=" * 60)
 
 if __name__ == "__main__":
-    print("""
-╔══════════════════════════════════════════════════════════════════╗
-║     SISTEMA DE VERIFICACIÓN EN TIEMPO REAL - GW250114            ║
-║     Ejemplos de Uso del Verificador                              ║
-╚══════════════════════════════════════════════════════════════════╝
-    """)
-    
-    main()
+    sys.exit(main())
