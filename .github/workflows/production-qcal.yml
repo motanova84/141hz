@@ -51,6 +51,13 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: Validate Riemann zeros relationship
+        run: python3 validate_riemann_zeros.py --precision 50
+        continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Aggregate results
         run: python3 scripts/aggregate_results.py
         continue-on-error: true
@@ -108,7 +115,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload validation results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: validation-results-${{ github.run_number }}
@@ -126,6 +133,12 @@ jobs:
             echo "### Core Validation Results" >> $GITHUB_STEP_SUMMARY
             echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
             cat results/validation_v5.json | head -30 >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/riemann_zeros.json" ]; then
+            echo "### Riemann Zeros Validation" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            cat results/riemann_zeros.json | head -40 >> $GITHUB_STEP_SUMMARY
             echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/aggregated_report.json" ]; then

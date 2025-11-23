@@ -7,13 +7,103 @@ __pycache__/
 data/
 *.hdf5
 
+# Test results
+scripts/results/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
 # Results
 results/
+# But allow vacuum energy visualizations
+!results/figures/vacuum_energy*.png
+# Allow mathematical demonstration figures
+!results/fig1_serie_prima_compleja.png
+!results/fig2_comportamiento_asintotico.png
+!results/fig3_distribucion_fases.png
+!results/fig4_analisis_espectral_theta.png
+!results/fig5_construccion_frecuencia.png
+!results/fig6_puente_dimensional.png
+
+# Artifacts from reproducibility pipelines
+artifacts/
+
+# Logs
+logs/
+*.log
+
+# Generated outputs
+examples/output/
+reports/
+/tmp/
 
 # Jupyter notebooks checkpoints
 .ipynb_checkpoints/
 
+# Lean build artifacts
+.lake/
+lake-packages/
+build/
+
 # OS files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# HDF5 files (large data files)
+*.hdf5
+*.h5
+
+# Log files
+*.log
+
+# Monitoring files
+monitoreo_gw250114.pid
+GW250114_DISPONIBLE.txt
+
+# Created directories (runtime)
+dashboard/
+resultados/
+
+# Environment variables
+.env
 *.swp
 *.tmp
+
+# Poetry
+poetry.lock
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+temp_test_output/
+temp_integration_test/
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# MkDocs build directory
+# Omega ∞³ validation outputs
+omega_validation_*.json
+omega_hypothesis_catalog.json
+# MkDocs
+site/

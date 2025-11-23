@@ -34,7 +34,7 @@
     "desviacion": 0.030000000000001137,
     "objetivo_teorico": 141.7001,
     "diferencia_absoluta": 0.019900000000006912,
-    "diferencia_relativa_porcentaje" : 0. 01404
+    "diferencia_relativa_porcentaje": 0.01404374449983233
   },
   "datos_fuente": {
     "repositorio": "GWOSC (Gravitational Wave Open Science Center)",

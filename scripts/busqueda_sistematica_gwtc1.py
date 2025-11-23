@@ -9,6 +9,12 @@ from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
 
+# Importar evidencia concluyente
+try:
+    from evidencia_concluyente import eventos_detallados, listar_eventos_confirmados
+    EVIDENCIA_DISPONIBLE = True
+except ImportError:
+    EVIDENCIA_DISPONIBLE = False
 # Importar sistema de alertas
 try:
     from sistema_alertas_gw250114 import SistemaAlertasGW250114
@@ -202,7 +208,46 @@ class BusquedaSistematicaGWTC1:
             for det in detecciones_significativas:
                 print(f"      - {det['evento']} ({det['detector']}): SNR={det['snr']:.2f}")
         
+        # Cross-reference con evidencia concluyente
+        if EVIDENCIA_DISPONIBLE:
+            self._comparar_con_evidencia_concluyente(eventos_unicos)
+        
         return self.resultados
+    
+    def _comparar_con_evidencia_concluyente(self, eventos_analizados):
+        """Compara resultados con la evidencia concluyente documentada"""
+        print("\n🔬 COMPARACIÓN CON EVIDENCIA CONCLUYENTE:")
+        print("=" * 70)
+        
+        eventos_confirmados = listar_eventos_confirmados()
+        
+        # Verificar cuántos eventos confirmados fueron analizados
+        confirmados_en_busqueda = [e for e in eventos_confirmados if e in eventos_analizados]
+        
+        print(f"   • Eventos confirmados en catálogo: {len(eventos_confirmados)}")
+        print(f"   • Eventos confirmados analizados: {len(confirmados_en_busqueda)}")
+        
+        if confirmados_en_busqueda:
+            print("\n   ✅ Eventos confirmados detectados:")
+            for evento in confirmados_en_busqueda:
+                # Obtener datos de evidencia concluyente
+                datos_confirmados = eventos_detallados.get(evento)
+                if datos_confirmados:
+                    # Buscar resultado de la búsqueda para este evento
+                    resultados_evento = [r for r in self.resultados if r['evento'] == evento]
+                    if resultados_evento:
+                        # Tomar el mejor resultado (H1)
+                        mejor = max(resultados_evento, key=lambda x: x['snr'])
+                        print(f"      • {evento}:")
+                        print(f"         Esperado: {datos_confirmados['frecuencia_hz']:.2f} Hz, SNR {datos_confirmados['snr_h1']:.2f}")
+                        print(f"         Detectado: {mejor['frecuencia_detectada']:.2f} Hz, SNR {mejor['snr']:.2f}")
+        
+        # Eventos confirmados no analizados
+        no_analizados = [e for e in eventos_confirmados if e not in eventos_analizados]
+        if no_analizados:
+            print(f"\n   ⚠️  Eventos confirmados no analizados: {', '.join(no_analizados)}")
+        
+        print("=" * 70)
 
 # EJECUCIÓN INMEDIATA
 if __name__ == "__main__":

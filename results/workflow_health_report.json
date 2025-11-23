@@ -1,6 +1,6 @@
 {
-  "total_workflows": 27,
-  "healthy_workflows": 27,
+  "total_workflows": 23,
+  "healthy_workflows": 23,
   "workflows_with_issues": 0,
   "issues": [],
   "warnings": [
@@ -8,13 +8,7 @@
     "dependency-health.yml: Multiple Python versions used: 3.11, 3.12. Consider standardizing to Python 3.11 or 3.12.",
     "analyze.yml/test: Has Python setup but doesn't install requirements.txt",
     "analyze.yml/lint: Has Python setup but doesn't install requirements.txt",
-    "analyze.yml/analysis: Has Python setup but doesn't install requirements.txt",
-    "mathematical-demonstration.yml/mathematical-demonstration: Has Python setup but doesn't install requirements.txt",
     "data-management.yml/validate-connectivity: Has Python setup but doesn't install requirements.txt",
-    "validation-rigor.yml/regression-tests: Has Python setup but doesn't install requirements.txt",
-    "validation-rigor.yml/benchmarking: Has Python setup but doesn't install requirements.txt",
-    "validation-rigor.yml/precision-certification: Has Python setup but doesn't install requirements.txt",
-    "riccati-mathematical-proofs.yml/mathematical-verification: Has Python setup but doesn't install requirements.txt",
     "update_coherence_visualization.yml/update-visualization: Has Python setup but doesn't install requirements.txt",
     "auto-update-docs.yml/update-docs: Has Python setup but doesn't install requirements.txt"
   ],
@@ -27,18 +21,11 @@
     "analyze.yml/lint: Consider adding pip caching for faster builds",
     "analyze.yml: Consider upgrading to Python 3.11 or 3.12 (currently using ${{ matrix.python-version }})",
     "quantum-validations.yml: Consider upgrading to Python 3.11 or 3.12 (currently using ${{ matrix.python-version }})",
-    "mathematical-demonstration.yml/mathematical-demonstration: Consider adding pip caching for faster builds",
     "data-management.yml/validate-connectivity: Consider adding pip caching for faster builds",
     "advanced-analysis.yml: Consider upgrading to Python 3.11 or 3.12 (currently using ${{ matrix.python-version }})",
     "special-analysis.yml: Consider upgrading to Python 3.11 or 3.12 (currently using ${{ matrix.python-version }})",
-    "validation-rigor.yml/regression-tests: Consider adding pip caching for faster builds",
-    "validation-rigor.yml/benchmarking: Consider adding pip caching for faster builds",
-    "validation-rigor.yml/precision-certification: Consider adding pip caching for faster builds",
-    "validation-rigor.yml: Consider upgrading to Python 3.11 or 3.12 (currently using ${{ matrix.python-version }})",
     "detector-analysis.yml: Consider upgrading to Python 3.11 or 3.12 (currently using ${{ matrix.python-version }})",
     "workflow-health-check.yml/check-dependencies: Consider adding pip caching for faster builds",
-    "riccati-mathematical-proofs.yml/mathematical-verification: Consider adding pip caching for faster builds",
-    "riccati-mathematical-proofs.yml: Consider upgrading to Python 3.11 or 3.12 (currently using ${{ matrix.python-version }})",
     "auto-update-docs.yml/update-docs: Consider adding pip caching for faster builds",
     "comprehensive-testing.yml: Consider upgrading to Python 3.11 or 3.12 (currently using ${{ matrix.python-version }})"
   ]

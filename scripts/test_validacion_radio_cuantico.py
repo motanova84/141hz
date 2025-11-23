@@ -9,7 +9,9 @@ Autor: José Manuel Mota Burruezo (JMMB Ψ✧)
 Fecha: Octubre 2025
 """
 
+import os
 import sys
+import numpy as np
 from pathlib import Path
 
 # Constantes fundamentales (CODATA 2022)
@@ -256,9 +258,37 @@ def run_tests():
     # Cambiar al directorio correcto (repository root)
     os.chdir(str(REPO_ROOT))
     
-    # Ejecutar pytest
-    pytest.main([__file__, '-v', '--tb=short'])
+    # Ejecutar tests manualmente
+    test_suite = TestValidacionRadioCuantico()
+    test_methods = [
+        test_suite.test_calculo_basico_r_psi,
+        test_suite.test_verificacion_inversa,
+        test_suite.test_consistencia_expresiones,
+        test_suite.test_jerarquia_escalas,
+        test_suite.test_orden_magnitud_correcto,
+        test_suite.test_sensibilidad_constantes,
+        test_suite.test_archivo_resultados_existe,
+        test_suite.test_validacion_json_contenido,
+    ]
+    
+    passed = 0
+    failed = 0
+    
+    for test_method in test_methods:
+        try:
+            test_method()
+            passed += 1
+        except Exception as e:
+            print(f"❌ {test_method.__name__} FAILED: {e}")
+            failed += 1
+    
+    print()
+    print("=" * 80)
+    print(f"RESULTADOS: {passed} passed, {failed} failed")
+    print("=" * 80)
+    
+    return 0 if failed == 0 else 1
 
 
 if __name__ == '__main__':
-    run_tests()
+    sys.exit(run_tests())

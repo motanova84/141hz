@@ -97,7 +97,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload PyCBC results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: pycbc-analysis-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -180,7 +180,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload SAGE results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: sage-protocol-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -251,7 +251,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload EVAC results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: evac-potential-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -315,7 +315,7 @@ jobs:
         continue-on-error: false
       
       - name: Upload GWTC-1 results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: gwtc1-search-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -395,7 +395,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload corrections results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: corrections-py${{ matrix.python-version }}-${{ github.run_number }}
