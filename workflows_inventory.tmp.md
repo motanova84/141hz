@@ -31,6 +31,14 @@
 - Trigger: schedule (`0 8 * * 1`)
 - Trigger: manual (workflow_dispatch)
 
+### QCAL Analysis
+
+**Archivo:** `analysis.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### CI/CD - Tests and Analysis
 
 **Archivo:** `analyze.yml`
@@ -54,9 +62,28 @@
 - Trigger: schedule (`0 2 * * 0`)
 - Trigger: manual (workflow_dispatch)
 
+### Autonomous Validation - 141Hz Agent
+
+**Archivo:** `autonomous-validation.yml`
+
+- Trigger: schedule (`0 */6 * * *  # Run every 6 hours`)
+- Trigger: manual (workflow_dispatch)
+
 ### CI básico para PRs
 
 **Archivo:** `ci-basic.yml`
+
+- Trigger: push
+- Trigger: pull_request
+
+### ci
+
+**Archivo:** `ci-standard.yml`
+
+
+### QC-LLM CI/CD
+
+**Archivo:** `ci.yml`
 
 - Trigger: push
 - Trigger: pull_request
@@ -101,6 +128,14 @@
 - Trigger: schedule (`0 4 * * *`)
 - Trigger: manual (workflow_dispatch)
 
+### Documentation
+
+**Archivo:** `docs.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### Issue Management Bot
 
 **Archivo:** `issue-management.yml`
@@ -113,6 +148,15 @@
 
 - Trigger: push
 - Trigger: pull_request
+
+### Lean 4 Formalization Verification
+
+**Archivo:** `lean-verification.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 2 * * *`)
+- Trigger: manual (workflow_dispatch)
 
 ### Master Workflow Orchestration
 
@@ -139,6 +183,22 @@
 - Trigger: schedule (`0 0,12 * * *`)
 - Trigger: manual (workflow_dispatch)
 
+### Omega ∞³ Auto-Validation
+
+**Archivo:** `omega-auto-validation.yml`
+
+- Trigger: schedule (`0 */6 * * *  # Run every 6 hours for Ω1 Auto-Ingestion`)
+- Trigger: manual (workflow_dispatch)
+
+### Optimized Analysis with GPU Support
+
+**Archivo:** `optimized-analysis.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * 0`)
+- Trigger: manual (workflow_dispatch)
+
 ### PR Review Automation
 
 **Archivo:** `pr-review-automation.yml`
@@ -153,6 +213,22 @@
 - Trigger: schedule (`0 */4 * * *       # Run every 4 hours`)
 - Trigger: manual (workflow_dispatch)
 
+### QC-LLM CI (Simplified)
+
+**Archivo:** `qc-llm-ci.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
+### QCAL-LLM Tests
+
+**Archivo:** `qcal-llm-tests.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### Quantum Validations
 
 **Archivo:** `quantum-validations.yml`
@@ -161,6 +237,12 @@
 - Trigger: pull_request
 - Trigger: schedule (`0 6 * * *`)
 - Trigger: manual (workflow_dispatch)
+
+### release
+
+**Archivo:** `release.yml`
+
+- Trigger: push
 
 ### Riccati Coefficient Mathematical Proofs
 
@@ -187,6 +269,23 @@
 - Trigger: push
 - Trigger: pull_request
 - Trigger: schedule (`0 14 * * 6`)
+- Trigger: manual (workflow_dispatch)
+
+### Tests - Python Matrix
+
+**Archivo:** `tests.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
+### Universal Validation Framework
+
+**Archivo:** `universal-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 6 * * 0`)
 - Trigger: manual (workflow_dispatch)
 
 ### Auto-Update Coherence Visualization
@@ -221,4 +320,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-10-30 21:24:30 UTC*
+*Generado automáticamente por el bot de documentación - 2025-11-23 03:38:49 UTC*

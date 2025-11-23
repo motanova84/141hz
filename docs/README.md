@@ -1,8 +1,63 @@
-# Pre-Registration and Validation Framework - Documentation
+# Documentation Directory - 141.7001 Hz Gravitational Wave Analysis
 
-This directory contains supplementary documentation for the 141.7001 Hz gravitational wave analysis project.
+This directory contains comprehensive documentation for the 141.7001 Hz gravitational wave analysis project, including tutorials, conceptual guides, technical specifications, and validation frameworks.
 
-## New Documents (v2.0.0)
+## 📚 User Documentation (NEW - v2.5.0)
+
+### Essential Guides for New Users
+
+These documents provide complete, accessible documentation for scientists from all disciplines:
+
+#### **[TUTORIAL_COMPLETO.md](TUTORIAL_COMPLETO.md)**
+**Complete Step-by-Step Tutorial** - Start here if you're new to gravitational wave analysis
+
+- ✅ Installation and environment setup
+- ✅ Data download from GWOSC
+- ✅ Running analyses (basic and advanced)
+- ✅ Interpreting results (JSON and graphics)
+- ✅ Troubleshooting common issues
+- ✅ Next steps for different user profiles
+
+**Target audience:** Scientists with no prior experience in gravitational wave analysis
+**Time to complete:** 1-2 hours
+
+#### **[TEORIA_CONCEPTUAL.md](TEORIA_CONCEPTUAL.md)**
+**Mathematical and Physical Foundations** - Accessible explanations for all scientists
+
+- 🔢 Mathematical foundations (primes, golden ratio, Riemann zeta)
+- ⚛️ Physical interpretation (Calabi-Yau geometry, Ψ field)
+- 🌌 Connection to observations (LIGO/Virgo data)
+- 📊 Statistical significance and validation
+- 💡 Analogies and intuitive explanations
+
+**Target audience:** Scientists from other disciplines wanting to understand the theory
+**Reading time:** 45-60 minutes
+
+#### **[FORMATOS_SALIDA.md](FORMATOS_SALIDA.md)**
+**Output Formats Reference** - Complete specification for integration
+
+- 📋 JSON schemas (all output types documented)
+- 📊 Graphics interpretation (time series, spectra, histograms)
+- 🔧 Integration examples (Python, R, Julia)
+- 📦 JSON Schema for validation
+- 💾 Versioning and compatibility
+
+**Target audience:** Developers and researchers integrating with external tools
+**Use case:** API reference, tool development
+
+### Quick Navigation by Purpose
+
+**I'm new to this project →** Start with [TUTORIAL_COMPLETO.md](TUTORIAL_COMPLETO.md)
+
+**I want to understand the theory →** Read [TEORIA_CONCEPTUAL.md](TEORIA_CONCEPTUAL.md)
+
+**I need to integrate the outputs →** Consult [FORMATOS_SALIDA.md](FORMATOS_SALIDA.md)
+
+**I want advanced mathematical details →** See [Pre-Registration Framework](#pre-registration-and-validation-framework-v200) below
+
+---
+
+## Pre-Registration and Validation Framework (v2.0.0)
 
 ### `PNP_ANTI_BARRIERS.md`
 **P ≠ NP: Anti-Barriers and Treewidth Approach**

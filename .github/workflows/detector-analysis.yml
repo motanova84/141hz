@@ -116,7 +116,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload analysis results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: detector-${{ matrix.detector }}-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -188,7 +188,7 @@ jobs:
         continue-on-error: false
       
       - name: Upload ringdown results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: ringdown-py${{ matrix.python-version }}-${{ github.run_number }}

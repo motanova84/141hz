@@ -5,7 +5,7 @@
       "criterio": "Ausencia en GWTC-3+",
       "descripcion": "Si la frecuencia 141.7 Hz no aparece en ningún evento de GWTC-3 o catálogos posteriores",
       "metodo_verificacion": "Análisis espectral de todos los eventos con SNR > 5",
-      "umbral_falsacion" : " Ausencia en >10 eventos con masa total >50 M_sun " ,
+      "umbral_falsacion": "Ausencia en >10 eventos con masa total >50 M☉",
       "estado": "VERIFICABLE"
     },
     "topologico": {
