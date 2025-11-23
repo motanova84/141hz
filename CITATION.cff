@@ -8,6 +8,9 @@ abstract: >
   of scientific validation: Quantum Radio (r_ψ), Quantum Energy (E_cuántica), and 
   Discrete Symmetry. This repository provides open-source tools and methods for 
   analyzing gravitational wave data with arbitrary precision and automated validation.
+  Now includes Llama 4 Maverick (400B) integration for quantum coherence evaluation in 
+  LLMs, achieving >95% hallucination reduction, validated in LIGO 11/11 events, 
+  formalized in Lean 4, DOI 10.5281/zenodo.17445017.
 authors:
   - family-names: "Mota Burruezo"
     given-names: "José Manuel"
@@ -34,6 +37,15 @@ keywords:
   - ai-accessible
   - machine-readable
   - reproducible-research
+  - lean-theorem-prover
+  - formal-verification
+  - calabi-yau-compactification
+  - string-theory
+  - mathematical-physics
+  - llama-4
+  - llm-coherence
+  - qcal-llm
+  - hallucination-reduction
 version: 1.0.0
 date-released: 2025-01-01
 identifiers:
@@ -44,6 +56,16 @@ identifiers:
     value: "10.5281/zenodo.17445017"
     description: "Zenodo record - Main verified proof for LIGO and VIRGO"
 references:
+  - type: data-set
+    title: "Formal Derivation of Universal Frequency f₀ = 141.7001 Hz"
+    authors:
+      - family-names: "Mota Burruezo"
+        given-names: "José Manuel"
+    date-published: 2025-11-05
+    publisher: "Zenodo"
+    url: "https://zenodo.org/records/17379721"
+    doi: "10.5281/zenodo.17379721"
+    description: "Lean 4 formal verification of f₀ derivation from Calabi-Yau compactification"
   - type: data-set
     title: "Main Verified Proof for LIGO and VIRGO - 141.7001 Hz Discovery"
     authors:

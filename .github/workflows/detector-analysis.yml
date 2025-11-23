@@ -74,6 +74,13 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
       
+      - name: Ensure visualization dependencies
+        run: |
+          pip install matplotlib seaborn --timeout 300
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
       - name: Download detector data
         run: |
           python scripts/descargar_datos.py
@@ -109,7 +116,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload analysis results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: detector-${{ matrix.detector }}-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -165,6 +172,13 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
       
+      - name: Ensure visualization dependencies
+        run: |
+          pip install matplotlib seaborn --timeout 300
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
       - name: Run ringdown analysis
         run: |
           python scripts/analizar_ringdown.py
@@ -174,7 +188,7 @@ jobs:
         continue-on-error: false
       
       - name: Upload ringdown results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: ringdown-py${{ matrix.python-version }}-${{ github.run_number }}

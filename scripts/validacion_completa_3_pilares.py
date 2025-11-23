@@ -15,8 +15,13 @@ O mediante Makefile:
 """
 
 import sys
-import json
 from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+from src.validador_pilares import guardar_json
 
 # Importar los tres módulos
 try:
@@ -81,12 +86,11 @@ def main():
         }
         
         # Guardar resultado consolidado
-        output_dir = Path('results')
-        output_dir.mkdir(exist_ok=True)
-        
-        output_file = output_dir / 'validacion_completa_3_pilares.json'
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(validacion_completa, f, indent=2, ensure_ascii=False)
+        output_file = guardar_json(
+            'validacion_completa_3_pilares.json',
+            validacion_completa,
+            'results',
+        )
         
         print("=" * 70)
         print(" RESUMEN DE VALIDACIÓN")

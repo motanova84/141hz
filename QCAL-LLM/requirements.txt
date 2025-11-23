@@ -1,0 +1,15 @@
+# Core scientific computing
+numpy>=1.24.0
+scipy>=1.11.0
+
+# Optional: Gravitational wave analysis
+# Uncomment if you need to work with GWOSC data
+# h5py>=3.8.0
+# gwpy>=3.0.0
+
+# Optional: Testing
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+
+# Visualization
+matplotlib>=3.7.0

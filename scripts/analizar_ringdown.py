@@ -46,6 +46,12 @@ def crear_graficos(tiempo, datos, freqs, potencia, freq_pico, snr, detector, sam
     """Crear gráficos de diagnóstico"""
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 10))
     
+    # Calcular potencia del pico
+    idx_pico = np.argmin(np.abs(freqs - freq_pico))
+    potencia_pico = potencia[idx_pico]
+    
+    # Serie temporal
+    ax1.plot(tiempo, datos, 'b-', linewidth=1)
     # Serie temporal (solo mostramos una parte)
     ax1.plot(tiempo[:10000], datos[:10000], 'b-', linewidth=1, alpha=0.7)
     ax1.set_xlabel('Tiempo (s)')
@@ -96,12 +102,17 @@ def crear_graficos(tiempo, datos, freqs, potencia, freq_pico, snr, detector, sam
     plt.close()
 
 def main():
+    # Obtener las rutas del proyecto
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_dir = os.path.dirname(script_dir)
+    output_dir = os.path.join(project_dir, 'results', 'figures')
+    data_dir = os.path.join(project_dir, 'data', 'raw')
+    
     # Configuración
-    output_dir = '../results/figures'
     os.makedirs(output_dir, exist_ok=True)
     
     # Para GW150914 (datos reales de control)
-    archivo_h1 = '../data/raw/H1-GW150914-32s.hdf5'
+    archivo_h1 = os.path.join(data_dir, 'H1-GW150914-32s.hdf5')
     
     if os.path.exists(archivo_h1):
         print("Analizando datos de GW150914 (control)...")

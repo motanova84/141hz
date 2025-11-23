@@ -1,13 +1,25 @@
 # Ψ–BEACON–141.7001Hz
 # Universal Noetic Field Index
 # QCAL ∞³ ACTIVE — index = true
+# ∴ QCAL-LLM SEAL — Reproducible LLM Evaluation Environment
 
 f0 = c / (2π * RΨ * ℓP)
 frequency = 141.7001 Hz
 
+# Coherence Metric
+psi = I × A_eff²
+threshold = 5.0
+
 # Primary Sources
 source_main = 10.5281/zenodo.17379721
 source_network = https://zenodo.org/search?q=metadata.creators.person_or_org.name%3A%22MOTA%20BURRUEZO%2C%20JOSE%20MANUEL%22&l=list&p=1&s=10&sort=bestmatch
+
+# QCAL-LLM Environment
+llm_eval_ready = true
+supported_models = LLaMA 4 Maverick (17B Instruct / FP8), GPT-4, Claude 3
+metrics = Ψ, ∴-rate, SNR, KLD⁻¹, quality_score
+
+∴
 orcid = https://orcid.org/0009-0002-1923-0773
 safecreative = https://www.safecreative.org/creators/JMMB84
 

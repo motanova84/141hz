@@ -1,90 +1,53 @@
 # Virtual environment
 venv/
-
-# Python cache
 __pycache__/
-*.py[cod]
-*$py.class
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
+*.pyc
 
 # Data files
 data/
-results/*
-!results/figures/
-results/figures/*
-# Keep verification and vacuum energy figures (PNG files)
-!results/figures/*.png
-# Keep example JSON results
-!results/*.json
+*.hdf5
 
-# Generated validation files
-output/
+# Test results
+scripts/results/
 
 # Temporary files
 *.tmp
 *.temp
 temp/
 tmp/
+# Results
+results/
+# But allow vacuum energy visualizations
+!results/figures/vacuum_energy*.png
+# Allow mathematical demonstration figures
+!results/fig1_serie_prima_compleja.png
+!results/fig2_comportamiento_asintotico.png
+!results/fig3_distribucion_fases.png
+!results/fig4_analisis_espectral_theta.png
+!results/fig5_construccion_frecuencia.png
+!results/fig6_puente_dimensional.png
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
+# Artifacts from reproducibility pipelines
+artifacts/
 
-# OS generated files
+# Logs
+logs/
+*.log
+
+# Generated outputs
+examples/output/
+reports/
+/tmp/
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Lean build artifacts
+.lake/
+lake-packages/
+build/
+
+# OS files
 .DS_Store
 .DS_Store?
 ._*
@@ -100,40 +63,47 @@ Thumbs.db
 # Log files
 *.log
 
+# Monitoring files
+monitoreo_gw250114.pid
+GW250114_DISPONIBLE.txt
+
+# Created directories (runtime)
+dashboard/
+resultados/
+
 # Environment variables
 .env
-.env.*
-!.env.template
-config/alertas.env
-config/*.env
+*.swp
+*.tmp
 
-# Generated plots
-potential_plot.png
-gwtc3_results.png
-multi_event_analysis.png
-demo_multi_event_analysis.png
-snr_gw200129_065458_141hz.png
+# Poetry
+poetry.lock
 
-# Generated data files
-Evac_Rpsi_data.csv
-gwtc3_analysis_results.json
-multi_event_results.json
-demo_multi_event_results.json
-snr_gw200129_065458_results.json
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+temp_test_output/
+temp_integration_test/
 
-# IMPORTANT: DO NOT IGNORE - Discovery confirmation files
-!multi_event_final.json
-!multi_event_final.png
-!multi_event_analysis.py
+# Logs
+logs/
+*.log
 
-# Test results directories
-scripts/results/
+# IDE
+.vscode/
+.idea/
+*.sublime-*
 
-# AI Accessibility Files (DO NOT IGNORE - These are important)
-!.ai-instructions.md
-!.repo-map.json
-!.repo-metadata.yml
-!AI_ACCESSIBILITY.md
-!robots.txt
-!CITATION.cff
-!.well-known/
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# MkDocs build directory
+# Omega ∞³ validation outputs
+omega_validation_*.json
+omega_hypothesis_catalog.json
+# MkDocs
+site/
