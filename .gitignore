@@ -7,10 +7,25 @@ __pycache__/
 data/
 *.hdf5
 
+# Test results
+scripts/results/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
 # Results
 results/
 # But allow vacuum energy visualizations
 !results/figures/vacuum_energy*.png
+# Allow mathematical demonstration figures
+!results/fig1_serie_prima_compleja.png
+!results/fig2_comportamiento_asintotico.png
+!results/fig3_distribucion_fases.png
+!results/fig4_analisis_espectral_theta.png
+!results/fig5_construccion_frecuencia.png
+!results/fig6_puente_dimensional.png
 
 # Artifacts from reproducibility pipelines
 artifacts/
@@ -69,6 +84,8 @@ poetry.lock
 .coverage
 htmlcov/
 .tox/
+temp_test_output/
+temp_integration_test/
 
 # Logs
 logs/
@@ -84,5 +101,30 @@ dist/
 build/
 *.egg-info/
 
+# MkDocs build directory
+# Omega ∞³ validation outputs
+omega_validation_*.json
+omega_hypothesis_catalog.json
 # MkDocs
 site/
+
+# LaTeX build artifacts
+papers/*.aux
+papers/*.log
+papers/*.out
+papers/*.toc
+papers/*.bbl
+papers/*.blg
+papers/*.fdb_latexmk
+papers/*.fls
+papers/*.synctex.gz
+papers/*.pdf
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
