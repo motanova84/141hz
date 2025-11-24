@@ -383,7 +383,8 @@ def main():
     validation_steps = [
         ("validar_conectividad.py", "PASO 1: Validación de conectividad GWOSC"),
         ("validar_gw150914.py", "PASO 2: Validación control GW150914 (BF y p-values)"),
-        ("analizar_gw250114.py", "PASO 3: Framework GW250114 (datos sintéticos)")
+        ("analizar_gw250114.py", "PASO 3: Framework GW250114 (datos sintéticos)"),
+        ("integracion_manifiesto.py", "PASO 4: Validación Manifiesto Noésico")
     ]
     
     results = {}

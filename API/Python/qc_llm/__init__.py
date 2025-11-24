@@ -14,16 +14,20 @@ from .metrics import (
     compute_frequency_alignment,
     compute_quantum_entropy,
     compute_coherence_score,
+    compute_coherence,  # New main function from problem statement
     F0
 )
+from .core import QCALLLMCore
 
 __all__ = [
     "CoherenceValidator",
     "compute_frequency_alignment",
     "compute_quantum_entropy",
     "compute_coherence_score",
+    "compute_coherence",  # New main function
     "F0",
-    "QC_LLM"
+    "QC_LLM",
+    "QCALLLMCore"
 ]
 
 class QC_LLM:
