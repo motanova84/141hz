@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#0f172a" stroke="#3b82f6" stroke-width="3"/>
+  
+  <!-- Waveform representing 141Hz -->
+  <path d="M 30,100 Q 45,70 60,100 T 90,100 T 120,100 T 150,100 T 170,100" 
+        fill="none" stroke="#60a5fa" stroke-width="2" opacity="0.7"/>
+  
+  <!-- Frequency text -->
+  <text x="100" y="110" font-family="Arial, sans-serif" font-size="32" font-weight="bold" 
+        fill="#e2e8f0" text-anchor="middle">141Hz</text>
+  
+  <!-- Decorative elements -->
+  <circle cx="100" cy="50" r="3" fill="#60a5fa"/>
+  <circle cx="100" cy="150" r="3" fill="#60a5fa"/>
+</svg>

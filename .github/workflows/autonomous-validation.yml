@@ -1,0 +1,156 @@
+name: Autonomous Validation - 141Hz Agent
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"  # Run every 6 hours
+  workflow_dispatch:
+    inputs:
+      max_intentos:
+        description: 'Máximo número de reintentos por validación'
+        required: false
+        default: '5'
+      tipo_validacion:
+        description: 'Tipo de validación a ejecutar (dejar vacío para todas)'
+        required: false
+        default: ''
+
+jobs:
+  autonomous-validation:
+    name: Validación Autónoma con Agente 141Hz
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      actions: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "⚠️ requirements.txt not found, installing core dependencies"
+            pip install mpmath sympy numpy scipy matplotlib astropy pandas pyyaml
+          fi
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Create necessary directories
+        run: |
+          mkdir -p logs results data tmp
+
+      - name: Run Autonomous Agent Orchestrator
+        id: orchestrator
+        run: |
+          MAX_INTENTOS="${{ github.event.inputs.max_intentos || '5' }}"
+          TIPO="${{ github.event.inputs.tipo_validacion }}"
+          
+          if [ -n "$TIPO" ]; then
+            python3 scripts/orquestador_validacion.py --tipo "$TIPO" --max-intentos "$MAX_INTENTOS"
+          else
+            python3 scripts/orquestador_validacion.py --max-intentos "$MAX_INTENTOS"
+          fi
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Upload validation results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: autonomous-validation-results-${{ github.run_number }}
+          path: |
+            results/
+            logs/
+          retention-days: 30
+
+      - name: Generate validation summary
+        if: always()
+        run: |
+          echo "## 🤖 Autonomous Validation Summary - 141Hz Agent" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### System Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frequency Alignment**: 141.7001 Hz" >> $GITHUB_STEP_SUMMARY
+          echo "- **Max Attempts**: ${{ github.event.inputs.max_intentos || '5' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "results/orquestador_consolidado.json" ]; then
+            echo "### Consolidated Results" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            cat results/orquestador_consolidado.json | head -50 >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Agent Logs" >> $GITHUB_STEP_SUMMARY
+          if [ -f "logs/agente_autonomo_141hz.log" ]; then
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            tail -30 logs/agente_autonomo_141hz.log >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Check validation status
+        if: always()
+        run: |
+          if [ -f "results/orquestador_consolidado.json" ]; then
+            ESTADO=$(python3 -c "import json; data=json.load(open('results/orquestador_consolidado.json')); print(data.get('estado_global', 'DESCONOCIDO'))")
+            echo "Estado global: $ESTADO"
+            
+            if [ "$ESTADO" = "EXITOSO" ]; then
+              echo "✅ Todas las validaciones pasaron exitosamente"
+              exit 0
+            elif [ "$ESTADO" = "PARCIAL" ]; then
+              echo "⚠️ Algunas validaciones fallaron"
+              exit 1
+            else
+              echo "❌ La mayoría o todas las validaciones fallaron"
+              exit 2
+            fi
+          else
+            echo "⚠️ No se generó reporte consolidado"
+            exit 1
+          fi
+
+      - name: Publish results to Hugging Face
+        if: success() && github.event_name == 'schedule'
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          pip install huggingface_hub
+          if [ -n "$HF_TOKEN" ]; then
+            echo "Publishing autonomous validation results to Hugging Face..."
+            huggingface-cli upload motanova84/qcal-cloud results/ --repo-type dataset || echo "⚠️ Upload failed or already up-to-date"
+          else
+            echo "⚠️ HF_TOKEN not set - skipping Hugging Face upload"
+          fi
+        continue-on-error: true

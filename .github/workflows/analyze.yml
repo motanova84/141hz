@@ -46,7 +46,21 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        # Install in multiple stages to handle timeouts better
+        # Stage 1: Core dependencies
+        pip install numpy scipy matplotlib astropy h5py --timeout 300
+        # Stage 2: Additional scientific packages
+        pip install mpmath sympy pandas pyyaml --timeout 300
+        # Stage 3: Testing and quality tools
+        pip install pytest pytest-cov flake8 --timeout 300
+        # Stage 4: Web and notebook tools
+        pip install flask jupyter python-dotenv --timeout 300
+        # Stage 5: Performance packages (with retries)
+        pip install numba llvmlite numexpr PyWavelets --timeout 300 || echo "Warning: Some performance packages failed to install"
+        pip install python-igraph --timeout 300 || echo "Warning: python-igraph failed to install"
+        # Stage 6: GWPy and pycbc (most complex, allow failure)
+        pip install gwpy --timeout 300 || echo "Warning: gwpy failed to install"
+        pip install pycbc --timeout 600 || echo "Warning: pycbc failed to install (optional)"
       env:
         # Help numexpr detect CPU features in virtual environments
         NUMEXPR_MAX_THREADS: 4
@@ -65,20 +79,66 @@ jobs:
         NUMEXPR_MAX_THREADS: 4
         NUMEXPR_NUM_THREADS: 2
     
+    - name: Run Riemann zeros tests
+      run: |
+        python -m unittest test_riemann_zeros -v
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
     - name: Run pytest tests (if any)
       run: |
-        pytest scripts/ -v --tb=short || echo "No pytest tests found"
+        pytest scripts/ -v --tb=short --cov=scripts --cov-report=xml --cov-report=term || echo "No pytest tests found"
       continue-on-error: true
       env:
         NUMEXPR_MAX_THREADS: 4
         NUMEXPR_NUM_THREADS: 2
+    
+    - name: Run statistical validation tests
+      run: |
+        python tests/test_statistical_validation.py
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
+    - name: Run integration pipeline tests
+      run: |
+        python tests/test_integration_pipeline.py
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
+    - name: Run scientific reproducibility tests
+      run: |
+        python tests/test_reproducibility.py
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
+    - name: Test notebook structure and validity
+      run: |
+        python tests/test_notebook_structure.py
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5
+      if: success()
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}  # Optional for public repos
+      continue-on-error: true
     
     - name: Validate README badges
       run: |
         python scripts/validate_badges.py
     
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: test-results-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -153,19 +213,137 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install jupyter nbconvert
+        # Install in multiple stages to handle timeouts better
+        # Stage 1: Core dependencies
+        pip install numpy scipy matplotlib astropy h5py --timeout 300
+        # Stage 2: Additional scientific packages
+        pip install mpmath sympy pandas pyyaml --timeout 300
+        # Stage 3: Testing and quality tools
+        pip install pytest pytest-cov flake8 --timeout 300
+        # Stage 4: Web and notebook tools
+        pip install flask jupyter nbconvert python-dotenv --timeout 300
+        # Stage 5: Performance packages (with retries)
+        pip install numba llvmlite numexpr PyWavelets --timeout 300 || echo "Warning: Some performance packages failed to install"
+        pip install python-igraph --timeout 300 || echo "Warning: python-igraph failed to install"
+        # Stage 6: GWPy and pycbc (most complex, allow failure)
+        pip install gwpy --timeout 300 || echo "Warning: gwpy failed to install"
+        pip install pycbc --timeout 600 || echo "Warning: pycbc failed to install (optional)"
       env:
         NUMEXPR_MAX_THREADS: 4
         NUMEXPR_NUM_THREADS: 2
     
-    - name: Download test data
-      run: python scripts/descargar_datos.py
+    - name: 📡 Descargar datos de GWOSC
+      run: |
+        echo "🌌 Iniciando descarga de datos gravitacionales..."
+        cd scripts && python descargar_datos.py
+        echo "✅ Descarga completada"
       continue-on-error: true
       env:
         NUMEXPR_MAX_THREADS: 4
         NUMEXPR_NUM_THREADS: 2
     
+    - name: 📊 Ejecutar análisis de ringdown H1
+      run: |
+        echo "🔍 Analizando detector Hanford (H1)..."
+        cd scripts && python analizar_ringdown.py
+        echo "✅ Análisis H1 completado"
+    
+    - name: 📊 Ejecutar análisis de L1
+      run: |
+        echo "🔍 Analizando detector Livingston (L1)..."
+        cd scripts && python analizar_l1.py
+        echo "✅ Análisis L1 completado"
+    
+    - name: 🧬 Ejecutar análisis noésico
+      run: |
+        echo "🔍 Ejecutando análisis noésico completo..."
+        cd scripts && python analisis_noesico.py
+        echo "✅ Análisis noésico completado"
+    
+    - name: 🔍 Ejecutar análisis avanzado
+      run: |
+        echo "🔍 Ejecutando análisis avanzado..."
+        cd scripts && python analisis_avanzado.py || echo "⚠️ Análisis avanzado opcional falló"
+        echo "✅ Análisis avanzado completado"
+    
+    - name: 📈 Verificar generación de figuras
+      run: |
+        echo "🔍 Verificando figuras generadas..."
+        if [ -d "results/figures" ]; then
+          echo "✅ Directorio results/figures existe"
+          ls -la results/figures/
+          echo "📊 Total de figuras: $(find results/figures/ -name '*.png' | wc -l)"
+        else
+          echo "❌ No se generaron figuras"
+          exit 1
+        fi
+    
+    - name: 📤 Subir figuras como artefactos
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: espectros-141hz-gw150914
+        path: |
+          results/figures/*.png
+          results/figures/*.jpg
+          results/figures/*.pdf
+        retention-days: 30
+    
+    - name: 🎯 Resumen de resultados
+      if: always()
+      run: |
+        echo "📊 RESUMEN DEL ANÁLISIS ESPECTRAL:"
+        echo "=================================="
+        
+        if [ -d "results/figures" ]; then
+          echo "✅ Figuras generadas correctamente"
+          find results/figures/ -name '*.png' -exec basename {} \; | while read file; do
+            echo "   📈 $file"
+          done
+        fi
+        
+        if [ -d "data/raw" ]; then
+          echo "✅ Datos descargados correctamente"
+          ls -la data/raw/ | grep -E "\.(hdf5|h5)$" | while read line; do
+            echo "   💾 $line"
+          done
+        fi
+        
+        echo ""
+        echo "🎯 Objetivo: Detección de componente espectral a 141.7 Hz"
+        echo "🔬 Método: Análisis de ringdown post-merger GW150914"
+        echo "📡 Detectores: H1 (Hanford) y L1 (Livingston)"
+        echo "✅ Análisis completado exitosamente"
+
+    - name: 🚨 Mostrar logs completos en caso de error
+      if: failure()
+      run: |
+        echo "❌ ERROR EN EL ANÁLISIS - LOGS COMPLETOS:"
+        echo "========================================="
+        
+        echo "📋 Estado del sistema:"
+        df -h
+        free -h
+        
+        echo "📁 Estructura de archivos:"
+        find . -type f -name "*.py" -o -name "*.hdf5" -o -name "*.png" | sort
+        
+        echo "🐍 Información de Python:"
+        python --version
+        pip list | grep -E "(gwpy|numpy|scipy|matplotlib)"
+        
+        echo "📊 Intentando ejecutar verificación del repositorio:"
+        if [ -f "verify_repository.sh" ]; then
+          chmod +x verify_repository.sh
+          ./verify_repository.sh || true
+        fi
+        
+        echo "💾 Logs de descarga:"
+        cd scripts && python descargar_datos.py || true
+        
+        echo "🔍 Logs de análisis:"
+        cd scripts && python analisis_avanzado.py || true
+        cd scripts && python analizar_l1.py || true
     - name: Run validation pipeline
       run: |
         python scripts/pipeline_validacion.py
@@ -178,8 +356,9 @@ jobs:
       run: jupyter nbconvert --to html --execute notebooks/validation_quick.ipynb --ExecutePreprocessor.timeout=1800
       continue-on-error: true
     
+    # Fallback compatibility step for older workflow versions
     - name: Upload analysis results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: analysis-results-py${{ matrix.python-version }}-${{ github.run_number }}

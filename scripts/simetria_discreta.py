@@ -14,9 +14,13 @@ Basado en el problema statement:
 import numpy as np
 from typing import TYPE_CHECKING, List, Tuple, Dict, Optional
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 if TYPE_CHECKING:
     import sympy
+
+# Get repository root dynamically
+REPO_ROOT = Path(__file__).parent.parent.resolve()
 
 from sympy import symbols, diff, sin, cos, log, pi, sqrt, exp, simplify, lambdify
 from sympy import Sum, oo, Derivative, solve, series
@@ -545,11 +549,11 @@ def ejemplo_uso():
     
     # Generar gráficos
     import os
-    results_dir = "/home/runner/work/gw250114-141hz-analysis/gw250114-141hz-analysis/results"
-    os.makedirs(results_dir, exist_ok=True)
-    output_file = os.path.join(results_dir, "simetria_discreta_analisis.png")
+    results_dir = REPO_ROOT / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    output_file = results_dir / "simetria_discreta_analisis.png"
     
-    generar_graficos(energia, R_min=0.5, R_max=50.0, output_file=output_file)
+    generar_graficos(energia, R_min=0.5, R_max=50.0, output_file=str(output_file))
     
     return energia, minimos
 
