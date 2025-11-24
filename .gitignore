@@ -7,6 +7,14 @@ __pycache__/
 data/
 *.hdf5
 
+# Test results
+scripts/results/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
 # Results
 results/
 # But allow vacuum energy visualizations
@@ -76,6 +84,8 @@ poetry.lock
 .coverage
 htmlcov/
 .tox/
+temp_test_output/
+temp_integration_test/
 
 # Logs
 logs/
@@ -91,8 +101,30 @@ dist/
 build/
 *.egg-info/
 
+# MkDocs build directory
 # Omega ∞³ validation outputs
 omega_validation_*.json
 omega_hypothesis_catalog.json
 # MkDocs
 site/
+
+# LaTeX build artifacts
+papers/*.aux
+papers/*.log
+papers/*.out
+papers/*.toc
+papers/*.bbl
+papers/*.blg
+papers/*.fdb_latexmk
+papers/*.fls
+papers/*.synctex.gz
+papers/*.pdf
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz

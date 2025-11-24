@@ -63,7 +63,7 @@ jobs:
       
       - name: Upload test results as artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: test-results-py${{ matrix.python-version }}-${{ matrix.os }}
           path: |
@@ -117,7 +117,7 @@ jobs:
       
       - name: Upload GPU test results
         if: steps.check-gpu.outputs.gpu_available == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: gpu-test-results
           path: results/**/*.json
@@ -168,7 +168,7 @@ jobs:
           fi
       
       - name: Upload Lean build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lean-build
           path: |
@@ -255,7 +255,7 @@ jobs:
           docker inspect ghcr.io/${{ github.repository }}:latest-gpu --format='{{.Id}}' >> docker-hashes.txt || echo "N/A" >> docker-hashes.txt
       
       - name: Upload Docker hashes
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: docker-hashes
           path: docker-hashes.txt

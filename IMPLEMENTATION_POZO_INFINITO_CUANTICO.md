@@ -191,6 +191,20 @@ Ran 29 tests in 0.005s
 OK ✓
 ```
 
+### Test Documentation and Samples
+
+Para ver ejemplos detallados de tests, muestras de salida y código completo:
+
+📖 **Ver documentación completa de tests**: [POZO_INFINITO_CUANTICO.md - Suite de Tests](POZO_INFINITO_CUANTICO.md#-suite-de-tests-completa)  
+🧪 **Archivo de tests**: [`test_pozo_infinito_cuantico.py`](test_pozo_infinito_cuantico.py)
+
+La documentación incluye:
+- Resumen detallado de las 6 clases de tests
+- Muestras de salida de tests específicos
+- Ejemplos de código de tests con explicaciones
+- Tabla de validación de propiedades físicas
+- Instrucciones para ejecutar tests individuales o por clase
+
 ---
 
 ## 📊 Visualization Features

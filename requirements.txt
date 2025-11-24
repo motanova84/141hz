@@ -25,6 +25,12 @@ accelerate>=0.20.0
 sentencepiece>=0.1.99
 protobuf>=3.20.0
 
+# Documentation dependencies
+mkdocs-material[imaging]>=9.0.0
+mkdocs-minify-plugin>=0.6.0
+mkdocs-git-revision-date-localized-plugin>=1.2.0
+pillow>=10.0.0
+cairosvg>=2.7.0
 # Omega ∞³ dependencies for GPU acceleration and GW data
 jax>=0.4.20
 jaxlib>=0.4.20

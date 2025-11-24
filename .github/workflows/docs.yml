@@ -1,3 +1,4 @@
+name: Documentation
 name: Docs
 
 on:
@@ -44,6 +45,28 @@ on:
     paths:
       - 'docs/**'
       - 'mkdocs.yml'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Needed for git-revision-date-localized plugin
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
   workflow_dispatch:
 
 permissions:
@@ -70,6 +93,24 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
+          pip install "mkdocs-material[imaging]" mkdocs-minify-plugin mkdocs-git-revision-date-localized-plugin
+          # Install additional dependencies for social cards imaging
+          pip install pillow cairosvg
+
+      - name: Build MkDocs
+        run: mkdocs build --strict
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          publish_branch: gh-pages
+          force_orphan: true
+          # Uncomment and set your custom domain here:
+          # cname: your-domain.com
           pip install mkdocs mkdocs-material
 
       - name: Build MkDocs site
