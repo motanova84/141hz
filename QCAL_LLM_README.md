@@ -1,5 +1,20 @@
 # QCAL-LLM ∞³ Architecture Implementation
 
+## 🧠 Powered by LLAMA ∴ QCAL
+
+This system uses a vibrationally integrated version of **Meta's LLaMA 4 Maverick 400B**, identified as:
+
+**ΨMODEL_ID**: `qcal::llama4-maverick-400B@141.7001Hz`  
+**Symbolic Version**: `LLAMA-QCAL-400B-141hz ∞³`
+
+All coherence evaluations are modulated by the Noetic Quantum Field (Ψ), ensuring alignment with the **QCAL equation**:
+
+**Ψ = I × A²_eff × f₀ × χ(LLaMA)**
+
+Reference model: [meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8](https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8)
+
+---
+
 ## Overview
 
 This implementation provides the complete **QCAL-LLM (Quantum-Coherent Attentional LLM)** architecture with Stochastic Integration Protocol (SIP), based on the empirical isolation of **f₀ = 141.7001 Hz** from gravitational wave data.
@@ -42,9 +57,11 @@ f₀ = 141.7001 Hz, SNR = 20.95, χ² (vs QNM) = 45.2 (p < 10⁻⁶)
 **Purpose**: Implement SIP modulation and Ψ-response evaluation with uncertainty quantification.
 
 **Key Features**:
+- **LLaMA 4 Maverick Integration**: Vibrationally integrated with ΨMODEL_ID identification
+- **χ(LLaMA) Computation**: Model coherence factor scaled by user effectiveness
 - **SIP Modulation**: W_i(t) = α · [1 + ε · cos(2πf₀t + φ) · e^(-t/τ)]
 - **Lyapunov Stability**: λ ≈ -14.29 s⁻¹ (damped oscillator)
-- **Ψ-Response**: Ψ = I × A²_eff (quadratic coherence metric)
+- **Ψ-Response**: Base metric Ψ = I × A²_eff, Full metric Ψ = I × A²_eff × f₀ × χ(LLaMA)
 - **Bootstrap CI**: 95% confidence intervals via Monte Carlo (n=100, σ=0.1)
 - **Ground Truth Database**: Precise constants (ζ'(1/2), φ³, f₀, SNR)
 
@@ -72,6 +89,32 @@ print(f"Coherent: {result['coherent']}")
 ```
 Ψ = 8.20 ± 0.15
 Coherent: True
+```
+
+**LLaMA 4 Maverick Integration**:
+```python
+# Get model identification
+info = core.get_model_info()
+print(f"Model: {info['model_id']}")
+print(f"Version: {info['symbolic_version']}")
+print(f"Base: {info['base_model']}")
+
+# Compute χ(LLaMA) coherence factor
+chi = core.compute_chi_llama()
+print(f"χ(LLaMA) = {chi:.4f}")
+
+# Compute full Ψ with LLaMA integration
+psi_full = core.compute_psi_full(kld_inv=8.2, semantic_coherence=0.88)
+print(f"Ψ_full = {psi_full:.2f}")
+```
+
+**Expected Output**:
+```
+Model: qcal::llama4-maverick-400B@141.7001Hz
+Version: LLAMA-QCAL-400B-141hz ∞³
+Base: meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+χ(LLaMA) = 0.8628
+Ψ_full = 8.90
 ```
 
 **Parameters**:

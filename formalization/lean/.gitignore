@@ -1,16 +1,19 @@
 # Lean build artifacts
-/build
-/lake-packages
-/.lake
-*.olean
-*.trace
+/.lake/
+/build/
+/lake-packages/
 
-# Lake lock file (usually committed, but can be regenerated)
-# lake-manifest.json
+# Lean cache
+*.olean
+*.ilean
+*.trace
 
 # Editor files
 .vscode/
 *.swp
 *.swo
 *~
+
+# OS files
 .DS_Store
+Thumbs.db

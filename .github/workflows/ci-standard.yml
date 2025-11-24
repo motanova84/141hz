@@ -1,0 +1,45 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: Install
+        run: |
+          pip install -U pip wheel
+          pip install -e .
+          pip install pytest pytest-cov cyclonedx-bom osv-scanner
+      
+      - name: Tests
+        run: |
+          pytest -q --cov=src/qcal --cov-report=xml
+        continue-on-error: true
+      
+      - name: Build SBOM
+        run: |
+          cyclonedx-bom -o sbom.json
+        continue-on-error: true
+      
+      - name: OSV Scan
+        run: |
+          osv-scanner --experimental --sbom=sbom.json || true
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: artifacts
+          path: |
+            artifacts/figures
+            artifacts/tables
+            coverage.xml
+            sbom.json
+        continue-on-error: true

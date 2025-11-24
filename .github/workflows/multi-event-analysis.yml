@@ -105,7 +105,7 @@ jobs:
         continue-on-error: false
       
       - name: Upload analysis results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: event-analysis-${{ matrix.event }}-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -179,7 +179,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload SNR results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: multi-event-snr-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -251,7 +251,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload Bayesian results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: bayesian-analysis-py${{ matrix.python-version }}-${{ github.run_number }}

@@ -2,6 +2,14 @@
 
 ¡Gracias por tu interés en contribuir al proyecto 141Hz / QC-LLM! Este documento describe cómo contribuir efectivamente al proyecto.
 
+## Requisitos Básicos
+
+- **Python**: 3.10+ (recomendado 3.11 o 3.12)
+- **Instalación de desarrollo**: `pip install -e ".[dev]"`
+- **Tests**: `pytest -q`
+- **Estilo**: PEP8, type hints opcional
+- **DCO**: Developer Certificate of Origin en commits
+
 ## 🌊 Contribuciones QC-LLM (Quantum Coherence for LLMs)
 
 El proyecto incluye un componente de **estándar de coherencia cuántica para modelos de lenguaje** (QC-LLM). Si trabajas en esta área:
