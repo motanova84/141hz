@@ -253,6 +253,13 @@
 - Trigger: schedule (`0 12 * * 1  # Run weekly on Monday at noon UTC`)
 - Trigger: manual (workflow_dispatch)
 
+### sci-validate
+
+**Archivo:** `sci-validate.yml`
+
+- Trigger: push
+- Trigger: pull_request
+
 ### Scientific Validation - 3 Pillars
 
 **Archivo:** `scientific-validation.yml`
@@ -320,4 +327,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-11-23 03:38:49 UTC*
+*Generado automáticamente por el bot de documentación - 2025-11-24 02:57:09 UTC*
