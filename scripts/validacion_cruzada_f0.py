@@ -251,7 +251,7 @@ def print_validation_table(results, coherence):
     print(f"   Fuentes analizadas: {coherence.get('sources_analyzed', 0)}")
 
 
-def print_cosmocerebal_conclusion(coherence):
+def print_cosmocerebral_conclusion(coherence):
     """
     Print the cosmocerebral coherence conclusion.
 
@@ -372,7 +372,7 @@ def main(ligo_path=None, eeg_path=None, use_synthetic=True,
     print_validation_table(results, coherence)
 
     # Print cosmocerebral conclusion
-    print_cosmocerebal_conclusion(coherence)
+    print_cosmocerebral_conclusion(coherence)
 
     # Save results if requested
     if output_json:

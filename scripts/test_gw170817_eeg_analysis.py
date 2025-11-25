@@ -14,7 +14,7 @@ from pathlib import Path
 import numpy as np
 
 # Add scripts directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / 'scripts'))
+sys.path.insert(0, str(Path(__file__).parent))
 
 
 class TestGW170817Analysis(unittest.TestCase):

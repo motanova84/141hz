@@ -24,7 +24,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.signal import welch
+from scipy.signal import butter, filtfilt, welch
 
 # Add parent directory for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -84,7 +84,7 @@ def load_eeg_numpy(file_path, fs=256):
         (time_array, signal, sample_rate)
     """
     data = np.load(file_path)
-    if isinstance(data, np.lib.npyio.NpzFile):
+    if hasattr(data, 'files'):
         # Handle .npz files
         if 'signal' in data:
             signal = data['signal']
@@ -134,7 +134,6 @@ def generate_synthetic_eeg(fs=512, duration=60, target_freq=141.7001):
     white_noise = np.random.normal(0, 1, n_samples)
 
     # Create pink noise by filtering
-    from scipy.signal import butter, filtfilt
     b, a = butter(2, 0.1, btype='high', fs=fs)
     pink_noise = filtfilt(b, a, white_noise)
 
