@@ -6,10 +6,14 @@
 
 - `analizar_asd_141hz.py`
   - Análisis ASD (Amplitude Spectral Density) en 141.7 Hz para GW150914
+- `analizar_eeg_real.py`
+  - 🧠 FASE 2 – ANÁLISIS DE DATOS EEG REALES
 - `analizar_gw150914_ejemplo.py`
   - Ejemplo de análisis espectral de GW150914 en 141.7 Hz
 - `analizar_gw150914_pycbc.py`
   - Análisis de GW150914 usando PyCBC
+- `analizar_gw170817.py`
+  - 🌀 FASE 1 – DATOS REALES DE LIGO (GW170817)
 - `analizar_gw200129.py`
   - Análisis de GW200129_065458 con PyCBC
 - `analizar_gw200129_snr.py`
@@ -108,6 +112,8 @@
   - Test unitario para el módulo de evidencia concluyente
 - `test_generar_prediccion_gw250114.py`
   - Test para generar_prediccion_gw250114.py
+- `test_gw170817_eeg_analysis.py`
+  - Tests for GW170817 and EEG analysis scripts.
 - `test_multi_event_snr_analysis.py`
   - Tests para el módulo multi_event_snr_analysis
 - `test_optimization_modules.py`
@@ -170,4 +176,4 @@
   - Script de prueba para el verificador GW250114
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-11-24 02:57:08 UTC*
+*Generado automáticamente por el bot de documentación - 2025-11-27 16:55:39 UTC*
