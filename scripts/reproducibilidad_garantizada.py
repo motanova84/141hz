@@ -86,6 +86,9 @@ def garantizar_reproducibilidad():
     print(f"Estado: {resultados_reproducibilidad['estado']}")
     print()
     
+    # Guardar resultados - Ahora se ejecuta dentro de la función
+    output_dir = Path('results')
+    output_dir.mkdir(parents=True, exist_ok=True)
     # Guardar resultados automáticamente
     output_dir = Path('results')
     output_dir.mkdir(exist_ok=True)

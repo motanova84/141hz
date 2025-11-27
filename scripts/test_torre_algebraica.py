@@ -72,6 +72,34 @@ class TestNivelOntologia(unittest.TestCase):
         self.assertIn('proceso', emergencia)
         self.assertIn('ecuacion', emergencia)
         self.assertIn('resultado', emergencia)
+    
+    def test_conexion_riemann_hypothesis(self):
+        """Verifica la conexión con la Hipótesis de Riemann"""
+        conexion = self.nivel.conexion_riemann_hypothesis()
+        
+        self.assertIn('tesis', conexion)
+        self.assertIn('funcion_zeta', conexion)
+        self.assertIn('sistema_adelico', conexion)
+        self.assertIn('derivada_critica', conexion)
+        self.assertIn('emergencia', conexion)
+        self.assertIn('implicacion', conexion)
+        
+        # Verificar estructura de función zeta
+        zeta = conexion['funcion_zeta']
+        self.assertIn('definicion', zeta)
+        self.assertIn('producto_euler', zeta)
+        self.assertIn('ceros_no_triviales', zeta)
+        
+        # Verificar sistema adélico
+        adelico = conexion['sistema_adelico']
+        self.assertIn('estructura', adelico)
+        self.assertIn('interpretacion', adelico)
+        
+        # Verificar derivada crítica
+        derivada = conexion['derivada_critica']
+        self.assertIn('valor', derivada)
+        self.assertIn('significado', derivada)
+        self.assertIn('conexion_f0', derivada)
 
 
 class TestNivelGeometria(unittest.TestCase):
