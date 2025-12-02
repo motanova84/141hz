@@ -1,0 +1,149 @@
+name: QCAL Production Cycle
+
+"on":
+  schedule:
+    - cron: "0 */4 * * *"       # Run every 4 hours
+  workflow_dispatch:            # Allow manual triggers
+
+jobs:
+  build-validate-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Validate core with precision
+        run: python3 validate_v5_coronacion.py --precision 30
+        continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Validate Riemann zeros relationship
+        run: python3 validate_riemann_zeros.py --precision 50
+        continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Aggregate results
+        run: python3 scripts/aggregate_results.py
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Publish dataset to Hugging Face
+        if: success() && github.event_name == 'schedule'
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          pip install huggingface_hub
+          if [ -n "$HF_TOKEN" ]; then
+            echo "Publishing to Hugging Face..."
+            huggingface-cli upload motanova84/qcal-cloud results/ --repo-type dataset || echo "⚠️ Upload failed or already up-to-date"
+          else
+            echo "⚠️ HF_TOKEN not set - skipping Hugging Face upload"
+          fi
+        continue-on-error: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        if: success() && github.event_name == 'schedule'
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: |
+          if [ -n "$DOCKERHUB_TOKEN" ] && [ -n "$DOCKERHUB_USERNAME" ]; then
+            echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          else
+            echo "⚠️ Docker Hub credentials not set - skipping Docker operations"
+          fi
+        continue-on-error: true
+
+      - name: Build Docker image
+        run: |
+          docker build -t qcal/production:${{ github.run_number }} .
+          docker tag qcal/production:${{ github.run_number }} qcal/production:latest
+        continue-on-error: true
+
+      - name: Push image to Docker Hub
+        if: success() && github.event_name == 'schedule'
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          if [ -n "$DOCKERHUB_TOKEN" ]; then
+            docker push qcal/production:${{ github.run_number }}
+            docker push qcal/production:latest
+          else
+            echo "⚠️ DOCKERHUB_TOKEN not set - skipping Docker push"
+          fi
+        continue-on-error: true
+
+      - name: Upload validation results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: validation-results-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+          retention-days: 30
+
+      - name: Generate validation summary
+        if: always()
+        run: |
+          echo "## Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f "results/validation_v5.json" ]; then
+            echo "### Core Validation Results" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            cat results/validation_v5.json | head -30 >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/riemann_zeros.json" ]; then
+            echo "### Riemann Zeros Validation" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            cat results/riemann_zeros.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/aggregated_report.json" ]; then
+            echo "### Aggregated Results" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            cat results/aggregated_report.json | head -30 >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi

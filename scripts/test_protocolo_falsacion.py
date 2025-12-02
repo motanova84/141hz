@@ -45,8 +45,6 @@ def test_teoria_no_falsada():
     print(f"   ✅ Teoría falsada: {verificacion['teoria_falsada']}")
     print(f"   ✅ Razones: {verificacion['razones']}")
     print("   ✅ TEST PASADO: Teoría correctamente NO falsada\n")
-    
-    return True
 
 
 def test_teoria_falsada_bi2se3():
@@ -73,8 +71,6 @@ def test_teoria_falsada_bi2se3():
     print(f"   ✅ Teoría falsada: {verificacion['teoria_falsada']}")
     print(f"   ✅ Razones: {verificacion['razones']}")
     print("   ✅ TEST PASADO: Teoría correctamente falsada por Bi2Se3\n")
-    
-    return True
 
 
 def test_teoria_falsada_cmb():
@@ -100,8 +96,6 @@ def test_teoria_falsada_cmb():
     print(f"   ✅ Teoría falsada: {verificacion['teoria_falsada']}")
     print(f"   ✅ Razones: {verificacion['razones']}")
     print("   ✅ TEST PASADO: Teoría correctamente falsada por CMB\n")
-    
-    return True
 
 
 def test_teoria_falsada_gw():
@@ -128,8 +122,6 @@ def test_teoria_falsada_gw():
     print(f"   ✅ Teoría falsada: {verificacion['teoria_falsada']}")
     print(f"   ✅ Razones: {verificacion['razones']}")
     print("   ✅ TEST PASADO: Teoría correctamente falsada por GW\n")
-    
-    return True
 
 
 def test_teoria_falsada_multiple():
@@ -160,8 +152,6 @@ def test_teoria_falsada_multiple():
     print(f"   ✅ Teoría falsada: {verificacion['teoria_falsada']}")
     print(f"   ✅ Razones: {verificacion['razones']}")
     print("   ✅ TEST PASADO: Teoría correctamente falsada por múltiples sistemas\n")
-    
-    return True
 
 
 def test_datos_parciales():
@@ -188,8 +178,6 @@ def test_datos_parciales():
     print(f"   ✅ Teoría falsada: {verificacion['teoria_falsada']}")
     print(f"   ✅ Razones: {verificacion['razones']}")
     print("   ✅ TEST PASADO: Teoría correctamente evaluada con datos parciales\n")
-    
-    return True
 
 
 def test_criterios_boundary():
@@ -226,8 +214,6 @@ def test_criterios_boundary():
     print(f"   ✅ Teoría falsada: {verificacion['teoria_falsada']}")
     print(f"   ✅ Razones: {verificacion['razones']}")
     print("   ✅ TEST PASADO: Límites correctamente evaluados\n")
-    
-    return True
 
 
 def test_generar_reporte():
@@ -254,8 +240,6 @@ def test_generar_reporte():
     
     print("   ✅ Reporte generado correctamente")
     print("   ✅ TEST PASADO: Generación de reporte funcional\n")
-    
-    return True
 
 
 def test_obtener_criterios():
@@ -279,8 +263,6 @@ def test_obtener_criterios():
     
     print(f"   ✅ Criterios obtenidos: {list(criterios.keys())}")
     print("   ✅ TEST PASADO: Criterios correctamente estructurados\n")
-    
-    return True
 
 
 def main():
@@ -306,8 +288,8 @@ def main():
     
     for nombre, test_func in tests:
         try:
-            passed = test_func()
-            resultados.append((nombre, passed, None))
+            test_func()
+            resultados.append((nombre, True, None))
         except AssertionError as e:
             print(f"   ❌ FALLO: {e}\n")
             resultados.append((nombre, False, str(e)))

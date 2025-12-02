@@ -2,11 +2,28 @@
 """
 Validación Estadística Completa
 Tests estadísticos rigurosos para validar detección de 141.7001 Hz
+
+ACTUALIZADO: Ahora incluye funciones del problem statement:
+1. Análisis de significancia estadística con p_value = stats.norm.sf(SNR) < 10⁻⁶
+2. Coherencia multisitio compute_coherence_h1_l1(f₀)
+3. Exclusión de sistemáticos exclude_instrumental_artifacts(f₀)
 """
 import numpy as np
 from scipy import stats, signal
 import warnings
 warnings.filterwarnings('ignore')
+
+# Importar funciones del nuevo módulo
+try:
+    from analisis_estadistico_avanzado import (
+        analisis_significancia_estadistica,
+        compute_coherence_h1_l1,
+        exclude_instrumental_artifacts
+    )
+    ADVANCED_AVAILABLE = True
+except ImportError:
+    ADVANCED_AVAILABLE = False
+    print("⚠️  Módulo de análisis avanzado no disponible - usando implementación básica")
 
 class ValidacionEstadisticaCompleta:
     def __init__(self):
@@ -185,17 +202,64 @@ class ValidacionEstadisticaCompleta:
             datos_h1 = señal + np.random.normal(0, 2e-22, len(t))
             datos_l1 = señal + np.random.normal(0, 2e-22, len(t))
         
-        # Ejecutar tests
-        print("\n1️⃣ Test de Significancia Estadística (H1)")
+        # Si está disponible el módulo avanzado, usarlo
+        if ADVANCED_AVAILABLE:
+            print("\n✨ Usando análisis estadístico avanzado")
+            print("-" * 70)
+            
+            # 1. Análisis de significancia (nuevo método)
+            print("\n1️⃣ Análisis de Significancia Estadística (stats.norm.sf)")
+            sig_h1 = analisis_significancia_estadistica(datos_h1, fs=fs)
+            sig_l1 = analisis_significancia_estadistica(datos_l1, fs=fs)
+            
+            print(f"   H1: SNR = {sig_h1['snr']:.2f}, p-value = {sig_h1['p_value']:.2e}")
+            print(f"       {'✅ Significativo' if sig_h1['significativo'] else '❌ No significativo'} (p < 10⁻⁶)")
+            print(f"   L1: SNR = {sig_l1['snr']:.2f}, p-value = {sig_l1['p_value']:.2e}")
+            print(f"       {'✅ Significativo' if sig_l1['significativo'] else '❌ No significativo'} (p < 10⁻⁶)")
+            
+            self.resultados['significancia_avanzada'] = {
+                'h1': sig_h1,
+                'l1': sig_l1
+            }
+            
+            # 2. Coherencia multisitio (nuevo método)
+            print("\n2️⃣ Coherencia Multisitio H1-L1")
+            coherence = compute_coherence_h1_l1(141.7001, datos_h1, datos_l1, fs=fs)
+            
+            print(f"   Coherencia en 141.7001 Hz: {coherence['coherence_at_f0']:.3f}")
+            print(f"   {'✅ Coherente' if coherence['coherent'] else '❌ No coherente'} (coherence > 0.5)")
+            
+            self.resultados['coherencia_avanzada'] = coherence
+            
+            # 3. Exclusión de sistemáticos (nuevo método)
+            print("\n3️⃣ Exclusión de Sistemáticos Instrumentales")
+            syst_h1 = exclude_instrumental_artifacts(141.7001, datos_h1, fs=fs, detector='H1')
+            syst_l1 = exclude_instrumental_artifacts(141.7001, datos_l1, fs=fs, detector='L1')
+            
+            print(f"   H1: {'✅ Sin artefactos' if syst_h1['is_clean'] else '❌ Posible artefacto'}")
+            print(f"       (Distancia a línea más cercana: {syst_h1['nearest_line']['distance']:.1f} Hz)")
+            print(f"   L1: {'✅ Sin artefactos' if syst_l1['is_clean'] else '❌ Posible artefacto'}")
+            print(f"       (Distancia a línea más cercana: {syst_l1['nearest_line']['distance']:.1f} Hz)")
+            
+            self.resultados['sistematicos_avanzados'] = {
+                'h1': syst_h1,
+                'l1': syst_l1
+            }
+        
+        # Ejecutar tests tradicionales también
+        print("\n📊 Tests Adicionales (Métodos Tradicionales)")
+        print("-" * 70)
+        
+        print("\n4️⃣ Test de Significancia Estadística (H1)")
         self.test_significancia_estadistica(datos_h1, fs=fs)
         
-        print("\n2️⃣ Cálculo de Bayes Factor (H1)")
+        print("\n5️⃣ Cálculo de Bayes Factor (H1)")
         self.calcular_bayes_factor_simplificado(datos_h1, fs=fs)
         
-        print("\n3️⃣ Test de Coherencia Multi-Detector")
+        print("\n6️⃣ Test de Coherencia Multi-Detector")
         self.test_coherencia_multi_detector(datos_h1, datos_l1, fs=fs)
         
-        print("\n4️⃣ Test de Estacionariedad (H1)")
+        print("\n7️⃣ Test de Estacionariedad (H1)")
         self.test_estacionariedad(datos_h1, fs=fs)
         
         # Resumen
@@ -206,6 +270,38 @@ class ValidacionEstadisticaCompleta:
         criterios_cumplidos = 0
         total_criterios = 4
         
+        # Criterios del análisis avanzado (si está disponible)
+        if ADVANCED_AVAILABLE:
+            print("\n🌟 ANÁLISIS AVANZADO (Problem Statement):")
+            
+            # Criterio 1: Significancia estadística avanzada
+            sig_passed = (self.resultados.get('significancia_avanzada', {}).get('h1', {}).get('significativo') or
+                         self.resultados.get('significancia_avanzada', {}).get('l1', {}).get('significativo'))
+            if sig_passed:
+                print("✅ Significancia estadística (p < 10⁻⁶)")
+                criterios_cumplidos += 1
+            else:
+                print("❌ Significancia estadística NO cumplida")
+            
+            # Criterio 2: Coherencia multisitio avanzada
+            coh_passed = self.resultados.get('coherencia_avanzada', {}).get('coherent', False)
+            if coh_passed:
+                print("✅ Coherencia multisitio (coherence > 0.5)")
+                criterios_cumplidos += 1
+            else:
+                print("❌ Coherencia multisitio NO cumplida")
+            
+            # Criterio 3: Exclusión de sistemáticos
+            syst_passed = (self.resultados.get('sistematicos_avanzados', {}).get('h1', {}).get('is_clean') and
+                          self.resultados.get('sistematicos_avanzados', {}).get('l1', {}).get('is_clean'))
+            if syst_passed:
+                print("✅ Exclusión de sistemáticos")
+                criterios_cumplidos += 1
+            else:
+                print("❌ Exclusión de sistemáticos NO cumplida")
+        
+        print("\n📈 Criterios tradicionales:")
+        
         if self.resultados.get('test_significancia', {}).get('significativo'):
             print("✅ Significancia estadística (p < 0.01)")
             criterios_cumplidos += 1
@@ -214,19 +310,16 @@ class ValidacionEstadisticaCompleta:
         
         if self.resultados.get('bayes_factor', {}).get('evidencia_fuerte'):
             print("✅ Bayes Factor (BF > 10)")
-            criterios_cumplidos += 1
         else:
             print("❌ Bayes Factor NO cumplido")
         
         if self.resultados.get('coherencia', {}).get('coherente'):
             print("✅ Coherencia multi-detector")
-            criterios_cumplidos += 1
         else:
             print("❌ Coherencia NO cumplida")
         
         if self.resultados.get('estacionariedad', {}).get('estacionaria'):
             print("✅ Estacionariedad")
-            criterios_cumplidos += 1
         else:
             print("❌ Estacionariedad NO cumplida")
         

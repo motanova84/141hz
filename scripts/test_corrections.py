@@ -2,6 +2,7 @@
 """
 Test unitario para verificar la lógica corregida de búsqueda de frecuencias
 """
+import sys
 import numpy as np
 import scipy.signal
 
@@ -37,12 +38,8 @@ def test_frequency_search_logic():
     
     # Verificar que la frecuencia detectada está cerca del objetivo
     tolerance = 1.0  # Hz
-    if abs(peak - target_freq) < tolerance:
-        print("   ✅ Test PASSED - Frecuencia detectada correctamente")
-        return True
-    else:
-        print("   ❌ Test FAILED - Frecuencia fuera de tolerancia")
-        return False
+    assert abs(peak - target_freq) < tolerance, f"Frecuencia fuera de tolerancia: {abs(peak - target_freq):.4f} Hz > {tolerance} Hz"
+    print("   ✅ Test PASSED - Frecuencia detectada correctamente")
 
 def test_old_logic_fails():
     """Demuestra que la lógica original tiene problemas"""
@@ -76,12 +73,20 @@ if __name__ == "__main__":
     print("=" * 60)
     
     # Ejecutar tests
-    test1_passed = test_frequency_search_logic()
+    try:
+        test_frequency_search_logic()
+        test1_passed = True
+    except Exception as e:
+        print(f"❌ Error en test_frequency_search_logic: {e}")
+        test1_passed = False
+    
     test_old_logic_fails()
     
     print("\n" + "=" * 60)
     if test1_passed:
         print("✅ RESULTADO: Todas las correcciones validadas")
+        sys.exit(0)
     else:
         print("❌ RESULTADO: Verificar implementación")
+        sys.exit(1)
     print("=" * 60)

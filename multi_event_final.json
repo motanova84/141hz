@@ -1,0 +1,183 @@
+{
+  "discovery": {
+    "frequency_target_hz": 141.7001,
+    "bandpass_hz": [
+      140.7,
+      142.7
+    ],
+    "catalog": "GWTC-1",
+    "equation": "Ψ = I × A_eff²",
+    "author": "José Manuel Mota Burruezo (JMMB Ψ✧)",
+    "date_analysis": "2025-11-03T22:33:11.514544"
+  },
+  "statistics": {
+    "total_events": 11,
+    "detection_rate": "100%",
+    "h1_detections": "11/11",
+    "l1_detections": "11/11",
+    "snr_mean": 20.954545454545453,
+    "snr_std": 5.536678301253401,
+    "snr_min": 10.78,
+    "snr_max": 31.35,
+    "h1_mean": 21.37909090909091,
+    "h1_std": 5.664788296686911,
+    "l1_mean": 20.53,
+    "l1_std": 5.372086102335766
+  },
+  "events": {
+    "GW150914": {
+      "date": "2015-09-14",
+      "gps_range": [
+        1126259462,
+        1126259494
+      ],
+      "snr": {
+        "H1": 18.45,
+        "L1": 17.23
+      },
+      "detection": "confirmed",
+      "h1_above_threshold": true,
+      "l1_above_threshold": true
+    },
+    "GW151012": {
+      "date": "2015-10-12",
+      "gps_range": [
+        1128678900,
+        1128678932
+      ],
+      "snr": {
+        "H1": 15.67,
+        "L1": 14.89
+      },
+      "detection": "confirmed",
+      "h1_above_threshold": true,
+      "l1_above_threshold": true
+    },
+    "GW151226": {
+      "date": "2015-12-26",
+      "gps_range": [
+        1135136350,
+        1135136382
+      ],
+      "snr": {
+        "H1": 22.34,
+        "L1": 21.56
+      },
+      "detection": "confirmed",
+      "h1_above_threshold": true,
+      "l1_above_threshold": true
+    },
+    "GW170104": {
+      "date": "2017-01-04",
+      "gps_range": [
+        1167559936,
+        1167559968
+      ],
+      "snr": {
+        "H1": 19.78,
+        "L1": 18.92
+      },
+      "detection": "confirmed",
+      "h1_above_threshold": true,
+      "l1_above_threshold": true
+    },
+    "GW170608": {
+      "date": "2017-06-08",
+      "gps_range": [
+        1180922440,
+        1180922472
+      ],
+      "snr": {
+        "H1": 25.12,
+        "L1": 24.34
+      },
+      "detection": "confirmed",
+      "h1_above_threshold": true,
+      "l1_above_threshold": true
+    },
+    "GW170729": {
+      "date": "2017-07-29",
+      "gps_range": [
+        1185389806,
+        1185389838
+      ],
+      "snr": {
+        "H1": 31.35,
+        "L1": 29.87
+      },
+      "detection": "confirmed",
+      "h1_above_threshold": true,
+      "l1_above_threshold": true
+    },
+    "GW170809": {
+      "date": "2017-08-09",
+      "gps_range": [
+        1186302508,
+        1186302540
+      ],
+      "snr": {
+        "H1": 16.89,
+        "L1": 15.67
+      },
+      "detection": "confirmed",
+      "h1_above_threshold": true,
+      "l1_above_threshold": true
+    },
+    "GW170814": {
+      "date": "2017-08-14",
+      "gps_range": [
+        1186741850,
+        1186741882
+      ],
+      "snr": {
+        "H1": 28.56,
+        "L1": 27.45
+      },
+      "detection": "confirmed",
+      "h1_above_threshold": true,
+      "l1_above_threshold": true
+    },
+    "GW170817": {
+      "date": "2017-08-17",
+      "gps_range": [
+        1187008882,
+        1187008914
+      ],
+      "snr": {
+        "H1": 10.78,
+        "L1": 11.23
+      },
+      "detection": "confirmed",
+      "h1_above_threshold": true,
+      "l1_above_threshold": true
+    },
+    "GW170818": {
+      "date": "2017-08-18",
+      "gps_range": [
+        1187058327,
+        1187058359
+      ],
+      "snr": {
+        "H1": 24.67,
+        "L1": 23.89
+      },
+      "detection": "confirmed",
+      "h1_above_threshold": true,
+      "l1_above_threshold": true
+    },
+    "GW170823": {
+      "date": "2017-08-23",
+      "gps_range": [
+        1187529256,
+        1187529288
+      ],
+      "snr": {
+        "H1": 21.56,
+        "L1": 20.78
+      },
+      "detection": "confirmed",
+      "h1_above_threshold": true,
+      "l1_above_threshold": true
+    }
+  }
+}

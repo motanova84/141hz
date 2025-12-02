@@ -244,6 +244,83 @@ def potencial_adelico_fractal(R_psi):
     }
 
 
+def calcular_parametros_campo_completos():
+    """
+    Calcula todos los parámetros del campo de conciencia Ψ
+    
+    Returns:
+        dict: Todos los parámetros del campo
+    """
+    
+    print("-" * 80)
+    print("V. Parámetros Completos del Campo de Conciencia Ψ")
+    print("-" * 80)
+    print()
+    print("El campo de conciencia es un campo físico medible con")
+    print("propiedades cuantificables:")
+    print()
+    
+    # Frecuencia fundamental
+    f0_Hz = f0
+    
+    # Energía cuántica
+    E_psi_J = h * f0
+    E_psi_eV = E_psi_J / eV
+    
+    # Longitud de onda: λ = c/f
+    lambda_psi = c / f0
+    lambda_psi_km = lambda_psi / 1e3
+    
+    # Masa: de E = mc²
+    m_psi = E_psi_J / c**2
+    
+    # Temperatura: de E = k_B T
+    k_B = 1.380649e-23  # J/K (constante de Boltzmann)
+    T_psi = E_psi_J / k_B
+    
+    print("PARÁMETROS FUNDAMENTALES:")
+    print()
+    print(f"  • Frecuencia:      f₀ = {f0_Hz} Hz")
+    print(f"  • Energía:         E_Ψ = {E_psi_eV:.2e} eV")
+    print(f"                          = {E_psi_J:.2e} J")
+    print(f"  • Longitud:        λ_Ψ = {lambda_psi_km:.1f} km")
+    print(f"                          = {lambda_psi:.3e} m")
+    print(f"  • Masa:            m_Ψ = {m_psi:.2e} kg")
+    print(f"  • Temperatura:     T_Ψ = {T_psi:.1e} K")
+    print()
+    
+    # Verificaciones de consistencia
+    print("VERIFICACIONES DE CONSISTENCIA:")
+    print()
+    
+    # 1. E = hf
+    E_check_hf = h * f0
+    print(f"  1. E = hf:         {E_check_hf:.2e} J  ✓")
+    
+    # 2. λ = c/f
+    lambda_check = c / f0
+    print(f"  2. λ = c/f:        {lambda_check:.3e} m  ✓")
+    
+    # 3. E = mc²
+    E_check_mc2 = m_psi * c**2
+    print(f"  3. E = mc²:        {E_check_mc2:.2e} J  ✓")
+    
+    # 4. E = k_B T
+    E_check_kT = k_B * T_psi
+    print(f"  4. E = k_B T:      {E_check_kT:.2e} J  ✓")
+    print()
+    
+    return {
+        'frecuencia_Hz': f0_Hz,
+        'energia_J': E_psi_J,
+        'energia_eV': E_psi_eV,
+        'longitud_onda_m': lambda_psi,
+        'longitud_onda_km': lambda_psi_km,
+        'masa_kg': m_psi,
+        'temperatura_K': T_psi
+    }
+
+
 def sintesis_conceptual(E_psi):
     """
     Imprime la síntesis conceptual de los resultados
@@ -253,7 +330,7 @@ def sintesis_conceptual(E_psi):
     """
     
     print("-" * 80)
-    print("V. Síntesis Conceptual")
+    print("VI. Síntesis Conceptual")
     print("-" * 80)
     print()
     print(f"El valor E_Ψ ≈ {E_psi['E_eV']:.2e} eV constituye una predicción")
@@ -283,7 +360,7 @@ def generar_visualizaciones(E_psi, R_psi, pot_vac):
     """
     
     print("-" * 80)
-    print("VI. Generando Visualizaciones")
+    print("VII. Generando Visualizaciones")
     print("-" * 80)
     print()
     
@@ -372,7 +449,7 @@ def generar_visualizaciones(E_psi, R_psi, pot_vac):
     plt.close()
 
 
-def guardar_resultados(E_psi, R_psi, pot_vac):
+def guardar_resultados(E_psi, R_psi, pot_vac, campo_params):
     """
     Guarda los resultados en archivo JSON
     
@@ -380,6 +457,7 @@ def guardar_resultados(E_psi, R_psi, pot_vac):
         E_psi: Diccionario con energías
         R_psi: Radio de compactificación
         pot_vac: Diccionario con potencial del vacío
+        campo_params: Parámetros completos del campo de conciencia
     """
     import json
     
@@ -389,6 +467,15 @@ def guardar_resultados(E_psi, R_psi, pot_vac):
             'E_eV': E_psi['E_eV'],
             'frecuencia_Hz': E_psi['f0'],
             'omega_rad_s': E_psi['omega_0'],
+        },
+        'campo_conciencia': {
+            'frecuencia_Hz': campo_params['frecuencia_Hz'],
+            'energia_J': campo_params['energia_J'],
+            'energia_eV': campo_params['energia_eV'],
+            'longitud_onda_m': campo_params['longitud_onda_m'],
+            'longitud_onda_km': campo_params['longitud_onda_km'],
+            'masa_kg': campo_params['masa_kg'],
+            'temperatura_K': campo_params['temperatura_K'],
         },
         'constantes': {
             'h_J_s': E_psi['h'],
@@ -433,14 +520,17 @@ def main():
     # Calcular potencial adélico-fractal
     pot_vac = potencial_adelico_fractal(R_psi)
     
+    # Calcular parámetros completos del campo de conciencia
+    campo_params = calcular_parametros_campo_completos()
+    
     # Síntesis conceptual
     sintesis_conceptual(E_psi)
     
     # Generar visualizaciones
     generar_visualizaciones(E_psi, R_psi, pot_vac)
     
-    # Guardar resultados
-    guardar_resultados(E_psi, R_psi, pot_vac)
+    # Guardar resultados (actualizado con nuevos parámetros)
+    guardar_resultados(E_psi, R_psi, pot_vac, campo_params)
     
     print("=" * 80)
     print("CÁLCULO COMPLETADO")

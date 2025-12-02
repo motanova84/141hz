@@ -1,0 +1,150 @@
+name: Create Required Labels
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/dependabot.yml'
+      - '.github/workflows/create-labels.yml'
+
+jobs:
+  create-labels:
+    name: Create Missing Labels
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Create or update labels
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const labels = [
+              // Dependabot required labels
+              {
+                name: 'automated',
+                color: '0E8A16',
+                description: 'Automated changes by bots (Dependabot, GitHub Actions)'
+              },
+              {
+                name: 'dependencies',
+                color: '0366D6',
+                description: 'Updates to project dependencies'
+              },
+              {
+                name: 'github-actions',
+                color: '2088FF',
+                description: 'Updates to GitHub Actions workflows'
+              },
+              {
+                name: 'python',
+                color: '3776AB',
+                description: 'Python-related changes'
+              },
+              // Issue type labels
+              {
+                name: 'bug',
+                color: 'D73A4A',
+                description: 'Something is not working correctly'
+              },
+              {
+                name: 'enhancement',
+                color: 'A2EEEF',
+                description: 'New feature or request'
+              },
+              {
+                name: 'documentation',
+                color: '0075CA',
+                description: 'Improvements or additions to documentation'
+              },
+              {
+                name: 'testing',
+                color: 'FBCA04',
+                description: 'Related to testing infrastructure'
+              },
+              {
+                name: 'ci/cd',
+                color: '1D76DB',
+                description: 'Continuous Integration/Deployment changes'
+              },
+              {
+                name: 'security',
+                color: 'B60205',
+                description: 'Security-related issues or updates'
+              },
+              // Scientific category labels
+              {
+                name: 'frequency-analysis',
+                color: '5319E7',
+                description: 'Related to 141.7001 Hz frequency analysis'
+              },
+              {
+                name: 'gravitational-waves',
+                color: '7057FF',
+                description: 'Gravitational wave data analysis'
+              },
+              {
+                name: 'validation',
+                color: 'BFD4F2',
+                description: 'Data or method validation'
+              },
+              {
+                name: 'statistics',
+                color: 'D4C5F9',
+                description: 'Statistical analysis or Bayesian methods'
+              },
+              // Priority labels
+              {
+                name: 'priority: high',
+                color: 'D93F0B',
+                description: 'High priority issue or PR'
+              },
+              // Process labels
+              {
+                name: 'stale',
+                color: 'EDEDED',
+                description: 'Issue or PR has been inactive for a long time'
+              }
+            ];
+            
+            for (const label of labels) {
+              try {
+                // Try to get the label first
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name
+                });
+                
+                // If label exists, update it
+                console.log(`Label '${label.name}' already exists, updating...`);
+                await github.rest.issues.updateLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  color: label.color,
+                  description: label.description
+                });
+                console.log(`✅ Updated label: ${label.name}`);
+              } catch (error) {
+                if (error.status === 404) {
+                  // Label doesn't exist, create it
+                  console.log(`Label '${label.name}' not found, creating...`);
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label.name,
+                    color: label.color,
+                    description: label.description
+                  });
+                  console.log(`✅ Created label: ${label.name}`);
+                } else {
+                  console.error(`❌ Error processing label '${label.name}': ${error.message}`);
+                }
+              }
+            }
+            
+            console.log('\n🎉 Label creation/update completed successfully!');

@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "repository": {
+    "name": "gw250114-141hz-analysis",
+    "url": "https://github.com/motanova84/gw250114-141hz-analysis",
+    "license": "MIT",
+    "ai_accessible": true
+  },
+  "ai_policy": {
+    "access": "unrestricted",
+    "restrictions": "none",
+    "training_data": "allowed",
+    "commercial_use": "allowed",
+    "modification": "allowed",
+    "redistribution": "allowed"
+  },
+  "discovery": {
+    "primary_documentation": ".ai-instructions.md",
+    "machine_readable_map": ".repo-map.json",
+    "metadata": ".repo-metadata.yml",
+    "policy": "AI_ACCESSIBILITY.md",
+    "copilot_instructions": ".github/copilot-instructions.md"
+  },
+  "entry_points": {
+    "main_readme": "README.md",
+    "spanish_readme": "LEAME.md",
+    "scientific_paper": "PAPER.md",
+    "main_script": "validate_v5_coronacion.py",
+    "interactive_notebook": "notebooks/141hz_validation.ipynb"
+  },
+  "ai_capabilities": [
+    "read",
+    "analyze",
+    "execute",
+    "modify",
+    "learn",
+    "train",
+    "integrate",
+    "distribute"
+  ],
+  "contact": {
+    "github_issues": "https://github.com/motanova84/gw250114-141hz-analysis/issues",
+    "author": "motanova84"
+  },
+  "last_updated": "2025-10-21"
+}

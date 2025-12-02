@@ -1,0 +1,144 @@
+name: Auto Label PRs and Issues
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+  issues:
+    types: [opened, edited]
+
+jobs:
+  label:
+    name: Automatic Labeling
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Label based on file changes
+        if: github.event_name == 'pull_request'
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+          sync-labels: true
+      
+      - name: Label based on title and body
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const issue = context.payload.pull_request || context.payload.issue;
+            const title = issue.title.toLowerCase();
+            const body = (issue.body || '').toLowerCase();
+            const labels = [];
+            
+            // Detect type from title/body
+            if (title.includes('fix') || title.includes('bug') || body.includes('fixes #')) {
+              labels.push('bug');
+            }
+            if (title.includes('feat') || title.includes('add') || title.includes('new')) {
+              labels.push('enhancement');
+            }
+            if (title.includes('docs') || title.includes('documentation')) {
+              labels.push('documentation');
+            }
+            if (title.includes('test') || body.includes('test')) {
+              labels.push('testing');
+            }
+            if (title.includes('ci') || title.includes('workflow') || title.includes('action')) {
+              labels.push('ci/cd');
+            }
+            if (title.includes('deps') || title.includes('dependenc') || title.includes('update')) {
+              labels.push('dependencies');
+            }
+            
+            // Scientific categories
+            if (body.includes('141.7001') || body.includes('141hz') || body.includes('frecuencia')) {
+              labels.push('frequency-analysis');
+            }
+            if (body.includes('gw150914') || body.includes('ligo') || body.includes('gravitational')) {
+              labels.push('gravitational-waves');
+            }
+            if (body.includes('validation') || body.includes('validación') || title.includes('validat')) {
+              labels.push('validation');
+            }
+            if (body.includes('bayesian') || body.includes('bayesiano') || body.includes('statistical')) {
+              labels.push('statistics');
+            }
+            
+            // Priority detection
+            if (title.includes('urgent') || title.includes('critical') || body.includes('urgent')) {
+              labels.push('priority: high');
+            }
+            
+            // Automated detection
+            if (context.actor === 'dependabot[bot]' || context.actor === 'github-actions[bot]') {
+              labels.push('automated');
+            }
+            
+            // Add labels if any were detected
+            if (labels.length > 0) {
+              try {
+                if (context.payload.pull_request) {
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    labels: labels
+                  });
+                  console.log(`Added labels: ${labels.join(', ')}`);
+                } else if (context.payload.issue) {
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    labels: labels
+                  });
+                  console.log(`Added labels to issue: ${labels.join(', ')}`);
+                }
+              } catch (error) {
+                console.log(`Error adding labels: ${error.message}`);
+              }
+            }
+      
+      - name: Add comment on first PR
+        if: github.event_name == 'pull_request' && github.event.action == 'opened'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            
+            // Check if this is the user's first PR
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              creator: pr.user.login
+            });
+            
+            if (prs.length === 1) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `🎉 ¡Gracias por tu primera contribución!
+                
+                Bienvenido/a al proyecto GW250114-141Hz. Este PR será revisado automáticamente por nuestros workflows de CI/CD.
+                
+                **Qué sucederá a continuación:**
+                - ✅ Los tests automáticos se ejecutarán
+                - 📊 Se validará la calidad del código
+                - 👀 Un mantenedor revisará tu PR
+                
+                **Recursos útiles:**
+                - [Guía de Contribución](../CONTRIBUTING.md)
+                - [Documentación del Proyecto](../README.md)
+                - [Estándares de Descubrimiento](../DISCOVERY_STANDARDS.md)
+                
+                ¡Gracias por hacer que la ciencia sea más abierta! 🌌✨`
+              });
+            }

@@ -65,12 +65,9 @@ def test_acto_iii_calculation():
     
     # Verificar que está cerca del valor declarado
     ratio_diff = abs(R_psi_ratio - R_psi_ratio_target) / R_psi_ratio_target
-    if ratio_diff < 0.01:  # Menos del 1% de diferencia
-        print(f"   ✅ RΨ/ℓ_P ≈ {R_psi_ratio:.2e} (≈ {R_psi_ratio_target:.2e} declarado)")
-        print(f"      Diferencia: {ratio_diff*100:.2f}%")
-    else:
-        print(f"   ⚠️  RΨ/ℓ_P difiere del valor declarado por {ratio_diff*100:.2f}%")
-        return False
+    assert ratio_diff < 0.01, f"RΨ/ℓ_P difiere del valor declarado por {ratio_diff*100:.2f}%"
+    print(f"   ✅ RΨ/ℓ_P ≈ {R_psi_ratio:.2e} (≈ {R_psi_ratio_target:.2e} declarado)")
+    print(f"      Diferencia: {ratio_diff*100:.2f}%")
     
     # Test 2: Cálculo de f₀
     print("\n3. TEST: CÁLCULO DE f₀")
@@ -83,12 +80,9 @@ def test_acto_iii_calculation():
     
     # Verificar que el error está dentro de la incertidumbre
     delta_f0 = abs(f0 - f0_target)
-    if delta_f0 < 0.001:  # Menos de 0.001 Hz de diferencia (mucho menor que δf₀)
-        print(f"   ✅ f₀ = {f0:.4f} Hz (objetivo: {f0_target} Hz)")
-        print(f"      Diferencia: {delta_f0:.6f} Hz")
-    else:
-        print(f"   ❌ f₀ difiere del objetivo por {delta_f0:.6f} Hz")
-        return False
+    assert delta_f0 < 0.001, f"f₀ difiere del objetivo por {delta_f0:.6f} Hz"
+    print(f"   ✅ f₀ = {f0:.4f} Hz (objetivo: {f0_target} Hz)")
+    print(f"      Diferencia: {delta_f0:.6f} Hz")
     
     # Test 3: Cálculo de incertidumbre
     print("\n4. TEST: CÁLCULO DE INCERTIDUMBRE")
@@ -101,11 +95,8 @@ def test_acto_iii_calculation():
     
     # Verificar que la incertidumbre es correcta
     uncertainty_diff = abs(delta_f0_calc - delta_f0_target) / delta_f0_target
-    if uncertainty_diff < 0.1:  # Menos del 10% de diferencia
-        print(f"   ✅ δf₀ ≈ {delta_f0_calc:.4f} Hz (objetivo: {delta_f0_target} Hz)")
-    else:
-        print(f"   ⚠️  δf₀ difiere del objetivo")
-        return False
+    assert uncertainty_diff < 0.1, f"δf₀ difiere del objetivo: {uncertainty_diff*100:.2f}%"
+    print(f"   ✅ δf₀ ≈ {delta_f0_calc:.4f} Hz (objetivo: {delta_f0_target} Hz)")
     
     # Test 4: Verificar que el error está dentro de la incertidumbre
     print("\n5. TEST: VALIDACIÓN ESTADÍSTICA")
@@ -121,8 +112,7 @@ def test_acto_iii_calculation():
     elif n_sigma < 3:
         print(f"   ✅ Error dentro de 3σ (aceptable)")
     else:
-        print(f"   ❌ Error > 3σ (inaceptable)")
-        return False
+        raise AssertionError(f"Error > 3σ (inaceptable): {n_sigma:.2f}σ")
     
     # Test 5: Verificar que b = π es correcto (no b = e)
     print("\n6. TEST: VERIFICACIÓN DE BASE b = π")
@@ -143,11 +133,8 @@ def test_acto_iii_calculation():
     print(f"   Con b = π (n={n_reported}): f₀ = {f0_pi_rounded:.4f} Hz, error = {error_pi:.6f} Hz")
     print(f"   Con b = π (n={n_optimal:.4f}): f₀ = {f0:.4f} Hz, error = {abs(f0-f0_target):.6f} Hz")
     
-    if error_pi < error_e:
-        print(f"   ✅ b = π produce mejor ajuste (error {error_e/error_pi:.0f}× menor)")
-    else:
-        print(f"   ❌ b = π no produce mejor ajuste que b = e")
-        return False
+    assert error_pi < error_e, f"b = π no produce mejor ajuste que b = e (error_pi={error_pi:.6f}, error_e={error_e:.6f})"
+    print(f"   ✅ b = π produce mejor ajuste (error {error_e/error_pi:.0f}× menor)")
     
     # Resumen
     print("\n" + "=" * 80)
@@ -161,9 +148,11 @@ RESUMEN:
    • Error |Δf₀| = {abs(f0-f0_target):.6f} Hz ({n_sigma:.2f}σ)  ✓
    • Base b = π correcta  ✓
     """)
-    
-    return True
 
 if __name__ == "__main__":
-    success = test_acto_iii_calculation()
-    sys.exit(0 if success else 1)
+    try:
+        test_acto_iii_calculation()
+        sys.exit(0)
+    except Exception as e:
+        print(f"\n❌ Test failed: {e}")
+        sys.exit(1)

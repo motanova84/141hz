@@ -1,0 +1,79 @@
+# Dependabot configuration for automated dependency updates
+# This acts as an AI collaborator to keep dependencies up-to-date
+
+version: 2
+updates:
+  # Python dependencies - root directory
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "motanova84"
+    labels:
+      - "dependencies"
+      - "python"
+      - "automated"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    # Group updates to reduce PR noise
+    groups:
+      scientific-computing:
+        patterns:
+          - "numpy*"
+          - "scipy*"
+          - "matplotlib*"
+          - "astropy*"
+        update-types:
+          - "minor"
+          - "patch"
+      gravitational-wave:
+        patterns:
+          - "gwpy*"
+          - "pycbc*"
+        update-types:
+          - "patch"
+      testing:
+        patterns:
+          - "pytest*"
+          - "flake8*"
+        update-types:
+          - "minor"
+          - "patch"
+    # Automatically rebase PRs when base branch updates
+    rebase-strategy: "auto"
+
+  # Python dependencies - repro/GWTC-1 directory (if exists)
+  - package-ecosystem: "pip"
+    directory: "/repro/GWTC-1"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "motanova84"
+    labels:
+      - "dependencies"
+      - "python"
+      - "automated"
+
+  # GitHub Actions updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "10:00"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "motanova84"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+    commit-message:
+      prefix: "ci"
+      include: "scope"

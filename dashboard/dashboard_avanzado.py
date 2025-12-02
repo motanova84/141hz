@@ -78,4 +78,7 @@ if __name__ == '__main__':
     print("📊 Monitor en tiempo real activado")
     print("🌐 Acceder a: http://localhost:5000")
     print("=" * 60)
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Only enable debug in development (controlled by environment variable)
+    import os
+    debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() in ('true', '1', 't')
+    app.run(debug=debug_mode, host='0.0.0.0', port=5000)

@@ -1,0 +1,327 @@
+---
+# Repository Metadata - Machine Readable
+# AI systems can parse this YAML for structured information
+
+repository:
+  name: gw250114-141hz-analysis
+  full_name: motanova84/gw250114-141hz-analysis
+  owner: motanova84
+  description: >
+    Analysis of 141.7001 Hz frequency component in gravitational wave event GW250114
+    using quantum gravity principles and multi-scale coherence analysis
+  
+  url: https://github.com/motanova84/gw250114-141hz-analysis
+  homepage: https://github.com/motanova84/gw250114-141hz-analysis
+  
+  topics:
+    - gravitational-waves
+    - quantum-physics
+    - python
+    - scientific-computing
+    - ligo
+    - gwpy
+    - open-science
+    - ai-friendly
+    - ai-accessible
+    - machine-readable
+
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+    ai_training: allowed
+    commercial_use: allowed
+    modification: allowed
+    distribution: allowed
+
+  language:
+    primary: Python
+    minimum_version: "3.11"
+    recommended_version: "3.12"
+
+  status:
+    active: true
+    maintained: true
+    accepting_contributions: true
+    ai_contributions_welcome: true
+
+author:
+  name: José Manuel Mota Burruezo
+  designation: JMMB Ψ✧
+  github: motanova84
+
+collaborators:
+  lead_researcher:
+    name: José Manuel Mota Burruezo
+    designation: JMMB Ψ✧
+    role: Lead Researcher, Theory Development, LIGO Data Analysis
+    github: motanova84
+  
+  ai_assistants:
+    - name: GitHub Copilot
+      role: Code Development, Documentation, Testing
+      type: automated
+      contributions:
+        - Automated testing implementation
+        - Technical documentation
+        - Code optimization
+        - CI/CD pipeline development
+  
+  seeking:
+    - role: Scientific Validators
+      areas: [gravitational-waves, quantum-physics, bayesian-analysis]
+    - role: Software Developers
+      areas: [python, testing, optimization]
+    - role: Data Analysts
+      areas: [GWTC-2, GWTC-3, multi-event-analysis]
+    - role: Technical Writers
+      areas: [documentation, tutorials, translations]
+    - role: Visual Designers
+      areas: [data-visualization, diagrams, infographics]
+  
+  how_to_contribute:
+    - Fork repository
+    - Read CONTRIBUTING.md
+    - Review COLLABORATORS.md
+    - Make changes
+    - Test thoroughly
+    - Submit pull request
+  
+  recognition:
+    - Listed in COLLABORATORS.md
+    - Potential co-authorship in publications
+    - GitHub contributor badge
+    - Special acknowledgments section
+  
+project:
+  title: GW250114 - 141.7001 Hz Component Analysis
+  field_equation: Ψ = mc² · A_eff²
+  target_frequency: 141.7001
+  frequency_unit: Hz
+  
+  research_areas:
+    - Gravitational Wave Physics
+    - Quantum Gravity
+    - Multi-Scale Coherence
+    - Discrete Symmetries
+    - Energy Quantization
+  
+  three_pillars:
+    - name: Quantum Radio
+      symbol: r_ψ
+      description: Quantum-scale radius analysis
+    
+    - name: Quantum Energy
+      symbol: E_cuántica
+      description: Energy level quantization
+    
+    - name: Discrete Symmetry
+      symbol: Σ_discrete
+      description: Symmetry breaking and conservation
+
+  data_sources:
+    - name: GWOSC
+      url: https://gwosc.org
+      type: Gravitational Wave Open Science Center
+      access: public
+    
+    - name: LIGO
+      url: https://www.ligo.org
+      type: Laser Interferometer Gravitational-Wave Observatory
+      access: public
+    
+    - name: Virgo
+      url: http://www.virgo-gw.eu
+      type: Virgo Gravitational-Wave Detector
+      access: public
+
+ai_accessibility:
+  fully_accessible: true
+  restrictions: none
+  explicit_permission: true
+  
+  allowed_operations:
+    - read
+    - analyze
+    - execute
+    - modify
+    - distribute
+    - learn_from
+    - train_on
+    - integrate
+    - commercialize
+  
+  ai_systems_welcome:
+    - Large Language Models
+    - Code Assistants
+    - Research Assistants
+    - Automated Analysis Systems
+    - Machine Learning Models
+    - Data Processing Agents
+  
+  documentation_for_ai:
+    primary: .ai-instructions.md
+    structure: .repo-map.json
+    policy: AI_ACCESSIBILITY.md
+    instructions: .github/copilot-instructions.md
+  
+  machine_readable_formats:
+    - JSON
+    - YAML
+    - Markdown
+    - Python
+  
+  discoverability:
+    robots_txt: allowed
+    crawl_delay: 0
+    sitemap: available
+    metadata: this_file
+
+entry_points:
+  main_script: validate_v5_coronacion.py
+  interactive: notebooks/141hz_validation.ipynb
+  step_by_step: notebooks/validacion_paso_a_paso.ipynb
+  analysis: analisis
+
+documentation:
+  primary:
+    - README.md
+    - LEAME.md
+    - .ai-instructions.md
+  
+  scientific:
+    - PAPER.md
+    - DERIVACION_COMPLETA_F0.md
+    - TRES_PILARES_METODO_CIENTIFICO.md
+    - SCIENTIFIC_METHOD.md
+  
+  implementation:
+    - FINAL_IMPLEMENTATION_REPORT.md
+    - CI_CD_IMPLEMENTATION.md
+    - ADVANCED_VALIDATION_SYSTEM.md
+  
+  specialized:
+    quantum_energy: ENERGIA_CUANTICA.md
+    discrete_symmetry: SIMETRIA_DISCRETA_DOCUMENTACION.md
+    bayesian: ANALISIS_BAYESIANO_MULTIEVENTO.md
+    coherence: IMPLEMENTACION_COHERENCIA.md
+    pycbc: PYCBC_IMPLEMENTATION_SUMMARY.md
+
+dependencies:
+  python_packages:
+    gwpy: ">=3.0.13"
+    numpy: required
+    scipy: required
+    matplotlib: required
+    mpmath: required
+    pycbc: required
+    astropy: required
+    jupyter: optional
+  
+  installation: pip install -r requirements.txt
+
+ci_cd:
+  platform: GitHub Actions
+  
+  workflows:
+    - name: analyze.yml
+      purpose: Main CI/CD testing pipeline
+      trigger: [push, pull_request]
+    
+    - name: production-qcal.yml
+      purpose: Production quality assurance
+      trigger: [schedule, workflow_dispatch]
+    
+    - name: update_coherence_visualization.yml
+      purpose: Automated visualization updates
+      trigger: [push, schedule]
+  
+  test_matrix:
+    python: ["3.11", "3.12"]
+    os: [ubuntu-latest]
+
+outputs:
+  formats:
+    numerical: JSON
+    visualizations: [PNG, PDF]
+    data_tables: CSV
+    logs: [TXT, LOG]
+  
+  locations:
+    results: results/
+    figures: results/figures/
+    logs: logs/ (if configured)
+
+precision:
+  standard: IEEE 754 double precision
+  high_precision: mpmath arbitrary precision
+  configurable: true
+  parameter: --precision
+
+validation_methods:
+  - Bayesian multi-event analysis
+  - Statistical significance (SNR, p-values)
+  - High-precision numerical calculations
+  - Energy conservation checks
+  - Symmetry validation
+  - Automated CI/CD testing
+
+quick_start:
+  setup:
+    - git clone https://github.com/motanova84/gw250114-141hz-analysis
+    - cd gw250114-141hz-analysis
+    - pip install -r requirements.txt
+  
+  run:
+    - python validate_v5_coronacion.py
+    - python scripts/generar_coherencia_escalas.py
+  
+  explore:
+    - jupyter notebook notebooks/141hz_validation.ipynb
+
+contribution:
+  guidelines: CONTRIBUTING.md
+  process:
+    - Fork repository
+    - Create feature branch
+    - Make changes
+    - Test thoroughly
+    - Submit pull request
+  
+  ai_contributions:
+    welcome: true
+    attribution: encouraged
+    same_process: true
+
+contact:
+  github_issues: https://github.com/motanova84/gw250114-141hz-analysis/issues
+  github_discussions: https://github.com/motanova84/gw250114-141hz-analysis/discussions
+  pull_requests: https://github.com/motanova84/gw250114-141hz-analysis/pulls
+  sponsor: https://github.com/sponsors/motanova84
+
+external_resources:
+  data:
+    - https://gwosc.org
+  
+  documentation:
+    - https://www.ligo.org
+    - https://gwpy.github.io
+    - https://pycbc.org
+  
+  related_work:
+    - LIGO Scientific Collaboration publications
+    - Gravitational wave catalogs
+
+metadata:
+  version: 1.0
+  created: 2025
+  last_updated: 2025-10-21
+  schema_version: 1.0
+  ai_friendly: true
+  machine_readable: true
+  human_readable: true
+
+tags:
+  scientific: [physics, astronomy, gravitational-waves, quantum-mechanics]
+  technical: [python, numpy, scipy, data-analysis, scientific-computing]
+  methodology: [bayesian-analysis, statistical-analysis, reproducibility]
+  accessibility: [open-science, open-source, ai-accessible, well-documented]

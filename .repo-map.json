@@ -1,0 +1,219 @@
+{
+  "repository": {
+    "name": "gw250114-141hz-analysis",
+    "full_name": "motanova84/gw250114-141hz-analysis",
+    "description": "Gravitational Wave GW250114 - Analysis of 141.7001 Hz frequency component using quantum gravity principles",
+    "author": "José Manuel Mota Burruezo (JMMB Ψ✧)",
+    "license": "MIT",
+    "language": "Python",
+    "min_python_version": "3.11",
+    "ai_accessible": true,
+    "ai_restrictions": "none",
+    "open_science": true
+  },
+  "core_concepts": {
+    "target_frequency": "141.7001 Hz",
+    "field_equation": "Ψ = mc² · A_eff²",
+    "research_focus": [
+      "Gravitational wave analysis",
+      "Quantum gravity connections",
+      "Multi-scale coherence",
+      "Discrete symmetries",
+      "Energy quantization"
+    ],
+    "three_pillars": [
+      "Quantum Radio (r_ψ)",
+      "Quantum Energy (E_cuántica)",
+      "Discrete Symmetry"
+    ]
+  },
+  "directory_structure": {
+    ".github/": {
+      "description": "GitHub configuration and workflows",
+      "important_files": [
+        "workflows/analyze.yml",
+        "workflows/production-qcal.yml",
+        "workflows/update_coherence_visualization.yml",
+        "copilot-instructions.md"
+      ]
+    },
+    "scripts/": {
+      "description": "Analysis and validation Python scripts",
+      "patterns": {
+        "generar_*.py": "Generation scripts for visualizations and data",
+        "validar_*.py": "Validation scripts for scientific verification"
+      }
+    },
+    "notebooks/": {
+      "description": "Jupyter notebooks for interactive analysis",
+      "key_files": [
+        "141hz_validation.ipynb",
+        "validacion_paso_a_paso.ipynb"
+      ]
+    },
+    "docs/": {
+      "description": "Additional documentation"
+    },
+    "config/": {
+      "description": "Configuration files for analysis parameters"
+    },
+    "results/": {
+      "description": "Analysis results and generated figures",
+      "subdirectories": {
+        "figures/": "Visualizations and plots (PNG files)"
+      }
+    },
+    "dashboard/": {
+      "description": "Web dashboard components for result visualization"
+    }
+  },
+  "entry_points": {
+    "primary_validation": "validate_v5_coronacion.py",
+    "interactive_notebook": "notebooks/141hz_validation.ipynb",
+    "step_by_step": "validacion_paso_a_paso.ipynb",
+    "analysis_executable": "analisis"
+  },
+  "documentation_hierarchy": {
+    "start_here": [
+      "README.md",
+      ".ai-instructions.md",
+      "LEAME.md"
+    ],
+    "scientific_foundations": [
+      "PAPER.md",
+      "DERIVACION_COMPLETA_F0.md",
+      "TRES_PILARES_METODO_CIENTIFICO.md",
+      "SCIENTIFIC_METHOD.md"
+    ],
+    "technical_implementation": [
+      "FINAL_IMPLEMENTATION_REPORT.md",
+      "CI_CD_IMPLEMENTATION.md",
+      "ADVANCED_VALIDATION_SYSTEM.md"
+    ],
+    "specific_topics": {
+      "quantum_energy": "ENERGIA_CUANTICA.md",
+      "discrete_symmetry": "SIMETRIA_DISCRETA_DOCUMENTACION.md",
+      "bayesian_analysis": "ANALISIS_BAYESIANO_MULTIEVENTO.md",
+      "coherence": "IMPLEMENTACION_COHERENCIA.md",
+      "pycbc_integration": "PYCBC_IMPLEMENTATION_SUMMARY.md"
+    },
+    "development": [
+      "CONTRIBUTING.md",
+      "CHANGELOG.md",
+      "IMPLEMENTATION_SUMMARY.md"
+    ],
+    "comparisons": [
+      "BEFORE_AFTER_COMPARISON.md",
+      "BEFORE_AFTER_PASO1.md",
+      "VISUAL_COMPARISON.md"
+    ],
+    "fixes_and_corrections": [
+      "FIXES.md",
+      "VALIDATION_FIX_DOCUMENTATION.md",
+      "CORRECCION_TECNICA_PASO1.md"
+    ]
+  },
+  "key_dependencies": {
+    "gwpy": ">=3.0.13",
+    "numpy": "required",
+    "scipy": "required",
+    "matplotlib": "required",
+    "mpmath": "required for high precision",
+    "pycbc": "for gravitational wave processing",
+    "astropy": "for astronomical calculations",
+    "jupyter": "for notebooks"
+  },
+  "ci_cd": {
+    "platforms": ["GitHub Actions"],
+    "workflows": {
+      "analyze.yml": "Main CI/CD pipeline for testing",
+      "production-qcal.yml": "Production quality assurance workflow",
+      "update_coherence_visualization.yml": "Automated visualization updates"
+    },
+    "test_matrix": {
+      "python_versions": ["3.11", "3.12"],
+      "os": ["ubuntu-latest"]
+    }
+  },
+  "data_sources": {
+    "primary": "GWOSC (Gravitational Wave Open Science Center)",
+    "events": ["GW250114"],
+    "detectors": ["LIGO", "Virgo"],
+    "access": "public"
+  },
+  "output_formats": {
+    "numerical_results": "JSON",
+    "visualizations": ["PNG", "PDF"],
+    "data_tables": "CSV",
+    "logs": "TXT/LOG"
+  },
+  "ai_interaction_guidelines": {
+    "read_access": "unrestricted",
+    "modify_access": "unrestricted (under MIT license)",
+    "execute_access": "unrestricted",
+    "contribute_access": "unrestricted",
+    "preferred_approach": [
+      "Read documentation first",
+      "Understand scientific context",
+      "Review code structure",
+      "Test before modifying",
+      "Document changes",
+      "Maintain reproducibility"
+    ]
+  },
+  "common_ai_queries": {
+    "understand_physics": {
+      "read": ["PAPER.md", "DERIVACION_COMPLETA_F0.md"],
+      "execute": null
+    },
+    "run_analysis": {
+      "read": ["README.md"],
+      "execute": ["validate_v5_coronacion.py"]
+    },
+    "review_results": {
+      "read": ["results/figures/", "FINAL_REPORT.md"],
+      "execute": null
+    },
+    "optimize_code": {
+      "read": ["scripts/", "validate_v5_coronacion.py"],
+      "execute": ["pytest", "flake8"]
+    },
+    "understand_methodology": {
+      "read": ["TRES_PILARES_METODO_CIENTIFICO.md", "SCIENTIFIC_METHOD.md"],
+      "execute": null
+    }
+  },
+  "validation_methods": {
+    "bayesian": "Multi-event Bayesian analysis",
+    "statistical": "SNR and p-value calculations",
+    "numerical": "High-precision mpmath calculations",
+    "physical": "Energy conservation and symmetry checks",
+    "automated": "CI/CD testing pipelines"
+  },
+  "precision_settings": {
+    "standard": "IEEE 754 double precision",
+    "high": "mpmath arbitrary precision",
+    "configurable": "via --precision parameter"
+  },
+  "web_resources": {
+    "documentation_site": "GitHub Pages (if configured)",
+    "colab_notebook": "Available via README badge",
+    "dashboard": "dashboard/ directory",
+    "deployment": "vercel.json configuration"
+  },
+  "contact": {
+    "author": "José Manuel Mota Burruezo",
+    "github_user": "motanova84",
+    "repository_url": "https://github.com/motanova84/gw250114-141hz-analysis",
+    "issues_url": "https://github.com/motanova84/gw250114-141hz-analysis/issues",
+    "sponsorship": "Available via GitHub Sponsors"
+  },
+  "metadata": {
+    "created": "2025",
+    "last_updated": "2025-10-21",
+    "status": "active",
+    "maturity": "research",
+    "ai_friendly": true,
+    "machine_readable": true
+  }
+}

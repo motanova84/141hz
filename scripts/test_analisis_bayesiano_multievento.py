@@ -31,7 +31,6 @@ def test_time_window_function():
     print()
     print("✅ Todas las ventanas de tiempo calculadas correctamente")
     print()
-    return True
 
 def test_synthetic_analysis():
     """Test del análisis con datos sintéticos"""
@@ -82,7 +81,6 @@ def test_synthetic_analysis():
     if mean_deviation < 0.5:
         print("✅ Test de análisis sintético APROBADO")
         print("   La frecuencia media está dentro del rango esperado")
-        return True
     else:
         print("⚠️  Test de análisis sintético con desviación significativa")
         return False
@@ -112,7 +110,6 @@ def test_statistics_calculation():
     
     print("✅ Cálculos estadísticos correctos")
     print()
-    return True
 
 def test_error_handling():
     """Test de manejo de errores"""
@@ -134,7 +131,6 @@ def test_error_handling():
     except ValueError as e:
         print(f"✅ ValueError capturado correctamente: {e}")
         print()
-        return True
 
 def main():
     """Ejecutar todos los tests"""
@@ -154,10 +150,12 @@ def main():
     
     for test_name, test_func in tests:
         try:
-            if test_func():
-                passed += 1
-            else:
+            result = test_func()
+            if result is False:
+                print(f"❌ Test {test_name} falló (retornó False)")
                 failed += 1
+            else:
+                passed += 1
         except Exception as e:
             print(f"❌ Test {test_name} falló con excepción: {e}")
             failed += 1

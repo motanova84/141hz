@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "framework": "QCAL-LLM \u221e\u00b3",
+    "author": "Jos\u00e9 Manuel Mota Burruezo (JMMB \u03a8\u2727)",
+    "optimization": "RLHF-free epsilon tuning",
+    "date": "2025-11-05"
+  },
+  "iterations": [
+    {
+      "iteration": 0,
+      "epsilon": 0.01,
+      "mean_psi": 7.667702393284496,
+      "ci_width": 0.04004204848820318,
+      "mean_coherence": 0.9333333333333333,
+      "mean_kld_inv": 8.725113579521155,
+      "converged": true
+    }
+  ],
+  "summary": {
+    "total_iterations": 1,
+    "converged": true,
+    "final_epsilon": 0.01,
+    "final_psi": 7.667702393284496,
+    "final_coherence": 0.9333333333333333
+  }
+}
