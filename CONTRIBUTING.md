@@ -2,6 +2,14 @@
 
 ¡Gracias por tu interés en contribuir al proyecto 141Hz / QC-LLM! Este documento describe cómo contribuir efectivamente al proyecto.
 
+## Requisitos Básicos
+
+- **Python**: 3.10+ (recomendado 3.11 o 3.12)
+- **Instalación de desarrollo**: `pip install -e ".[dev]"`
+- **Tests**: `pytest -q`
+- **Estilo**: PEP8, type hints opcional
+- **DCO**: Developer Certificate of Origin en commits
+
 ## 🌊 Contribuciones QC-LLM (Quantum Coherence for LLMs)
 
 El proyecto incluye un componente de **estándar de coherencia cuántica para modelos de lenguaje** (QC-LLM). Si trabajas en esta área:
@@ -224,6 +232,28 @@ git push origin feature/mi-mejora
 - Espera la revisión automática de CI/CD
 - Responde a comentarios de revisión
 
+### 7. Codecov AI - Revisión Automática (Opcional)
+
+El proyecto utiliza **Codecov AI** para revisiones automáticas de código y generación de pruebas. Puedes usar estos comandos en los comentarios de tu PR:
+
+#### Revisar Código Automáticamente
+
+```
+@codecov-ai-reviewer review
+```
+
+El bot analizará tu PR y sugerirá mejoras de código, identificará problemas potenciales y verificará buenas prácticas.
+
+#### Generar Pruebas Automáticamente
+
+```
+@codecov-ai-reviewer test
+```
+
+El bot generará sugerencias de pruebas unitarias para tu código nuevo, mejorando la cobertura.
+
+**Nota**: La generación de comentarios puede tardar algunos minutos. Para más información, consulta [CODECOV_AI_GUIDE.md](CODECOV_AI_GUIDE.md).
+
 ## 🧪 Ejecutar Tests Localmente
 
 ### Suite Completa
@@ -259,6 +289,26 @@ flake8 scripts/ --select=E9,F63,F7,F82 --show-source
 # Todas las advertencias
 flake8 scripts/ --max-line-length=120
 ```
+
+### Cobertura de Código
+
+El proyecto mantiene cobertura de código alta para garantizar calidad. Ejecuta los tests con cobertura:
+
+```bash
+# Generar reporte de cobertura
+pytest tests/ -v --cov=. --cov-report=term --cov-report=xml
+
+# Ver reporte HTML interactivo
+pytest tests/ --cov=. --cov-report=html
+open htmlcov/index.html  # o xdg-open en Linux
+```
+
+**Objetivos de cobertura:**
+- Proyecto completo: Mantener nivel actual (automático)
+- Código nuevo (patches): Mínimo 70%
+- Código crítico: Apuntar a >90%
+
+Ver configuración completa en `codecov.yml` y estado actual en [![codecov](https://codecov.io/gh/motanova84/141hz/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/141hz)
 
 ## 📝 Estándares de Código
 

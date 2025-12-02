@@ -24,8 +24,9 @@ El pozo infinito cuántico representa el modelo fundamental que ilustra la **cua
 2. [Interpretación y Transición al Marco Noésico](#b-interpretación-y-transición-al-marco-noésico)
 3. [Frecuencia Fundamental y Resonador Basal](#c-frecuencia-fundamental-y-resonador-basal)
 4. [Implementación Computacional](#implementación-computacional)
-5. [Validación Experimental](#validación-experimental)
-6. [Conclusiones](#conclusiones)
+5. [Suite de Tests Completa](#-suite-de-tests-completa)
+6. [Validación Experimental](#validación-experimental)
+7. [Conclusiones](#conclusiones)
 
 ---
 
@@ -295,6 +296,205 @@ python3 pozo_infinito_cuantico.py
 # Ejecutar tests
 python3 test_pozo_infinito_cuantico.py
 ```
+
+---
+
+## 🧪 Suite de Tests Completa
+
+### Resumen de Tests
+
+El módulo `pozo_infinito_cuantico.py` cuenta con una **suite de 29 tests exhaustivos** que validan tanto la implementación estándar de mecánica cuántica como la extensión al marco noésico.
+
+🔗 **Archivo de tests**: [`test_pozo_infinito_cuantico.py`](test_pozo_infinito_cuantico.py)
+
+### Cobertura de Tests
+
+#### 1. TestPozoInfinitoCuantico (12 tests)
+
+Tests de la implementación estándar del pozo cuántico:
+
+- ✅ **Inicialización**: Verificación de parámetros L y m
+- ✅ **Número de onda**: Cálculo kₙ = nπ/L y validación de cuantización
+- ✅ **Energía**: Eigenvalores Eₙ = ℏ²π²n²/(2mL²) y escalado n²
+- ✅ **Frecuencia**: Cálculo fₙ = Eₙ/h
+- ✅ **Función de onda**: Normalización ∫|ψ|² dx = 1
+- ✅ **Condiciones de frontera**: ψ(0) = ψ(L) = 0
+- ✅ **Nodos internos**: Verificación de (n-1) nodos para nivel n
+- ✅ **Densidad de probabilidad**: |Ψₙ(x)|²
+- ✅ **Estado fundamental**: Energía y frecuencia del punto cero
+
+#### 2. TestPozoNoetico (5 tests)
+
+Tests de la extensión noésica con término R_Ψ:
+
+- ✅ **Inicialización noésica**: Parámetros L, m, R_psi
+- ✅ **Reducción a estándar**: Verificación R_Ψ = 0 → Schrödinger estándar
+- ✅ **Energía noésica**: E_noésica = E_cuántica + R_Ψ
+- ✅ **Frecuencia noésica**: f_noésica con retroalimentación
+- ✅ **Coherencia de campo**: Factor de coherencia |Ψ_noésica|²/|Ψ_cuántica|²
+
+#### 3. TestCalcularLongitudPozo (3 tests)
+
+Tests del cálculo inverso L desde f₀:
+
+- ✅ **Consistencia**: L → f → L' verifica L = L'
+- ✅ **Frecuencia universal**: Alineación con f₀ = 141.7001 Hz
+- ✅ **Escalado**: Verificación L ∝ 1/√(mf)
+
+#### 4. TestResonadorBasalUniversal (3 tests)
+
+Tests del resonador alineado con f₀:
+
+- ✅ **Frecuencia exacta**: |f₁ - 141.7001| < 10⁻⁶ Hz
+- ✅ **Propiedades físicas**: L > 0, E₁ > 0, f₁ > 0
+- ✅ **Independencia de masa**: f₁ = 141.7001 Hz para diferentes masas
+
+#### 5. TestPhysicalConsistency (4 tests)
+
+Tests de consistencia física:
+
+- ✅ **Principio de incertidumbre**: ΔxΔp ≥ ℏ/2
+- ✅ **Ortogonalidad**: ∫ψₙψₘ dx = 0 para n ≠ m
+- ✅ **Positividad de energía**: Eₙ > 0 ∀n
+- ✅ **Positividad de frecuencia**: fₙ > 0 ∀n
+
+#### 6. TestNumericalStability (2 tests)
+
+Tests de estabilidad numérica:
+
+- ✅ **Tamaños extremos**: Desde escala atómica (10⁻¹² m) hasta macroscópica (10⁻³ m)
+- ✅ **Números cuánticos altos**: Verificación hasta n = 100
+
+### Ejemplo de Salida de Tests
+
+```bash
+$ python3 test_pozo_infinito_cuantico.py -v
+
+test_calcular_longitud_pozo_consistency ... ok
+test_calcular_longitud_pozo_scaling ... ok
+test_calcular_longitud_pozo_universal ... ok
+test_extreme_well_sizes ... ok
+test_high_quantum_numbers ... ok
+test_energy_positivity ... ok
+test_frequency_positivity ... ok
+test_orthogonality ... ok
+test_uncertainty_principle ... ok
+test_densidad_probabilidad ... ok
+test_energia ... ok
+test_energia_punto_cero ... ok
+test_energia_scaling ... ok
+test_frecuencia ... ok
+test_frecuencia_fundamental ... ok
+test_funcion_onda_boundary_conditions ... ok
+test_funcion_onda_nodes ... ok
+test_funcion_onda_normalization ... ok
+test_initialization ... ok
+test_numero_onda ... ok
+test_numero_onda_invalid ... ok
+test_coherencia_campo ... ok
+test_energia_noesica ... ok
+test_frecuencia_noesica ... ok
+test_initialization (TestPozoNoetico) ... ok
+test_reduces_to_standard_when_R_zero ... ok
+test_resonador_universal_different_masses ... ok
+test_resonador_universal_frequency ... ok
+test_resonador_universal_properties ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 0.005s
+
+OK
+```
+
+### Muestras de Tests Específicos
+
+#### Test: Validación de Frecuencia Universal
+
+```python
+def test_resonador_universal_frequency(self):
+    """Test that universal resonator has correct fundamental frequency."""
+    m = 1e-27  # Arbitrary mass
+    L, E1, f1 = resonador_basal_universal(m, precision=50)
+    
+    # Frequency should match F0_UNIVERSAL within high precision
+    rel_error = abs(f1 - F0_UNIVERSAL) / F0_UNIVERSAL
+    self.assertLess(rel_error, 1e-6)
+```
+
+**Resultado**: ✅ Error relativo < 10⁻⁶ (< 0.0001%)
+
+#### Test: Normalización de Funciones de Onda
+
+```python
+def test_funcion_onda_normalization(self):
+    """Test that wave functions are normalized."""
+    x = np.linspace(0, self.L, 1000)
+    dx = x[1] - x[0]
+    
+    for n in range(1, 6):
+        psi = self.pozo.funcion_onda(x, n)
+        # Integrate |ψ|² over the well
+        norm = np.sum(np.abs(psi)**2) * dx
+        # Should integrate to 1 (normalized)
+        self.assertAlmostEqual(norm, 1.0, places=2)
+```
+
+**Resultado**: ✅ ∫|ψ|² dx = 1.00 ± 0.01 para todos los niveles
+
+#### Test: Principio de Incertidumbre
+
+```python
+def test_uncertainty_principle(self):
+    """Test that system respects Heisenberg uncertainty principle."""
+    Delta_x = self.L  # Order of magnitude
+    k1 = self.pozo.numero_onda(1)
+    Delta_p = HBAR * k1  # Order of magnitude of momentum
+    
+    uncertainty_product = Delta_x * Delta_p
+    # Should satisfy uncertainty principle
+    self.assertGreaterEqual(uncertainty_product, HBAR / 2)
+```
+
+**Resultado**: ✅ ΔxΔp = πℏ > ℏ/2 (satisface principio de Heisenberg)
+
+### Validación de Consistencia Matemática
+
+Todos los tests verifican propiedades fundamentales de mecánica cuántica:
+
+| Propiedad | Test | Estado |
+|-----------|------|--------|
+| Cuantización energética (Eₙ ∝ n²) | `test_energia_scaling` | ✅ PASS |
+| Ortogonalidad (⟨ψₙ\|ψₘ⟩ = δₙₘ) | `test_orthogonality` | ✅ PASS |
+| Normalización (⟨ψₙ\|ψₙ⟩ = 1) | `test_funcion_onda_normalization` | ✅ PASS |
+| Condiciones frontera (ψ(0) = ψ(L) = 0) | `test_funcion_onda_boundary_conditions` | ✅ PASS |
+| Incertidumbre (ΔxΔp ≥ ℏ/2) | `test_uncertainty_principle` | ✅ PASS |
+| Alineación f₀ (f₁ = 141.7001 Hz) | `test_resonador_universal_frequency` | ✅ PASS |
+
+### Ejecutar Tests
+
+```bash
+# Ejecutar todos los tests con salida detallada
+python3 test_pozo_infinito_cuantico.py -v
+
+# Ejecutar solo una clase de tests específica
+python3 test_pozo_infinito_cuantico.py TestPozoInfinitoCuantico -v
+
+# Ejecutar un test específico
+python3 test_pozo_infinito_cuantico.py TestPozoInfinitoCuantico.test_energia -v
+```
+
+### Código Fuente de Tests
+
+Para ver el código completo de todos los tests y su documentación:
+
+📄 **Archivo completo**: [`test_pozo_infinito_cuantico.py`](test_pozo_infinito_cuantico.py) (470 líneas)
+
+El archivo incluye:
+- Docstrings detallados para cada test
+- Configuración de fixtures en `setUp()`
+- Valores de referencia físicos estándar
+- Tolerancias numéricas apropiadas
+- Comentarios explicativos de física cuántica
 
 ---
 
