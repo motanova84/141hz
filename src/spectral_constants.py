@@ -61,8 +61,7 @@ Instituto Conciencia Cuántica
 """
 
 import mpmath as mp
-from typing import Dict, Any, Tuple
-import numpy as np
+from typing import Dict, Any
 
 # Set default precision for mpmath calculations
 mp.dps = 50
@@ -71,12 +70,12 @@ mp.dps = 50
 class SpectralConstants:
     """
     Container for spectral constants in the dual-constant framework.
-    
+
     The system has two fundamental spectral constants:
-    
+
     1. C_PRIMARY (629.83) - Primary spectral residue from λ₀
     2. C_COHERENCE (244.36) - Coherence constant from second spectral moment
-    
+
     Both combine to produce f₀ = 141.7001 Hz.
     """
 
@@ -87,7 +86,7 @@ class SpectralConstants:
     # Minimum eigenvalue of the H_Ψ operator
     # Calculated as λ₀ = 1/C_PRIMARY to ensure exact C_PRIMARY = 629.83
     LAMBDA_0 = mp.mpf("0.001587730022")
-    
+
     # Primary spectral constant: C = 1/λ₀ = 629.83 (exact)
     C_PRIMARY = mp.mpf("629.83")
 
@@ -98,7 +97,7 @@ class SpectralConstants:
     # Mean eigenvalue (spectral centroid)
     # Calculated to ensure C_COHERENCE = ⟨λ⟩²/λ₀ = 244.36
     LAMBDA_MEAN = mp.mpf("0.622878566231")
-    
+
     # Coherence constant: C_QCAL = ⟨λ⟩²/λ₀ = 244.36 (exact)
     C_COHERENCE = mp.mpf("244.36")
 
@@ -115,10 +114,10 @@ class SpectralConstants:
 
     # Euler-Mascheroni constant γ
     GAMMA = mp.mpf("0.5772156649015329")
-    
+
     # Golden ratio φ = (1+√5)/2
     PHI = (1 + mp.sqrt(5)) / 2
-    
+
     # Derived constants
     E_GAMMA = mp.exp(GAMMA)  # e^γ ≈ 1.781072418
     SQRT_2PI_GAMMA = mp.sqrt(2 * mp.pi * GAMMA)  # √(2πγ) ≈ 1.904403577
@@ -138,40 +137,40 @@ class SpectralConstants:
     def derive_f0_from_spectral_constants(cls, precision: int = 50) -> Dict[str, Any]:
         """
         Derive f₀ = 141.7001 Hz from the spectral constants.
-        
+
         The derivation follows:
             f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_PRIMARY
-        
+
         And the coherence factor modulates the result:
             f₀ ≈ F(C_PRIMARY) × COHERENCE_FACTOR
-        
+
         Args:
             precision: Decimal precision for calculation
-            
+
         Returns:
             Dictionary with derivation results
         """
         mp.dps = precision
-        
+
         # Base frequency from theta function
         f_base = 1 / (2 * mp.pi)
-        
+
         # Step 1: Scale by e^γ
         f1 = f_base * cls.E_GAMMA
-        
+
         # Step 2: Scale by √(2πγ)
         f2 = f1 * cls.SQRT_2PI_GAMMA
-        
+
         # Step 3: Scale by φ²/(2π)
         f3 = f2 * (cls.PHI ** 2 / (2 * mp.pi))
-        
+
         # Step 4: Scale by C_PRIMARY
         f_from_primary = f3 * cls.C_PRIMARY
-        
-        # Alternative derivation using coherence factor
-        # This shows the relationship between both constants
-        coherence_contribution = float(cls.COHERENCE_FACTOR)
-        
+
+        # The coherence factor modulates the structure to produce form
+        # coherence_contribution = C_COHERENCE / C_PRIMARY ≈ 0.388
+        # This is used in alternative derivation paths
+
         # Compute error
         error_relative = abs(float(f_from_primary) - 141.7001) / 141.7001
 
@@ -201,10 +200,10 @@ class SpectralConstants:
     def analyze_spectral_levels(cls) -> Dict[str, Any]:
         """
         Analyze the two spectral levels of the H_Ψ operator.
-        
+
         Level 1 (Local): λ₀ → C_PRIMARY (structure)
         Level 2 (Global): Second moment → C_COHERENCE (coherence)
-        
+
         Returns:
             Dictionary with level analysis
         """
@@ -242,21 +241,21 @@ class SpectralConstants:
     def validate_dual_constant_framework(cls, precision: int = 50) -> Dict[str, Any]:
         """
         Validate the mathematical consistency of the dual-constant framework.
-        
+
         Args:
             precision: Decimal precision for calculation
-            
+
         Returns:
             Dictionary with validation results
         """
         mp.dps = precision
-        
+
         results = {
             "framework": "Dual Spectral Constant Theory",
             "validations": {},
             "all_valid": True,
         }
-        
+
         # Validation 1: C_PRIMARY = 1/λ₀ (with tolerance for explicit values)
         c_primary_computed = 1 / cls.LAMBDA_0
         # Tolerance of 0.01% for numerical precision of explicit values
@@ -270,7 +269,7 @@ class SpectralConstants:
             "status": "✓ PASS" if valid_primary else "✗ FAIL"
         }
         results["all_valid"] = results["all_valid"] and valid_primary
-        
+
         # Validation 2: C_COHERENCE = ⟨λ⟩²/λ₀ (with tolerance for explicit values)
         c_coherence_computed = (cls.LAMBDA_MEAN ** 2) / cls.LAMBDA_0
         tolerance_coh = 0.0001 * float(cls.C_COHERENCE)
@@ -283,7 +282,7 @@ class SpectralConstants:
             "status": "✓ PASS" if valid_coherence else "✗ FAIL"
         }
         results["all_valid"] = results["all_valid"] and valid_coherence
-        
+
         # Validation 3: Coherence factor consistency
         factor_computed = cls.C_COHERENCE / cls.C_PRIMARY
         valid_factor = abs(float(factor_computed) - float(cls.COHERENCE_FACTOR)) < 1e-10
@@ -295,7 +294,7 @@ class SpectralConstants:
             "status": "✓ PASS" if valid_factor else "✗ FAIL"
         }
         results["all_valid"] = results["all_valid"] and valid_factor
-        
+
         # Validation 4: f₀ derivation accuracy
         derivation = cls.derive_f0_from_spectral_constants(precision)
         error_threshold = 0.01  # 1% error tolerance
@@ -310,16 +309,16 @@ class SpectralConstants:
             "status": "✓ PASS" if valid_f0 else "✗ FAIL"
         }
         results["all_valid"] = results["all_valid"] and valid_f0
-        
+
         # Overall status
         results["overall_status"] = "✓ FRAMEWORK VALIDATED" if results["all_valid"] else "✗ VALIDATION FAILED"
-        
+
         return results
 
     def to_dict(self) -> Dict[str, float]:
         """
         Export all spectral constants as a dictionary with float values.
-        
+
         Returns:
             Dictionary of constant name -> value
         """
@@ -370,10 +369,10 @@ if __name__ == "__main__":
     print("The Rigorous Structure Unifying 629.83 and 244.36")
     print("=" * 78)
     print()
-    
+
     # Create instance
     spec = SpectralConstants()
-    
+
     # Display spectral constants
     print("─" * 78)
     print("SPECTRAL CONSTANTS")
@@ -390,7 +389,7 @@ if __name__ == "__main__":
     print("3. COHERENCE FACTOR")
     print(f"   COHERENCE_FACTOR        = {float(spec.COHERENCE_FACTOR):.6f}")
     print()
-    
+
     # Analyze spectral levels
     print("─" * 78)
     print("SPECTRAL LEVELS")
@@ -403,16 +402,17 @@ if __name__ == "__main__":
     print(f"  Constant: {levels['level_1']['constant']:.4f}")
     print(f"  Interpretation: {levels['level_1']['interpretation']}")
     print()
-    print(f"Level 2 - {levels['level_2']['name']}:")
+    print("Level 2 - {name}:".format(name=levels['level_2']['name']))
     print(f"  Parameter: {levels['level_2']['parameter']}")
     print(f"  Constant: {levels['level_2']['constant']:.4f}")
     print(f"  Interpretation: {levels['level_2']['interpretation']}")
     print()
-    print(f"Relationship:")
+    print("Relationship:")
     print(f"  Ratio: {levels['relationship']['ratio']:.6f}")
-    print(f"  {levels['relationship']['interpretation']}")
+    interpretation = levels['relationship']['interpretation']
+    print(f"  {interpretation}")
     print()
-    
+
     # Derive f₀
     print("─" * 78)
     print("DERIVATION OF f₀ = 141.7001 Hz")
@@ -429,7 +429,7 @@ if __name__ == "__main__":
     print(f"Target: {derivation['f0_target_hz']:.4f} Hz")
     print(f"Error: {derivation['error_relative']*100:.4f}%")
     print()
-    
+
     # Validate framework
     print("─" * 78)
     print("FRAMEWORK VALIDATION")
@@ -441,7 +441,7 @@ if __name__ == "__main__":
     print()
     print(f"Overall: {validation['overall_status']}")
     print()
-    
+
     # Physical interpretation
     print("─" * 78)
     print("PHYSICAL INTERPRETATION")
