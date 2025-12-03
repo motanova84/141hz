@@ -242,12 +242,12 @@ class TestMathematicalProperties:
     
     def test_pi_cubed(self, derivacion):
         """Test that π³ correction is calculated correctly."""
-        import math
+        from mpmath import pi as mp_pi
         
         R_data = derivacion.calcular_R_Psi_desde_vacio()
         corr_pi = float(R_data["corr_pi"])
         
-        expected = math.pi ** 3
+        expected = float(mp_pi ** 3)
         assert corr_pi == pytest.approx(expected, rel=1e-6)
 
 

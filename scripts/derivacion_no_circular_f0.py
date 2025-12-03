@@ -167,18 +167,20 @@ class DerivacionNoCircular:
         Returns:
             Diccionario con análisis de equilibrio
         """
-        import math
-        
         def equilibrio_adelico(p):
             """
             Calcula el valor de equilibrio para un primo p.
             
             El equilibrio se alcanza cuando la derivada del cociente
             growth/suppression es mínima.
+            
+            Uses mpmath for consistent high-precision calculations.
             """
-            adelic_growth = math.exp(math.pi * math.sqrt(p) / 2)
-            fractal_suppression = abs(math.log(math.pi / (float(self.phi) ** 3)))
-            return adelic_growth / fractal_suppression
+            from mpmath import exp as mp_exp, sqrt as mp_sqrt, log as mp_log, pi as mp_pi
+            
+            adelic_growth = mp_exp(mp_pi * mp_sqrt(p) / 2)
+            fractal_suppression = abs(mp_log(mp_pi / (self.phi ** 3)))
+            return float(adelic_growth / fractal_suppression)
         
         primes = [11, 13, 17, 19, 23, 29]
         resultados = {}
