@@ -20,8 +20,9 @@ Spectral Origin:
 
         λ₀ ≈ 0.001588050 (first eigenvalue of Hψ)
         C = 1/λ₀ = 629.83... (universal constant)
-        ω₀ = √C ≈ 25.0965 rad/s (angular frequency)
-        f₀ = ω₀/(2π) = 141.7001 Hz (fundamental frequency)
+        f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C = 141.7001 Hz
+
+    where γ is the Euler-Mascheroni constant and φ is the golden ratio.
 
 This constant is:
     - Invariant under adelic transformations

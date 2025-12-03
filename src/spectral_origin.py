@@ -95,6 +95,19 @@ class NoeticOperator:
     # Reference fundamental frequency
     F0_REFERENCE = mp.mpf("141.7001")
 
+    # ═══════════════════════════════════════════════════════════════════
+    # POTENTIAL COEFFICIENTS
+    # ═══════════════════════════════════════════════════════════════════
+    # These coefficients define the noetic potential V(x) = α x² + β cos(2πx/L)
+    # α: Harmonic confinement coefficient (dimensionless, normalized to domain)
+    # β: Adelic modulation coefficient (small perturbation from prime structure)
+    ALPHA_HARMONIC = 0.01  # Harmonic coefficient (sets potential well curvature)
+    BETA_ADELIC = 0.001    # Adelic correction (from prime distribution modulation)
+
+    # Numerical convergence threshold: coefficient of variation < 10%
+    # indicates stable convergence of eigenvalues across grid resolutions
+    CONVERGENCE_CV_THRESHOLD = 0.1
+
     def __init__(self, grid_size: int = 100, domain_size: float = 10.0):
         """
         Initialize the noetic operator discretization.
@@ -131,8 +144,15 @@ class NoeticOperator:
         """
         Compute the noetic potential Vψ.
 
-        The noetic potential is a harmonic-type potential that
-        encodes the vibrational structure of the field.
+        The noetic potential is a harmonic-type potential with adelic corrections
+        that encodes the vibrational structure of the field:
+
+            V(x) = α x² + β cos(2πx/L)
+
+        where:
+            - α (ALPHA_HARMONIC): Sets the curvature of the harmonic well
+            - β (BETA_ADELIC): Small perturbation from prime structure modulation
+            - L: Domain size
 
         Returns:
             1D numpy array of potential values at grid points
@@ -144,11 +164,8 @@ class NoeticOperator:
         )
 
         # Noetic potential: harmonic with adelic corrections
-        # V(x) = α x² + β cos(2πx/L) where L is the domain size
-        alpha = 0.01  # Harmonic coefficient
-        beta = 0.001  # Adelic correction coefficient
-
-        V = alpha * x**2 + beta * np.cos(2 * np.pi * x / self.domain_size)
+        V = (self.ALPHA_HARMONIC * x**2 +
+             self.BETA_ADELIC * np.cos(2 * np.pi * x / self.domain_size))
 
         return V
 
@@ -258,7 +275,9 @@ class NoeticOperator:
         """
         Verify spectral stability across different discretizations.
 
-        This demonstrates that λ₀ is robust and reproducible.
+        This demonstrates that λ₀ is robust and reproducible by computing
+        eigenvalues on progressively finer grids and checking that the
+        coefficient of variation (CV) is below the convergence threshold.
 
         Args:
             n_grids: Number of different grid sizes to test
@@ -277,14 +296,16 @@ class NoeticOperator:
         lambda_0_array = np.array(lambda_0_values)
         lambda_0_mean = np.mean(lambda_0_array)
         lambda_0_std = np.std(lambda_0_array)
+        lambda_0_cv = lambda_0_std / lambda_0_mean if lambda_0_mean != 0 else 0
 
         return {
             "grid_sizes": grid_sizes,
             "lambda_0_values": lambda_0_values,
             "lambda_0_mean": lambda_0_mean,
             "lambda_0_std": lambda_0_std,
-            "lambda_0_cv": lambda_0_std / lambda_0_mean if lambda_0_mean != 0 else 0,
-            "convergent": lambda_0_std / lambda_0_mean < 0.1 if lambda_0_mean != 0 else False,
+            "lambda_0_cv": lambda_0_cv,
+            "convergence_threshold": self.CONVERGENCE_CV_THRESHOLD,
+            "convergent": lambda_0_cv < self.CONVERGENCE_CV_THRESHOLD if lambda_0_mean != 0 else False,
             "note": "Numerical λ₀ converges to theoretical value as grid refines"
         }
 
