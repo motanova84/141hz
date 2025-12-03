@@ -49,6 +49,9 @@ except ImportError:
 PLANCK_LENGTH = mp.mpf("1.616255e-35")  # meters
 SPEED_OF_LIGHT = mp.mpf("299792458")    # m/s
 
+# Fundamental frequency (the target value derived from p=17)
+F0_EXPECTED = mp.mpf("141.7001")  # Hz
+
 # Balance function parameters (derived from zeta function structure)
 # These are calibrated to produce f₀ = 141.7001 Hz at p = 17
 BALANCE_BASE = mp.mpf("76.143")      # Minimum value at p = 17
@@ -182,9 +185,9 @@ def calculate_r_psi(p: int, precision: int = 80) -> mp.mpf:
     """
     mp.dps = precision
     # R_Ψ for p=17 from the noetic vacuum structure
-    # Derived from f₀ = c / (2π × R_Ψ × ℓ_P) with f₀ = 141.7001 Hz
+    # Derived from f₀ = c / (2π × R_Ψ × ℓ_P) with f₀ = F0_EXPECTED
     # R_Ψ = c / (2π × f₀ × ℓ_P) ≈ 2.083343 × 10^40
-    return SPEED_OF_LIGHT / (2 * mp.pi * mp.mpf("141.7001") * PLANCK_LENGTH)
+    return SPEED_OF_LIGHT / (2 * mp.pi * F0_EXPECTED * PLANCK_LENGTH)
 
 
 def calculate_f0(r_psi: mp.mpf, precision: int = 80) -> mp.mpf:
@@ -242,11 +245,8 @@ def validate_p17_optimality(precision: int = 80) -> Dict[str, Any]:
     # Calculate emergent frequency
     f0_emergent = calculate_f0(r_psi_17, precision)
 
-    # Expected frequency
-    f0_expected = mp.mpf("141.7001")
-
     # Calculate relative error
-    relative_error = abs(f0_emergent - f0_expected) / f0_expected
+    relative_error = abs(f0_emergent - F0_EXPECTED) / F0_EXPECTED
 
     # Prepare results
     results = {
@@ -260,7 +260,7 @@ def validate_p17_optimality(precision: int = 80) -> Dict[str, Any]:
         "r_psi_17": float(r_psi_17),
         "r_psi_17_scientific": f"{float(r_psi_17):.6e}",
         "f0_emergent_hz": float(f0_emergent),
-        "f0_expected_hz": float(f0_expected),
+        "f0_expected_hz": float(F0_EXPECTED),
         "relative_error": float(relative_error),
         "validation_passed": is_p17_optimal and relative_error < 0.01,
     }

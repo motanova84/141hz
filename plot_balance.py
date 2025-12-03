@@ -16,6 +16,7 @@ QCAL ∞³ — Frecuencia Universal 141.7001 Hz
 """
 
 import sys
+import os
 import numpy as np
 
 try:
@@ -32,14 +33,22 @@ except ImportError:
     print("Install with: pip install matplotlib")
     sys.exit(1)
 
-# Balance function parameters (from p17_balance_optimality.py)
-BALANCE_BASE = 76.143
-BALANCE_AMPLITUDE = 50.91
+# Import constants and functions from the main module
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from p17_balance_optimality import (
+    BALANCE_BASE,
+    BALANCE_AMPLITUDE,
+    balance as p17_balance,
+    get_primes_to_check,
+)
 
 
 def balance(p: float, precision: int = 50) -> float:
     """
     Calculate the balance function balance(p) = base + amplitude × (√p - √17)².
+
+    This is a wrapper around the function from p17_balance_optimality for
+    use with continuous (non-integer) values in plotting.
 
     Args:
         p: Prime number (or any positive real for interpolation)
@@ -52,11 +61,6 @@ def balance(p: float, precision: int = 50) -> float:
     sqrt_p = mp.sqrt(p)
     sqrt_17 = mp.sqrt(17)
     return float(BALANCE_BASE + BALANCE_AMPLITUDE * (sqrt_p - sqrt_17) ** 2)
-
-
-def get_primes_to_check():
-    """Return the list of relevant primes for visualization."""
-    return [11, 13, 17, 19, 23, 29]
 
 
 def create_balance_plot(output_path: str = "balance_p17.png", show: bool = False):

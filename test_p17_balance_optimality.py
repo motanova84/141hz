@@ -9,12 +9,14 @@ Author: José Manuel Mota Burruezo (JMMB Ψ✧)
 Instituto de Consciencia Cuántica (ICQ)
 """
 
+import os
 import sys
 import pytest
 import mpmath as mp
 
-# Import the module under test
-sys.path.insert(0, '/home/runner/work/141hz/141hz')
+# Add parent directory for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from p17_balance_optimality import (
     get_primes_to_check,
     adelic_factor,
@@ -26,7 +28,12 @@ from p17_balance_optimality import (
     validate_p17_optimality,
     BALANCE_BASE,
     BALANCE_AMPLITUDE,
+    F0_EXPECTED,
 )
+
+# Test tolerance constants
+TOLERANCE_TIGHT = 1e-10
+TOLERANCE_RELATIVE = 0.001  # 0.1% relative tolerance
 
 
 class TestAdelicFactor:
@@ -95,8 +102,8 @@ class TestBalanceFunction:
         }
         for p, expected in expected_values.items():
             b = balance(p)
-            # Allow 0.1% tolerance
-            assert abs(float(b) - expected) / expected < 0.001, \
+            # Allow TOLERANCE_RELATIVE (0.1%) tolerance
+            assert abs(float(b) - expected) / expected < TOLERANCE_RELATIVE, \
                 f"balance({p}) = {float(b):.3f}, expected ≈ {expected}"
 
 
