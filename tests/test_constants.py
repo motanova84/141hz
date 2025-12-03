@@ -24,6 +24,11 @@ from constants import (
     H_PLANCK,
     H_BAR,
     C_LIGHT,
+    EULER_GAMMA,
+    LAMBDA_0,
+    LAMBDA_MEAN,
+    C_PRIMARY,
+    C_COHERENCE,
 )
 
 # Test constants
@@ -363,6 +368,144 @@ class TestExportFunctions:
         assert data["f0_hz"] == pytest.approx(float(const.F0), abs=1e-4)
         assert data["E_psi_joules"] == pytest.approx(float(const.E_PSI), abs=1e-40)
         assert data["lambda_psi_km"] == pytest.approx(float(const.LAMBDA_PSI_KM), abs=1e-6)
+
+
+class TestSpectralFieldConstants:
+    """Test suite for spectral field constants from operator eigenvalues."""
+    
+    def test_lambda_0_value(self):
+        """Test first eigenvalue λ₀ ≈ 0.001588."""
+        assert float(LAMBDA_0) == pytest.approx(0.001588, abs=1e-6)
+        assert float(CONSTANTS.LAMBDA_0) == pytest.approx(0.001588, abs=1e-6)
+    
+    def test_lambda_mean_value(self):
+        """Test mean spectral value ⟨λ⟩ ≈ 0.6225."""
+        assert float(LAMBDA_MEAN) == pytest.approx(0.6225, abs=1e-4)
+        assert float(CONSTANTS.LAMBDA_MEAN) == pytest.approx(0.6225, abs=1e-4)
+    
+    def test_c_primary_value(self):
+        """Test primary spectral constant C = 629.83."""
+        assert float(C_PRIMARY) == pytest.approx(629.83, abs=0.01)
+        assert float(CONSTANTS.C_PRIMARY) == pytest.approx(629.83, abs=0.01)
+    
+    def test_c_coherence_value(self):
+        """Test coherence constant C = 244.36."""
+        assert float(C_COHERENCE) == pytest.approx(244.36, abs=0.01)
+        assert float(CONSTANTS.C_COHERENCE) == pytest.approx(244.36, abs=0.01)
+    
+    def test_c_primary_derivation(self):
+        """Test C_PRIMARY = 1/λ₀ derivation."""
+        c_calculated = 1 / float(LAMBDA_0)
+        assert c_calculated == pytest.approx(float(C_PRIMARY), rel=0.01)
+    
+    def test_c_coherence_derivation(self):
+        """Test C_COHERENCE = ⟨λ⟩²/λ₀ derivation."""
+        c_calculated = (float(LAMBDA_MEAN) ** 2) / float(LAMBDA_0)
+        assert c_calculated == pytest.approx(float(C_COHERENCE), rel=0.01)
+    
+    def test_euler_gamma_value(self):
+        """Test Euler-Mascheroni constant γ ≈ 0.5772156649."""
+        assert float(EULER_GAMMA) == pytest.approx(0.5772156649, abs=1e-10)
+        assert float(CONSTANTS.EULER_GAMMA) == pytest.approx(0.5772156649, abs=1e-10)
+    
+    def test_spectral_constants_positive(self):
+        """Test that all spectral constants are positive."""
+        assert float(LAMBDA_0) > 0
+        assert float(LAMBDA_MEAN) > 0
+        assert float(C_PRIMARY) > 0
+        assert float(C_COHERENCE) > 0
+    
+    def test_c_primary_greater_than_c_coherence(self):
+        """Test C_PRIMARY > C_COHERENCE (structure > coherence)."""
+        assert float(C_PRIMARY) > float(C_COHERENCE)
+        ratio = float(C_PRIMARY) / float(C_COHERENCE)
+        # The ratio should be approximately 2.578 (≈ √(2πφ))
+        assert ratio == pytest.approx(2.578, rel=0.05)
+
+
+class TestSpectralValidation:
+    """Test the spectral constants validation method."""
+    
+    def test_validate_spectral_constants_structure(self):
+        """Test the structure of validate_spectral_constants output."""
+        validation = UniversalConstants.validate_spectral_constants(precision=30)
+        
+        assert "spectral_constants" in validation
+        assert "relationships" in validation
+        assert "physical_interpretation" in validation
+        assert "operator_origin" in validation
+        assert "validation_status" in validation
+    
+    def test_validate_spectral_constants_values(self):
+        """Test that validation returns correct constant values."""
+        validation = UniversalConstants.validate_spectral_constants(precision=30)
+        sc = validation["spectral_constants"]
+        
+        assert sc["lambda_0"] == pytest.approx(0.001588, abs=1e-6)
+        assert sc["C_primary"] == pytest.approx(629.83, abs=0.01)
+        assert sc["C_coherence"] == pytest.approx(244.36, abs=0.01)
+    
+    def test_validate_spectral_constants_derivation(self):
+        """Test that C constants are correctly derived from eigenvalues."""
+        validation = UniversalConstants.validate_spectral_constants(precision=30)
+        sc = validation["spectral_constants"]
+        
+        # C_PRIMARY should match 1/λ₀ within tolerance
+        assert sc["C_primary_valid"] is True
+        assert sc["C_primary_relative_error"] < 0.01
+        
+        # C_COHERENCE should match ⟨λ⟩²/λ₀ within tolerance
+        assert sc["C_coherence_valid"] is True
+        assert sc["C_coherence_relative_error"] < 0.01
+    
+    def test_validate_spectral_constants_passes(self):
+        """Test that validation passes with ✓ VALIDATED status."""
+        validation = UniversalConstants.validate_spectral_constants(precision=30)
+        assert validation["validation_status"] == "✓ VALIDATED"
+    
+    def test_operator_origin_documented(self):
+        """Test that operator origin is documented."""
+        validation = UniversalConstants.validate_spectral_constants(precision=30)
+        origin = validation["operator_origin"]
+        
+        assert "Hamiltonian" in origin
+        assert "HΨ = -Δ + V(x)" in origin["Hamiltonian"]
+        assert "potential" in origin
+        assert "logarithmic-quantum" in origin["potential"]
+    
+    def test_physical_interpretation_documented(self):
+        """Test that physical interpretation is documented."""
+        validation = UniversalConstants.validate_spectral_constants(precision=30)
+        interp = validation["physical_interpretation"]
+        
+        assert "C_primary_meaning" in interp
+        assert "C_coherence_meaning" in interp
+        assert "f0_relation" in interp
+        assert "141.7001" in interp["f0_relation"]
+
+
+class TestSpectralConstants_to_dict:
+    """Test that spectral constants appear in to_dict output."""
+    
+    def test_spectral_constants_in_dict(self):
+        """Test that to_dict includes spectral constants."""
+        const = UniversalConstants()
+        data = const.to_dict()
+        
+        assert "lambda_0" in data
+        assert "lambda_mean" in data
+        assert "C_primary" in data
+        assert "C_coherence" in data
+        assert "euler_gamma" in data
+    
+    def test_spectral_constants_dict_values(self):
+        """Test that dict values match class constants."""
+        const = UniversalConstants()
+        data = const.to_dict()
+        
+        assert data["lambda_0"] == pytest.approx(float(const.LAMBDA_0), abs=1e-6)
+        assert data["C_primary"] == pytest.approx(float(const.C_PRIMARY), abs=0.01)
+        assert data["C_coherence"] == pytest.approx(float(const.C_COHERENCE), abs=0.01)
 
 
 if __name__ == "__main__":
