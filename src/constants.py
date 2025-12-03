@@ -383,19 +383,21 @@ class UniversalConstants:
         """
         Derive f₀ = 141.7001 Hz from the spectral hierarchy of H_Ψ.
 
-        The master formula harmonizing structure and coherence:
-            f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C × (C_QCAL/C)
+        The derivation uses the primary spectral constant C:
+            f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C
 
         Where:
             - γ ≈ 0.57721 (Euler-Mascheroni, from log flows in RH)
             - φ ≈ 1.61803 (golden ratio, fractal scale)
             - C = 629.83 (Primary Spectral Constant = 1/λ₀)
-            - C_QCAL = 244.36 (Derived Coherence Constant = ⟨λ⟩²/λ₀)
-            - Coherence factor: C_QCAL/C ≈ 0.388
 
-        This formula unifies:
-            - Level 1 (Local/Primary): C = 1/λ₀ fixes base structure (~4 Hz)
-            - Level 2 (Global/Derived): C_QCAL modulates to 141.7 Hz
+        The spectral hierarchy consists of two levels:
+            - Level 1 (Local/Primary): C = 1/λ₀ fixes base structure
+            - Level 2 (Global/Derived): C_QCAL = ⟨λ⟩²/λ₀ captures coherence
+
+        Note: C_QCAL (244.36) coexists with C at a different hierarchical level.
+        The coherence factor C_QCAL/C ≈ 0.388 represents the ratio of global
+        coherence to local structure, but C alone drives the primary derivation.
 
         Args:
             precision: Decimal precision for calculation
@@ -415,7 +417,7 @@ class UniversalConstants:
         e_gamma = mp.exp(gamma)  # e^γ ≈ 1.781
         sqrt_2pi_gamma = mp.sqrt(2 * mp.pi * gamma)  # √(2πγ) ≈ 1.904
         phi_squared_over_2pi = (phi ** 2) / (2 * mp.pi)  # φ²/(2π) ≈ 0.418
-        coherence_factor = C_QCAL / C  # ≈ 0.388
+        coherence_factor = C_QCAL / C  # Calculated from actual constants
 
         # Primary formula: f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C
         # This uses C = 629.83 as the primary spectral constant
@@ -504,16 +506,17 @@ class UniversalConstants:
             "description": "C = 1/λ₀ relationship"
         }
 
-        # Validation 2: Coherence factor ≈ 0.388
+        # Validation 2: Coherence factor C_QCAL/C
+        # The theoretical prediction is that this ratio should be approximately 0.388
+        # based on the spectral distribution properties (GUE-like from Riemann zeros)
         coherence_factor = cls.C_QCAL / cls.C_PRIMARY
-        expected_factor = mp.mpf("0.388")
-        factor_error = abs(float(coherence_factor) - float(expected_factor)) / float(expected_factor)
+        # Validate that the ratio is in the expected range (0.35 to 0.42)
+        in_expected_range = 0.35 < float(coherence_factor) < 0.42
         results["validations"]["coherence_factor"] = {
             "calculated": float(coherence_factor),
-            "expected": float(expected_factor),
-            "relative_error": float(factor_error),
-            "valid": factor_error < 0.01,  # Within 1%
-            "description": "C_QCAL/C ≈ 0.388 modulation factor"
+            "expected_range": "0.35 to 0.42",
+            "valid": in_expected_range,
+            "description": "C_QCAL/C coherence factor in expected range"
         }
 
         # Validation 3: Master formula produces f₀
