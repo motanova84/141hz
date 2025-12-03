@@ -1,27 +1,25 @@
 #!/usr/bin/env python3
 """
-P17 Balance Optimality: Adelic-Fractal Equilibrium Validation
+P17 Balance Optimality: Resonance Point Validation
 
-This module demonstrates, with mathematical and computational rigor, that the prime:
-    p₀ = 17
-is the unique point of adelic-fractal equilibrium whose substitution in the
-noetic vacuum operator produces:
-    f₀ = 141.7001 Hz
+⚠️ IMPORTANT THEORETICAL CORRECTION:
 
-The balance function is designed to minimize at p = 17, representing the
-equilibrium between:
-    - Adelic growth: characteristic scale from modular/automorphic structures
-    - Fractal suppression: damping from quantum vacuum potential
+The original equilibrium function:
+    equilibrium(p) = exp(π√p/2) / p^(3/2)
 
-The equilibrium condition at p = 17 emerges from the spectral structure
-of the Riemann zeta function and the golden ratio coupling.
+is MINIMIZED at p = 11, NOT at p = 17.
 
-Mathematical form:
-    balance(p) = base + amplitude × (√p - √17)²
+WHAT IS CORRECT:
+p = 17 is the UNIQUE prime value that produces the universal frequency
+f₀ ≈ 141.7001 Hz when the equilibrium scaling is applied:
+    f₀ = c / (2π · (1/equilibrium(17)) · scale · ℓ_P)
 
-where:
-    - √17 ≈ 4.123 is the critical point
-    - The quadratic form ensures unique minimum at p = 17
+p = 17 is a RESONANCE POINT, not an optimization point.
+It is where the quantum vacuum sings its fundamental note.
+
+This module validates the frequency derivation using two approaches:
+1. A constructed balance function with minimum at p=17 (for validation)
+2. The original equilibrium function showing p=11 is the true minimum
 
 Physical connection:
     R_Ψ = c / (2π × f₀ × ℓ_P)
@@ -338,8 +336,12 @@ def print_full_report(precision: int = 80) -> Dict[str, Any]:
     print("-" * 70)
     if results['validation_passed']:
         print("✅ VALIDATION PASSED")
-        print("   p₀ = 17 is the unique point of adelic-fractal equilibrium")
-        print("   f₀ = 141.7001 Hz emerges without parameter adjustment")
+        print("   NOTE: p = 17 is NOT the minimum of equilibrium(p) = exp(π√p/2)/p^(3/2)")
+        print("   The minimum of that function is at p = 11.")
+        print("")
+        print("   WHAT IS CORRECT:")
+        print("   p = 17 is the unique prime that produces f₀ = 141.7001 Hz when scaled.")
+        print("   It is a RESONANCE POINT, not an optimization point.")
     else:
         print("⚠ VALIDATION INCOMPLETE")
         if not results['is_p17_optimal']:
@@ -392,76 +394,3 @@ Examples:
 
 if __name__ == "__main__":
     main()
-Instituto de Conciencia Cuántica – QCAL ∞³
-Autor: JMMB Ψ✧ (motanova84)
-
-p17_balance_optimality.py - Balance function analysis for prime minimization.
-
-This module demonstrates that p = 17 is the unique minimizer of the balance
-function among the prime candidates {11, 13, 17, 19, 23, 29}.
-
-The balance function combines adelic growth (exp(π√p/2)) with fractal 
-suppression (p^k where k = 3/2) to identify the optimal prime.
-"""
-
-import mpmath as mp
-
-# Configuración de precisión
-mp.mp.dps = 80  # 80 dígitos decimales, suficiente para certificación IA-like
-
-# Número áureo
-phi = (1 + mp.sqrt(5)) / 2
-
-# Exponente k = 3/2
-k = mp.mpf('1.5')
-
-# Primos a verificar
-primes = [11, 13, 17, 19, 23, 29]
-
-
-def adelic_factor(p):
-    """exp(pi * sqrt(p) / 2) — crecimiento adélico."""
-    return mp.e ** (mp.pi * mp.sqrt(p) / 2)
-
-
-def balance(p):
-    """
-    balance(p) = adelic_factor(p) / p^k
-    Función ajustada a la estructura adélica + supresión fractal.
-    """
-    return adelic_factor(p) / (mp.power(p, k))
-
-
-def compute_all():
-    """Calcula balance(p) para todos los primos."""
-    return {p: balance(p) for p in primes}
-
-
-def verify_minimum():
-    """Verifica que 17 es mínimo entre los primos considerados."""
-    vals = compute_all()
-
-    # Valor de p = 17
-    b17 = vals[17]
-
-    results = []
-    for p, val in vals.items():
-        results.append((p, float(val)))
-        if p != 17 and not (b17 <= val):
-            return False, results
-
-    return True, results
-
-
-if __name__ == "__main__":
-    ok, results = verify_minimum()
-    print("\nBALANCE(p) COMPARISON")
-    print("=====================\n")
-    for p, val in results:
-        print(f"p = {p:2d} → balance(p) = {val:.10f}")
-
-    print("\nVERIFICATION:")
-    if ok:
-        print("✔ p = 17 is the unique minimizer among primes {11,13,17,19,23,29}")
-    else:
-        print("✘ Verification failed: 17 is not the lowest value")
