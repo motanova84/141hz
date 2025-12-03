@@ -374,14 +374,20 @@ class TestSpectralFieldConstants:
     """Test suite for spectral field constants from operator eigenvalues."""
     
     def test_lambda_0_value(self):
-        """Test first eigenvalue λ₀ ≈ 0.001588."""
-        assert float(LAMBDA_0) == pytest.approx(0.001588, abs=1e-6)
-        assert float(CONSTANTS.LAMBDA_0) == pytest.approx(0.001588, abs=1e-6)
+        """Test first eigenvalue λ₀ = 1/629.83 ≈ 0.00158773."""
+        # λ₀ is derived from C_PRIMARY = 1/λ₀ = 629.83
+        expected_lambda_0 = 1 / 629.83
+        assert float(LAMBDA_0) == pytest.approx(expected_lambda_0, rel=1e-6)
+        assert float(CONSTANTS.LAMBDA_0) == pytest.approx(expected_lambda_0, rel=1e-6)
     
     def test_lambda_mean_value(self):
-        """Test mean spectral value ⟨λ⟩ ≈ 0.6225."""
-        assert float(LAMBDA_MEAN) == pytest.approx(0.6225, abs=1e-4)
-        assert float(CONSTANTS.LAMBDA_MEAN) == pytest.approx(0.6225, abs=1e-4)
+        """Test mean spectral value ⟨λ⟩ derived from √(C_COHERENCE × λ₀)."""
+        # ⟨λ⟩ is derived to satisfy C_COHERENCE = ⟨λ⟩²/λ₀
+        import math
+        lambda_0 = 1 / 629.83
+        expected_lambda_mean = math.sqrt(244.36 * lambda_0)
+        assert float(LAMBDA_MEAN) == pytest.approx(expected_lambda_mean, rel=1e-6)
+        assert float(CONSTANTS.LAMBDA_MEAN) == pytest.approx(expected_lambda_mean, rel=1e-6)
     
     def test_c_primary_value(self):
         """Test primary spectral constant C = 629.83."""
@@ -394,14 +400,16 @@ class TestSpectralFieldConstants:
         assert float(CONSTANTS.C_COHERENCE) == pytest.approx(244.36, abs=0.01)
     
     def test_c_primary_derivation(self):
-        """Test C_PRIMARY = 1/λ₀ derivation."""
+        """Test C_PRIMARY = 1/λ₀ derivation (exact by construction)."""
         c_calculated = 1 / float(LAMBDA_0)
-        assert c_calculated == pytest.approx(float(C_PRIMARY), rel=0.01)
+        # This should be exactly equal since λ₀ = 1/C_PRIMARY by construction
+        assert c_calculated == pytest.approx(float(C_PRIMARY), rel=1e-10)
     
     def test_c_coherence_derivation(self):
-        """Test C_COHERENCE = ⟨λ⟩²/λ₀ derivation."""
+        """Test C_COHERENCE = ⟨λ⟩²/λ₀ derivation (exact by construction)."""
         c_calculated = (float(LAMBDA_MEAN) ** 2) / float(LAMBDA_0)
-        assert c_calculated == pytest.approx(float(C_COHERENCE), rel=0.01)
+        # This should be exactly equal since LAMBDA_MEAN is derived to satisfy this
+        assert c_calculated == pytest.approx(float(C_COHERENCE), rel=1e-10)
     
     def test_euler_gamma_value(self):
         """Test Euler-Mascheroni constant γ ≈ 0.5772156649."""
@@ -419,8 +427,8 @@ class TestSpectralFieldConstants:
         """Test C_PRIMARY > C_COHERENCE (structure > coherence)."""
         assert float(C_PRIMARY) > float(C_COHERENCE)
         ratio = float(C_PRIMARY) / float(C_COHERENCE)
-        # The ratio should be approximately 2.578 (≈ √(2πφ))
-        assert ratio == pytest.approx(2.578, rel=0.05)
+        # The ratio is approximately 2.5775 (empirically observed)
+        assert ratio == pytest.approx(2.5775, rel=0.01)
 
 
 class TestSpectralValidation:
@@ -441,7 +449,8 @@ class TestSpectralValidation:
         validation = UniversalConstants.validate_spectral_constants(precision=30)
         sc = validation["spectral_constants"]
         
-        assert sc["lambda_0"] == pytest.approx(0.001588, abs=1e-6)
+        # λ₀ = 1/629.83 ≈ 0.00158773
+        assert sc["lambda_0"] == pytest.approx(1/629.83, rel=1e-6)
         assert sc["C_primary"] == pytest.approx(629.83, abs=0.01)
         assert sc["C_coherence"] == pytest.approx(244.36, abs=0.01)
     
@@ -450,13 +459,13 @@ class TestSpectralValidation:
         validation = UniversalConstants.validate_spectral_constants(precision=30)
         sc = validation["spectral_constants"]
         
-        # C_PRIMARY should match 1/λ₀ within tolerance
+        # C_PRIMARY should match 1/λ₀ exactly (by construction)
         assert sc["C_primary_valid"] is True
-        assert sc["C_primary_relative_error"] < 0.01
+        assert sc["C_primary_relative_error"] < 1e-10
         
-        # C_COHERENCE should match ⟨λ⟩²/λ₀ within tolerance
+        # C_COHERENCE should match ⟨λ⟩²/λ₀ exactly (by construction)
         assert sc["C_coherence_valid"] is True
-        assert sc["C_coherence_relative_error"] < 0.01
+        assert sc["C_coherence_relative_error"] < 1e-10
     
     def test_validate_spectral_constants_passes(self):
         """Test that validation passes with ✓ VALIDATED status."""
