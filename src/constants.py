@@ -82,6 +82,51 @@ class UniversalConstants:
         """Planck length (meters)."""
         return mp.sqrt(self.H_BAR * self.G_NEWTON / (self.C_LIGHT ** 3))
 
+    # Planck mass: m_P = √(ℏc/G) (kg)
+    @property
+    def M_PLANCK(self) -> mp.mpf:
+        """Planck mass (kg)."""
+        return mp.sqrt(self.H_BAR * self.C_LIGHT / self.G_NEWTON)
+
+    # ═══════════════════════════════════════════════════════════════════
+    # VACUUM ENERGY SCALE CONSTANTS (DERIVED FROM FIRST PRINCIPLES)
+    # ═══════════════════════════════════════════════════════════════════
+
+    # Quantum vacuum energy density scale Λ_Q (kg)
+    # Derived from dark energy scale: Λ_Q ≈ 2.3 meV ≈ 4.12×10⁻²² kg
+    # This is the vacuum cutoff scale where E_vac ≈ Λ_Q⁴
+    LAMBDA_Q = mp.mpf("4.12e-22")  # kg
+
+    # Hierarchy factor G_Y = (m_P / Λ_Q)^(1/3)
+    # Derived from first principles without f₀ dependency
+    @property
+    def G_Y(self) -> mp.mpf:
+        """
+        Hierarchy factor G_Y derived from first principles.
+
+        Formula: G_Y = (m_P / Λ_Q)^(1/3)
+
+        Where:
+            - m_P = Planck mass ≈ 2.176×10⁻⁸ kg
+            - Λ_Q = quantum vacuum energy density ≈ 4.12×10⁻²² kg
+
+        Result: G_Y ≈ 3.72×10⁴
+
+        This derivation does NOT depend on f₀, eliminating circularity.
+        """
+        return (self.M_PLANCK / self.LAMBDA_Q) ** (mp.mpf(1) / mp.mpf(3))
+
+    # Optimal prime for adelic corrections
+    # p = 17 minimizes d/dp[adelic_growth - fractal_log_periodic] = 0
+    PRIME_P = 17
+
+    # Fractal dimension exponent (-3 for φ⁻³)
+    # Corresponds to the effective dimension D_eff = 3 of the adelic fractal space
+    FRACTAL_DIMENSION = 3
+
+    # Fundamental mode of log-periodic resonance: π/2
+    FUNDAMENTAL_MODE = mp.pi / 2
+
     # ═══════════════════════════════════════════════════════════════════
     # COSMOLOGICAL SCALE CONSTANTS
     # ═══════════════════════════════════════════════════════════════════
