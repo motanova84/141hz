@@ -10,6 +10,7 @@ Author: JMMB Ψ✧ (motanova84)
 Instituto de Conciencia Cuántica (ICQ) – QCAL ∞³
 """
 
+import math
 import os
 import sys
 import pytest
@@ -59,7 +60,13 @@ class TestEquilibriumFunction:
         assert min_p == 11, f"Minimum should be at p=11, got p={min_p}"
 
     def test_equilibrium_known_values(self):
-        """Test equilibrium values match expected values."""
+        """Test equilibrium values match expected values.
+
+        These values are computed from the formula:
+        equilibrium(p) = exp(π√p/2) / p^(3/2)
+
+        For example, equilibrium(11) = exp(π×3.3166/2) / 11^1.5 ≈ 5.0173
+        """
         expected = {
             11: 5.0173,
             13: 6.1482,
@@ -126,8 +133,6 @@ class TestDimensionalConsistency:
 
     def test_r_psi_from_frequency(self):
         """R_Ψ derived from equilibrium(17) should match the needed value."""
-        import math
-
         # R_Ψ needed to produce 141.7001 Hz
         R_needed = C_LIGHT / (2 * math.pi * TARGET_FREQUENCY * PLANCK_LENGTH)
 

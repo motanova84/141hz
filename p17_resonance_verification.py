@@ -26,9 +26,6 @@ PLANCK_LENGTH = 1.616255e-35  # m
 TARGET_FREQUENCY = 141.7001  # Hz
 SCALE_FACTOR = 1.931174e41  # Escala Planck-cosmológica
 
-# Número áureo
-PHI = (1 + mp.sqrt(5)) / 2
-
 # Primos a verificar
 PRIMES = [11, 13, 17, 19, 23, 29]
 
@@ -37,6 +34,10 @@ def adelic_factor(p):
     """
     Factor de crecimiento adélico: exp(π√p/2)
     Representa la expansión espectral del primo.
+
+    Note: This is the original physical formula from the adelic-fractal theory,
+    distinct from the quadratic balance function in p17_balance_optimality.py
+    which was designed to have a minimum at p=17.
     """
     return mp.exp(mp.pi * mp.sqrt(p) / 2)
 
@@ -48,6 +49,10 @@ def equilibrium(p):
 
     IMPORTANTE: Esta función NO se minimiza en p = 17.
     El mínimo está en p = 11.
+
+    Note: This is the original theoretical formula. The balance function in
+    p17_balance_optimality.py uses a different (quadratic) formulation
+    calibrated to have its minimum at p=17.
     """
     return adelic_factor(p) / mp.power(p, mp.mpf('1.5'))
 
@@ -56,6 +61,9 @@ def R_Psi(p):
     """
     Radio universal derivado del primo p:
     R_Ψ(p) = scale_factor / equilibrium(p)
+
+    Note: Float conversion is intentional here since the result feeds into
+    standard physics calculations where float precision (~15 digits) is sufficient.
     """
     return SCALE_FACTOR / float(equilibrium(p))
 
