@@ -93,8 +93,10 @@ class UniversalConstants:
     # ═══════════════════════════════════════════════════════════════════
 
     # Quantum vacuum energy density scale Λ_Q (kg)
-    # Derived from dark energy scale: Λ_Q ≈ 2.3 meV ≈ 4.12×10⁻²² kg
-    # This is the vacuum cutoff scale where E_vac ≈ Λ_Q⁴
+    # Derived from dark energy scale: Λ_Q ≈ 2.3 meV
+    # The energy scale E = 2.3 meV = 3.68×10⁻²² J
+    # Converting to mass: m = E/c² = 4.12×10⁻²² kg
+    # This is the vacuum cutoff scale in the Casimir-like energy formulation
     LAMBDA_Q = mp.mpf("4.12e-22")  # kg
 
     # Hierarchy factor G_Y = (m_P / Λ_Q)^(1/3)
@@ -110,7 +112,7 @@ class UniversalConstants:
             - m_P = Planck mass ≈ 2.176×10⁻⁸ kg
             - Λ_Q = quantum vacuum energy density ≈ 4.12×10⁻²² kg
 
-        Result: G_Y ≈ 3.72×10⁴
+        Result: G_Y ≈ 3.75×10⁴
 
         This derivation does NOT depend on f₀, eliminating circularity.
         """

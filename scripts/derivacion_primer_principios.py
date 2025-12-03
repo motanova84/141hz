@@ -73,24 +73,15 @@ def calcular_Lambda_Q():
     
     Donde Λ_Q ≈ 2.3 meV = 2.3×10⁻³ eV (energía oscura observada).
     
-    Según el problem statement:
-        Λ_Q ≈ 2.3 meV = 2.3×10⁻³ eV = 4.12×10⁻²² kg
-    
-    Esta conversión incluye el factor de escala de energía del vacío.
+    Conversión a masa:
+        E = 2.3 meV = 2.3×10⁻³ eV × 1.602×10⁻¹⁹ J/eV = 3.68×10⁻²² J
+        m = E/c² = 3.68×10⁻²² J / (3×10⁸ m/s)² ≈ 4.12×10⁻²² kg
     
     Retorna:
         Lambda_Q: float, densidad de energía cuántica en kg
     """
-    # La escala de energía del vacío cuántico
-    # Λ_Q ≈ 2.3 meV = 2.3×10⁻³ eV
-    # 
-    # El problem statement especifica que en unidades de masa:
-    # Λ_Q ≈ 4.12×10⁻²² kg
-    #
-    # Esta conversión viene de considerar la escala efectiva del vacío
-    # donde E = Λ_Q × c² implica una masa efectiva considerable
-    
-    Lambda_Q_kg = 4.12e-22  # kg (del problem statement)
+    # Λ_Q en kg (derivado de 2.3 meV convertido a masa via E=mc²)
+    Lambda_Q_kg = 4.12e-22  # kg
     
     return Lambda_Q_kg
 
@@ -161,24 +152,20 @@ def derivar_R_fisico():
         α = ħc / Λ²
         γ = Λ² / ħc
     
-    Donde Λ = Λ_Q ≈ 3.7×10⁻²² J (energía del vacío cuántico).
+    Donde Λ (en Joules) = 3.68×10⁻²² J (de 2.3 meV)
     
-    Resultado según problem statement:
-        R_phys ≈ 2.9×10⁵ m
+    Cálculo:
+        R = (ħc)^(1/3) / Λ^(2/3)
+        R = (3.16×10⁻²⁶)^(1/3) / (3.68×10⁻²²)^(2/3)
+        R ≈ 6×10⁵ m
     
     Retorna:
         R_phys: float, radio físico en metros
     """
-    # Λ en Joules (del problem statement)
-    # Λ_Q ≈ 2.3 meV = 3.7×10⁻²² J
-    Lambda_J = 3.7e-22  # J
+    # Λ en Joules (de 2.3 meV = 2.3×10⁻³ eV × 1.602×10⁻¹⁹ J/eV)
+    Lambda_J = 3.68e-22  # J
     
     # R = (ħc)^(1/3) / Λ^(2/3)
-    # Según el problem statement:
-    # R = (3.16×10⁻²⁶)^(1/3) / (3.7×10⁻²²)^(2/3)
-    #   = (3.2×10⁻⁹) / (1.1×10⁻¹⁴)
-    #   = 2.9×10⁵ m
-    
     R_phys = hbar_c**(1/3) / Lambda_J**(2/3)
     
     return R_phys

@@ -52,15 +52,20 @@ class TestDerivacionPrimerPrincipios:
     
     def test_g_y_valor_esperado(self):
         """
-        Test: G_Y = (m_P / Λ_Q)^(1/3) ≈ 3.72×10⁴
+        Test: G_Y = (m_P / Λ_Q)^(1/3) ≈ 3.75×10⁴
+        
+        The expected value is computed from the formula using:
+        - m_P ≈ 2.176×10⁻⁸ kg
+        - Λ_Q ≈ 4.12×10⁻²² kg
         """
         G_Y = calcular_G_Y()
         
-        # Según el problem statement: G_Y ≈ 3.72×10⁴
-        expected = 3.72e4
+        # Compute expected value from formula directly
+        # G_Y = (2.176e-8 / 4.12e-22)^(1/3) ≈ 3.75×10⁴
+        expected = (m_P / 4.12e-22) ** (1/3)
         rel_error = abs(G_Y - expected) / expected
         
-        assert rel_error < 0.05, \
+        assert rel_error < 0.01, \
             f"G_Y = {G_Y:.3e}, esperado ≈ {expected:.3e}, error: {rel_error:.2%}"
     
     def test_g_y_sin_dependencia_f0(self):
@@ -147,15 +152,23 @@ class TestDerivacionPrimerPrincipios:
         assert result['primo_optimo'] == 17, \
             f"El primo óptimo debe ser 17, obtenido: {result['primo_optimo']}"
     
+    # Adelic equilibrium constants for p=17 tests
+    ADELIC_EQUILIBRIUM_FACTOR = 650  # Target equilibrium factor for p=17
+    ADELIC_TOLERANCE_LOW = 600       # Lower bound for equilibrium test
+    ADELIC_TOLERANCE_HIGH = 700      # Upper bound for equilibrium test
+    
     def test_factor_adelico_17_equilibrio(self):
         """
         Test: El factor adélico de p=17 debe estar en el punto de equilibrio (~650)
+        
+        The factor exp(π√p/2) for p=17 should be approximately 650, which
+        represents the balance point between adelic growth and fractal suppression.
         """
         factor_17 = factor_adelico(17)
         
-        # El factor debe estar cerca de 650 (punto de equilibrio)
-        assert 600 < factor_17 < 700, \
-            f"Factor(17) debe estar ~650, obtenido: {factor_17:.0f}"
+        # The factor must be in the equilibrium range
+        assert self.ADELIC_TOLERANCE_LOW < factor_17 < self.ADELIC_TOLERANCE_HIGH, \
+            f"Factor(17) debe estar ~{self.ADELIC_EQUILIBRIUM_FACTOR}, obtenido: {factor_17:.0f}"
     
     def test_factor_adelico_creciente(self):
         """
