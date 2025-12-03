@@ -28,6 +28,13 @@ from constants import (
     C_PRIMARY,
     C_QCAL,
     GAMMA_EULER,
+    # Spectral constants (Dual-Constant Framework)
+    LAMBDA_0,
+    LAMBDA_MEAN,
+    C_PRIMARY,
+    C_COHERENCE,
+    COHERENCE_FACTOR,
+    GAMMA,
 )
 
 # Test constants
@@ -548,6 +555,150 @@ class TestSpectralValidation:
         v = result["validations"]["physical_interpretation"]
         assert v["valid"] is True
         assert "omega_squared_C" in v
+
+
+class TestSpectralConstants:
+    """Test suite for the dual spectral constant framework.
+    
+    The framework establishes two fundamental constants:
+    - C_PRIMARY (629.83): Primary spectral residue (structure)
+    - C_COHERENCE (244.36): Derived coherence constant (form)
+    
+    Both emerge from the H_Ψ operator and combine to produce f₀.
+    """
+    
+    def test_c_primary_value(self):
+        """Test that C_PRIMARY has the correct value (≈629.83)."""
+        assert float(C_PRIMARY) == pytest.approx(629.83, abs=0.01)
+        assert float(CONSTANTS.C_PRIMARY) == pytest.approx(629.83, abs=0.01)
+    
+    def test_c_coherence_value(self):
+        """Test that C_COHERENCE has the correct value (≈244.36)."""
+        assert float(C_COHERENCE) == pytest.approx(244.36, abs=0.01)
+        assert float(CONSTANTS.C_COHERENCE) == pytest.approx(244.36, abs=0.01)
+    
+    def test_coherence_factor_value(self):
+        """Test the coherence factor ratio (≈0.388)."""
+        assert float(COHERENCE_FACTOR) == pytest.approx(0.388, abs=0.001)
+        assert float(CONSTANTS.COHERENCE_FACTOR) == pytest.approx(0.388, abs=0.001)
+    
+    def test_lambda_0_value(self):
+        """Test minimum eigenvalue λ₀."""
+        assert float(LAMBDA_0) == pytest.approx(0.00158773, abs=1e-7)
+        assert float(CONSTANTS.LAMBDA_0) == pytest.approx(0.00158773, abs=1e-7)
+    
+    def test_lambda_mean_value(self):
+        """Test mean eigenvalue ⟨λ⟩."""
+        assert float(LAMBDA_MEAN) == pytest.approx(0.6228786, abs=1e-6)
+        assert float(CONSTANTS.LAMBDA_MEAN) == pytest.approx(0.6228786, abs=1e-6)
+    
+    def test_c_primary_from_lambda0(self):
+        """Test that C_PRIMARY ≈ 1/λ₀."""
+        c_computed = 1 / LAMBDA_0
+        tolerance = 0.0001 * float(C_PRIMARY)  # 0.01% tolerance
+        assert abs(float(c_computed) - float(C_PRIMARY)) < tolerance
+    
+    def test_c_coherence_from_moments(self):
+        """Test that C_COHERENCE ≈ ⟨λ⟩²/λ₀."""
+        c_computed = (LAMBDA_MEAN ** 2) / LAMBDA_0
+        tolerance = 0.0001 * float(C_COHERENCE)  # 0.01% tolerance
+        assert abs(float(c_computed) - float(C_COHERENCE)) < tolerance
+    
+    def test_coherence_factor_ratio(self):
+        """Test that COHERENCE_FACTOR = C_COHERENCE / C_PRIMARY."""
+        factor_computed = C_COHERENCE / C_PRIMARY
+        assert abs(float(factor_computed) - float(COHERENCE_FACTOR)) < 1e-10
+    
+    def test_gamma_constant(self):
+        """Test Euler-Mascheroni constant γ."""
+        assert float(GAMMA) == pytest.approx(0.5772156649, abs=1e-10)
+        assert float(CONSTANTS.GAMMA) == pytest.approx(0.5772156649, abs=1e-10)
+    
+    def test_constants_coexist(self):
+        """Test that both constants are distinct and coexist."""
+        # C_PRIMARY and C_COHERENCE must be different
+        assert abs(float(C_PRIMARY) - float(C_COHERENCE)) > 100
+        
+        # Both must be positive
+        assert float(C_PRIMARY) > 0
+        assert float(C_COHERENCE) > 0
+        
+        # C_PRIMARY > C_COHERENCE (structure > form)
+        assert float(C_PRIMARY) > float(C_COHERENCE)
+    
+    def test_spectral_constants_in_to_dict(self):
+        """Test that spectral constants are exported in to_dict()."""
+        const = UniversalConstants()
+        data = const.to_dict()
+        
+        # Check required fields exist
+        assert "C_primary" in data
+        assert "C_coherence" in data
+        assert "coherence_factor" in data
+        assert "lambda_0" in data
+        assert "lambda_mean" in data
+        assert "gamma" in data
+        
+        # Check values are floats
+        assert isinstance(data["C_primary"], float)
+        assert isinstance(data["C_coherence"], float)
+        assert isinstance(data["coherence_factor"], float)
+        
+        # Check values are correct
+        assert data["C_primary"] == pytest.approx(629.83, abs=0.01)
+        assert data["C_coherence"] == pytest.approx(244.36, abs=0.01)
+
+
+class TestDualConstantFramework:
+    """Test the physical interpretation of the dual-constant framework."""
+    
+    def test_structure_vs_form(self):
+        """Test the structure/form interpretation.
+        
+        C_PRIMARY (629.83) represents STRUCTURE (local, from λ₀)
+        C_COHERENCE (244.36) represents FORM (global, from second moment)
+        """
+        # C_PRIMARY is "local" - depends only on minimum eigenvalue
+        # This is verified by the 1/λ₀ relationship
+        assert abs(float(1 / LAMBDA_0) - float(C_PRIMARY)) < 0.1
+        
+        # C_COHERENCE is "global" - depends on spectral distribution
+        # This is verified by the ⟨λ⟩²/λ₀ relationship
+        c_coh_computed = float(LAMBDA_MEAN ** 2) / float(LAMBDA_0)
+        assert abs(c_coh_computed - float(C_COHERENCE)) < 0.1
+    
+    def test_f0_derivation_from_c_primary(self):
+        """Test that f₀ can be derived using C_PRIMARY.
+        
+        Formula: f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_PRIMARY
+        """
+        import mpmath as mp
+        
+        # Components
+        f_base = 1 / (2 * mp.pi)
+        e_gamma = mp.exp(GAMMA)
+        sqrt_2pi_gamma = mp.sqrt(2 * mp.pi * GAMMA)
+        phi_factor = PHI ** 2 / (2 * mp.pi)
+        
+        # Derivation
+        f_derived = f_base * e_gamma * sqrt_2pi_gamma * phi_factor * C_PRIMARY
+        
+        # Should be close to 141.7001 Hz (within 1%)
+        error = abs(float(f_derived) - 141.7001) / 141.7001
+        assert error < 0.01  # Less than 1% error
+    
+    def test_coherence_factor_physical_meaning(self):
+        """Test the physical meaning of the coherence factor.
+        
+        The coherence factor (≈0.388) modulates structure into form.
+        It represents the ratio linking global coherence to local structure.
+        """
+        # Coherence factor should be between 0 and 1
+        assert 0 < float(COHERENCE_FACTOR) < 1
+        
+        # It should be approximately 244.36 / 629.83
+        expected_ratio = 244.36 / 629.83
+        assert float(COHERENCE_FACTOR) == pytest.approx(expected_ratio, abs=0.001)
 
 
 if __name__ == "__main__":

@@ -14,6 +14,16 @@ where:
     - h is Planck's constant
     - ℏ = h/(2π)
 
+Alternative spectral derivation:
+
+    f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_primaria
+
+where:
+    - γ ≈ 0.5772 (Euler-Mascheroni constant)
+    - φ = (1+√5)/2 (golden ratio)
+    - C_primaria = 1/λ₀ ≈ 629.70 (primary spectral constant)
+    - λ₀ = 0.001588050271 (first eigenvalue of H_Ψ)
+
 This constant is:
     - Invariant under adelic transformations
     - Stable under RG flow
@@ -24,6 +34,7 @@ References:
     - Zenodo 17379721: "La Solución del Infinito"
     - DERIVACION_COMPLETA_F0.md
     - VAL_F0_LIGO.md
+    - src/spectral_origin.py (spectral derivation)
 """
 
 import mpmath as mp
@@ -50,6 +61,28 @@ class UniversalConstants:
     F0_UNCERTAINTY = mp.mpf("0.0016")  # Hz
 
     # ═══════════════════════════════════════════════════════════════════
+    # SPECTRAL ORIGIN CONSTANTS (from noetic spectral operator H_Ψ)
+    # ═══════════════════════════════════════════════════════════════════
+
+    # First eigenvalue of the noetic spectral operator H_Ψ
+    # This is the "root" - the latent vibrational form
+    LAMBDA_0 = mp.mpf("0.001588050271")
+
+    # Effective mean of first eigenvalues (spectral coherence parameter)
+    LANGLE_LAMBDA = mp.mpf("0.0247")
+
+    # Primary spectral constant: C_primaria = 1/λ₀ ≈ 629.70
+    # The pure residue, the root structure
+    C_PRIMARIA = 1 / LAMBDA_0
+
+    # Coherence-derived constant: C_coherencia = ⟨λ⟩²/λ₀
+    # The flower, the emergent order, the living harmony of the spectrum
+    C_COHERENCIA = (LANGLE_LAMBDA ** 2) / LAMBDA_0
+
+    # Euler-Mascheroni constant (for spectral derivation)
+    GAMMA = mp.euler
+
+    # ═══════════════════════════════════════════════════════════════════
     # MATHEMATICAL ORIGIN CONSTANTS
     # ═══════════════════════════════════════════════════════════════════
 
@@ -71,6 +104,40 @@ class UniversalConstants:
 
     # Gravitational constant (m³/(kg·s²)) - CODATA 2018
     G_NEWTON = mp.mpf("6.67430e-11")
+
+    # Euler-Mascheroni constant γ
+    GAMMA = mp.mpf("0.5772156649015329")
+
+    # ═══════════════════════════════════════════════════════════════════
+    # SPECTRAL CONSTANTS (Dual-Constant Framework)
+    # ═══════════════════════════════════════════════════════════════════
+    #
+    # The system has two fundamental spectral constants that coexist:
+    #
+    # 1. C_PRIMARY (629.83) - Primary spectral residue from λ₀
+    #    - Local (depends only on minimum eigenvalue)
+    #    - Represents STRUCTURE
+    #
+    # 2. C_COHERENCE (244.36) - Coherence constant from second moment
+    #    - Global (depends on spectral distribution)
+    #    - Represents FORM
+    #
+    # Both combine to produce f₀ = 141.7001 Hz
+
+    # Minimum eigenvalue of the H_Ψ operator
+    LAMBDA_0 = mp.mpf("0.001587730022")
+
+    # Mean eigenvalue (spectral centroid)
+    LAMBDA_MEAN = mp.mpf("0.622878566231")
+
+    # Primary spectral constant: C = 1/λ₀ = 629.83 (structure)
+    C_PRIMARY = mp.mpf("629.83")
+
+    # Coherence constant: C_QCAL = ⟨λ⟩²/λ₀ = 244.36 (form)
+    C_COHERENCE = mp.mpf("244.36")
+
+    # Coherence factor: ratio linking form to structure
+    COHERENCE_FACTOR = C_COHERENCE / C_PRIMARY  # ≈ 0.388
 
     # ═══════════════════════════════════════════════════════════════════
     # PLANCK SCALE CONSTANTS
@@ -398,6 +465,17 @@ class UniversalConstants:
         Note: C_QCAL (244.36) coexists with C at a different hierarchical level.
         The coherence factor C_QCAL/C ≈ 0.388 represents the ratio of global
         coherence to local structure, but C alone drives the primary derivation.
+    def derive_f0_from_spectral(cls, precision: int = 50) -> Dict[str, Any]:
+        """
+        Derive f₀ from spectral constants of the noetic operator H_Ψ.
+
+        Formula:
+            f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_primaria
+
+        where:
+            - γ: Euler-Mascheroni constant ≈ 0.5772
+            - φ: Golden ratio (1+√5)/2 ≈ 1.618
+            - C_primaria = 1/λ₀ ≈ 629.70
 
         Args:
             precision: Decimal precision for calculation
@@ -550,6 +628,44 @@ class UniversalConstants:
         return results
 
     @classmethod
+            Dictionary with derivation results
+        """
+        mp.dps = precision
+
+        # Base factor: (1/2π) × e^γ × √(2πγ) × (φ²/2π)
+        gamma = mp.euler
+        phi = (1 + mp.sqrt(5)) / 2
+        pi = mp.pi
+
+        base = (
+            (1 / (2 * pi)) *
+            mp.exp(gamma) *
+            mp.sqrt(2 * pi * gamma) *
+            (phi ** 2 / (2 * pi))
+        )
+
+        # Derived f₀
+        f0_derived = base * cls.C_PRIMARIA
+
+        # Error analysis
+        error_hz = abs(f0_derived - cls.F0)
+        error_pct = float(error_hz / cls.F0) * 100
+
+        return {
+            "f0_derived_hz": float(f0_derived),
+            "f0_expected_hz": float(cls.F0),
+            "error_hz": float(error_hz),
+            "error_percent": error_pct,
+            "lambda_0": float(cls.LAMBDA_0),
+            "c_primaria": float(cls.C_PRIMARIA),
+            "c_coherencia": float(cls.C_COHERENCIA),
+            "langle_lambda": float(cls.LANGLE_LAMBDA),
+            "base_factor": float(base),
+            "formula": "f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_primaria",
+            "valid": error_pct < 0.1,  # Within 0.1% is valid
+        }
+
+    @classmethod
     def validate_symmetries(cls, precision: int = 50) -> Dict[str, Any]:
         """
         Validate that f₀ satisfies required symmetries:
@@ -614,10 +730,18 @@ class UniversalConstants:
             "f0_uncertainty_hz": float(self.F0_UNCERTAINTY),
             "zeta_prime_half": float(self.ZETA_PRIME_HALF),
             "phi": float(self.PHI),
+            "gamma": float(self.GAMMA),
             "h_planck_js": float(self.H_PLANCK),
             "h_bar_js": float(self.H_BAR),
             "c_light_ms": float(self.C_LIGHT),
             "G_newton_m3_kg_s2": float(self.G_NEWTON),
+            # Spectral constants (Dual-Constant Framework)
+            "lambda_0": float(self.LAMBDA_0),
+            "lambda_mean": float(self.LAMBDA_MEAN),
+            "C_primary": float(self.C_PRIMARY),
+            "C_coherence": float(self.C_COHERENCE),
+            "coherence_factor": float(self.COHERENCE_FACTOR),
+            # Physical properties
             "l_planck_m": float(self.L_PLANCK),
             "R_psi_cosmological_m": float(self.R_PSI_COSMOLOGICAL),
             "R_psi_scale_factor": float(self.R_PSI_SCALE_FACTOR),
@@ -634,6 +758,11 @@ class UniversalConstants:
             "C_QCAL": float(self.C_QCAL),
             "gamma_euler": float(self.GAMMA_EULER),
             "coherence_factor": float(self.COHERENCE_FACTOR),
+            # Spectral origin constants
+            "lambda_0": float(self.LAMBDA_0),
+            "langle_lambda": float(self.LANGLE_LAMBDA),
+            "c_primaria": float(self.C_PRIMARIA),
+            "c_coherencia": float(self.C_COHERENCIA),
         }
 
 
@@ -649,6 +778,13 @@ CONSTANTS = UniversalConstants()
 F0 = CONSTANTS.F0
 F0_UNCERTAINTY = CONSTANTS.F0_UNCERTAINTY
 
+# Spectral origin constants
+LAMBDA_0 = CONSTANTS.LAMBDA_0
+LANGLE_LAMBDA = CONSTANTS.LANGLE_LAMBDA
+C_PRIMARIA = CONSTANTS.C_PRIMARIA
+C_COHERENCIA = CONSTANTS.C_COHERENCIA
+GAMMA = CONSTANTS.GAMMA
+
 # Mathematical origin
 ZETA_PRIME_HALF = CONSTANTS.ZETA_PRIME_HALF
 PHI = CONSTANTS.PHI
@@ -656,6 +792,14 @@ H_PLANCK = CONSTANTS.H_PLANCK
 H_BAR = CONSTANTS.H_BAR
 C_LIGHT = CONSTANTS.C_LIGHT
 G_NEWTON = CONSTANTS.G_NEWTON
+GAMMA = CONSTANTS.GAMMA
+
+# Spectral constants (Dual-Constant Framework)
+LAMBDA_0 = CONSTANTS.LAMBDA_0
+LAMBDA_MEAN = CONSTANTS.LAMBDA_MEAN
+C_PRIMARY = CONSTANTS.C_PRIMARY
+C_COHERENCE = CONSTANTS.C_COHERENCE
+COHERENCE_FACTOR = CONSTANTS.COHERENCE_FACTOR
 
 # Spectral hierarchy constants
 LAMBDA_0 = CONSTANTS.LAMBDA_0
