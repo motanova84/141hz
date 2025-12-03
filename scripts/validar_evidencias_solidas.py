@@ -18,7 +18,7 @@ Fecha: Diciembre 2025
 
 import numpy as np
 from scipy.linalg import eigh
-from typing import Dict, Tuple, List, Optional
+from typing import Dict, Tuple, List, Optional, Any
 import os
 import subprocess
 import json
@@ -46,7 +46,7 @@ PRIMES_PADIC = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
 # TEST 1: BÚSQUEDA DE ARCHIVOS HISTÓRICOS
 # =============================================================================
 
-def buscar_archivos_historicos(repo_path: str = ".") -> Dict[str, bool]:
+def buscar_archivos_historicos(repo_path: str = ".") -> Dict[str, Dict[str, Any]]:
     """
     Busca archivos históricos que contienen λ₀ ≈ 0.001588.
     
@@ -97,7 +97,7 @@ def buscar_archivos_historicos(repo_path: str = ".") -> Dict[str, bool]:
     return resultados
 
 
-def buscar_lambda_0_en_repositorio(repo_path: str = ".") -> Dict[str, any]:
+def buscar_lambda_0_en_repositorio(repo_path: str = ".") -> Dict[str, Any]:
     """
     Busca referencias a λ₀ = 0.001588 en todo el repositorio.
     
@@ -138,7 +138,7 @@ def buscar_lambda_0_en_repositorio(repo_path: str = ".") -> Dict[str, any]:
 # TEST 2: VERIFICACIÓN DE RELACIÓN f₀ ↔ C
 # =============================================================================
 
-def verificar_relacion_f0_C() -> Dict[str, any]:
+def verificar_relacion_f0_C() -> Dict[str, Any]:
     """
     Verifica la relación matemática entre f₀ y C.
     
@@ -247,6 +247,9 @@ def construir_potencial_padic(N: int, primes: List[int] = None) -> np.ndarray:
     V_psi = np.zeros((N, N))
     
     for p in primes:
+        # Validate that p is a valid prime (p > 1)
+        if p <= 1:
+            continue
         weight = 1.0 / np.log(p)
         for i in range(0, N, p):
             V_psi[i, i] += weight
@@ -310,7 +313,7 @@ def calcular_lambda_0_operador_noetico(N: int = 1000) -> float:
 
 
 def test_lambda0_emergente(N: int = 1000, 
-                           tolerancia: float = 0.1) -> Dict[str, any]:
+                           tolerancia: float = 0.1) -> Dict[str, Any]:
     """
     Test definitivo: ¿λ₀ emerge del operador H_ψ sin ajuste?
     
@@ -369,7 +372,7 @@ def test_lambda0_emergente(N: int = 1000,
 
 def ejecutar_validacion_completa(repo_path: str = ".",
                                   N: int = 1000,
-                                  verbose: bool = True) -> Dict[str, any]:
+                                  verbose: bool = True) -> Dict[str, Any]:
     """
     Ejecuta la validación completa de todas las evidencias sólidas.
     
@@ -495,6 +498,31 @@ def ejecutar_validacion_completa(repo_path: str = ".",
 
 
 # =============================================================================
+# SERIALIZACIÓN JSON SEGURA
+# =============================================================================
+
+def _json_serializer(obj):
+    """
+    Serializador personalizado para objetos no JSON-serializables.
+    
+    Maneja específicamente:
+    - numpy arrays y tipos numéricos
+    - números complejos
+    - objetos Path
+    """
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, (np.integer, np.floating)):
+        return float(obj)
+    elif isinstance(obj, complex):
+        return {"real": obj.real, "imag": obj.imag}
+    elif isinstance(obj, Path):
+        return str(obj)
+    else:
+        return str(obj)
+
+
+# =============================================================================
 # PUNTO DE ENTRADA
 # =============================================================================
 
@@ -517,7 +545,7 @@ if __name__ == "__main__":
     output_file.parent.mkdir(parents=True, exist_ok=True)
     
     with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(resultados, f, indent=2, ensure_ascii=False, default=str)
+        json.dump(resultados, f, indent=2, ensure_ascii=False, default=_json_serializer)
     
     print(f"\n📄 Resultados guardados en: {output_file}")
     

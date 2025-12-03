@@ -132,11 +132,10 @@ class TestPotencialPadico:
         # La matriz debe ser diagonal
         assert V.shape == (N, N)
         
-        # Elementos fuera de diagonal deben ser cero
-        for i in range(N):
-            for j in range(N):
-                if i != j:
-                    assert V[i, j] == 0, f"V[{i},{j}] debe ser 0"
+        # More efficient check: off-diagonal elements should be zero
+        V_copy = V.copy()
+        np.fill_diagonal(V_copy, 0)
+        assert np.allclose(V_copy, 0), "Off-diagonal elements should be zero"
     
     def test_potencial_valores_positivos(self):
         """Verifica que los valores son no negativos."""
