@@ -102,6 +102,8 @@
   - Tests para el Dashboard de Estado GW250114
 - `test_demostracion_matematica.py`
   - Tests para la demostración matemática de 141.7001 Hz
+- `test_derivacion_primer_principios.py`
+  - Tests para el módulo de derivación desde primeros principios
 - `test_discovery_standards.py`
   - Tests para Validación de Estándares de Descubrimiento Científico
 - `test_ecuacion_latido_universal.py`
@@ -176,4 +178,4 @@
   - Script de prueba para el verificador GW250114
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-11-30 07:39:25 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-03 04:08:20 UTC*

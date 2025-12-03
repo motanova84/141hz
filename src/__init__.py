@@ -43,8 +43,14 @@ from .noetic_force import (
     summarize_noetic_force,
 )
 
-from .qcal_llm_core import (
-    QCALLLMCore,
+# Note: qcal_llm_core has encoding issues with Unicode subscripts
+# Import it only if needed, not at module level
+# from .qcal_llm_core import QCALLLMCore
+
+from .spectral_origin import (
+    SpectralOrigin,
+    derive_f0_from_spectral,
+    get_spectral_constants,
 )
 
 __all__ = [
@@ -71,13 +77,22 @@ __all__ = [
     'C_PRIMARY',
     'C_COHERENCE',
     'COHERENCE_FACTOR',
+    # Spectral origin constants
+    'LAMBDA_0',
+    'LANGLE_LAMBDA',
+    'C_PRIMARIA',
+    'C_COHERENCIA',
+    'GAMMA',
+    'SpectralOrigin',
+    'derive_f0_from_spectral',
+    'get_spectral_constants',
     # Noetic Force
     'NoeticField',
     'NoeticForce',
     'NoeticForceDetection',
     'summarize_noetic_force',
-    # QCAL LLM Core
-    'QCALLLMCore',
+    # QCAL LLM Core (import separately if needed)
+    # 'QCALLLMCore',
     # SIP Attention
     'SIPAttention',
     'create_sip_attention_demo',
