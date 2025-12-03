@@ -3,6 +3,12 @@ Utilities for the 141 Hz analysis project.
 
 This module provides core functionality for analyzing the universal constant
 f₀ = 141.7001 ± 0.0016 Hz and the Noetic Coherent Force.
+
+The dual spectral constant framework establishes:
+- C_PRIMARY = 629.83: Primary spectral residue (structure)
+- C_COHERENCE = 244.36: Derived coherence constant (form)
+
+Both constants emerge from the H_Ψ operator and combine to produce f₀.
 """
 
 from .constants import (
@@ -12,6 +18,7 @@ from .constants import (
     F0_UNCERTAINTY,
     ZETA_PRIME_HALF,
     PHI,
+    GAMMA,
     H_PLANCK,
     H_BAR,
     C_LIGHT,
@@ -21,6 +28,12 @@ from .constants import (
     R_PSI,
     M_PSI,
     T_PSI,
+    # Spectral constants (Dual-Constant Framework)
+    LAMBDA_0,
+    LAMBDA_MEAN,
+    C_PRIMARY,
+    C_COHERENCE,
+    COHERENCE_FACTOR,
 )
 
 from .noetic_force import (
@@ -42,6 +55,7 @@ __all__ = [
     'F0_UNCERTAINTY',
     'ZETA_PRIME_HALF',
     'PHI',
+    'GAMMA',
     'H_PLANCK',
     'H_BAR',
     'C_LIGHT',
@@ -51,6 +65,12 @@ __all__ = [
     'R_PSI',
     'M_PSI',
     'T_PSI',
+    # Spectral Constants (Dual-Constant Framework)
+    'LAMBDA_0',
+    'LAMBDA_MEAN',
+    'C_PRIMARY',
+    'C_COHERENCE',
+    'COHERENCE_FACTOR',
     # Noetic Force
     'NoeticField',
     'NoeticForce',
