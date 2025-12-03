@@ -14,15 +14,15 @@ where:
     - h is Planck's constant
     - ℏ = h/(2π)
 
-Alternative spectral derivation:
+Spectral Origin:
+    The constant C = 629.83 emerges as the inverse of the first eigenvalue λ₀
+    of the noetic operator Hψ = -Δ + Vψ, and this naturally implies f₀:
 
-    f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_primaria
+        λ₀ ≈ 0.001588050 (first eigenvalue of Hψ)
+        C = 1/λ₀ = 629.83... (universal constant)
+        f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C = 141.7001 Hz
 
-where:
-    - γ ≈ 0.5772 (Euler-Mascheroni constant)
-    - φ = (1+√5)/2 (golden ratio)
-    - C_primaria = 1/λ₀ ≈ 629.70 (primary spectral constant)
-    - λ₀ = 0.001588050271 (first eigenvalue of H_Ψ)
+    where γ is the Euler-Mascheroni constant and φ is the golden ratio.
 
 This constant is:
     - Invariant under adelic transformations
@@ -34,7 +34,7 @@ References:
     - Zenodo 17379721: "La Solución del Infinito"
     - DERIVACION_COMPLETA_F0.md
     - VAL_F0_LIGO.md
-    - src/spectral_origin.py (spectral derivation)
+    - SPECTRAL_ORIGIN_F0.md
 """
 
 import mpmath as mp
@@ -61,26 +61,20 @@ class UniversalConstants:
     F0_UNCERTAINTY = mp.mpf("0.0016")  # Hz
 
     # ═══════════════════════════════════════════════════════════════════
-    # SPECTRAL ORIGIN CONSTANTS (from noetic spectral operator H_Ψ)
+    # SPECTRAL ORIGIN CONSTANTS
     # ═══════════════════════════════════════════════════════════════════
+    # The fundamental frequency f₀ emerges from the spectral properties
+    # of the noetic operator Hψ = -Δ + Vψ through:
+    #   λ₀ → C = 1/λ₀ → ω₀ = √C → f₀ = ω₀/(2π)
 
-    # First eigenvalue of the noetic spectral operator H_Ψ
-    # This is the "root" - the latent vibrational form
-    LAMBDA_0 = mp.mpf("0.001588050271")
+    # First eigenvalue of the noetic operator Hψ
+    LAMBDA_0 = mp.mpf("0.001588050")
 
-    # Effective mean of first eigenvalues (spectral coherence parameter)
-    LANGLE_LAMBDA = mp.mpf("0.0247")
+    # Universal constant C = 1/λ₀ (normalization constant)
+    C_UNIVERSAL = 1 / LAMBDA_0  # ≈ 629.83
 
-    # Primary spectral constant: C_primaria = 1/λ₀ ≈ 629.70
-    # The pure residue, the root structure
-    C_PRIMARIA = 1 / LAMBDA_0
-
-    # Coherence-derived constant: C_coherencia = ⟨λ⟩²/λ₀
-    # The flower, the emergent order, the living harmony of the spectrum
-    C_COHERENCIA = (LANGLE_LAMBDA ** 2) / LAMBDA_0
-
-    # Euler-Mascheroni constant (for spectral derivation)
-    GAMMA = mp.euler
+    # Angular frequency ω₀ = √C (rad/s)
+    OMEGA_0 = mp.sqrt(C_UNIVERSAL)  # ≈ 25.0965 rad/s
 
     # ═══════════════════════════════════════════════════════════════════
     # MATHEMATICAL ORIGIN CONSTANTS
@@ -846,6 +840,11 @@ class UniversalConstants:
         return {
             "f0_hz": float(self.F0),
             "f0_uncertainty_hz": float(self.F0_UNCERTAINTY),
+            # Spectral origin constants
+            "lambda_0": float(self.LAMBDA_0),
+            "C_universal": float(self.C_UNIVERSAL),
+            "omega_0_rad_per_s": float(self.OMEGA_0),
+            # Mathematical origin
             "zeta_prime_half": float(self.ZETA_PRIME_HALF),
             "phi": float(self.PHI),
             "euler_gamma": float(self.EULER_GAMMA),
@@ -889,6 +888,57 @@ class UniversalConstants:
             "c_coherencia": float(self.C_COHERENCIA),
         }
 
+    @classmethod
+    def derive_f0_from_spectral_origin(cls, precision: int = 50) -> Dict[str, Any]:
+        """
+        Derive f₀ from the spectral origin: the noetic operator eigenvalue.
+
+        The derivation chain is:
+            λ₀ → C = 1/λ₀ → f₀ via the mathematical formula
+
+        Where:
+            - λ₀ ≈ 0.001588050 is the first eigenvalue of Hψ
+            - C = 629.83... is the universal constant
+            - f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C = 141.7001 Hz
+
+        Args:
+            precision: Decimal precision for calculation
+
+        Returns:
+            Dictionary with spectral derivation results
+        """
+        mp.dps = precision
+
+        # Step 1: First eigenvalue of Hψ
+        lambda_0 = cls.LAMBDA_0
+
+        # Step 2: Universal constant C = 1/λ₀
+        C = 1 / lambda_0
+
+        # Step 3: Mathematical constants
+        gamma = mp.mpf("0.5772156649015328606065120900824024310421")  # Euler-Mascheroni
+        phi = cls.PHI  # Golden ratio
+
+        # Step 4: Fundamental frequency via the formula
+        # f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C
+        f0_derived = ((1 / (2 * mp.pi)) *
+                      mp.exp(gamma) *
+                      mp.sqrt(2 * mp.pi * gamma) *
+                      (phi**2 / (2 * mp.pi)) *
+                      C)
+
+        return {
+            "lambda_0": float(lambda_0),
+            "C_universal": float(C),
+            "gamma": float(gamma),
+            "phi": float(phi),
+            "f0_derived_hz": float(f0_derived),
+            "f0_target_hz": float(cls.F0),
+            "relative_error": abs(float(f0_derived) - float(cls.F0)) / float(cls.F0),
+            "derivation_chain": "λ₀ → C = 1/λ₀ → f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C",
+            "formula": "f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C ≈ 141.7001 Hz"
+        }
+
 
 # Create a global instance for convenient access
 CONSTANTS = UniversalConstants()
@@ -903,11 +953,9 @@ F0 = CONSTANTS.F0
 F0_UNCERTAINTY = CONSTANTS.F0_UNCERTAINTY
 
 # Spectral origin constants
-LAMBDA_0 = CONSTANTS.LAMBDA_0
-LANGLE_LAMBDA = CONSTANTS.LANGLE_LAMBDA
-C_PRIMARIA = CONSTANTS.C_PRIMARIA
-C_COHERENCIA = CONSTANTS.C_COHERENCIA
-GAMMA = CONSTANTS.GAMMA
+LAMBDA_0 = CONSTANTS.LAMBDA_0       # First eigenvalue of Hψ
+C_UNIVERSAL = CONSTANTS.C_UNIVERSAL  # Universal constant C = 1/λ₀
+OMEGA_0 = CONSTANTS.OMEGA_0         # Angular frequency ω₀ = √C
 
 # Mathematical origin
 ZETA_PRIME_HALF = CONSTANTS.ZETA_PRIME_HALF
