@@ -31,35 +31,59 @@ Author: José Manuel Mota Burruezo
 Reference: DERIVACION_COMPLETA_F0.md, scripts/demostracion_matematica_141hz.py
 """
 
-import mpmath as mp
 from typing import Dict, Any
 
-# Set default precision
-mp.dps = 100
+try:
+    import mpmath as mp
+    MPMATH_AVAILABLE = True
+except ImportError:
+    mp = None  # type: ignore
+    MPMATH_AVAILABLE = False
 
-# ═══════════════════════════════════════════════════════════════════
-# FUNDAMENTAL SPECTRAL CONSTANTS
-# ═══════════════════════════════════════════════════════════════════
 
-# First eigenvalue of the noetic spectral operator H_Ψ
-# This is the "root" - the latent vibrational form
-LAMBDA_0 = mp.mpf("0.001588050271")
+def _check_mpmath():
+    """Check if mpmath is available and raise informative error if not."""
+    if not MPMATH_AVAILABLE:
+        raise ImportError(
+            "mpmath is required for spectral origin calculations. "
+            "Install it with: pip install mpmath"
+        )
 
-# Effective mean of first eigenvalues (spectral coherence parameter)
-# This represents the emergent coherence from the eigenvalue distribution
-LANGLE_LAMBDA = mp.mpf("0.0247")
 
-# Primary spectral constant: C = 1/λ₀
-# The pure residue, the root structure
-# C_primaria ≈ 629.7029875321875
-C_PRIMARIA = 1 / LAMBDA_0
+# Set default precision if mpmath is available
+if MPMATH_AVAILABLE:
+    mp.dps = 100
 
-# Coherence-derived constant: C = ⟨λ⟩²/λ₀
-# The flower, the emergent order, the living harmony of the spectrum
-C_COHERENCIA = (LANGLE_LAMBDA ** 2) / LAMBDA_0
+    # ═══════════════════════════════════════════════════════════════════
+    # FUNDAMENTAL SPECTRAL CONSTANTS
+    # ═══════════════════════════════════════════════════════════════════
 
-# Target/expected frequency (for validation)
-F0_EXPECTED = mp.mpf("141.7001")
+    # First eigenvalue of the noetic spectral operator H_Ψ
+    # This is the "root" - the latent vibrational form
+    LAMBDA_0 = mp.mpf("0.001588050271")
+
+    # Effective mean of first eigenvalues (spectral coherence parameter)
+    # This represents the emergent coherence from the eigenvalue distribution
+    LANGLE_LAMBDA = mp.mpf("0.0247")
+
+    # Primary spectral constant: C = 1/λ₀
+    # The pure residue, the root structure
+    # C_primaria ≈ 629.7029875321875
+    C_PRIMARIA = 1 / LAMBDA_0
+
+    # Coherence-derived constant: C = ⟨λ⟩²/λ₀
+    # The flower, the emergent order, the living harmony of the spectrum
+    C_COHERENCIA = (LANGLE_LAMBDA ** 2) / LAMBDA_0
+
+    # Target/expected frequency (for validation)
+    F0_EXPECTED = mp.mpf("141.7001")
+else:
+    # Fallback values when mpmath is not available (for import only)
+    LAMBDA_0 = 0.001588050271
+    LANGLE_LAMBDA = 0.0247
+    C_PRIMARIA = 1 / LAMBDA_0
+    C_COHERENCIA = (LANGLE_LAMBDA ** 2) / LAMBDA_0
+    F0_EXPECTED = 141.7001
 
 
 class SpectralOrigin:
@@ -81,7 +105,11 @@ class SpectralOrigin:
 
         Args:
             precision: Number of decimal places for mpmath calculations
+
+        Raises:
+            ImportError: If mpmath is not available
         """
+        _check_mpmath()
         mp.dps = precision
 
         # Spectral constants
@@ -147,8 +175,8 @@ class SpectralOrigin:
         c_primaria = float(self.C_primaria)
         c_coherencia = float(self.C_coherencia)
 
-        # Base factor components
-        comp1 = 1 / (2 * pi)  # ≈ 0.159
+        # Base factor components (all using mpmath for consistency)
+        comp1 = 1 / (2 * self.pi)  # ≈ 0.159
         comp2 = mp.exp(self.gamma)  # ≈ 1.781
         comp3 = mp.sqrt(2 * self.pi * self.gamma)  # ≈ 1.904
         comp4 = self.phi ** 2 / (2 * self.pi)  # ≈ 0.418
