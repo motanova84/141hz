@@ -14,6 +14,16 @@ where:
     - h is Planck's constant
     - ℏ = h/(2π)
 
+Alternative spectral derivation:
+
+    f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_primaria
+
+where:
+    - γ ≈ 0.5772 (Euler-Mascheroni constant)
+    - φ = (1+√5)/2 (golden ratio)
+    - C_primaria = 1/λ₀ ≈ 629.70 (primary spectral constant)
+    - λ₀ = 0.001588050271 (first eigenvalue of H_Ψ)
+
 This constant is:
     - Invariant under adelic transformations
     - Stable under RG flow
@@ -24,6 +34,7 @@ References:
     - Zenodo 17379721: "La Solución del Infinito"
     - DERIVACION_COMPLETA_F0.md
     - VAL_F0_LIGO.md
+    - src/spectral_origin.py (spectral derivation)
 """
 
 import mpmath as mp
@@ -48,6 +59,28 @@ class UniversalConstants:
     # The fundamental frequency constant (Hz)
     F0 = mp.mpf("141.7001")
     F0_UNCERTAINTY = mp.mpf("0.0016")  # Hz
+
+    # ═══════════════════════════════════════════════════════════════════
+    # SPECTRAL ORIGIN CONSTANTS (from noetic spectral operator H_Ψ)
+    # ═══════════════════════════════════════════════════════════════════
+
+    # First eigenvalue of the noetic spectral operator H_Ψ
+    # This is the "root" - the latent vibrational form
+    LAMBDA_0 = mp.mpf("0.001588050271")
+
+    # Effective mean of first eigenvalues (spectral coherence parameter)
+    LANGLE_LAMBDA = mp.mpf("0.0247")
+
+    # Primary spectral constant: C_primaria = 1/λ₀ ≈ 629.70
+    # The pure residue, the root structure
+    C_PRIMARIA = 1 / LAMBDA_0
+
+    # Coherence-derived constant: C_coherencia = ⟨λ⟩²/λ₀
+    # The flower, the emergent order, the living harmony of the spectrum
+    C_COHERENCIA = (LANGLE_LAMBDA ** 2) / LAMBDA_0
+
+    # Euler-Mascheroni constant (for spectral derivation)
+    GAMMA = mp.euler
 
     # ═══════════════════════════════════════════════════════════════════
     # MATHEMATICAL ORIGIN CONSTANTS
@@ -334,6 +367,60 @@ class UniversalConstants:
         return cls.F0
 
     @classmethod
+    def derive_f0_from_spectral(cls, precision: int = 50) -> Dict[str, Any]:
+        """
+        Derive f₀ from spectral constants of the noetic operator H_Ψ.
+
+        Formula:
+            f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_primaria
+
+        where:
+            - γ: Euler-Mascheroni constant ≈ 0.5772
+            - φ: Golden ratio (1+√5)/2 ≈ 1.618
+            - C_primaria = 1/λ₀ ≈ 629.70
+
+        Args:
+            precision: Decimal precision for calculation
+
+        Returns:
+            Dictionary with derivation results
+        """
+        mp.dps = precision
+
+        # Base factor: (1/2π) × e^γ × √(2πγ) × (φ²/2π)
+        gamma = mp.euler
+        phi = (1 + mp.sqrt(5)) / 2
+        pi = mp.pi
+
+        base = (
+            (1 / (2 * pi)) *
+            mp.exp(gamma) *
+            mp.sqrt(2 * pi * gamma) *
+            (phi ** 2 / (2 * pi))
+        )
+
+        # Derived f₀
+        f0_derived = base * cls.C_PRIMARIA
+
+        # Error analysis
+        error_hz = abs(f0_derived - cls.F0)
+        error_pct = float(error_hz / cls.F0) * 100
+
+        return {
+            "f0_derived_hz": float(f0_derived),
+            "f0_expected_hz": float(cls.F0),
+            "error_hz": float(error_hz),
+            "error_percent": error_pct,
+            "lambda_0": float(cls.LAMBDA_0),
+            "c_primaria": float(cls.C_PRIMARIA),
+            "c_coherencia": float(cls.C_COHERENCIA),
+            "langle_lambda": float(cls.LANGLE_LAMBDA),
+            "base_factor": float(base),
+            "formula": "f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_primaria",
+            "valid": error_pct < 0.1,  # Within 0.1% is valid
+        }
+
+    @classmethod
     def validate_symmetries(cls, precision: int = 50) -> Dict[str, Any]:
         """
         Validate that f₀ satisfies required symmetries:
@@ -412,6 +499,11 @@ class UniversalConstants:
             "R_psi_m": float(self.R_PSI),
             "m_psi_kg": float(self.M_PSI),
             "T_psi_K": float(self.T_PSI),
+            # Spectral origin constants
+            "lambda_0": float(self.LAMBDA_0),
+            "langle_lambda": float(self.LANGLE_LAMBDA),
+            "c_primaria": float(self.C_PRIMARIA),
+            "c_coherencia": float(self.C_COHERENCIA),
         }
 
 
@@ -426,6 +518,13 @@ CONSTANTS = UniversalConstants()
 # Fundamental constant
 F0 = CONSTANTS.F0
 F0_UNCERTAINTY = CONSTANTS.F0_UNCERTAINTY
+
+# Spectral origin constants
+LAMBDA_0 = CONSTANTS.LAMBDA_0
+LANGLE_LAMBDA = CONSTANTS.LANGLE_LAMBDA
+C_PRIMARIA = CONSTANTS.C_PRIMARIA
+C_COHERENCIA = CONSTANTS.C_COHERENCIA
+GAMMA = CONSTANTS.GAMMA
 
 # Mathematical origin
 ZETA_PRIME_HALF = CONSTANTS.ZETA_PRIME_HALF
