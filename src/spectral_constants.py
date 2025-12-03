@@ -359,6 +359,9 @@ C_COHERENCE = SPECTRAL.C_COHERENCE
 # Coherence factor
 COHERENCE_FACTOR = SPECTRAL.COHERENCE_FACTOR
 
+# Euler-Mascheroni constant
+GAMMA = SPECTRAL.GAMMA
+
 
 if __name__ == "__main__":
     """
