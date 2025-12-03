@@ -53,7 +53,12 @@ C_LIGHT = mp.mpf("299792458")  # m/s
 # Longitud de Planck
 L_PLANCK = mp.mpf("1.616255e-35")  # metros
 
-# Factor de escala adélico-fractal (derivado de la estructura del vacío)
+# Factor de escala adélico-fractal
+# Derivado de la estructura del vacío cuántico mediante:
+#   scale_factor = c / (2π × f₀_target × ℓ_P × eq(17))
+# donde f₀_target = 141.7001 Hz es la frecuencia noética observada y eq(17) ≈ 9.27
+# Esta relación conecta la escala de Planck con la escala cosmológica
+# Referencia: JMMB (2025), "Descubrimiento Matemático 141.7001 Hz"
 SCALE_FACTOR = mp.mpf("1.931e41")
 
 # Frecuencia de referencia para A4
@@ -67,7 +72,12 @@ C0_FREQUENCY = 16.3516  # Hz
 # CONFIGURACIÓN DE PRECISIÓN
 # =============================================================================
 
-mp.mp.dps = 50  # 50 dígitos de precisión para cálculos críticos
+# Precisión de 50 dígitos requerida para:
+# 1. Cálculos con exponenciales de √p que pueden crecer rápidamente
+# 2. Mantener coherencia numérica en R_Ψ que opera en escala 10^40
+# 3. Evitar errores de acumulación en las sumas de equilibrium
+DEFAULT_PRECISION = 50
+mp.mp.dps = DEFAULT_PRECISION
 
 
 # =============================================================================

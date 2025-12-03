@@ -5,6 +5,8 @@ Test suite for Spectral Analysis of the First 100 Prime Numbers.
 This module tests the adelic-fractal equilibrium calculations and
 spectral frequency derivations.
 
+Run with: python -m pytest scripts/test_analisis_espectral_100_primos.py -v
+
 Author: José Manuel Mota Burruezo (JMMB Ψ✧)
 Instituto de Consciencia Cuántica (ICQ)
 """
@@ -13,10 +15,10 @@ import os
 import sys
 import pytest
 
-# Add parent directory for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add scripts directory for imports (follows existing pattern in repository)
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
 
-from scripts.analisis_espectral_100_primos import (  # noqa: E402
+from analisis_espectral_100_primos import (  # noqa: E402
     generate_primes,
     equilibrium_function,
     calculate_r_psi,
