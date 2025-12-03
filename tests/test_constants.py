@@ -24,6 +24,11 @@ from constants import (
     H_PLANCK,
     H_BAR,
     C_LIGHT,
+    LAMBDA_0,
+    C_PRIMARY,
+    C_QCAL,
+    GAMMA_EULER,
+    COHERENCE_FACTOR,
 )
 
 # Test constants
@@ -363,6 +368,170 @@ class TestExportFunctions:
         assert data["f0_hz"] == pytest.approx(float(const.F0), abs=1e-4)
         assert data["E_psi_joules"] == pytest.approx(float(const.E_PSI), abs=1e-40)
         assert data["lambda_psi_km"] == pytest.approx(float(const.LAMBDA_PSI_KM), abs=1e-6)
+    
+    def test_dict_includes_spectral_constants(self):
+        """Test that dict includes spectral hierarchy constants."""
+        const = UniversalConstants()
+        data = const.to_dict()
+        
+        assert "lambda_0" in data
+        assert "C_primary" in data
+        assert "C_QCAL" in data
+        assert "gamma_euler" in data
+        assert "coherence_factor" in data
+
+
+class TestSpectralHierarchy:
+    """Test suite for spectral hierarchy constants H_Ψ = -Δ + V_Ψ."""
+    
+    def test_lambda_0_value(self):
+        """Test that λ₀ (minimum eigenvalue) has the correct value."""
+        assert float(LAMBDA_0) == pytest.approx(0.001588050, abs=1e-9)
+        assert float(CONSTANTS.LAMBDA_0) == pytest.approx(0.001588050, abs=1e-9)
+    
+    def test_c_primary_value(self):
+        """Test that C = 1/λ₀ (Primary Spectral Constant) has the correct value."""
+        assert float(C_PRIMARY) == pytest.approx(629.83, abs=0.01)
+        assert float(CONSTANTS.C_PRIMARY) == pytest.approx(629.83, abs=0.01)
+    
+    def test_c_primary_equals_inverse_lambda0(self):
+        """Test that C = 1/λ₀ relationship holds."""
+        C_from_lambda = 1 / float(LAMBDA_0)
+        assert C_from_lambda == pytest.approx(float(C_PRIMARY), rel=1e-3)
+    
+    def test_c_qcal_value(self):
+        """Test that C_QCAL (Derived Coherence Constant) has the correct value."""
+        assert float(C_QCAL) == pytest.approx(244.36, abs=0.01)
+        assert float(CONSTANTS.C_QCAL) == pytest.approx(244.36, abs=0.01)
+    
+    def test_gamma_euler_value(self):
+        """Test Euler-Mascheroni constant γ."""
+        assert float(GAMMA_EULER) == pytest.approx(0.5772156649015329, abs=1e-15)
+        assert float(CONSTANTS.GAMMA_EULER) == pytest.approx(0.5772156649015329, abs=1e-15)
+    
+    def test_coherence_factor_value(self):
+        """Test that coherence factor C_QCAL/C ≈ 0.388."""
+        factor = COHERENCE_FACTOR()
+        assert float(factor) == pytest.approx(0.388, abs=0.001)
+    
+    def test_coherence_factor_relationship(self):
+        """Test that coherence factor equals C_QCAL/C."""
+        factor = COHERENCE_FACTOR()
+        expected = float(C_QCAL) / float(C_PRIMARY)
+        assert float(factor) == pytest.approx(expected, rel=1e-10)
+
+
+class TestSpectralDerivation:
+    """Test suite for f₀ derivation from spectral hierarchy."""
+    
+    def test_derive_f0_from_spectral_hierarchy(self):
+        """Test the spectral hierarchy derivation method."""
+        result = UniversalConstants.derive_f0_from_spectral_hierarchy(precision=50)
+        
+        # Check structure
+        assert "f0_target_hz" in result
+        assert "f0_derived_hz" in result
+        assert "relative_error" in result
+        assert "agreement_percent" in result
+        assert "spectral_constants" in result
+        assert "scaling_factors" in result
+        assert "hierarchy_levels" in result
+    
+    def test_f0_derivation_accuracy(self):
+        """Test that derived f₀ matches target with >99% accuracy."""
+        result = UniversalConstants.derive_f0_from_spectral_hierarchy(precision=50)
+        
+        # Should be within 1% of target
+        assert result["relative_error"] < 0.01
+        assert result["agreement_percent"] > 99.0
+    
+    def test_f0_derived_close_to_target(self):
+        """Test that derived f₀ ≈ 141.7001 Hz."""
+        result = UniversalConstants.derive_f0_from_spectral_hierarchy(precision=50)
+        
+        assert result["f0_derived_hz"] == pytest.approx(141.7001, abs=0.1)
+    
+    def test_spectral_constants_in_derivation(self):
+        """Test that spectral constants are correctly included."""
+        result = UniversalConstants.derive_f0_from_spectral_hierarchy(precision=50)
+        
+        sc = result["spectral_constants"]
+        assert sc["lambda_0"] == pytest.approx(0.001588050, abs=1e-9)
+        assert sc["C_primary"] == pytest.approx(629.83, abs=0.01)
+        assert sc["C_QCAL"] == pytest.approx(244.36, abs=0.01)
+        assert sc["coherence_factor"] == pytest.approx(0.388, abs=0.001)
+    
+    def test_scaling_factors_in_derivation(self):
+        """Test that scaling factors are correctly calculated."""
+        result = UniversalConstants.derive_f0_from_spectral_hierarchy(precision=50)
+        
+        sf = result["scaling_factors"]
+        assert sf["e_gamma"] == pytest.approx(1.781, abs=0.001)  # e^γ
+        assert sf["sqrt_2pi_gamma"] == pytest.approx(1.904, abs=0.001)  # √(2πγ)
+        assert sf["phi_squared_over_2pi"] == pytest.approx(0.417, abs=0.001)  # φ²/(2π)
+    
+    def test_hierarchy_levels_in_derivation(self):
+        """Test that hierarchy levels are computed."""
+        result = UniversalConstants.derive_f0_from_spectral_hierarchy(precision=50)
+        
+        hl = result["hierarchy_levels"]
+        # Level 1 natural: f = √C/(2π) ≈ 3.99 Hz
+        assert hl["level_1_natural_hz"] == pytest.approx(3.99, abs=0.1)
+        # Level 1 primary: f₀ ≈ 141.67 Hz
+        assert hl["level_1_primary_hz"] == pytest.approx(141.67, abs=0.1)
+
+
+class TestSpectralValidation:
+    """Test suite for spectral constants validation."""
+    
+    def test_validate_spectral_constants(self):
+        """Test the spectral constants validation method."""
+        result = UniversalConstants.validate_spectral_constants(precision=50)
+        
+        # Check structure
+        assert "precision" in result
+        assert "validations" in result
+        assert "overall_valid" in result
+        assert "status" in result
+    
+    def test_all_validations_pass(self):
+        """Test that all spectral validations pass."""
+        result = UniversalConstants.validate_spectral_constants(precision=50)
+        
+        assert result["overall_valid"] is True
+        assert "PASS" in result["status"]
+    
+    def test_c_inverse_lambda0_validation(self):
+        """Test C = 1/λ₀ validation passes."""
+        result = UniversalConstants.validate_spectral_constants(precision=50)
+        
+        v = result["validations"]["C_equals_inverse_lambda0"]
+        assert v["valid"] is True
+        assert v["relative_error"] < 1e-3
+    
+    def test_coherence_factor_validation(self):
+        """Test C_QCAL/C ≈ 0.388 validation passes."""
+        result = UniversalConstants.validate_spectral_constants(precision=50)
+        
+        v = result["validations"]["coherence_factor"]
+        assert v["valid"] is True
+        assert v["relative_error"] < 0.01
+    
+    def test_master_formula_validation(self):
+        """Test master formula validation passes."""
+        result = UniversalConstants.validate_spectral_constants(precision=50)
+        
+        v = result["validations"]["master_formula"]
+        assert v["valid"] is True
+        assert v["relative_error"] < 0.01
+    
+    def test_physical_interpretation_validation(self):
+        """Test physical interpretation validation passes."""
+        result = UniversalConstants.validate_spectral_constants(precision=50)
+        
+        v = result["validations"]["physical_interpretation"]
+        assert v["valid"] is True
+        assert "omega_squared_C" in v
 
 
 if __name__ == "__main__":
