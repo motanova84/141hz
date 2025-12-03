@@ -105,6 +105,40 @@ class UniversalConstants:
     # Gravitational constant (m³/(kg·s²)) - CODATA 2018
     G_NEWTON = mp.mpf("6.67430e-11")
 
+    # Euler-Mascheroni constant γ
+    GAMMA = mp.mpf("0.5772156649015329")
+
+    # ═══════════════════════════════════════════════════════════════════
+    # SPECTRAL CONSTANTS (Dual-Constant Framework)
+    # ═══════════════════════════════════════════════════════════════════
+    #
+    # The system has two fundamental spectral constants that coexist:
+    #
+    # 1. C_PRIMARY (629.83) - Primary spectral residue from λ₀
+    #    - Local (depends only on minimum eigenvalue)
+    #    - Represents STRUCTURE
+    #
+    # 2. C_COHERENCE (244.36) - Coherence constant from second moment
+    #    - Global (depends on spectral distribution)
+    #    - Represents FORM
+    #
+    # Both combine to produce f₀ = 141.7001 Hz
+
+    # Minimum eigenvalue of the H_Ψ operator
+    LAMBDA_0 = mp.mpf("0.001587730022")
+
+    # Mean eigenvalue (spectral centroid)
+    LAMBDA_MEAN = mp.mpf("0.622878566231")
+
+    # Primary spectral constant: C = 1/λ₀ = 629.83 (structure)
+    C_PRIMARY = mp.mpf("629.83")
+
+    # Coherence constant: C_QCAL = ⟨λ⟩²/λ₀ = 244.36 (form)
+    C_COHERENCE = mp.mpf("244.36")
+
+    # Coherence factor: ratio linking form to structure
+    COHERENCE_FACTOR = C_COHERENCE / C_PRIMARY  # ≈ 0.388
+
     # ═══════════════════════════════════════════════════════════════════
     # PLANCK SCALE CONSTANTS
     # ═══════════════════════════════════════════════════════════════════
@@ -485,10 +519,18 @@ class UniversalConstants:
             "f0_uncertainty_hz": float(self.F0_UNCERTAINTY),
             "zeta_prime_half": float(self.ZETA_PRIME_HALF),
             "phi": float(self.PHI),
+            "gamma": float(self.GAMMA),
             "h_planck_js": float(self.H_PLANCK),
             "h_bar_js": float(self.H_BAR),
             "c_light_ms": float(self.C_LIGHT),
             "G_newton_m3_kg_s2": float(self.G_NEWTON),
+            # Spectral constants (Dual-Constant Framework)
+            "lambda_0": float(self.LAMBDA_0),
+            "lambda_mean": float(self.LAMBDA_MEAN),
+            "C_primary": float(self.C_PRIMARY),
+            "C_coherence": float(self.C_COHERENCE),
+            "coherence_factor": float(self.COHERENCE_FACTOR),
+            # Physical properties
             "l_planck_m": float(self.L_PLANCK),
             "R_psi_cosmological_m": float(self.R_PSI_COSMOLOGICAL),
             "R_psi_scale_factor": float(self.R_PSI_SCALE_FACTOR),
@@ -533,6 +575,14 @@ H_PLANCK = CONSTANTS.H_PLANCK
 H_BAR = CONSTANTS.H_BAR
 C_LIGHT = CONSTANTS.C_LIGHT
 G_NEWTON = CONSTANTS.G_NEWTON
+GAMMA = CONSTANTS.GAMMA
+
+# Spectral constants (Dual-Constant Framework)
+LAMBDA_0 = CONSTANTS.LAMBDA_0
+LAMBDA_MEAN = CONSTANTS.LAMBDA_MEAN
+C_PRIMARY = CONSTANTS.C_PRIMARY
+C_COHERENCE = CONSTANTS.C_COHERENCE
+COHERENCE_FACTOR = CONSTANTS.COHERENCE_FACTOR
 
 
 # Planck and cosmological scales (lazy evaluation via properties)
