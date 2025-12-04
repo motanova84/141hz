@@ -215,7 +215,7 @@ def validate_adelic_spectral_indicator(precision: int = 80) -> Dict[str, Any]:
     Complete validation that p = 17 minimizes the adelic-spectral indicator.
 
     Computes:
-        indicator(p) = e^(π√p/2) / p^(3/2)
+        indicator(p) = e^(3√(p/17)) / p^(3/2)
 
     for all primes in {11, 13, 17, 19, 23, 29} and verifies p = 17 is minimum.
 
