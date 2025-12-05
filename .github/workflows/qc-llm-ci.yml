@@ -73,7 +73,7 @@ jobs:
         python -c "import sys; sys.path.insert(0, 'API/Python'); from qc_llm import F0; assert F0 == 141.7001, f'F0 constant modified: {F0}'; print('✅ F0 constant verified')"
     
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: qc-llm-test-results-py${{ matrix.python-version }}

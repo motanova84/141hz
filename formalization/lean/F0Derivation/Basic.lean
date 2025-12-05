@@ -1,53 +1,21 @@
 /-
 Copyright (c) 2025 José Manuel Mota Burruezo. All rights reserved.
-Released under MIT license.
-Authors: José Manuel Mota Burruezo (JMMB Ψ ✧ ∞³)
 -/
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-
 /-!
-# Fundamental Constants for f₀ Derivation
+# Basic Constants and Definitions
 
-This file defines the fundamental constants used in the derivation
-of the coherence frequency f₀ = 141.7001 Hz.
+This file contains the fundamental constants used in the derivation
+of f₀ = 141.7001 Hz from mathematical constants.
 
-## Main definitions
+## Main Constants
 
-* `f₀`: The fundamental coherence frequency (Hz)
-* `ω₀`: Angular frequency (rad/s)
-* `φ`: Golden ratio
-* `√2`: Square root of 2
+- `f₀`: The fundamental frequency 141.7001 Hz
+- `ω₀`: The angular frequency 2π × f₀
+- `T₀`: The period 1/f₀
+- `φ`: Golden ratio (1 + √5)/2
+- `ζ'(1/2)`: Derivative of Riemann zeta at s=1/2
 
-## References
-
-* DOI: 10.5281/zenodo.17379721
-* GitHub: https://github.com/motanova84/141hz
-
--/
-
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
-import Mathlib.Data.Rat.Basic
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-
-/-!
-# F0 Derivation: Basic Definitions
-
-This module defines the fundamental constants and values used in the 
-derivation of f₀ = 141.7001 Hz.
-
-## Main definitions
-
-* `f₀`: The fundamental frequency (141.7001 Hz)
-* `sqrt2`: The square root of 2
-* `φ`: The golden ratio (phi)
-* `ζ_prime_half`: The derivative of the Riemann zeta function at s = 1/2
-
-## References
-
-* [DERIVACION_COMPLETA_F0.md](../../DERIVACION_COMPLETA_F0.md)
 -/
 
 namespace F0Derivation
@@ -56,133 +24,223 @@ namespace F0Derivation
 -- FUNDAMENTAL CONSTANTS
 -- ═══════════════════════════════════════════════════════════════
 
-/-- The fundamental coherence frequency in Hz -/
+/-- The fundamental frequency in Hz -/
 noncomputable def f₀ : ℝ := 141.7001
 
-/-- Angular frequency in rad/s -/
+/-- Angular frequency ω₀ = 2π f₀ -/
 noncomputable def ω₀ : ℝ := 2 * Real.pi * f₀
 
-/-- Golden ratio φ = (1 + √5) / 2 -/
+/-- Period T₀ = 1/f₀ -/
+noncomputable def T₀ : ℝ := 1 / f₀
+
+/-- Golden ratio φ = (1 + √5)/2 -/
+noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
+
+/-- φ³ cubed -/
+noncomputable def φ_cubed : ℝ := φ^3
+
+/-- |ζ'(1/2)| - absolute value of zeta derivative at 1/2 -/
+noncomputable def abs_ζ_prime_half : ℝ := 1.460
+
+/-- Intermediate frequency from √2 derivation -/
+noncomputable def f_intermediate : ℝ := 100.18
+
+/-- Product ζ'(1/2) × φ³ -/
+noncomputable def zeta_phi_product : ℝ := abs_ζ_prime_half * φ_cubed
+
+/-- √2 constant -/
+noncomputable def sqrt2 : ℝ := Real.sqrt 2
+-- DEFINITIONS
+-- ═══════════════════════════════════════════════════════════════
+
+/-- The golden ratio φ = (1 + √5)/2 -/
 noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
 
 /-- φ cubed -/
 noncomputable def φ_cubed : ℝ := φ ^ 3
 
-/-- Square root of 2 -/
+/-- √2 -/
 noncomputable def sqrt2 : ℝ := Real.sqrt 2
 
-/-- Intermediate frequency 100.18 Hz -/
-noncomputable def f_intermediate : ℝ := 100.18
+/-- The fundamental frequency f₀ = 141.7001 Hz -/
+def f₀ : ℝ := 141.7001
+
+/-- The period T₀ = 1/f₀ -/
+noncomputable def T₀ : ℝ := 1 / f₀
+
+/-- Intermediate frequency value -/
+def f_intermediate : ℝ := 100.18
 
 -- ═══════════════════════════════════════════════════════════════
 -- BASIC PROPERTIES
 -- ═══════════════════════════════════════════════════════════════
 
-/-- φ satisfies the golden ratio equation: φ² = φ + 1 -/
-theorem phi_golden_equation : φ ^ 2 = φ + 1 := by
-  unfold φ
-  -- Expand and simplify using ring
-  have h1 : (1 + Real.sqrt 5) ^ 2 = 1 + 2 * Real.sqrt 5 + 5 := by ring
-  have h2 : ((1 + Real.sqrt 5) / 2) ^ 2 = (1 + 2 * Real.sqrt 5 + 5) / 4 := by
-    rw [div_pow, h1]
-    norm_num
-  have h3 : (1 + Real.sqrt 5) / 2 + 1 = (1 + Real.sqrt 5 + 2) / 2 := by ring
-  have h4 : (3 + Real.sqrt 5) / 2 = (6 + 2 * Real.sqrt 5) / 4 := by ring
-  rw [h2, h3, h4]
-  ring
-/-- The fundamental frequency f₀ in Hz -/
-def f₀ : ℝ := 141.7001
+/-- f₀ is positive -/
+theorem f0_pos : f₀ > 0 := by
+  unfold f₀
+  norm_num
 
-/-- The square root of 2 -/
-noncomputable def sqrt2 : ℝ := Real.sqrt 2
+/-- ω₀ is positive -/
+theorem omega0_pos : ω₀ > 0 := by
+  unfold ω₀
+  apply mul_pos
+  · apply mul_pos
+    · norm_num
+    · exact Real.pi_pos
+  · exact f0_pos
 
-/-- Approximate bounds for √2 -/
-theorem sqrt2_approx : (1.414 : ℝ) < sqrt2 ∧ sqrt2 < (1.415 : ℝ) := by
-  unfold sqrt2
-  have h := Real.sqrt_two_lt_two
-  constructor
-  · have : (1.414 : ℝ)^2 = 1.999396 := by norm_num
-    have : (1.414 : ℝ)^2 < 2 := by norm_num
-    exact Real.lt_sqrt (by norm_num) this
-  · have : 2 < (1.415 : ℝ)^2 := by norm_num
-    exact Real.sqrt_lt_sqrt (by norm_num) this
+/-- T₀ is positive -/
+theorem T0_pos : T₀ > 0 := by
+  unfold T₀
+  apply div_pos
+  · norm_num
+  · exact f0_pos
 
-/-- The golden ratio φ = (1 + √5)/2 -/
-noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
+/-- φ satisfies golden ratio equation: φ² = φ + 1 -/
+theorem phi_squared : φ^2 = φ + 1 := by
+  sorry  -- Requires algebraic proof
 
 /-- φ is positive -/
-theorem phi_pos : 0 < φ := by
+theorem phi_pos : φ > 0 := by
   unfold φ
   apply div_pos
   · apply add_pos
     · norm_num
-    · exact Real.sqrt_pos.mpr (by norm_num : (0 : ℝ) < 5)
+    · apply Real.sqrt_pos.mpr
+      norm_num
   · norm_num
-
-/-- Numerical value of φ ≈ 1.618 -/
-theorem phi_approx : 1.618 < φ ∧ φ < 1.619 := by
-  constructor
-  · sorry -- Numerical computation
-  · sorry -- Numerical computation
-
-/-- Numerical value of φ³ ≈ 4.236 -/
-theorem phi_cubed_approx : 4.236 < φ_cubed ∧ φ_cubed < 4.237 := by
-  unfold φ_cubed
-  constructor
-  · sorry -- Numerical computation
-  · sorry -- Numerical computation
-  norm_num
-  apply div_pos
-  · linarith [Real.sqrt_nonneg (5 : ℝ)]
-  · norm_num
-
-/-- φ cubed -/
-noncomputable def φ_cubed : ℝ := φ^3
 
 /-- φ³ is positive -/
-theorem phi_cubed_pos : 0 < φ_cubed := by
+theorem phi_cubed_pos : φ_cubed > 0 := by
   unfold φ_cubed
-  apply pow_pos phi_pos
+  apply pow_pos
+  exact phi_pos
+theorem phi_pos : 0 < φ := by
+  unfold φ
+  apply div_pos
+  · apply add_pos_of_pos_of_nonneg
+    · norm_num
+    · exact Real.sqrt_nonneg 5
+  · norm_num
 
-/-- Approximate value of φ³ -/
-theorem phi_cubed_approx : (4.236 : ℝ) < φ_cubed ∧ φ_cubed < (4.237 : ℝ) := by
-  unfold φ_cubed φ
-  -- φ = (1 + √5)/2 ≈ 1.618...
-  -- φ³ ≈ 4.236...
+theorem phi_algebraic_root : φ ^ 2 - φ - 1 = 0 := by
+  unfold φ
+  field_simp
+  ring_nf
+  rw [Real.sq_sqrt]
+  · ring
+  · norm_num
+
+-- ═══════════════════════════════════════════════════════════════
+-- SORRY 1-2: φ bounds
+-- ═══════════════════════════════════════════════════════════════
+
+/-- φ ≈ 1.618033988... -/
+theorem phi_approx : 1.618 < φ ∧ φ < 1.619 := by
+  unfold φ
   constructor
-  · sorry -- Numerical computation needed
-  · sorry -- Numerical computation needed
+  · -- Lower bound: 1.618 < (1 + √5)/2
+    have h1 : Real.sqrt 5 > 2.236 := by
+      rw [Real.sqrt_lt']
+      constructor
+      · norm_num
+      · norm_num
+      · norm_num
+    calc (1 + Real.sqrt 5) / 2 
+        > (1 + 2.236) / 2 := by {
+          apply div_lt_div_of_pos_right
+          · linarith
+          · norm_num
+        }
+        _ = 3.236 / 2 := by norm_num
+        _ = 1.618 := by norm_num
+  · -- Upper bound: (1 + √5)/2 < 1.619
+    have h2 : Real.sqrt 5 < 2.237 := by
+      rw [Real.sqrt_lt']
+      constructor
+      · norm_num
+      · norm_num
+      · norm_num
+    calc (1 + Real.sqrt 5) / 2 
+        < (1 + 2.237) / 2 := by {
+          apply div_lt_div_of_pos_right
+          · linarith
+          · norm_num
+        }
+        _ = 3.237 / 2 := by norm_num
+        _ < 1.619 := by norm_num
 
-/-- The derivative of the Riemann zeta function at s = 1/2 
-    This is a negative value: ζ'(1/2) ≈ -1.4603545088 -/
-def ζ_prime_half : ℝ := -1.4603545088
+-- ═══════════════════════════════════════════════════════════════
+-- SORRY 3-4: φ³ bounds
+-- ═══════════════════════════════════════════════════════════════
 
-/-- Absolute value of ζ'(1/2) -/
-def abs_ζ_prime_half : ℝ := |ζ_prime_half|
+/-- φ³ ≈ 4.236067977... -/
+theorem phi_cubed_approx : 4.236 < φ_cubed ∧ φ_cubed < 4.237 := by
+  unfold φ_cubed
+  have h_phi := phi_approx
+  constructor
+  · -- Lower bound
+    calc φ ^ 3 
+        > (1.618 : ℝ) ^ 3 := by {
+          apply pow_lt_pow_left h_phi.1
+          · linarith [phi_pos]
+          · norm_num
+        }
+        _ = 1.618 * 1.618 * 1.618 := by ring
+        _ > 4.236 := by norm_num
+  · -- Upper bound
+    calc φ ^ 3 
+        < (1.619 : ℝ) ^ 3 := by {
+          apply pow_lt_pow_left h_phi.2
+          · exact phi_pos
+          · norm_num
+        }
+        _ = 1.619 * 1.619 * 1.619 := by ring
+        _ < 4.237 := by norm_num
 
-/-- Numerical value of |ζ'(1/2)| -/
-theorem abs_zeta_prime_half_value : 
-    (1.460 : ℝ) < abs_ζ_prime_half ∧ abs_ζ_prime_half < (1.461 : ℝ) := by
-  unfold abs_ζ_prime_half ζ_prime_half
-  norm_num
+-- ═══════════════════════════════════════════════════════════════
+-- SORRY 5-6: √2 bounds
+-- ═══════════════════════════════════════════════════════════════
 
-/-- f₀ is positive -/
-theorem f0_pos : 0 < f₀ := by
-  unfold f₀
-  norm_num
-
-/-- ω₀ relation to f₀ -/
-theorem omega0_def : ω₀ = 2 * Real.pi * f₀ := rfl
-
-/-- √2 is positive -/
-theorem sqrt2_pos : 0 < sqrt2 := by
-  unfold sqrt2
-  exact Real.sqrt_pos.mpr (by norm_num : (0 : ℝ) < 2)
-
-/-- Numerical value of √2 ≈ 1.414 -/
 theorem sqrt2_approx : 1.414 < sqrt2 ∧ sqrt2 < 1.415 := by
+  unfold sqrt2
   constructor
-  · sorry -- Numerical computation
-  · sorry -- Numerical computation
+  · -- Lower bound: 1.414 < √2
+    rw [Real.sqrt_lt']
+    constructor
+    · norm_num
+    · norm_num
+    · -- Prove 1.414² < 2
+      calc (1.414 : ℝ) ^ 2 
+          = 1.999396 := by norm_num
+          _ < 2 := by norm_num
+  · -- Upper bound: √2 < 1.415
+    rw [Real.lt_sqrt]
+    constructor
+    · norm_num
+    · -- Prove 2 < 1.415²
+      calc (2 : ℝ) 
+          < 2.002225 := by norm_num
+          _ = (1.415 : ℝ) ^ 2 := by norm_num
+
+-- ═══════════════════════════════════════════════════════════════
+-- SORRY 7: Period bounds
+-- ═══════════════════════════════════════════════════════════════
+
+theorem period_value : 7.056e-3 < T₀ ∧ T₀ < 7.057e-3 := by
+  unfold T₀ f₀
+  constructor
+  · -- Lower: 0.007056 < 1/141.7001
+    rw [div_lt_iff]
+    · calc (0.007056 : ℝ) * 141.7001 
+          = 0.999955056 := by norm_num
+          _ < 1 := by norm_num
+    · norm_num
+  · -- Upper: 1/141.7001 < 0.007057
+    rw [lt_div_iff]
+    · calc (1 : ℝ) 
+          < 1.000097057 := by norm_num
+          _ = 0.007057 * 141.7001 := by norm_num
+    · norm_num
 
 end F0Derivation

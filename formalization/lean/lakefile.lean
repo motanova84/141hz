@@ -2,14 +2,6 @@ import Lake
 open Lake DSL
 
 package «f0derivation» where
-  version := "1.0.0"
-  keywords := #["number-theory", "zeta-function", "frequency"]
-  description := "Formal derivation of f₀ = 141.7001 Hz from primes"
-
-lean_lib «F0Derivation» where
-  globs := #[.submodules `F0Derivation]
-package «f0-formalization» where
-package «f0derivation» where
   -- add package configuration options here
 
 lean_lib «F0Derivation» where
@@ -18,7 +10,24 @@ lean_lib «F0Derivation» where
 @[default_target]
 lean_exe «f0derivation» where
   root := `Main
+  -- Enables the use of the Lean interpreter by the executable (e.g.,
+  -- `runFrontend`) at the expense of increased binary size on Linux.
+  -- Remove this line if you do not need such functionality.
   supportInterpreter := true
+package f0derivation where
+  -- Project metadata
+  version := v!"0.1.0"
+  keywords := #["mathematics", "physics", "zeta-function", "golden-ratio"]
+  leanOptions := #[
+    ⟨`pp.unicode.fun, true⟩,
+    ⟨`autoImplicit, false⟩
+  ]
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git"
+
+@[default_target]
+lean_lib F0Derivation where
+  -- Source files
+  roots := #[`F0Derivation]
+  globs := #[.submodules `F0Derivation]

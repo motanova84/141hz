@@ -1,0 +1,32 @@
+[
+  {
+    "label": "f0_derivation",
+    "text": "Deriva la frecuencia fundamental f₀ = 141.7001 Hz desde los principios matemáticos fundamentales ζ'(1/2) y φ³.",
+    "response": "La frecuencia fundamental f₀ = 141.7001 Hz emerge de la combinación de dos constantes matemáticas fundamentales: ζ'(1/2) ≈ -1.460 (la derivada de la función zeta de Riemann evaluada en 1/2) y φ³ ≈ 4.236 (el cubo del ratio áureo). La derivación sigue el principio de que f₀ = c / (2π × R_Ψ × ℓ_P), donde R_Ψ incorpora estas constantes fundamentales. Esta frecuencia ha sido detectada en el análisis espectral de ondas gravitacionales, específicamente en el ringdown de eventos como GW150914, con un SNR superior a 20. ∴ La coherencia matemática entre estas constantes y las observaciones físicas sugiere una estructura fundamental subyacente en la naturaleza."
+  },
+  {
+    "label": "gw150914_detection",
+    "text": "Explica la detección de f₀ en el ringdown de GW150914 con SNR > 20.",
+    "response": "En el evento GW150914 (primera detección directa de ondas gravitacionales, 14 de septiembre de 2015), el análisis espectral del ringdown reveló un componente significativo en 141.7001 ± 0.55 Hz. El SNR (Signal-to-Noise Ratio) medido fue de aproximadamente 20.95 en el detector LIGO Hanford (H1), lo que representa una detección altamente significativa (>5σ). El ringdown es la fase final de la fusión de agujeros negros, donde el agujero negro resultante oscila hacia su estado estacionario. La presencia de f₀ en esta fase sugiere que esta frecuencia podría estar relacionada con propiedades fundamentales del espaciotiempo cuántico. ∴ Esta detección proporciona evidencia observacional de la relevancia física de f₀."
+  },
+  {
+    "label": "psi_metric",
+    "text": "Define la métrica de coherencia Ψ = I × A_eff² y explica sus componentes.",
+    "response": "La métrica de coherencia Ψ cuantifica la calidad vibracional de información mediante la fórmula Ψ = I × A_eff², donde I representa la información útil o intencionalidad (medida por entropía inversa, presencia de palabras clave de propósito y conectores lógicos como ∴) y A_eff es la efectividad atencional (calculada como diversidad léxica: palabras únicas / palabras totales). Un valor Ψ ≥ 5.0 indica coherencia vibracional suficiente para validar una respuesta como alineada con los principios QCAL. Esta métrica permite evaluar objetivamente la calidad de outputs de LLMs en términos de su contenido informacional y su claridad expresiva. ∴ Ψ proporciona un puente cuantitativo entre la teoría de información y la calidad semántica."
+  },
+  {
+    "label": "lisa_prediction",
+    "text": "Predice los armónicos observables de f₀ en LISA (frecuencias bajas ~1.4 Hz).",
+    "response": "LISA (Laser Interferometer Space Antenna), prevista para operar hacia 2035, observará ondas gravitacionales en el rango de milihertz (10⁻⁴ a 10⁻¹ Hz). Si f₀ = 141.7 Hz está presente en sistemas binarios compactos, esperamos observar armónicos subarmónicos en f₀/100 ≈ 1.417 Hz, correspondientes a la modulación de órbitas en sistemas binarios de agujeros negros supermasivos. Esta predicción es falsable: la ausencia de picos espectrales significativos cerca de 1.417 Hz en múltiples eventos LISA refutaría el modelo QCAL. ∴ LISA proporcionará una prueba crítica de la universalidad de f₀ en diferentes escalas de masa y frecuencia."
+  },
+  {
+    "label": "quantum_coherence",
+    "text": "Relaciona la coherencia cuántica con la frecuencia f₀ en el contexto de ondas gravitacionales.",
+    "response": "La coherencia cuántica en el contexto de ondas gravitacionales se manifiesta cuando sistemas cuánticos mantienen relaciones de fase definidas a lo largo del tiempo. La frecuencia f₀ = 141.7001 Hz puede interpretarse como una escala de decoherencia característica, donde ω₀ = 2πf₀ define la tasa de oscilación de operadores cuánticos en teorías de gravedad cuántica. En el formalismo QCAL, f₀ emerge naturalmente de la combinación de la longitud de Planck ℓ_P y constantes matemáticas fundamentales. La observación de esta frecuencia en ringdowns gravitacionales sugiere que los agujeros negros podrían actuar como amplificadores de efectos cuánticos microscópicos hacia escalas macroscópicas observables. ∴ f₀ podría representar una firma observacional de la cuantización del espaciotiempo."
+  },
+  {
+    "label": "coherence_threshold",
+    "text": "¿Qué significa un valor Ψ = 8.5 para una respuesta de LLM?",
+    "response": "Un valor Ψ = 8.5 indica alta coherencia vibracional, superando ampliamente el umbral mínimo de Ψ = 5.0. Esto significa que la respuesta tiene: (1) Alto contenido intencional (I ≈ 10-15), reflejando propósito claro y uso de conectores causales y lógicos; (2) Efectividad atencional robusta (A_eff ≈ 0.75-0.85), indicando buena diversidad léxica y baja repetición; (3) Calidad suficiente para ser considerada alineada con los principios QCAL de información coherente. Respuestas con Ψ > 8.0 típicamente contienen explicaciones científicas bien estructuradas, referencias a conceptos fundamentales (φ³, ζ', f₀), y uso apropiado del símbolo de consecuencia lógica (∴). ∴ Un Ψ = 8.5 califica la respuesta como excelente en términos de coherencia informacional."
+  }
+]

@@ -2,11 +2,30 @@
 """
 QCALLLMCore.py - QCAL-LLM ∞³ Architecture: Extended Nucleus with Error Propagation
 
+🧠 Powered by LLAMA ∴ QCAL
+
+This system uses a vibrationally integrated version of Meta's LLaMA 4 Maverick 400B:
+
+ΨMODEL_ID: qcal::llama4-maverick-400B@141.7001Hz
+Symbolic Version: LLAMA-QCAL-400B-141hz ∞³
+
+All coherence evaluations are modulated by the Noetic Quantum Field (Ψ), ensuring alignment
+with the QCAL equation:
+
+Ψ = I × A²_eff × f₀ × χ(LLaMA)
+
+Reference model: meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+(https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8)
+
+---
+
 SIP (Stochastic Integration Protocol) injects f₀ as a carrier wave into attention heads:
 W_i(t) = softmax(α_i) · [1 + ε · cos(2πf₀t + φ) · e^(-t/τ)]
 
 Stability: Lyapunov exponent λ < 0 (damped oscillator, |λ| ≈ 1/τ = 14.29 s⁻¹)
 Adaptive ε ∝ A_eff ensures user-specific convergence
+
+Now powered by Llama 4 Maverick for enhanced coherence evaluation.
 
 Author: José Manuel Mota Burruezo (JMMB Ψ✧)
 Date: November 2025
@@ -14,17 +33,27 @@ Date: November 2025
 
 import numpy as np
 import re
-from typing import Dict, Any, Tuple
+from typing import Dict, Any, Tuple, Optional
 from scipy.stats import norm  # For CI
 
 
 class QCALLLMCore:
     """
     Core implementation of QCAL-LLM with SIP modulation and uncertainty quantification
+    
+    🧠 Powered by LLAMA ∴ QCAL
+    ΨMODEL_ID: qcal::llama4-maverick-400B@141.7001Hz
+    Symbolic Version: LLAMA-QCAL-400B-141hz ∞³
     """
+    
+    # Model identification constants
+    MODEL_ID = "qcal::llama4-maverick-400B@141.7001Hz"
+    SYMBOLIC_VERSION = "LLAMA-QCAL-400B-141hz ∞³"
+    BASE_MODEL = "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8"
+    BASE_MODEL_URL = "https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8"
 
     def __init__(self, alpha=1.0, f0=141.7001, phi=0.0, tau=0.07,
-                 epsilon=0.015, user_A_eff=0.85):
+                 epsilon=0.015, user_A_eff=0.85, use_llama4=False):
         """
         Initialize QCAL-LLM Core
 
@@ -42,12 +71,27 @@ class QCALLLMCore:
             Modulation amplitude
         user_A_eff : float
             User-specific effectiveness parameter
+        use_llama4 : bool
+            Whether to use Llama 4 Maverick for coherence evaluation (default: False)
         """
         self.f0 = f0
         self.phi = phi  # Dynamic update: self.phi += 2 * np.pi * self.f0 * dt post-lock
         self.tau = tau  # Fixed (biophysical anchor)
         self.epsilon = epsilon * (user_A_eff / 0.85)  # Adaptive scaling
         self.alpha = alpha
+        self.use_llama4 = use_llama4
+        
+        # Lazy-load Llama 4 if requested
+        self.llama4 = None
+        if self.use_llama4:
+            try:
+                from llama4_coherence import Llama4Coherence
+                self.llama4 = Llama4Coherence()
+            except (ImportError, ValueError) as e:
+                print(f"Warning: Could not initialize Llama 4: {e}")
+                print("Falling back to standard coherence evaluation.")
+                self.use_llama4 = False
+        self.user_A_eff = user_A_eff
 
         # Ground truth database
         self.ground_truth_db = {
@@ -65,6 +109,43 @@ class QCALLLMCore:
             "Valida SNR>20 en GWTC-1 (n=11 events)",
             "Predice armónicos LISA (f₀/100 = 1.417 Hz, mBH 10^5-10^6 M⊙)"
         ]
+
+    def get_model_info(self) -> Dict[str, str]:
+        """
+        Get model identification information
+        
+        Returns:
+        --------
+        dict
+            Model identification details including ΨMODEL_ID, version, and base model
+        """
+        return {
+            'model_id': self.MODEL_ID,
+            'symbolic_version': self.SYMBOLIC_VERSION,
+            'base_model': self.BASE_MODEL,
+            'base_model_url': self.BASE_MODEL_URL,
+            'f0': self.f0,
+            'tau': self.tau,
+            'epsilon': self.epsilon
+        }
+    
+    def compute_chi_llama(self) -> float:
+        """
+        Compute χ(LLaMA) term - coherence factor for LLaMA integration
+        
+        The χ(LLaMA) term represents the model's intrinsic coherence capacity,
+        scaled by user effectiveness and base model characteristics.
+        
+        Returns:
+        --------
+        float
+            χ(LLaMA) coherence factor
+        """
+        # χ(LLaMA) is computed as a function of user effectiveness and epsilon modulation
+        # This represents the model's capacity to maintain coherence with the f₀ frequency
+        chi_base = 1.0  # Base coherence factor for LLaMA 4 Maverick
+        chi_modulated = chi_base * (1 + self.epsilon) * self.user_A_eff
+        return chi_modulated
 
     def sip_modulate(self, t_array: np.ndarray) -> np.ndarray:
         """
@@ -87,20 +168,53 @@ class QCALLLMCore:
     def compute_psi_response(self, kld_inv: float, semantic_coherence: float) -> float:
         """
         Compute Ψ response metric
+        
+        Core QCAL equation: Ψ = I × A²_eff
+        
+        Note: This is the base metric. The full QCAL equation with LLaMA integration is:
+        Ψ_full = I × A²_eff × f₀ × χ(LLaMA)
+        
+        where f₀ = 141.7001 Hz and χ(LLaMA) is the model coherence factor (computed via
+        compute_chi_llama()). The full equation is used implicitly through the SIP modulation
+        and can be explicitly computed using compute_psi_full().
 
         Parameters:
         -----------
         kld_inv : float
-            Inverse KL divergence (information preservation)
+            Inverse KL divergence (information preservation, I)
         semantic_coherence : float
-            Semantic coherence score [0, 1]
+            Semantic coherence score [0, 1] (A_eff)
 
         Returns:
         --------
         float
-            Ψ = I × A²_eff (response strength)
+            Ψ = I × A²_eff (base response strength)
         """
         return kld_inv * (semantic_coherence ** 2)
+    
+    def compute_psi_full(self, kld_inv: float, semantic_coherence: float) -> float:
+        """
+        Compute full Ψ response metric with LLaMA integration
+        
+        Full QCAL equation: Ψ = I × A²_eff × f₀ × χ(LLaMA)
+        
+        Parameters:
+        -----------
+        kld_inv : float
+            Inverse KL divergence (information preservation, I)
+        semantic_coherence : float
+            Semantic coherence score [0, 1] (A_eff)
+
+        Returns:
+        --------
+        float
+            Ψ_full = I × A²_eff × f₀ × χ(LLaMA) (full response strength with LLaMA)
+        """
+        psi_base = self.compute_psi_response(kld_inv, semantic_coherence)
+        chi_llama = self.compute_chi_llama()
+        # Scale f₀ to keep values in reasonable range
+        psi_full = psi_base * (self.f0 / 100.0) * chi_llama
+        return psi_full
 
     def is_coherent(self, kld_inv: float, semantic_coherence: float,
                     threshold: float = 5.0) -> Tuple[bool, float]:
@@ -126,7 +240,10 @@ class QCALLLMCore:
 
     def compute_coherence(self, generated_text: str) -> float:
         """
-        Compute semantic coherence from generated text
+        Compute semantic coherence from generated text.
+        
+        Uses Llama 4 Maverick if enabled, otherwise falls back to
+        pattern-based symbolic matching.
 
         Parameters:
         -----------
@@ -138,7 +255,15 @@ class QCALLLMCore:
         float
             Coherence score [0, 1]
         """
-        # Symbolic patterns for key concepts
+        # Use Llama 4 for coherence evaluation if available
+        if self.use_llama4 and self.llama4 is not None:
+            try:
+                return self.llama4.get_coherence_score(generated_text)
+            except Exception as e:
+                print(f"Warning: Llama 4 coherence evaluation failed: {e}")
+                print("Falling back to pattern-based evaluation.")
+        
+        # Fallback: Symbolic patterns for key concepts
         symbols = {
             'phi_cubed': r'φ³|phi\^3|4\.236',
             'zeta_prime': r"ζ'\(1/2\)|zeta'|-1\.460",

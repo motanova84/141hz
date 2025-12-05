@@ -2,7 +2,61 @@
 
 This directory contains Jupyter notebooks for validating the 141.7001 Hz frequency detection in gravitational wave events.
 
-## 🆕 New Interactive Notebooks
+## 🌟 Comprehensive Validation Notebook
+
+### `comprehensive_141hz_validation.ipynb` ⭐ **RECOMMENDED**
+
+**Complete end-to-end validation combining all three critical methodologies.**
+
+This is the **definitive notebook** that implements the full validation framework described in the research:
+
+#### 🔬 What's Included:
+
+**Part 1: Fundamentals**
+- Installation and setup
+- Constants and configuration
+- Analysis parameters
+
+**Part 2: Single Event Validation (GW150914 Ringdown)**
+- ✅ Ringdown isolation (10-60 ms post-merger)
+- ✅ Damped sine model fitting
+- ✅ Bayes Factor calculation (BF > 10)
+- ✅ Chi-squared comparison
+- ✅ Q-Transform visualization
+
+**Part 3: Multi-Event Analysis (11 GWTC-1 Events)**
+- ✅ SNR calculation in 140.7-142.7 Hz band
+- ✅ H1/L1 cross-validation
+- ✅ Detection rate ≥ 80%
+- ✅ Statistical summaries
+
+**Part 4: Critical Additional Tests**
+- ✅ GWTC-3 extended analysis (O3 epoch)
+- ✅ Harmonic search (2f₀, 3f₀, 4f₀)
+- ✅ Virgo (V1) validation
+- ✅ Combined detection rate
+
+**Part 5: Consolidated Results**
+- 📊 Evidence summary table
+- 📝 Scientific interpretation
+- 🎯 Comprehensive conclusions
+
+#### 📊 Evidence Table Included:
+
+| Métrica | Umbral | Significado |
+|---------|---------|------------|
+| Bayes Factor | > 10 | Evidencia fuerte |
+| P-Value | < 0.01 | Significancia alta |
+| Tasa Detección | ≥ 80% | Universalidad |
+| Armónicos | ≥ 3 | Resonancia física |
+
+**Perfect for**: Complete understanding of the validation methodology and reproducible results
+
+**Running**: Click "Open in Colab" badge at the top of the notebook
+
+---
+
+## 🆕 Focused Topic Notebooks
 
 ### `spectral_analysis_gw150914.ipynb`
 

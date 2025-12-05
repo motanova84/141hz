@@ -1,0 +1,111 @@
+name: QCAL Analysis
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  analysis:
+    name: Scientific Analysis - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v6
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          libigraph-dev \
+          libigraph3t64 \
+          llvm-dev \
+          build-essential \
+          gfortran
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # Install in multiple stages to handle timeouts better
+        # Stage 1: Core dependencies
+        pip install numpy scipy matplotlib astropy h5py --timeout 300
+        # Stage 2: Additional scientific packages
+        pip install mpmath sympy pandas pyyaml --timeout 300
+        # Stage 3: Testing and quality tools
+        pip install pytest pytest-cov flake8 --timeout 300
+        # Stage 4: Web and notebook tools
+        pip install flask jupyter nbconvert python-dotenv --timeout 300
+        # Stage 5: Performance packages (with retries)
+        pip install numba llvmlite numexpr PyWavelets --timeout 300 || echo "Warning: Some performance packages failed to install"
+        pip install python-igraph --timeout 300 || echo "Warning: python-igraph failed to install"
+        # Stage 6: GWPy and pycbc (most complex, allow failure)
+        pip install gwpy --timeout 300 || echo "Warning: gwpy failed to install"
+        pip install pycbc --timeout 600 || echo "Warning: pycbc failed to install (optional)"
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
+    - name: Run core validation tests
+      run: |
+        python scripts/run_all_tests.py
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
+    - name: Run statistical validation
+      run: |
+        python tests/test_statistical_validation.py
+      continue-on-error: true
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
+    - name: Download test data
+      run: python scripts/descargar_datos.py
+      continue-on-error: true
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
+    - name: Run validation pipeline
+      run: |
+        python scripts/pipeline_validacion.py
+      continue-on-error: true
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
+    - name: Upload analysis results
+      uses: actions/upload-artifact@v5
+      if: always()
+      with:
+        name: analysis-results-py${{ matrix.python-version }}-${{ github.run_number }}
+        path: |
+          results/
+          *.png
+          *.jpg
+          *.pdf
+        retention-days: 30
