@@ -886,6 +886,7 @@ class UniversalConstants:
             Dictionary of constant name -> value
         """
         return {
+            # Fundamental frequency
             "f0_hz": float(self.F0),
             "f0_uncertainty_hz": float(self.F0_UNCERTAINTY),
             # Spectral origin constants
@@ -902,10 +903,11 @@ class UniversalConstants:
             "c_light_ms": float(self.C_LIGHT),
             "G_newton_m3_kg_s2": float(self.G_NEWTON),
             # Spectral constants (Dual-Constant Framework)
-            "lambda_0": float(self.LAMBDA_0),
             "lambda_mean": float(self.LAMBDA_MEAN),
             "C_primary": float(self.C_PRIMARY),
             "C_coherence": float(self.C_COHERENCE),
+            "C_QCAL": float(self.C_QCAL),
+            "gamma_euler": float(self.GAMMA_EULER),
             "coherence_factor": float(self.COHERENCE_FACTOR),
             # Physical properties
             "l_planck_m": float(self.L_PLANCK),
@@ -918,16 +920,7 @@ class UniversalConstants:
             "R_psi_m": float(self.R_PSI),
             "m_psi_kg": float(self.M_PSI),
             "T_psi_K": float(self.T_PSI),
-            # Spectral field constants
-            "lambda_0": float(self.LAMBDA_0),
-            "lambda_mean": float(self.LAMBDA_MEAN),
-            "C_primary": float(self.C_PRIMARY),
-            "C_coherence": float(self.C_COHERENCE),
-            # Spectral hierarchy constants
-            "C_QCAL": float(self.C_QCAL),
-            "gamma_euler": float(self.GAMMA_EULER),
-            "coherence_factor": float(self.COHERENCE_FACTOR),
-            # Calabi-Yau spectral invariant
+            # Calabi-Yau spectral invariant κ_Π
             "kappa_pi": float(self.KAPPA_PI),
             "kappa_pi_computed": float(self.KAPPA_PI_COMPUTED),
             "kappa_pi_error": float(self.KAPPA_PI_ERROR),
@@ -1034,8 +1027,8 @@ KAPPA_PI_ERROR = CONSTANTS.KAPPA_PI_ERROR
 
 
 def KAPPA_PI_FROM_C():
-    """κ_Π from the ratio C_PRIMARY/C_COHERENCE ≈ 2.5775"""
-    return CONSTANTS.KAPPA_PI_FROM_C
+    """κ_Π computed from the ratio C_PRIMARY/C_COHERENCE ≈ 2.5775"""
+    return CONSTANTS.C_PRIMARY / CONSTANTS.C_COHERENCE
 
 
 def COHERENCE_FACTOR():
