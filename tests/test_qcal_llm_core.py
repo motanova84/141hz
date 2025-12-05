@@ -96,12 +96,6 @@ class TestQCALLLMCore:
 
 class TestSIPModulation:
     """Test Signal Integration Protocol modulation."""
-        assert core.ground_truth_db['f0'] == 141.7001
-        assert abs(core.ground_truth_db['zeta_prime_half'] - (-1.4603545)) < 1e-6
-        # Golden ratio cubed: φ³ = ((1 + √5)/2)³ ≈ 4.236067977
-        phi_cubed = ((1 + np.sqrt(5))/2)**3
-        assert abs(core.ground_truth_db['phi_cubed'] - phi_cubed) < 1e-6
-        assert core.ground_truth_db['snr_gw150914'] == 20.95
 
     def test_benchmark_queries_exist(self):
         """Test that benchmark queries are defined."""
@@ -312,11 +306,6 @@ class TestCoherenceComputation:
 
 class TestEvaluate:
     """Test full LLM response evaluation."""
-
-        # Low values should not be coherent
-        is_coherent, psi = core.is_coherent(2.0, 0.5, threshold=5.0)
-        assert is_coherent is False
-        assert psi < 5.0
 
     def test_is_coherent_at_threshold(self):
         """Test coherence check at exactly the threshold."""
@@ -535,111 +524,3 @@ class TestIntegration:
 if __name__ == "__main__":
     """Run tests with pytest."""
     pytest.main([__file__, "-v", "--tb=short"])
-        """Test that confidence interval is properly ordered."""
-        core = QCALLLMCore()
-        text = "f₀ = 141.7001 Hz with ζ'(1/2) = -1.460"
-        result = core.evaluate(text, "Test query")
-
-        ci_lower, ci_upper = result['psi_ci_95']
-        assert ci_lower < ci_upper
-        assert result['mean_psi'] >= ci_lower
-        assert result['mean_psi'] <= ci_upper
-
-    def test_evaluate_matches_counting(self):
-        """Test that evaluate correctly counts matches."""
-        core = QCALLLMCore()
-
-        # No matches
-        result0 = core.evaluate("random text", "query")
-        assert result0['matches'] == 0
-
-        # One match (f0=141.7001)
-        result1 = core.evaluate("f0=141.7001", "query")
-        assert result1['matches'] >= 1
-
-    def test_evaluate_reproducibility_with_seed(self):
-        """Test that evaluate gives consistent results with same random seed."""
-        core = QCALLLMCore()
-        text = "f₀ = 141.7001 Hz"
-
-        # Run twice with same seed
-        np.random.seed(42)
-        result1 = core.evaluate(text, "query", n_bootstrap=100)
-
-        np.random.seed(42)
-        result2 = core.evaluate(text, "query", n_bootstrap=100)
-
-        assert result1['mean_psi'] == pytest.approx(result2['mean_psi'], abs=1e-6)
-        assert result1['kld_inv'] == pytest.approx(result2['kld_inv'], abs=1e-6)
-
-    def test_evaluate_bootstrap_samples(self):
-        """Test that bootstrap sampling affects results appropriately."""
-        core = QCALLLMCore()
-        text = "f₀ = 141.7001 Hz"
-
-        # More bootstrap samples should give tighter confidence intervals
-        result_small = core.evaluate(text, "query", n_bootstrap=10)
-        result_large = core.evaluate(text, "query", n_bootstrap=1000)
-
-        # Both should have valid intervals
-        assert result_small['psi_ci_95'][0] < result_small['psi_ci_95'][1]
-        assert result_large['psi_ci_95'][0] < result_large['psi_ci_95'][1]
-
-
-class TestQCALLLMCoreIntegration:
-    """Integration tests matching the problem statement verification."""
-
-    def test_problem_statement_example(self):
-        """Test the exact example from the problem statement."""
-        core = QCALLLMCore(user_A_eff=0.92)
-        t = np.linspace(0, 1, 1000)
-        weights = core.sip_modulate(t)
-        is_valid, psi_val = core.is_coherent(8.2, 0.88)
-        response_mock = "f₀ = -ζ'(1/2) × φ³ scale = 141.7001 Hz. Ψ coherent. SNR=20.95."
-        eval_res = core.evaluate(response_mock, "Deriva f₀")
-
-        # Verify outputs match expected ranges
-        assert psi_val == pytest.approx(6.3501, abs=1e-4)
-        assert is_valid is True
-
-        # Mean psi should be positive and coherent
-        assert eval_res['mean_psi'] > 0
-        assert eval_res['coherent'] in [True, False]  # Depends on random bootstrap
-
-        # Weights statistics
-        assert np.mean(weights) == pytest.approx(1.0, abs=0.01)
-        assert np.std(weights) == pytest.approx(0.0022, abs=0.001)
-
-        # Post-decay variance should be very small
-        post_decay_var = np.var(weights[t > 0.07])
-        assert post_decay_var < 1e-4
-
-    def test_benchmark_queries_availability(self):
-        """Test that all benchmark queries are accessible."""
-        core = QCALLLMCore()
-
-        # Should have 5 standard queries
-        assert len(core.benchmark_queries) == 5
-
-        # Check they contain expected keywords
-        queries_str = ' '.join(core.benchmark_queries)
-        assert '141.7001' in queries_str
-        assert 'GW150914' in queries_str or 'GW' in queries_str
-        assert 'LISA' in queries_str
-
-    def test_user_effectiveness_scaling(self):
-        """Test that user effectiveness parameter scales epsilon correctly."""
-        core_default = QCALLLMCore(epsilon=0.015, user_A_eff=0.85)
-        core_higher = QCALLLMCore(epsilon=0.015, user_A_eff=0.92)
-
-        # Higher effectiveness should increase epsilon
-        assert core_higher.epsilon > core_default.epsilon
-
-        # Check exact scaling
-        expected_ratio = 0.92 / 0.85
-        actual_ratio = core_higher.epsilon / core_default.epsilon
-        assert actual_ratio == pytest.approx(expected_ratio, abs=1e-6)
-
-
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"])
