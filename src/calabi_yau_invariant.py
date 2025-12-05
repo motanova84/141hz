@@ -39,7 +39,7 @@ References:
 Author: JMMB Ψ✧
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 try:
     import mpmath as mp
@@ -293,7 +293,7 @@ class LaplacianSpectrum:
 
     def __init__(
         self,
-        eigenvalues: List[float] = None,
+        eigenvalues: Optional[List[float]] = None,
         threshold: float = 1e-12,
         precision: int = 50
     ):
