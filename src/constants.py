@@ -500,6 +500,74 @@ class UniversalConstants:
         Note: C_QCAL (244.36) coexists with C at a different hierarchical level.
         The coherence factor C_QCAL/C ≈ 0.388 represents the ratio of global
         coherence to local structure, but C alone drives the primary derivation.
+
+        Args:
+            precision: Decimal precision for calculation
+
+        Returns:
+            Dictionary with derivation results
+        """
+        mp.dps = precision
+
+        # Get constants
+        gamma = cls.GAMMA_EULER
+        phi = cls.PHI
+        C = cls.C_PRIMARY
+        C_QCAL = cls.C_QCAL
+
+        # Calculate intermediate factors
+        e_gamma = mp.exp(gamma)  # e^γ ≈ 1.781
+        sqrt_2pi_gamma = mp.sqrt(2 * mp.pi * gamma)  # √(2πγ) ≈ 1.904
+        phi_squared_over_2pi = (phi ** 2) / (2 * mp.pi)  # φ²/(2π) ≈ 0.418
+        coherence_factor = C_QCAL / C  # Calculated from actual constants
+
+        # Primary formula: f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C
+        # This uses C = 629.83 as the primary spectral constant
+        base_freq = 1 / (2 * mp.pi)  # ≈ 0.159 Hz
+        f0_from_C = base_freq * e_gamma * sqrt_2pi_gamma * phi_squared_over_2pi * C
+
+        # For comparison, calculate what frequency C_QCAL alone would give
+        f0_from_CQCAL = base_freq * e_gamma * sqrt_2pi_gamma * phi_squared_over_2pi * C_QCAL
+
+        # The primary derivation uses C
+        f0_derived = f0_from_C
+
+        # Calculate relative error
+        relative_error = abs(float(f0_derived) - float(cls.F0)) / float(cls.F0)
+
+        # Natural frequency from wave equation: ω² = C → f = √C/(2π)
+        f_natural = mp.sqrt(C) / (2 * mp.pi)
+
+        return {
+            "f0_target_hz": float(cls.F0),
+            "f0_derived_hz": float(f0_derived),
+            "relative_error": float(relative_error),
+            "agreement_percent": float((1 - relative_error) * 100),
+            "spectral_constants": {
+                "lambda_0": float(cls.LAMBDA_0),
+                "C_primary": float(C),
+                "C_QCAL": float(C_QCAL),
+                "coherence_factor": float(coherence_factor),
+            },
+            "scaling_factors": {
+                "e_gamma": float(e_gamma),
+                "sqrt_2pi_gamma": float(sqrt_2pi_gamma),
+                "phi_squared_over_2pi": float(phi_squared_over_2pi),
+            },
+            "hierarchy_levels": {
+                "level_1_natural_hz": float(f_natural),
+                "level_1_primary_hz": float(f0_from_C),
+                "level_2_coherent_hz": float(f0_from_CQCAL),
+            },
+            "formula": "f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C",
+            "interpretation": (
+                "C = 629.83 (primary spectral constant) derives f₀ directly; "
+                "C_QCAL = 244.36 (derived coherence constant) coexists at Level 2; "
+                "Both emerge from spectrum of H_Ψ = -Δ + V_Ψ"
+            )
+        }
+
+    @classmethod
     def derive_f0_from_spectral(cls, precision: int = 50) -> Dict[str, Any]:
         """
         Derive f₀ from spectral constants of the noetic operator H_Ψ.
@@ -661,44 +729,6 @@ class UniversalConstants:
         results["status"] = "✓ ALL VALIDATIONS PASSED" if all_valid else "✗ SOME VALIDATIONS FAILED"
 
         return results
-
-    @classmethod
-            Dictionary with derivation results
-        """
-        mp.dps = precision
-
-        # Base factor: (1/2π) × e^γ × √(2πγ) × (φ²/2π)
-        gamma = mp.euler
-        phi = (1 + mp.sqrt(5)) / 2
-        pi = mp.pi
-
-        base = (
-            (1 / (2 * pi)) *
-            mp.exp(gamma) *
-            mp.sqrt(2 * pi * gamma) *
-            (phi ** 2 / (2 * pi))
-        )
-
-        # Derived f₀
-        f0_derived = base * cls.C_PRIMARIA
-
-        # Error analysis
-        error_hz = abs(f0_derived - cls.F0)
-        error_pct = float(error_hz / cls.F0) * 100
-
-        return {
-            "f0_derived_hz": float(f0_derived),
-            "f0_expected_hz": float(cls.F0),
-            "error_hz": float(error_hz),
-            "error_percent": error_pct,
-            "lambda_0": float(cls.LAMBDA_0),
-            "c_primaria": float(cls.C_PRIMARIA),
-            "c_coherencia": float(cls.C_COHERENCIA),
-            "langle_lambda": float(cls.LANGLE_LAMBDA),
-            "base_factor": float(base),
-            "formula": "f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_primaria",
-            "valid": error_pct < 0.1,  # Within 0.1% is valid
-        }
 
     @classmethod
     def validate_symmetries(cls, precision: int = 50) -> Dict[str, Any]:

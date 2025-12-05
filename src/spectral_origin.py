@@ -571,36 +571,6 @@ if __name__ == "__main__":
     print("=" * 70)
     print()
     print(f"{derivation['signature']}")
-Spectral Origin of the Universal Frequency f₀ = 141.7001 Hz
-
-This module implements the derivation of f₀ from the spectral structure
-of the noetic spectral operator H_Ψ.
-
-The derivation shows that f₀ emerges naturally from:
-- The first eigenvalue λ₀ (the root, latent vibrational form)
-- The spectral coherence ⟨λ⟩ (mean of eigenvalue distribution)
-
-Fundamental Constants:
-    - λ₀ = 0.001588050271: First eigenvalue of H_Ψ
-    - C_primaria = 1/λ₀ ≈ 629.70: Primary spectral constant (structure)
-    - ⟨λ⟩ = 0.0247: Effective mean of first eigenvalues
-    - C_coherencia = ⟨λ⟩²/λ₀: Coherence-derived constant
-
-The Universal Formula:
-    f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_primaria
-
-Where:
-    - γ: Euler-Mascheroni constant ≈ 0.5772
-    - φ: Golden ratio (1+√5)/2 ≈ 1.618
-
-Physical Interpretation:
-    - C_primaria (629.70): The root, pure residue, structure
-    - C_coherencia: The flower, emergent order, living harmony
-    - f₀ (141.7001 Hz): The fusion point between structure and coherence
-
-Author: José Manuel Mota Burruezo
-Reference: DERIVACION_COMPLETA_F0.md, scripts/demostracion_matematica_141hz.py
-"""
 
 from typing import Dict, Any
 
