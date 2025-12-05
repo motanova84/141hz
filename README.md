@@ -18,6 +18,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 [![QCAL Analysis](https://github.com/motanova84/141hz/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analysis.yml)
+[![codecov](https://codecov.io/gh/motanova84/141hz/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/141hz)
 [![Docs](https://img.shields.io/badge/docs-mkdocs--material-blue)](https://motanova84.github.io/141hz)
 [![SBOM](https://img.shields.io/badge/SBOM-CycloneDX-informational)](#)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
@@ -3307,6 +3308,7 @@ for chunk in text_stream:
 - [API Reference](Documentation/API/python_api.md)
 - [Mathematical Theory](Documentation/Theory/mathematical_foundation.md)
 - [Integration Guide](Documentation/Tutorials/02_llm_integration.md)
+- [Codecov AI Guide](CODECOV_AI_GUIDE.md) - Automated code review and test generation
 
 ## 🧪 Testing
 ```bash
@@ -3360,7 +3362,11 @@ See also [CITATION.cff](CITATION.cff) for machine-readable citation metadata.
 
 ## 🤝 Contributing
 
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md)
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+For code review and test generation, use [Codecov AI](CODECOV_AI_GUIDE.md) commands in pull requests:
+- `@codecov-ai-reviewer review` - Get automated code review
+- `@codecov-ai-reviewer test` - Generate test suggestions
 
 ## 📜 License
 

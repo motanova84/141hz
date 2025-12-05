@@ -1,42 +1,4 @@
 name: Documentation
-name: Docs
-
-on:
-  push:
-    branches: [ "main" ]
-    tags: [ "v*" ]
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-jobs:
-  build-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install MkDocs + plugins
-        run: |
-          pip install mkdocs mkdocs-material mkdocs-minify-plugin mkdocs-git-revision-date-localized-plugin
-
-      - name: Build docs
-        run: mkdocs build --strict
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
-          publish_branch: gh-pages
-          force_orphan: true
-name: Deploy MkDocs to GitHub Pages
 
 on:
   push:
@@ -61,31 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0  # Needed for git-revision-date-localized plugin
 
       - name: Set up Python
-        uses: actions/setup-python@v5
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
@@ -94,8 +36,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install "mkdocs-material[imaging]" mkdocs-minify-plugin mkdocs-git-revision-date-localized-plugin
-          # Install additional dependencies for social cards imaging
+          pip install mkdocs mkdocs-material mkdocs-minify-plugin mkdocs-git-revision-date-localized-plugin
           pip install pillow cairosvg
 
       - name: Build MkDocs
@@ -103,61 +44,9 @@ jobs:
 
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
           publish_branch: gh-pages
           force_orphan: true
-          # Uncomment and set your custom domain here:
-          # cname: your-domain.com
-          pip install mkdocs mkdocs-material
-
-      - name: Build MkDocs site
-        run: mkdocs build
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./site
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-name: docs
-on:
-  push:
-    branches: [main]
-
-jobs:
-  build-deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-      
-      - name: Install dependencies
-        run: |
-          pip install mkdocs mkdocs-material
-      
-      - name: Build documentation
-        run: |
-          mkdocs build
-      
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
