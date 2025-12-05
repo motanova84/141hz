@@ -299,11 +299,11 @@ def main():
 
     # Directorio base
     base_dir = Path(__file__).parent.parent
-    data_dir = base_dir / "data"
+    resultados_dir = base_dir / "resultados"
     papers_dir = base_dir / "papers" / "figures"
 
     # Crear directorios si no existen
-    data_dir.mkdir(exist_ok=True)
+    resultados_dir.mkdir(exist_ok=True)
     papers_dir.mkdir(exist_ok=True, parents=True)
 
     # 1. Generar datos de CY aleatorias
@@ -352,7 +352,7 @@ def main():
     create_plot(all_data, analysis, str(plot_path))
 
     # 5. Guardar CSV
-    csv_path = data_dir / "cy_kpi_extended.csv"
+    csv_path = resultados_dir / "cy_kpi_extended.csv"
     save_csv(all_data, str(csv_path))
 
     # 6. Conclusión

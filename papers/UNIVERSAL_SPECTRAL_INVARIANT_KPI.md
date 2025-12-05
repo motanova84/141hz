@@ -22,7 +22,7 @@ The QCAL framework proposes that certain spectral invariants of CY manifolds are
 
 ### 1.2 Definition
 
-For a CY threefold X, let {λᵢ} be the non-zero eigenvalues of the Laplacian Δ acting on (1,1)-forms. Define:
+For a CY threefold X, let {λᵢ} be the non-zero eigenvalues of the Laplacian Δ acting on (0,1)-forms. Define:
 
 - **First spectral moment:** μ₁ = ⟨λ⟩ = (1/N) Σᵢ λᵢ
 - **Second spectral moment:** μ₂ = ⟨λ²⟩ = (1/N) Σᵢ λᵢ²
@@ -79,7 +79,7 @@ For each manifold:
 
 ## 4. Visualization
 
-![k_Π vs h²¹ Linear Fit](../papers/figures/kpi_linear_fit.png)
+![k_Π vs h²¹ Linear Fit](figures/kpi_linear_fit.png)
 
 *Figure 1: Spectral invariant k_Π vs Hodge number h²¹. The red dashed line shows the linear fit (slope ≈ 0), and the orange dotted line indicates the universal value 2.5773.*
 
@@ -131,7 +131,7 @@ This confirms the prediction of the QCAL framework that certain spectral propert
 
 ### 7.1 Data Files
 
-- `data/cy_kpi_extended.csv`: Complete dataset (h²¹, k_Π) for all 150 CY
+- `resultados/cy_kpi_extended.csv`: Complete dataset (h²¹, k_Π) for all 150 CY
 - `papers/figures/kpi_linear_fit.png`: Visualization of results
 
 ### 7.2 Code
