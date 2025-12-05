@@ -407,7 +407,7 @@ R_min, V_min = minimize_potential()
 | Reduced Planck constant | ℏ | 1.054571817 × 10⁻³⁴ J·s |
 | Hubble constant | H₀ | 2.19 × 10⁻¹⁸ s⁻¹ |
 | Dark energy density | ρ_Λ | 6.0 × 10⁻¹⁰ J/m³ |
-| Zeta derivative at 1/2 | ζ'(1/2) | -0.207886 |
+| Zeta derivative at 1/2 | ζ'(1/2) | -1.4603545088 |
 
 ---
 
