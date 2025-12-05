@@ -384,7 +384,9 @@ class GravityComponent:
         """
         import math
         
-        alpha = 1e-12  # Coupling strength (very small)
+        alpha = 1e-12  # Coupling strength - dimensionless, estimated from
+                       # theoretical constraints (see FUERZA_NOESICA.md)
+                       # Value chosen to be consistent with current LLR precision
         exp_factor = math.exp(-r / self.lambda_yukawa)
         relative_correction = alpha * exp_factor
         
@@ -499,7 +501,12 @@ class CondensedMatterComponent:
     
     def __init__(self, f0: float = F0):
         self.f0 = f0
-        self.V_resonance = f0 / 1000  # mV (numerical coincidence: f₀ Hz ↔ V mV)
+        # The voltage prediction uses the numerical value of f₀ in Hz
+        # as the bias voltage in mV. This is an empirical prediction based
+        # on the hypothesis that the noetic field couples to electronic
+        # transport in topological insulators. The physical mechanism
+        # involves the density of states modulation at energy E = eV.
+        self.V_resonance = f0 / 1000  # mV
         
     def stm_prediction(self) -> Dict[str, Any]:
         """

@@ -288,7 +288,8 @@ class TestPhysicalConsistency(unittest.TestCase):
         constants = UnifiedTheoryConstants()
         h = 6.62607015e-34  # Planck constant
         expected_E = h * constants.f0
-        self.assertAlmostEqual(constants.E_psi_J, expected_E, places=40)
+        # Use delta for floating-point comparison
+        self.assertAlmostEqual(constants.E_psi_J, expected_E, delta=1e-50)
     
     def test_wavelength_frequency_relation(self):
         """Test λ = c/f relation."""
@@ -300,7 +301,8 @@ class TestPhysicalConsistency(unittest.TestCase):
         """Test E = mc² relation."""
         constants = UnifiedTheoryConstants()
         expected_m = constants.E_psi_J / (c**2)
-        self.assertAlmostEqual(constants.m_psi, expected_m, places=50)
+        # Use delta for floating-point comparison
+        self.assertAlmostEqual(constants.m_psi, expected_m, delta=1e-60)
 
 
 if __name__ == "__main__":
