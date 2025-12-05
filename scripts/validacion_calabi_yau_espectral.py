@@ -81,7 +81,7 @@ CY_MODELS = [
         "equation": "z₀⁸ + z₁⁸ + z₂⁸ + z₃⁸ + z₄⁸ = 0",
         "h11": 1,
         "h21": 145,
-        "reference": "Hypersuperficie",
+        "reference": "Hipersuperficie",
         "degree": 8,
         "expected_modes": 1121,
         "expected_k_pi": 2.5775,
@@ -89,7 +89,7 @@ CY_MODELS = [
     {
         "name": "Pfaffian CY",
         "key": "pfaffian_cy",
-        "equation": "Pfaffiano de matriz 5×5 antisim.",
+        "equation": "Pfaffiano de matriz 5×5 antisim. (det=0 en subespacio)",
         "h11": 2,
         "h21": 59,
         "reference": "Kuznetsov",
@@ -398,11 +398,11 @@ def validate_calabi_yau_spectral_universality(
 
     return {
         "models": results,
-        "k_pi_mean": k_pi_mean,
-        "k_pi_std": k_pi_std,
+        "k_pi_mean": float(k_pi_mean),
+        "k_pi_std": float(k_pi_std),
         "k_pi_universal": K_PI_UNIVERSAL,
         "k_pi_from_constants": K_PI_FROM_CONSTANTS,
-        "is_universal": is_universal,
+        "is_universal": bool(is_universal),
         "tolerance": tolerance,
     }
 

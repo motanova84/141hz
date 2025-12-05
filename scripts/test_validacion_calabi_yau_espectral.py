@@ -202,7 +202,7 @@ class TestUniversalityValidation:
     def test_validation_produces_universal_k_pi(self):
         """Test that k_Π is universal across all models."""
         results = validate_calabi_yau_spectral_universality()
-        assert results["is_universal"] == True  # noqa: E712
+        assert results["is_universal"] is True
 
     def test_k_pi_mean_close_to_universal(self):
         """Test that mean k_Π is close to universal value."""
@@ -238,7 +238,7 @@ class TestIntegration:
         results = validate_calabi_yau_spectral_universality()
 
         # Check universality
-        assert results["is_universal"] == True  # noqa: E712
+        assert results["is_universal"] is True
 
         # Check k_Pi values for each model
         expected_k_pi_range = (2.575, 2.580)
