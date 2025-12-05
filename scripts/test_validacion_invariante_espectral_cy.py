@@ -12,14 +12,13 @@ The tests verify:
 4. Reproducibility of results
 
 Author: José Manuel Mota Burruezo (JMMB Ψ✧)
-Date: December 2025
 """
 
 import sys
 from pathlib import Path
 
-# Add scripts to path - must be before local imports
-sys.path.insert(0, str(Path(__file__).parent.parent / 'scripts'))
+# Add scripts directory to path for local imports
+sys.path.insert(0, str(Path(__file__).parent))
 
 import pytest  # noqa: E402
 import numpy as np  # noqa: E402
