@@ -584,7 +584,7 @@ class UniversalConstants:
             precision: Decimal precision for calculation
 
         Returns:
-            Dictionary with derivation results including f₀_derived
+            Dictionary with derivation results
         """
         mp.dps = precision
 
@@ -906,16 +906,8 @@ class UniversalConstants:
             "C_primary": float(self.C_PRIMARY),
             "C_coherence": float(self.C_COHERENCE),
             # Spectral hierarchy constants
-            "lambda_0": float(self.LAMBDA_0),
-            "C_primary": float(self.C_PRIMARY),
             "C_QCAL": float(self.C_QCAL),
             "gamma_euler": float(self.GAMMA_EULER),
-            "coherence_factor": float(self.COHERENCE_FACTOR),
-            # Spectral origin constants
-            "lambda_0": float(self.LAMBDA_0),
-            "langle_lambda": float(self.LANGLE_LAMBDA),
-            "c_primaria": float(self.C_PRIMARIA),
-            "c_coherencia": float(self.C_COHERENCIA),
         }
 
     @classmethod
