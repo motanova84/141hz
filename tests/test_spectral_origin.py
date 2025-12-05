@@ -9,27 +9,6 @@ subsequent derivation of f₀ = 141.7001 Hz.
 Author: José Manuel Mota Burruezo (JMMB Ψ✧)
 """
 
-Tests for Spectral Origin of f₀ = 141.7001 Hz
-
-Validates the derivation of the universal frequency from spectral constants
-of the noetic spectral operator H_Ψ:
-
-- λ₀ = 0.001588050271: First eigenvalue of H_Ψ (the root)
-- C_primaria = 1/λ₀ ≈ 629.70: Primary spectral constant (structure)
-- ⟨λ⟩ = 0.0247: Effective mean of first eigenvalues
-- C_coherencia = ⟨λ⟩²/λ₀: Coherence-derived constant (emergent order)
-
-The frequency f₀ emerges as the natural fusion point between
-structure (C_primaria) and coherence (C_coherencia).
-
-Formula:
-    f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_primaria
-
-References:
-    - DERIVACION_COMPLETA_F0.md
-    - scripts/demostracion_matematica_141hz.py
-"""
-
 import pytest
 import sys
 from pathlib import Path
