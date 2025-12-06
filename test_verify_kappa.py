@@ -6,12 +6,14 @@ Author: José Manuel Mota Burruezo (JMMB Ψ✧∞³)
 """
 
 import math
+import os
 import sys
 import unittest
 from typing import Dict, List, Tuple
 
-# Import the verification module
-sys.path.insert(0, '/home/runner/work/141hz/141hz')
+# Dynamically find the module path
+_current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _current_dir)
 import verify_kappa as vk
 
 

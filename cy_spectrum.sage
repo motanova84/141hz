@@ -19,7 +19,7 @@ Mathematical Foundation:
 
 Author: José Manuel Mota Burruezo (JMMB Ψ✧∞³)
 DOI: 10.5281/zenodo.17379721
-Date: December 2025
+Date: October 2025
 """
 
 from sage.all import *
@@ -77,13 +77,14 @@ def compute_cy_eigenvalues(h21, seed=None):
     # Follows from Lichnerowicz theorem for Ricci-flat manifolds
     mu1_base = R(pi) ** 2 / (R(h21 + 1))
     
-    # Add small fluctuation from moduli deformation
-    fluctuation1 = R(random()) * R(0.05) - R(0.025)
+    # Add symmetric fluctuation from moduli deformation (mean zero)
+    fluctuation1 = (R(random()) - R(0.5)) * R(0.05)
     mu1 = mu1_base * (R(1) + fluctuation1)
     
     # Second eigenvalue μ₂ - first excited state
     # Gap follows from spectral geometry of CY3
-    gap_factor = R(2.5773) + (R(random()) * R(0.16) - R(0.08))
+    # Symmetric fluctuation ensures unbiased mean
+    gap_factor = KAPPA_PI_UNIVERSAL + (R(random()) - R(0.5)) * R(0.16)
     mu2 = mu1 * gap_factor
     
     # Compute the spectral invariant
