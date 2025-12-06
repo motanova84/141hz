@@ -2,10 +2,23 @@
 """
 Plot Balance Function: Visualization of P17 Adelic-Fractal Equilibrium
 
-This script creates a visualization of the balance function:
+IMPORTANT NOTE (v2.0 CORRECTION):
+--------------------------------
+This script visualizes the QUADRATIC balance function:
     balance(p) = base + amplitude × (√p - √17)²
+which is designed to have minimum at p = 17.
 
-showing the clear minimum at p = 17.
+This is DIFFERENT from the original equilibrium function:
+    equilibrium(p) = exp(π√p/2) / p^(3/2)
+which is minimized at p = 11, NOT p = 17.
+
+For the corrected spectral resonance theory, see:
+    scripts/spectral_resonance_p17.py
+    aik_resonance_p17.json
+--------------------------------
+
+This script creates a visualization of the balance function showing
+the clear minimum at p = 17.
 
 The quadratic form in √p ensures that p = 17 is the unique equilibrium point
 where adelic growth and fractal suppression balance perfectly.
