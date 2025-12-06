@@ -6,6 +6,9 @@ test_verify_kappa_pi_complete.py
 Tests for verify_kappa_pi_complete.py
 
 Instituto QCAL - Quantum Consciousness Adelic Laboratory
+
+Run with: python scripts/test_verify_kappa_pi_complete.py
+Or from scripts dir: python test_verify_kappa_pi_complete.py
 """
 
 import sys
@@ -13,16 +16,32 @@ import os
 import unittest
 import numpy as np
 
-# Add scripts directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
-
-from verify_kappa_pi_complete import (
-    KappaVerifier,
-    KAPPA_PI_REF,
-    TOLERANCE,
-    C_LIGHT,
-    PLANCK_LENGTH,
-)
+# Import from same directory (for running directly from scripts/)
+# or from parent directory (for running from repo root)
+try:
+    from verify_kappa_pi_complete import (
+        KappaVerifier,
+        KAPPA_PI_REF,
+        TOLERANCE,
+        C_LIGHT,
+        PLANCK_LENGTH,
+        GEOMETRY_TOLERANCE,
+        NOETIC_PRIME,
+    )
+except ImportError:
+    # Running from repo root - add scripts to path
+    _scripts_dir = os.path.dirname(os.path.abspath(__file__))
+    if _scripts_dir not in sys.path:
+        sys.path.insert(0, _scripts_dir)
+    from verify_kappa_pi_complete import (
+        KappaVerifier,
+        KAPPA_PI_REF,
+        TOLERANCE,
+        C_LIGHT,
+        PLANCK_LENGTH,
+        GEOMETRY_TOLERANCE,
+        NOETIC_PRIME,
+    )
 
 
 class TestKappaVerifier(unittest.TestCase):
@@ -50,9 +69,17 @@ class TestKappaVerifier(unittest.TestCase):
         self.assertEqual(C_LIGHT, 299792458)
         self.assertEqual(PLANCK_LENGTH, 1.616255e-35)
 
+    def test_noetic_prime_constant(self):
+        """Test that NOETIC_PRIME is correctly defined."""
+        self.assertEqual(NOETIC_PRIME, 17)
+
+    def test_geometry_tolerance_constant(self):
+        """Test that GEOMETRY_TOLERANCE is correctly defined."""
+        self.assertEqual(GEOMETRY_TOLERANCE, 0.15)
+
     def test_generate_realistic_cy_spectrum(self):
         """Test CY spectrum generation."""
-        np.random.seed(17)
+        np.random.seed(NOETIC_PRIME)
         spectrum = self.verifier._generate_realistic_cy_spectrum(1000)
 
         # Check that spectrum is sorted
@@ -190,9 +217,9 @@ class TestIntegration(unittest.TestCase):
         kappa_geo = verifier.results.get("kappa_geometry", 0)
         kappa_arith = verifier.results.get("kappa_arithmetic", 0)
 
-        # Geometry uses statistical simulation, so use larger tolerance (0.15)
-        # Arithmetic is exact, so use strict tolerance
-        self.assertAlmostEqual(kappa_geo, KAPPA_PI_REF, delta=0.15)
+        # Geometry uses statistical simulation, so use GEOMETRY_TOLERANCE
+        # Arithmetic is exact, so use strict TOLERANCE
+        self.assertAlmostEqual(kappa_geo, KAPPA_PI_REF, delta=GEOMETRY_TOLERANCE)
         self.assertAlmostEqual(kappa_arith, KAPPA_PI_REF, delta=TOLERANCE)
 
 

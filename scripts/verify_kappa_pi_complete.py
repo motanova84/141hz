@@ -22,9 +22,6 @@ import numpy as np
 import mpmath as mp
 from typing import Dict
 
-# Configuracion de precision
-mp.mp.dps = 50
-
 # Constantes fisicas
 C_LIGHT = 299792458  # m/s
 PLANCK_LENGTH = 1.616255e-35  # m
@@ -34,13 +31,31 @@ HBAR = 1.054571817e-34  # J*s
 KAPPA_PI_REF = 2.5773
 TOLERANCE = 1e-4
 
+# Primo noetico p=17 - usado como semilla para reproducibilidad en simulaciones
+# Este primo tiene significado especial en la teoria noetica
+NOETIC_PRIME = 17
+
+# Tolerancia para verificacion geometrica (15%)
+# Se usa tolerancia mayor porque la verificacion geometrica se basa en
+# simulacion estadistica del espectro CY quintic. Con 10000 modos,
+# la convergencia al valor teorico tiene varianza ~10%
+GEOMETRY_TOLERANCE = 0.15
+
 
 class KappaVerifier:
     """Verificador del invariante kappa_Pi desde multiples perspectivas."""
 
-    def __init__(self):
+    def __init__(self, mpmath_precision: int = 50):
+        """
+        Inicializa el verificador.
+
+        Args:
+            mpmath_precision: Digitos de precision para mpmath (default: 50)
+        """
         self.results = {}
-        self.phi = float((1 + mp.sqrt(5)) / 2)
+        # Set precision locally for this instance
+        with mp.workdps(mpmath_precision):
+            self.phi = float((1 + mp.sqrt(5)) / 2)
 
     def verify_all(self) -> Dict[str, bool]:
         """Ejecuta todas las verificaciones."""
@@ -93,7 +108,7 @@ class KappaVerifier:
 
         # Espectro simulado (valores representativos del Laplaciano)
         # En produccion: spectrum = sage_cy_quintic.laplacian_spectrum(p=1, q=1)
-        np.random.seed(17)  # Seed = 17 (primo noetico)
+        np.random.seed(NOETIC_PRIME)  # Seed = 17 (primo noetico)
         n_modes = 10000  # Numero de modos no nulos (large for statistical convergence)
 
         # Generar espectro con distribucion realista
@@ -118,14 +133,12 @@ class KappaVerifier:
         print(f"   Diferencia: {abs(kappa_geo - KAPPA_PI_REF):.6f}")
 
         error = abs(kappa_geo - KAPPA_PI_REF)
-        # Use larger tolerance for statistical simulation (0.1 for ~10% variance)
-        geo_tolerance = 0.15
-        passed = bool(error < geo_tolerance)
+        passed = bool(error < GEOMETRY_TOLERANCE)
 
         if passed:
-            print(f"   [PASS] (error < {geo_tolerance})")
+            print(f"   [PASS] (error < {GEOMETRY_TOLERANCE})")
         else:
-            print(f"   [FAIL] (error > {geo_tolerance})")
+            print(f"   [FAIL] (error > {GEOMETRY_TOLERANCE})")
 
         self.results["geometry"] = passed
         self.results["kappa_geometry"] = float(kappa_geo)

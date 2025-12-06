@@ -55,26 +55,36 @@ jobs:
           NUMEXPR_NUM_THREADS: 2
 
       - name: Run tests
+        id: tests
         run: |
           python scripts/test_verify_kappa_pi_complete.py -v
         env:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
-      - name: Generate summary
-        if: always()
+      - name: Generate summary on success
+        if: success()
         run: |
-          echo "## Kappa Pi Verification Results" >> $GITHUB_STEP_SUMMARY
+          echo "## Kappa Pi Verification Results - SUCCESS" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Python version: ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Verification Domains" >> $GITHUB_STEP_SUMMARY
+          echo "### Verification Domains - All Passed" >> $GITHUB_STEP_SUMMARY
           echo "1. Geometry: CY quintic Laplacian spectrum" >> $GITHUB_STEP_SUMMARY
           echo "2. Arithmetic: p=17 noetic prime" >> $GITHUB_STEP_SUMMARY
           echo "3. Physics: f0=141.7001 Hz" >> $GITHUB_STEP_SUMMARY
           echo "4. Consciousness: tau_deco=1.2ms" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "kappa_Pi = 2.5773" >> $GITHUB_STEP_SUMMARY
+
+      - name: Generate summary on failure
+        if: failure()
+        run: |
+          echo "## Kappa Pi Verification Results - FAILED" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Python version: ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "One or more verification domains failed. Check logs for details." >> $GITHUB_STEP_SUMMARY
 
   validate-kappa-domains:
     name: Validate All Four Domains
