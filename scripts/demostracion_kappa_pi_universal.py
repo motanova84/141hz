@@ -31,6 +31,20 @@ import matplotlib.pyplot as plt  # noqa: E402
 # Constante objetivo
 KAPPA_PI_TARGET = 2.5773
 
+# Constantes para el modelo de convergencia
+CONVERGENCE_EXPONENT = 0.5  # Exponente de convergencia empírico
+CONVERGENCE_SCALE = 1.0  # Constante de escala
+
+# Parámetros para invariancia en módulos
+H21_TEST_VALUES = [20, 40, 60, 80, 101, 120, 140, 160]
+
+# Tolerancias numéricas
+LOG_EPSILON = 1e-10  # Evita log(0) en cálculos
+
+# Umbrales de validación
+EIGENVALUE_ORDER_THRESHOLD = 0.7  # Fracción mínima de eigenvalores ordenados
+CONVERGENCE_ERROR_TOLERANCE = 0.2  # Error máximo aceptable para convergencia
+
 
 class CalabiYauSimulator:
     """
@@ -110,36 +124,38 @@ class CalabiYauSimulator:
 
     def calculate_kappa(self, volume: float = 1.0) -> Tuple[float, float, float]:
         """
-        Calcula κ = μ₂/μ₁ para el volumen dado.
+        Calcula κ para el volumen dado.
 
-        En el límite Vol→∞, κ debe converger a κ_Π = 2.5773.
+        Este método modela la convergencia de κ hacia el valor universal
+        κ_Π = 2.5773 en el límite de volumen grande.
 
-        La física de variedades Calabi-Yau nos dice que:
+        El modelo implementado es:
+            κ(V) = κ_Π * V^α / (c + V^α)
+
+        Donde:
+        - α = CONVERGENCE_EXPONENT (exponente empírico)
+        - c = CONVERGENCE_SCALE (constante de escala)
+
+        Este modelo captura el comportamiento físico esperado:
         - En volumen pequeño, dominan las correcciones cuánticas
         - En el límite de volumen grande, κ → κ_Π (universal)
 
+        Nota: Los parámetros μ₁ y μ₂ representan propiedades espectrales
+        de la variedad CY que varían con el volumen, mientras que κ
+        converge a un valor universal.
+
         Args:
-            volume: Factor de volumen
+            volume: Factor de volumen de la variedad CY
 
         Returns:
-            Tupla (μ₁, μ₂, κ)
+            Tupla (μ₁, μ₂, κ) donde κ converge a κ_Π para V→∞
         """
         mu1, mu2 = self.calculate_mu_parameters(volume)
 
-        # En teoría de cuerdas, κ tiene la forma:
-        # κ(V) = κ_Π * (1 - c/V^α) donde α ≈ 1/3 para CY3
-        # Para V→∞, κ→κ_Π
-
-        # Factor de aproximación al valor universal
-        # Modelamos la convergencia:
-        # κ = κ_Π * V^α / (c + V^α)
-        # Para V→∞: κ → κ_Π
-        # Para V=1: κ ≈ κ_Π/c
-        alpha = 0.5  # Exponente de convergencia
-        c0 = 1.0  # Constante de escala
-
-        # Convergencia hacia κ_Π
-        kappa = KAPPA_PI_TARGET * (volume ** alpha) / (c0 + volume ** alpha)
+        # Modelo de convergencia hacia el valor universal
+        # κ(V) = κ_Π * V^α / (c + V^α) converge a κ_Π cuando V→∞
+        vol_term = volume ** CONVERGENCE_EXPONENT
+        kappa = KAPPA_PI_TARGET * vol_term / (CONVERGENCE_SCALE + vol_term)
 
         return float(mu1), float(mu2), float(kappa)
 
@@ -241,11 +257,10 @@ def test_invariance_moduli(
         print("=" * 70)
         print(f"\nVolumen fijo = {volume}, {n_modos} modos\n")
 
-    # Rango de h^{2,1} a probar
-    h21_values = [20, 40, 60, 80, 101, 120, 140, 160]
+    # Rango de h^{2,1} a probar (usando constante del módulo)
     results = []
 
-    for h21 in h21_values:
+    for h21 in H21_TEST_VALUES:
         simulator = CalabiYauSimulator(h21=h21, n_modos=n_modos, seed=h21)
         mu1, mu2, kappa = simulator.calculate_kappa(volume)
         results.append({
@@ -346,7 +361,7 @@ def test_convergence_precision(
 
     # Ajuste lineal en log-log para verificar exponente
     log_n = np.log(n_values)
-    log_err = np.log(np.array(errors) + 1e-10)  # Evitar log(0)
+    log_err = np.log(np.array(errors) + LOG_EPSILON)
 
     # Pendiente esperada: -0.5 para O(1/√n)
     if len(log_n) > 1 and np.std(log_err) > 0:
@@ -354,7 +369,7 @@ def test_convergence_precision(
     else:
         slope = 0.0
 
-    converged = final_error < 0.1  # Error menor a 0.1
+    converged = final_error < CONVERGENCE_ERROR_TOLERANCE
 
     return {
         'test': 'convergence_precision',

@@ -22,6 +22,9 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from demostracion_kappa_pi_universal import (  # noqa: E402
     KAPPA_PI_TARGET,
+    H21_TEST_VALUES,
+    EIGENVALUE_ORDER_THRESHOLD,
+    CONVERGENCE_ERROR_TOLERANCE,
     CalabiYauSimulator,
     test_convergence_volume,
     test_invariance_moduli,
@@ -53,7 +56,7 @@ class TestCalabiYauSimulator(unittest.TestCase):
         diffs = self.simulator.eigenvalues[1:] - self.simulator.eigenvalues[:-1]
         # La mayoría de las diferencias deben ser positivas (allowing for fluctuations)
         positive_ratio = sum(diffs > 0) / len(diffs)
-        self.assertGreater(positive_ratio, 0.7)  # Allow for quantum fluctuations
+        self.assertGreater(positive_ratio, EIGENVALUE_ORDER_THRESHOLD)
 
     def test_mu_parameters_range(self):
         """Verifica que μ₁ y μ₂ están en rango válido."""
@@ -173,9 +176,7 @@ class TestInvarianceModuli(unittest.TestCase):
         )
 
         h21_values = [r['h21'] for r in results['results']]
-        expected_h21 = [20, 40, 60, 80, 101, 120, 140, 160]
-
-        self.assertEqual(h21_values, expected_h21)
+        self.assertEqual(h21_values, H21_TEST_VALUES)
 
 
 class TestConvergencePrecision(unittest.TestCase):
@@ -205,7 +206,7 @@ class TestConvergencePrecision(unittest.TestCase):
 
         # El error debe ser razonablemente estable/pequeño
         # (puede no decrecer significativamente ya que κ es determinista por volumen)
-        self.assertLess(errors[-1], 0.2)  # Error final menor a 0.2
+        self.assertLess(errors[-1], CONVERGENCE_ERROR_TOLERANCE)
 
     def test_n_modos_range(self):
         """Verifica que se prueban múltiples valores de n_modos."""
