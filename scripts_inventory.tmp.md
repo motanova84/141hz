@@ -100,6 +100,8 @@
   - Test unitario para verificar la lógica corregida de búsqueda de frecuencias
 - `test_dashboard.py`
   - Tests para el Dashboard de Estado GW250114
+- `test_demostracion_kappa_pi.py`
+  - Tests para Demostración Rigurosa de κ_Π = 2.5773 Universal
 - `test_demostracion_matematica.py`
   - Tests para la demostración matemática de 141.7001 Hz
 - `test_derivacion_primer_principios.py`
@@ -178,4 +180,4 @@
   - Script de prueba para el verificador GW250114
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-03 04:08:20 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-06 18:32:26 UTC*
