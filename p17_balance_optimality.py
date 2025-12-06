@@ -2,6 +2,23 @@
 """
 P17 Balance Optimality: Adelic-Fractal Equilibrium Validation
 
+IMPORTANT NOTE (v2.0 CORRECTION):
+--------------------------------
+This module uses a QUADRATIC balance function designed with minimum at p=17:
+    balance(p) = base + amplitude × (√p - √17)²
+
+This is DIFFERENT from the original equilibrium function:
+    equilibrium(p) = exp(π√p/2) / p^(3/2)
+which is minimized at p=11, NOT p=17.
+
+For the corrected spectral resonance theory, see:
+    scripts/spectral_resonance_p17.py
+    aik_resonance_p17.json
+
+The corrected claim is that p=17 is the SPECTRAL RESONANCE POINT
+that produces f₀ = 141.7001 Hz, not that it minimizes equilibrium(p).
+--------------------------------
+
 This module demonstrates, with mathematical and computational rigor, that the prime:
     p₀ = 17
 is the unique point of adelic-fractal equilibrium whose substitution in the
