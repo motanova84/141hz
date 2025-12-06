@@ -12,14 +12,14 @@ that emerges from the Calabi-Yau quintic spectral geometry.
 1. GEOMETRY: Hodge-de Rham Laplacian on CY quintic
 2. ARITHMETIC: p=17 noetic → φ³ × ζ'(1/2)
 3. PHYSICS: f₀=141.7001 Hz → λ_Yukawa=336km
-4. CONSCIOUSNESS: Ψ=I×A_eff² → τ_deco=1.2ms
+4. CONSCIOUSNESS: Ψ=I×A_eff² → τ_deco=11.4ms
 
 ## Main Results
 
-- `κ_Π`: Universal invariant √(φ³ × |ζ'(1/2)|) ≈ 2.5773
-- `kappa_pi_value`: Verification that κ_Π ≈ 2.5773
-- `yukawa_wavelength`: λ_Yukawa = c/f₀ ≈ 336 km
-- `decoherence_time`: τ_deco = φ/f₀ ≈ 1.2 ms
+- `κ_Π`: Universal invariant √(φ³ × |ζ'(1/2)|) ≈ 2.49
+- `kappa_pi_value`: Verification that κ_Π ≈ 2.49
+- `yukawa_wavelength`: λ_Yukawa = c/(2πf₀) ≈ 336 km
+- `decoherence_time`: τ_deco = φ/f₀ ≈ 11.4 ms
 
 Author: José Manuel Mota Burruezo (JMMB Ψ✧)
 Instituto de Consciencia Cuántica (ICQ)

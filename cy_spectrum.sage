@@ -14,7 +14,7 @@ Mathematical Framework:
 1. GEOMETRY: Hodge-de Rham Laplacian on CY quintic
 2. ARITHMETIC: p=17 noetic → φ³ × ζ'(1/2)
 3. PHYSICS: f₀=141.7001 Hz → λ_Yukawa=336km
-4. CONSCIOUSNESS: Ψ=I×A_eff² → τ_deco=1.2ms
+4. CONSCIOUSNESS: Ψ=I×A_eff² → τ_deco=11.4ms
 
 The fundamental invariant κ_Π emerges from the spectral geometry of the
 Calabi-Yau quintic manifold in CP⁴.
@@ -226,13 +226,13 @@ print(f"           = {lambda_Yukawa_km} km ≈ 336 km")
 print()
 
 # 3. Consciousness decoherence time
-# τ_deco ≈ 1/f₀ scaled by φ
-tau_deco = R(1) / f_0 * phi
+# τ_deco = φ/f₀
+tau_deco = phi / f_0
 tau_deco_ms = tau_deco * 1000
 
 print("3. CONSCIOUSNESS DECOHERENCE:")
 print(f"   τ_deco = φ/f₀ = {tau_deco} s")
-print(f"         = {tau_deco_ms} ms ≈ 1.2 ms")
+print(f"         = {tau_deco_ms} ms ≈ 11.4 ms")
 print()
 
 # 4. Consciousness field relation: Ψ = I × A_eff²

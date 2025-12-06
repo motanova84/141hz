@@ -11,7 +11,7 @@ Mathematical Framework:
 1. GEOMETRY: Hodge-de Rham Laplacian on CY quintic
 2. ARITHMETIC: p=17 noetic → φ³ × ζ'(1/2)
 3. PHYSICS: f₀=141.7001 Hz → λ_Yukawa=336km
-4. CONSCIOUSNESS: Ψ=I×A_eff² → τ_deco=1.2ms
+4. CONSCIOUSNESS: Ψ=I×A_eff² → τ_deco=11.4ms
 
 Usage:
 ------
@@ -191,14 +191,13 @@ def print_physical_predictions():
     # Golden ratio for consciousness
     phi = (1 + math.sqrt(5)) / 2
 
-    # Decoherence time - scaled version
-    # τ_deco ≈ 1.2 ms is the qubit coherence time at resonance
-    tau_base = 1 / f0  # Period
-    tau_deco_ms = tau_base * 1000  # in ms
+    # Decoherence time: τ_deco = φ/f₀
+    tau_deco = phi / f0
+    tau_deco_ms = tau_deco * 1000
 
     print(f"3. Consciousness Decoherence Time:")
-    print(f"   τ_base = 1/f₀ = {tau_base:.6f} s = {tau_deco_ms:.2f} ms")
-    print(f"   τ_deco ≈ φ × τ_base / 10 ≈ 1.14 ms (qubit coherence)")
+    print(f"   τ_deco = φ/f₀ = {tau_deco:.6f} s")
+    print(f"         = {tau_deco_ms:.2f} ms ≈ 11.4 ms")
     print()
 
     print(f"4. Consciousness Field Relation:")
