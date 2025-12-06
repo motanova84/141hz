@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 # Add scripts directory to path
-scripts_dir = Path(__file__).parent.parent / "scripts"
+scripts_dir = Path(__file__).parent
 sys.path.insert(0, str(scripts_dir))
 
 # Import the module under test

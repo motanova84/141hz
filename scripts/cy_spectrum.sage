@@ -141,7 +141,7 @@ print(f"  μ₂ (2nd moment) = {mu2:.6f}")
 print(f"  κ_Π = μ₂/μ₁ = {kappa_pi:.4f}")
 print()
 print(f"  κ_Π (postulated) = {kappa_pi_postulated}")
-print(f"  Error relativo = {error_relative:.3f}%")
+print(f"  Relative error = {error_relative:.3f}%")
 print()
 
 # ============================================================================
