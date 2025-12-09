@@ -366,7 +366,7 @@ class CanonicalConsciousnessField:
                 symbol=self.TAU_PSI_SYMBOL,
                 value=float(self.TAU_PSI),
                 unit="s",
-                physical_relation="h / E_Ψ = 7.07 × 10⁻²⁴",
+                physical_relation="τ_Ψ = 1/f₀",
                 ontological_meaning=self.TAU_PSI_MEANING
             ),
         }
