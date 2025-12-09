@@ -74,7 +74,7 @@ def verify_parameter(name, symbol, required, actual, unit, tolerance=1.0):
         bool: True if parameter matches within tolerance
     """
     if required != 0:
-        rel_diff = abs(actual - required) / abs(required) * 100
+        rel_diff = abs(actual - required) / required * 100
     else:
         rel_diff = 0
     
@@ -105,14 +105,14 @@ def verify_physical_relation(name, formula, calculated, measured, tolerance=1.0)
         bool: True if relation is satisfied
     """
     if measured != 0:
-        rel_diff = abs(calculated - measured) / abs(measured) * 100
+        rel_diff = abs(calculated - measured) / measured * 100
     else:
         rel_diff = 0
     
     valid = rel_diff < tolerance
     status = "✅" if valid else "❌"
     
-    print(f"✅ {name} ({formula}):")
+    print(f"{status} {name} ({formula}):")
     print(f"   Calculado: {calculated:.6e} J")
     print(f"   Medido:    {measured:.6e} J")
     print(f"   Diferencia: {rel_diff:.6f}%")
@@ -135,8 +135,9 @@ def main():
     
     print_section("PARTE 1: PARÁMETROS FUNDAMENTALES DEL CAMPO Ψ")
     
-    print("Nota: En la notación española, '2,116' usa coma como separador de miles.")
-    print("      Por lo tanto, λ_Ψ = 2,116 km significa 2116 kilómetros.\n")
+    print("Nota: En el problem statement, '2,116' en notación española usa coma")
+    print("      como separador de miles. Por lo tanto, λ_Ψ = 2,116 kilómetros")
+    print("      debe interpretarse como 2116 km (dos mil ciento dieciséis).\n")
     
     # Get values from constants module
     f0 = float(CONSTANTS.F0)
