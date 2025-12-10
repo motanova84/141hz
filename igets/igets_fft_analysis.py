@@ -35,6 +35,11 @@ TOLERANCE = 0.5  # Hz - Tolerancia de búsqueda
 LAMBDA_BAR = 3.37e5  # m - Longitud característica Yukawa
 ALPHA_Y = 1e-6  # Amplitud Yukawa (orden de magnitud esperado)
 
+# Amplitud ajustada a rango testeable con SG (Superconducting Gravimeter)
+# Ver sg_sensitivity_analysis.py para detalles de cálculo
+AMPLITUDE_TESTABLE_MIN = 1e-13  # g - Amplitud mínima testeable (~3 días observación)
+AMPLITUDE_TESTABLE_MAX = 1e-12  # g - Amplitud máxima testeable (~42 min observación)
+
 # Estaciones IGETS de referencia
 IGETS_STATIONS = {
     'CANTLEY': {'lat': 45.59, 'lon': -75.87, 'name': 'Cantley, Canada'},
