@@ -161,9 +161,9 @@ print(f"Significativo (3σ): {correlacion['significativo_3sigma']}")
 
 | Parámetro | Valor |
 |-----------|-------|
-| λ (Poisson) | 9.52 × 10⁻⁵ |
-| P(≥2 eventos) | 4.53 × 10⁻⁹ |
-| N_bursts (10 años) | 3.15 × 10⁹ |
+| λ (Poisson) | 9.52 × 10^-5 |
+| P(≥2 eventos) | 4.53 × 10^-9 |
+| N_bursts (10 años) | 3.15 × 10^9 |
 | N_expected (coincidencias) | ~14.3 |
 | P(Δt = 7.06 ms) | 0.0706 |
 | N_correlated | ~1.0 |
@@ -172,9 +172,9 @@ print(f"Significativo (3σ): {correlacion['significativo_3sigma']}")
 
 | Parámetro | Valor |
 |-----------|-------|
-| λ (Poisson) | 9.52 × 10⁻⁶ |
-| P(≥2 eventos) | 4.53 × 10⁻¹¹ |
-| N_bursts (10 años) | 3.15 × 10¹⁰ |
+| λ (Poisson) | 9.52 × 10^-6 |
+| P(≥2 eventos) | 4.53 × 10^-11 |
+| N_bursts (10 años) | 3.15 × 10^10 |
 | N_expected (coincidencias) | ~1.4 |
 | P(Δt = 7.06 ms) | 0.706 |
 | N_correlated | ~1.0 |
