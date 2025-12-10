@@ -138,12 +138,24 @@ Para obtener λ_Ψ ≈ 2.1 km, se requiere considerar factores de amortiguamient
 El campo Ψ acopla a los fonones de condensados de Bose-Einstein (BEC), generando un nodo resonante en el espectro de excitaciones colectivas a un vector de onda característico:
 
 ```
-k₀ = ω₀/c_s ≈ 890 m⁻¹
+k₀ = ω₀/c_s
 ```
 
 **Donde:**
-- **ω₀ = 2π · 141.7001 rad/s:** frecuencia angular fundamental
-- **c_s ≈ 1.0 m/s:** velocidad del sonido en BEC de ⁸⁷Rb típico
+- **ω₀ = 2π · 141.7001 ≈ 890.36 rad/s:** frecuencia angular fundamental
+- **c_s:** velocidad del sonido en el BEC (depende de la densidad)
+
+**Nota sobre parámetros realistas:**
+
+Para BECs típicos de ⁸⁷Rb con densidad n ∼ 10¹⁴ cm⁻³ (10²⁰ m⁻³), la velocidad del sonido es:
+- c_s ≈ 1-5 mm/s (valores típicos experimentales)
+- Esto da k₀ ∼ 200,000 - 900,000 m⁻¹
+
+Para alcanzar k₀ ≈ 890 m⁻¹ (como sugiere c_s ≈ 1 m/s), se requeriría:
+- Densidad muy alta: n ∼ 10¹⁹ cm⁻³ (10²⁵ m⁻³)
+- Esto es técnicamente desafiante pero factible en BECs ultra-densos
+
+**Predicción ajustable:** El valor exacto de k₀ dependerá de la densidad del BEC utilizado. La predicción es que **debe existir un pico resonante en k₀ = ω₀/c_s**, independientemente del valor específico de c_s, siempre que se mida a la densidad correspondiente.
 
 ### 3.2 Derivación Física
 
@@ -165,11 +177,19 @@ El acoplamiento con el campo Ψ introduce una perturbación resonante en k₀:
 k₀ = ω₀/c_s
 ```
 
-Para ⁸⁷Rb con densidad típica n ∼ 10¹⁴ cm⁻³, c_s ≈ 1.0 m/s:
+Para ⁸⁷Rb, el valor exacto de k₀ depende de la densidad del condensado:
 
+**Caso 1: Densidad típica (n ∼ 10¹⁴ cm⁻³)**
 ```
-k₀ = (2π × 141.7001) / 1.0 ≈ 890.36 m⁻¹
+c_s ≈ 2 mm/s → k₀ ≈ 445,000 m⁻¹
 ```
+
+**Caso 2: Densidad alta (n ∼ 10¹⁹ cm⁻³)**
+```
+c_s ≈ 1 m/s → k₀ ≈ 890 m⁻¹
+```
+
+La predicción fundamental es la relación k₀ = ω₀/c_s, donde ω₀ = 2π × 141.7001 rad/s es fijo.
 
 ### 3.3 Protocolo Experimental
 
@@ -177,14 +197,21 @@ k₀ = (2π × 141.7001) / 1.0 ≈ 890.36 m⁻¹
 
 **Procedimiento:**
 1. Preparar BEC de ⁸⁷Rb en trampa magneto-óptica
-2. Aplicar pulsos de Bragg con vectores de onda variables
-3. Escanear el factor de estructura dinámico S(k,ω) en el rango:
-   - k = 850 - 920 m⁻¹
-   - ω = 800 - 950 rad/s
+2. Controlar densidad para obtener c_s deseada
+3. Aplicar pulsos de Bragg con vectores de onda variables
+4. Escanear el factor de estructura dinámico S(k,ω)
+
+**Rangos experimentales según densidad:**
+
+| Densidad (cm⁻³) | c_s (mm/s) | k₀ (m⁻¹) | Rango de escaneo |
+|-----------------|------------|----------|------------------|
+| 10¹⁴ | ~2 | ~445,000 | 400,000 - 500,000 |
+| 10¹⁷ | ~60 | ~15,000 | 13,000 - 17,000 |
+| 10¹⁹ | ~1000 | ~890 | 800 - 1,000 |
 
 **Predicción concreta:**
-- **Pico Lorentziano centrado en k₀ ≈ 890 m⁻¹**
-- **Ancho del pico:** Γ ≈ 15-25 m⁻¹ (determinado por tiempo de coherencia)
+- **Pico Lorentziano centrado en k₀ = ω₀/c_s**
+- **Ancho del pico:** Γ ≈ 0.02-0.05 k₀ (2-5% del valor central)
 - **Amplitud:** A > 2 × ruido de fondo
 
 ### 3.4 Instalaciones Experimentales
@@ -197,13 +224,13 @@ k₀ = (2π × 141.7001) / 1.0 ≈ 890.36 m⁻¹
 
 ### 3.5 Criterio de Falsación
 
-**Falsación:** Ausencia reproducible del pico espectral en k₀ ≈ 890 m⁻¹ (±5%) en al menos 3 experimentos independientes con BECs de ⁸⁷Rb bajo condiciones controladas, Y modelos teóricos sin acoplamiento Ψ explican completamente S(k,ω).
+**Falsación:** Ausencia reproducible del pico espectral en k₀ = ω₀/c_s (±5%) en al menos 3 experimentos independientes con BECs de ⁸⁷Rb bajo condiciones controladas (densidad conocida, temperatura  < 100 nK, tiempo de coherencia > 100 ms), Y modelos teóricos sin acoplamiento Ψ explican completamente S(k,ω).
 
 **Confirmación:** Detección del pico con:
-- Posición: k₀ = 890 ± 45 m⁻¹
-- Ancho: Γ = 15-25 m⁻¹
+- Posición: k₀ = ω₀/c_s ± 5%
+- Ancho relativo: Γ/k₀ ≈ 0.02-0.05
 - SNR > 3
-- Reproducible en múltiples laboratorios
+- Reproducible en múltiples laboratorios con diferentes densidades
 
 ---
 

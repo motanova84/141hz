@@ -28,7 +28,10 @@ OMEGA0 = 2 * pi * F0  # rad/s
 
 # Constantes de ⁸⁷Rb
 M_RB87 = 87 * m_u  # Masa atómica de ⁸⁷Rb en kg
-A_S = 5.29e-9  # Longitud de scattering (m) para ⁸⁷Rb
+# Para ⁸⁷Rb (F=2, mF=2), a_s ≈ 98.98 a_0
+# donde a_0 = 5.29177e-11 m (radio de Bohr)
+# Referencia: Ketterle group, MIT
+A_S = 98.98 * 5.29177e-11  # ≈ 5.24e-9 m
 
 
 def calcular_velocidad_sonido(n, a_s=A_S, m=M_RB87):
@@ -124,6 +127,11 @@ def generar_grafica_prediccion():
     """
     Genera gráficas de la predicción BEC.
     """
+    # Nota: Para obtener c_s ≈ 1 m/s se requiere densidad muy alta (~10¹⁹ cm⁻³)
+    # Valores típicos de BECs: n ∼ 10¹⁴ cm⁻³, c_s ∼ 1-5 mm/s
+    # Esto da k₀ ∼ 200,000 - 900,000 m⁻¹
+    # Ajustamos la predicción para usar densidad típica y calcular k₀ correspondiente
+    
     # Densidad típica para ⁸⁷Rb BEC
     n = 1e20  # m⁻³ (10¹⁴ cm⁻³)
     
