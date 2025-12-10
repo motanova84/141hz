@@ -142,6 +142,15 @@
 
 - Trigger: schedule (`0 0 * * *`)
 
+### Kappa Pi Verification
+
+**Archivo:** `kappa-pi-verification.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 4 * * *`)
+- Trigger: manual (workflow_dispatch)
+
 ### lean-ci
 
 **Archivo:** `lean-ci.yml`
@@ -327,4 +336,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-07 02:45:15 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-09 09:25:04 UTC*
