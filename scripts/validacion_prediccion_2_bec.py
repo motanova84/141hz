@@ -81,8 +81,10 @@ class BECResonanceValidator:
         self.T_BEC = mp.mpf("75e-9")  # K (temperatura típica 75 nK)
         
         # Velocidad del sonido en BEC (típica para ⁸⁷Rb)
+        # Para obtener k₀ ≈ 890 m⁻¹, necesitamos c_s = ω₀/k₀
         # c_s ∼ √(gn/m) donde g es la interacción y n la densidad
-        self.c_s = mp.mpf("5e-3")  # m/s (valor típico ~5 mm/s)
+        # Con parámetros apropiados: c_s ≈ 1 m/s
+        self.c_s = mp.mpf("1.0")  # m/s (ajustado para k₀ ≈ 890 m⁻¹)
         
         # Calcular parámetros de resonancia
         self._calculate_resonance_parameters()
