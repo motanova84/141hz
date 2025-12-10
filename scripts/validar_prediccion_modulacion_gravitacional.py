@@ -54,12 +54,16 @@ def calcular_amplitud_modulacion():
     return A
 
 
-def generar_señal_modulada(duracion=86400, fs=1000, amplitud=1e-14, noise_level=1e-12):
+def generar_señal_modulada(duracion=3600, fs=1000, amplitud=1e-14, noise_level=1e-12):
     """
     Genera señal sintética de modulación gravitacional.
     
+    NOTA: Para análisis completo se requieren 30 días de datos.
+    Esta función usa 1 hora por defecto para demostración (limitación de memoria).
+    En análisis real, se procesarían datos en chunks o se usaría downsample.
+    
     Args:
-        duracion: Duración en segundos (default: 1 día)
+        duracion: Duración en segundos (default: 1 hora para demo)
         fs: Frecuencia de muestreo (Hz)
         amplitud: Amplitud de modulación (m/s²)
         noise_level: Nivel de ruido (m/s²)
@@ -285,19 +289,24 @@ def generar_graficas_analisis():
     duraciones = np.logspace(2, 6, 20)  # 100 s a ~11 días
     snr_values = []
     
-    for T in duraciones[:10]:  # Solo primeras 10 para velocidad
+    # Calcular SNR para las primeras duraciones (limitado por memoria)
+    n_calc = min(10, len(duraciones))
+    for T in duraciones[:n_calc]:
         t_temp, señal_temp, _ = generar_señal_modulada(int(T), fs, amplitud, noise_level=1e-12)
         f_temp, psd_temp = analisis_espectral(t_temp, señal_temp, fs)
         snr_temp = calcular_snr_espectral(f_temp, psd_temp)
         snr_values.append(snr_temp)
     
     # Extender con modelo teórico SNR ∝ √T
-    duraciones_plot = duraciones
-    snr_extrapolated = snr_values[-1] * np.sqrt(duraciones_plot / duraciones[9])
+    if len(snr_values) > 0:
+        snr_extrapolated = snr_values[-1] * np.sqrt(duraciones / duraciones[n_calc-1])
+    else:
+        snr_extrapolated = np.sqrt(duraciones / 100)  # Fallback
     
-    ax4.loglog(duraciones_plot/86400, snr_extrapolated, linewidth=2, color='purple', 
+    ax4.loglog(duraciones/86400, snr_extrapolated, linewidth=2, color='purple', 
                label='SNR predicho')
-    ax4.scatter(duraciones[:10]/86400, snr_values, s=50, color='red', zorder=5, label='Simulado')
+    if len(snr_values) > 0:
+        ax4.scatter(duraciones[:n_calc]/86400, snr_values, s=50, color='red', zorder=5, label='Simulado')
     ax4.axhline(3, color='orange', linestyle='--', linewidth=2, label='SNR = 3')
     ax4.set_xlabel('Duración (días)', fontsize=11)
     ax4.set_ylabel('SNR', fontsize=11)

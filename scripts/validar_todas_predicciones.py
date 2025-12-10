@@ -64,6 +64,11 @@ def ejecutar_validacion(script_name, descripcion):
         print(f"❌ ERROR: Script no encontrado: {script_path}")
         return False
     
+    # Validar que el script está en el directorio esperado
+    if not script_path.is_relative_to(Path(__file__).parent):
+        print(f"❌ ERROR: Script fuera del directorio permitido: {script_path}")
+        return False
+    
     try:
         result = subprocess.run(
             [sys.executable, str(script_path)],
