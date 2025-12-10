@@ -81,7 +81,10 @@ class GravitationalModulationValidator:
         
         # Parámetros del detector
         self.sampling_rate = 1000  # Hz (tasa de muestreo típica)
-        self.detector_noise_floor = 1e-10  # Nivel de ruido del detector (g)
+        # Gravimeter noise floor: typical value for superconducting gravimeters
+        # Represents instrumental precision in units of g (Earth's gravity)
+        DETECTOR_NOISE_FLOOR = 1e-10  # Dimensionless fraction of g
+        self.detector_noise_floor = DETECTOR_NOISE_FLOOR
     
     def _calculate_signal_parameters(self):
         """
@@ -144,7 +147,9 @@ class GravitationalModulationValidator:
             noise = np.fft.irfft(noise_complex, n=n_samples)
             
             # Añadir ruido blanco adicional
-            white_noise = np.random.normal(0, float(self.detector_noise_floor) * g0 * 0.1, n_samples)
+            # White noise contribution: 10% of colored noise for high-frequency spectrum
+            WHITE_NOISE_SCALE = 0.1
+            white_noise = np.random.normal(0, float(self.detector_noise_floor) * g0 * WHITE_NOISE_SCALE, n_samples)
             
             g_signal = g_signal + noise + white_noise
         

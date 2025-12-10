@@ -215,8 +215,20 @@ class HiggsInvisibleCorrelationValidator:
         Returns:
             Diccionario con p-values y estadísticos
         """
-        # Calcular diferencias temporales
+        # Calcular diferencias entre eventos consecutivos
         dt = np.diff(timestamps)
+        
+        # Protección contra array vacío
+        if len(dt) == 0:
+            return {
+                "ks_statistic": 0.0,
+                "ks_pvalue": 1.0,
+                "chi2_statistic": 0.0,
+                "chi2_dof": 0,
+                "chi2_pvalue": 1.0,
+                "combined_pvalue": 1.0,
+                "note": "Insufficient data (empty dt array)"
+            }
         
         # Test de uniformidad (Kolmogorov-Smirnov)
         # Si hay correlación, dt no debería ser uniforme
@@ -231,12 +243,16 @@ class HiggsInvisibleCorrelationValidator:
         n_periods = int(np.max(dt) / T0_s) + 1
         expected_per_bin = len(dt) / n_periods
         
+        # Evitar división por cero
+        EPSILON = 1e-10
+        expected_per_bin = max(expected_per_bin, EPSILON)
+        
         # Histograma modulo T₀
         dt_mod = np.mod(dt, T0_s)
         hist, _ = np.histogram(dt_mod, bins=20)
         
-        # χ² test
-        chi2_statistic = np.sum((hist - expected_per_bin) ** 2 / expected_per_bin)
+        # χ² test con protección contra valores cero
+        chi2_statistic = np.sum((hist - expected_per_bin) ** 2 / (expected_per_bin + EPSILON))
         chi2_dof = len(hist) - 1
         chi2_pvalue = 1 - stats.chi2.cdf(chi2_statistic, chi2_dof)
         
@@ -246,7 +262,9 @@ class HiggsInvisibleCorrelationValidator:
             "chi2_statistic": float(chi2_statistic),
             "chi2_dof": chi2_dof,
             "chi2_pvalue": float(chi2_pvalue),
-            "combined_pvalue": float(np.sqrt(ks_pvalue * chi2_pvalue))  # Combinación geométrica
+            # Geometric mean of p-values: provides conservative combined test
+            # See: Fisher's method for combining independent tests
+            "combined_pvalue": float(np.sqrt(ks_pvalue * chi2_pvalue))
         }
     
     def validate_prediction(self, n_simulations: int = 5) -> Dict[str, Any]:

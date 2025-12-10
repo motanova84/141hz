@@ -60,6 +60,9 @@ class BECResonanceValidator:
     Validador del pico resonante en condensados de Bose-Einstein.
     """
     
+    # Constante pequeña para evitar división por cero en cálculos numéricos
+    EPSILON = 1e-10
+    
     def __init__(self, precision: int = 50):
         """
         Inicializa el validador.

@@ -31,7 +31,8 @@ L = (c⁴/16πG) R - ½(∂μΨ)(∂ᵘΨ) - ½m²_Ψ Ψ² + ζ(3) R Ψ² + R co
 | Parámetro | Valor | Origen |
 |-----------|-------|--------|
 | **f₀** | 141.7001 Hz | Estructuras espectrales (ζ'(1/2)/φ³) |
-| **ζ(3)** | ≈ 2.577 | Compactificaciones Calabi-Yau con invariante espectral κΠ |
+| **κΠ** | ≈ 2.577 | Invariante espectral de compactificación Calabi-Yau |
+| **ζ(3)** | ≈ 1.202057 | Función zeta de Riemann (constante de acoplamiento) |
 | **m_Ψ** | ℏω₀/c² | Masa del campo Ψ |
 | **λ_Ψ** | ℏ/(m_Ψ c) ≈ 2.1 km | Longitud de coherencia |
 

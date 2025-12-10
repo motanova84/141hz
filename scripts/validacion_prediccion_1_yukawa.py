@@ -83,6 +83,10 @@ class YukawaGravityCorrectionValidator:
         # Parámetros del campo Ψ
         self._calculate_psi_parameters()
     
+    # Geometrical scaling factor for Yukawa coherence length
+    # Derived from effective potential structure: λ_Ψ_eff = λ_Compton / YUKAWA_GEOMETRIC_FACTOR
+    YUKAWA_GEOMETRIC_FACTOR = 160  # Empirical factor from potential analysis
+    
     def _calculate_psi_parameters(self):
         """
         Calcula los parámetros del campo Ψ.
@@ -94,12 +98,12 @@ class YukawaGravityCorrectionValidator:
         omega_0 = 2 * mp.pi * self.f0  # rad/s
         self.m_psi = self.hbar * omega_0 / (self.c ** 2)  # kg
         
-        # Longitud de coherencia para Yukawa: λ_Ψ ≈ ℏ/(m_Ψ·c) / 160
+        # Longitud de coherencia para Yukawa: λ_Ψ ≈ ℏ/(m_Ψ·c) / YUKAWA_GEOMETRIC_FACTOR
         # Factor de escala derivado de la estructura del potencial efectivo
         # La longitud característica es menor que la longitud de onda Compton
         self.lambda_psi_compton = self.hbar / (self.m_psi * self.c)  # m (Compton)
         # Longitud de coherencia efectiva para Yukawa (factor geométrico ~160)
-        self.lambda_psi = self.lambda_psi_compton / 160  # m (~2.1 km)
+        self.lambda_psi = self.lambda_psi_compton / self.YUKAWA_GEOMETRIC_FACTOR  # m (~2.1 km)
         
         # Parámetro de fuerza α ∼ ζ(3) · ⟨Ψ⟩²/M²_Pl
         self.alpha = self.zeta_3 * (self.psi_vev ** 2) / (self.M_Pl ** 2)

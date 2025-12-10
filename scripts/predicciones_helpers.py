@@ -38,7 +38,20 @@ def save_json_results(results, filepath):
     Args:
         results: Results dictionary to save
         filepath: Path to save JSON file
+        
+    Raises:
+        IOError: If file cannot be written
+        ValueError: If results cannot be serialized
     """
-    results_json = convert_to_json(results)
-    with open(filepath, 'w') as f:
-        json.dump(results_json, f, indent=2)
+    try:
+        results_json = convert_to_json(results)
+    except Exception as e:
+        raise ValueError(f"Failed to convert results to JSON-serializable format: {e}")
+    
+    try:
+        with open(filepath, 'w') as f:
+            json.dump(results_json, f, indent=2)
+    except IOError as e:
+        raise IOError(f"Failed to write results to {filepath}: {e}")
+    except Exception as e:
+        raise Exception(f"Unexpected error saving JSON: {e}")
