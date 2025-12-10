@@ -27,7 +27,8 @@ from prediccion_altura_pico_bec import (
     ZETA_3,
     OMEGA_0,
     C_S,
-    F0
+    F0,
+    NORMALIZATION_FACTOR_EMPIRICAL
 )
 
 
@@ -137,13 +138,12 @@ class TestAlturaPico(unittest.TestCase):
         """Test que A ~ |g|² con normalización"""
         g_valores = [0.5, 1.0, 1.5, 2.0]
         densidad = 1.0
-        factor_norm = 12.0
         
         for g in g_valores:
             resultado = calcular_altura_pico(g, densidad_fondo=densidad)
             
-            # A ~ |g|² / (densidad_fondo × factor_norm)
-            A_esperado = (g ** 2) / (densidad * factor_norm)
+            # A ~ |g|² / (densidad_fondo × NORMALIZATION_FACTOR_EMPIRICAL)
+            A_esperado = (g ** 2) / (densidad * NORMALIZATION_FACTOR_EMPIRICAL)
             
             self.assertAlmostEqual(
                 resultado.altura_pico_A,
@@ -216,8 +216,9 @@ class TestAlturaPico(unittest.TestCase):
         """Test que la detección de rango [1.05, 1.20] funciona"""
         g_psi = ZETA_3
         
-        # Caso dentro del rango
-        resultado_dentro = calcular_altura_pico(g_psi, densidad_fondo=120.0)
+        # Caso dentro del rango: densidad típica de BEC normalizado
+        # Densidad 1.2 es una densidad de fondo razonable para BEC
+        resultado_dentro = calcular_altura_pico(g_psi, densidad_fondo=1.2)
         if 1.05 <= resultado_dentro.ratio_estructura <= 1.20:
             self.assertTrue(
                 resultado_dentro.en_rango_predicho,
@@ -255,7 +256,6 @@ class TestPrediccionCompleta(unittest.TestCase):
     def test_consistencia_acoplamiento_altura(self):
         """Test que el acoplamiento se usa correctamente en altura"""
         psi = 1.5
-        factor_norm = 12.0
         acoplamiento, altura = prediccion_completa(psi_esperado=psi, verbose=False)
         
         # El acoplamiento debe ser proporcional a psi
@@ -267,7 +267,7 @@ class TestPrediccionCompleta(unittest.TestCase):
         )
         
         # La altura debe usar este acoplamiento con normalización
-        altura_esperada = (acoplamiento.g_psi_phonon ** 2) / (1.0 * factor_norm)  # densidad = 1.0
+        altura_esperada = (acoplamiento.g_psi_phonon ** 2) / (1.0 * NORMALIZATION_FACTOR_EMPIRICAL)
         self.assertAlmostEqual(
             altura.altura_pico_A,
             altura_esperada,
@@ -400,33 +400,31 @@ class TestValidacionFormulas(unittest.TestCase):
         )
     
     def test_formula_altura(self):
-        """Test que A ~ |g|² / (ρ_fondo × factor_norm)"""
+        """Test que A ~ |g|² / (ρ_fondo × NORMALIZATION_FACTOR_EMPIRICAL)"""
         g = 1.5
         rho = 1.0
-        factor_norm = 12.0  # Factor de normalización del código
         
         resultado = calcular_altura_pico(g, densidad_fondo=rho)
         
         # Cálculo manual con factor de normalización
-        A_teorico = (g ** 2) / (rho * factor_norm)
+        A_teorico = (g ** 2) / (rho * NORMALIZATION_FACTOR_EMPIRICAL)
         
         self.assertAlmostEqual(
             resultado.altura_pico_A,
             A_teorico,
             places=10,
-            msg="Fórmula de altura debe ser A = |g|²/(ρ × factor)"
+            msg="Fórmula de altura debe ser A = |g|²/(ρ × NORMALIZATION_FACTOR_EMPIRICAL)"
         )
     
     def test_formula_ratio(self):
         """Test que ratio = S(k₀) / S(bg) = (S_bg + A) / S_bg = 1 + A/S_bg"""
         g = 1.2
         rho = 1.0
-        factor_norm = 12.0
         
         resultado = calcular_altura_pico(g, densidad_fondo=rho)
         
         # Cálculo manual con normalización
-        A = (g ** 2) / (rho * factor_norm)
+        A = (g ** 2) / (rho * NORMALIZATION_FACTOR_EMPIRICAL)
         ratio_teorico = 1.0 + (A / rho)
         
         self.assertAlmostEqual(

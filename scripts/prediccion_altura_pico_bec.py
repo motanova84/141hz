@@ -48,6 +48,13 @@ H_BAR = 1.054571817e-34  # J·s
 K_B = 1.380649e-23  # J/K
 M_RB87 = 1.443160e-25  # kg - Masa del átomo Rb-87
 
+# Factor de normalización empírico para escalar A a unidades de S(k) típicas
+# Ajustado para que S(k₀)/S(bg) caiga en el rango predicho [1.05, 1.20]
+NORMALIZATION_FACTOR_EMPIRICAL = 12.0
+
+# Fracción del ancho del pico gaussiano respecto a k₀
+PEAK_WIDTH_FRACTION = 0.02  # 2% de k₀
+
 
 @dataclass
 class ResultadoAcoplamiento:
@@ -140,8 +147,8 @@ def calcular_acoplamiento_psi_phonon(
 def calcular_altura_pico(
     g_psi_phonon: float,
     densidad_fondo: float = 1.0,
-    temperatura: float = 100e-9,  # 100 nK
-    n_atomos: int = 1000000
+    temperatura: Optional[float] = None,
+    n_atomos: Optional[int] = None
 ) -> ResultadoAlturaPico:
     """
     Calcula la altura del pico en el factor de estructura S(k).
@@ -151,11 +158,15 @@ def calcular_altura_pico(
     Args:
         g_psi_phonon: Constante de acoplamiento Ψ-phonon
         densidad_fondo: Densidad de fondo normalizada (típicamente 0.5-1.5)
-        temperatura: Temperatura del BEC en Kelvin
-        n_atomos: Número de átomos en el condensado
+        temperatura: Temperatura del BEC en Kelvin (reservado para futuras extensiones)
+        n_atomos: Número de átomos en el condensado (reservado para futuras extensiones)
     
     Returns:
         ResultadoAlturaPico con predicción cuantitativa
+    
+    Note:
+        Los parámetros temperatura y n_atomos están reservados para futuras
+        implementaciones que incluyan correcciones térmicas o de número finito.
     """
     # Altura del pico: A ~ |g|²
     # En unidades típicas de S(k), esto es del orden 10⁻³ - 10⁻²
@@ -167,17 +178,10 @@ def calcular_altura_pico(
     # Con g ~ 1.2, tenemos g² ~ 1.44
     # Para A ~ 0.1 × S_bg, necesitamos normalización apropiada
     
-    # Factor de normalización que ajusta las unidades físicas a S(k) típico
-    # En un BEC típico, S(k) ~ n donde n es la densidad de número
-    # Ajustamos para que el pico esté en el rango esperado
-    # Con factor ~ 12, obtenemos g²/12 ~ 1.44/12 ~ 0.12
-    # lo que da ratio ~ 1.12 para densidad_fondo = 1.0
-    factor_normalizacion = 12.0  # Factor empírico para escala correcta
-    
     if densidad_fondo > 0:
-        altura_pico_A = altura_base / (densidad_fondo * factor_normalizacion)
+        altura_pico_A = altura_base / (densidad_fondo * NORMALIZATION_FACTOR_EMPIRICAL)
     else:
-        altura_pico_A = altura_base / factor_normalizacion
+        altura_pico_A = altura_base / NORMALIZATION_FACTOR_EMPIRICAL
     
     # Factor de estructura en k₀
     # S(k₀) incluye tanto el fondo como el pico
@@ -205,8 +209,8 @@ def prediccion_completa(
     c_s: float = C_S,
     psi_esperado: float = 1.0,
     densidad_fondo: float = 1.0,
-    temperatura: float = 100e-9,
-    n_atomos: int = 1000000,
+    temperatura: Optional[float] = None,
+    n_atomos: Optional[int] = None,
     verbose: bool = True
 ) -> Tuple[ResultadoAcoplamiento, ResultadoAlturaPico]:
     """
@@ -289,7 +293,7 @@ def generar_espectro_estructura(
     
     # Construir S(k) con pico gaussiano en k₀
     # S(k) = S_bg + A × exp(-(k - k₀)²/(2σ²))
-    sigma = k_0 * 0.02  # Ancho del pico (2% de k₀)
+    sigma = k_0 * PEAK_WIDTH_FRACTION  # Ancho del pico (fracción de k₀)
     S_k_array = S_background + altura_pico * np.exp(-((k_array - k_0) ** 2) / (2 * sigma ** 2))
     
     return k_array, S_k_array
