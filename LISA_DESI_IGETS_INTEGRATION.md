@@ -63,7 +63,7 @@ V(r,t) = -GM/r [1 + α_Y e^(-r/λ̄) (1 + ε cos 2πf₀t)]
 
 con λ̄ ≈ 3.37×10⁵ m, f₀ = 141.7001 Hz.
 
-**Rango de Amplitud Testeable con SG**: 10⁻¹³ - 10⁻¹² g
+**Rango de Amplitud Testable con SG**: 10⁻¹³ - 10⁻¹² g
 
 Especificaciones de Superconducting Gravimeters (SG):
 - σ_single = 10⁻¹¹ g @ 1 Hz
@@ -105,7 +105,7 @@ cd ..
 
 # IGETS - Sensitivity Analysis
 cd igets
-python3 sg_sensitivity_analysis.py  # Verificar rango testeable
+python3 sg_sensitivity_analysis.py  # Verificar rango testable
 python3 igets_fft_analysis.py       # Análisis completo
 cd ..
 ```

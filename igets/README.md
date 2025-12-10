@@ -40,9 +40,9 @@ donde el término Yukawa oscila a frecuencia f₀.
 
 Los SGs miden variaciones en g con precisión de ~1 nm/s² (10⁻¹⁰ g₀).
 
-**Especificaciones SG para rango testeable**:
+**Especificaciones SG para rango testable**:
 - **σ_single** = 10⁻¹¹ g @ 1 Hz (nivel de ruido de muestra única)
-- **Rango de amplitud testeable**: 10⁻¹³ - 10⁻¹² g
+- **Rango de amplitud testable**: 10⁻¹³ - 10⁻¹² g
 - **SNR objetivo**: 5 para detección significativa
 
 Ver [`sg_sensitivity_analysis.py`](sg_sensitivity_analysis.py) y [`README_SG_SENSITIVITY.md`](README_SG_SENSITIVITY.md) para análisis detallado de sensibilidad.
@@ -66,7 +66,7 @@ Ver [`sg_sensitivity_analysis.py`](sg_sensitivity_analysis.py) y [`README_SG_SEN
 
 ### Análisis de Sensibilidad SG
 
-**Verificar rango de amplitud testeable**:
+**Verificar rango de amplitud testable**:
 
 ```bash
 cd igets
