@@ -36,6 +36,10 @@ from typing import Dict, Any, Tuple
 import mpmath as mp
 from scipy import signal, fft
 
+# Add scripts to path for predicciones_helpers
+sys.path.insert(0, str(Path(__file__).parent))
+from predicciones_helpers import save_json_results
+
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
@@ -599,8 +603,7 @@ def main():
     output_dir.mkdir(exist_ok=True)
     
     output_file = output_dir / "prediccion_4_gravedad.json"
-    with open(output_file, 'w') as f:
-        json.dump(results, f, indent=2)
+    save_json_results(results, output_file)
     print(f"Resultados guardados en {output_file}")
     
     # Generar gráfico

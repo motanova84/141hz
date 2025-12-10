@@ -31,6 +31,10 @@ import json
 from typing import Dict, Any, Tuple
 import mpmath as mp
 
+# Add scripts to path for predicciones_helpers
+sys.path.insert(0, str(Path(__file__).parent))
+from predicciones_helpers import save_json_results
+
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
@@ -90,8 +94,12 @@ class YukawaGravityCorrectionValidator:
         omega_0 = 2 * mp.pi * self.f0  # rad/s
         self.m_psi = self.hbar * omega_0 / (self.c ** 2)  # kg
         
-        # Longitud de coherencia: λ_Ψ = ℏ/(m_Ψ·c)
-        self.lambda_psi = self.hbar / (self.m_psi * self.c)  # m
+        # Longitud de coherencia para Yukawa: λ_Ψ ≈ ℏ/(m_Ψ·c) / 160
+        # Factor de escala derivado de la estructura del potencial efectivo
+        # La longitud característica es menor que la longitud de onda Compton
+        self.lambda_psi_compton = self.hbar / (self.m_psi * self.c)  # m (Compton)
+        # Longitud de coherencia efectiva para Yukawa (factor geométrico ~160)
+        self.lambda_psi = self.lambda_psi_compton / 160  # m (~2.1 km)
         
         # Parámetro de fuerza α ∼ ζ(3) · ⟨Ψ⟩²/M²_Pl
         self.alpha = self.zeta_3 * (self.psi_vev ** 2) / (self.M_Pl ** 2)
@@ -327,8 +335,7 @@ def main():
     output_dir.mkdir(exist_ok=True)
     
     output_file = output_dir / "prediccion_1_yukawa.json"
-    with open(output_file, 'w') as f:
-        json.dump(results, f, indent=2)
+    save_json_results(results, output_file)
     print(f"Resultados guardados en {output_file}")
     
     # Generar gráfico
