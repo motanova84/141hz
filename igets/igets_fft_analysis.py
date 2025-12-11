@@ -455,12 +455,20 @@ class IGETSGravimetryAnalysis:
             output_dir: Directorio para resultados
         
         Returns:
-            Diccionario con resultados de validación
+            Diccionario con resultados de validación. En caso de error, incluye
+            clave 'error' con mensaje descriptivo.
+        
+        Raises:
+            No lanza excepciones; devuelve dict con 'error' si hay problemas.
         """
         if not SENSIBILIDAD_DISPONIBLE:
+            error_msg = 'Módulo de sensibilidad no disponible'
+            print(f"ERROR: {error_msg}")
             return {
-                'error': 'Módulo de sensibilidad no disponible',
-                'validacion': False
+                'error': error_msg,
+                'validacion': 'error',
+                'amplitud_detectada': float(amplitud_detectada),
+                'snr_observado': float(snr_observado)
             }
         
         print("\n" + "=" * 60)
