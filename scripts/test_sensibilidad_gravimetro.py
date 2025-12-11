@@ -17,6 +17,12 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
 from sensibilidad_gravimetro import simular_salida_gravimetro, ejecutar_analisis_sensibilidad
 
+# Test constants
+EXPECTED_SNR_AT_1E12 = 12.3  # Expected SNR for amplitude 1e-12 g
+SNR_TOLERANCE = 3.0  # Tolerance for SNR comparison (accounts for stochastic variation)
+LINEAR_SCALING_TOLERANCE = 0.2  # 20% tolerance for linear scaling check
+MIN_DETECTION_RATE_AT_1E12 = 80.0  # Minimum detection rate (%) for 1e-12 g amplitude
+
 
 def test_simular_salida_gravimetro():
     """Test: Simulación de salida del gravímetro genera SNR esperado."""
@@ -33,15 +39,13 @@ def test_simular_salida_gravimetro():
     assert all(snr >= 0 for snr in snrs), "SNR no puede ser negativo"
     
     mean_snr = np.mean(snrs)
-    expected_snr = 12.3  # Valor esperado para 1e-12 g
-    tolerance = 3.0  # Tolerancia amplia por variación estocástica
     
-    assert abs(mean_snr - expected_snr) < tolerance, \
-        f"SNR medio ({mean_snr:.2f}) debe estar cerca de {expected_snr} ± {tolerance}"
+    assert abs(mean_snr - EXPECTED_SNR_AT_1E12) < SNR_TOLERANCE, \
+        f"SNR medio ({mean_snr:.2f}) debe estar cerca de {EXPECTED_SNR_AT_1E12} ± {SNR_TOLERANCE}"
     
     print(f"  Amplitud: {amplitud:.2e} g")
     print(f"  SNR medio: {mean_snr:.2f}")
-    print(f"  SNR esperado: {expected_snr:.2f}")
+    print(f"  SNR esperado: {EXPECTED_SNR_AT_1E12:.2f}")
     print("✓ Simulación de salida: OK")
 
 
@@ -61,8 +65,7 @@ def test_escalamiento_snr():
     ratio_snr = snrs_mean[1] / snrs_mean[0]
     ratio_amp = amplitudes[1] / amplitudes[0]
     
-    # Tolerancia del 20% para variación estocástica
-    assert abs(ratio_snr / ratio_amp - 1.0) < 0.2, \
+    assert abs(ratio_snr / ratio_amp - 1.0) < LINEAR_SCALING_TOLERANCE, \
         f"SNR debe escalar linealmente: ratio SNR={ratio_snr:.2f}, ratio amp={ratio_amp:.2f}"
     
     print(f"  Amplitudes: {amplitudes}")
@@ -90,8 +93,8 @@ def test_tasa_deteccion():
         "Tasa de detección debe aumentar con la amplitud"
     
     # Para 1e-12 g, debe ser alta (>80%)
-    assert tasas_deteccion[1] > 80, \
-        f"Tasa de detección para 1e-12 g debe ser >80% (actual: {tasas_deteccion[1]:.1f}%)"
+    assert tasas_deteccion[1] > MIN_DETECTION_RATE_AT_1E12, \
+        f"Tasa de detección para 1e-12 g debe ser >{MIN_DETECTION_RATE_AT_1E12}% (actual: {tasas_deteccion[1]:.1f}%)"
     
     print(f"  Amplitud {amplitudes[0]:.2e} g: {tasas_deteccion[0]:.1f}%")
     print(f"  Amplitud {amplitudes[1]:.2e} g: {tasas_deteccion[1]:.1f}%")
