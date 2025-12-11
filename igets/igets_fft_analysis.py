@@ -514,13 +514,13 @@ class IGETSGravimetryAnalysis:
         print("=" * 60)
         
         resultado = {
-            'amplitud_detectada': amplitud_detectada,
-            'snr_observado': snr_observado,
-            'snr_medio_simulado': snr_medio_simulado,
-            'snr_std_simulado': snr_std_simulado,
-            'tasa_deteccion_simulada': tasa_deteccion_simulada,
-            'z_score': z_score,
-            'consistente': consistente,
+            'amplitud_detectada': float(amplitud_detectada),
+            'snr_observado': float(snr_observado),
+            'snr_medio_simulado': float(snr_medio_simulado),
+            'snr_std_simulado': float(snr_std_simulado),
+            'tasa_deteccion_simulada': float(tasa_deteccion_simulada),
+            'z_score': float(z_score),
+            'consistente': bool(consistente),
             'validacion': 'exitosa' if consistente else 'advertencia'
         }
         
