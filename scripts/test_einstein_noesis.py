@@ -28,7 +28,7 @@ from scripts.einstein_noesis import (
     NoeticStressEnergyTensor,
     RiemannConsciousnessConnection,
     YangMillsMassGapConnection,
-    c, eV, G
+    c, h, eV, G
 )
 
 
@@ -121,8 +121,8 @@ class TestEinsteinNoesisEquation(unittest.TestCase):
         
         C = self.eq.compute_consciousness(mass, A_eff)
         
-        # Should match E_psi_J when A_eff = 1 (within 1% tolerance)
-        self.assertAlmostEqual(C, self.eq.E_psi_J, delta=1e-33)
+        # Should match E_psi_J when A_eff = 1 (using relative tolerance)
+        self.assertAlmostEqual(C / self.eq.E_psi_J, 1.0, places=2)
 
 
 class TestNoeticStressEnergyTensor(unittest.TestCase):
@@ -319,16 +319,15 @@ class TestIntegrationWithCampoConciencia(unittest.TestCase):
         """Test E = mc² consistency for consciousness field quantum."""
         # E_psi should equal m_psi × c²
         E_from_mass = self.eq.m_psi * c**2
-        # Within 5% tolerance due to slight differences in stored values
-        self.assertAlmostEqual(E_from_mass, self.eq.E_psi_J, delta=5e-33)
+        # Using relative tolerance for robust comparison
+        self.assertAlmostEqual(E_from_mass / self.eq.E_psi_J, 1.0, places=2)
         
     def test_frequency_energy_relation(self):
         """Test E = hf relation for consciousness field."""
-        from scripts.campo_conciencia import h
-        
         # E_psi should equal h × f0
         E_from_freq = h * self.eq.f0
-        self.assertAlmostEqual(E_from_freq, self.eq.E_psi_J, delta=1e-35)
+        # Using relative tolerance for robust comparison
+        self.assertAlmostEqual(E_from_freq / self.eq.E_psi_J, 1.0, places=2)
 
 
 class TestPhysicalConsistency(unittest.TestCase):

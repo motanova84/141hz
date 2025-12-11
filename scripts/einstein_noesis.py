@@ -49,6 +49,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # ============================================================================
 
 c = 299792458.0           # m/s (speed of light, exact)
+h = 6.62607015e-34        # J·s (Planck constant, exact)
 h_bar = 1.054571817e-34   # J·s (reduced Planck constant)
 G = 6.67430e-11           # m³/(kg·s²) (gravitational constant)
 eV = 1.602176634e-19      # J (electronvolt, exact)
@@ -335,8 +336,9 @@ class RiemannConsciousnessConnection:
         np.ndarray
             Array of discrete A_eff values allowed by spectral structure
         """
-        # First few imaginary parts of non-trivial zeros (from literature)
+        # First few imaginary parts of non-trivial zeros (6 decimal places, from literature)
         # ζ(1/2 + it) = 0 for these t values
+        # Source: Odlyzko tables, verified to high precision
         zeros_Im = np.array([
             14.134725, 21.022040, 25.010858, 30.424876, 32.935062,
             37.586178, 40.918719, 43.327073, 48.005151, 49.773832
