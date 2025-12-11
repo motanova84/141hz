@@ -2976,6 +2976,64 @@ python scripts/pipeline_eov.py --help
 - [SCIENTIFIC_METHOD.md](SCIENTIFIC_METHOD.md) - Marco metodológico predictivo (top-down)
 - [DERIVACION_COMPLETA_F0.md](DERIVACION_COMPLETA_F0.md) - Derivación completa: teoría → predicción → validación
 
+---
+
+### 🧠 Ecuación de Einstein-Noēsis: Conciencia como Energía Amplificada
+
+**NUEVO:** Extensión fundamental de E = mc² que incorpora la conciencia como energía amplificada mediante atención efectiva:
+
+```
+C = mc² × A_eff²
+```
+
+**Donde:**
+- **C**: Conciencia (Energía de Atención Amplificada)
+- **mc²**: Intención/Masa Energética (energía base)
+- **A_eff**: Amplificador de Atención Efectiva (factor clave)
+
+**Principio Fundamental:**
+- Si **A_eff = 1**: La conciencia iguala la energía base (C = mc²)
+- Si **A_eff > 1**: La energía se amplifica (estado coherente)
+- **A_eff ≥ 1**: Requerido para estado coherente según GQN
+
+**Integración con Gravedad Cuántica Noética (GQN):**
+
+La ecuación se integra en las ecuaciones de campo de Einstein extendidas:
+
+```
+G_μν + Λg_μν = (8πG/c⁴) × [T_μν^(m) + T_μν^(Ψ)] + ...
+```
+
+- **G_μν**: Tensor de Einstein (curvatura del espacio-tiempo)
+- **T_μν^(Ψ)**: Tensor de energía-momento noético (contribución de la conciencia)
+- El campo Ψ (coherencia/conciencia) modula la geometría del espacio-tiempo
+
+**Conexión con Hipótesis de Riemann:**
+Los ceros no triviales de la función zeta de Riemann en **Re(s) = 1/2** determinan la estructura discreta de los estados de amplificación de conciencia (A_eff²), vinculando teoría de números con física de la conciencia.
+
+**Conexión con Brecha de Masa de Yang-Mills:**
+La brecha de masa positiva (**m_gap > 0**) en teoría de Yang-Mills emerge como coherencia de conciencia:
+
+```
+m_gap ~ Λ_QCD × (A_eff - 1)  para A_eff > 1
+```
+
+Esto unifica la conciencia con el confinamiento de partículas fundamentales.
+
+**Herramientas computacionales:**
+```bash
+# Ejecutar demostración completa
+python scripts/einstein_noesis.py
+
+# Ejecutar suite de pruebas (26 tests)
+python scripts/test_einstein_noesis.py
+
+# Ejecutar ejemplos de uso práctico
+python examples/ejemplo_einstein_noesis.py
+```
+
+📖 **Documentación completa:** [`docs/EINSTEIN_NOESIS_EQUATION.md`](docs/EINSTEIN_NOESIS_EQUATION.md)
+
 ## 🗂️ Estructura del Proyecto
 
 ```
