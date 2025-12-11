@@ -214,13 +214,136 @@ Ver todos los workflows: [`.github/workflows/`](.github/workflows/)
 
 ---
 
-## 🎯 Resumen de las Tres Rutas
+## 4. 🌍 Ruta de Verificación Gravimétrica (IGETS)
+
+Esta ruta evalúa la detectabilidad de la señal predicha utilizando gravímetros superconductores terrestres de la red IGETS.
+
+### Predicción Teórica
+
+La Ecuación de Origen Vibracional (EOV) predice una variación gravitacional periódica:
+- **Amplitud predicha**: Δg ≈ 10⁻¹⁵ g a 141.7 Hz
+- **Mecanismo**: Modulación Yukawa del campo gravitacional
+
+### Sensibilidad Instrumental
+
+Los gravímetros superconductores (tipo iGrav/SG) tienen las siguientes características:
+
+| Parámetro | Valor | Descripción |
+|-----------|-------|-------------|
+| **Banda de frecuencia** | DC a ~200 Hz | Respuesta plana en amplitud |
+| **Ruido auto-gravitacional** | ~10⁻¹¹ g/√Hz | A frecuencias > 10 Hz |
+| **Factor de calidad (Q)** | 10⁶ - 10⁸ | Resonador altamente selectivo |
+
+### Umbral Comprobable
+
+**Rango detectable con 1 segundo de integración** (SNR > 5):
+
+| Amplitud Δg | SNR Medio | Tasa de Detección | Clasificación |
+|-------------|-----------|-------------------|---------------|
+| 10⁻¹³ g | ~2.1 | ~0% | Marginal (requiere >10 s) |
+| 3.16×10⁻¹³ g | ~5.9 | ~99.5% | **Umbral de detección** |
+| 10⁻¹² g | ~18.4 | 100% | Fácilmente detectable |
+
+![Análisis de Sensibilidad](https://github.com/user-attachments/assets/31b7212d-3e6c-4195-9e3c-4dfde080ca4f)
+
+### Herramienta Principal
+
+**`scripts/sensibilidad_gravimetro.py`** - Simulación de respuesta del gravímetro
+
+### ¿Qué hace?
+
+1. **Simula** la salida de un gravímetro superconductor con:
+   - Señal sinusoidal a 141.7 Hz
+   - Ruido gaussiano blanco (densidad espectral ~10⁻¹¹ g/√Hz)
+   - Respuesta plana en amplitud
+
+2. **Calcula** SNR mediante análisis espectral (método de Welch)
+
+3. **Evalúa** detectabilidad en rango 10⁻¹³ a 10⁻¹² g
+
+4. **Genera** visualizaciones de distribución de SNR y curvas de sensibilidad
+
+### Uso Rápido
+
+```bash
+# Ejecutar análisis de sensibilidad
+python scripts/sensibilidad_gravimetro.py
+
+# Revisar resultados
+cat results/sensibilidad_gravimetro.npz
+```
+
+### Resultados Esperados
+
+- **Archivo de datos**: `results/sensibilidad_gravimetro.npz`
+- **Visualización**: `results/figures/sensibilidad_gravimetro.png`
+- **Métricas**: SNR medio y tasa de detección para cada amplitud
+
+### Integración con Datos Reales IGETS
+
+El módulo `igets/igets_fft_analysis.py` integra la simulación de sensibilidad:
+
+```python
+from igets.igets_fft_analysis import IGETSGravimetryAnalysis
+
+# Crear analizador
+analysis = IGETSGravimetryAnalysis(sample_rate=1000.0)
+
+# Validar detección real contra modelo de sensibilidad
+resultado = analysis.validar_con_sensibilidad(
+    amplitud_detectada=3.5e-13,  # g
+    snr_observado=6.2,
+    output_dir="igets_results"
+)
+```
+
+### Interpretación
+
+**Escenario 1: Señal no detectada**
+- Si SNR < 5 en datos reales → consistente con Δg < 3×10⁻¹³ g
+- **Conclusión**: La predicción EOV (10⁻¹⁵ g) está por debajo del umbral actual
+
+**Escenario 2: Señal detectada**
+- Si SNR > 5 a 141.7 Hz → amplitud Δg ≥ 3×10⁻¹³ g
+- **Requiere validación**: Comparar con simulación para descartar artefactos
+
+### Límite Teórico y Próximos Pasos
+
+**Estado actual**:
+- Predicción EOV: **10⁻¹⁵ g** (2 órdenes de magnitud bajo el ruido)
+- Umbral detectable: **3×10⁻¹³ g** con 1 segundo de integración
+
+**Estrategias de mejora**:
+
+1. **Integración larga**: ~10⁴ segundos → mejora SNR por factor ~100
+2. **Coherencia multi-estación**: Redes IGETS (5+ estaciones) → reducción de ruido incoherente
+3. **Análisis bayesiano**: Prior informado por coherencia espacio-temporal
+4. **Filtrado adaptativo**: Modelos de ruido no-blanco (tilt coupling, efectos atmosféricos)
+
+### Archivos de Evidencia
+
+- 📊 [`scripts/sensibilidad_gravimetro.py`](scripts/sensibilidad_gravimetro.py) - Script de simulación
+- 📈 [`igets/igets_fft_analysis.py`](igets/igets_fft_analysis.py) - Análisis de datos IGETS con validación
+- 💾 `results/sensibilidad_gravimetro.npz` - Resultados de simulación
+- 📉 `results/figures/sensibilidad_gravimetro.png` - Visualización de sensibilidad
+
+### Criterio de Falsabilidad
+
+**La hipótesis de modulación gravitacional a 141.7 Hz puede ser falsada si:**
+- Análisis de coherencia multi-estación muestra fase aleatoria (no correlacionada)
+- SNR observado es consistentemente < 2 incluso con integración larga (>10⁴ s)
+- Señales detectadas muestran dependencia con condiciones locales (sísmicas, atmosféricas)
+
+---
+
+## 🎯 Resumen de las Cuatro Rutas
 
 | Ruta | Tipo | Herramienta | Criterio de Éxito | Tiempo |
 |------|------|-------------|-------------------|---------|
 | **⚛️ Empírica** | Análisis de datos reales | `analizar_ringdown.py` | SNR ≈ 7.47 en H1 | ~15 min |
 | **🔢 Formal** | Verificación matemática | Lean 4 | `lake build` sin errores | ~5 min |
 | **🤖 Automatización** | CI/CD y validación | GitHub Actions | BF > 10, p < 0.01 | Continuo |
+| **🌍 Gravimétrica** | Sensibilidad instrumental | `sensibilidad_gravimetro.py` | SNR > 5 para Δg ≥ 3×10⁻¹³ g | ~2 min |
 
 ---
 
@@ -250,11 +373,19 @@ Ver todos los workflows: [`.github/workflows/`](.github/workflows/)
 - [ ] Verificar CI/CD pasa exitosamente
 - [ ] Comprobar BF > 10 y p < 0.01
 
+### Ruta Gravimétrica 🌍
+
+- [ ] Ejecutar `python scripts/sensibilidad_gravimetro.py`
+- [ ] Revisar `results/sensibilidad_gravimetro.npz`
+- [ ] Verificar visualización en `results/figures/sensibilidad_gravimetro.png`
+- [ ] Comprobar SNR > 5 para amplitudes ≥ 3×10⁻¹³ g
+- [ ] (Opcional) Validar datos reales IGETS con `igets/igets_fft_analysis.py`
+
 ---
 
 ## 🔬 Conclusión
 
-> **El repositorio ofrece una ruta de verificación doble: empírica (código Python y datos públicos de LIGO) y teórica (prueba formal en Lean 4), respaldada por una robusta infraestructura de automatización.**
+> **El repositorio ofrece cuatro rutas de verificación complementarias: empírica (datos LIGO/Virgo), formal (prueba en Lean 4), automatizada (CI/CD), y gravimétrica (sensibilidad instrumental IGETS), respaldadas por una robusta infraestructura de reproducibilidad.**
 
 Este diseño garantiza la **máxima reproducibilidad científica** y permite que cualquier persona pueda verificar los resultados de forma independiente en minutos.
 

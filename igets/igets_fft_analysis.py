@@ -17,6 +17,10 @@ Acciones:
 Resultado esperado:
 Una modulación coherente global confirmaría un acoplo gravitacional oscilante
 del campo Ψ; su ausencia falsaría la hipótesis de coherencia gravitatoria.
+
+Integración con análisis de sensibilidad:
+- Importa simular_salida_gravimetro de scripts/sensibilidad_gravimetro.py
+- Permite validar datos reales de IGETS contra modelos simulados
 """
 
 import numpy as np
@@ -27,6 +31,18 @@ import matplotlib.pyplot as plt
 from typing import Dict, List, Tuple, Optional
 import json
 from pathlib import Path
+import sys
+import os
+
+# Añadir directorio scripts al path para importar funciones de sensibilidad
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
+try:
+    from sensibilidad_gravimetro import simular_salida_gravimetro
+    SENSIBILIDAD_DISPONIBLE = True
+except ImportError:
+    SENSIBILIDAD_DISPONIBLE = False
+    print("Advertencia: No se pudo importar simular_salida_gravimetro")
+    print("El análisis de sensibilidad no estará disponible.")
 
 
 # Constantes del modelo GQN
@@ -421,6 +437,104 @@ class IGETSGravimetryAnalysis:
             print(f"\n📁 Resultados guardados en: {results_file}")
         
         return results
+    
+    def validar_con_sensibilidad(self, 
+                                amplitud_detectada: float,
+                                snr_observado: float,
+                                output_dir: str = "igets_results") -> Dict[str, any]:
+        """
+        Valida datos reales de IGETS contra el modelo de sensibilidad del gravímetro.
+        
+        Esta función compara las detecciones reales con las predicciones del modelo
+        de sensibilidad para determinar si son consistentes con las capacidades
+        instrumentales esperadas.
+        
+        Args:
+            amplitud_detectada: Amplitud de variación gravitacional detectada [g]
+            snr_observado: SNR observado en los datos reales
+            output_dir: Directorio para resultados
+        
+        Returns:
+            Diccionario con resultados de validación
+        """
+        if not SENSIBILIDAD_DISPONIBLE:
+            return {
+                'error': 'Módulo de sensibilidad no disponible',
+                'validacion': False
+            }
+        
+        print("\n" + "=" * 60)
+        print("VALIDACIÓN CON MODELO DE SENSIBILIDAD")
+        print("=" * 60)
+        print(f"Amplitud detectada: {amplitud_detectada:.2e} g")
+        print(f"SNR observado: {snr_observado:.2f}")
+        print()
+        
+        # Simular SNR esperado para esta amplitud
+        print(f"Simulando respuesta del gravímetro para Δg = {amplitud_detectada:.2e} g...")
+        snrs_simulados = simular_salida_gravimetro(
+            amplitud_detectada, 
+            num_realizaciones=1000,
+            f0=F0
+        )
+        
+        snr_medio_simulado = np.mean(snrs_simulados)
+        snr_std_simulado = np.std(snrs_simulados)
+        tasa_deteccion_simulada = np.mean(snrs_simulados > 5) * 100
+        
+        # Calcular z-score (desviación del SNR observado respecto al esperado)
+        z_score = (snr_observado - snr_medio_simulado) / snr_std_simulado if snr_std_simulado > 0 else 0
+        
+        # Validación: ¿el SNR observado está dentro del rango esperado?
+        # Usamos 3 sigma como criterio (99.7% de probabilidad)
+        consistente = abs(z_score) < 3.0
+        
+        print(f"\nRESULTADOS DE SIMULACIÓN:")
+        print(f"  SNR medio simulado: {snr_medio_simulado:.2f} ± {snr_std_simulado:.2f}")
+        print(f"  Tasa de detección: {tasa_deteccion_simulada:.1f}%")
+        print(f"\nCOMPARACIÓN:")
+        print(f"  SNR observado: {snr_observado:.2f}")
+        print(f"  Z-score: {z_score:.2f}")
+        print(f"  Consistente (|z| < 3): {'✓ SÍ' if consistente else '✗ NO'}")
+        
+        if consistente:
+            print(f"\n✓ VALIDACIÓN EXITOSA")
+            print(f"  La detección es consistente con la sensibilidad instrumental esperada.")
+            print(f"  El SNR observado está dentro del rango predicho por el modelo.")
+        else:
+            if z_score > 3:
+                print(f"\n⚠ ADVERTENCIA: SNR ANORMALMENTE ALTO")
+                print(f"  El SNR observado es {z_score:.1f}σ mayor que el esperado.")
+                print(f"  Posibles causas: señal más fuerte, ruido menor, o artefacto.")
+            else:
+                print(f"\n⚠ ADVERTENCIA: SNR ANORMALMENTE BAJO")
+                print(f"  El SNR observado es {abs(z_score):.1f}σ menor que el esperado.")
+                print(f"  Posibles causas: ruido adicional, interferencia, o problema instrumental.")
+        
+        print("=" * 60)
+        
+        resultado = {
+            'amplitud_detectada': amplitud_detectada,
+            'snr_observado': snr_observado,
+            'snr_medio_simulado': snr_medio_simulado,
+            'snr_std_simulado': snr_std_simulado,
+            'tasa_deteccion_simulada': tasa_deteccion_simulada,
+            'z_score': z_score,
+            'consistente': consistente,
+            'validacion': 'exitosa' if consistente else 'advertencia'
+        }
+        
+        # Guardar resultados
+        output_path = Path(output_dir)
+        output_path.mkdir(exist_ok=True)
+        
+        results_file = output_path / "validacion_sensibilidad.json"
+        with open(results_file, 'w') as f:
+            json.dump(resultado, f, indent=2)
+        
+        print(f"\n📁 Resultados de validación guardados en: {results_file}")
+        
+        return resultado
     
     def plot_results(self, results: Dict[str, any], output_dir: str = "igets_results"):
         """
