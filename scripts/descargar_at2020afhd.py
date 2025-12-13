@@ -17,10 +17,10 @@ import argparse
 import numpy as np
 import pandas as pd
 from pathlib import Path
-from astropy.time import Time
-from astropy.io import fits
-from astropy.utils.data import download_file
-import warnings
+# Note: The following imports are for future use with real astronomical data
+# from astropy.time import Time
+# from astropy.io import fits
+# from astropy.utils.data import download_file
 
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

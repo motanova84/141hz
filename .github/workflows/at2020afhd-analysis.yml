@@ -37,7 +37,7 @@ jobs:
           python-version: '3.11'
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-tde-${{ hashFiles('requirements.txt') }}
@@ -47,7 +47,7 @@ jobs:
       
       - name: Check existing data cache
         id: cache-check
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         if: github.event.inputs.download_data != 'true'
         with:
           path: data/tde/at2020afhd/
@@ -116,7 +116,7 @@ jobs:
           python-version: '3.11'
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-tde-${{ hashFiles('requirements.txt') }}

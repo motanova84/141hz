@@ -12,6 +12,7 @@ import json
 import unittest
 from pathlib import Path
 import numpy as np
+import pandas as pd
 
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -60,7 +61,6 @@ class TestAT2020afhdDownload(unittest.TestCase):
         if not self.xray_file.exists():
             self.skipTest("X-ray data not downloaded yet")
         
-        import pandas as pd
         df = pd.read_csv(self.xray_file)
         
         # Check required columns
@@ -78,7 +78,6 @@ class TestAT2020afhdDownload(unittest.TestCase):
         if not self.radio_file.exists():
             self.skipTest("Radio data not downloaded yet")
         
-        import pandas as pd
         df = pd.read_csv(self.radio_file)
         
         # Check required columns
