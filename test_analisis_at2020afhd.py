@@ -28,16 +28,26 @@ except ImportError:
             raise AssertionError(msg)
     pytest = MockPytest()
 
-# Añadir directorio scripts al path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'scripts'))
-
-from analisis_at2020afhd_tde import (
-    AnalisisAT2020afhd,
-    F0,
-    PHI,
-    PERIODO_PRECESION_DIAS,
-    MASA_BH_ESTIMADA,
-)
+# Importar módulo desde scripts
+# Nota: En producción, esto debería ser un paquete instalable
+try:
+    from scripts.analisis_at2020afhd_tde import (
+        AnalisisAT2020afhd,
+        F0,
+        PHI,
+        PERIODO_PRECESION_DIAS,
+        MASA_BH_ESTIMADA,
+    )
+except ImportError:
+    # Fallback: añadir directorio scripts al path solo si la importación falla
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'scripts'))
+    from analisis_at2020afhd_tde import (
+        AnalisisAT2020afhd,
+        F0,
+        PHI,
+        PERIODO_PRECESION_DIAS,
+        MASA_BH_ESTIMADA,
+    )
 
 
 class TestAnalisisAT2020afhd:
@@ -340,7 +350,16 @@ class TestIntegracionQCAL:
 def test_importacion_modulo():
     """Test de que el módulo se puede importar correctamente"""
     try:
-        from analisis_at2020afhd_tde import AnalisisAT2020afhd
+        # Intentar importación desde scripts
+        try:
+            from scripts.analisis_at2020afhd_tde import AnalisisAT2020afhd
+        except ImportError:
+            # Fallback para importación directa
+            import sys
+            import os
+            sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'scripts'))
+            from analisis_at2020afhd_tde import AnalisisAT2020afhd
+        
         assert AnalisisAT2020afhd is not None
     except ImportError as e:
         pytest.fail(f"No se pudo importar el módulo: {e}")
