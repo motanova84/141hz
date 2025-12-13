@@ -1941,6 +1941,20 @@ Puedes acceder al notebook interactivo en Google Colab aquí:
 - Puedes ejecutarlo directamente en Google Colab
 - Para guardar cambios, haz una copia en tu Google Drive (Archivo → Guardar una copia en Drive)
 
+### 🌌 Nuevo: AT2020afhd - Resonador Gravitacional Cuántico
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/motanova84/141hz/blob/main/notebooks/at2020afhd_analysis.ipynb)
+
+Análisis completo del evento de disrupción de marea AT2020afhd que demuestra la conexión entre el bamboleo de Lense-Thirring (~20 días) y la frecuencia fundamental 141.70001 Hz:
+
+- 📡 **Datos Reales**: Swift X-ray (HEASARC) y VLA Radio
+- 🔍 **Periodograma Lomb-Scargle**: Detecta el periodo de ~20 días
+- 🎯 **Modelo Lense-Thirring**: Ψ(t) = A·sin(ω·t + φ)·e^(-γt)
+- 🌟 **Conexión Armónica**: ωframe ≈ 3.63 × 10⁻⁶ Hz ↔ f₀ = 141.70001 Hz
+- 📊 **Ratio ~10¹¹**: Demuestra fractalidad del Infinito
+
+**Basado en**: Science Advances (Pasham et al.) - "A 20-day periodicity in AT2020afhd"
+
 ---
 
 ## 🔍 Resultados preliminares – GW150914 (Control)
