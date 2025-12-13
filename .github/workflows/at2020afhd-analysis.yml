@@ -26,6 +26,8 @@ jobs:
   download-tde-data:
     name: Download AT2020afhd Data
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -105,6 +107,8 @@ jobs:
     name: Analyze Lense-Thirring Precession
     needs: download-tde-data
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -188,6 +192,8 @@ jobs:
     name: Compare with QCAL Framework
     needs: analyze-precession
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -264,6 +270,8 @@ jobs:
     name: Analysis Summary
     needs: [download-tde-data, analyze-precession, compare-with-qcal]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: always()
     
     steps:
