@@ -25,6 +25,11 @@ import sys
 
 # Constantes fundamentales del sistema QCAL
 F0_QCAL = 141.7001  # Hz - Frecuencia fundamental del campo QCAL
+SECONDS_PER_DAY = 86400.0  # Segundos en un día
+
+# Tolerancias para verificación
+TOLERANCE_OCTAVES = 0.1  # Tolerancia en octavas para verificación
+TOLERANCE_RATIO = 0.01  # Tolerancia relativa para ratio armónico (1%)
 
 
 def calcular_frecuencia_periodo(periodo_dias: float) -> float:
@@ -37,8 +42,7 @@ def calcular_frecuencia_periodo(periodo_dias: float) -> float:
     Returns:
         Frecuencia en Hz
     """
-    segundos_por_dia = 86400.0
-    periodo_segundos = periodo_dias * segundos_por_dia
+    periodo_segundos = periodo_dias * SECONDS_PER_DAY
     frecuencia_hz = 1.0 / periodo_segundos
     return frecuencia_hz
 
@@ -91,8 +95,8 @@ def verificar_cascada_fractal(periodo_dias: float,
     
     # Verificaciones
     periodo_ok = bool(tolerancia_periodo[0] <= periodo_dias <= tolerancia_periodo[1])
-    octavas_ok = bool(abs(relacion['octavas'] - octavas_esperadas) < 0.1)
-    ratio_ok = bool(abs((relacion['ratio'] - ratio_esperado) / ratio_esperado) < 0.01)
+    octavas_ok = bool(abs(relacion['octavas'] - octavas_esperadas) < TOLERANCE_OCTAVES)
+    ratio_ok = bool(abs((relacion['ratio'] - ratio_esperado) / ratio_esperado) < TOLERANCE_RATIO)
     
     # Calcular diferencias
     diff_periodo = 0.0 if periodo_dias == 19.6 else abs(periodo_dias - 19.6)
