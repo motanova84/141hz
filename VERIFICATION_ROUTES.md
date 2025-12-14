@@ -250,6 +250,145 @@ Ver todos los workflows: [`.github/workflows/`](.github/workflows/)
 - [ ] Verificar CI/CD pasa exitosamente
 - [ ] Comprobar BF > 10 y p < 0.01
 
+### Ruta Gravimétrica 🌍
+
+- [ ] Ejecutar `python scripts/sensibilidad_gravimetro.py`
+- [ ] Verificar SNR ≈ 12.3 para Δg = 10⁻¹² g
+- [ ] Comprobar escalamiento lineal de SNR con amplitud
+- [ ] Revisar gráficos en `results/figures/sensibilidad_gravimetro.png`
+- [ ] Validar integración con IGETS: `python igets/igets_fft_analysis.py`
+
+---
+
+## 4. 🌍 Ruta de Verificación Gravimétrica (IGETS)
+
+Esta ruta proporciona una validación experimental independiente mediante el análisis de sensibilidad de gravímetros superconductores en la banda de 141.7 Hz.
+
+### Herramienta Principal
+
+**`scripts/sensibilidad_gravimetro.py`** - Simulación de sensibilidad gravimétrica
+
+### ¿Qué hace?
+
+Simula la respuesta de gravímetros superconductores (iGrav/SG típicos) para determinar el umbral de detección de señales gravitacionales en 141.7 Hz:
+
+1. **Parámetros del Sistema**: Configura gravímetro con fs=1000 Hz, ruido auto-gravitacional de 1×10⁻¹¹ g/√Hz
+2. **Simulación Monte Carlo**: Genera 1000 realizaciones para cada amplitud gravitacional
+3. **Análisis SNR**: Calcula relación señal-ruido usando procesamiento FFT con Welch
+4. **Estadísticas de Detección**: Determina tasa de detección para umbral SNR > 5
+
+### Predicción EOV vs. Sensibilidad Instrumental
+
+| Amplitud Δg (g) | SNR Medio | Tasa de Detección (%) | Interpretación |
+|-----------------|-----------|------------------------|----------------|
+| 1.0 × 10⁻¹³    | 1.23      | ~12%                   | Detección marginal, requiere integración larga |
+| 1.78 × 10⁻¹³   | 2.19      | ~29%                   | Detección poco confiable |
+| 3.16 × 10⁻¹³   | 3.89      | ~57%                   | Detección moderada |
+| 5.62 × 10⁻¹³   | 6.92      | ~84%                   | Detección confiable |
+| 1.0 × 10⁻¹²    | 12.30     | ~100%                  | Detección consistente |
+| **EOV: 10⁻¹⁵ g** | **0.012** | **0%**                 | **Requiere mejoras instrumentales** |
+
+### Criterio de Éxito
+
+- **SNR > 5**: Umbral de detección confiable (estadísticamente significativo)
+- **Tasa > 80%**: Detección consistente en múltiples realizaciones
+- **Escalamiento lineal**: SNR debe escalar linealmente con la amplitud
+
+### Uso Rápido
+
+```bash
+# Ejecutar análisis de sensibilidad completo
+python scripts/sensibilidad_gravimetro.py
+
+# Ver resultados
+cat results/sensibilidad_gravimetro.json
+open results/figures/sensibilidad_gravimetro.png
+```
+
+### Integración con IGETS
+
+El análisis se integra con el sistema IGETS mediante:
+
+```python
+# Importar función de simulación
+from scripts.sensibilidad_gravimetro import simular_salida_gravimetro
+
+# Validar datos reales de IGETS en 141.7 Hz
+snr_samples = simular_salida_gravimetro(amplitud_medida, num_realizaciones=1000)
+tasa_deteccion = np.mean(snr_samples > 5) * 100
+```
+
+### Archivos Generados
+
+- 📊 `results/sensibilidad_gravimetro.npz` - Resultados numéricos (NumPy)
+- 📄 `results/sensibilidad_gravimetro.json` - Resultados legibles (JSON)
+- 📈 `results/figures/sensibilidad_gravimetro.png` - Visualización completa
+
+### Validación en IGETS
+
+Para validar con datos reales de la red IGETS:
+
+```bash
+# Ejecutar análisis IGETS con validación de sensibilidad
+python igets/igets_fft_analysis.py
+```
+
+### Conclusión
+
+**Límite actual**: Los gravímetros superconductores pueden detectar señales ≥ 10⁻¹² g con alta confiabilidad.
+
+**Predicción EOV**: 10⁻¹⁵ g está 1000× por debajo del límite actual.
+
+**Implicación**: Se requiere:
+- Integración coherente larga (~10⁴ segundos)
+- Redes multi-estación (IGETS) con análisis de coherencia
+- Mejoras instrumentales (criogenia avanzada, aislamiento sísmico)
+
+### Documentación Adicional
+
+- 📖 [igets/igets_fft_analysis.py](igets/igets_fft_analysis.py) - Análisis IGETS completo
+- 🔬 [scripts/analizar_igets_gravimetro.py](scripts/analizar_igets_gravimetro.py) - Procesamiento de datos reales
+- 📊 [scripts/test_analizar_igets_gravimetro.py](scripts/test_analizar_igets_gravimetro.py) - Tests de validación
+
+---
+
+## 🎯 Resumen de las Cuatro Rutas
+
+| Ruta | Tipo | Herramienta | Criterio de Éxito | Tiempo |
+|------|------|-------------|-------------------|---------|
+| **⚛️ Empírica** | Análisis de datos reales | `analizar_ringdown.py` | SNR ≈ 7.47 en H1 | ~15 min |
+| **🔢 Formal** | Verificación matemática | Lean 4 | `lake build` sin errores | ~5 min |
+| **🤖 Automatización** | CI/CD y validación | GitHub Actions | BF > 10, p < 0.01 | Continuo |
+| **🌍 Gravimétrica** | Sensibilidad instrumental | `sensibilidad_gravimetro.py` | SNR @ 10⁻¹² g > 12 | ~2 min |
+
+---
+
+## 📋 Lista de Verificación Completa
+
+### Ruta Empírica ⚛️
+
+- [ ] Clonar repositorio
+- [ ] Ejecutar `make setup`
+- [ ] Ejecutar `make analyze`
+- [ ] Verificar SNR ≈ 7.47 en `multi_event_final.json`
+- [ ] Revisar gráficos en `results/figures/`
+
+### Ruta Formal 🔢
+
+- [ ] Instalar Lean 4 (ver [lean-lang.org](https://lean-lang.org))
+- [ ] Navegar a `formalization/lean/`
+- [ ] Ejecutar `lake build`
+- [ ] Verificar compilación exitosa
+- [ ] Ejecutar `lake exe f0derivation`
+
+### Ruta Automatización 🤖
+
+- [ ] Verificar workflows en GitHub Actions
+- [ ] Ejecutar `python demo_verificador.py`
+- [ ] Revisar badges en README.md
+- [ ] Verificar CI/CD pasa exitosamente
+- [ ] Comprobar BF > 10 y p < 0.01
+
 ---
 
 ## 🔬 Conclusión
