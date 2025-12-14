@@ -34,7 +34,7 @@ from datetime import datetime, timezone
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-from scipy import stats
+from scipy.signal import lombscargle
 
 # High precision calculations
 try:
@@ -66,32 +66,32 @@ def calculate_harmonic_relationship(precision=100):
     """
     Calculate the exact harmonic relationship between f₀ and the observed
     frame-dragging frequency in AT2020afhd.
-    
+
     Args:
         precision: Decimal places for mpmath calculations
-        
+
     Returns:
         dict: Harmonic relationship parameters
     """
     mp.dps = precision
-    
+
     # Convert period to frequency
     period_seconds = PERIOD_DAYS * SECONDS_PER_DAY
     f_obs = 1.0 / period_seconds  # Hz
-    
+
     # Calculate ratio
     ratio = F0_HZ / f_obs
-    
+
     # Calculate octaves: log₂(ratio)
     octaves = mp.log(ratio, 2)
-    
+
     # Calculate decades: log₁₀(ratio)
     decades = mp.log10(ratio)
-    
+
     # Angular frequency
     omega = 2 * mp.pi / period_seconds  # rad/s
     omega_per_day = 2 * mp.pi / PERIOD_DAYS  # rad/day
-    
+
     return {
         'f0_hz': float(F0_HZ),
         'period_days': float(PERIOD_DAYS),
@@ -110,26 +110,27 @@ def calculate_harmonic_relationship(precision=100):
 def verify_harmonic_precision(harmonic_data):
     """
     Verify that the harmonic relationship is exact within numerical precision.
-    
+
     Args:
         harmonic_data: Dictionary from calculate_harmonic_relationship
-        
+
     Returns:
         dict: Verification results
     """
-    # Expected values from problem statement
-    expected_ratio = 2.405e8
-    expected_octaves = 27.84
-    expected_decades = 8.38
-    
+    # Expected values from Wang et al. (2025) problem statement analysis
+    # These are the theoretical predictions from NOĒSIS framework
+    expected_ratio = 2.405e8      # f₀/f_obs ratio (2.405 × 10⁸)
+    expected_octaves = 27.84      # log₂(ratio) in octaves
+    expected_decades = 8.38       # log₁₀(ratio) in decades
+
     # Calculate relative errors
     ratio_error = abs(harmonic_data['ratio'] - expected_ratio) / expected_ratio
     octaves_error = abs(harmonic_data['octaves'] - expected_octaves) / expected_octaves
     decades_error = abs(harmonic_data['decades'] - expected_decades) / expected_decades
-    
+
     # Check if within acceptable tolerance (0.5%)
     tolerance = 0.005
-    
+
     return {
         'ratio_match': ratio_error < tolerance,
         'ratio_error_percent': ratio_error * 100,
@@ -152,16 +153,16 @@ def verify_harmonic_precision(harmonic_data):
 def lense_thirring_model(t, A, omega, phi, gamma, C):
     """
     Lense-Thirring precession model with exponential decay.
-    
+
     Ψ(t) = A·sin(ω·t + φ)·exp(-γ·t) + C
-    
+
     This models the frame-dragging induced precession with:
     - A: Amplitude (related to A²ₑff - directed intensity)
     - ω: Angular frequency (2π/P)
     - φ: Phase offset
     - γ: Decay rate (TDE evolution)
     - C: Baseline offset
-    
+
     Args:
         t: Time array [days]
         A: Amplitude
@@ -169,7 +170,7 @@ def lense_thirring_model(t, A, omega, phi, gamma, C):
         phi: Phase [radians]
         gamma: Decay rate [1/day]
         C: Baseline
-        
+
     Returns:
         np.ndarray: Model values
     """
@@ -179,60 +180,60 @@ def lense_thirring_model(t, A, omega, phi, gamma, C):
 def generate_synthetic_lightcurve(harmonic_data, duration_days=400, noise_level=0.15):
     """
     Generate synthetic AT2020afhd light curve based on published parameters.
-    
+
     This simulates Swift XRT and VLA observations showing the 19.6-day QPO.
-    
+
     Args:
         harmonic_data: Harmonic relationship data
         duration_days: Total observation time [days]
         noise_level: Relative noise level (σ/A)
-        
+
     Returns:
         tuple: (time, xray_flux, radio_flux, errors)
     """
     # Time array
     t = np.linspace(0, duration_days, 200)
-    
+
     # Model parameters matching the observations
     omega = harmonic_data['omega_rad_per_day']
-    
+
     # X-ray light curve (Swift XRT)
     A_xray = 1.0
     phi_xray = 0.3
     gamma_xray = 0.002  # Slow decay over ~400 days
     C_xray = 0.5
-    
+
     xray_flux = lense_thirring_model(t, A_xray, omega, phi_xray, gamma_xray, C_xray)
     xray_flux += np.random.normal(0, noise_level * A_xray, len(t))
     xray_flux = np.maximum(xray_flux, 0)  # Physical constraint
-    
+
     # Radio light curve (VLA 15.1 GHz)
     A_radio = 0.8
     phi_radio = 0.3  # Same phase as X-ray (coherent)
     gamma_radio = 0.0015  # Slightly different decay
     C_radio = 0.4
-    
+
     radio_flux = lense_thirring_model(t, A_radio, omega, phi_radio, gamma_radio, C_radio)
     radio_flux += np.random.normal(0, noise_level * A_radio, len(t))
     radio_flux = np.maximum(radio_flux, 0)
-    
+
     # Realistic error bars
     xray_errors = np.random.uniform(0.05, 0.15, len(t)) * A_xray
     radio_errors = np.random.uniform(0.05, 0.15, len(t)) * A_radio
-    
+
     return t, xray_flux, radio_flux, xray_errors, radio_errors
 
 
 def fit_lense_thirring_model(t, flux, errors, omega_initial):
     """
     Fit the Lense-Thirring model to observed light curve.
-    
+
     Args:
         t: Time array [days]
         flux: Flux measurements
         errors: Flux uncertainties
         omega_initial: Initial guess for omega [rad/day]
-        
+
     Returns:
         tuple: (fitted_params, uncertainties, fit_quality)
     """
@@ -241,15 +242,15 @@ def fit_lense_thirring_model(t, flux, errors, omega_initial):
     C_guess = np.mean(flux)
     phi_guess = 0.0
     gamma_guess = 0.001
-    
+
     p0 = [A_guess, omega_initial, phi_guess, gamma_guess, C_guess]
-    
+
     # Bounds to ensure physical parameters
     bounds = (
         [0, omega_initial * 0.8, -np.pi, 0, 0],  # Lower bounds
         [2 * A_guess, omega_initial * 1.2, np.pi, 0.01, 2 * C_guess]  # Upper bounds
     )
-    
+
     try:
         # Fit with weighted least squares
         popt, pcov = curve_fit(
@@ -262,26 +263,26 @@ def fit_lense_thirring_model(t, flux, errors, omega_initial):
             bounds=bounds,
             maxfev=10000
         )
-        
+
         # Extract parameters
         A_fit, omega_fit, phi_fit, gamma_fit, C_fit = popt
         perr = np.sqrt(np.diag(pcov))
-        
+
         # Calculate fit quality
         residuals = flux - lense_thirring_model(t, *popt)
         chi2 = np.sum((residuals / errors) ** 2)
         dof = len(t) - len(popt)
         chi2_reduced = chi2 / dof
-        
+
         # R² coefficient
         ss_res = np.sum(residuals ** 2)
         ss_tot = np.sum((flux - np.mean(flux)) ** 2)
         r_squared = 1 - (ss_res / ss_tot)
-        
+
         # Recovered period
         period_fit = 2 * np.pi / omega_fit
         period_error = 2 * np.pi * perr[1] / (omega_fit ** 2)
-        
+
         return {
             'amplitude': A_fit,
             'amplitude_err': perr[0],
@@ -308,41 +309,41 @@ def fit_lense_thirring_model(t, flux, errors, omega_initial):
 # PERIODOGRAM ANALYSIS
 # ============================================================================
 
+
 def compute_lomb_scargle(t, flux, errors, period_range=(5, 50)):
     """
     Compute Lomb-Scargle periodogram to detect the 19.6-day QPO.
-    
+
     Args:
         t: Time array [days]
         flux: Flux measurements
         errors: Flux uncertainties
         period_range: Tuple of (min_period, max_period) [days]
-        
+
     Returns:
         dict: Periodogram results
     """
-    from scipy.signal import lombscargle
-    
+
     # Define frequency grid
     f_min = 1.0 / period_range[1]  # 1/50 days
     f_max = 1.0 / period_range[0]  # 1/5 days
     frequencies = np.linspace(f_min, f_max, 10000)
-    
+
     # Normalize flux
     flux_norm = (flux - np.mean(flux)) / np.std(flux)
-    
+
     # Compute periodogram
     power = lombscargle(t, flux_norm, 2 * np.pi * frequencies, normalize=True)
-    
+
     # Find peak
     peak_idx = np.argmax(power)
     peak_freq = frequencies[peak_idx]
     peak_period = 1.0 / peak_freq
     peak_power = power[peak_idx]
-    
+
     # Convert to periods for plotting
     periods = 1.0 / frequencies
-    
+
     return {
         'periods': periods,
         'power': power,
@@ -361,7 +362,7 @@ def create_comprehensive_figure(harmonic_data, t, xray_flux, radio_flux,
                                 xray_periodogram, radio_periodogram):
     """
     Create comprehensive 6-panel figure matching the existing visualization.
-    
+
     Args:
         harmonic_data: Harmonic relationship data
         t: Time array
@@ -369,16 +370,16 @@ def create_comprehensive_figure(harmonic_data, t, xray_flux, radio_flux,
         xray_errors, radio_errors: Flux uncertainties
         xray_fit, radio_fit: Fitted model parameters
         xray_periodogram, radio_periodogram: Periodogram results
-        
+
     Returns:
         matplotlib.figure.Figure
     """
     fig = plt.figure(figsize=(18, 12))
-    
+
     # Color scheme
     xray_color = '#FF6B6B'  # Red for X-ray
     radio_color = '#4ECDC4'  # Cyan for Radio
-    
+
     # ========================================================================
     # Panel 1: X-ray Light Curve
     # ========================================================================
@@ -393,7 +394,7 @@ def create_comprehensive_figure(harmonic_data, t, xray_flux, radio_flux,
     ax1.legend(loc='upper right', fontsize=10)
     ax1.grid(alpha=0.3, linestyle='--')
     ax1.set_facecolor('#F8F9FA')
-    
+
     # ========================================================================
     # Panel 2: Radio Light Curve
     # ========================================================================
@@ -408,7 +409,7 @@ def create_comprehensive_figure(harmonic_data, t, xray_flux, radio_flux,
     ax2.legend(loc='upper right', fontsize=10)
     ax2.grid(alpha=0.3, linestyle='--')
     ax2.set_facecolor('#F8F9FA')
-    
+
     # ========================================================================
     # Panel 3: X-ray Periodogram
     # ========================================================================
@@ -427,7 +428,7 @@ def create_comprehensive_figure(harmonic_data, t, xray_flux, radio_flux,
     ax3.grid(alpha=0.3, linestyle='--')
     ax3.set_xlim(5, 50)
     ax3.set_facecolor('#F8F9FA')
-    
+
     # ========================================================================
     # Panel 4: Radio Periodogram
     # ========================================================================
@@ -446,7 +447,7 @@ def create_comprehensive_figure(harmonic_data, t, xray_flux, radio_flux,
     ax4.grid(alpha=0.3, linestyle='--')
     ax4.set_xlim(5, 50)
     ax4.set_facecolor('#F8F9FA')
-    
+
     # ========================================================================
     # Panel 5: X-ray Model Fit
     # ========================================================================
@@ -473,7 +474,7 @@ def create_comprehensive_figure(harmonic_data, t, xray_flux, radio_flux,
     ax5.legend(loc='upper right', fontsize=9)
     ax5.grid(alpha=0.3, linestyle='--')
     ax5.set_facecolor('#F8F9FA')
-    
+
     # ========================================================================
     # Panel 6: Radio Model Fit
     # ========================================================================
@@ -499,15 +500,15 @@ def create_comprehensive_figure(harmonic_data, t, xray_flux, radio_flux,
     ax6.legend(loc='upper right', fontsize=9)
     ax6.grid(alpha=0.3, linestyle='--')
     ax6.set_facecolor('#F8F9FA')
-    
-    # Add main title with harmonic information
+
+    # Add main title with harmonic information (UTF-8 encoded)
     fig.suptitle(
-        f'AT2020afhd: Harmonic Verification of NOĒSIS Fractal Coherence\n'
-        f'f₀ = {harmonic_data["f0_hz"]:.5f} Hz  →  f_obs = {harmonic_data["f_obs_hz"]:.3e} Hz  '
+        'AT2020afhd: Harmonic Verification of NOESIS Fractal Coherence\n'
+        f'f_0 = {harmonic_data["f0_hz"]:.5f} Hz  ->  f_obs = {harmonic_data["f_obs_hz"]:.3e} Hz  '
         f'(Ratio = {harmonic_data["ratio"]:.2e}, Octaves = {harmonic_data["octaves"]:.2f})',
         fontsize=14, fontweight='bold', y=0.995
     )
-    
+
     plt.tight_layout(rect=[0, 0, 1, 0.985])
     return fig
 
@@ -519,12 +520,12 @@ def create_comprehensive_figure(harmonic_data, t, xray_flux, radio_flux,
 def run_analysis(output_dir='.', save_json=True, save_figure=True):
     """
     Run complete AT2020afhd harmonic verification analysis.
-    
+
     Args:
         output_dir: Directory for saving outputs
         save_json: Save results to JSON
         save_figure: Save figure to PNG
-        
+
     Returns:
         dict: Complete analysis results
     """
@@ -532,11 +533,11 @@ def run_analysis(output_dir='.', save_json=True, save_figure=True):
     print("AT2020afhd: Harmonic Verification of NOĒSIS Fractal Coherence")
     print("=" * 80)
     print()
-    
+
     # Step 1: Calculate harmonic relationship
     print("📊 Step 1: Calculating harmonic relationship...")
     harmonic_data = calculate_harmonic_relationship(precision=100)
-    
+
     print(f"   f₀ = {harmonic_data['f0_hz']:.5f} Hz")
     print(f"   Period = {harmonic_data['period_days']:.1f} days")
     print(f"   f_obs = {harmonic_data['f_obs_hz']:.3e} Hz")
@@ -545,11 +546,11 @@ def run_analysis(output_dir='.', save_json=True, save_figure=True):
     print(f"   Octaves = {harmonic_data['octaves']:.2f}")
     print(f"   Decades = {harmonic_data['decades']:.2f}")
     print()
-    
+
     # Step 2: Verify precision
     print("✓ Step 2: Verifying harmonic precision...")
     verification = verify_harmonic_precision(harmonic_data)
-    
+
     if verification['all_verified']:
         print("   ✅ All harmonic relationships verified!")
         print(f"   - Ratio error: {verification['ratio_error_percent']:.4f}%")
@@ -558,7 +559,7 @@ def run_analysis(output_dir='.', save_json=True, save_figure=True):
     else:
         print("   ⚠️  Some verification checks failed")
     print()
-    
+
     # Step 3: Generate synthetic data
     print("📈 Step 3: Generating synthetic AT2020afhd light curves...")
     t, xray_flux, radio_flux, xray_errors, radio_errors = generate_synthetic_lightcurve(
@@ -566,17 +567,17 @@ def run_analysis(output_dir='.', save_json=True, save_figure=True):
     )
     print(f"   Generated {len(t)} data points over {max(t):.0f} days")
     print()
-    
+
     # Step 4: Compute periodograms
     print("🔍 Step 4: Computing Lomb-Scargle periodograms...")
     xray_periodogram = compute_lomb_scargle(t, xray_flux, xray_errors)
     radio_periodogram = compute_lomb_scargle(t, radio_flux, radio_errors)
-    
+
     print(f"   X-ray peak: {xray_periodogram['peak_period']:.2f} days")
     print(f"   Radio peak: {radio_periodogram['peak_period']:.2f} days")
     print(f"   Expected: {PERIOD_OBSERVED:.1f} ± {PERIOD_UNCERTAINTY:.1f} days")
     print()
-    
+
     # Step 5: Fit Lense-Thirring model
     print("⚙️  Step 5: Fitting Lense-Thirring precession model...")
     xray_fit = fit_lense_thirring_model(
@@ -585,18 +586,18 @@ def run_analysis(output_dir='.', save_json=True, save_figure=True):
     radio_fit = fit_lense_thirring_model(
         t, radio_flux, radio_errors, harmonic_data['omega_rad_per_day']
     )
-    
+
     if xray_fit['fit_successful']:
         print(f"   X-ray fit: P = {xray_fit['period_days']:.2f} ± {xray_fit['period_err']:.2f} days")
         print(f"              R² = {xray_fit['r_squared']:.4f}")
         print(f"              χ²_red = {xray_fit['chi2_reduced']:.3f}")
-    
+
     if radio_fit['fit_successful']:
         print(f"   Radio fit: P = {radio_fit['period_days']:.2f} ± {radio_fit['period_err']:.2f} days")
         print(f"              R² = {radio_fit['r_squared']:.4f}")
         print(f"              χ²_red = {radio_fit['chi2_reduced']:.3f}")
     print()
-    
+
     # Step 6: Create visualization
     if save_figure:
         print("📊 Step 6: Creating comprehensive visualization...")
@@ -605,13 +606,13 @@ def run_analysis(output_dir='.', save_json=True, save_figure=True):
             xray_errors, radio_errors, xray_fit, radio_fit,
             xray_periodogram, radio_periodogram
         )
-        
+
         output_path = Path(output_dir) / 'at2020afhd_harmonic_verification.png'
         fig.savefig(output_path, dpi=150, bbox_inches='tight', facecolor='white')
         print(f"   Saved: {output_path}")
         plt.close(fig)
         print()
-    
+
     # Step 7: Compile results
     results = {
         'metadata': {
@@ -653,7 +654,7 @@ def run_analysis(output_dir='.', save_json=True, save_figure=True):
             )
         }
     }
-    
+
     # Save JSON
     if save_json:
         json_path = Path(output_dir) / 'at2020afhd_harmonic_verification.json'
@@ -661,7 +662,7 @@ def run_analysis(output_dir='.', save_json=True, save_figure=True):
             json.dump(results, f, indent=2, default=str)
         print(f"💾 Results saved: {json_path}")
         print()
-    
+
     # Print summary
     print("=" * 80)
     print("✨ VERIFICATION COMPLETE")
@@ -678,7 +679,7 @@ def run_analysis(output_dir='.', save_json=True, save_figure=True):
     print()
     print("   ∞³ NOĒSIS VERIFIED ∞³")
     print("=" * 80)
-    
+
     return results
 
 
@@ -702,32 +703,32 @@ Reference:
   Science Advances, DOI: 10.1126/sciadv.ady9068
         """
     )
-    
+
     parser.add_argument(
         '--output', '-o',
         type=str,
         default='.',
         help='Output directory for results (default: current directory)'
     )
-    
+
     parser.add_argument(
         '--no-json',
         action='store_true',
         help='Do not save JSON results'
     )
-    
+
     parser.add_argument(
         '--no-figure',
         action='store_true',
         help='Do not save figure'
     )
-    
+
     args = parser.parse_args()
-    
+
     # Create output directory if needed
     output_dir = Path(args.output)
     output_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Run analysis
     try:
         results = run_analysis(
