@@ -227,7 +227,7 @@ class IGETSGravimetryAnalysis:
                 'frequency': float(peak_freq),
                 'power': float(peak_power),
                 'snr': float(snr),
-                'significant': snr > 6.0,
+                'significant': bool(snr > 6.0),
                 'delta_f': float(peak_freq - F0)
             }
         else:
@@ -287,7 +287,7 @@ class IGETSGravimetryAnalysis:
             'stations': stations,
             'coherence_matrix': coherence_matrix.tolist(),
             'global_coherence': float(global_coherence),
-            'highly_coherent': global_coherence > 0.7
+            'highly_coherent': bool(global_coherence > 0.7)
         }
     
     def run_analysis(self,
@@ -537,6 +537,27 @@ def main():
     
     analysis.plot_results(results_with, output_dir="igets_results")
     
+    # Validar con análisis de sensibilidad
+    print("\n\n" + "=" * 60)
+    print("VALIDACIÓN DE SENSIBILIDAD")
+    print("=" * 60)
+    try:
+        # Importar función de análisis de sensibilidad
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent.parent / 'scripts'))
+        from sensibilidad_gravimetro import simular_salida_gravimetro
+        
+        # Validar detección con amplitudes típicas
+        test_amplitude = 1e-12  # g
+        print(f"\nValidando con amplitud de prueba: {test_amplitude:.2e} g")
+        snr_samples = simular_salida_gravimetro(test_amplitude, num_realizaciones=100)
+        print(f"SNR medio: {np.mean(snr_samples):.2f}")
+        print(f"Detecciones (SNR>5): {np.sum(snr_samples > 5)}/100")
+        print("✓ Validación de sensibilidad completada")
+    except ImportError as e:
+        print(f"⚠ No se pudo importar análisis de sensibilidad: {e}")
+        print("  Ejecute 'python scripts/sensibilidad_gravimetro.py' para análisis completo")
+    
     print("\n\n" + "=" * 60)
     print("INTERPRETACIÓN")
     print("=" * 60)
@@ -545,6 +566,8 @@ def main():
     print("coherencia gravitatoria.")
     print("\nEste análisis proporciona una prueba directa terrestre de la")
     print("predicción GQN sobre interacciones gravitacionales modificadas.")
+    print("\nPara análisis detallado de sensibilidad:")
+    print("  python scripts/sensibilidad_gravimetro.py")
 
 
 if __name__ == "__main__":
