@@ -18,7 +18,7 @@ Cada observatorio proporciona un método único de falsación científica del mo
 |--------------|------------------|-----------|----------------|-------------------|
 | **LISA** | Ondas gravitacionales | 10⁻³ – 1 | Armónicos f₀/nφ | Espectral |
 | **DESI** | Energía oscura w(z) | — | w₀=-1, wₐ=0.2 | Cosmológica |
-| **IGETS** | Gravedad local oscilante | 10² – 10³ | f₀=141.7 Hz | Gravimétrica |
+| **IGETS** | Gravedad local oscilante | 10² – 10³ | f₀=141.7 Hz, A=10⁻¹³-10⁻¹² g | Gravimétrica |
 
 ---
 
@@ -63,6 +63,21 @@ V(r,t) = -GM/r [1 + α_Y e^(-r/λ̄) (1 + ε cos 2πf₀t)]
 
 con λ̄ ≈ 3.37×10⁵ m, f₀ = 141.7001 Hz.
 
+**Rango de Amplitud Testable con SG**: 10⁻¹³ - 10⁻¹² g
+
+Especificaciones de Superconducting Gravimeters (SG):
+- σ_single = 10⁻¹¹ g @ 1 Hz
+- f_sampling = 1 Hz
+- SNR objetivo = 5
+
+**Tiempos de Observación Requeridos**:
+- A = 10⁻¹² g: N = 2,500 muestras → ~42 minutos ✅
+- A = 10⁻¹³ g: N = 250,000 muestras → ~3 días ✅
+
+Ambos son **factibles** con la red IGETS actual.
+
+Ver: [`igets/sg_sensitivity_analysis.py`](igets/sg_sensitivity_analysis.py) para análisis completo.
+
 **Criterio**: Detección coherente en f₀ con SNR > 6 en ≥2 estaciones y coherencia de fase > 0.7.
 
 ---
@@ -88,9 +103,10 @@ cd desi
 python3 desi_wz_analysis.py
 cd ..
 
-# IGETS
+# IGETS - Sensitivity Analysis
 cd igets
-python3 igets_fft_analysis.py
+python3 sg_sensitivity_analysis.py  # Verificar rango testable
+python3 igets_fft_analysis.py       # Análisis completo
 cd ..
 ```
 
