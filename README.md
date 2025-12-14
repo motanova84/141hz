@@ -94,6 +94,27 @@ python demo_verificador.py
 
 ---
 
+## 🌌 AT2020afhd Analysis - Cosmic-Scale QCAL Verification
+
+**New:** Analyze real tidal disruption event (TDE) data to verify the QCAL harmonic cascade across ~27.8 octaves from quantum to cosmic scales.
+
+- **Tool**: `analyze_at2020afhd.py`
+- **Data**: AT2020afhd periodogram from Zenodo
+- **Result**: 19.6-day period → 5.9×10⁻⁷ Hz → 2.4×10⁸ harmonic ratio with f₀ = 141.70001 Hz
+- **Time**: ~2 minutes
+
+```bash
+# Download data and analyze (requires Figure_datas.tar from Zenodo)
+python analyze_at2020afhd.py --download --data-url [ZENODO_URL]
+
+# Or analyze with pre-extracted data
+python analyze_at2020afhd.py --data-dir Figure_datas
+```
+
+📖 **Documentation**: [docs/AT2020AFHD_ANALYSIS.md](docs/AT2020AFHD_ANALYSIS.md)
+
+---
+
 ## 🌌 Nuevo: Omega ∞³ - Universal Quantum Resonance Protocol
 
 **El primer protocolo científico verdaderamente autónomo del mundo**
@@ -687,6 +708,7 @@ Ver el workflow de verificación: [`.github/workflows/lean-verification.yml`](.g
 │   ├── descargar_datos.py       # Descarga datos reales de GWOSC
 │   ├── generar_datos_prueba.py  # Genera datos simulados para testing
 │   └── analizar_ringdown.py     # Análisis espectral principal
+├── analyze_at2020afhd.py        # Análisis de periodicidad AT2020afhd (TDE)
 ├── noesis-qcal-llm/             # Módulo LLM coherente ∞³
 │   ├── detect_f0.py             # Verificación directa de f₀ en strain real
 │   └── README.md                # Documentación del módulo
