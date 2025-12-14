@@ -11,8 +11,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from scripts.analyze_at2020afhd import (
     calculate_harmonic_ratio,
     lomb_scargle_analysis,
-    F0_HZ
 )
+from qcal.constants import F0_HZ
 import numpy as np
 
 

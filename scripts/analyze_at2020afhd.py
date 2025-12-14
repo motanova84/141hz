@@ -11,10 +11,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from astropy.timeseries import LombScargle
+import sys
+import os
 
-# QCAL Constants
-F0_HZ = 141.70001  # Fundamental frequency in Hz
-EXPECTED_PERIOD_DAYS = 19.6  # Expected period from Wang et al. (2025)
+# Import QCAL constants
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from qcal.constants import F0_HZ, EXPECTED_PERIOD_DAYS
 
 
 def load_data(filepath):
@@ -30,14 +32,24 @@ def load_data(filepath):
     --------
     numpy.ndarray
         Loaded data array
+        
+    Raises:
+    -------
+    FileNotFoundError
+        If the file does not exist
+    ValueError
+        If the file format is invalid
     """
     try:
         data = np.loadtxt(filepath)
         print(f"✅ Loaded {len(data)} data points from {filepath}")
         return data
-    except Exception as e:
-        print(f"❌ Error loading {filepath}: {e}")
-        return None
+    except FileNotFoundError:
+        print(f"❌ File not found: {filepath}")
+        raise
+    except (ValueError, OSError) as e:
+        print(f"❌ Error reading file {filepath}: {e}")
+        raise
 
 
 def lomb_scargle_analysis(time_mjd, flux, flux_err=None):
