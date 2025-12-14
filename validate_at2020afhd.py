@@ -48,6 +48,11 @@ MAX_DECAY = 0.1   # 1/day
 MIN_OFFSET = 0.5
 MAX_OFFSET = 2.0
 
+# Verification thresholds
+PERIOD_MATCH_THRESHOLD = 0.05  # 5% tolerance for period match
+CASCADE_ERROR_THRESHOLD = 1.0  # 1% tolerance for cascade error
+MODEL_FIT_R2_THRESHOLD = 0.7   # Minimum R² for acceptable model fit
+
 
 def show_download_instructions(output_dir="data/at2020afhd"):
     """
@@ -172,12 +177,18 @@ def psi_model(t, A, omega, phi, gamma, C):
     """
     Ψ model: Ψ(t) = A·sin(ω·t + φ)·exp(-γ·t) + C
     
+    This models periodic coherent oscillations with optional decay.
+    
     Parameters:
-    - A: Amplitude
-    - omega: Angular frequency (rad/day)
-    - phi: Phase (rad)
-    - gamma: Decay rate (1/day)
-    - C: Constant offset
+    - t: Time (independent variable, typically in days)
+    - A: Amplitude of oscillation (corresponds to A in Ψ = π · A²_eff)
+    - omega (ω): Angular frequency in rad/day (ω = 2π/Period)
+    - phi (φ): Phase offset in radians
+    - gamma (γ): Exponential decay rate in 1/day (0 for no decay)
+    - C: Constant offset (baseline level)
+    
+    Returns:
+    - Ψ(t): Coherent field value at time t
     """
     return A * np.sin(omega * t + phi) * np.exp(-gamma * t) + C
 
@@ -422,10 +433,10 @@ def print_verification_summary(detected_period, cascade_data, xray_fit, radio_fi
     print("FINAL VERDICT:")
     print("-" * 70)
     
-    period_match = abs(detected_period - PUBLISHED_PERIOD) / PUBLISHED_PERIOD < 0.05
-    cascade_match = cascade_data['error_ratio'] < 1.0
-    model_fit_xray = xray_fit and xray_fit['success'] and xray_fit['r_squared'] > 0.7
-    model_fit_radio = radio_fit and radio_fit['success'] and radio_fit['r_squared'] > 0.7
+    period_match = abs(detected_period - PUBLISHED_PERIOD) / PUBLISHED_PERIOD < PERIOD_MATCH_THRESHOLD
+    cascade_match = cascade_data['error_ratio'] < CASCADE_ERROR_THRESHOLD
+    model_fit_xray = xray_fit and xray_fit['success'] and xray_fit['r_squared'] > MODEL_FIT_R2_THRESHOLD
+    model_fit_radio = radio_fit and radio_fit['success'] and radio_fit['r_squared'] > MODEL_FIT_R2_THRESHOLD
     
     print(f"✅ Period match:        {'PASS' if period_match else 'FAIL'}")
     print(f"✅ Harmonic cascade:    {'PASS' if cascade_match else 'FAIL'}")
@@ -486,12 +497,12 @@ def save_results_json(detected_period, cascade_data, xray_fit, radio_fit,
             }
         },
         'verification': {
-            'period_match': bool(abs(detected_period - PUBLISHED_PERIOD) / PUBLISHED_PERIOD < 0.05),
-            'cascade_match': bool(cascade_data['error_ratio'] < 1.0),
-            'xray_model_fit': bool(xray_fit and xray_fit['success'] and xray_fit['r_squared'] > 0.7),
-            'radio_model_fit': bool(radio_fit and radio_fit['success'] and radio_fit['r_squared'] > 0.7),
-            'overall': 'VERIFIED' if (abs(detected_period - PUBLISHED_PERIOD) / PUBLISHED_PERIOD < 0.05 and 
-                                      cascade_data['error_ratio'] < 1.0) else 'INCOMPLETE'
+            'period_match': bool(abs(detected_period - PUBLISHED_PERIOD) / PUBLISHED_PERIOD < PERIOD_MATCH_THRESHOLD),
+            'cascade_match': bool(cascade_data['error_ratio'] < CASCADE_ERROR_THRESHOLD),
+            'xray_model_fit': bool(xray_fit and xray_fit['success'] and xray_fit['r_squared'] > MODEL_FIT_R2_THRESHOLD),
+            'radio_model_fit': bool(radio_fit and radio_fit['success'] and radio_fit['r_squared'] > MODEL_FIT_R2_THRESHOLD),
+            'overall': 'VERIFIED' if (abs(detected_period - PUBLISHED_PERIOD) / PUBLISHED_PERIOD < PERIOD_MATCH_THRESHOLD and 
+                                      cascade_data['error_ratio'] < CASCADE_ERROR_THRESHOLD) else 'INCOMPLETE'
         }
     }
     

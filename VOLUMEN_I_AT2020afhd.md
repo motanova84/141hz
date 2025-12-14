@@ -241,9 +241,9 @@ MEDICIÓN DEL PERIODO
 Periodo detectado:      P = 19.600 días
 Error de medición:      ΔP < 0.001 días (< 0.005%)
 Valor publicado:        19.6 ± 0.5 días (Wang et al. 2025)
-Diferencia absoluta:    0.000 días
+Diferencia absoluta:    < 0.001 días (dentro de precisión)
 ═══════════════════════════════════════════════════════════════════
-COINCIDENCIA: 100.000%
+COINCIDENCIA: Dentro de precisión experimental
 ═══════════════════════════════════════════════════════════════════
 ```
 
@@ -293,15 +293,16 @@ Frecuencia marco:         f_frame = 5.892361 × 10⁻⁷ Hz
 ───────────────────────────────────────────────────────────────────
 Ratio armónico medido:    2.404891 × 10⁸
 Ratio esperado (2^27.84): 2.405000 × 10⁸
-ERROR RELATIVO:           0.004%
+ERROR RELATIVO:           0.004% (dentro de precisión experimental)
 ───────────────────────────────────────────────────────────────────
 Octavas medidas:          27.840
 Octavas esperadas:        27.84
-ERROR ABSOLUTO:           0.000 octavas
+ERROR ABSOLUTO:           < 0.001 octavas (dentro de precisión)
 ───────────────────────────────────────────────────────────────────
 Órdenes de magnitud:      log₁₀(Ratio) = 8.381
 ───────────────────────────────────────────────────────────────────
-CONCLUSIÓN: Cascada armónica PERFECTA (error < 0.005%)
+CONCLUSIÓN: Cascada armónica consistente dentro de precisión 
+            experimental (error < 0.005%)
 ═══════════════════════════════════════════════════════════════════
 ```
 
