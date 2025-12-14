@@ -12,7 +12,14 @@ from scripts.analyze_at2020afhd import (
     calculate_harmonic_ratio,
     lomb_scargle_analysis,
 )
-from qcal.constants import F0_HZ
+from qcal.constants import (
+    F0_HZ, 
+    EXPECTED_RATIO, 
+    TEST_PERIOD_MIN_DAYS, 
+    TEST_PERIOD_MAX_DAYS,
+    TEST_OCTAVES_MIN,
+    TEST_OCTAVES_MAX
+)
 import numpy as np
 
 
@@ -94,9 +101,10 @@ def test_full_pipeline():
     freq, power, period_ls = lomb_scargle_analysis(time_mjd, flux, flux_err)
     harmonic_data = calculate_harmonic_ratio(F0_HZ, period_ls)
     
-    # Verify results
-    assert 18.0 < period_ls < 21.0, f"Period out of range: {period_ls}"
-    assert 27.0 < harmonic_data['octaves'] < 29.0, \
+    # Verify results using constants
+    assert TEST_PERIOD_MIN_DAYS < period_ls < TEST_PERIOD_MAX_DAYS, \
+        f"Period out of range: {period_ls}"
+    assert TEST_OCTAVES_MIN < harmonic_data['octaves'] < TEST_OCTAVES_MAX, \
         f"Octaves out of range: {harmonic_data['octaves']}"
     
     print(f"✅ Full pipeline test passed")

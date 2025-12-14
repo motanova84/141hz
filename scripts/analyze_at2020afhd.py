@@ -16,7 +16,7 @@ import os
 
 # Import QCAL constants
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from qcal.constants import F0_HZ, EXPECTED_PERIOD_DAYS
+from qcal.constants import F0_HZ, EXPECTED_PERIOD_DAYS, EXPECTED_RATIO
 
 
 def load_data(filepath):
@@ -135,9 +135,8 @@ def calculate_harmonic_ratio(f0_hz, period_days):
     # Orders of magnitude
     orders = np.log10(ratio)
     
-    # Expected ratio (theoretical)
-    expected_ratio = 2.405e8
-    error_percent = 100 * abs(ratio - expected_ratio) / expected_ratio
+    # Expected ratio (theoretical) - from constants
+    error_percent = 100 * abs(ratio - EXPECTED_RATIO) / EXPECTED_RATIO
     
     print(f"\n{'='*60}")
     print(f"HARMONIC CASCADE ANALYSIS")
@@ -147,7 +146,7 @@ def calculate_harmonic_ratio(f0_hz, period_days):
     print(f"Observed frequency (f_frame): {f_frame:.6e} Hz")
     print(f"─"*60)
     print(f"Harmonic ratio (R):           {ratio:.6e}")
-    print(f"Expected ratio:               {expected_ratio:.6e}")
+    print(f"Expected ratio:               {EXPECTED_RATIO:.6e}")
     print(f"ERROR:                        {error_percent:.2f}%")
     print(f"─"*60)
     print(f"Number of octaves:            {octaves:.3f}")
