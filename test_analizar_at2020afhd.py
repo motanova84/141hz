@@ -121,7 +121,7 @@ class TestAnalisisAT2020afhd(unittest.TestCase):
         f_obs = calcular_frecuencia_observada(periodo_observado)
         
         # Verificar relación armónica
-        ratio, n_octavas, error_pct = verificar_relacion_armonica(f_obs)
+        ratio, n_octavas, error_pct = verificar_relacion_armonica(f_obs, F0_QCAL)
         
         # Verificaciones del modelo QCAL ∞³
         # 1. La frecuencia debe ser muy pequeña (escala de días)
@@ -153,7 +153,7 @@ class TestAnalisisAT2020afhd(unittest.TestCase):
         
         for periodo in periodos_test:
             f_obs = calcular_frecuencia_observada(periodo)
-            ratio, n_octavas, error_pct = verificar_relacion_armonica(f_obs)
+            ratio, n_octavas, error_pct = verificar_relacion_armonica(f_obs, F0_QCAL)
             
             # Para cualquier periodo en el rango, las octavas deben estar
             # muy cerca de 27.84 (error < 0.1 octavas)
@@ -192,7 +192,7 @@ class TestCasosLimite(unittest.TestCase):
         self.assertGreater(f_obs, 0.01)
         
         # Verificar que las octavas son menores
-        ratio, n_octavas, _ = verificar_relacion_armonica(f_obs)
+        ratio, n_octavas, _ = verificar_relacion_armonica(f_obs, F0_QCAL)
         self.assertLess(n_octavas, 27.84)
     
     def test_periodo_muy_grande(self):
@@ -204,7 +204,7 @@ class TestCasosLimite(unittest.TestCase):
         self.assertLess(f_obs, 1e-6)
         
         # Verificar que las octavas son mayores
-        ratio, n_octavas, _ = verificar_relacion_armonica(f_obs)
+        ratio, n_octavas, _ = verificar_relacion_armonica(f_obs, F0_QCAL)
         self.assertGreater(n_octavas, 27.84)
     
     def test_precision_numerica(self):
