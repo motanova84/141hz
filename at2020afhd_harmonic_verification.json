@@ -4,7 +4,7 @@
     "description": "NO\u0112SIS Fractal Coherence: f\u2080 = 141.70001 Hz \u2192 19.6-day precession",
     "reference": "Wang et al. (2025), Science Advances, DOI: 10.1126/sciadv.ady9068",
     "author": "Jos\u00e9 Manuel Mota Burruezo (JMMB \u03a8\u2727)",
-    "timestamp": "2025-12-14T00:35:27.502576+00:00"
+    "timestamp": "2025-12-14T00:38:28.191403+00:00"
   },
   "harmonic_relationship": {
     "f0_hz": 141.70001,
@@ -30,47 +30,47 @@
   },
   "xray_analysis": {
     "periodogram": {
-      "peak_period_days": 19.601270289343685,
-      "peak_power": 0.8521917682393858
+      "peak_period_days": 19.580542826929857,
+      "peak_power": 0.8722915369727617
     },
     "model_fit": {
-      "amplitude": 0.8483317788483374,
-      "amplitude_err": 0.023353287402901303,
-      "omega": 0.3207325902665485,
-      "omega_err": 0.00013068275806202032,
-      "phase": 0.26982805017524475,
-      "phase_err": 0.02468130096810354,
-      "decay": 0.00187698316906974,
-      "decay_err": 0.00013931270613852485,
-      "baseline": 0.5208485695204483,
-      "baseline_err": 0.006198195284658886,
-      "period_days": 19.590105582840437,
-      "period_err": 0.007982004654295279,
-      "chi2_reduced": 2.8588945921338236,
-      "r_squared": 0.8894893262224454,
+      "amplitude": 0.7734230253788764,
+      "amplitude_err": 0.019079317187663095,
+      "omega": 0.3207054101655015,
+      "omega_err": 0.00013187066708227085,
+      "phase": 0.34118544697727293,
+      "phase_err": 0.025705710035470525,
+      "decay": 0.0013659458048625398,
+      "decay_err": 0.00012268398580248798,
+      "baseline": 0.5496986741417387,
+      "baseline_err": 0.006249565383329185,
+      "period_days": 19.591765863685055,
+      "period_err": 0.00805592656647277,
+      "chi2_reduced": 2.6804691014618736,
+      "r_squared": 0.9001843644363972,
       "fit_successful": true
     }
   },
   "radio_analysis": {
     "periodogram": {
-      "peak_period_days": 19.587447108603666,
-      "peak_power": 0.901179149135655
+      "peak_period_days": 19.615112994350284,
+      "peak_power": 0.8982497830785147
     },
     "model_fit": {
-      "amplitude": 0.6933451028806987,
-      "amplitude_err": 0.01588254368692935,
-      "omega": 0.3206257585529263,
-      "omega_err": 0.00010747936450234197,
-      "phase": 0.2783451025407208,
-      "phase_err": 0.021074601563922764,
-      "decay": 0.0014156094111985222,
-      "decay_err": 0.0001133365811716028,
-      "baseline": 0.4380300484932752,
-      "baseline_err": 0.004770235146677245,
-      "period_days": 19.596632957805255,
-      "period_err": 0.006569134264809479,
-      "chi2_reduced": 2.4565541629863765,
-      "r_squared": 0.9210737117802864,
+      "amplitude": 0.6541557606271325,
+      "amplitude_err": 0.015680412828437545,
+      "omega": 0.320172805296649,
+      "omega_err": 0.00011336720727523811,
+      "phase": 0.3258150748526549,
+      "phase_err": 0.023079341596658337,
+      "decay": 0.00120621465440696,
+      "decay_err": 0.0001202480189137298,
+      "baseline": 0.44571574050104656,
+      "baseline_err": 0.004850073117390849,
+      "period_days": 19.62435660754523,
+      "period_err": 0.006948617953699935,
+      "chi2_reduced": 3.066155208216028,
+      "r_squared": 0.9132954607360892,
       "fit_successful": true
     }
   },
