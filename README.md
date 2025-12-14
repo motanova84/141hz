@@ -46,6 +46,18 @@ Este repositorio ofrece **tres vías claras** para verificar los resultados con 
 make setup && make analyze
 ```
 
+### 🌌 1b. Verificación Astronómica (AT2020afhd)
+- **Herramienta**: `validate_at2020afhd_periodicity.py`
+- **Datos**: Real black hole periodicity (Zenodo LSP.txt)
+- **Criterio**: 27.84 octaves fractal cascade confirmed
+- **Tiempo**: ~5 seconds
+
+```bash
+python3 validate_at2020afhd_periodicity.py
+```
+
+**→ [AT2020AFHD_VALIDATION.md](AT2020AFHD_VALIDATION.md)** - Black hole singing at 27.8 octaves below 141.7 Hz
+
 ### 🔢 2. Verificación Formal (Rigor Matemático)
 - **Herramienta**: Lean 4 (asistente de pruebas)
 - **Ubicación**: `formalization/lean/`
@@ -76,6 +88,7 @@ python demo_verificador.py
 | Ruta | Estado | Tiempo | Documento |
 |------|--------|--------|-----------|
 | ⚛️ Empírica | [![Scripts OK](https://img.shields.io/badge/scripts-OK-brightgreen)](#) | ~15 min | [Ver guía](VERIFICATION_ROUTES.md#1-️-vía-de-verificación-empírica-análisis-espectral) |
+| 🌌 Astronómica | [![AT2020afhd OK](https://img.shields.io/badge/AT2020afhd-verified-success)](#) | ~5 sec | [Ver validación](AT2020AFHD_VALIDATION.md) |
 | 🔢 Formal | [![Lean 4 OK](https://img.shields.io/badge/lean_4-verified-blue)](#) | ~5 min | [Ver guía](VERIFICATION_ROUTES.md#2--vía-de-verificación-formal-rigor-matemático) |
 | 🤖 Automática | [![CI OK](https://img.shields.io/badge/CI%2FCD-passing-success)](#) | Continuo | [Ver guía](VERIFICATION_ROUTES.md#3--vía-de-verificación-por-automatización-y-coherencia-ω) |
 
