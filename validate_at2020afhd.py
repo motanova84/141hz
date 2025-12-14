@@ -36,15 +36,25 @@ F0_QCAL = 141.70001  # Hz - Fundamental frequency
 PUBLISHED_PERIOD = 19.6  # days - Wang et al. (2025)
 EXPECTED_OCTAVES = 27.84  # Expected octave separation
 
+# Model fitting constants
+MIN_PERIOD_DAYS = 10.0  # Minimum search period
+MAX_PERIOD_DAYS = 30.0  # Maximum search period
+MIN_AMPLITUDE = 0.0
+MAX_AMPLITUDE = 1.0
+MIN_PHASE = -2 * np.pi
+MAX_PHASE = 2 * np.pi
+MIN_DECAY = -0.1  # 1/day
+MAX_DECAY = 0.1   # 1/day
+MIN_OFFSET = 0.5
+MAX_OFFSET = 2.0
 
-def download_zenodo_data(output_dir="data/at2020afhd"):
+
+def show_download_instructions(output_dir="data/at2020afhd"):
     """
-    Download AT2020afhd data from Zenodo.
+    Show instructions to download AT2020afhd data from Zenodo.
     
-    Note: This is a placeholder. In practice, users should:
-    1. Go to https://doi.org/10.5281/zenodo.14195067
-    2. Download Figure_datas.tar
-    3. Extract to data/at2020afhd/
+    Note: This function displays download instructions only.
+    Users should manually download data or use the Google Colab notebook.
     """
     print("=" * 70)
     print("ZENODO DATA DOWNLOAD INSTRUCTIONS")
@@ -185,8 +195,8 @@ def fit_psi_model(time, flux, error, period_guess):
     
     # Bounds
     bounds = (
-        [0, 2*np.pi/30, -2*np.pi, -0.1, 0.5],  # Lower bounds
-        [1, 2*np.pi/10, 2*np.pi, 0.1, 2.0]     # Upper bounds
+        [MIN_AMPLITUDE, 2*np.pi/MAX_PERIOD_DAYS, MIN_PHASE, MIN_DECAY, MIN_OFFSET],  # Lower bounds
+        [MAX_AMPLITUDE, 2*np.pi/MIN_PERIOD_DAYS, MAX_PHASE, MAX_DECAY, MAX_OFFSET]   # Upper bounds
     )
     
     try:
@@ -522,7 +532,7 @@ Examples:
     
     # Download instructions
     if args.download_zenodo:
-        download_zenodo_data(args.data_dir)
+        show_download_instructions(args.data_dir)
         return 0
     
     print("=" * 70)
