@@ -1,6 +1,6 @@
 {
   "event": "AT2020afhd",
-  "analysis_date": "2025-12-14T00:10:44.620355",
+  "analysis_date": "2025-12-14T00:11:52.080795",
   "coordinates": {
     "ra_hms": "03:13:35.70",
     "dec_dms": "-02:09:06.37",
@@ -20,10 +20,10 @@
     "reference": "Wang et al. 2025, Science Advances"
   },
   "detected_periods": {
-    "xray_days": 19.698462751281042,
-    "xray_delta_days": 0.09846275128104054,
-    "radio_days": 19.745160015804032,
-    "radio_delta_days": 0.1451600158040307
+    "xray_days": 19.88658973338639,
+    "xray_delta_days": 0.28658973338638916,
+    "radio_days": 19.90242931103146,
+    "radio_delta_days": 0.3024293110314602
   },
   "harmonic_connection": {
     "f0_quantum_hz": 141.70001,
