@@ -182,7 +182,8 @@ print("\n" + "="*70)
 print("🎼 HARMONIC RESONANCE ANALYSIS")
 print("="*70)
 
-# Fundamental frequency from QCAL ∞³
+# Fundamental frequency from QCAL ∞³ (Quantum Coherent Attractor Lattice)
+# This is the characteristic frequency identified in the NOĒSIS framework
 f0_Hz = 141.70001
 
 # Frame-dragging frequency
