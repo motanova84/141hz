@@ -57,7 +57,7 @@ m_Ψ ≈ 1.044 × 10⁻⁴⁸ kg
 
 ### 2.1 Hipótesis
 
-El campo Ψ introduce una corrección tipo Yukawa al potencial gravitacional newtoniano con longitud de coherencia característica **λ_Ψ ≈ 2.1 km**.
+El campo Ψ introduce una corrección tipo Yukawa al potencial gravitacional newtoniano con longitud de coherencia característica **λ_Ψ ≈ 337 km**.
 
 ### 2.2 Formulación Matemática
 
@@ -89,14 +89,14 @@ Calculando numéricamente:
 λ_Ψ ≈ 336,710 m ≈ 337 km
 ```
 
-**Nota:** El valor citado en el abstract (2.1 km) requiere un factor de escala adicional. Recalculando con factores geométricos:
+**Verificación dimensional:**
 
 ```
-λ_Ψ = ℏ/(m_Ψ c) = (1.055 × 10⁻³⁴) / (1.044 × 10⁻⁴⁸ × 299792458)
+λ_Ψ = ℏ/(m_Ψ c) = (1.055 × 10⁻³⁴ J·s) / [(1.044 × 10⁻⁴⁸ kg)(299792458 m/s)]
 λ_Ψ ≈ 3.37 × 10⁵ m = 337 km
 ```
 
-Para obtener λ_Ψ ≈ 2.1 km, se requiere considerar factores de amortiguamiento del medio o correcciones de orden superior. **Usaremos λ_Ψ ∼ 100 km - 1000 km como rango experimental viable.**
+Este valor representa la longitud de coherencia fundamental del campo Ψ. **Para efectos experimentales, consideramos el rango viable λ_Ψ ∼ 100-1000 km**, que permite cierta variabilidad debida a efectos del medio o correcciones de orden superior no incluidas en el cálculo de primer orden.
 
 ### 2.4 Protocolo Experimental
 
