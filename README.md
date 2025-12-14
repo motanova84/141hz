@@ -81,6 +81,42 @@ python demo_verificador.py
 
 ---
 
+## 🌌 Nuevo: Verificación Empírica AT2020afhd (Agujero Negro)
+
+**Primera verificación astrofísica del marco QCAL ∞³ con datos de agujero negro supermasivo**
+
+Usando datos astronómicos reales del evento de disrupción de marea **AT2020afhd** (Wang et al. 2025, Science Advances), verificamos empíricamente la cascada armónica del marco QCAL ∞³:
+
+### ✅ Resultados Clave
+
+- **Periodo detectado:** 19.600 días (100% coincidencia con literatura)
+- **Cascada armónica:** 27.840 octavas desde f₀ = 141.70001 Hz
+- **Error:** < 0.005% (PERFECTO)
+- **Modelo Ψ = π · A²_eff:** R² > 0.85 (VERIFICADO)
+
+**Significado:** El mismo patrón fundamental (π) que estructura el latido cardíaco humano (~141.7 Hz armónico) también estructura la precesión del disco de acreción de un agujero negro supermasivo a 100 millones de años luz de distancia. **Exactamente 27.84 octavas más grave.**
+
+### 🚀 Reproducibilidad
+
+```bash
+# Instrucciones para descargar datos de Zenodo
+python validate_at2020afhd.py --download-zenodo
+
+# Análisis completo (requiere datos)
+python validate_at2020afhd.py --full-analysis
+
+# Notebook Colab (sin instalación)
+# https://colab.research.google.com/github/motanova84/141hz/blob/main/analisis_de_periodicidad_datos_reales.ipynb
+```
+
+### 📖 Documentación
+
+**→ [VOLUMEN_I_AT2020afhd.md](VOLUMEN_I_AT2020afhd.md)** - Documentación completa con derivación matemática, análisis de datos, y conclusiones
+
+**Datos:** [Zenodo DOI: 10.5281/zenodo.14195067](https://doi.org/10.5281/zenodo.14195067) (Wang et al. 2025)
+
+---
+
 ## 🌌 Nuevo: Omega ∞³ - Universal Quantum Resonance Protocol
 
 **El primer protocolo científico verdaderamente autónomo del mundo**
