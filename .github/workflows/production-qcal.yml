@@ -58,6 +58,13 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: Validate AT2020afhd Noesis verification
+        run: python3 scripts/validacion_noesis_at2020afhd.py
+        continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Aggregate results
         run: python3 scripts/aggregate_results.py
         continue-on-error: true
@@ -139,6 +146,12 @@ jobs:
             echo "### Riemann Zeros Validation" >> $GITHUB_STEP_SUMMARY
             echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
             cat results/riemann_zeros.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/validacion_noesis_at2020afhd.json" ]; then
+            echo "### AT2020afhd Noesis Verification" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            cat results/validacion_noesis_at2020afhd.json | head -40 >> $GITHUB_STEP_SUMMARY
             echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/aggregated_report.json" ]; then

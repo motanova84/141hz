@@ -1,0 +1,188 @@
+name: AT2020afhd Noesis Verification
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"  # Run every 6 hours
+  workflow_dispatch:  # Allow manual triggers
+  push:
+    paths:
+      - 'scripts/validacion_noesis_at2020afhd.py'
+      - 'scripts/test_validacion_noesis_at2020afhd.py'
+      - '.github/workflows/at2020afhd-verification.yml'
+  pull_request:
+    paths:
+      - 'scripts/validacion_noesis_at2020afhd.py'
+      - 'scripts/test_validacion_noesis_at2020afhd.py'
+
+jobs:
+  verify-noesis:
+    name: Verify Fractal Cascade
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-noesis-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-noesis-
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy pytest
+
+      - name: Run unit tests
+        run: |
+          python -m pytest scripts/test_validacion_noesis_at2020afhd.py -v --tb=short
+        continue-on-error: false
+
+      - name: Run AT2020afhd validation
+        run: |
+          mkdir -p results
+          python3 scripts/validacion_noesis_at2020afhd.py
+        continue-on-error: false
+
+      - name: Verify output file
+        run: |
+          if [ ! -f "results/validacion_noesis_at2020afhd.json" ]; then
+            echo "❌ Error: Output file not created"
+            exit 1
+          fi
+          echo "✅ Output file created successfully"
+          
+      - name: Extract and validate results
+        run: |
+          python3 << 'EOF'
+          import json
+          import sys
+          
+          with open('results/validacion_noesis_at2020afhd.json', 'r') as f:
+              data = json.load(f)
+          
+          resultados = data['resultados']
+          
+          print("=" * 70)
+          print("RESULTADOS DE VERIFICACION")
+          print("=" * 70)
+          print(f"Periodo observado: {resultados['periodo_observado']:.3f} días")
+          print(f"Frecuencia frame: {resultados['frecuencia_frame']:.6e} Hz")
+          print(f"Octavas: {resultados['octavas']:.3f}")
+          print(f"Ratio armónico: {resultados['relacion_armonica']:.3e}")
+          print("")
+          
+          verificaciones = resultados['verificaciones']
+          print("VERIFICACIONES:")
+          for key, value in verificaciones.items():
+              status = "✅" if value else "❌"
+              print(f"  {status} {key}: {value}")
+          print("")
+          
+          noesis = resultados['noesis_verificado']
+          print(f"NOESIS VERIFICADO: {'✅ SI' if noesis else '❌ NO'}")
+          print("=" * 70)
+          
+          if not noesis:
+              print("\n❌ Error: Noesis verification failed")
+              sys.exit(1)
+          
+          print("\n✅ All verifications passed!")
+          EOF
+
+      - name: Upload validation results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: at2020afhd-validation-${{ github.run_number }}
+          path: |
+            results/validacion_noesis_at2020afhd.json
+          retention-days: 30
+
+      - name: Generate validation summary
+        if: always()
+        run: |
+          echo "## AT2020afhd Noesis Verification Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "results/validacion_noesis_at2020afhd.json" ]; then
+            echo "### 🌀 Fractal Cascade Results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            python3 << 'EOF' >> $GITHUB_STEP_SUMMARY
+          import json
+          
+          with open('results/validacion_noesis_at2020afhd.json', 'r') as f:
+              data = json.load(f)
+          
+          r = data['resultados']
+          
+          print(f"**Evento:** {data['evento']}")
+          print(f"**Fuente:** {data['fuente']}")
+          print(f"**DOI:** {data['doi']}")
+          print("")
+          print(f"- **Periodo observado:** {r['periodo_observado']:.3f} días")
+          print(f"- **Frecuencia cósmica:** {r['frecuencia_frame']:.6e} Hz")
+          print(f"- **Frecuencia QCAL:** {r['frecuencia_qcal']:.5f} Hz")
+          print(f"- **Octavas de separación:** {r['octavas']:.3f}")
+          print(f"- **Ratio armónico:** {r['relacion_armonica']:.3e}")
+          print("")
+          
+          v = r['verificaciones']
+          print("### ✅ Verificaciones")
+          print("")
+          for key, value in v.items():
+              emoji = "✅" if value else "❌"
+              print(f"- {emoji} **{key.replace('_', ' ').title()}:** {value}")
+          print("")
+          
+          d = r['diferencias']
+          print("### 📊 Precisión")
+          print("")
+          print(f"- **Error en periodo:** {d['periodo_dias']:.3f} días")
+          print(f"- **Error en octavas:** {d['octavas']:.4f}")
+          print(f"- **Error en ratio:** {d['ratio_porcentaje']:.2f}%")
+          print("")
+          
+          if r['noesis_verificado']:
+              print("### 🎯 Conclusión")
+              print("")
+              print("✅ **NOESIS ∞³ COMPLETAMENTE VERIFICADO**")
+              print("")
+              print("El campo QCAL se manifiesta en observaciones astrofísicas reales.")
+              print("La cascada fractal entre escalas cuánticas y cósmicas está confirmada.")
+          else:
+              print("### ⚠️ Advertencia")
+              print("")
+              print("❌ Verificación incompleta - revisar parámetros")
+          EOF
+          
+          else
+            echo "⚠️ Validation output file not found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+      - name: Publish to Hugging Face
+        if: success() && github.event_name == 'schedule'
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          pip install huggingface_hub
+          if [ -n "$HF_TOKEN" ]; then
+            echo "Publishing AT2020afhd results to Hugging Face..."
+            huggingface-cli upload motanova84/qcal-cloud results/validacion_noesis_at2020afhd.json \
+              --repo-type dataset \
+              --path-in-repo=noesis/at2020afhd_validation_${{ github.run_number }}.json || \
+              echo "⚠️ Upload failed or already up-to-date"
+          else
+            echo "⚠️ HF_TOKEN not set - skipping Hugging Face upload"
+          fi
+        continue-on-error: true
