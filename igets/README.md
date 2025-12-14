@@ -40,6 +40,13 @@ donde el término Yukawa oscila a frecuencia f₀.
 
 Los SGs miden variaciones en g con precisión de ~1 nm/s² (10⁻¹⁰ g₀).
 
+**Especificaciones SG para rango testable**:
+- **σ_single** = 10⁻¹¹ g @ 1 Hz (nivel de ruido de muestra única)
+- **Rango de amplitud testable**: 10⁻¹³ - 10⁻¹² g
+- **SNR objetivo**: 5 para detección significativa
+
+Ver [`sg_sensitivity_analysis.py`](sg_sensitivity_analysis.py) y [`README_SG_SENSITIVITY.md`](README_SG_SENSITIVITY.md) para análisis detallado de sensibilidad.
+
 ### Análisis FFT
 
 1. **Preprocesamiento**:
@@ -56,6 +63,24 @@ Los SGs miden variaciones en g con precisión de ~1 nm/s² (10⁻¹⁰ g₀).
    - Verificar coherencia global > 0.7
 
 ## Uso
+
+### Análisis de Sensibilidad SG
+
+**Verificar rango de amplitud testable**:
+
+```bash
+cd igets
+python3 sg_sensitivity_analysis.py
+```
+
+Esto calculará:
+- Tamaños de muestra requeridos para SNR = 5
+- Tiempos de observación para diferentes amplitudes
+- Factibilidad con red IGETS actual
+
+**Resultados esperados**:
+- **A = 10⁻¹² g**: ~42 minutos de observación ✅
+- **A = 10⁻¹³ g**: ~3 días de observación ✅
 
 ### Ejecución básica
 
