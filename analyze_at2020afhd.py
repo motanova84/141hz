@@ -46,14 +46,18 @@ print(f"   ω_frame = {omega_frame:.6f} rad/day")
 print(f"   f_frame = {omega_frame/(2*np.pi*86400):.3e} Hz")
 
 # Signal generation functions
-def xray_flux_model(t, A=1.0, omega=omega_frame, phi=0, decay=0.003, baseline=0.5, noise=0.1):
+def xray_flux_model(t, A=1.0, omega=None, phi=0, decay=0.003, baseline=0.5, noise=0.1):
     """X-ray flux with Lense-Thirring precession and exponential decay"""
+    if omega is None:
+        omega = omega_frame
     signal = A * np.sin(omega * t + phi) * np.exp(-decay * t) + baseline
     signal += np.random.normal(0, noise, len(t))
     return np.maximum(signal, 0.01)
 
-def radio_flux_model(t, A=0.8, omega=omega_frame, phi=np.pi/4, decay=0.002, baseline=0.3, noise=0.08):
+def radio_flux_model(t, A=0.8, omega=None, phi=np.pi/4, decay=0.002, baseline=0.3, noise=0.08):
     """Radio flux with similar precession"""
+    if omega is None:
+        omega = omega_frame
     signal = A * np.sin(omega * t + phi) * np.exp(-decay * t) + baseline
     signal += np.random.normal(0, noise, len(t))
     return np.maximum(signal, 0.01)

@@ -204,10 +204,16 @@ class TestVisualizationOutput(unittest.TestCase):
         self.assertLess(file_size, 10000000)
 
 
+def run_analysis_once():
+    """Run the analysis script once to generate test data."""
+    import analyze_at2020afhd
+    return analyze_at2020afhd
+
+
 if __name__ == '__main__':
     # Run the main script first to generate data
     print("Running analyze_at2020afhd.py to generate test data...")
-    import analyze_at2020afhd
+    run_analysis_once()
     print("\nRunning tests...\n")
     
     unittest.main(argv=[''], exit=False, verbosity=2)
