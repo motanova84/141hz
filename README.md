@@ -28,7 +28,12 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
-> **📚 NUEVO**: [**ÍNDICE COMPLETO**](INDICE_COMPLETO.md) - Documento maestro que consolida todo el marco QCAL ∞³: verificación empírica (AT2020afhd, GWTC), resolución de 5 problemas del milenio + Ramsey, estructuras matemáticas nuevas, derivaciones ab initio, predicciones falsables, y ecosistema GitHub completo. **~895 líneas, 32KB de documentación exhaustiva.**
+> **📚 NUEVO**: [**ÍNDICE COMPLETO**](INDICE_COMPLETO.md) - Documento maestro que consolida todo el marco QCAL ∞³:
+> - Verificación empírica (AT2020afhd, GWTC)
+> - Resolución de 5 problemas del milenio + Ramsey
+> - Estructuras matemáticas nuevas, derivaciones ab initio
+> - Predicciones falsables y ecosistema GitHub completo
+> - **~895 líneas, 32KB de documentación exhaustiva**
 
 ---
 

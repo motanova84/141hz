@@ -873,7 +873,7 @@ python sabio_infinity4.py
 
 | Documento | Estado | Líneas | Última actualización |
 |-----------|--------|--------|---------------------|
-| INDICE_COMPLETO.md | ✅ Completo | ~1100 | 2025-12-14 |
+| INDICE_COMPLETO.md | ✅ Completo | ~895 | 2025-12-14 |
 | README.md | ✅ Actualizado | 800+ | 2025-12 |
 | STATUS_PROYECTO_COMPLETO.md | ✅ Completo | 400+ | 2025-10 |
 | DERIVACION_COMPLETA_F0.md | ✅ Completo | 600+ | 2025-10 |
