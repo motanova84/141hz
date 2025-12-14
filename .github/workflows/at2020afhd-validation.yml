@@ -28,6 +28,9 @@ on:
       - 'VOLUMEN_I_AT2020afhd.md'
       - 'analisis_de_periodicidad_datos_reales.ipynb'
 
+permissions:
+  contents: read
+
 jobs:
   validate-script:
     name: Validate AT2020afhd Script
