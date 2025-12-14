@@ -16,7 +16,7 @@ AT2020afhd is a tidal disruption event with a detected periodicity of approximat
 The analysis requires Python 3.11+ and the following packages:
 
 ```bash
-pip install numpy scipy matplotlib
+pip install numpy matplotlib
 ```
 
 ## Data Requirements
@@ -48,10 +48,11 @@ python analyze_at2020afhd.py --data-dir Figure_datas
 
 ### Download and Analyze
 
-To download the data automatically (if URL is available):
+To download the data automatically (requires valid Zenodo URL):
 
 ```bash
-python analyze_at2020afhd.py --download --data-url https://zenodo.org/record/XXXXX/files/Figure_datas.tar
+# Replace RECORD_ID with the actual Zenodo record ID
+python analyze_at2020afhd.py --download --data-url https://zenodo.org/record/RECORD_ID/files/Figure_datas.tar
 ```
 
 ### Save Plots
@@ -248,9 +249,9 @@ The relationship spans exactly ~27.8 octaves, suggesting a universal harmonic st
 
 ## References
 
-- AT2020afhd discovery paper: [Citation needed]
 - QCAL framework: See repository documentation
 - Lomb-Scargle periodogram: Lomb (1976), Scargle (1982)
+- AT2020afhd data: Available on Zenodo
 
 ## Related Scripts
 
