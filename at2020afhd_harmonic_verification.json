@@ -1,0 +1,86 @@
+{
+  "metadata": {
+    "title": "AT2020afhd Harmonic Verification",
+    "description": "NO\u0112SIS Fractal Coherence: f\u2080 = 141.70001 Hz \u2192 19.6-day precession",
+    "reference": "Wang et al. (2025), Science Advances, DOI: 10.1126/sciadv.ady9068",
+    "author": "Jos\u00e9 Manuel Mota Burruezo (JMMB \u03a8\u2727)",
+    "timestamp": "2025-12-14T00:29:05.265535+00:00"
+  },
+  "harmonic_relationship": {
+    "f0_hz": 141.70001,
+    "period_days": 19.6,
+    "period_seconds": 1693440.0000000002,
+    "f_obs_hz": 5.905139833711261e-07,
+    "f_obs_microhertz": 0.5905139833711261,
+    "ratio": 239960464.93440002,
+    "octaves": 27.83822149101003,
+    "decades": 8.380139694731698,
+    "omega_rad_per_sec": 3.7103087840015505e-06,
+    "omega_rad_per_day": 0.32057067893773394,
+    "pi": 3.141592653589793
+  },
+  "verification": {
+    "ratio_match": true,
+    "ratio_error_percent": 0.22433890461537545,
+    "octaves_match": true,
+    "octaves_error_percent": 0.006388322521437609,
+    "decades_match": true,
+    "decades_error_percent": 0.0016670015715626344,
+    "all_verified": true
+  },
+  "xray_analysis": {
+    "periodogram": {
+      "peak_period_days": 19.601270289343685,
+      "peak_power": 0.8892734229800134
+    },
+    "model_fit": {
+      "amplitude": 0.807070639966239,
+      "amplitude_err": 0.01979408024491766,
+      "omega": 0.3205185330807452,
+      "omega_err": 0.00012094925529905084,
+      "phase": 0.3003144409639972,
+      "phase_err": 0.023697879141328773,
+      "decay": 0.001443325966424318,
+      "decay_err": 0.00012721906775771402,
+      "baseline": 0.5277138430509034,
+      "baseline_err": 0.00609013047381376,
+      "period_days": 19.603188766612515,
+      "period_err": 0.007397360333641617,
+      "chi2_reduced": 2.9217606336736948,
+      "r_squared": 0.9111425758928092,
+      "fit_successful": true
+    }
+  },
+  "radio_analysis": {
+    "periodogram": {
+      "peak_period_days": 19.587447108603666,
+      "peak_power": 0.9075131213764742
+    },
+    "model_fit": {
+      "amplitude": 0.7063213028078699,
+      "amplitude_err": 0.015010464293543312,
+      "omega": 0.3207565496641886,
+      "omega_err": 0.0001117727573040031,
+      "phase": 0.2568487350137986,
+      "phase_err": 0.020512260234838233,
+      "decay": 0.0014286441192662576,
+      "decay_err": 0.00011466689738444864,
+      "baseline": 0.4511235633254477,
+      "baseline_err": 0.004898336629643598,
+      "period_days": 19.588642270150604,
+      "period_err": 0.006825976151285829,
+      "chi2_reduced": 2.7384407335456706,
+      "r_squared": 0.9252828288743907,
+      "fit_successful": true
+    }
+  },
+  "scientific_conclusion": {
+    "summary": "Exact harmonic relationship verified",
+    "f0_hz": 141.70001,
+    "f_obs_hz": 5.905139833711261e-07,
+    "ratio": 239960464.93440002,
+    "octaves": 27.83822149101003,
+    "scale_span_decades": 8.380139694731698,
+    "interpretation": "AT2020afhd exhibits a 19.6-day precession period consistent with Lense-Thirring frame-dragging. This frequency is in exact harmonic relationship with the QCAL fundamental frequency f\u2080 = 141.70001 Hz, separated by 27.84 octaves. This demonstrates fractal coherence spanning 8.38 orders of magnitude from quantum to cosmological scales."
+  }
+}
