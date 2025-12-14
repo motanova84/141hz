@@ -58,6 +58,11 @@ from datetime import datetime
 # PARÁMETROS DEL EVENTO AT2020afhd
 # ============================================================================
 
+# Periodos sintéticos para demostración (cercanos al publicado de 19.6 días)
+# Estos valores se usan solo cuando no hay datos reales disponibles
+SYNTHETIC_PERIOD_XRAY = 19.35  # días - simulado para X-ray
+SYNTHETIC_PERIOD_RADIO = 19.52  # días - simulado para Radio
+
 # Coordenadas exactas
 RA_HMS = "03:13:35.70"
 DEC_DMS = "-02:09:06.37"
@@ -175,15 +180,17 @@ def load_real_data_xray(filepath=None):
         print("   3. Llamar: load_real_data_xray('data/AT2020afhd_xray.qdp')")
         return None, None, None
     
-    # TODO: Implementar lectura de archivos .qdp o .fits
-    # Ejemplo básico para formato .qdp:
-    # data = np.loadtxt(filepath, comments='!')
-    # time_days = data[:, 0]
-    # flux = data[:, 1]
-    # flux_error = data[:, 2]
-    # return time_days, flux, flux_error
-    
-    return None, None, None
+    try:
+        # Attempt to read .qdp format (common for Swift XRT data)
+        # Format: time(s) | rate(cts/s) | error(cts/s)
+        data = np.loadtxt(filepath, comments='!')
+        time_days = data[:, 0] / 86400.0  # Convert seconds to days
+        flux = data[:, 1]
+        flux_error = data[:, 2]
+        return time_days, flux, flux_error
+    except (FileNotFoundError, ValueError, OSError) as e:
+        print(f"⚠️  Could not read file {filepath}: {e}")
+        return None, None, None
 
 
 def load_real_data_radio(filepath=None):
@@ -218,8 +225,22 @@ def load_real_data_radio(filepath=None):
         print("   4. Llamar: load_real_data_radio('data/AT2020afhd_radio.csv')")
         return None, None, None
     
-    # TODO: Implementar lectura de archivos de VLA
-    return None, None, None
+    try:
+        # Attempt to read CSV format (common for VLA data)
+        # Assumes columns: time(MJD), flux(μJy), error(μJy)
+        import csv
+        with open(filepath, 'r') as f:
+            reader = csv.DictReader(f)
+            times, fluxes, errors = [], [], []
+            for row in reader:
+                # Adjust column names based on actual VLA data format
+                times.append(float(row.get('time', row.get('MJD', 0))))
+                fluxes.append(float(row.get('flux', row.get('Flux', 0))))
+                errors.append(float(row.get('error', row.get('Error', 0))))
+        return np.array(times), np.array(fluxes), np.array(errors)
+    except (FileNotFoundError, KeyError, ValueError, OSError) as e:
+        print(f"⚠️  Could not read file {filepath}: {e}")
+        return None, None, None
 
 
 # ============================================================================
@@ -299,7 +320,8 @@ def fit_lense_thirring_model(time, flux, period_init=19.6):
         # Ajustar modelo
         popt, pcov = curve_fit(lense_thirring, time, flux_norm, p0=p0,
                               bounds=([0, 15, -2*np.pi, 50, 0],
-                                     [1, 25, 2*np.pi, 200, 1]))
+                                     [1, 25, 2*np.pi, 200, 1]),
+                              maxfev=5000)
         
         # Calcular ajuste
         fitted = lense_thirring(time, *popt)
@@ -308,8 +330,8 @@ def fit_lense_thirring_model(time, flux, period_init=19.6):
         chi_sq = np.sum((flux_norm - fitted)**2) / len(time)
         
         return popt, fitted, chi_sq
-    except:
-        print("⚠️  Ajuste de Lense-Thirring no convergió")
+    except (RuntimeError, ValueError) as e:
+        print(f"⚠️  Ajuste de Lense-Thirring no convergió: {e}")
         return None, None, None
 
 
@@ -406,9 +428,9 @@ def plot_complete_analysis(save_path='at2020afhd_complete_analysis.png',
                          (time_full <= QPO_WINDOW_END)]
     
     # Datos X-ray y Radio sintéticos
-    flux_xray = generate_synthetic_lightcurve(time_full, period=19.35, 
+    flux_xray = generate_synthetic_lightcurve(time_full, period=SYNTHETIC_PERIOD_XRAY, 
                                               amplitude=1.0, trend='decay')
-    flux_radio = generate_synthetic_lightcurve(time_full, period=19.52, 
+    flux_radio = generate_synthetic_lightcurve(time_full, period=SYNTHETIC_PERIOD_RADIO, 
                                                amplitude=1.2, trend='constant')
     
     # Crear figura con 4 filas
@@ -779,8 +801,8 @@ def main():
     
     # Calcular periodos para el resumen
     time_full = np.linspace(0, 300, 150)
-    flux_xray = generate_synthetic_lightcurve(time_full, period=19.35)
-    flux_radio = generate_synthetic_lightcurve(time_full, period=19.52)
+    flux_xray = generate_synthetic_lightcurve(time_full, period=SYNTHETIC_PERIOD_XRAY)
+    flux_radio = generate_synthetic_lightcurve(time_full, period=SYNTHETIC_PERIOD_RADIO)
     
     _, _, best_period_x, _ = lomb_scargle_periodogram(
         time_full, flux_xray, min_period=15, max_period=25)

@@ -15,11 +15,14 @@ def test_script_execution():
     """Test that the script runs without errors."""
     print("Testing AT2020afhd_Real_Data_Analysis.py execution...")
     
+    # Configurable timeout - increase for slower systems
+    timeout_seconds = int(os.environ.get('TEST_TIMEOUT', '120'))
+    
     result = subprocess.run(
         [sys.executable, "AT2020afhd_Real_Data_Analysis.py"],
         capture_output=True,
         text=True,
-        timeout=60
+        timeout=timeout_seconds
     )
     
     if result.returncode != 0:
@@ -98,15 +101,18 @@ def test_json_content():
         detected = data.get("detected_periods", {})
         published = data.get("published_parameters", {}).get("period_days", 19.6)
         
-        xray_delta = detected.get("xray_delta_days", float('inf'))
-        radio_delta = detected.get("radio_delta_days", float('inf'))
+        xray_delta = detected.get("xray_delta_days")
+        radio_delta = detected.get("radio_delta_days")
         
-        if xray_delta < 1.0:
+        if xray_delta is None or radio_delta is None:
+            print("❌ Missing period delta values in JSON")
+            all_present = False
+        elif xray_delta < 1.0:
             print(f"✅ X-ray period within 1 day of published (Δ={xray_delta:.2f})")
         else:
             print(f"⚠️  X-ray period off by {xray_delta:.2f} days")
         
-        if radio_delta < 1.0:
+        if radio_delta is not None and radio_delta < 1.0:
             print(f"✅ Radio period within 1 day of published (Δ={radio_delta:.2f})")
         else:
             print(f"⚠️  Radio period off by {radio_delta:.2f} days")
