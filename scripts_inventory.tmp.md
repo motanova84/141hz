@@ -184,4 +184,4 @@
   - test_verify_kappa_pi_complete.py
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-09 09:25:04 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-14 05:42:25 UTC*
