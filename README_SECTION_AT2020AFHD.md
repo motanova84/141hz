@@ -17,7 +17,7 @@ Utilizando observaciones del evento AT2020afhd (Wang et al. 2025, Science Advanc
 
 Periodo observado:     19.600 días (±0.5)
 Frecuencia cósmica:    5.905 × 10⁻⁷ Hz
-Frecuencia QCAL:       141.70001 Hz
+Frecuencia QCAL:       141.7001 Hz
 ──────────────────────────────────────
 Octavas de separación: 27.84
 Ratio armónico:        2.400 × 10⁸

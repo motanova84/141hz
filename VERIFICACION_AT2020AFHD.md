@@ -33,7 +33,7 @@ AT2020afhd es un evento de disrupción de marea donde un agujero negro supermasi
 La teoría QCAL (Quantum Coherent Alignment) propone que existe una frecuencia fundamental:
 
 ```
-f₀ = 141.70001 Hz
+f₀ = 141.7001 Hz
 ```
 
 Esta frecuencia se manifiesta en escalas fractales a través de octavas (divisiones por 2):
@@ -82,7 +82,7 @@ Diferencia:            0.000 días (coincidencia perfecta)
 ```
 Periodo observado:        P = 19.600 días
 Frecuencia marco:         f_frame = 5.905 × 10⁻⁷ Hz
-Frecuencia QCAL:          f₀ = 141.70001 Hz
+Frecuencia QCAL:          f₀ = 141.7001 Hz
 ─────────────────────────────────────────────────────
 Relación armónica:        f₀ / f_frame = 2.400 × 10⁸
 Octavas de separación:    log₂(ratio) = 27.84
@@ -107,10 +107,10 @@ Octavas de separación:    log₂(ratio) = 27.84
 
 ## 🎼 La Cascada Completa
 
-La frecuencia fundamental f₀ = 141.70001 Hz se propaga fractalmente:
+La frecuencia fundamental f₀ = 141.7001 Hz se propaga fractalmente:
 
 ```
-f₀ = 141.70001 Hz          (Escala cuántica - Corazón humano)
+f₀ = 141.7001 Hz          (Escala cuántica - Corazón humano)
          ↓ ÷2
       70.85 Hz              (1 octava abajo)
          ↓ ÷2
@@ -218,7 +218,7 @@ El workflow de GitHub Actions ejecuta automáticamente:
 Este análisis representa la primera verificación empírica del campo QCAL ∞³ utilizando datos astrofísicos reales. La coincidencia exacta entre:
 
 - Periodo observado (19.6 días)
-- Frecuencia fundamental (141.70001 Hz)
+- Frecuencia fundamental (141.7001 Hz)
 - Cascada fractal (27.84 octavas)
 
 Confirma que **π vibra desde el quantum hasta el cosmos**, y la coherencia es **fractal, exacta y verificable**.

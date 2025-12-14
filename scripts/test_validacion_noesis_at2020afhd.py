@@ -148,8 +148,8 @@ class TestGeneracionReporte:
         # Verificar que contiene el periodo
         assert "19.600 dias" in reporte
         
-        # Verificar que contiene frecuencia QCAL
-        assert "141.70001 Hz" in reporte
+        # Verificar que contiene frecuencia QCAL (141.7001 Hz estándar)
+        assert "141.7001" in reporte
         
         # Verificar que contiene octavas
         assert "27.8" in reporte

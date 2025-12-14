@@ -24,7 +24,7 @@ from typing import Dict, Tuple, Any
 import sys
 
 # Constantes fundamentales del sistema QCAL
-F0_QCAL = 141.70001  # Hz - Frecuencia fundamental del campo QCAL
+F0_QCAL = 141.7001  # Hz - Frecuencia fundamental del campo QCAL
 
 
 def calcular_frecuencia_periodo(periodo_dias: float) -> float:
