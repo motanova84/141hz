@@ -21,7 +21,10 @@ from scipy import stats
 
 # Constantes del Higgs
 M_HIGGS = 125.0  # GeV
-SIGMA_HIGGS_SM = 55.0  # pb (producción en LHC a 13 TeV)
+# Producción del Higgs en LHC a 13 TeV por modo relevante:
+SIGMA_HIGGS_VBF_SM = 3.8  # pb (Vector Boson Fusion, VBF, aprox. 3.8 pb)
+SIGMA_HIGGS_VH_SM = 2.3   # pb (Asociado a bosón vectorial, VH, aprox. 2.3 pb)
+SIGMA_HIGGS_SM = SIGMA_HIGGS_VBF_SM + SIGMA_HIGGS_VH_SM  # pb total para canales relevantes
 BR_INVISIBLE_SM = 0.001  # Límite actual ~0.1%, usamos conservador
 
 

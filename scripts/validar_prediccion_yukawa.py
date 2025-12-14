@@ -254,8 +254,8 @@ def generar_tabla_comparativa():
     experimentos = [
         {
             'nombre': 'Eöt-Wash (2003)',
-            'r_min': 0.1,  # mm → m
-            'r_max': 0.01,  # m
+            'r_min': 0.0001,  # 0.1 mm → m
+            'r_max': 0.01,    # 1 cm → m
             'alpha_limit': 1e-3,
             'referencia': 'Adelberger et al., Ann. Rev. Nucl. Part. Sci. 53 (2003)'
         },

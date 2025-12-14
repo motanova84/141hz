@@ -132,8 +132,10 @@ def generar_grafica_prediccion():
     # Esto da k₀ ∼ 200,000 - 900,000 m⁻¹
     # Ajustamos la predicción para usar densidad típica y calcular k₀ correspondiente
     
-    # Densidad típica para ⁸⁷Rb BEC
-    n = 1e20  # m⁻³ (10¹⁴ cm⁻³)
+    # Densidad utilizada para ⁸⁷Rb BEC
+    # n = 1e20 m⁻³ = 1e20 / 1e6 = 1e14 cm⁻³ (conversión: 1 m⁻³ = 1e-6 cm⁻³)
+    # Nota: Este valor es más alto que la densidad típica de BEC (~1e14 cm⁻³), usada aquí para obtener c_s ≈ 1 m/s.
+    n = 1e20  # m⁻³
     
     # Calcular parámetros
     cs = calcular_velocidad_sonido(n)

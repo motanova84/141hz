@@ -54,35 +54,55 @@ def calcular_amplitud_modulacion():
     return A
 
 
-def generar_señal_modulada(duracion=3600, fs=1000, amplitud=1e-14, noise_level=1e-12):
+def generar_señal_modulada(duracion=3600, fs=1000, amplitud=1e-14, noise_level=1e-12, chunk_size=None):
     """
     Genera señal sintética de modulación gravitacional.
     
     NOTA: Para análisis completo se requieren 30 días de datos.
     Esta función usa 1 hora por defecto para demostración (limitación de memoria).
     En análisis real, se procesarían datos en chunks o se usaría downsample.
+    Si se especifica chunk_size, la función devuelve un generador que produce chunks de datos.
     
     Args:
         duracion: Duración en segundos (default: 1 hora para demo)
         fs: Frecuencia de muestreo (Hz)
         amplitud: Amplitud de modulación (m/s²)
         noise_level: Nivel de ruido (m/s²)
+        chunk_size: Tamaño de chunk en segundos (opcional). Si None, devuelve todo el array.
     
     Returns:
-        tuple: (tiempo, señal)
+        tuple: (tiempo, señal, señal_pura) si chunk_size is None
+        generator: genera tuplas (tiempo, señal, señal_pura) por chunk si chunk_size está definido
     """
-    t = np.arange(0, duracion, 1/fs)
+    if chunk_size is None:
+        t = np.arange(0, duracion, 1/fs)
+        # Señal pura
+        señal_pura = amplitud * np.cos(OMEGA0 * t)
+        # Ruido
+        ruido = noise_level * np.random.randn(len(t))
+        # Señal total
+        señal_total = señal_pura + ruido
+        return t, señal_total, señal_pura
+    else:
+        return _generar_señal_chunked(duracion, fs, amplitud, noise_level, chunk_size)
+
+
+def _generar_señal_chunked(duracion, fs, amplitud, noise_level, chunk_size):
+    """
+    Generador auxiliar para procesamiento por chunks.
     
-    # Señal pura
-    señal_pura = amplitud * np.cos(OMEGA0 * t)
-    
-    # Ruido
-    ruido = noise_level * np.random.randn(len(t))
-    
-    # Señal total
-    señal_total = señal_pura + ruido
-    
-    return t, señal_total, señal_pura
+    Yields:
+        tuple: (tiempo, señal, señal_pura) para cada chunk
+    """
+    num_chunks = int(np.ceil(duracion / chunk_size))
+    for i in range(num_chunks):
+        start = i * chunk_size
+        end = min((i + 1) * chunk_size, duracion)
+        t_chunk = np.arange(start, end, 1/fs)
+        señal_pura_chunk = amplitud * np.cos(OMEGA0 * t_chunk)
+        ruido_chunk = noise_level * np.random.randn(len(t_chunk))
+        señal_total_chunk = señal_pura_chunk + ruido_chunk
+        yield t_chunk, señal_total_chunk, señal_pura_chunk
 
 
 def analisis_espectral(t, señal, fs=1000):
