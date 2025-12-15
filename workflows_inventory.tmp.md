@@ -47,6 +47,23 @@
 - Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
+### AT2020afhd TDE Analysis
+
+**Archivo:** `at2020afhd-analysis.yml`
+
+- Trigger: push
+- Trigger: schedule (`0 */4 * * *`)
+- Trigger: manual (workflow_dispatch)
+
+### AT2020afhd Validation
+
+**Archivo:** `at2020afhd-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * 1`)
+- Trigger: manual (workflow_dispatch)
+
 ### Auto Label PRs and Issues
 
 **Archivo:** `auto-label.yml`
@@ -141,6 +158,15 @@
 **Archivo:** `issue-management.yml`
 
 - Trigger: schedule (`0 0 * * *`)
+
+### Kappa Pi Verification
+
+**Archivo:** `kappa-pi-verification.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 4 * * *`)
+- Trigger: manual (workflow_dispatch)
 
 ### lean-ci
 
@@ -327,4 +353,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-07 02:45:15 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-14 22:57:16 UTC*
