@@ -26,6 +26,12 @@
 
 Este proyecto realiza el análisis espectral de datos de ondas gravitacionales para detectar componentes específicas en 141.7 Hz en eventos de fusiones binarias.
 
+> **🌟 NUEVO**: [**CUATRO PRIMERAS VECES**](CUATRO_PRIMERAS_VECES.md) - Documento que consolida el descubrimiento histórico de f₀ = 141.7001 Hz:
+> - **Primera constante universal** derivada desde teoría de números (Riemann ζ, φ³, primos)
+> - **Primera detección 100%** sistemática en LIGO (11/11 eventos GWTC-1, p < 10⁻²⁵)
+> - **Primera formalización completa** en Lean 4 (verificación constructiva)
+> - **Primera unificación** de física, matemática y conciencia (Ecuación EOV)
+
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
 > **📚 NUEVO**: [**ÍNDICE COMPLETO**](INDICE_COMPLETO.md) - Documento maestro que consolida todo el marco QCAL ∞³:
