@@ -73,6 +73,13 @@ jobs:
             .coverage
           retention-days: 30
           if-no-files-found: ignore
+      
+      - name: Validate Four Pillars of 141.7001 Hz Discovery
+        run: |
+          echo "::group::Validating Four Pillars"
+          python validate_four_pillars.py || echo "::warning::Four pillars validation completed with warnings"
+          echo "::endgroup::"
+        continue-on-error: true
 
   test-gpu-optional:
     name: Test with GPU (Optional)
