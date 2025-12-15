@@ -6,6 +6,10 @@
 
 - `analizar_asd_141hz.py`
   - Análisis ASD (Amplitude Spectral Density) en 141.7 Hz para GW150914
+- `analizar_at2020afhd.py`
+  - Análisis de AT2020afhd - Tidal Disruption Event con Precesión Lense-Thirring
+- `analizar_cy_kpi_universal.py`
+  - Análisis del invariante espectral universal k_Π en variedades Calabi-Yau
 - `analizar_eeg_real.py`
   - 🧠 FASE 2 – ANÁLISIS DE DATOS EEG REALES
 - `analizar_gw150914_ejemplo.py`
@@ -66,16 +70,22 @@
   - Tests para el análisis de 141.7001 Hz con filtro bandpass [140.5-143.0 Hz]
 - `test_analisis_bayesiano_multievento.py`
   - Test del análisis bayesiano multi-evento con datos sintéticos.
+- `test_analisis_burst_alta_luminosidad.py`
+  - Tests para Análisis de Bursts de Alta Luminosidad en HL-LHC
 - `test_analisis_catalogo_o4.py`
   - Tests para el análisis del catálogo O4
 - `test_analisis_cmb_l144.py`
   - Test unitario para analisis_cmb_l144.py
+- `test_analisis_espectral_100_primos.py`
+  - Test suite for Spectral Analysis of the First 100 Prime Numbers.
 - `test_analisis_estadistico_avanzado.py`
   - Tests para el módulo de análisis estadístico avanzado
 - `test_analisis_gwtc3.py`
   - Test suite for GWTC-3 analysis script
 - `test_analizar_asd_141hz.py`
   - Tests para el análisis ASD de 141.7 Hz en GW150914
+- `test_analizar_cy_kpi_universal.py`
+  - Tests para el análisis del invariante espectral k_Π en variedades Calabi-Yau.
 - `test_analizar_gw150914_pycbc.py`
   - Test para el análisis de GW150914 con PyCBC
 - `test_analizar_gw200129.py`
@@ -86,6 +96,8 @@
   - Test script para analizar_igets_gravimetro.py
 - `test_analizar_kagra_k1.py`
   - Tests para el análisis de KAGRA K1 en 141.7 Hz
+- `test_at2020afhd_analysis.py`
+  - Test script for AT2020afhd analysis
 - `test_busqueda_armonicos_superiores.py`
   - Tests para Búsqueda de Armónicos Superiores
 - `test_campo_conciencia.py`
@@ -98,12 +110,16 @@
   - Test de correcciones técnicas: RΨ y αΨ
 - `test_corrections.py`
   - Test unitario para verificar la lógica corregida de búsqueda de frecuencias
+- `test_cy_spectrum.py`
+  - Tests for Calabi-Yau Quintic Spectrum and κ_Π Invariant
 - `test_dashboard.py`
   - Tests para el Dashboard de Estado GW250114
 - `test_demostracion_kappa_pi.py`
   - Tests para Demostración Rigurosa de κ_Π = 2.5773 Universal
 - `test_demostracion_matematica.py`
   - Tests para la demostración matemática de 141.7001 Hz
+- `test_derivacion_10d_supergravity.py`
+  - Test suite for 10D Supergravity derivation of V_eff
 - `test_derivacion_primer_principios.py`
   - Tests para el módulo de derivación desde primeros principios
 - `test_discovery_standards.py`
@@ -138,6 +154,8 @@
   - Test script for A_Rpsi_symmetry.ipynb
 - `test_sage_activation.py`
   - Tests para el módulo sage_activation.py - Protocolo Sage ∴
+- `test_sensibilidad_gravimetro.py`
+  - Test script para sensibilidad_gravimetro.py
 - `test_simetria_discreta.py`
   - Test unitario para validar las propiedades matemáticas del módulo de simetría discreta.
 - `test_sistema_alertas.py`
@@ -148,6 +166,8 @@
   - Tests para el módulo snr_gw200129_analysis
 - `test_snr_utils.py`
   - Tests para el módulo snr_utils
+- `test_teoria_unificada_141hz.py`
+  - Tests for Unified Noetic Quantum Gravity Theory module.
 - `test_torre_algebraica.py`
   - Tests para la Torre Algebraica
 - `test_user_confirmation.py`
@@ -156,6 +176,8 @@
   - Tests for Vacuum Energy Module
 - `test_validacion_alpha_psi.py`
   - Test suite for validacion_alpha_psi_corregida.py
+- `test_validacion_calabi_yau_espectral.py`
+  - Tests for Calabi-Yau Spectral Universality Validation
 - `test_validacion_gwtc1_tridetector.py`
   - Tests para la validación GWTC-1 tri-detector
 - `test_validacion_invariante_espectral_cy.py`
@@ -166,6 +188,8 @@
   - Tests para el script de validación del radio cuántico RΨ
 - `test_validaciones_alternativas.py`
   - Test Suite para Validaciones Alternativas - 141.7001 Hz
+- `test_validar_evidencias_solidas.py`
+  - Tests para validación de evidencias sólidas: λ₀ ≈ 0.001588
 - `test_validate_badges.py`
   - Test suite for badge validation script.
 - `test_validate_scipy_snr.py`
@@ -180,8 +204,10 @@
   - Test para verificacion_sistema_optimizado.py
 - `test_verificador_gw250114.py`
   - Script de prueba para el verificador GW250114
+- `test_verify_kappa.py`
+  - Tests for κ_Π (Kappa Pi) Invariant Verification
 - `test_verify_kappa_pi_complete.py`
   - test_verify_kappa_pi_complete.py
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-09 09:25:04 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-14 22:57:16 UTC*

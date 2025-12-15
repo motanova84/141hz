@@ -60,6 +60,8 @@ jobs:
 
       - name: Validate AT2020afhd Noesis verification
         run: python3 scripts/validacion_noesis_at2020afhd.py
+      - name: Validate AT2020afhd periodicity
+        run: python3 validate_at2020afhd_periodicity.py --precision 50
         continue-on-error: false
         env:
           NUMEXPR_MAX_THREADS: 4
@@ -152,6 +154,10 @@ jobs:
             echo "### AT2020afhd Noesis Verification" >> $GITHUB_STEP_SUMMARY
             echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
             cat results/validacion_noesis_at2020afhd.json | head -40 >> $GITHUB_STEP_SUMMARY
+          if [ -f "results/at2020afhd_validation.json" ]; then
+            echo "### AT2020afhd Periodicity Validation" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            cat results/at2020afhd_validation.json | head -40 >> $GITHUB_STEP_SUMMARY
             echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/aggregated_report.json" ]; then
