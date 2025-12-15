@@ -77,9 +77,19 @@ jobs:
       - name: Validate Four Pillars of 141.7001 Hz Discovery
         run: |
           echo "::group::Validating Four Pillars"
-          python validate_four_pillars.py || echo "::warning::Four pillars validation completed with warnings"
+          set +e  # Don't exit on error
+          python validate_four_pillars.py
+          VALIDATION_EXIT_CODE=$?
           echo "::endgroup::"
-        continue-on-error: true
+          
+          if [ $VALIDATION_EXIT_CODE -eq 0 ]; then
+            echo "::notice::All four pillars validated successfully"
+          else
+            echo "::warning::Some pillars completed with warnings (exit code: $VALIDATION_EXIT_CODE)"
+          fi
+          
+          # Don't fail the build, but report status
+          exit 0
 
   test-gpu-optional:
     name: Test with GPU (Optional)

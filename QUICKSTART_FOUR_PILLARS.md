@@ -28,7 +28,12 @@ cd 141hz
 pip install numpy scipy matplotlib mpmath sympy
 
 # 3. (Opcional) Instalar Lean 4 para verificación formal
+# Opción A: Usando elan (recomendado)
 curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh
+# Opción B: Verificar checksum antes de instalar
+# curl -O https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh
+# sha256sum elan-init.sh  # Verificar contra checksum oficial
+# sh elan-init.sh -y
 ```
 
 ### Validación Completa

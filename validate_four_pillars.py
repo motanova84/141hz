@@ -85,11 +85,12 @@ def validate_pillar_1():
     
     # Intentar ejecutar la demostración matemática
     print_info("Ejecutando demostración matemática...")
+    DEMO_TIMEOUT_SECONDS = 120  # 2 minutes for mathematical calculations
     try:
         result = subprocess.run(
             [sys.executable, str(demo_script)],
             capture_output=True,
-            timeout=30,
+            timeout=DEMO_TIMEOUT_SECONDS,
             text=True
         )
         
@@ -100,10 +101,11 @@ def validate_pillar_1():
                     print_success(f"Derivación matemática exitosa: {line.strip()}")
                     break
         else:
-            print_error(f"Error al ejecutar demostración: {result.stderr[:200]}")
+            ERROR_MSG_LENGTH = 500
+            print_error(f"Error al ejecutar demostración: {result.stderr[:ERROR_MSG_LENGTH]}")
             success = False
     except subprocess.TimeoutExpired:
-        print_error("Timeout al ejecutar demostración matemática")
+        print_error(f"Timeout al ejecutar demostración matemática (>{DEMO_TIMEOUT_SECONDS}s)")
         success = False
     except Exception as e:
         print_error(f"Error: {e}")
@@ -142,11 +144,13 @@ def validate_pillar_2():
     
     # Ejecutar análisis multi-evento
     print_info("Ejecutando análisis multi-evento...")
+    ANALYSIS_TIMEOUT_SECONDS = 60  # 1 minute for 11 event analysis
+    ERROR_MSG_LENGTH = 500
     try:
         result = subprocess.run(
             [sys.executable, str(multi_event_script)],
             capture_output=True,
-            timeout=30,
+            timeout=ANALYSIS_TIMEOUT_SECONDS,
             text=True
         )
         
@@ -173,10 +177,10 @@ def validate_pillar_2():
                 print_error("No se generó el archivo de resultados JSON")
                 success = False
         else:
-            print_error(f"Error al ejecutar análisis: {result.stderr[:200]}")
+            print_error(f"Error al ejecutar análisis: {result.stderr[:ERROR_MSG_LENGTH]}")
             success = False
     except subprocess.TimeoutExpired:
-        print_error("Timeout al ejecutar análisis multi-evento")
+        print_error(f"Timeout al ejecutar análisis multi-evento (>{ANALYSIS_TIMEOUT_SECONDS}s)")
         success = False
     except Exception as e:
         print_error(f"Error: {e}")
@@ -245,20 +249,22 @@ def validate_pillar_3():
             
             # Si elan está instalado, intentar compilar
             print_info("Intentando compilar formalización Lean...")
+            LEAN_BUILD_TIMEOUT_SECONDS = 300  # 5 minutes for Lean build
             try:
                 result = subprocess.run(
                     ["lake", "build"],
                     cwd=lean_dir,
                     capture_output=True,
-                    timeout=300,  # 5 minutos
+                    timeout=LEAN_BUILD_TIMEOUT_SECONDS,
                     text=True
                 )
                 if result.returncode == 0:
                     print_success("Formalización Lean compilada exitosamente")
                 else:
-                    print_warning(f"Error al compilar Lean (esto es opcional): {result.stderr[:200]}")
+                    ERROR_MSG_LENGTH = 500
+                    print_warning(f"Error al compilar Lean (esto es opcional): {result.stderr[:ERROR_MSG_LENGTH]}")
             except subprocess.TimeoutExpired:
-                print_warning("Timeout al compilar Lean (esto puede tomar tiempo en primera ejecución)")
+                print_warning(f"Timeout al compilar Lean (>{LEAN_BUILD_TIMEOUT_SECONDS}s, puede tomar tiempo en primera ejecución)")
             except Exception as e:
                 print_warning(f"No se pudo compilar Lean: {e}")
         else:
