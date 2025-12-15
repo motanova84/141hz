@@ -74,6 +74,8 @@ GW250114_DISPONIBLE.txt
 # Created directories (runtime)
 dashboard/
 resultados/
+# But allow CY spectral data
+!resultados/cy_kpi_extended.csv
 
 # Environment variables
 .env
@@ -134,3 +136,4 @@ papers/*.pdf
 *.fdb_latexmk
 *.fls
 *.synctex.gz
+results/validacion_evidencias_solidas.json
