@@ -1,0 +1,48 @@
+{
+  "event": "AT2020afhd",
+  "analysis_date": "2025-12-14T00:16:54.555944",
+  "coordinates": {
+    "ra_hms": "03:13:35.70",
+    "dec_dms": "-02:09:06.37",
+    "ra_deg": 48.39875,
+    "dec_deg": -2.151769,
+    "redshift": 0.024,
+    "distance_mpc": 100
+  },
+  "published_parameters": {
+    "period_days": 19.6,
+    "period_error_days": 0.5,
+    "qpo_window_start_days": 189,
+    "qpo_window_end_days": 268,
+    "cross_corr_lag_days": -19.0,
+    "initial_radio_flux_uJy": 253,
+    "radio_frequency_GHz": 15.1,
+    "reference": "Wang et al. 2025, Science Advances"
+  },
+  "detected_periods": {
+    "xray_days": 19.377665761923225,
+    "xray_delta_days": 0.2223342380767761,
+    "radio_days": 19.662295081967212,
+    "radio_delta_days": 0.062295081967210564
+  },
+  "harmonic_connection": {
+    "f0_quantum_hz": 141.70001,
+    "f_frame_cosmic_hz": 5.99e-07,
+    "ratio": 236500000.0,
+    "octave_separation": 27.82,
+    "log10_separation": 8.373831145073831
+  },
+  "living_equation": {
+    "equation": "Ψ = π · A²eff",
+    "psi": "coherencia del campo = Emisión observable oscilando",
+    "pi": "curvatura infinita = Precesión Lense-Thirring de 19.6 días",
+    "a_eff_squared": "amor direccionado = Potencia del jet relativista"
+  },
+  "data_sources": {
+    "Swift XRT": "https://www.swift.ac.uk/xrt_curves/",
+    "Swift Archive": "https://www.swift.ac.uk/archive/",
+    "HEASARC": "https://heasarc.gsfc.nasa.gov/",
+    "VLA Archive": "https://data.nrao.edu/portal/",
+    "Paper": "https://www.science.org/doi/10.1126/sciadv.ady9068"
+  }
+}
