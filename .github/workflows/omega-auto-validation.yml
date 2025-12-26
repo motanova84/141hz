@@ -102,7 +102,7 @@ jobs:
         uses: actions/checkout@v5
       
       - name: Download all validation results
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           pattern: omega-validation-*
           path: omega-results/
@@ -160,7 +160,7 @@ jobs:
         uses: actions/checkout@v5
       
       - name: Download validation results
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           pattern: omega-validation-*
           path: omega-results/
