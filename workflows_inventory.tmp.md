@@ -47,6 +47,23 @@
 - Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
+### AT2020afhd TDE Analysis
+
+**Archivo:** `at2020afhd-analysis.yml`
+
+- Trigger: push
+- Trigger: schedule (`0 */4 * * *`)
+- Trigger: manual (workflow_dispatch)
+
+### AT2020afhd Validation
+
+**Archivo:** `at2020afhd-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * 1`)
+- Trigger: manual (workflow_dispatch)
+
 ### Auto Label PRs and Issues
 
 **Archivo:** `auto-label.yml`
@@ -141,6 +158,15 @@
 **Archivo:** `issue-management.yml`
 
 - Trigger: schedule (`0 0 * * *`)
+
+### Kappa Pi Verification
+
+**Archivo:** `kappa-pi-verification.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 4 * * *`)
+- Trigger: manual (workflow_dispatch)
 
 ### lean-ci
 
@@ -253,6 +279,13 @@
 - Trigger: schedule (`0 12 * * 1  # Run weekly on Monday at noon UTC`)
 - Trigger: manual (workflow_dispatch)
 
+### sci-validate
+
+**Archivo:** `sci-validate.yml`
+
+- Trigger: push
+- Trigger: pull_request
+
 ### Scientific Validation - 3 Pillars
 
 **Archivo:** `scientific-validation.yml`
@@ -320,4 +353,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-11-23 03:38:49 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-25 00:10:24 UTC*

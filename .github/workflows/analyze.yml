@@ -280,7 +280,7 @@ jobs:
     
     - name: 📤 Subir figuras como artefactos
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v5
       with:
         name: espectros-141hz-gw150914
         path: |
