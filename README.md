@@ -2076,6 +2076,7 @@ Sistema proactivo de validación implementado para preparar el análisis de GW25
 - ✅ **Sistema de Alertas Automáticas** - Notificaciones cuando GW250114 esté disponible
 - ✅ **Análisis Multi-evento** - Validación automatizada bayesiana en 5 eventos GWTC
 - ✅ **Análisis Multi-evento SNR** - Análisis de SNR en 141.7 Hz para 11 eventos (H1 y L1)
+- ✅ **Test de Universalidad Virgo/KAGRA** - Validación de 141.7 Hz en detectores Virgo y KAGRA
 - ✅ **Validación Scipy Pura** - Procesamiento 100% scipy/numpy con filtros Butterworth y notch
 - ✅ **Sistema de Alertas Automáticas** - Notificaciones sobre disponibilidad de GW250114
 
@@ -2090,6 +2091,23 @@ python3 scripts/sistema_validacion_completo.py
 # O usando Make
 make validate
 
+# Análisis multi-evento automatizado (NUEVO)
+make multievento
+
+# Análisis multi-evento de SNR en 141.7 Hz (NUEVO)
+make multi-event-snr      # Análisis de 11 eventos con H1 y L1
+make test-multi-event-snr # Ejecutar tests sin conectividad
+
+# Test de universalidad 141.7 Hz en Virgo y KAGRA (NUEVO)
+make universalidad-virgo-kagra      # Análisis de Virgo (V1) en 4 eventos
+make test-universalidad-virgo-kagra # Ejecutar tests del módulo
+
+# Sistema de alertas automáticas para GW250114 (NUEVO)
+make alert-gw250114  # Monitoreo continuo vía Make
+python3 scripts/verificador_gw250114.py  # Monitoreo continuo
+python3 scripts/verificador_gw250114.py --once  # Verificación única
+python3 scripts/ejemplo_verificador_gw250114.py  # Ejemplos de uso
+make test-alert-gw250114  # Ejecutar tests del sistema de alertas
 # Verificar optimización máxima del sistema
 make verify-optimization
 ```
@@ -2107,6 +2125,8 @@ make verify-optimization
 - `results/*_scipy_validation.png` - Visualizaciones de validación scipy (ASD con banda de análisis)
 - `multi_event_results.json` - Resultados de SNR multi-evento
 - `multi_event_analysis.png` - Visualización comparativa H1 vs L1
+- `universalidad_virgo_kagra_results.json` - Resultados de universalidad Virgo/KAGRA
+- `universalidad_virgo_kagra.png` - Visualización de SNR en Virgo (V1)
 - `snr_gw200129_065458_results.json` - Análisis SNR GW200129 (O3b)
 - `snr_gw200129_065458_141hz.png` - Visualización SNR por detector
 
