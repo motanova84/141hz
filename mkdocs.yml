@@ -1,3 +1,10 @@
+site_name: Análisis de Componente en 141.7 Hz
+site_description: Análisis espectral de datos de ondas gravitacionales para detectar componentes específicas en 141.7 Hz
+site_author: motanova84
+site_url: https://motanova84.github.io/141hz
+
+repo_name: motanova84/141hz
+repo_url: https://github.com/motanova84/141hz
 site_name: QCAL — Coherence Analytics (141.7 Hz)
 site_description: CLI científica y pipelines reproducibles para análisis de coherencia (141.7 Hz)
 site_url: https://motanova84.github.io/141hz
@@ -8,6 +15,8 @@ edit_uri: edit/main/docs/
 theme:
   name: material
   language: es
+  logo: assets/brand/logo.svg
+  # favicon: assets/brand/favicon.png  # Uncomment when favicon.png is added
   features:
     - navigation.tabs
     - navigation.sections
@@ -91,6 +100,79 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
   features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+  - git-revision-date-localized:
+      type: date
+      fallback_to_build_date: true
+  - social:
+      cards: true
+      cards_layout_options:
+        background_color: "#0f172a"
+        color: "#e2e8f0"
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.arithmatex:
+      generic: true
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/motanova84
+    - icon: fontawesome/brands/twitter
+      link: https://x.com/Investigad1154
+  meta:
+    - name: twitter:card
+      content: summary_large_image
+    - name: twitter:site
+      content: "@Investigad1154"
+
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Inicio: index.md
+  - Documentación:
+    - Setup Guide: DOCUMENTATION_SETUP.md
+    - Badges: BADGES.md
+    - Tutorial Completo: TUTORIAL_COMPLETO.md
+    - Protocolos Experimentales: PROTOCOLOS_EXPERIMENTALES.md
+  - Validaciones:
+    - Guía Quíntica: validacion_quintica_guia.md
+    - Geometría Unificada: GEOMETRIA_UNIFICADA.md
+  - Análisis:
+    - GW200129: GW200129_ANALYSIS_README.md
+    - KAGRA: KAGRA_ANALYSIS.md
+  - QCAL-LLM:
+    - Core: QCAL_LLM_CORE_README.md
+    - Quick Start Frecuencia Prima: QUICKSTART_FRECUENCIA_PRIMA.md
     - navigation.tabs
     - navigation.sections
     - navigation.expand

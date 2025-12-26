@@ -1,0 +1,146 @@
+{
+  "title": "Omega ∞³ Multi-Event Validation",
+  "timestamp": "2025-11-13T01:58:56.462598",
+  "target_frequency_hz": 141.7001,
+  "events_analyzed": 3,
+  "validations": [
+    {
+      "event": "GW150914",
+      "snr": {
+        "H1": 27.17,
+        "L1": 25.32
+      },
+      "coherent": true,
+      "f0_detected": 141.7001,
+      "timestamp": "2025-11-13T01:58:56.462398",
+      "mode": "simulation",
+      "ipfs_hash": "Qm91fa9612ea64b60e16883d40377413bc35ffac8bf982",
+      "nft_metadata": {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "name": "Omega-Validation-141Hz-GW150914",
+        "author": {
+          "@id": "https://orcid.org/0000-0000-0000-0000",
+          "name": "José Manuel Mota Burruezo (JMMB Ψ✧)"
+        },
+        "datePublished": "2025-11-13T01:58:56.462446",
+        "identifier": "omega-GW150914-Qm91fa9612ea64b60e16883d40377413bc35ffac8bf982",
+        "measurementMethod": "JAX-GPU-FFT-Omega",
+        "variableMeasured": [
+          {
+            "@type": "PropertyValue",
+            "name": "f0",
+            "value": 141.7001,
+            "unitText": "Hz"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "snr_h1",
+            "value": 27.17,
+            "unitText": "dB"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "snr_l1",
+            "value": 25.32,
+            "unitText": "dB"
+          }
+        ],
+        "validation": "ipfs://Qm91fa9612ea64b60e16883d40377413bc35ffac8bf982",
+        "proof": "integrity-verified"
+      }
+    },
+    {
+      "event": "GW151226",
+      "snr": {
+        "H1": 28.83,
+        "L1": 10.78
+      },
+      "coherent": false,
+      "f0_detected": 141.7001,
+      "timestamp": "2025-11-13T01:58:56.462495",
+      "mode": "simulation",
+      "ipfs_hash": "Qmbd435c49e205268fd7ddb89e60b14a576508b3b246a7",
+      "nft_metadata": {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "name": "Omega-Validation-141Hz-GW151226",
+        "author": {
+          "@id": "https://orcid.org/0000-0000-0000-0000",
+          "name": "José Manuel Mota Burruezo (JMMB Ψ✧)"
+        },
+        "datePublished": "2025-11-13T01:58:56.462520",
+        "identifier": "omega-GW151226-Qmbd435c49e205268fd7ddb89e60b14a576508b3b246a7",
+        "measurementMethod": "JAX-GPU-FFT-Omega",
+        "variableMeasured": [
+          {
+            "@type": "PropertyValue",
+            "name": "f0",
+            "value": 141.7001,
+            "unitText": "Hz"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "snr_h1",
+            "value": 28.83,
+            "unitText": "dB"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "snr_l1",
+            "value": 10.78,
+            "unitText": "dB"
+          }
+        ],
+        "validation": "ipfs://Qmbd435c49e205268fd7ddb89e60b14a576508b3b246a7",
+        "proof": "integrity-verified"
+      }
+    },
+    {
+      "event": "GW170814",
+      "snr": {
+        "H1": 16.25,
+        "L1": 17.86
+      },
+      "coherent": true,
+      "f0_detected": 141.7001,
+      "timestamp": "2025-11-13T01:58:56.462562",
+      "mode": "simulation",
+      "ipfs_hash": "Qm30f5e5a0d30700b2145c8edfddd902b1a56241a96102",
+      "nft_metadata": {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "name": "Omega-Validation-141Hz-GW170814",
+        "author": {
+          "@id": "https://orcid.org/0000-0000-0000-0000",
+          "name": "José Manuel Mota Burruezo (JMMB Ψ✧)"
+        },
+        "datePublished": "2025-11-13T01:58:56.462580",
+        "identifier": "omega-GW170814-Qm30f5e5a0d30700b2145c8edfddd902b1a56241a96102",
+        "measurementMethod": "JAX-GPU-FFT-Omega",
+        "variableMeasured": [
+          {
+            "@type": "PropertyValue",
+            "name": "f0",
+            "value": 141.7001,
+            "unitText": "Hz"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "snr_h1",
+            "value": 16.25,
+            "unitText": "dB"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "snr_l1",
+            "value": 17.86,
+            "unitText": "dB"
+          }
+        ],
+        "validation": "ipfs://Qm30f5e5a0d30700b2145c8edfddd902b1a56241a96102",
+        "proof": "integrity-verified"
+      }
+    }
+  ]
+}
