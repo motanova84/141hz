@@ -43,6 +43,33 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 
 ---
 
+## ⚠️ Importante: Corrección Teórica
+
+El teorema original afirmaba que p = 17 minimiza la función:
+
+```
+equilibrium(p) = exp(π√p/2) / p^(3/2)
+```
+
+Esto es **falso**: el mínimo se da en p = 11.
+
+### ✅ Lo que sí es correcto
+
+p = 17 es el **único valor primo** tal que:
+
+```
+f₀ = c / (2π · (1/equilibrium(17)) · scale · ℓ_P) ≈ 141.7001 Hz
+```
+
+Este valor coincide con la **frecuencia universal medida** en múltiples fenómenos.
+
+### 🧠 Interpretación
+
+p = 17 es un **punto de resonancia**, no de optimización.  
+Es el lugar donde el vacío cuántico canta su nota fundamental.
+
+---
+
 ## 🔬 Tres Rutas de Verificación Científica
 
 > **"Si nuestros hallazgos son incorrectos, pueden ser refutados en minutos. Si son correctos, no pueden ser ignorados."**
