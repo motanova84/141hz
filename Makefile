@@ -27,6 +27,7 @@ setup: venv
   multi-event-snr test-multi-event-snr demo-multi-event-snr \
   snr-gw200129 test-snr-gw200129 \
   energia-cuantica test-energia-cuantica \
+  fractal-resonance test-fractal-resonance \
   validate-3-pilares test-3-pilares \
   validate-discovery-standards test-discovery-standards \
   pycbc-analysis test-pycbc demo-pycbc coherencia-escalas \
@@ -78,6 +79,8 @@ help:
 	@echo "  test-snr-gw200129     - Test SNR analysis for GW200129_065458 (NEW)"
 	@echo "  energia-cuantica      - Calculate quantum energy E_Ψ = hf₀ (NEW)"
 	@echo "  test-energia-cuantica - Test quantum energy calculations (NEW)"
+	@echo "  fractal-resonance     - Derive 141.7001 Hz from fractal resonance in fundamental constants (NEW)"
+	@echo "  test-fractal-resonance - Test fractal resonance derivation module (NEW)"
 	@echo "  validate-3-pilares    - Run 3 pillars validation: reproducibility, falsifiability, evidence (NEW)"
 	@echo "  test-3-pilares        - Test 3 pillars validation scripts (NEW)"
 	@echo "  validate-discovery-standards - Validate scientific discovery standards (>10σ) (NEW)"
@@ -174,6 +177,167 @@ pipeline: validate
 analyze-gw250114:
 	./venv/bin/python scripts/analisis_gw250114.py
 
+# Individual validation steps  
+validate-connectivity: setup
+	@echo "🌐 Validando conectividad GWOSC..."
+	./venv/bin/python scripts/validar_conectividad.py || echo "⚠️  Problemas de conectividad detectados"
+
+validate-gw150914: setup
+	@echo "🔬 Validando análisis de control GW150914..."
+	./venv/bin/python scripts/validar_gw150914.py || echo "⚠️  Validación GW150914 falló - revisar conectividad"
+
+validate-gw250114: setup  
+	@echo "🎯 Validando framework GW250114..."
+	./venv/bin/python scripts/analizar_gw250114.py || echo "⚠️  Framework GW250114 presentó errores - revisar logs"
+
+# Alert system for GW250114 availability
+alert-gw250114: setup
+	@echo "🚨 Sistema de alertas automáticas para GW250114"
+	@echo "   Iniciando monitoreo continuo..."
+	@echo "   Presiona Ctrl+C para detener"
+	./venv/bin/python scripts/verificador_gw250114.py
+
+# Test alert system for GW250114
+test-alert-gw250114: setup
+	@echo "🧪 Testing alert system for GW250114..."
+	./venv/bin/python scripts/test_verificador_gw250114.py
+
+# Test R_Ψ symmetry and compactification radius
+test-rpsi: setup
+	@echo "🔬 Testing R_Ψ symmetry and compactification radius..."
+	@echo "   Validating R_Ψ = 1.687e-35 m and f₀ = 141.7001 Hz relationship"
+	./venv/bin/python scripts/test_rpsi_symmetry.py
+
+# Validate Calabi-Yau compactification (Section 5.7f)
+validacion-quintica: setup
+	@echo "🔬 Validación numérica de compactificación sobre la quíntica en ℂP⁴..."
+	@echo "   Sección 5.7(f): Jerarquía RΨ ≈ 10⁴⁷ y frecuencia f₀ = 141.7001 Hz"
+	./venv/bin/python scripts/validacion_compactificacion_quintica.py
+
+# Multi-event Bayesian analysis
+multievento: setup
+	@echo "🌌 Ejecutando análisis bayesiano multi-evento..."
+	@echo "   Eventos: GW150914, GW151012, GW170104, GW190521, GW200115"
+	./venv/bin/python scripts/analisis_bayesiano_multievento.py || echo "⚠️  Análisis multi-evento completado con advertencias"
+
+# Test multi-event module with synthetic data
+test-multievento: setup
+	@echo "🧪 Testing análisis bayesiano multi-evento..."
+	./venv/bin/python scripts/test_analisis_bayesiano_multievento.py
+
+# Multi-event SNR analysis at 141.7 Hz
+multi-event-snr: setup
+	@echo "📊 Ejecutando análisis multi-evento de SNR en 141.7 Hz..."
+	@echo "   Eventos: GW150914, GW151012, GW151226, GW170104, GW170608,"
+	@echo "            GW170729, GW170809, GW170814, GW170817, GW170818, GW170823"
+	@echo "   Banda: 140.7-142.7 Hz"
+	./venv/bin/python scripts/multi_event_snr_analysis.py || echo "⚠️  Análisis multi-evento SNR completado con advertencias"
+
+# Test multi-event SNR analysis module
+test-multi-event-snr: setup
+	@echo "🧪 Testing análisis multi-evento de SNR..."
+	./venv/bin/python scripts/test_multi_event_snr_analysis.py
+
+# Demo multi-event SNR analysis with synthetic data
+demo-multi-event-snr: setup
+	@echo "🎬 Ejecutando demostración de análisis multi-evento SNR..."
+	@echo "   Usando datos sintéticos (sin conectividad a GWOSC)"
+	./venv/bin/python scripts/demo_multi_event_snr.py || python3 scripts/demo_multi_event_snr.py
+
+# SNR analysis for GW200129_065458 event
+snr-gw200129: setup
+	@echo "📊 Ejecutando análisis de SNR para GW200129_065458 en 141.7 Hz..."
+	@echo "   Evento O3b: 2020-01-29 06:54:58 UTC"
+	@echo "   Detectores: H1, L1, V1 (K1 no disponible)"
+	./venv/bin/python scripts/snr_gw200129_analysis.py
+
+# Test SNR analysis for GW200129_065458
+test-snr-gw200129: setup
+	@echo "🧪 Testing análisis de SNR para GW200129_065458..."
+	./venv/bin/python scripts/test_snr_gw200129_analysis.py
+
+# Calculate quantum energy of fundamental mode
+energia-cuantica: setup
+	@echo "⚛️  Calculando energía cuántica del modo fundamental..."
+	@echo "   E_Ψ = hf₀ con f₀ = 141.7001 Hz"
+	./venv/bin/python scripts/energia_cuantica_fundamental.py
+
+# Test quantum energy calculations
+test-energia-cuantica: setup
+	@echo "🧪 Testing cálculos de energía cuántica..."
+	./venv/bin/python scripts/test_energia_cuantica.py
+
+# Derive 141.7001 Hz from fractal resonance in fundamental constants
+fractal-resonance:
+	@echo "🔢 Deriving 141.7001 Hz from Fractal Resonance in Fundamental Constants..."
+	@echo "   Complex prime series with α_opt = 0.551020"
+	@echo "   Fractal correction δ ≈ 1.000141678"
+	@echo "   Fractal dimension D_f ≈ 1.236857745"
+	python3 scripts/fractal_resonance_constants.py
+
+# Test fractal resonance module
+test-fractal-resonance:
+	@echo "🧪 Testing fractal resonance derivation..."
+	python3 scripts/test_fractal_resonance_constants.py
+
+# Run 3 pillars validation: reproducibility, falsifiability, evidence
+validate-3-pilares: setup
+	@echo "🌟 Ejecutando Validación de 3 Pilares del Método Científico..."
+	@echo "   1. REPRODUCIBILIDAD GARANTIZADA"
+	@echo "   2. FALSABILIDAD EXPLÍCITA"
+	@echo "   3. EVIDENCIA EMPÍRICA CONCRETA"
+	./venv/bin/python scripts/validacion_completa_3_pilares.py
+
+# Test 3 pillars validation scripts
+test-3-pilares: setup
+	@echo "🧪 Testing scripts de validación de 3 pilares..."
+	@echo "   Testing reproducibilidad..."
+	./venv/bin/python scripts/reproducibilidad_garantizada.py || exit 1
+	@echo "   Testing falsabilidad..."
+	./venv/bin/python scripts/falsabilidad_explicita.py || exit 1
+	@echo "   Testing evidencia empírica..."
+	./venv/bin/python scripts/evidencia_empirica.py || exit 1
+	@echo "   Testing validación completa..."
+	./venv/bin/python scripts/validacion_completa_3_pilares.py || exit 1
+	@echo "✅ Todos los tests de 3 pilares pasaron exitosamente"
+
+# Validate scientific discovery standards (Particle Physics, Astronomy, Medicine)
+validate-discovery-standards: setup
+	@echo "📊 Validando Estándares de Descubrimiento Científico..."
+	@echo "   • Física de partículas: ≥ 5σ"
+	@echo "   • Astronomía: ≥ 3σ"
+	@echo "   • Medicina (EEG): ≥ 2σ"
+	./venv/bin/python scripts/discovery_standards.py
+	@echo "✅ Validación de estándares completada"
+
+# Test discovery standards validation
+test-discovery-standards: setup
+	@echo "🧪 Testing validación de estándares de descubrimiento..."
+	./venv/bin/python scripts/test_discovery_standards.py
+	@echo "✅ Tests de estándares de descubrimiento pasaron exitosamente"
+
+# Run PyCBC-based GW150914 analysis
+pycbc-analysis: setup
+	@echo "🌌 Ejecutando análisis GW150914 con PyCBC..."
+	@echo "   Filtrado, blanqueado y graficado de señal"
+	@mkdir -p results/figures
+	./venv/bin/python scripts/analizar_gw150914_pycbc.py || echo "⚠️  Análisis PyCBC requiere conectividad a GWOSC"
+
+# Test PyCBC analysis script
+test-pycbc: setup
+	@echo "🧪 Testing script de análisis PyCBC..."
+	./venv/bin/python scripts/test_analizar_gw150914_pycbc.py
+
+# Run PyCBC demo with simulated data
+demo-pycbc: setup
+	@echo "🎬 Ejecutando demostración de análisis PyCBC con datos simulados..."
+	@mkdir -p results/figures
+	@if ./venv/bin/python -c "import matplotlib" 2>/dev/null; then \
+		./venv/bin/python scripts/demo_pycbc_analysis.py; \
+	else \
+		echo "⚠️  venv sin matplotlib, usando Python del sistema"; \
+		python3 scripts/demo_pycbc_analysis.py; \
+	fi
 # Run all analyses (legacy + GW250114)
 analyze-all: analyze analyze-gw250114
 
