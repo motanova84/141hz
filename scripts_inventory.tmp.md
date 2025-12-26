@@ -7,7 +7,7 @@
 - `analizar_asd_141hz.py`
   - Análisis ASD (Amplitude Spectral Density) en 141.7 Hz para GW150914
 - `analizar_at2020afhd.py`
-  - Análisis de AT2020afhd - Tidal Disruption Event con Precesión Lense-Thirring
+  - 
 - `analizar_cy_kpi_universal.py`
   - Análisis del invariante espectral universal k_Π en variedades Calabi-Yau
 - `analizar_eeg_real.py`
@@ -210,4 +210,4 @@
   - test_verify_kappa_pi_complete.py
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-14 22:57:16 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-25 00:10:23 UTC*
