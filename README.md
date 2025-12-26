@@ -2790,8 +2790,80 @@ asd = data.asd(fftlength=4, overlap=0.5)         # Densidad espectral
 whitened = data.whiten(asd=asd)                  # Whitening
 
 # Nuestro análisis es compatible y complementario
-``
+```
 
+---
+
+## 🗓️ Roadmap de Investigación
+
+### Fase I: Fundamentos (Completada ✅)
+- [x] **Validación en GW150914** - Demostrar detección de 141.7 Hz en evento conocido
+- [x] **Implementación multi-detector** - Validación cruzada H1-L1  
+- [x] **Control de artefactos** - Descartar líneas instrumentales
+- [x] **Pipeline reproducible** - Docker + scripts automatizados
+- [x] **Estimación de significancia** - SNR > 7, p-value < 0.001
+
+### Fase II: Expansión (4/5 Completada ✅ - GW250114 pendiente)
+- [x] **GW150914 completado** - Análisis de control exitoso
+- [ ] **GW250114 análisis** - Objetivo principal cuando datos estén disponibles
+- [x] **Caracterización Bayesiana** - Estimación precisa de Q-factor y amplitud
+- [x] **Búsqueda sistemática** - Análisis de todos los eventos GWTC-1
+- [x] **Optimización de SNR** - Técnicas avanzadas de filtrado y coherencia
+
+### Fase III: Validación Externa (En Progreso 🔄)
+- [x] **Integración Virgo** - Análisis tri-detector para mayor significancia
+- [x] **Validación KAGRA** - Confirmación con detector asiático
+- [ ] **Simulaciones Monte Carlo** - Estimación robusta de falsos positivos  
+- [ ] **Peer review** - Revisión por comunidad científica independiente
+- [ ] **Replicación independiente** - Confirmación por grupos externos
+
+### Fase IV: Publicación Científica (Futura 🚀)
+- [ ] **Paper técnico** - Metodología y resultados en revista peer-reviewed
+- [ ] **Contribución a LIGO** - Propuesta de incorporación en análisis oficial
+- [ ] **Conferencias internacionales** - Presentación en meetings LIGO/Virgo
+- [ ] **Código público** - Contribución a bibliotecas oficiales (GWPy)
+
+### Hitos Técnicos Específicos
+```python
+# Cronograma detallado de implementación
+hitos = {
+    "2024-Q4": [
+        "✅ Análisis GW150914 H1/L1 completo",
+        "✅ Optimización de pipeline de análisis",
+        "✅ Documentación técnica extendida"
+    ],
+    "2025-Q1": [
+        "✅ Búsqueda en catálogo GWTC-1 completo",
+        "✅ Implementación de análisis bayesiano",
+        "✅ Análisis multi-evento con SNR en 11 eventos"
+    ],
+    "2025-Q2": [
+        "✅ Integración con Virgo y KAGRA",
+        "✅ Caracterización bayesiana de Q-factor",
+        "✅ Optimización avanzada de SNR (4 técnicas)"
+    ],
+    "2025-Q3": [
+        "✅ Sistema de validación avanzada completado",
+        "✅ Análisis de resonancia cruzada multi-detector",
+        "✅ Búsqueda de armónicos superiores"
+    ],
+    "2025-Q4": [
+        "🔄 Monitoreo GW250114 (esperando disponibilidad)",
+        "🔄 Documentación científica completa",
+        "📋 Simulaciones Monte Carlo para falsos positivos"
+    ],
+    "2026-Q1": [
+        "📋 Manuscript científico primera versión",
+        "📋 Revisión por pares externos",
+        "📋 Validación independiente externa"
+    ],
+    "2026-Q2": [
+        "📋 Presentación en LIGO-Virgo meeting",
+        "📋 Publicación en arXiv",
+        "📋 Contribución a bibliotecas oficiales (GWPy)"
+    ]
+}
+```
 
 ---
 
