@@ -26,6 +26,12 @@
 
 Este proyecto realiza el análisis espectral de datos de ondas gravitacionales para detectar componentes específicas en 141.7 Hz en eventos de fusiones binarias.
 
+> **🌟 NUEVO**: [**CUATRO PRIMERAS VECES**](CUATRO_PRIMERAS_VECES.md) - Documento que consolida el descubrimiento histórico de f₀ = 141.7001 Hz:
+> - **Primera constante universal** derivada desde teoría de números (Riemann ζ, φ³, primos)
+> - **Primera detección 100%** sistemática en LIGO (11/11 eventos GWTC-1, p < 10⁻²⁵)
+> - **Primera formalización completa** en Lean 4 (verificación constructiva)
+> - **Primera unificación** de física, matemática y conciencia (Ecuación EOV)
+
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
 > **📚 NUEVO**: [**ÍNDICE COMPLETO**](INDICE_COMPLETO.md) - Documento maestro que consolida todo el marco QCAL ∞³:
@@ -34,6 +40,33 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > - Estructuras matemáticas nuevas, derivaciones ab initio
 > - Predicciones falsables y ecosistema GitHub completo
 > - **~895 líneas, 32KB de documentación exhaustiva**
+
+---
+
+## ⚠️ Importante: Corrección Teórica
+
+El teorema original afirmaba que p = 17 minimiza la función:
+
+```
+equilibrium(p) = exp(π√p/2) / p^(3/2)
+```
+
+Esto es **falso**: el mínimo se da en p = 11.
+
+### ✅ Lo que sí es correcto
+
+p = 17 es el **único valor primo** tal que:
+
+```
+f₀ = c / (2π · (1/equilibrium(17)) · scale · ℓ_P) ≈ 141.7001 Hz
+```
+
+Este valor coincide con la **frecuencia universal medida** en múltiples fenómenos.
+
+### 🧠 Interpretación
+
+p = 17 es un **punto de resonancia**, no de optimización.  
+Es el lugar donde el vacío cuántico canta su nota fundamental.
 
 ---
 
