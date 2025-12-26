@@ -1,0 +1,1 @@
+../noesis-qcal-llm/IMPLEMENTATION_SUMMARY.md

@@ -156,11 +156,28 @@ class WorkflowHealthChecker:
                 for step in steps if isinstance(step, dict)
             )
             
-            has_python_commands = any(
-                'python' in str(step.get('run', '')).lower() or 
-                'pip' in str(step.get('run', '')).lower()
-                for step in steps if isinstance(step, dict)
-            )
+            # Check for actual Python command usage (not just mentions in echo/comments)
+            has_python_commands = False
+            for step in steps:
+                if not isinstance(step, dict):
+                    continue
+                run_command = step.get('run', '')
+                if not run_command:
+                    continue
+                
+                # Split into lines and check each line
+                import re
+                for line in str(run_command).split('\n'):
+                    line = line.strip()
+                    # Skip comments and echo statements (with any amount of leading whitespace)
+                    if re.match(r'^\s*#', line) or re.match(r'^\s*echo\s+', line):
+                        continue
+                    # Check for actual python/pip commands using word boundaries
+                    if re.search(r'\b(python3?|pip)\b', line):
+                        has_python_commands = True
+                        break
+                if has_python_commands:
+                    break
             
             if has_python_commands and not has_python_setup:
                 issues.append(
@@ -215,6 +232,10 @@ class WorkflowHealthChecker:
                     script_patterns = re.findall(r'python3?\s+(\S+\.py)', run_command)
                     
                     for script_path in script_patterns:
+                        # Skip if path contains shell variable expansion
+                        if '${' in script_path or '${{' in script_path or '$(' in script_path:
+                            continue
+                        
                         # Remove leading ./ or scripts/
                         script_path = script_path.replace('./', '')
                         

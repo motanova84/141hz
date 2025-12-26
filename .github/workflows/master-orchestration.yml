@@ -82,7 +82,7 @@ jobs:
     
     steps:
       - name: Trigger quantum validations workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             await github.rest.actions.createWorkflowDispatch({
@@ -101,7 +101,7 @@ jobs:
     
     steps:
       - name: Trigger alternative validations workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             await github.rest.actions.createWorkflowDispatch({
@@ -120,7 +120,7 @@ jobs:
     
     steps:
       - name: Trigger multi-event analysis workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             await github.rest.actions.createWorkflowDispatch({
@@ -139,7 +139,7 @@ jobs:
     
     steps:
       - name: Trigger detector analysis workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             await github.rest.actions.createWorkflowDispatch({
@@ -158,7 +158,7 @@ jobs:
     
     steps:
       - name: Trigger scientific validation workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             await github.rest.actions.createWorkflowDispatch({
@@ -177,7 +177,7 @@ jobs:
     
     steps:
       - name: Trigger advanced analysis workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             await github.rest.actions.createWorkflowDispatch({
@@ -196,7 +196,7 @@ jobs:
     
     steps:
       - name: Trigger special analysis workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             await github.rest.actions.createWorkflowDispatch({
@@ -215,7 +215,7 @@ jobs:
     
     steps:
       - name: Trigger comprehensive testing workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             await github.rest.actions.createWorkflowDispatch({

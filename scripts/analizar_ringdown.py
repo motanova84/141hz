@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 import os
+import argparse
+import json
 
 def cargar_datos_gwosc(archivo_hdf5):
     """Cargar datos desde archivo HDF5 de GWOSC (formato real)"""
@@ -46,6 +48,12 @@ def crear_graficos(tiempo, datos, freqs, potencia, freq_pico, snr, detector, sam
     """Crear gráficos de diagnóstico"""
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 10))
     
+    # Calcular potencia del pico
+    idx_pico = np.argmin(np.abs(freqs - freq_pico))
+    potencia_pico = potencia[idx_pico]
+    
+    # Serie temporal
+    ax1.plot(tiempo, datos, 'b-', linewidth=1)
     # Serie temporal (solo mostramos una parte)
     ax1.plot(tiempo[:10000], datos[:10000], 'b-', linewidth=1, alpha=0.7)
     ax1.set_xlabel('Tiempo (s)')
@@ -96,18 +104,34 @@ def crear_graficos(tiempo, datos, freqs, potencia, freq_pico, snr, detector, sam
     plt.close()
 
 def main():
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Análisis de componente en 141.7 Hz en el ringdown')
+    parser.add_argument('--detector', type=str, default='H1', help='Detector name (e.g., H1, L1, V1)')
+    parser.add_argument('--event', type=str, default='GW150914', help='Event name (e.g., GW150914)')
+    parser.add_argument('--offline', action='store_true', help='Use offline mode (use pre-generated data)')
+    args = parser.parse_args()
+    
+    # Obtener las rutas del proyecto
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_dir = os.path.dirname(script_dir)
+    output_dir = os.path.join(project_dir, 'results', 'figures')
+    data_dir = os.path.join(project_dir, 'data', 'raw')
+    results_dir = os.path.join(project_dir, 'results')
+    
     # Configuración
-    output_dir = '../results/figures'
     os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(results_dir, exist_ok=True)
     
-    # Para GW150914 (datos reales de control)
-    archivo_h1 = '../data/raw/H1-GW150914-32s.hdf5'
+    # Construir el nombre del archivo basado en los argumentos
+    archivo = os.path.join(data_dir, f'{args.detector}-{args.event}-32s.hdf5')
     
-    if os.path.exists(archivo_h1):
-        print("Analizando datos de GW150914 (control)...")
+    if os.path.exists(archivo):
+        print(f"Analizando datos de {args.event} ({args.detector})...")
+        if args.offline:
+            print("Modo offline: usando datos pre-generados")
         
         # Cargar datos con formato correcto
-        tiempo, strain, sample_rate = cargar_datos_gwosc(archivo_h1)
+        tiempo, strain, sample_rate = cargar_datos_gwosc(archivo)
         print(f"Sample rate: {sample_rate} Hz")
         print(f"Duración: {len(strain)/sample_rate:.1f} segundos")
         print(f"Tiempo GPS inicio: {tiempo[0]:.1f}")
@@ -122,18 +146,35 @@ def main():
             tiempo, strain, sample_rate
         )
         
-        print(f"\nResultados para H1 - GW150914:")
+        print(f"\nResultados para {args.detector} - {args.event}:")
         print(f"  - Frecuencia del pico más cercano: {freq_pico:.2f} Hz")
         print(f"  - SNR aproximado: {snr:.2f}")
         print(f"  - ¿Coincide con 141.7 Hz? {'SÍ' if abs(freq_pico-141.7)<1 else 'NO'}")
         
         # Crear gráficos
-        crear_graficos(tiempo, strain, freqs, potencia, freq_pico, snr, 'H1_GW150914', sample_rate, output_dir)
+        crear_graficos(tiempo, strain, freqs, potencia, freq_pico, snr, f'{args.detector}_{args.event}', sample_rate, output_dir)
         print(f"Gráficos guardados en {output_dir}/")
+        
+        # Guardar resultados en formato JSON para validación
+        results = {
+            'detector': args.detector,
+            'event': args.event,
+            'frequency': float(freq_pico),
+            'snr': float(snr),
+            'target_frequency': 141.7,
+            'matches_target': bool(abs(freq_pico - 141.7) < 1.0)
+        }
+        
+        results_file = os.path.join(results_dir, f'ringdown_results_{args.detector}_{args.event}.json')
+        with open(results_file, 'w') as f:
+            json.dump(results, f, indent=2)
+        print(f"Resultados guardados en {results_file}")
     
     else:
-        print("¡Los datos de GW150914 no se encontraron!")
-        print("Ejecuta primero: python scripts/descargar_datos.py")
+        print(f"¡Los datos de {args.event} ({args.detector}) no se encontraron!")
+        print(f"Archivo esperado: {archivo}")
+        print("Ejecuta primero: python scripts/generar_datos_prueba.py")
+        exit(1)
 
 if __name__ == "__main__":
     main()

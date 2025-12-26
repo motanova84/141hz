@@ -1,0 +1,23 @@
+{
+  "model": "llama-4-405b-qcal",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful, accurate, and precise mathematical assistant. Solve problems step-by-step and show your reasoning clearly."
+    },
+    {
+      "role": "user",
+      "content": "Janet's ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?"
+    }
+  ],
+  "temperature": 0.7,
+  "max_tokens": 512,
+  "extra_body": {
+    "qcal_frequency": 141.7001,
+    "qcal_epsilon": 0.015,
+    "qcal_tau": 0.07,
+    "qcal_phase": 0.0,
+    "qcal_enabled": true
+  },
+  "seed": 42
+}
