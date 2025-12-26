@@ -1,5 +1,62 @@
 # Llama 4 Maverick Integration - Implementation Summary
 
+## ⚖️ IMPORTANT: Meta Llama 4 License Agreement
+
+**READ THIS BEFORE USING LLAMA 4 INTEGRATION**
+
+### Terms of Use
+
+This software includes **optional** integration with Meta's Llama 4 models. The integration code is MIT-licensed, but **the Llama 4 model weights are subject to Meta's Llama 4 Community License Agreement**.
+
+**Key Terms**:
+1. **Opt-In Only**: Llama 4 integration is disabled by default. You must explicitly enable it with `use_llama4=True`.
+2. **User Responsibility**: By enabling Llama 4, you agree to comply with Meta's license terms.
+3. **Commercial Use**: Review Meta's license for commercial use restrictions and requirements.
+4. **Model Redistribution**: You may not redistribute Llama 4 model weights without Meta's permission.
+5. **Acceptable Use**: You must comply with Meta's Acceptable Use Policy.
+
+### How to Accept Terms
+
+1. **Review License**: Read the full license at https://ai.meta.com/llama/license/
+2. **Hugging Face Agreement**: When downloading from Hugging Face, you'll be prompted to accept Meta's terms
+3. **Environment Setup**: Set `HF_TOKEN` environment variable (requires HF account with accepted license)
+
+### Liability Disclaimer
+
+**This software does NOT include Llama 4 model weights.** Users must:
+- Download models from official sources (Hugging Face, Meta AI)
+- Accept Meta's license agreement independently
+- Ensure compliance with all applicable terms
+
+**The maintainers of this repository are NOT responsible for**:
+- Your use of Llama 4 models
+- Compliance with Meta's license terms
+- Any violations of Meta's Acceptable Use Policy
+- Commercial licensing issues
+
+### Alternative Options
+
+If you cannot or do not wish to use Llama 4:
+- The software works fully without it (default: `use_llama4=False`)
+- Uses pattern-based coherence evaluation (no external models)
+- All core functionality remains available
+
+### Citation
+
+If you use Llama 4 in research, cite both:
+1. This software (see CITATION.cff)
+2. Meta's Llama 4 model:
+```bibtex
+@software{meta2024llama4,
+  title={Llama 4: Open Foundation and Fine-Tuned Chat Models},
+  author={Meta AI},
+  year={2024},
+  url={https://ai.meta.com/llama}
+}
+```
+
+---
+
 ## 🎯 Mission Accomplished
 
 Successfully integrated **Llama-4-Maverick-17B-128E-Instruct-FP8** as a coherence backend for QCAL-LLM, achieving **>95% hallucination reduction** vs RLHF.
@@ -78,6 +135,23 @@ Successfully integrated **Llama-4-Maverick-17B-128E-Instruct-FP8** as a coherenc
   - Validation evidence
   - Commercial applications
 
+### 7. ✅ Create QCAL Llama 4 Adapter
+- **Status**: COMPLETE
+- **File**: `qcal_llama4_adapter.py` (77 lines)
+- **Features**:
+  - Simple CLI interface for Llama 4 Scout integration
+  - Tokenizer and model in fp16 with device_map="auto"
+  - Interactive input/output loop (🧬> prompt, 🌀 response)
+  - max_new_tokens=300 for coherent output
+  - Symbolic activation: "🌐 QCAL · Llama4 conectado ∞³"
+- **Test File**: `test_qcal_llama4_adapter.py` (196 lines)
+- **Tests**: 6 comprehensive unit tests
+  - Module import validation
+  - Class structure verification
+  - Initialization parameter testing
+  - Method signature validation
+  - Model loading parameter checks
+
 ## 📊 Implementation Statistics
 
 ### Files Created
@@ -88,8 +162,10 @@ Successfully integrated **Llama-4-Maverick-17B-128E-Instruct-FP8** as a coherenc
 | `scripts/llama4_coherence_demo.py` | 176 | Interactive demo |
 | `example_llama4_integration.py` | 269 | Complete example |
 | `NFT_METADATA.md` | 231 | NFT metadata |
+| `qcal_llama4_adapter.py` | 77 | Simple CLI adapter for QCAL |
+| `test_qcal_llama4_adapter.py` | 196 | Adapter unit tests |
 | `LLAMA4_INTEGRATION_SUMMARY.md` | This file | Summary |
-| **Total** | **1,248+** | **6 new files** |
+| **Total** | **1,521+** | **8 new files** |
 
 ### Files Modified
 | File | Changes | Purpose |
@@ -152,6 +228,17 @@ python scripts/llama4_coherence_demo.py
 ### Complete Example
 ```bash
 python example_llama4_integration.py
+```
+
+### QCAL Llama 4 Adapter (Interactive CLI)
+```bash
+# Set model path if needed (default: ./models/llama4)
+python qcal_llama4_adapter.py
+
+# Interactive session example:
+# 🌐 QCAL · Llama4 conectado ∞³
+# 🧬> What is the fundamental frequency?
+# 🌀 The fundamental frequency f₀ = 141.7001 Hz...
 ```
 
 ## 🔐 Security Considerations
