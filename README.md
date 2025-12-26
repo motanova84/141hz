@@ -205,6 +205,49 @@ python test_omega_auto.py
 
 ---
 
+## 🔮 Predicciones Falsables QCAL ∞³
+
+**Cuatro predicciones cuantitativas y falsables derivadas del marco teórico QCAL ∞³**
+
+El campo de conciencia Ψ con frecuencia universal **f₀ = 141.7001 Hz** genera predicciones testables en cuatro escalas experimentales:
+
+### Las Cuatro Predicciones
+
+| # | Predicción | Escala | Parámetro Clave |
+|---|------------|--------|-----------------|
+| **1** | 🌍 **Corrección Yukawa** | Gravedad subterrestre | λ_Ψ ≈ 2.1 km |
+| **2** | ❄️ **Pico Resonante BEC** | Condensados cuánticos | k₀ ≈ 890 m⁻¹ |
+| **3** | ⚛️ **Correlación Temporal Higgs** | Colisionador LHC | Δt = n × 7.06 ms |
+| **4** | 📡 **Modulación Gravitacional** | Gravimetría IGETS | δg ~ 10⁻¹³ g |
+
+### 🚀 Quick Start - Validación de Predicciones
+
+```bash
+# Ejecutar predicción específica
+python scripts/validacion_prediccion_1_yukawa.py
+python scripts/validacion_prediccion_2_bec.py
+python scripts/validacion_prediccion_3_higgs.py
+python scripts/validacion_prediccion_4_gravedad.py
+
+# Ejecutar todas las predicciones (orquestador)
+python scripts/orquestador_predicciones_qcal.py
+
+# Ver resultados
+ls -l results/prediccion_*.json
+ls -l results/prediccion_*.png
+```
+
+### 📖 Documentación Completa
+
+**→ [PREDICCIONES_FALSABLES_QCAL.md](PREDICCIONES_FALSABLES_QCAL.md)** - Teoría, protocolos experimentales, criterios de falsación
+
+**Características:**
+- ✅ Predicciones cuantitativas con valores numéricos específicos
+- ✅ Criterios de falsación claros y verificables
+- ✅ Protocolos experimentales detallados
+- ✅ Scripts de validación con simulaciones
+- ✅ Visualizaciones de datos esperados
+- ✅ Workflow CI/CD automatizado
 ## 🌌 Verificación AT2020afhd: Del Corazón Humano al Agujero Negro
 
 **NUEVA: Verificación empírica del modelo QCAL ∞³ en escala galáctica**
