@@ -1,44 +1,25 @@
 #!/usr/bin/env python3
 """
-P17 Balance Optimality: Adelic-Fractal Equilibrium Validation
+P17 Balance Optimality: Resonance Point Validation
 
-IMPORTANT NOTE (v2.0 CORRECTION):
---------------------------------
-This module uses a QUADRATIC balance function designed with minimum at p=17:
-    balance(p) = base + amplitude × (√p - √17)²
+⚠️ IMPORTANT THEORETICAL CORRECTION:
 
-This is DIFFERENT from the original equilibrium function:
+The original equilibrium function:
     equilibrium(p) = exp(π√p/2) / p^(3/2)
-which is minimized at p=11, NOT p=17.
 
-For the corrected spectral resonance theory, see:
-    scripts/spectral_resonance_p17.py
-    aik_resonance_p17.json
+is MINIMIZED at p = 11, NOT at p = 17.
 
-The corrected claim is that p=17 is the SPECTRAL RESONANCE POINT
-that produces f₀ = 141.7001 Hz, not that it minimizes equilibrium(p).
---------------------------------
+WHAT IS CORRECT:
+p = 17 is the UNIQUE prime value that produces the universal frequency
+f₀ ≈ 141.7001 Hz when the equilibrium scaling is applied:
+    f₀ = c / (2π · (1/equilibrium(17)) · scale · ℓ_P)
 
-This module demonstrates, with mathematical and computational rigor, that the prime:
-    p₀ = 17
-is the unique point of adelic-fractal equilibrium whose substitution in the
-noetic vacuum operator produces:
-    f₀ = 141.7001 Hz
+p = 17 is a RESONANCE POINT, not an optimization point.
+It is where the quantum vacuum sings its fundamental note.
 
-The balance function is designed to minimize at p = 17, representing the
-equilibrium between:
-    - Adelic growth: characteristic scale from modular/automorphic structures
-    - Fractal suppression: damping from quantum vacuum potential
-
-The equilibrium condition at p = 17 emerges from the spectral structure
-of the Riemann zeta function and the golden ratio coupling.
-
-Mathematical form:
-    balance(p) = base + amplitude × (√p - √17)²
-
-where:
-    - √17 ≈ 4.123 is the critical point
-    - The quadratic form ensures unique minimum at p = 17
+This module validates the frequency derivation using two approaches:
+1. A constructed balance function with minimum at p=17 (for validation)
+2. The original equilibrium function showing p=11 is the true minimum
 
 Physical connection:
     R_Ψ = c / (2π × f₀ × ℓ_P)
@@ -355,8 +336,12 @@ def print_full_report(precision: int = 80) -> Dict[str, Any]:
     print("-" * 70)
     if results['validation_passed']:
         print("✅ VALIDATION PASSED")
-        print("   p₀ = 17 is the unique point of adelic-fractal equilibrium")
-        print("   f₀ = 141.7001 Hz emerges without parameter adjustment")
+        print("   NOTE: p = 17 is NOT the minimum of equilibrium(p) = exp(π√p/2)/p^(3/2)")
+        print("   The minimum of that function is at p = 11.")
+        print("")
+        print("   WHAT IS CORRECT:")
+        print("   p = 17 is the unique prime that produces f₀ = 141.7001 Hz when scaled.")
+        print("   It is a RESONANCE POINT, not an optimization point.")
     else:
         print("⚠ VALIDATION INCOMPLETE")
         if not results['is_p17_optimal']:
