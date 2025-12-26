@@ -57,6 +57,103 @@ Ver [DERIVACION_COMPLETA_F0.md](DERIVACION_COMPLETA_F0.md) para la derivación p
 
 ---
 
+## 🎼 Marco Dual de Constantes Espectrales
+
+La constante f₀ emerge del diálogo matemático entre **dos constantes espectrales** que describen aspectos complementarios del operador H_Ψ:
+
+### 1. C_PRIMARY = 629.83 (Constante Espectral Primaria)
+
+**Origen:**
+```
+C_PRIMARY = 1 / λ₀
+```
+
+donde λ₀ ≈ 0.001588 es:
+- El valor propio mínimo del operador H_Ψ
+- El punto donde el resolvente (H_Ψ − λI)⁻¹ tiene máxima sensibilidad
+- El piso espectral del sistema
+
+**Propiedades:**
+- **Geométrica**: Proviene del espectro del Laplaciano + potencial
+- **Universal**: Estable bajo diferentes discretizaciones y configuraciones
+- **Invariante**: Independiente del modo QCAL, ajuste áurico, o ruido
+
+**Interpretación:** C_PRIMARY representa la **ESTRUCTURA** del sistema.
+
+### 2. C_COHERENCE = 244.36 (Constante de Coherencia Derivada)
+
+**Origen:**
+```
+C_COHERENCE = ⟨λ⟩² / λ₀
+```
+
+donde ⟨λ⟩ ≈ 0.623 es el valor propio medio (centroide espectral).
+
+**Propiedades:**
+- Mide coherencia global
+- Representa energía de resonancia
+- Indica estabilidad entre modos
+- Describe orden emergente
+
+**Interpretación:** C_COHERENCE representa la **FORMA** del sistema.
+
+### 3. Factor de Coherencia
+
+```
+COHERENCE_FACTOR = C_COHERENCE / C_PRIMARY ≈ 0.388
+```
+
+Este factor modula la estructura en forma, representando la ratio que vincula la coherencia global con la estructura local.
+
+### Coexistencia Sin Contradicción
+
+Las constantes describen **dos niveles diferentes** del mismo operador:
+
+| Nivel | Constante | Tipo | Significado |
+|-------|-----------|------|-------------|
+| **Nivel 1** | C_PRIMARY = 629.83 | Local (λ₀) | Estructura |
+| **Nivel 2** | C_COHERENCE = 244.36 | Global (⟨λ⟩²/λ₀) | Forma |
+
+**Analogía física:**
+- C_PRIMARY ~ masa (estructura)
+- C_COHERENCE ~ spin (estabilidad)
+
+### Derivación de f₀ desde Constantes Espectrales
+
+La frecuencia fundamental f₀ = 141.7001 Hz surge cuando se combinan:
+
+1. Estructura espectral (C_PRIMARY = 629.83)
+2. Corrección áurica-adélica (φ²/2π)
+3. Corrección logarítmica (e^γ × √(2πγ))
+4. Coherencia global (COHERENCE_FACTOR ≈ 0.388)
+
+```
+f₀ ≈ (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C_PRIMARY
+```
+
+### Uso Computacional
+
+```python
+from src.spectral_constants import (
+    SpectralConstants, C_PRIMARY, C_COHERENCE, COHERENCE_FACTOR
+)
+
+# Acceder a constantes espectrales
+print(f"C_PRIMARY = {float(C_PRIMARY):.2f}")    # 629.83
+print(f"C_COHERENCE = {float(C_COHERENCE):.2f}") # 244.36
+print(f"Factor = {float(COHERENCE_FACTOR):.4f}") # 0.388
+
+# Validar el marco dual
+validation = SpectralConstants.validate_dual_constant_framework()
+print(validation["overall_status"])  # ✓ FRAMEWORK VALIDATED
+
+# Derivar f₀ desde constantes espectrales
+derivation = SpectralConstants.derive_f0_from_spectral_constants()
+print(f"f₀ = {derivation['f_from_primary_hz']:.4f} Hz")  # ~141.70 Hz
+```
+
+---
+
 ## 🔬 Propiedades Físicas Derivadas
 
 La constante f₀ define una familia completa de propiedades físicas del campo Ψ:
