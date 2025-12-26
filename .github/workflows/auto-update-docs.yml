@@ -1,0 +1,190 @@
+name: Auto-Update Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**.py'
+      - 'requirements.txt'
+      - '.github/workflows/**.yml'
+  schedule:
+    # Run weekly on Sunday at 02:00 UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+
+jobs:
+  update-docs:
+    name: Update Documentation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+      
+      - name: Generate script inventory
+        run: |
+          cat > scripts_inventory.tmp.md << 'EOF'
+          # 📜 Inventario de Scripts Automatizado
+          
+          *Este documento es generado automáticamente cada semana.*
+          
+          ## Scripts de Análisis
+          
+          EOF
+          
+          # List analysis scripts
+          for script in scripts/analiz*.py scripts/multi_event*.py; do
+            if [ -f "$script" ]; then
+              echo "- \`$(basename $script)\`" >> scripts_inventory.tmp.md
+              # Extract first docstring if exists
+              desc=$(python3 -c "import ast; tree=ast.parse(open('$script').read()); print(ast.get_docstring(tree) or 'Sin descripción')" 2>/dev/null | head -1)
+              echo "  - $desc" >> scripts_inventory.tmp.md
+            fi
+          done
+          
+          echo "" >> scripts_inventory.tmp.md
+          echo "## Scripts de Validación" >> scripts_inventory.tmp.md
+          echo "" >> scripts_inventory.tmp.md
+          
+          # List validation scripts
+          for script in scripts/validat*.py scripts/validate_*.py; do
+            if [ -f "$script" ]; then
+              echo "- \`$(basename $script)\`" >> scripts_inventory.tmp.md
+              desc=$(python3 -c "import ast; tree=ast.parse(open('$script').read()); print(ast.get_docstring(tree) or 'Sin descripción')" 2>/dev/null | head -1)
+              echo "  - $desc" >> scripts_inventory.tmp.md
+            fi
+          done
+          
+          echo "" >> scripts_inventory.tmp.md
+          echo "## Scripts de Test" >> scripts_inventory.tmp.md
+          echo "" >> scripts_inventory.tmp.md
+          
+          # List test scripts
+          for script in scripts/test_*.py; do
+            if [ -f "$script" ]; then
+              echo "- \`$(basename $script)\`" >> scripts_inventory.tmp.md
+              desc=$(python3 -c "import ast; tree=ast.parse(open('$script').read()); print(ast.get_docstring(tree) or 'Sin descripción')" 2>/dev/null | head -1)
+              echo "  - $desc" >> scripts_inventory.tmp.md
+            fi
+          done
+          
+          echo "" >> scripts_inventory.tmp.md
+          echo "---" >> scripts_inventory.tmp.md
+          echo "*Generado automáticamente por el bot de documentación - $(date -u '+%Y-%m-%d %H:%M:%S UTC')*" >> scripts_inventory.tmp.md
+      
+      - name: Update workflow inventory
+        run: |
+          cat > workflows_inventory.tmp.md << 'EOF'
+          # 🔄 Inventario de Workflows Automatizado
+          
+          *Este documento es generado automáticamente cada semana.*
+          
+          ## Workflows Activos
+          
+          EOF
+          
+          for workflow in .github/workflows/*.yml; do
+            if [ -f "$workflow" ]; then
+              name=$(grep "^name:" "$workflow" | head -1 | sed 's/name: *//')
+              echo "### $name" >> workflows_inventory.tmp.md
+              echo "" >> workflows_inventory.tmp.md
+              echo "**Archivo:** \`$(basename $workflow)\`" >> workflows_inventory.tmp.md
+              echo "" >> workflows_inventory.tmp.md
+              
+              # Extract triggers
+              if grep -q "push:" "$workflow"; then
+                echo "- Trigger: push" >> workflows_inventory.tmp.md
+              fi
+              if grep -q "pull_request:" "$workflow"; then
+                echo "- Trigger: pull_request" >> workflows_inventory.tmp.md
+              fi
+              if grep -q "schedule:" "$workflow"; then
+                cron=$(grep "cron:" "$workflow" | head -1 | sed 's/.*cron: *//' | tr -d "'\"")
+                echo "- Trigger: schedule (\`$cron\`)" >> workflows_inventory.tmp.md
+              fi
+              if grep -q "workflow_dispatch:" "$workflow"; then
+                echo "- Trigger: manual (workflow_dispatch)" >> workflows_inventory.tmp.md
+              fi
+              
+              echo "" >> workflows_inventory.tmp.md
+            fi
+          done
+          
+          echo "---" >> workflows_inventory.tmp.md
+          echo "*Generado automáticamente por el bot de documentación - $(date -u '+%Y-%m-%d %H:%M:%S UTC')*" >> workflows_inventory.tmp.md
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git add scripts_inventory.tmp.md workflows_inventory.tmp.md
+          if git diff --cached --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No hay cambios en la documentación"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "La documentación ha sido actualizada"
+          fi
+      
+      - name: Commit and push if changed
+        if: steps.check_changes.outputs.changed == 'true' && github.event_name != 'pull_request'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "📚 Auto-update: Actualizar inventarios de documentación [skip ci]"
+          git push
+      
+      - name: Create PR if changes on schedule
+        if: steps.check_changes.outputs.changed == 'true' && github.event_name == 'schedule'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "📚 Auto-update: Actualizar inventarios de documentación"
+          title: "📚 Actualización automática de documentación"
+          body: |
+            ## 📚 Actualización Automática de Documentación
+            
+            Este PR fue creado automáticamente por el bot de documentación.
+            
+            **Cambios incluidos:**
+            - Inventario actualizado de scripts
+            - Inventario actualizado de workflows
+            
+            **Revisión:**
+            - ✅ Los cambios son generados automáticamente
+            - ✅ Revisar que la información sea correcta
+            - ✅ Merge cuando esté listo
+            
+            *Este PR fue creado automáticamente por github-actions[bot]*
+          branch: bot/update-docs
+          labels: automated,documentation
+      
+      - name: Generate summary
+        if: always()
+        run: |
+          echo "## 📚 Actualización de Documentación" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.check_changes.outputs.changed }}" == "true" ]; then
+            echo "✅ **Documentación actualizada**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "- Inventario de scripts regenerado" >> $GITHUB_STEP_SUMMARY
+            echo "- Inventario de workflows regenerado" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✓ **Sin cambios** - La documentación está actualizada" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "*Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')*" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,117 @@
+name: Alternative Validations
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/validacion_alternativa_*.py'
+      - '.github/workflows/alternative-validations.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Run weekly on Monday at 08:00 UTC
+    - cron: '0 8 * * 1'
+
+jobs:
+  alternative-validation:
+    name: ${{ matrix.validation }} - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+        validation:
+          - autoencoder
+          - wavelet
+          - interferometrica
+          - coherencia
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-alt-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-alt-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run alternative validation - ${{ matrix.validation }}
+        run: |
+          python scripts/validacion_alternativa_${{ matrix.validation }}.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Run test for alternative validation
+        run: |
+          if [ -f "scripts/test_validaciones_alternativas.py" ]; then
+            python scripts/test_validaciones_alternativas.py
+          else
+            echo "No test file found for alternative validations"
+          fi
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload validation results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: alt-validation-${{ matrix.validation }}-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            output/
+            *.json
+            *.png
+            *.pdf
+          retention-days: 30
+  
+  validation-summary:
+    name: Alternative Validation Summary
+    needs: alternative-validation
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## 🔬 Alternative Validations Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All alternative validation methods have completed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Methods executed:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Autoencoder (Neural network based)" >> $GITHUB_STEP_SUMMARY
+          echo "- Wavelet (Multi-scale analysis)" >> $GITHUB_STEP_SUMMARY
+          echo "- Interferométrica (Interferometric patterns)" >> $GITHUB_STEP_SUMMARY
+          echo "- Coherencia (Coherence analysis)" >> $GITHUB_STEP_SUMMARY

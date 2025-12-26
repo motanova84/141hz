@@ -1,0 +1,353 @@
+name: Advanced Analysis Methods
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/analisis_avanzado.py'
+      - 'scripts/analisis_estadistico_avanzado.py'
+      - 'scripts/analisis_noesico.py'
+      - 'scripts/campo_conciencia.py'
+      - 'scripts/torre_algebraica.py'
+      - 'scripts/simetria_discreta.py'
+      - 'scripts/acto_iii_validacion_cuantica.py'
+      - '.github/workflows/advanced-analysis.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Run weekly on Friday at 10:00 UTC
+    - cron: '0 10 * * 5'
+
+jobs:
+  advanced-analysis:
+    name: ${{ matrix.analysis }} - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+        analysis:
+          - analisis_avanzado
+          - analisis_estadistico_avanzado
+          - analisis_noesico
+          - campo_conciencia
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-adv-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-adv-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run advanced analysis - ${{ matrix.analysis }}
+        run: |
+          python scripts/${{ matrix.analysis }}.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Run test for advanced analysis
+        run: |
+          if [ -f "scripts/test_${{ matrix.analysis }}.py" ]; then
+            python scripts/test_${{ matrix.analysis }}.py
+          else
+            echo "No test file found for ${{ matrix.analysis }}"
+          fi
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: adv-analysis-${{ matrix.analysis }}-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            output/
+            *.json
+            *.png
+            *.pdf
+          retention-days: 30
+  
+  algebraic-tower:
+    name: Algebraic Tower Analysis
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-tower-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-tower-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run algebraic tower analysis
+        run: |
+          python scripts/torre_algebraica.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test algebraic tower
+        run: |
+          python scripts/test_torre_algebraica.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Visualize algebraic tower
+        run: |
+          python scripts/visualizar_torre_algebraica.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload tower results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: algebraic-tower-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+            *.png
+          retention-days: 30
+  
+  discrete-symmetry:
+    name: Discrete Symmetry Analysis
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-sym-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-sym-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run discrete symmetry analysis
+        run: |
+          python scripts/simetria_discreta.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test discrete symmetry
+        run: |
+          python scripts/test_simetria_discreta.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Run R_Ψ symmetry test
+        run: |
+          python scripts/test_rpsi_symmetry.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload symmetry results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: discrete-symmetry-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+            *.png
+          retention-days: 30
+  
+  quantum-act3:
+    name: Acto III - Quantum Validation
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-act3-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-act3-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run Acto III quantum validation
+        run: |
+          python scripts/acto_iii_validacion_cuantica.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test Acto III
+        run: |
+          python scripts/test_acto_iii_validacion.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload Acto III results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: acto-iii-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+          retention-days: 30
+  
+  analysis-summary:
+    name: Advanced Analysis Summary
+    needs: [advanced-analysis, algebraic-tower, discrete-symmetry, quantum-act3]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## 🧮 Advanced Analysis Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All advanced analysis workflows have completed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Analysis methods:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Advanced statistical analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- Noetic analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- Consciousness field analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- Algebraic tower construction" >> $GITHUB_STEP_SUMMARY
+          echo "- Discrete symmetry analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- Acto III quantum validation" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,345 @@
+name: Optimized Analysis with GPU Support
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'gw_141hz_tools/**'
+      - 'scripts/example_optimized_analysis.py'
+      - 'scripts/test_optimization_modules.py'
+      - '.github/workflows/optimized-analysis.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      catalog:
+        description: 'Catalog to process (GWTC-1, GWTC-3)'
+        required: false
+        default: 'GWTC-1'
+      use_gpu:
+        description: 'Enable GPU acceleration'
+        required: false
+        default: 'false'
+  schedule:
+    # Run weekly on Sundays at 00:00 UTC
+    - cron: '0 0 * * 0'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  test-optimization-modules:
+    name: Test Optimization Modules - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-opt-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-opt-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy matplotlib h5py pandas joblib
+      
+      - name: Run optimization module tests
+        run: |
+          python scripts/test_optimization_modules.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: optimization-test-results-py${{ matrix.python-version }}
+          path: results/
+          retention-days: 7
+
+  test-compressed-io:
+    name: Test Compressed I/O
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install numpy scipy h5py pandas joblib
+      
+      - name: Test compression methods
+        run: |
+          python -c "
+          from gw_141hz_tools.compressed_io import benchmark_compression
+          benchmark_compression(data_size=2**18)
+          "
+      
+      - name: Test data roundtrip
+        run: |
+          python -c "
+          import numpy as np
+          from gw_141hz_tools.compressed_io import DataManager
+          
+          dm = DataManager()
+          data = np.random.randn(10000)
+          
+          # Test HDF5
+          dm.save_timeseries(data, 'test.h5', 4096.0, 1126259462.0)
+          loaded, meta = dm.load_timeseries('test.h5')
+          assert len(loaded) == len(data)
+          print('✓ HDF5 roundtrip successful')
+          
+          # Test compressed NumPy
+          dm.save_compressed_numpy('test.npz', data=data)
+          loaded_dict = dm.load_compressed_numpy('test.npz')
+          assert 'data' in loaded_dict
+          print('✓ NumPy roundtrip successful')
+          "
+
+  test-hpc-scripts:
+    name: Test HPC Script Generation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install numpy
+      
+      - name: Generate HPC scripts
+        run: |
+          python scripts/example_optimized_analysis.py \
+            --generate-hpc-scripts \
+            --catalog GWTC-1
+      
+      - name: Validate script syntax
+        run: |
+          bash -n hpc_jobs/*.sh
+          echo "✓ All scripts have valid syntax"
+      
+      - name: Upload HPC scripts
+        uses: actions/upload-artifact@v5
+        with:
+          name: hpc-job-scripts
+          path: hpc_jobs/
+          retention-days: 30
+
+  example-analysis:
+    name: Example Optimized Analysis
+    runs-on: ubuntu-latest
+    needs: test-optimization-modules
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-example-${{ hashFiles('requirements.txt') }}
+      
+      - name: Install dependencies
+        run: |
+          pip install numpy scipy matplotlib h5py pandas joblib
+      
+      - name: Run single event analysis
+        run: |
+          python scripts/example_optimized_analysis.py \
+            --events GW150914 \
+            --output-dir results/example
+      
+      - name: Run multi-event analysis
+        run: |
+          python scripts/example_optimized_analysis.py \
+            --events GW150914 GW151226 GW170814 \
+            --n-jobs 2 \
+            --output-dir results/multi_event
+      
+      - name: Verify results
+        run: |
+          # Check that results were created
+          test -f results/example/GW150914_summary.json || exit 1
+          test -f results/example/GW150914_results.npz || exit 1
+          test -f results/multi_event/multi_event_summary.json || exit 1
+          echo "✓ All expected results created"
+      
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v5
+        with:
+          name: example-analysis-results
+          path: results/
+          retention-days: 30
+
+  benchmark-performance:
+    name: Performance Benchmark
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install numpy scipy matplotlib h5py pandas joblib
+      
+      - name: Run FFT benchmark
+        run: |
+          python -c "
+          from gw_141hz_tools.spectral_analysis_optimized import benchmark_performance
+          results = benchmark_performance(data_size=2**20, n_trials=5)
+          print('Benchmark completed successfully')
+          "
+      
+      - name: Run compression benchmark
+        run: |
+          python -c "
+          from gw_141hz_tools.compressed_io import benchmark_compression
+          benchmark_compression(data_size=2**20)
+          "
+      
+      - name: Generate benchmark report
+        run: |
+          cat > benchmark_report.md << 'EOF'
+          # Performance Benchmark Report
+          
+          **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Runner:** GitHub Actions Ubuntu Latest
+          **Python:** 3.11
+          
+          ## FFT Performance
+          - CPU-only benchmark completed
+          - See logs for detailed timings
+          
+          ## Compression Performance
+          - Tested gzip, lzf, and no compression
+          - See logs for compression ratios and speeds
+          
+          ## Notes
+          - GPU benchmarks require GPU-enabled runners
+          - Results may vary based on runner hardware
+          EOF
+          
+          cat benchmark_report.md
+      
+      - name: Upload benchmark report
+        uses: actions/upload-artifact@v5
+        with:
+          name: performance-benchmark
+          path: benchmark_report.md
+          retention-days: 90
+
+  docker-build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build CPU Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: gw-141hz:cpu
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: Test CPU Docker image
+        run: |
+          docker run --rm gw-141hz:cpu python -c "
+          import numpy, scipy
+          print('✓ CPU image working')
+          "
+      
+      # GPU image build (informational only - won't push without GPU runners)
+      - name: Validate GPU Dockerfile
+        run: |
+          docker build -f Dockerfile.gpu -t gw-141hz:gpu . || echo "GPU build skipped (no GPU available)"
+
+  catalog-analysis:
+    name: Catalog Analysis - ${{ matrix.catalog }}
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    
+    strategy:
+      matrix:
+        catalog: ['GWTC-1']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install numpy scipy matplotlib h5py pandas joblib
+      
+      - name: Process catalog
+        run: |
+          python scripts/example_optimized_analysis.py \
+            --catalog ${{ matrix.catalog }} \
+            --n-jobs 4 \
+            --output-dir results/catalog_${{ matrix.catalog }}
+        continue-on-error: true
+      
+      - name: Upload catalog results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: catalog-${{ matrix.catalog }}-results
+          path: results/catalog_${{ matrix.catalog }}/
+          retention-days: 90

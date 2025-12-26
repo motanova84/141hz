@@ -7,7 +7,6 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-
 @app.route('/estado-gw250114')
 def estado_gw250114():
     """Endpoint para estado de GW250114"""
@@ -25,8 +24,6 @@ def estado_gw250114():
     # Verificar si hay resultados de análisis
     # Intentar diferentes rutas relativas
     possible_paths = [
-        'resultados/analisis_GW250114.json',
-        '../resultados/analisis_GW250114.json',
         os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resultados', 'analisis_GW250114.json')
     ]
     
@@ -42,7 +39,6 @@ def estado_gw250114():
             break
     
     return jsonify(estado)
-
 
 @app.route('/monitor-gw')
 def monitor_gw():
@@ -96,9 +92,6 @@ def monitor_gw():
     </html>
     '''
 
-
 if __name__ == '__main__':
-    # Only enable debug in development (controlled by environment variable)
-    import os
-    debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() in ('true', '1', 't')
-    app.run(debug=debug_mode, host='0.0.0.0', port=5000)
+    # WARNING: Do not use debug=True in production. This configuration is for development only.
+    app.run(debug=False, host='0.0.0.0', port=5000)

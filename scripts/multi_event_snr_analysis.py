@@ -14,7 +14,7 @@ El análisis incluye:
 - Visualización comparativa entre detectores
 
 Eventos analizados: GW150914, GW151012, GW151226, GW170104, GW170608,
-                   GW170729, GW170809, GW170814, GW170817, GW170818, GW170823
+                   GW170729, GW170809, GW170814, GW170817, GW170818, GW170823, GW200129_065458
 """
 
 from gwpy.timeseries import TimeSeries
@@ -40,6 +40,7 @@ events = {
     "GW170817": [1187008882, 1187008914],
     "GW170818": [1187058327, 1187058359],
     "GW170823": [1187529256, 1187529288],
+    "GW200129_065458": [1264316100, 1264316132],
 }
 
 snr_threshold = 5.0

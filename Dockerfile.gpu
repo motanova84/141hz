@@ -1,0 +1,109 @@
+# GPU-Optimized Dockerfile for GW 141Hz Analysis
+# 
+# This Dockerfile builds an optimized container with GPU support for
+# large-scale gravitational wave analysis.
+#
+# Build:
+#   docker build -f Dockerfile.gpu -t gw-141hz:gpu .
+#
+# Run with GPU:
+#   docker run --gpus all -v $(pwd)/data:/data -v $(pwd)/results:/results gw-141hz:gpu
+#
+# Run without GPU (CPU fallback):
+#   docker run -v $(pwd)/data:/data -v $(pwd)/results:/results gw-141hz:gpu
+
+FROM nvidia/cuda:12.2.0-runtime-ubuntu22.04
+
+LABEL maintainer="José Manuel Mota Burruezo"
+LABEL description="GPU-accelerated gravitational wave analysis for 141.7 Hz detection"
+LABEL version="1.0"
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONUNBUFFERED=1
+ENV CUDA_VISIBLE_DEVICES=0
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    python3.11 \
+    python3.11-dev \
+    python3-pip \
+    git \
+    wget \
+    build-essential \
+    gfortran \
+    libhdf5-dev \
+    libfftw3-dev \
+    libgsl-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set Python 3.11 as default
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1 \
+    && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
+
+# Upgrade pip
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
+# Install core scientific packages
+RUN pip install --no-cache-dir \
+    numpy>=1.21.0 \
+    scipy>=1.7.0 \
+    matplotlib>=3.5.0 \
+    h5py>=3.7.0 \
+    pandas>=1.3.0 \
+    astropy>=5.0
+
+# Install GPU acceleration (CuPy for CUDA 12.x)
+RUN pip install --no-cache-dir cupy-cuda12x
+
+# Install performance optimization packages
+RUN pip install --no-cache-dir \
+    joblib>=1.1.0 \
+    numexpr>=2.8.0 \
+    dask[complete]>=2023.1.0 \
+    distributed>=2023.1.0
+
+# Install compression libraries
+RUN pip install --no-cache-dir \
+    zarr>=2.13.0 \
+    pyarrow>=10.0.0
+
+# Install gravitational wave specific packages
+RUN pip install --no-cache-dir \
+    gwpy>=3.0.0 \
+    gwosc>=0.7.0
+
+# Install additional scientific packages
+RUN pip install --no-cache-dir \
+    mpmath>=1.3.0 \
+    sympy>=1.12 \
+    pyyaml>=6.0
+
+# Create working directories
+WORKDIR /workspace
+RUN mkdir -p /data /results /workspace/scripts
+
+# Copy application code
+COPY gw_141hz_tools/ /workspace/gw_141hz_tools/
+COPY scripts/*.py /workspace/scripts/
+COPY requirements.txt /workspace/
+
+# Install any remaining requirements
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Set up Python path
+ENV PYTHONPATH=/workspace:$PYTHONPATH
+
+# Create non-root user for security
+RUN useradd -m -u 1000 gwuser && \
+    chown -R gwuser:gwuser /workspace /data /results
+
+USER gwuser
+
+# Default command: run benchmark
+CMD ["python", "scripts/test_optimization_modules.py"]
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import numpy, scipy, cupy; print('OK')" || exit 1
