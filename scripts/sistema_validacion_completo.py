@@ -15,7 +15,8 @@ class SistemaValidacionCompleto:
             'caracterizacion_bayesiana',
             'busqueda_sistematica', 
             'optimizacion_snr',
-            'validacion_estadistica'
+            'validacion_estadistica',
+            'evidencia_concluyente'
         ]
         self.resultados_consolidados = {}
     
@@ -46,6 +47,11 @@ class SistemaValidacionCompleto:
         print("-" * 70)
         resultado_estadistica = self.ejecutar_validacion_estadistica()
         self.resultados_consolidados['validacion_estadistica'] = resultado_estadistica
+        
+        print("\n5️⃣ Módulo 5: EVIDENCIA CONCLUYENTE")
+        print("-" * 70)
+        resultado_evidencia = self.ejecutar_validacion_evidencia_concluyente()
+        self.resultados_consolidados['evidencia_concluyente'] = resultado_evidencia
         
         # Generar reporte final
         self.generar_reporte_final()
@@ -131,6 +137,38 @@ class SistemaValidacionCompleto:
                 'coherencia': resultados.get('coherencia', {}).get('coherencia_target'),
                 'significativo': bool(resultados.get('test_significancia', {}).get('significativo', False)),
                 'evidencia_fuerte': bool(resultados.get('bayes_factor', {}).get('evidencia_fuerte', False))
+            }
+        except Exception as e:
+            print(f"   ❌ Error: {e}")
+            return {
+                'estado': 'error',
+                'mensaje': str(e)
+            }
+    
+    def ejecutar_validacion_evidencia_concluyente(self):
+        """Ejecuta validación de evidencia concluyente"""
+        try:
+            from evidencia_concluyente import (
+                validar_estructura_evidencia,
+                listar_eventos_confirmados,
+                metricas_estadisticas
+            )
+            
+            # Ejecutar validación
+            validacion = validar_estructura_evidencia()
+            eventos = listar_eventos_confirmados()
+            metricas = metricas_estadisticas
+            
+            return {
+                'estado': 'completado',
+                'valido': validacion['valido'],
+                'eventos_confirmados': len(eventos),
+                'eventos': eventos,
+                'p_value_global': metricas['significancia_global']['p_value'],
+                'bayes_factor_global': metricas['significancia_global']['log_bayes_factor'],
+                'coherencia_multi_detector': metricas['coherencia_multi_detector']['tasa_coincidencia'],
+                'snr_medio': metricas['snr_consolidado']['snr_medio_h1'],
+                'error_relativo_medio': metricas['precision_frecuencial']['error_relativo_medio']
             }
         except Exception as e:
             print(f"   ❌ Error: {e}")
@@ -236,6 +274,23 @@ class SistemaValidacionCompleto:
                     f.write(f"   • Coherencia: {estadistica.get('coherencia'):.3f}\n")
             else:
                 f.write(f"   ❌ Error: {estadistica.get('mensaje', 'Desconocido')}\n")
+            f.write("\n")
+            
+            # Evidencia Concluyente
+            evidencia = informe['resultados'].get('evidencia_concluyente', {})
+            f.write("5. EVIDENCIA CONCLUYENTE\n")
+            if evidencia.get('estado') == 'completado':
+                f.write(f"   ✅ Completado\n")
+                f.write(f"   • Eventos confirmados: {evidencia.get('eventos_confirmados', 0)}\n")
+                f.write(f"   • p-value global: {evidencia.get('p_value_global', 0):.2e}\n")
+                f.write(f"   • Bayes Factor global: {evidencia.get('bayes_factor_global', 0):.1f}\n")
+                f.write(f"   • Coherencia multi-detector: {evidencia.get('coherencia_multi_detector', 0):.1%}\n")
+                f.write(f"   • SNR medio H1: {evidencia.get('snr_medio', 0):.2f}\n")
+                f.write(f"   • Error relativo medio: {evidencia.get('error_relativo_medio', 0):.3f}%\n")
+                if evidencia.get('eventos'):
+                    f.write(f"   • Eventos: {', '.join(evidencia.get('eventos', []))}\n")
+            else:
+                f.write(f"   ❌ Error: {evidencia.get('mensaje', 'Desconocido')}\n")
             f.write("\n")
             
             f.write("=" * 70 + "\n")

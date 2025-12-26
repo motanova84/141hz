@@ -106,6 +106,51 @@ class NivelOntologia:
             "conservacion": ["Carga noésica", "Coherencia"],
             "invarianza": ["Gauge U(1)", "CPT", "Difeomorfismos"]
         }
+    
+    def conexion_riemann_hypothesis(self):
+        """
+        Describe la conexión fundamental entre el campo Ψ y la 
+        Hipótesis de Riemann (RH).
+        
+        El campo Ψ emerge de la estructura espectral de ζ(s), 
+        conectando la aritmética (números primos) con la física 
+        observable (frecuencia f₀).
+        
+        Returns:
+            dict: Conexión RH-Ψ
+        """
+        return {
+            "tesis": (
+                "El campo Ψ es la manifestación física de la estructura "
+                "espectral de la función zeta de Riemann ζ(s)"
+            ),
+            "funcion_zeta": {
+                "definicion": "ζ(s) = ∑_{n=1}^∞ 1/n^s = ∏_p (1 - p^(-s))^(-1)",
+                "producto_euler": "Conecta primos con función analítica",
+                "ceros_no_triviales": "Todos en línea crítica Re(s) = 1/2 (RH)"
+            },
+            "sistema_adelico": {
+                "estructura": "𝐀_ℚ = ℝ × ∏'_p ℚ_p",
+                "interpretacion": "Unifica completaciones reales y p-ádicas",
+                "papel": "Provee geometría aritmética subyacente a Ψ"
+            },
+            "derivada_critica": {
+                "valor": "ζ'(1/2) ≈ -3.92264614",
+                "significado": "Codifica información espectral de primos",
+                "conexion_f0": "Factor adélico |ζ'(1/2)|/π modula frecuencia"
+            },
+            "emergencia": {
+                "nivel_1": "Números primos {2, 3, 5, 7, 11, ...}",
+                "nivel_2": "Función ζ(s) y sus ceros",
+                "nivel_3": "Sistema espectral adélico 𝐀_ℚ",
+                "nivel_4": "Campo Ψ modulado por estructura aritmética",
+                "nivel_5": "Observables físicos (f₀ = 141.7001 Hz)"
+            },
+            "implicacion": (
+                "La distribución de primos dicta la vibración cosmológica "
+                "a través del campo Ψ y la geometría de compactificación"
+            )
+        }
 
     def emergence_to_geometry(self):
         """
@@ -621,6 +666,16 @@ class TorreAlgebraica:
                 }
             }
         }
+        
+        # Agregar conexión RH si está disponible
+        try:
+            if hasattr(self.niveles[5], 'conexion_riemann_hypothesis'):
+                output["niveles_detallados"]["NIVEL_5_Ontologia"]["conexion_riemann_hypothesis"] = \
+                    self.niveles[5].conexion_riemann_hypothesis()
+        except Exception as e:
+            # Registrar error pero no fallar la exportación
+            output["warnings"] = output.get("warnings", [])
+            output["warnings"].append(f"No se pudo exportar conexion_riemann_hypothesis: {str(e)}")
 
         # Guardar JSON
         with open(output_path, 'w', encoding='utf-8') as f:

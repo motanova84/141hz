@@ -774,7 +774,6 @@ pytest tests/test_ceros_riemann.py::test_identidad_fundamental
 ### 12.3 Próximos Pasos
 
 **Inmediato (2025):**
-- Publicación en arXiv
 - Búsqueda de armónicos en LIGO O5
 - Análisis CMB (Planck/ACT)
 
@@ -795,8 +794,7 @@ pytest tests/test_ceros_riemann.py::test_identidad_fundamental
 Este trabajo se benefició de:
 - Datos públicos de GWOSC (LIGO/Virgo)
 - Bibliotecas open source: NumPy, SciPy, SymPy, mpmath
-- Comunidad matemática: OEIS, arXiv, MathOverflow
-- Revisores y colaboradores en GitHub
+- Comunidad matemática: OEIS, MathOverflow
 
 ---
 
@@ -849,7 +847,7 @@ theorem serieComplejaConverge (α : ℝ) (hα : α > 0) :
 - Email: institutoconsciencia@proton.me
 - GitHub: https://github.com/motanova84/141hz
 - Zenodo: https://doi.org/10.5281/zenodo.17379721
-- ORCID: [En proceso de registro]
+- ORCID: https://orcid.org/0009-0002-1923-0773
 
 **Licencia:** CC BY 4.0 Internacional
 

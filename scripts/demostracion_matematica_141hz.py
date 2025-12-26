@@ -570,7 +570,8 @@ def plot_dimensional_bridge(output_dir='results'):
         r'• Constante de Euler: $e^\gamma \approx 1.7811$',
         r'• Factor geométrico: $\sqrt{2\pi\gamma} \approx 1.9044$',
         r'• Proporción áurea: $\frac{\phi^2}{2\pi} \approx 0.4178$',
-        r'• Constante de normalización: C ≈ 629.83'
+        r'• C_PRIMARY ≈ 629.83 (estructura espectral)',
+        r'• C_COHERENCE ≈ 244.36 (coherencia global)'
     ]
     
     y_pos = 0.38
@@ -580,22 +581,22 @@ def plot_dimensional_bridge(output_dir='results'):
         y_pos -= 0.04
     
     # Flecha hacia abajo
-    ax.annotate('', xy=(0.5, 0.13), xytext=(0.5, 0.18),
+    ax.annotate('', xy=(0.5, 0.10), xytext=(0.5, 0.15),
                 arrowprops=arrow_props, transform=ax.transAxes)
     
     # Dominio físico (abajo)
     phys_box = dict(boxstyle='round,pad=0.5', facecolor='lightyellow',
                     edgecolor='darkorange', linewidth=2)
-    ax.text(0.5, 0.11, 'DOMINIO FÍSICO\n(Frecuencia Audible)',
+    ax.text(0.5, 0.08, 'DOMINIO FÍSICO\n(Frecuencia Audible)',
             ha='center', va='top', fontsize=14, fontweight='bold',
             bbox=phys_box, transform=ax.transAxes)
     
-    ax.text(0.5, 0.04, r'$f_{final} = \frac{1}{2\pi} \cdot e^\gamma \cdot \sqrt{2\pi\gamma} \cdot \frac{\phi^2}{2\pi} \cdot C$',
+    ax.text(0.5, 0.01, r'$f_{final} = \frac{1}{2\pi} \cdot e^\gamma \cdot \sqrt{2\pi\gamma} \cdot \frac{\phi^2}{2\pi} \cdot C_{PRIMARY}$',
             ha='center', va='top', fontsize=13, transform=ax.transAxes,
             bbox=dict(boxstyle='round,pad=0.3', facecolor='white', 
                      edgecolor='black', linewidth=1))
     
-    ax.text(0.5, -0.02, '≈ 141.7001 Hz',
+    ax.text(0.5, -0.05, '≈ 141.7001 Hz',
             ha='center', va='top', fontsize=16, fontweight='bold',
             color='darkred', transform=ax.transAxes)
     

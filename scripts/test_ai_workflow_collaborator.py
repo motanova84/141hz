@@ -120,6 +120,92 @@ def test_documentation_exists():
     
     return all_exist
 
+def test_no_false_positive_shell_variables():
+    """Test that shell variables in script paths don't cause false positives"""
+    try:
+        from ai_workflow_health_checker import WorkflowHealthChecker
+        
+        repo_root = Path(__file__).parent.parent
+        checker = WorkflowHealthChecker(repo_root)
+        results = checker.check_all_workflows()
+        
+        # Check that multi-event-analysis.yml doesn't have false positive for ${EVENT_LOWER}
+        shell_var_issues = [
+            issue for issue in results.get('issues', [])
+            if '${' in issue or 'EVENT_LOWER' in issue
+        ]
+        
+        if shell_var_issues:
+            print(f"❌ Found false positive for shell variables:")
+            for issue in shell_var_issues:
+                print(f"   - {issue}")
+            return False
+        
+        print("✅ No false positives for shell variables in script paths")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Test failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+def test_no_false_positive_echo_python():
+    """Test that 'python' in echo statements doesn't trigger false positives"""
+    try:
+        from ai_workflow_health_checker import WorkflowHealthChecker
+        
+        repo_root = Path(__file__).parent.parent
+        checker = WorkflowHealthChecker(repo_root)
+        results = checker.check_all_workflows()
+        
+        # Check that test-summary job in comprehensive-testing.yml 
+        # doesn't have false positive for mentioning "Python" in text
+        echo_issues = [
+            issue for issue in results.get('issues', [])
+            if 'comprehensive-testing.yml/test-summary' in issue 
+            and 'Python' in issue
+        ]
+        
+        if echo_issues:
+            print(f"❌ Found false positive for 'python' in echo statement:")
+            for issue in echo_issues:
+                print(f"   - {issue}")
+            return False
+        
+        print("✅ No false positives for 'python' in echo statements")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Test failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+def test_no_critical_issues():
+    """Test that there are no critical issues in workflows"""
+    try:
+        from ai_workflow_health_checker import WorkflowHealthChecker
+        
+        repo_root = Path(__file__).parent.parent
+        checker = WorkflowHealthChecker(repo_root)
+        results = checker.check_all_workflows()
+        
+        if results['workflows_with_issues'] > 0:
+            print(f"❌ Found {results['workflows_with_issues']} workflow(s) with critical issues:")
+            for issue in results.get('issues', [])[:5]:
+                print(f"   - {issue}")
+            return False
+        
+        print(f"✅ No critical issues found in {results['total_workflows']} workflows")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Test failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
 def main():
     """Run all tests"""
     print("=" * 70)
@@ -133,6 +219,9 @@ def main():
         ("Execute Health Checker", test_health_checker_execution),
         ("Validate Workflow File", test_workflow_file_exists),
         ("Check Documentation", test_documentation_exists),
+        ("No Shell Variable False Positives", test_no_false_positive_shell_variables),
+        ("No Echo Python False Positives", test_no_false_positive_echo_python),
+        ("No Critical Issues", test_no_critical_issues),
     ]
     
     results = []

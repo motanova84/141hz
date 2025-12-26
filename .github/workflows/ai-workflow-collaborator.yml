@@ -66,10 +66,17 @@ jobs:
           python scripts/ai_workflow_fixer.py
         continue-on-error: true
 
+      - name: Re-verify workflow health
+        if: always() && steps.health_check.outcome == 'failure'
+        id: reverify
+        run: |
+          echo "🔍 Re-verifying workflow health after fix attempt..."
+          python scripts/ai_workflow_health_checker.py
+
       - name: Check if fixes were applied
         id: check_changes
         run: |
-          porcelain=$(git status --porcelain .github/workflows/)
+          porcelain=$(git status --porcelain .github/workflows/ scripts/)
           if [ -n "$porcelain" ]; then
             echo "changes=true" >> $GITHUB_OUTPUT
             echo "🔧 Workflow fixes were applied"
@@ -106,7 +113,7 @@ jobs:
         if: |
           steps.check_changes.outputs.changes == 'true' &&
           github.event_name == 'pull_request'
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: |
@@ -139,7 +146,7 @@ jobs:
             workflow-fix
 
       - name: Upload health report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: workflow-health-report
@@ -149,7 +156,7 @@ jobs:
           retention-days: 30
 
       - name: Upload workflow backups
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: steps.check_changes.outputs.changes == 'true'
         with:
           name: workflow-backups
