@@ -6,6 +6,8 @@ Analiza un segmento de datos públicos de KAGRA para detectar la señal de 141.7
 GPS: 1370294440 – 1370294472 (32 s)
 Fecha: 2023-06-16
 Detector: K1 (KAGRA)
+
+Incluye funciones para buscar datos disponibles y manejar casos donde no hay datos
 """
 
 import os
@@ -15,6 +17,10 @@ import matplotlib
 matplotlib.use('Agg')  # Use non-interactive backend
 import matplotlib.pyplot as plt
 from gwpy.timeseries import TimeSeries
+from gwosc import datasets
+import argparse
+import traceback
+from datetime import datetime
 
 def analyze_kagra_141hz():
     """
@@ -147,11 +153,226 @@ def analyze_kagra_141hz():
     return results
 
 
+def buscar_datos_kagra_disponibles(run='O4'):
+    """
+    Escanear GWOSC por segmentos O4 publicados de KAGRA
+    
+    Args:
+        run: Run de observación ('O3', 'O4', etc.)
+    
+    Returns:
+        list: Lista de eventos disponibles con KAGRA, o None si no hay
+    """
+    print(f"\n🔍 Buscando datos de KAGRA en run {run}...")
+    print("="*60)
+    
+    try:
+        # Buscar eventos con KAGRA
+        eventos = datasets.find_datasets(type='event', detector='K1')
+        
+        if not eventos or len(eventos) == 0:
+            print("⚠️  KAGRA: Sin datos públicos aún en GWOSC")
+            print(f"   Run {run} comenzó pero datos aún no liberados")
+            print("   Típicamente los datos se liberan 18 meses después")
+            print()
+            print("📋 Creando documentación de espera...")
+            crear_kagra_placeholder(run)
+            return None
+        
+        print(f"✅ Encontrados {len(eventos)} eventos con KAGRA")
+        for evento in eventos[:5]:  # Mostrar primeros 5
+            print(f"   - {evento}")
+        
+        if len(eventos) > 5:
+            print(f"   ... y {len(eventos) - 5} más")
+        
+        return eventos
+        
+    except Exception as e:
+        print(f"❌ Error buscando datos: {e}")
+        print("   Probablemente los datos de KAGRA O4 no están disponibles aún")
+        crear_kagra_placeholder(run)
+        return None
+
+
+def crear_kagra_placeholder(run='O4'):
+    """
+    Documentar por qué KAGRA es importante y qué esperamos
+    
+    Args:
+        run: Run de observación
+    """
+    # Usar path absoluto desde el script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root = os.path.dirname(script_dir)
+    output_dir = os.path.join(repo_root, 'docs')
+    os.makedirs(output_dir, exist_ok=True)
+    
+    placeholder_file = os.path.join(output_dir, f'KAGRA_{run}_WAITLIST.md')
+    
+    doc = f"""# KAGRA K1: Validación Pendiente - Run {run}
+
+## 🎯 Por qué KAGRA es importante
+
+KAGRA (K1) es crucial para validar si 141.7 Hz es una frecuencia física universal o un artefacto instrumental:
+
+### 1. Detector Independiente
+- **Ubicación:** Japón (Kamioka)
+- **Operador:** Instituto Nacional de Ciencias Naturales de Japón
+- **Diseño completamente independiente de LIGO**
+
+### 2. Diseño Único
+- **Subterráneo:** 200 metros bajo tierra (reducción de ruido sísmico)
+- **Criogénico:** Espejos enfriados a 20K (reducción de ruido térmico)
+- **Geometría diferente:** Brazos de 3 km (vs. 4 km de LIGO)
+
+### 3. Orientación Única
+- **Geometría del detector:** Diferente a H1/L1
+- **Respuesta angular:** Complementaria a LIGO
+- **Ubicación geográfica:** Red global de detección
+
+## 🔬 Predicción Científica
+
+Si 141.7 Hz es una frecuencia física universal (como predice Ψ = I × A²_eff):
+- ✅ **DEBE aparecer en KAGRA K1** en eventos de fusión BBH
+- ✅ **DEBE tener coherencia con H1/L1** cuando detecta simultáneamente
+- ✅ **DEBE mostrar el mismo patrón de ringdown**
+
+Si 141.7 Hz es un artefacto instrumental de LIGO:
+- ❌ **NO aparecerá en KAGRA K1**
+- ❌ **NO habrá coherencia con H1/L1**
+- ❌ **Diferentes patrones de ruido instrumental**
+
+## 📊 Estado Actual: Run {run}
+
+### Información del Run
+- **Run {run} comenzó:** Abril 2023 (aprox.)
+- **Estado:** En curso / Recientemente finalizado
+- **Datos públicos:** TBD (típicamente 18 meses después del run)
+
+### Política de Datos LIGO/Virgo/KAGRA
+GWOSC (Gravitational Wave Open Science Center) libera datos en fases:
+1. **Eventos significativos:** ~6 meses después de detección
+2. **Catálogo completo:** ~18 meses después del run
+3. **Datos de strain continuos:** Progresivamente
+
+### Próximos Pasos
+Cuando los datos estén disponibles:
+
+```bash
+# Analizar segmento específico
+python scripts/analizar_kagra_k1.py --run {run} --segment START-END
+
+# Buscar automáticamente datos disponibles
+python scripts/analizar_kagra_k1.py --search-available --run {run}
+```
+
+## 🌐 Análisis Comparativo Mientras Tanto
+
+Mientras esperamos datos de KAGRA {run}, podemos:
+
+### 1. Análisis de Sensibilidad
+Comparar sensibilidad teórica LIGO vs. KAGRA en 141.7 Hz:
+```bash
+python scripts/comparar_ligo_vs_kagra_sensibilidad.py
+```
+
+### 2. Análisis de Runs Previos
+Si hay datos de runs anteriores (O3), analizarlos:
+```bash
+python scripts/analizar_kagra_k1.py --run O3
+```
+
+### 3. Simulaciones
+Simular respuesta esperada de KAGRA a señales con 141.7 Hz:
+```bash
+python scripts/simular_respuesta_kagra_141hz.py
+```
+
+## 📚 Referencias
+
+### Diseño de KAGRA
+- KAGRA Collaboration, "KAGRA: 2.5 generation interferometric gravitational wave detector"
+- Nature Astronomy 3, 35-40 (2019)
+
+### Sensibilidad y Ruido
+- KAGRA Collaboration, "Overview of KAGRA: Detector design and construction history"
+- arXiv:2005.05574
+
+### Datos Abiertos
+- GWOSC: https://gwosc.org
+- KAGRA Data Release: https://gwcenter.icrr.u-tokyo.ac.jp/en/
+
+## 🔔 Notificaciones
+
+Para recibir notificaciones cuando los datos estén disponibles:
+1. Suscribirse a GWOSC announcements: https://gwosc.org/news/
+2. Seguir @KAGRA_PR en Twitter/X
+3. Revisar periódicamente: https://gwosc.org/eventapi/
+
+---
+
+**Última actualización:** {get_timestamp()}
+**Estado:** ESPERANDO DATOS {run}
+**Importancia:** CRÍTICA para validación independiente
+"""
+    
+    with open(placeholder_file, 'w', encoding='utf-8') as f:
+        f.write(doc)
+    
+    print(f"📄 Documentación creada: {placeholder_file}")
+    print()
+    print("💡 RESUMEN:")
+    print(f"   - KAGRA {run}: Datos no disponibles aún")
+    print("   - Importancia: Validación independiente crucial")
+    print("   - Predicción: 141.7 Hz DEBE aparecer si es universal")
+    print(f"   - Acción: Esperar liberación de datos (~18 meses post-run)")
+    print()
+
+
+def get_timestamp():
+    """Obtener timestamp actual formateado"""
+    return datetime.now().strftime('%Y-%m-%d %H:%M UTC')
+
+
 def main():
     """Función principal"""
+    parser = argparse.ArgumentParser(
+        description="Análisis de 141.7 Hz en KAGRA K1"
+    )
+    parser.add_argument(
+        '--search-available',
+        action='store_true',
+        help='Buscar automáticamente datos disponibles de KAGRA'
+    )
+    parser.add_argument(
+        '--run',
+        type=str,
+        default='O4',
+        help='Run de observación (O3, O4, etc.)'
+    )
+    parser.add_argument(
+        '--segment',
+        type=str,
+        help='Segmento GPS específico (formato: START-END)'
+    )
+    
+    args = parser.parse_args()
+    
     print("\n🌌 ANÁLISIS KAGRA - Búsqueda de 141.7 Hz en O4 Data")
     print()
     
+    # Si se solicita búsqueda automática
+    if args.search_available:
+        eventos = buscar_datos_kagra_disponibles(args.run)
+        if eventos is None:
+            print("\n⏳ Esperando liberación de datos...")
+            return 1
+        else:
+            print(f"\n✅ Datos disponibles. Use uno de los eventos encontrados.")
+            return 0
+    
+    # Análisis normal
     try:
         results = analyze_kagra_141hz()
         
@@ -168,8 +389,12 @@ def main():
         
     except Exception as e:
         print(f"\n❌ Error en el análisis: {e}")
-        import traceback
         traceback.print_exc()
+        
+        # Si falla, probablemente datos no disponibles
+        print("\n💡 Intentando verificar disponibilidad de datos...")
+        buscar_datos_kagra_disponibles(args.run)
+        
         return 1
 
 

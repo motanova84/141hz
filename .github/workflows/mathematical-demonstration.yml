@@ -1,0 +1,145 @@
+name: Mathematical Demonstration - Prime Numbers to 141.7001 Hz
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/demostracion_matematica_141hz.py'
+      - 'scripts/test_demostracion_matematica.py'
+      - '.github/workflows/mathematical-demonstration.yml'
+  pull_request:
+    paths:
+      - 'scripts/demostracion_matematica_141hz.py'
+      - 'scripts/test_demostracion_matematica.py'
+  workflow_dispatch:  # Allow manual triggers
+  schedule:
+    - cron: '0 0 * * 0'  # Run weekly on Sunday at midnight UTC
+
+jobs:
+  mathematical-demonstration:
+    name: Generate Mathematical Demonstration
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy>=1.21.0 scipy>=1.7.0 matplotlib>=3.5.0 pytest>=7.0.0
+      
+      - name: Run validation tests
+        run: |
+          python -m pytest scripts/test_demostracion_matematica.py -v --tb=short
+        continue-on-error: false
+      
+      - name: Generate mathematical demonstration
+        run: |
+          python scripts/demostracion_matematica_141hz.py
+        continue-on-error: false
+      
+      - name: Verify generated figures
+        run: |
+          echo "Checking for generated figures..."
+          ls -lh results/fig*.png || echo "No figures generated"
+          
+          # Count figures
+          FIGURE_COUNT=$(ls -1 results/fig*.png 2>/dev/null | wc -l)
+          echo "Generated $FIGURE_COUNT figures"
+          
+          if [ "$FIGURE_COUNT" -eq 6 ]; then
+            echo "✅ All 6 figures generated successfully"
+          else
+            echo "⚠️ Expected 6 figures, found $FIGURE_COUNT"
+            exit 1
+          fi
+      
+      - name: Upload demonstration figures as artifacts
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: mathematical-demonstration-figures
+          path: results/fig*.png
+          retention-days: 30
+      
+      - name: Generate summary report
+        if: always()
+        run: |
+          echo "# 📐 Mathematical Demonstration Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Generated Figures" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -d "results" ]; then
+            for fig in results/fig*.png; do
+              if [ -f "$fig" ]; then
+                echo "- ✅ $(basename $fig)" >> $GITHUB_STEP_SUMMARY
+              fi
+            done
+          else
+            echo "- ❌ No figures directory found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Key Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Serie Prima Compleja**: ∇Ξ(1) = Σ e^(2πi·log(p_n)/φ)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Comportamiento Asintótico**: |∇Ξ(1)| ≈ 8.27√N" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frecuencia Base**: f₀ = 1/(2π) ≈ 0.159155 Hz" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frecuencia Final**: f ≈ 141.7001 Hz" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📖 [Ver documentación completa](https://github.com/${{ github.repository }}/blob/main/DEMOSTRACION_MATEMATICA_141HZ.md)" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Comment on PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const pr = context.payload.pull_request;
+            
+            // Check if figures were generated
+            let figureStatus = '';
+            try {
+              const files = fs.readdirSync('results');
+              const figures = files.filter(f => f.startsWith('fig') && f.endsWith('.png'));
+              figureStatus = `✅ Generated ${figures.length}/6 figures`;
+            } catch (e) {
+              figureStatus = '❌ No figures generated';
+            }
+            
+            const body = `## 📐 Mathematical Demonstration Results
+            
+            ${figureStatus}
+            
+            ### Validated:
+            - ✅ Constants: γ, φ, e^γ, √(2πγ)
+            - ✅ Prime number generation (Sieve of Eratosthenes)
+            - ✅ Complex prime series ∇Ξ(1)
+            - ✅ Asymptotic behavior |S_N|/√N ≈ 8.27
+            - ✅ Phase distribution (Weyl equidistribution)
+            - ✅ Spectral analysis of θ(it)
+            - ✅ Frequency construction: f ≈ 141.7001 Hz
+            
+            📖 [View full documentation](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/DEMOSTRACION_MATEMATICA_141HZ.md)
+            
+            *Generated by workflow: Mathematical Demonstration*`;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body
+            });

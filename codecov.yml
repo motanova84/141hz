@@ -1,0 +1,85 @@
+# Codecov Configuration for 141Hz GW Analysis Project
+# https://docs.codecov.com/docs/codecov-yaml
+
+# Coverage targets and thresholds
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+  
+  status:
+    # Project-level coverage
+    project:
+      default:
+        target: auto
+        threshold: 1%
+        base: auto
+        informational: false
+        
+    # Patch coverage (new code in PRs)
+    patch:
+      default:
+        target: 70%
+        threshold: 5%
+        base: auto
+        informational: false
+
+# Comment configuration for PR comments
+comment:
+  layout: "reach,diff,flags,tree,files"
+  behavior: default
+  require_changes: false
+  require_base: false
+  require_head: true
+
+# Ignore paths
+ignore:
+  - "tests/**/*"
+  - "test_*.py"
+  - "**/__pycache__/**/*"
+  - "data/**/*"
+  - "results/**/*"
+  - "resultados/**/*"
+  - "docs/**/*"
+  - "notebooks/**/*"
+  - "*.ipynb"
+  - "examples/**/*"
+  - "Examples/**/*"
+  - "scripts_inventory.tmp.md"
+  - "workflows_inventory.tmp.md"
+
+# Flag configuration for different test suites
+flags:
+  unittests:
+    paths:
+      - src/
+      - qcal/
+    carryforward: true
+    
+  qc-llm:
+    paths:
+      - API/Python/
+      - Core/
+    carryforward: true
+
+# GitHub Checks configuration
+github_checks:
+  annotations: true
+
+# Codecov AI configuration
+# To enable Codecov AI for your organization:
+# 1. Visit https://github.com/apps/codecov-ai
+# 2. Install the Codecov AI GitHub App for your organization/repositories
+# 3. Use @codecov-ai-reviewer commands in PR comments:
+#    - @codecov-ai-reviewer test -- generates tests for the PR
+#    - @codecov-ai-reviewer review -- reviews the PR and provides suggestions
+
+# Pull Request comments configuration
+codecov:
+  notify:
+    # Wait for multiple workflows to upload coverage
+    # tests.yml uploads per Python version (2 uploads for 3.11 and 3.12)
+    # analyze.yml uploads 1
+    # qc-llm-ci.yml uploads per matrix (varies)
+    after_n_builds: 3
+    wait_for_ci: true
