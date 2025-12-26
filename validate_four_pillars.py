@@ -14,7 +14,7 @@ Uso:
     python3 validate_four_pillars.py
 
 Autor: José Manuel Mota Burruezo (JMMB Ψ✧)
-Fecha: Diciembre 2025
+Fecha: 2025-12-19
 """
 
 import subprocess
