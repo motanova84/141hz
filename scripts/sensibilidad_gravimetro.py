@@ -86,6 +86,7 @@ def simular_salida_gravimetro(amplitud_g, num_realizaciones=1000,
         idx = np.argmin(np.abs(freqs - f0))
         signal_power = psd[idx]
         noise_floor = np.median(psd)
+        noise_floor = max(noise_floor, 1e-20)
         snr = np.sqrt(signal_power / noise_floor)  # SNR espectral
         
         snrs.append(snr)
