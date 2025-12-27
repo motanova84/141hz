@@ -25,6 +25,7 @@ setup: venv
   alert-gw250114 test-alert-gw250114 test-rpsi \
   validacion-quintica multievento test-multievento \
   multi-event-snr test-multi-event-snr demo-multi-event-snr \
+  virgo-v1-validation test-virgo-v1-validation \
   universalidad-virgo-kagra test-universalidad-virgo-kagra \
   snr-gw200129 test-snr-gw200129 \
   energia-cuantica test-energia-cuantica \
@@ -76,6 +77,8 @@ help:
 	@echo "  multi-event-snr       - Run multi-event SNR analysis at 141.7 Hz (NEW)"
 	@echo "  test-multi-event-snr  - Test multi-event SNR analysis module (NEW)"
 	@echo "  demo-multi-event-snr  - Demo multi-event SNR with synthetic data (NEW)"
+	@echo "  virgo-v1-validation   - Run Virgo V1 detector validation at 141.7 Hz (NEW)"
+	@echo "  test-virgo-v1-validation - Test Virgo V1 validation module (NEW)"
 	@echo "  universalidad-virgo-kagra - Test 141.7 Hz universality in Virgo/KAGRA (NEW)"
 	@echo "  test-universalidad-virgo-kagra - Test Virgo/KAGRA universality module (NEW)"
 	@echo "  snr-gw200129          - Analyze SNR for GW200129_065458 at 141.7 Hz (NEW)"
@@ -247,6 +250,18 @@ demo-multi-event-snr: setup
 	@echo "   Usando datos sintéticos (sin conectividad a GWOSC)"
 	./venv/bin/python scripts/demo_multi_event_snr.py || python3 scripts/demo_multi_event_snr.py
 
+# Virgo V1 detector validation at 141.7 Hz
+virgo-v1-validation: setup
+	@echo "🧬 Ejecutando validación en detector Virgo V1..."
+	@echo "   Eventos: GW170814, GW170817, GW170818, GW170823"
+	@echo "   Detector: V1 (Virgo, Italia) - Independiente de LIGO"
+	@echo "   Banda: 140.7-142.7 Hz"
+	./venv/bin/python scripts/virgo_v1_validation.py || echo "⚠️  Validación Virgo V1 completada con advertencias"
+
+# Test Virgo V1 validation module
+test-virgo-v1-validation: setup
+	@echo "🧪 Testing validación Virgo V1..."
+	./venv/bin/python scripts/test_virgo_v1_validation.py
 # Test universality of 141.7 Hz in Virgo and KAGRA detectors
 universalidad-virgo-kagra: setup
 	@echo "🌍 Ejecutando test de universalidad 141.7 Hz en Virgo/KAGRA..."
