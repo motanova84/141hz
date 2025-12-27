@@ -1,0 +1,102 @@
+# Configuration for PR labeler
+# Automatically labels PRs based on changed files
+
+# Documentation
+documentation:
+  - changed-files:
+    - any-glob-to-any-file: 
+      - '**/*.md'
+      - 'docs/**/*'
+
+# Python code
+python:
+  - changed-files:
+    - any-glob-to-any-file: '**/*.py'
+
+# Workflows and CI/CD
+ci/cd:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/workflows/**'
+      - '.github/actions/**'
+      - 'Makefile'
+      - 'Dockerfile'
+
+# Dependencies
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'requirements.txt'
+      - 'setup.py'
+      - 'pyproject.toml'
+
+# Tests
+testing:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/test_*.py'
+      - 'tests/**/*'
+      - 'scripts/test_*.py'
+
+# Scripts
+scripts:
+  - changed-files:
+    - any-glob-to-any-file: 'scripts/**/*'
+
+# Notebooks
+notebooks:
+  - changed-files:
+    - any-glob-to-any-file: 
+      - '**/*.ipynb'
+      - 'notebooks/**/*'
+
+# Configuration files
+configuration:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '*.json'
+      - '*.yml'
+      - '*.yaml'
+      - 'config/**/*'
+
+# Validation
+validation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/validat*.py'
+      - '**/validate_*.py'
+      - '**/validacion_*.py'
+
+# Analysis
+analysis:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/analiz*.py'
+      - '**/analizar_*.py'
+      - '**/multi_event_*.py'
+
+# Gravitational waves
+gravitational-waves:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*gw*.py'
+      - '**/*ligo*.py'
+      - '**/descargar_datos.py'
+
+# Results and figures
+results:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'results/**/*'
+      - '**/*.png'
+      - '**/*.pdf'
+      - '**/*.jpg'
+
+# Web/Dashboard
+dashboard:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'dashboard/**/*'
+      - 'index.html'
+      - '*.html'
+      - 'vercel.json'

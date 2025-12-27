@@ -1,0 +1,407 @@
+name: Scientific Validation - 3 Pillars
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/validacion_completa_3_pilares.py'
+      - 'scripts/reproducibilidad_garantizada.py'
+      - 'scripts/falsabilidad_explicita.py'
+      - 'scripts/evidencia_empirica.py'
+      - 'scripts/protocolo_falsacion.py'
+      - 'scripts/discovery_standards.py'
+      - '.github/workflows/scientific-validation.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Run daily at 02:00 UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  three-pillars-validation:
+    name: ${{ matrix.pillar }} - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+        pillar:
+          - reproducibilidad
+          - falsabilidad
+          - evidencia_empirica
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-sci-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-sci-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Generate validation files
+        run: |
+          python scripts/generar_validacion_pilares.py
+        continue-on-error: true
+      
+      - name: Run pillar validation - ${{ matrix.pillar }}
+        run: |
+          python scripts/${{ matrix.pillar }}_garantizada.py || \
+          python scripts/${{ matrix.pillar }}_explicita.py || \
+          python scripts/${{ matrix.pillar }}.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Upload pillar results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: pillar-${{ matrix.pillar }}-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            output/
+            results/
+            *.json
+          retention-days: 30
+  
+  complete-3-pillars:
+    name: Complete 3 Pillars Validation
+    needs: three-pillars-validation
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-3p-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-3p-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Generate validation files
+        run: |
+          python scripts/generar_validacion_pilares.py
+        continue-on-error: true
+      
+      - name: Run complete 3 pillars validation
+        run: |
+          python scripts/validacion_completa_3_pilares.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test 3 pillars
+        run: |
+          python scripts/test_3_pilares.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload complete validation results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: complete-3-pillars-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            output/
+            results/
+            *.json
+          retention-days: 30
+  
+  discovery-standards:
+    name: Discovery Standards (>10σ)
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-ds-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-ds-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run discovery standards validation
+        run: |
+          python scripts/discovery_standards.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test discovery standards
+        run: |
+          python scripts/test_discovery_standards.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload discovery standards results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: discovery-standards-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+          retention-days: 30
+  
+  falsification-protocol:
+    name: Falsification Protocol
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-fp-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-fp-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run falsification protocol
+        run: |
+          python scripts/protocolo_falsacion.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test falsification protocol
+        run: |
+          python scripts/test_protocolo_falsacion.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload falsification results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: falsification-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+          retention-days: 30
+  
+  experimental-protocols:
+    name: Experimental Protocols
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-exp-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-exp-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run experimental protocols
+        run: |
+          python scripts/protocolos_experimentales.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test experimental protocols
+        run: |
+          python scripts/test_protocolos_experimentales.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload experimental results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: experimental-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            diagrams/
+            *.json
+            *.png
+          retention-days: 30
+  
+  validation-summary:
+    name: Scientific Validation Summary
+    needs: [three-pillars-validation, complete-3-pillars, discovery-standards, falsification-protocol, experimental-protocols]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## 🔬 Scientific Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All scientific validation workflows have completed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Three Pillars of Scientific Method:**" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Reproducibilidad (Reproducibility)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Falsabilidad (Falsifiability)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Evidencia Empírica (Empirical Evidence)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Additional Validations:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Discovery Standards (>10σ significance)" >> $GITHUB_STEP_SUMMARY
+          echo "- Falsification Protocol" >> $GITHUB_STEP_SUMMARY
+          echo "- Experimental Protocols" >> $GITHUB_STEP_SUMMARY

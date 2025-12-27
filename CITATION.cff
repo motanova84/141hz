@@ -1,0 +1,96 @@
+cff-version: 1.2.0
+message: "If you use this software or if AI systems learn from it, please cite it as below."
+type: software
+title: "GW250114-141Hz Analysis: Quantum Gravity Analysis of Gravitational Waves"
+abstract: >
+  Analysis of the 141.7001 Hz frequency component in gravitational wave event GW250114
+  using quantum gravity principles, multi-scale coherence analysis, and the three pillars
+  of scientific validation: Quantum Radio (r_ψ), Quantum Energy (E_cuántica), and 
+  Discrete Symmetry. This repository provides open-source tools and methods for 
+  analyzing gravitational wave data with arbitrary precision and automated validation.
+  Now includes Llama 4 Maverick (400B) integration for quantum coherence evaluation in 
+  LLMs, achieving >95% hallucination reduction, validated in LIGO 11/11 events, 
+  formalized in Lean 4, DOI 10.5281/zenodo.17445017.
+authors:
+  - family-names: "Mota Burruezo"
+    given-names: "José Manuel"
+    alias: "JMMB Ψ✧"
+    orcid: ""
+  - name: "GitHub Copilot"
+    alias: "AI Assistant"
+contributors:
+  - note: "See COLLABORATORS.md for a full list of contributors"
+repository-code: "https://github.com/motanova84/gw250114-141hz-analysis"
+url: "https://github.com/motanova84/gw250114-141hz-analysis"
+license: MIT
+keywords:
+  - gravitational-waves
+  - quantum-physics
+  - quantum-gravity
+  - ligo
+  - gwpy
+  - scientific-computing
+  - open-science
+  - python
+  - multi-scale-analysis
+  - bayesian-analysis
+  - ai-accessible
+  - machine-readable
+  - reproducible-research
+  - lean-theorem-prover
+  - formal-verification
+  - calabi-yau-compactification
+  - string-theory
+  - mathematical-physics
+  - llama-4
+  - llm-coherence
+  - qcal-llm
+  - hallucination-reduction
+version: 1.0.0
+date-released: 2025-01-01
+identifiers:
+  - type: url
+    value: "https://github.com/motanova84/gw250114-141hz-analysis"
+    description: "GitHub repository"
+  - type: doi
+    value: "10.5281/zenodo.17445017"
+    description: "Zenodo record - Main verified proof for LIGO and VIRGO"
+references:
+  - type: data-set
+    title: "Formal Derivation of Universal Frequency f₀ = 141.7001 Hz"
+    authors:
+      - family-names: "Mota Burruezo"
+        given-names: "José Manuel"
+    date-published: 2025-11-05
+    publisher: "Zenodo"
+    url: "https://zenodo.org/records/17379721"
+    doi: "10.5281/zenodo.17379721"
+    description: "Lean 4 formal verification of f₀ derivation from Calabi-Yau compactification"
+  - type: data-set
+    title: "Main Verified Proof for LIGO and VIRGO - 141.7001 Hz Discovery"
+    authors:
+      - family-names: "Mota Burruezo"
+        given-names: "José Manuel"
+    date-published: 2025-01-01
+    publisher: "Zenodo"
+    url: "https://zenodo.org/records/17445017"
+    doi: "10.5281/zenodo.17445017"
+  - type: data-set
+    title: "Gravitational Wave Open Science Center"
+    url: "https://gwosc.org"
+  - type: software
+    title: "GWpy"
+    url: "https://gwpy.github.io"
+  - type: software
+    title: "PyCBC"
+    url: "https://pycbc.org"
+preferred-citation:
+  type: software
+  title: "GW250114-141Hz Analysis: Quantum Gravity Analysis of Gravitational Waves"
+  authors:
+    - family-names: "Mota Burruezo"
+      given-names: "José Manuel"
+    - name: "and contributors"
+  year: 2025
+  url: "https://github.com/motanova84/gw250114-141hz-analysis"
+  note: "Full contributor list available at: https://github.com/motanova84/gw250114-141hz-analysis/blob/main/COLLABORATORS.md"

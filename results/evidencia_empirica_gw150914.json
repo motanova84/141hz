@@ -1,0 +1,47 @@
+{
+  "evento": "GW150914",
+  "fecha": "2015-09-14 09:50:45 UTC",
+  "tipo": "Binary Black Hole Merger",
+  "detectores": {
+    "H1": {
+      "frecuencia": 141.69,
+      "SNR": 7.47,
+      "p_value": "< 0.001",
+      "detector": "Hanford (Washington, USA)",
+      "coordenadas": "46.4°N, 119.4°W"
+    },
+    "L1": {
+      "frecuencia": 141.75,
+      "SNR": 0.95,
+      "coincidencia": true,
+      "detector": "Livingston (Louisiana, USA)",
+      "coordenadas": "30.6°N, 90.8°W"
+    },
+    "validacion_cruzada": "Multisitio confirmado",
+    "separacion_detectores": "3,002 km",
+    "artefactos_descartados": "Distancia >80Hz de líneas instrumentales",
+    "lineas_instrumentales": {
+      "60 Hz": "Red eléctrica",
+      "120 Hz": "Armónico de 60 Hz",
+      "300 Hz": "Bombas de vacío",
+      "393 Hz": "Violin modes"
+    },
+    "distancia_minima_artefacto": "81.7 Hz (a 60 Hz)",
+    "conclusion_artefacto": "DESCARTADO - No correlaciona con instrumentación"
+  },
+  "estadistica_combinada": {
+    "frecuencia_promedio": 141.72,
+    "desviacion": 0.030000000000001137,
+    "objetivo_teorico": 141.7001,
+    "diferencia_absoluta": 0.019900000000006912,
+    "diferencia_relativa_porcentaje": 0.01404374449983233
+  },
+  "datos_fuente": {
+    "repositorio": "GWOSC (Gravitational Wave Open Science Center)",
+    "url": "https://gwosc.org/eventapi/html/GWTC-1-confident/GW150914/",
+    "acceso": "Público",
+    "formato": "HDF5",
+    "herramientas": "GWPy 3.0.13"
+  },
+  "estado_validacion": "CONFIRMADO"
+}

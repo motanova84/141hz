@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/results/(.*)", "dest": "/results/$1" },
+    { "src": "/scripts/(.*)", "dest": "/scripts/$1" },
+    { "src": "/docs/(.*)", "dest": "/docs/$1" },
+    { "src": "/validate", "dest": "/scripts/validar_gw150914.py" },
+    { "src": "/multievento", "dest": "/scripts/analisis_bayesiano_multievento.py" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Powered-By", "value": "GWPy + Noesis Ψ" },
+        { "key": "X-Frequency", "value": "141.7001 Hz" },
+        { "key": "X-Coherence", "value": "Verified" }
+      ]
+    }
+  ],
+  "crons": [
+    {
+      "path": "/scripts/analisis_bayesiano_multievento.py",
+      "schedule": "0 */6 * * *"
+    }
+  ],
+  "functions": {
+    "scripts/analisis_bayesiano_multievento.py": {
+      "memory": 1024,
+      "maxDuration": 180
+    },
+    "scripts/validar_gw150914.py": {
+      "memory": 1024,
+      "maxDuration": 120
+    }
+  },
+  "regions": ["fra1", "iad1", "gru1"],
+  "cleanUrls": true,
+  "trailingSlash": false
+}

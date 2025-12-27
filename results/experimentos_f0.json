@@ -1,0 +1,55 @@
+{
+  "resonancia_neuronal": {
+    "experimento": "Resonancia Neuronal",
+    "timestamp": "2025-10-24T01:25:30.020161",
+    "exito": true,
+    "metricas": {
+      "snr_meditacion": 1224637.9121183916,
+      "snr_control": 8911.323564746901,
+      "ratio_amplitud": 137.4249182201223,
+      "n_sujetos": 10
+    },
+    "notas": [
+      "SNR meditación: 1224637.91",
+      "SNR control: 8911.32",
+      "Ratio: 137.42",
+      "Criterio cumplido: True"
+    ]
+  },
+  "modulacion_masa": {
+    "experimento": "Modulación de Masa",
+    "timestamp": "2025-10-24T01:25:30.020363",
+    "exito": true,
+    "metricas": {
+      "delta_m_relativo": 4.080319340521806e-08,
+      "delta_m_predicho": 1e-08,
+      "delta_frecuencia_hz": 0.0,
+      "n_mediciones": 100
+    },
+    "notas": [
+      "Δm/m medido: 4.08e-08",
+      "Δm/m predicho: 1.00e-08",
+      "Δf: 0.00e+00 Hz",
+      "Criterio cumplido: True"
+    ]
+  },
+  "entrelazamiento_distancia": {
+    "experimento": "Entrelazamiento a Distancia",
+    "timestamp": "2025-10-24T01:25:30.020730",
+    "exito": true,
+    "metricas": {
+      "tau_antes_2000km": 2.128561273487979,
+      "tau_en_2000km": 0.999018352418165,
+      "tau_despues_2000km": 0.21952629017692885,
+      "razon_salto": 9.696156536752154,
+      "lambda_psi_km": 2000.0,
+      "n_mediciones_por_distancia": 50
+    },
+    "notas": [
+      "τ antes de 2000 km: 2.129 s",
+      "τ después de 2000 km: 0.220 s",
+      "Razón de salto: 9.70",
+      "Criterio cumplido (razón > 2): True"
+    ]
+  }
+}

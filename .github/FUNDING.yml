@@ -1,0 +1,16 @@
+# GitHub Sponsors Configuration
+# Supporting the GW250114 - 141.7001 Hz Analysis Project
+#
+# This open-source project analyzes gravitational wave data to validate
+# the presence of a 141.7001 Hz frequency component in LIGO detections,
+# contributing to our understanding of spacetime resonance phenomena.
+#
+# Lead Researcher: José Manuel Mota Burruezo
+# Institution: Instituto Conciencia Cuántica
+# Project License: MIT
+
+# GitHub Sponsors (ENABLED - main funding platform)
+github: motanova84
+
+# Research funding inquiries and collaboration contact
+custom: ["mailto:institutoconsciencia@proton.me?subject=GW250114%20Research%20Funding"]

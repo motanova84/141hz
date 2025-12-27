@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Análisis de componente 141.7001 Hz en evento GW250114 - Marco Noésico">
+    <meta name="author" content="José Manuel Mota Burruezo (JMMB Ψ✧)">
+    <title>GW250114 - Análisis 141.7001 Hz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .frequency {
+            text-align: center;
+            font-size: 3em;
+            font-weight: bold;
+            margin: 30px 0;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .info-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .info-card p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .links {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: #ffd700;
+        }
+        
+        .btn-primary:hover {
+            background: rgba(255, 215, 0, 0.4);
+        }
+        
+        .zenodo-link {
+            color: #ffd700;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        .equation {
+            text-align: center;
+            font-size: 1.5em;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            .frequency {
+                font-size: 2em;
+            }
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌌 GW250114</h1>
+        <div class="subtitle">Análisis de Componente de Alta Frecuencia</div>
+        
+        <div class="frequency">141.7001 Hz</div>
+        
+        <div class="equation">Ψ = mc² · A<sub>eff</sub>²</div>
+        
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>📡 Marco Noésico</h3>
+                <p>Análisis bajo el marco teórico noésico con validación bayesiana multi-evento</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>🔬 Validación</h3>
+                <p>Sistema automatizado de validación científica con análisis cada 6 horas</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>✅ Verificación LIGO/VIRGO</h3>
+                <p>Prueba principal verificada en detectores LIGO y VIRGO - <a href="https://zenodo.org/records/17445017" target="_blank" class="zenodo-link">Zenodo 17445017</a></p>
+            </div>
+            
+            <div class="info-card">
+                <h3>🌍 Distribución Global</h3>
+                <p>Infraestructura distribuida en Frankfurt, Virginia y São Paulo</p>
+            </div>
+        </div>
+        
+        <div class="links">
+            <a href="https://zenodo.org/records/17445017" class="btn btn-primary" target="_blank">
+                🔬 Ver Prueba Verificada
+            </a>
+            <a href="https://github.com/motanova84/gw250114-141hz-analysis" class="btn" target="_blank">
+                📂 Ver Repositorio
+            </a>
+            <a href="/validate" class="btn">
+                ✓ Validar GW150914
+            </a>
+            <a href="/multievento" class="btn">
+                🌌 Análisis Multi-evento
+            </a>
+            <a href="/results/" class="btn">
+                📊 Ver Resultados
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Autor:</strong> José Manuel Mota Burruezo (JMMB Ψ✧)</p>
+            <p>Powered by GWPy + Noesis Ψ | Coherence Verified ✓</p>
+        </div>
+    </div>
+</body>
+</html>

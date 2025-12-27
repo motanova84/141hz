@@ -1,0 +1,137 @@
+# Configuración del Sistema de Validación GW250114
+# Validación Proactiva Avanzada para detección de 141.7001 Hz
+
+sistema_validacion:
+  nombre: "Validación Proactiva GW250114"
+  version: "1.0.0"
+  frecuencia_objetivo: 141.7001
+  
+  parametros:
+    # Banda de búsqueda (Hz)
+    banda_busqueda:
+      - 130
+      - 160
+    
+    # Umbral de SNR para detecciones significativas
+    snr_umbral: 5.0
+    
+    # Rango de Q-factor esperado
+    q_factor_range:
+      - 2
+      - 50
+    
+    # Número de muestras para análisis bayesiano
+    n_muestras_bayesianas: 2000
+    
+    # Duración de datos sintéticos (segundos)
+    duracion_datos: 32
+    
+    # Frecuencia de muestreo (Hz)
+    sample_rate: 4096
+  
+  modulos_habilitados:
+    - caracterizacion_bayesiana
+    - busqueda_sistematica_gwtc1
+    - optimizacion_snr
+    - validacion_estadistica
+  
+  salidas:
+    # Tipos de salida generados
+    - informe_json
+    - resumen_texto
+    - datos_procesados
+    - graficos_analisis
+
+ejecucion:
+  # Modo de ejecución
+  modo: "completo"  # opciones: completo, rapido, offline
+  
+  # Ejecutar módulos en paralelo
+  paralelo: false
+  
+  # Timeout por módulo (minutos)
+  timeout_minutos: 30
+  
+  # Número de reintentos en caso de error
+  reintentos: 3
+  
+  # Usar datos reales si están disponibles
+  usar_datos_reales: true
+  
+  # Generar gráficos
+  generar_graficos: true
+
+catalogo_gwtc1:
+  # Eventos a analizar
+  eventos:
+    - GW150914
+    - GW151012
+    - GW151226
+    - GW170104
+    - GW170608
+    - GW170729
+    - GW170809
+    - GW170814
+    - GW170818
+    - GW170823
+  
+  # Detectores a considerar
+  detectores:
+    - H1  # LIGO Hanford
+    - L1  # LIGO Livingston
+
+validacion_estadistica:
+  # Nivel de significancia
+  alpha: 0.01
+  
+  # Umbral de Bayes Factor
+  bayes_factor_umbral: 10
+  
+  # Umbral de coherencia
+  coherencia_umbral: 0.5
+  
+  # Número de time-slides para p-value
+  n_timeslides: 1000
+
+optimizacion_snr:
+  # Técnicas habilitadas
+  tecnicas:
+    - filtrado_adaptativo
+    - coherent_stack
+    - matched_filtering
+    - wavelet_denoising
+  
+  # Parámetros de filtrado RLS
+  rls:
+    orden: 32
+    lambda: 0.99
+    delta: 0.01
+  
+  # Parámetros de matched filtering
+  matched_filter:
+    duracion_plantilla: 2.0  # segundos
+    q_plantilla: 8.5
+
+datos_sinteticos:
+  # Parámetros para generación de datos sintéticos
+  gw250114:
+    frecuencia: 141.7001
+    q_factor: 8.5
+    amplitud: 1.0e-21
+    snr_esperado: 15.2
+  
+  # Nivel de ruido
+  ruido:
+    tipo: "gaussiano"
+    nivel: 2.0e-22
+
+directorios:
+  # Directorio de salida
+  output: "results"
+  
+  # Subdirectorios
+  subdirs:
+    figuras: "figures"
+    datos: "data_processed"
+    reportes: "reports"
+    json: "json_output"
