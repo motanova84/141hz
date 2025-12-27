@@ -48,6 +48,49 @@ author:
   name: José Manuel Mota Burruezo
   designation: JMMB Ψ✧
   github: motanova84
+
+collaborators:
+  lead_researcher:
+    name: José Manuel Mota Burruezo
+    designation: JMMB Ψ✧
+    role: Lead Researcher, Theory Development, LIGO Data Analysis
+    github: motanova84
+  
+  ai_assistants:
+    - name: GitHub Copilot
+      role: Code Development, Documentation, Testing
+      type: automated
+      contributions:
+        - Automated testing implementation
+        - Technical documentation
+        - Code optimization
+        - CI/CD pipeline development
+  
+  seeking:
+    - role: Scientific Validators
+      areas: [gravitational-waves, quantum-physics, bayesian-analysis]
+    - role: Software Developers
+      areas: [python, testing, optimization]
+    - role: Data Analysts
+      areas: [GWTC-2, GWTC-3, multi-event-analysis]
+    - role: Technical Writers
+      areas: [documentation, tutorials, translations]
+    - role: Visual Designers
+      areas: [data-visualization, diagrams, infographics]
+  
+  how_to_contribute:
+    - Fork repository
+    - Read CONTRIBUTING.md
+    - Review COLLABORATORS.md
+    - Make changes
+    - Test thoroughly
+    - Submit pull request
+  
+  recognition:
+    - Listed in COLLABORATORS.md
+    - Potential co-authorship in publications
+    - GitHub contributor badge
+    - Special acknowledgments section
   
 project:
   title: GW250114 - 141.7001 Hz Component Analysis

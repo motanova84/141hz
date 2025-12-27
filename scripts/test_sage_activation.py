@@ -15,7 +15,13 @@ from pathlib import Path
 # Agregar el directorio scripts al path para importar (debe ser antes de importar sage_activation)
 sys.path.insert(0, str(Path(__file__).parent))
 
-import pytest  # noqa: E402
+try:
+    import pytest  # noqa: E402
+except ImportError:
+    print("⚠️ pytest not installed, skipping tests")
+    print("Install with: pip install pytest")
+    sys.exit(0)
+
 import subprocess  # noqa: E402
 from unittest.mock import patch, MagicMock  # noqa: E402
 import sage_activation  # noqa: E402

@@ -1,0 +1,136 @@
+name: Issue Management Bot
+
+on:
+  issues:
+    types: [opened, labeled, unlabeled]
+  issue_comment:
+    types: [created]
+  schedule:
+    # Run daily at 00:00 UTC to check for stale issues
+    - cron: '0 0 * * *'
+
+jobs:
+  triage:
+    name: Triage New Issues
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    permissions:
+      issues: write
+    
+    steps:
+      - name: Add triage comment
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const issue = context.payload.issue;
+            
+            // Detect if issue has required information
+            const body = (issue.body || '').toLowerCase();
+            const hasSteps = body.includes('steps') || body.includes('pasos') || body.includes('reproducir');
+            const hasExpected = body.includes('expected') || body.includes('esperado');
+            const hasEnvironment = body.includes('python') || body.includes('version') || body.includes('entorno');
+            
+            let comment = `🤖 **Bot de Gestión de Issues**\n\n`;
+            comment += `Gracias por abrir este issue. Un mantenedor lo revisará pronto.\n\n`;
+            
+            // Check for missing information
+            const missing = [];
+            if (!hasSteps) missing.push('- Pasos para reproducir el problema');
+            if (!hasExpected) missing.push('- Comportamiento esperado vs observado');
+            if (!hasEnvironment) missing.push('- Información del entorno (Python version, OS)');
+            
+            if (missing.length > 0) {
+              comment += `⚠️ **Información faltante detectada:**\n\n`;
+              comment += missing.join('\n') + '\n\n';
+              comment += `Por favor, añade esta información para facilitar la resolución.\n\n`;
+            } else {
+              comment += `✅ **Issue bien documentado** - Contiene información suficiente para comenzar.\n\n`;
+            }
+            
+            comment += `**Recursos útiles:**\n`;
+            comment += `- [Guía de Contribución](../blob/main/CONTRIBUTING.md)\n`;
+            comment += `- [Documentación Científica](../blob/main/SCIENTIFIC_METHOD.md)\n`;
+            comment += `- [Estado del Proyecto](../blob/main/STATUS_PROYECTO_COMPLETO.md)\n`;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body: comment
+            });
+  
+  auto-close-resolved:
+    name: Auto-close Resolved Issues
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issue_comment'
+    permissions:
+      issues: write
+    
+    steps:
+      - name: Close if resolved
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const comment = context.payload.comment;
+            const issue = context.payload.issue;
+            
+            // Check if comment indicates resolution
+            const body = comment.body.toLowerCase();
+            const resolvedKeywords = ['resolved', 'resuelto', 'solucionado', 'fixed', 'arreglado'];
+            const isResolved = resolvedKeywords.some(keyword => body.includes(keyword));
+            
+            if (isResolved && issue.state === 'open') {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `🤖 Este issue parece estar resuelto según el comentario. Cerrándolo automáticamente.\n\nSi el problema persiste, por favor reabre el issue.`
+              });
+              
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+                state_reason: 'completed'
+              });
+            }
+  
+  stale-check:
+    name: Mark Stale Issues
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    permissions:
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Check for stale issues and PRs
+        uses: actions/stale@v10
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: |
+            🤖 Este issue ha estado inactivo por 60 días y será marcado como obsoleto.
+            
+            Si todavía es relevante, por favor comenta para mantenerlo abierto.
+            Se cerrará automáticamente en 7 días si no hay actividad.
+          stale-pr-message: |
+            🤖 Este PR ha estado inactivo por 30 días y será marcado como obsoleto.
+            
+            Si todavía es relevante, por favor actualiza el PR o comenta para mantenerlo abierto.
+            Se cerrará automáticamente en 7 días si no hay actividad.
+          close-issue-message: |
+            🤖 Este issue ha sido cerrado automáticamente por inactividad.
+            
+            Si crees que debería reabrirse, por favor comenta o abre un nuevo issue.
+          close-pr-message: |
+            🤖 Este PR ha sido cerrado automáticamente por inactividad.
+            
+            Si todavía deseas que se merge, por favor reabre el PR y actualízalo con la rama main.
+          days-before-stale: 60
+          days-before-close: 7
+          stale-issue-label: 'stale'
+          stale-pr-label: 'stale'
+          exempt-issue-labels: 'pinned,security,priority: high'
+          exempt-pr-labels: 'pinned,security,priority: high'
+          operations-per-run: 100

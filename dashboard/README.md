@@ -1,246 +1,134 @@
-# 📊 Dashboard Avanzado GW250114
+# 📊 Dashboard de Estado en Tiempo Real - GW250114
 
-## Descripción
+Dashboard Flask para monitorear el estado de disponibilidad y análisis del evento GW250114.
 
-Dashboard web de máxima eficiencia para monitoreo en tiempo real del sistema de análisis GW250114. Proporciona visualización de métricas del sistema, estado de operación y estadísticas de detección.
+## 🚀 Uso
 
-## 🚀 Características Principales
-
-- **Monitoreo en Tiempo Real**: Stream de datos actualizado cada segundo usando Server-Sent Events (SSE)
-- **Métricas del Sistema**:
-  - Uso de CPU
-  - Uso de Memoria
-  - Latencia de Red
-  - Eventos Procesados
-  - Confianza de Detección
-  - Estado del Sistema
-- **Interfaz Moderna**: Diseño responsive con gradientes y animaciones
-- **Información Detallada**: Datos técnicos del sistema de análisis GW250114
-- **Visualización Intuitiva**: Barras de progreso y badges de estado
-
-## 📋 Requisitos
+### Instalación de dependencias
 
 ```bash
-flask>=2.3.0
-numpy>=1.21.0
-```
-
-## 🔧 Instalación
-
-1. Asegúrate de tener el entorno virtual activado:
-```bash
-source venv/bin/activate  # Linux/Mac
-# o
-venv\Scripts\activate  # Windows
-```
-
-2. Instala las dependencias:
-```bash
+pip install flask
+# O usando requirements.txt
 pip install -r requirements.txt
 ```
 
-## 🎯 Uso
-
-### Iniciar el Dashboard
+### Ejecutar el dashboard
 
 ```bash
 cd dashboard
-python dashboard_avanzado.py
+python3 estado_gw250114.py
 ```
 
-El dashboard estará disponible en: `http://localhost:5000`
+El servidor estará disponible en `http://localhost:5000`
 
-### Configuración
+### Endpoints disponibles
 
-Por defecto, el dashboard se ejecuta en:
-- **Host**: `0.0.0.0` (accesible desde cualquier interfaz de red)
-- **Puerto**: `5000`
-- **Modo Debug**: `True` (desactivar en producción)
+#### 1. `/estado-gw250114` - Estado en formato JSON
 
-Para cambiar la configuración, edita las últimas líneas de `dashboard_avanzado.py`:
+Endpoint API que devuelve el estado actual del evento GW250114 en formato JSON.
 
-```python
-app.run(debug=False, host='127.0.0.1', port=8080)
-```
-
-## 🌐 API Endpoints
-
-### GET `/`
-Página principal del dashboard
-
-**Respuesta**: HTML del dashboard interactivo
-
-### GET `/api/stream`
-Stream de datos en tiempo real usando Server-Sent Events (SSE)
-
-**Respuesta**: Stream continuo de datos JSON
+**Respuesta cuando NO está disponible:**
 ```json
 {
-  "timestamp": "2025-10-15T12:00:00.000000",
-  "cpu_usage": 15.3,
-  "memory_usage": 45.2,
-  "network_latency": 12.5,
-  "events_processed": 523,
-  "detection_confidence": 0.9823,
-  "system_status": "OPTIMO"
+  "evento": "GW250114",
+  "ultima_verificacion": "2025-10-15T11:56:14.036324",
+  "disponible": false,
+  "estado": "NO_DISPONIBLE",
+  "mensaje": "Esperando publicación en GWOSC",
+  "eventos_similares": [],
+  "timestamp": 1760529374.036332
 }
 ```
 
-### GET `/api/estado-completo`
-Información completa del sistema
-
-**Respuesta**: JSON con datos estáticos del sistema
+**Respuesta cuando SÍ está disponible y analizado:**
 ```json
 {
-  "sistema": "Monitor Avanzado GW250114",
-  "version": "2.0.0",
-  "estado": "OPERATIVO",
-  "ultima_verificacion": "2025-10-15T12:00:00.000000",
-  "metricas": {
-    "sensibilidad_actual": "141.7001 ± 0.0001 Hz",
-    "tiempo_respuesta": "< 2 segundos",
-    "confianza_deteccion": "99.9%",
-    "eventos_monitoreados": "247",
-    "falsos_positivos": "0.1%"
+  "evento": "GW250114",
+  "ultima_verificacion": "2025-10-15T11:56:14.036324",
+  "disponible": true,
+  "estado": "ANALIZADO",
+  "eventos_similares": [],
+  "timestamp": 1760529374.036332,
+  "resultados": {
+    "evento": "GW250114",
+    "fecha_analisis": "2025-01-14T00:00:00",
+    "detectores": {
+      "H1": {
+        "bayes_factor": 15.3,
+        "p_value": 0.0075,
+        "snr": 12.4
+      },
+      "L1": {
+        "bayes_factor": 18.7,
+        "p_value": 0.0042,
+        "snr": 14.2
+      }
+    }
   }
 }
 ```
 
-## 🎨 Interfaz de Usuario
+#### 2. `/monitor-gw` - Interfaz web de monitoreo
 
-### Métricas Visualizadas
+Página web con actualización automática cada 30 segundos que muestra:
+- Estado actual del evento GW250114
+- Indicador visual (verde si disponible, rojo si no disponible)
+- Última verificación
+- Actualización automática cada 30 segundos
 
-1. **CPU Usage**: Porcentaje de uso del procesador
-2. **Memory Usage**: Porcentaje de memoria utilizada
-3. **Network Latency**: Latencia de red en milisegundos
-4. **Events Processed**: Número de eventos procesados
-5. **Detection Confidence**: Nivel de confianza de detección (0-100%)
-6. **System Status**: Estado actual del sistema (ÓPTIMO/ADVERTENCIA/CRÍTICO)
+**Acceso:** `http://localhost:5000/monitor-gw`
 
-### Información del Sistema
+## 📁 Estructura de archivos
 
-- Sistema: Monitor Avanzado GW250114
-- Versión: 2.0.0
-- Sensibilidad: 141.7001 ± 0.0001 Hz
-- Tiempo de Respuesta: < 2 segundos
-- Confianza de Detección: 99.9%
-- Eventos Monitoreados: 247
-- Falsos Positivos: 0.1%
+```
+dashboard/
+├── estado_gw250114.py    # Aplicación Flask principal
+└── README.md             # Esta documentación
 
-## 🔧 Arquitectura Técnica
+resultados/
+└── analisis_GW250114.json  # Archivo de resultados (creado por scripts de análisis)
+```
 
-### Backend (Flask)
+## 🔄 Flujo de trabajo
 
-- **Framework**: Flask 2.3+
-- **Threading**: Generación de datos en hilo separado para no bloquear el servidor
-- **SSE**: Server-Sent Events para streaming en tiempo real
-- **JSON API**: Endpoints RESTful para datos estáticos
+1. El dashboard verifica la existencia del archivo `resultados/analisis_GW250114.json`
+2. Si el archivo existe, el dashboard muestra el estado como **ANALIZADO** con los resultados
+3. Si no existe, muestra el estado como **NO_DISPONIBLE** esperando datos
+4. Los scripts de análisis (como `scripts/analizar_gw250114.py`) generan este archivo cuando GW250114 esté disponible
 
-### Frontend (HTML/CSS/JavaScript)
+## 🎨 Características
 
-- **HTML5**: Estructura semántica
-- **CSS3**: Gradientes, animaciones y diseño responsive
-- **JavaScript Vanilla**: EventSource API para SSE, Fetch API para datos estáticos
-- **Sin dependencias**: No requiere jQuery, React u otros frameworks
+- **Actualización automática**: La página web se actualiza cada 30 segundos
+- **Diseño responsive**: Estilo oscuro optimizado para visualización
+- **API REST**: Endpoint JSON para integración con otros sistemas
+- **Sin dependencias de templates**: HTML embebido en el código para simplicidad
 
-### Patrón de Diseño
+## 🧪 Testing
 
-- **Singleton**: Instancia única de `DashboardAvanzado`
-- **Observer**: EventSource para actualizaciones en tiempo real
-- **MVC**: Separación clara entre backend (modelo), frontend (vista) y lógica de actualización (controlador)
+Para probar el dashboard sin necesidad de ejecutar un servidor:
 
-## 🛠️ Personalización
-
-### Modificar Frecuencia de Actualización
-
-En `dashboard_avanzado.py`, línea 33:
 ```python
-time.sleep(1)  # Cambiar a 0.5 para actualizar cada medio segundo
+from estado_gw250114 import app
+
+with app.test_client() as client:
+    # Test estado endpoint
+    response = client.get('/estado-gw250114')
+    print(response.get_json())
+    
+    # Test monitor endpoint
+    response = client.get('/monitor-gw')
+    print(response.status_code)
 ```
 
-### Añadir Nuevas Métricas
+## 🔗 Integración
 
-1. En `generar_datos_tiempo_real()`, añadir la métrica:
-```python
-self.metricas_tiempo_real['nueva_metrica'] = valor
-```
-
-2. En el HTML, añadir un nuevo card:
-```html
-<div class="metric-card">
-    <div class="metric-title">📈 Nueva Métrica</div>
-    <div class="metric-value" id="nueva-metrica">--</div>
-</div>
-```
-
-3. En el JavaScript, actualizar el valor:
-```javascript
-document.getElementById('nueva-metrica').textContent = data.nueva_metrica;
-```
-
-### Cambiar Colores del Tema
-
-En `dashboard_avanzado.html`, sección `<style>`:
-```css
-/* Color principal */
---primary-color: #00d4ff;  /* Azul cyan */
-
-/* Gradiente de fondo */
-background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
-```
-
-## 🚨 Solución de Problemas
-
-### Error: "Address already in use"
-```bash
-# Encontrar el proceso usando el puerto 5000
-lsof -i :5000
-
-# Matar el proceso
-kill -9 <PID>
-```
-
-### Error: "ModuleNotFoundError: No module named 'flask'"
-```bash
-pip install flask
-```
-
-### El stream no se actualiza
-- Verificar que el navegador soporte Server-Sent Events
-- Revisar la consola del navegador para errores
-- Comprobar que el hilo de generación de datos esté activo
-
-## 📈 Próximas Mejoras
-
-- [ ] Integración con datos reales del sistema de análisis
-- [ ] Gráficos históricos con Chart.js o D3.js
-- [ ] Alertas configurables por umbral
-- [ ] Exportación de métricas a CSV/JSON
-- [ ] Autenticación y control de acceso
-- [ ] WebSocket para comunicación bidireccional
-- [ ] Panel de configuración en tiempo real
-- [ ] Modo oscuro/claro conmutable
+El dashboard está diseñado para integrarse con:
+- Scripts de análisis que generan `resultados/analisis_GW250114.json`
+- Sistemas de monitoreo externos vía el endpoint JSON
+- Dashboards personalizados que consumen la API REST
 
 ## 📝 Notas
 
-- **Modo Debug**: Desactivar en producción para evitar fugas de información
-- **Seguridad**: Implementar autenticación antes de exponer públicamente
-- **Rendimiento**: El stream SSE mantiene una conexión abierta por cliente
-- **Escalabilidad**: Considerar Redis o similar para múltiples workers
-
-## 🤝 Contribuciones
-
-Para añadir nuevas funcionalidades o reportar bugs:
-1. Fork del repositorio
-2. Crear rama feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit de cambios (`git commit -am 'Añadir nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crear Pull Request
-
-## 📄 Licencia
-
-Parte del proyecto GW250114 - 141.7001 Hz Analysis
-
----
-
-**Desarrollado para el análisis de ondas gravitacionales GW250114** 🌌
+- El puerto por defecto es 5000 (configurable en el código)
+- El dashboard busca el archivo de resultados en múltiples ubicaciones relativas
+- Modo debug habilitado por defecto para desarrollo (desactivar en producción)

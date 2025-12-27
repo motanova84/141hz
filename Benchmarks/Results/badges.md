@@ -1,0 +1,3 @@
+## Project Badges
+
+![frequency](https://img.shields.io/badge/frequency-141.7001_Hz-blue) ![coherence](https://img.shields.io/badge/coherence-validated-success) ![Lean_4](https://img.shields.io/badge/Lean_4-formalized-purple) ![python](https://img.shields.io/badge/python-3.8+-blue) ![javascript](https://img.shields.io/badge/javascript-ES2020-yellow) ![license](https://img.shields.io/badge/license-MIT-green) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17379721.svg)](https://doi.org/10.5281/zenodo.17379721) 

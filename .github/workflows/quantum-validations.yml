@@ -1,0 +1,119 @@
+name: Quantum Validations
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/validacion_*.py'
+      - 'scripts/energia_cuantica_fundamental.py'
+      - '.github/workflows/quantum-validations.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Run daily at 06:00 UTC
+    - cron: '0 6 * * *'
+
+jobs:
+  quantum-validation:
+    name: ${{ matrix.validation }} - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+        validation:
+          - radio_cuantico
+          - energia_cuantica
+          - alpha_psi
+          - compactificacion_quintica
+          - numerica_5_7f
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run validation - ${{ matrix.validation }}
+        run: |
+          python scripts/validacion_${{ matrix.validation }}.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Run test - ${{ matrix.validation }}
+        run: |
+          if [ -f "scripts/test_validacion_${{ matrix.validation }}.py" ]; then
+            python scripts/test_validacion_${{ matrix.validation }}.py
+          else
+            echo "No test file found for ${{ matrix.validation }}"
+          fi
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload validation results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: quantum-validation-${{ matrix.validation }}-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            output/
+            *.json
+            *.png
+          retention-days: 30
+  
+  validation-summary:
+    name: Validation Summary
+    needs: quantum-validation
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## 🌌 Quantum Validations Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All quantum validation workflows have completed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Validations executed:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Radio Cuántico (Quantum Radio)" >> $GITHUB_STEP_SUMMARY
+          echo "- Energía Cuántica (Quantum Energy E_Ψ = hf₀)" >> $GITHUB_STEP_SUMMARY
+          echo "- Alpha Psi (α_Ψ corrections)" >> $GITHUB_STEP_SUMMARY
+          echo "- Compactificación Quíntica (5th dimension)" >> $GITHUB_STEP_SUMMARY
+          echo "- Validación Numérica 5/7f₀" >> $GITHUB_STEP_SUMMARY

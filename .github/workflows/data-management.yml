@@ -1,0 +1,182 @@
+name: Data Management
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_download:
+        description: 'Force re-download of all data'
+        required: false
+        default: 'false'
+        type: boolean
+      event:
+        description: 'Specific event to download (or "all")'
+        required: false
+        default: 'all'
+        type: string
+  schedule:
+    # Run weekly on Wednesday at 00:00 UTC to refresh cached data
+    - cron: '0 0 * * 3'
+
+jobs:
+  download-gwosc-data:
+    name: Download GWOSC Data - ${{ matrix.event }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        event:
+          - GW150914
+          - GW151226
+          - GW170814
+          - GW200129_065458
+          - GW250114
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-data-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-data-
+            ${{ runner.os }}-pip-
+      
+      - name: Check existing data cache
+        id: cache-check
+        uses: actions/cache@v4
+        if: github.event.inputs.force_download != 'true'
+        with:
+          path: data/
+          key: gwosc-data-${{ matrix.event }}-${{ hashFiles('scripts/descargar_datos.py') }}
+          restore-keys: |
+            gwosc-data-${{ matrix.event }}-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Download event data
+        if: steps.cache-check.outputs.cache-hit != 'true' || github.event.inputs.force_download == 'true'
+        run: |
+          echo "Downloading data for ${{ matrix.event }}"
+          python scripts/descargar_datos.py --event ${{ matrix.event }}
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Verify downloaded data
+        run: |
+          if [ -d "data" ]; then
+            echo "## 📊 Data Verification for ${{ matrix.event }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Event:** ${{ matrix.event }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Files downloaded:**" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            find data -type f -name "*${{ matrix.event }}*" -o -name "*.hdf5" -o -name "*.h5" | head -20 >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Total size:**" >> $GITHUB_STEP_SUMMARY
+            du -sh data >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No data directory found" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Upload data as artifact
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: gwosc-data-${{ matrix.event }}-${{ github.run_number }}
+          path: data/
+          retention-days: 30
+  
+  validate-connectivity:
+    name: Validate GWOSC Connectivity
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install gwpy requests
+      
+      - name: Test GWOSC connectivity
+        run: |
+          python scripts/validar_conectividad.py
+        continue-on-error: false
+      
+      - name: Upload connectivity results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: connectivity-check-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+          retention-days: 7
+  
+  data-summary:
+    name: Data Management Summary
+    needs: [download-gwosc-data, validate-connectivity]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## 💾 Data Management Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Events Processed" >> $GITHUB_STEP_SUMMARY
+          echo "- GW150914 (First detection, 2015-09-14)" >> $GITHUB_STEP_SUMMARY
+          echo "- GW151226 (Second detection, 2015-12-26)" >> $GITHUB_STEP_SUMMARY
+          echo "- GW170814 (Three-detector, 2017-08-14)" >> $GITHUB_STEP_SUMMARY
+          echo "- GW200129_065458 (2020-01-29)" >> $GITHUB_STEP_SUMMARY
+          echo "- GW250114 (Target event, 2025-01-14)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Data Sources" >> $GITHUB_STEP_SUMMARY
+          echo "- GWOSC (Gravitational Wave Open Science Center)" >> $GITHUB_STEP_SUMMARY
+          echo "- LIGO Hanford (H1)" >> $GITHUB_STEP_SUMMARY
+          echo "- LIGO Livingston (L1)" >> $GITHUB_STEP_SUMMARY
+          echo "- Virgo (V1)" >> $GITHUB_STEP_SUMMARY
+          echo "- KAGRA (K1)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Data Management Features" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Automatic data caching" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Event-specific downloads" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ GWOSC connectivity validation" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Data verification checks" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Artifact uploads for reuse" >> $GITHUB_STEP_SUMMARY

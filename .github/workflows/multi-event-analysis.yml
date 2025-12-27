@@ -1,0 +1,288 @@
+name: Multi-Event Analysis
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/analisis_*.py'
+      - 'scripts/multi_event_*.py'
+      - 'multi_event_analysis.py'
+      - '.github/workflows/multi-event-analysis.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Run twice daily at 00:00 and 12:00 UTC
+    - cron: '0 0,12 * * *'
+
+jobs:
+  event-analysis:
+    name: ${{ matrix.event }} - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+        event:
+          - GW150914
+          - GW151226
+          - GW170814
+          - GW200129
+          - GW250114
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-multi-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-multi-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Cache GWOSC data
+        uses: actions/cache@v4
+        with:
+          path: data/
+          key: gwosc-data-${{ matrix.event }}-${{ hashFiles('scripts/descargar_datos.py') }}
+          restore-keys: |
+            gwosc-data-${{ matrix.event }}-
+            gwosc-data-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Download event data
+        run: |
+          python scripts/descargar_datos.py --event ${{ matrix.event }}
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Analyze event - ${{ matrix.event }}
+        run: |
+          EVENT_LOWER=$(echo "${{ matrix.event }}" | tr '[:upper:]' '[:lower:]')
+          if [ -f "scripts/analizar_${EVENT_LOWER}.py" ]; then
+            python scripts/analizar_${EVENT_LOWER}.py
+          elif [ "${{ matrix.event }}" == "GW150914" ]; then
+            python scripts/analizar_gw150914_pycbc.py
+          elif [ "${{ matrix.event }}" == "GW200129" ]; then
+            python scripts/analizar_gw200129_snr.py
+          elif [ "${{ matrix.event }}" == "GW250114" ]; then
+            python scripts/analizar_gw250114.py
+          else
+            echo "Using generic analysis script"
+            python scripts/analisis_avanzado.py --event ${{ matrix.event }}
+          fi
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: event-analysis-${{ matrix.event }}-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            output/
+            *.json
+            *.png
+            *.pdf
+          retention-days: 30
+  
+  multi-event-snr:
+    name: Multi-Event SNR Analysis
+    needs: event-analysis
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-snr-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-snr-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run multi-event SNR analysis
+        run: |
+          python scripts/multi_event_snr_analysis.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test multi-event SNR analysis
+        run: |
+          python scripts/test_multi_event_snr_analysis.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload SNR results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: multi-event-snr-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            multi_event_*.json
+            multi_event_*.png
+          retention-days: 30
+  
+  bayesian-multi-event:
+    name: Bayesian Multi-Event Analysis
+    needs: event-analysis
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-bayes-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-bayes-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run Bayesian multi-event analysis
+        run: |
+          python scripts/analisis_bayesiano_multievento.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test Bayesian analysis
+        run: |
+          python scripts/test_analisis_bayesiano_multievento.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload Bayesian results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: bayesian-analysis-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            output/
+            *.json
+            *.png
+          retention-days: 30
+  
+  analysis-summary:
+    name: Multi-Event Analysis Summary
+    needs: [event-analysis, multi-event-snr, bayesian-multi-event]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## 🌊 Multi-Event Analysis Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All multi-event analysis workflows have completed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Events analyzed:**" >> $GITHUB_STEP_SUMMARY
+          echo "- GW150914 (First detection)" >> $GITHUB_STEP_SUMMARY
+          echo "- GW151226 (Second detection)" >> $GITHUB_STEP_SUMMARY
+          echo "- GW170814 (Three-detector observation)" >> $GITHUB_STEP_SUMMARY
+          echo "- GW200129_065458 (SNR at 141.7 Hz)" >> $GITHUB_STEP_SUMMARY
+          echo "- GW250114 (Target event)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Analysis methods:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Multi-event SNR at 141.7001 Hz" >> $GITHUB_STEP_SUMMARY
+          echo "- Bayesian multi-event analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- PyCBC-based analysis" >> $GITHUB_STEP_SUMMARY

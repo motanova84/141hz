@@ -1,0 +1,305 @@
+name: AT2020afhd Validation
+
+on:
+  schedule:
+    # Run weekly on Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+    inputs:
+      data_provided:
+        description: 'Are Zenodo data files provided in repository?'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+  push:
+    branches:
+      - main
+    paths:
+      - 'validate_at2020afhd.py'
+      - 'VOLUMEN_I_AT2020afhd.md'
+      - 'analisis_de_periodicidad_datos_reales.ipynb'
+      - '.github/workflows/at2020afhd-validation.yml'
+  pull_request:
+    paths:
+      - 'validate_at2020afhd.py'
+      - 'VOLUMEN_I_AT2020afhd.md'
+      - 'analisis_de_periodicidad_datos_reales.ipynb'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-script:
+    name: Validate AT2020afhd Script
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install numpy scipy matplotlib astropy
+      
+      - name: Test script help
+        run: |
+          python validate_at2020afhd.py --help
+      
+      - name: Test download instructions
+        run: |
+          python validate_at2020afhd.py --download-zenodo
+      
+      - name: Lint script
+        run: |
+          pip install flake8
+          flake8 validate_at2020afhd.py --max-line-length=120 --ignore=E501,W503
+      
+      - name: Check script is executable
+        run: |
+          test -x validate_at2020afhd.py || chmod +x validate_at2020afhd.py
+  
+  validate-with-mock-data:
+    name: Validate with Mock Data
+    runs-on: ubuntu-latest
+    needs: validate-script
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install numpy scipy matplotlib astropy
+      
+      - name: Create mock data directory
+        run: |
+          mkdir -p data/at2020afhd
+      
+      - name: Generate mock LSP data
+        run: |
+          python << EOF
+          import numpy as np
+          
+          # Generate mock Lomb-Scargle periodogram
+          # Peak at 19.6 days as expected
+          period = np.linspace(10, 40, 1000)
+          
+          # Gaussian peak at 19.6 days
+          peak_period = 19.6
+          sigma = 0.5
+          power = 100 * np.exp(-0.5 * ((period - peak_period) / sigma)**2)
+          
+          # Add noise
+          power += np.random.normal(0, 5, len(period))
+          power = np.maximum(power, 0)
+          
+          # Save
+          data = np.column_stack([period, power])
+          np.savetxt('data/at2020afhd/LSP.txt', data)
+          print(f"Generated mock LSP data with peak at {peak_period} days")
+          EOF
+      
+      - name: Generate mock X-ray light curve
+        run: |
+          python << EOF
+          import numpy as np
+          
+          # Generate mock X-ray light curve
+          # Sinusoidal with 19.6 day period
+          t = np.linspace(0, 200, 85)  # 85 points as in real data
+          period = 19.6
+          omega = 2 * np.pi / period
+          
+          # Sinusoidal + noise
+          flux = 1.0 + 0.05 * np.sin(omega * t + 1.5)
+          flux += np.random.normal(0, 0.01, len(t))
+          error = np.full(len(t), 0.01)
+          
+          # Save
+          data = np.column_stack([t, flux, error])
+          np.savetxt('data/at2020afhd/data_lc_NEW_gti.txt', data)
+          print(f"Generated mock X-ray data with {len(t)} points")
+          EOF
+      
+      - name: Generate mock Radio light curve
+        run: |
+          python << EOF
+          import numpy as np
+          
+          # Generate mock Radio light curve
+          # Sinusoidal with 19.6 day period
+          t = np.linspace(0, 200, 45)  # 45 points as in real data
+          period = 19.6
+          omega = 2 * np.pi / period
+          
+          # Sinusoidal + noise (larger amplitude than X-ray)
+          flux = 1.0 + 0.4 * np.sin(omega * t + 3.0)
+          flux += np.random.normal(0, 0.05, len(t))
+          error = np.full(len(t), 0.05)
+          
+          # Save
+          data = np.column_stack([t, flux, error])
+          np.savetxt('data/at2020afhd/all_radio_lc.txt', data)
+          print(f"Generated mock Radio data with {len(t)} points")
+          EOF
+      
+      - name: Run quick check
+        run: |
+          python validate_at2020afhd.py --quick-check --no-plots
+      
+      - name: Run full analysis
+        run: |
+          python validate_at2020afhd.py --full-analysis --no-plots
+      
+      - name: Check output files
+        run: |
+          test -f at2020afhd_verification_report.json
+          cat at2020afhd_verification_report.json
+      
+      - name: Validate verification results
+        run: |
+          python << EOF
+          import json
+          
+          with open('at2020afhd_verification_report.json', 'r') as f:
+              results = json.load(f)
+          
+          # Check that period is close to expected
+          detected = results['period']['detected_days']
+          expected = 19.6
+          error_percent = abs(detected - expected) / expected * 100
+          
+          print(f"Detected period: {detected:.3f} days")
+          print(f"Expected period: {expected:.1f} days")
+          print(f"Error: {error_percent:.2f}%")
+          
+          assert error_percent < 5, f"Period error too large: {error_percent:.2f}%"
+          
+          # Check harmonic cascade
+          octaves = results['harmonic_cascade']['octaves']
+          expected_octaves = 27.84
+          octave_error = abs(octaves - expected_octaves)
+          
+          print(f"Detected octaves: {octaves:.3f}")
+          print(f"Expected octaves: {expected_octaves:.2f}")
+          print(f"Error: {octave_error:.3f} octaves")
+          
+          assert octave_error < 0.5, f"Octave error too large: {octave_error:.3f}"
+          
+          print("\n✅ Mock data validation PASSED")
+          EOF
+      
+      - name: Upload verification report
+        uses: actions/upload-artifact@v4
+        with:
+          name: at2020afhd-verification-report
+          path: at2020afhd_verification_report.json
+          retention-days: 30
+  
+  check-documentation:
+    name: Check Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Check VOLUMEN_I exists
+        run: |
+          test -f VOLUMEN_I_AT2020afhd.md
+      
+      - name: Check documentation structure
+        run: |
+          # Check that key sections exist
+          grep -q "RESUMEN EJECUTIVO CIENTÍFICO" VOLUMEN_I_AT2020afhd.md
+          grep -q "INTRODUCCIÓN AL MARCO QCAL" VOLUMEN_I_AT2020afhd.md
+          grep -q "VERIFICACIÓN EMPÍRICA: AT2020afhd" VOLUMEN_I_AT2020afhd.md
+          grep -q "MODELO Ψ = π · A²_eff" VOLUMEN_I_AT2020afhd.md
+          grep -q "INTERPRETACIÓN NOĒSICA" VOLUMEN_I_AT2020afhd.md
+          grep -q "CONCLUSIONES Y FRASE DEFINITIVA" VOLUMEN_I_AT2020afhd.md
+      
+      - name: Check key values in documentation
+        run: |
+          # Check f0 value
+          grep -q "141.70001 Hz" VOLUMEN_I_AT2020afhd.md
+          
+          # Check period
+          grep -q "19.6" VOLUMEN_I_AT2020afhd.md
+          
+          # Check octaves
+          grep -q "27.84" VOLUMEN_I_AT2020afhd.md
+          
+          # Check Zenodo DOI
+          grep -q "10.5281/zenodo.14195067" VOLUMEN_I_AT2020afhd.md
+      
+      - name: Check notebook reference
+        run: |
+          test -f analisis_de_periodicidad_datos_reales.ipynb
+      
+      - name: Validate markdown
+        run: |
+          npm install -g markdownlint-cli
+          markdownlint VOLUMEN_I_AT2020afhd.md --config .markdownlint.json || true
+  
+  integration-check:
+    name: Integration Check
+    runs-on: ubuntu-latest
+    needs: [validate-script, validate-with-mock-data, check-documentation]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Check README integration
+        run: |
+          # Check that README mentions AT2020afhd
+          grep -q "AT2020afhd" README.md
+          grep -q "VOLUMEN_I_AT2020afhd.md" README.md
+          grep -q "validate_at2020afhd.py" README.md
+      
+      - name: Verify file structure
+        run: |
+          echo "Checking file structure..."
+          test -f VOLUMEN_I_AT2020afhd.md && echo "✓ Documentation found"
+          test -f validate_at2020afhd.py && echo "✓ Validation script found"
+          test -f analisis_de_periodicidad_datos_reales.ipynb && echo "✓ Notebook found"
+          test -f "Verificación Empírica del Modelo QCAL ∞³ en AT2020afhd.pdf" && echo "✓ PDF found" || echo "⚠ PDF not found (optional)"
+          echo "File structure check complete"
+      
+      - name: Summary
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ AT2020afhd Validation Workflow Complete"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "Validated:"
+          echo "  ✓ Python validation script (validate_at2020afhd.py)"
+          echo "  ✓ Mock data analysis (period and cascade verification)"
+          echo "  ✓ Documentation structure (VOLUMEN_I_AT2020afhd.md)"
+          echo "  ✓ README integration"
+          echo ""
+          echo "For full validation with real Zenodo data:"
+          echo "  1. Download from: https://doi.org/10.5281/zenodo.14195067"
+          echo "  2. Extract to: data/at2020afhd/"
+          echo "  3. Run: python validate_at2020afhd.py --full-analysis"
+          echo ""
+          echo "Or use Google Colab:"
+          echo "  https://colab.research.google.com/github/motanova84/141hz/blob/main/analisis_de_periodicidad_datos_reales.ipynb"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

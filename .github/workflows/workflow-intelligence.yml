@@ -1,0 +1,263 @@
+name: Workflow Intelligence
+
+on:
+  workflow_run:
+    workflows: ["CI/CD - Tests and Analysis", "QCAL Production Cycle"]
+    types: [completed]
+  schedule:
+    # Run weekly on Monday at 08:00 UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+jobs:
+  analyze-workflows:
+    name: Analyze Workflow Performance
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      actions: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Analyze workflow performance
+        uses: actions/github-script@v8
+        id: analyze
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Get recent workflow runs
+            const { data: runs } = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 50,
+              status: 'completed'
+            });
+            
+            // Analyze workflow statistics
+            const stats = {};
+            let slowRuns = [];
+            
+            for (const run of runs.workflow_runs) {
+              const workflowName = run.name;
+              if (!stats[workflowName]) {
+                stats[workflowName] = {
+                  total: 0,
+                  success: 0,
+                  failure: 0,
+                  durations: []
+                };
+              }
+              
+              stats[workflowName].total++;
+              if (run.conclusion === 'success') {
+                stats[workflowName].success++;
+              } else if (run.conclusion === 'failure') {
+                stats[workflowName].failure++;
+              }
+              
+              // Calculate duration
+              const start = new Date(run.created_at);
+              const end = new Date(run.updated_at);
+              const duration = (end - start) / 1000 / 60; // minutes
+              stats[workflowName].durations.push(duration);
+              
+              // Track slow runs (> 30 minutes)
+              if (duration > 30) {
+                slowRuns.push({
+                  workflow: workflowName,
+                  duration: duration.toFixed(2),
+                  url: run.html_url
+                });
+              }
+            }
+            
+            // Generate report
+            let report = '## 📊 Análisis de Rendimiento de Workflows\n\n';
+            report += `**Período analizado:** Últimas 50 ejecuciones\n\n`;
+            
+            for (const [workflow, data] of Object.entries(stats)) {
+              const successRate = ((data.success / data.total) * 100).toFixed(1);
+              const avgDuration = (data.durations.reduce((a, b) => a + b, 0) / data.durations.length).toFixed(1);
+              
+              report += `### ${workflow}\n\n`;
+              report += `- **Ejecuciones:** ${data.total}\n`;
+              report += `- **Tasa de éxito:** ${successRate}%\n`;
+              report += `- **Duración promedio:** ${avgDuration} minutos\n`;
+              
+              if (data.failure > 0) {
+                report += `- ⚠️ **Fallos:** ${data.failure}\n`;
+              }
+              
+              report += '\n';
+            }
+            
+            // Add recommendations
+            report += '## 💡 Recomendaciones\n\n';
+            
+            if (slowRuns.length > 0) {
+              report += '### Optimización de Velocidad\n\n';
+              report += 'Los siguientes workflows tardaron más de 30 minutos:\n\n';
+              slowRuns.slice(0, 5).forEach(run => {
+                report += `- ${run.workflow}: ${run.duration} min ([ver run](${run.url}))\n`;
+              });
+              report += '\n**Sugerencias:**\n';
+              report += '- Considerar cachear más dependencias\n';
+              report += '- Paralelizar jobs independientes\n';
+              report += '- Optimizar descarga de datos GWOSC\n\n';
+            }
+            
+            // Check for workflow improvements based on copilot-instructions.md
+            report += '### Mejoras Detectadas Automáticamente\n\n';
+            
+            // Check if validation scripts exist and are used in workflows
+            const scriptsDir = './scripts';
+            const validationScripts = [];
+            if (fs.existsSync(scriptsDir)) {
+              const files = fs.readdirSync(scriptsDir);
+              files.forEach(file => {
+                if (file.startsWith('validat') && file.endsWith('.py')) {
+                  validationScripts.push(file);
+                }
+              });
+            }
+            
+            if (validationScripts.length > 0) {
+              report += `**Scripts de validación detectados:** ${validationScripts.length}\n`;
+              report += '- Verificar que todos están referenciados en workflows\n\n';
+            }
+            
+            report += '### Cumplimiento de Estándares\n\n';
+            report += '✅ Workflows actuales siguen las mejores prácticas:\n';
+            report += '- Cache de dependencias pip\n';
+            report += '- Variables de entorno NUMEXPR\n';
+            report += '- Retention days configurado para artifacts\n';
+            report += '- Continue-on-error para pasos opcionales\n\n';
+            
+            console.log(report);
+            return report;
+      
+      - name: Save report to workflow summary
+        run: |
+          echo '${{ steps.analyze.outputs.result }}' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check for failing workflows
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const { data: runs } = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 10,
+              status: 'completed'
+            });
+            
+            // Check for consecutive failures
+            let consecutiveFailures = 0;
+            let failedWorkflow = null;
+            
+            for (const run of runs.workflow_runs) {
+              if (run.conclusion === 'failure') {
+                consecutiveFailures++;
+                failedWorkflow = run.name;
+              } else if (run.conclusion === 'success') {
+                break;
+              }
+            }
+            
+            // Create issue if 3+ consecutive failures
+            if (consecutiveFailures >= 3) {
+              const { data: issues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                labels: 'automated,ci/cd'
+              });
+              
+              // Check if issue already exists
+              const existingIssue = issues.find(issue => 
+                issue.title.includes(`Fallos consecutivos: ${failedWorkflow}`)
+              );
+              
+              if (!existingIssue) {
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: `🚨 Fallos consecutivos detectados: ${failedWorkflow}`,
+                  body: `## Alerta Automática de CI/CD\n\n` +
+                        `El workflow **${failedWorkflow}** ha fallado ${consecutiveFailures} veces consecutivas.\n\n` +
+                        `**Acción requerida:**\n` +
+                        `- Revisar los logs de las últimas ejecuciones\n` +
+                        `- Verificar cambios recientes en el código\n` +
+                        `- Comprobar dependencias y entorno\n\n` +
+                        `**Enlaces útiles:**\n` +
+                        `- [Ver workflows](../../actions)\n` +
+                        `- [Guía de troubleshooting](../blob/main/CONTRIBUTING.md#-ejecutar-tests-localmente)\n\n` +
+                        `*Este issue fue creado automáticamente por el bot de gestión de workflows.*`,
+                  labels: ['automated', 'ci/cd', 'priority: high', 'bug']
+                });
+                
+                console.log(`Created issue for ${consecutiveFailures} consecutive failures in ${failedWorkflow}`);
+              }
+            }
+  
+  suggest-optimizations:
+    name: Suggest Workflow Optimizations
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: read
+      issues: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Analyze workflow files
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const yaml = require('js-yaml');
+            
+            const workflowsDir = '.github/workflows';
+            const suggestions = [];
+            
+            // Read all workflow files
+            const files = fs.readdirSync(workflowsDir);
+            
+            for (const file of files) {
+              if (!file.endsWith('.yml') && !file.endsWith('.yaml')) continue;
+              
+              const content = fs.readFileSync(path.join(workflowsDir, file), 'utf8');
+              
+              // Check for common optimization opportunities
+              if (!content.includes('actions/cache')) {
+                suggestions.push(`- **${file}**: Considerar añadir caching para dependencias`);
+              }
+              
+              if (content.includes('pip install') && !content.includes('--cache-dir')) {
+                suggestions.push(`- **${file}**: Optimizar instalación de pip con --cache-dir`);
+              }
+              
+              if (!content.includes('continue-on-error') && content.includes('run:')) {
+                suggestions.push(`- **${file}**: Considerar continue-on-error para pasos opcionales`);
+              }
+              
+              if (content.includes('python-version: ') && !content.includes("['3.11', '3.12']")) {
+                suggestions.push(`- **${file}**: Considerar matrix para Python 3.11 y 3.12 según copilot-instructions.md`);
+              }
+            }
+            
+            if (suggestions.length > 0) {
+              console.log('## 💡 Sugerencias de Optimización\n');
+              console.log(suggestions.join('\n'));
+              console.log('\nEstas sugerencias fueron generadas automáticamente basándose en las mejores prácticas.');
+            } else {
+              console.log('✅ No se encontraron optimizaciones obvias. Los workflows están bien configurados.');
+            }

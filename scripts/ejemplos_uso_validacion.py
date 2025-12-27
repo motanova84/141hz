@@ -110,10 +110,65 @@ def ejemplo_validacion_estadistica():
     
     return resultados
 
+def ejemplo_evidencia_concluyente():
+    """Ejemplo: Evidencia Concluyente"""
+    print("\n" + "=" * 70)
+    print("EJEMPLO 5: EVIDENCIA CONCLUYENTE")
+    print("=" * 70)
+    
+    from evidencia_concluyente import (
+        evidencia_concluyente,
+        validar_estructura_evidencia,
+        obtener_evento,
+        listar_eventos_confirmados,
+        obtener_metricas_estadisticas
+    )
+    
+    # Mostrar estructura de evidencia
+    print("\n📊 Eventos confirmados:")
+    for evento in evidencia_concluyente['eventos_confirmados']:
+        print(f"   • {evento}")
+    
+    print("\n📈 Significancia estadística:")
+    for clave, valor in evidencia_concluyente['significancia_estadistica'].items():
+        print(f"   • {clave}: {valor}")
+    
+    # Validar estructura
+    print("\n🔬 Validando estructura...")
+    validacion = validar_estructura_evidencia()
+    print(f"   Estado: {'✅ Válido' if validacion['valido'] else '❌ Inválido'}")
+    print(f"   Eventos validados: {validacion['eventos_validados']}")
+    print(f"   p-value: {validacion['p_value']:.2e}")
+    print(f"   Bayes Factor: {validacion['bayes_factor']:.1f}")
+    
+    # Obtener datos de un evento específico
+    print("\n📋 Detalle de GW150914:")
+    gw150914 = obtener_evento('GW150914')
+    if gw150914:
+        print(f"   Frecuencia: {gw150914['frecuencia_hz']:.2f} Hz")
+        print(f"   SNR H1: {gw150914['snr_h1']:.2f}")
+        print(f"   SNR L1: {gw150914['snr_l1']:.2f}")
+        print(f"   Error relativo: {gw150914['error_relativo']:.3f}%")
+    
+    # Listar todos los eventos
+    print("\n📝 Lista de eventos confirmados:")
+    eventos = listar_eventos_confirmados()
+    print(f"   {', '.join(eventos)}")
+    
+    # Obtener métricas
+    print("\n🔬 Métricas estadísticas globales:")
+    metricas = obtener_metricas_estadisticas()
+    sig = metricas['significancia_global']
+    print(f"   p-value global: {sig['p_value']:.2e}")
+    print(f"   log(BF): {sig['log_bayes_factor']:.1f}")
+    print(f"   Coherencia multi-detector: {metricas['coherencia_multi_detector']['tasa_coincidencia']:.1%}")
+    
+    return validacion
+
 def ejemplo_sistema_completo():
     """Ejemplo: Sistema Completo"""
     print("\n" + "=" * 70)
-    print("EJEMPLO 5: SISTEMA COMPLETO")
+    print("EJEMPLO 6: SISTEMA COMPLETO")
     print("=" * 70)
     
     from sistema_validacion_completo import SistemaValidacionCompleto
@@ -146,6 +201,7 @@ def main():
         ("Búsqueda GWTC-1", ejemplo_busqueda_gwtc1),
         ("Optimización SNR", ejemplo_optimizacion_snr),
         ("Validación Estadística", ejemplo_validacion_estadistica),
+        ("Evidencia Concluyente", ejemplo_evidencia_concluyente),
         ("Sistema Completo", ejemplo_sistema_completo)
     ]
     

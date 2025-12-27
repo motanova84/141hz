@@ -1,0 +1,234 @@
+name: Validation Rigor and Benchmarking
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'tests/test_regression_scientific.py'
+      - 'scripts/benchmark_quantum_solvers.py'
+      - 'scripts/certify_numerical_precision.py'
+      - '.github/workflows/validation-rigor.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Run weekly on Monday at 03:00 UTC
+    - cron: '0 3 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  regression-tests:
+    name: Regression Tests - Known Scientific Models
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      actions: read
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest mpmath numpy scipy
+      
+      - name: Run regression tests (direct)
+        run: |
+          python3 tests/test_regression_scientific.py
+        timeout-minutes: 10
+      
+      - name: Run regression tests (pytest)
+        run: |
+          pytest tests/test_regression_scientific.py -v --tb=short
+        continue-on-error: true
+      
+      - name: Upload results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: regression-test-results-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+          retention-days: 30
+  
+  benchmarking:
+    name: Quantum Solver Benchmarking
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      actions: read
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy matplotlib
+      
+      - name: Install QuTiP (optional)
+        run: |
+          pip install qutip
+        continue-on-error: true
+      
+      - name: Create results directory
+        run: mkdir -p results
+      
+      - name: Run benchmark suite
+        run: |
+          python3 scripts/benchmark_quantum_solvers.py --output results/benchmark_results.json
+        timeout-minutes: 20
+      
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: benchmark-results-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/benchmark_results.json
+          retention-days: 30
+      
+      - name: Generate benchmark summary
+        if: always()
+        run: |
+          echo "## 📊 Benchmarking Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Benchmark completed for Python ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f results/benchmark_results.json ]; then
+            echo "Results saved to \`results/benchmark_results.json\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "See [BENCHMARKING.md](BENCHMARKING.md) for full details." >> $GITHUB_STEP_SUMMARY
+          fi
+  
+  precision-certification:
+    name: Numerical Precision Certification
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      actions: read
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install core dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install mpmath numpy scipy
+      
+      - name: Install CuPy for GPU testing (optional)
+        run: |
+          # Try to detect CUDA version and install appropriate CuPy
+          # If no GPU or CUDA not available, this step will fail gracefully
+          pip install cupy-cuda11x || pip install cupy-cuda12x
+        continue-on-error: true
+      
+      - name: Create results directory
+        run: mkdir -p results
+      
+      - name: Run precision certification
+        run: |
+          python3 scripts/certify_numerical_precision.py --output results/precision_certification.json
+        timeout-minutes: 15
+      
+      - name: Upload certification results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: precision-certification-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/precision_certification.json
+          retention-days: 30
+      
+      - name: Generate certification summary
+        if: always()
+        run: |
+          echo "## 🔒 Numerical Precision Certification" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Certification completed for Python ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f results/precision_certification.json ]; then
+            echo "Results saved to \`results/precision_certification.json\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "See [PRECISION_CERTIFICATION.md](PRECISION_CERTIFICATION.md) for full details." >> $GITHUB_STEP_SUMMARY
+          fi
+  
+  validation-summary:
+    name: Validation Rigor Summary
+    needs: [regression-tests, benchmarking, precision-certification]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Generate validation summary
+        run: |
+          echo "## 🛡️ Validation Rigor and Confidence Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All validation enhancement workflows have completed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Validation Enhancements" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. **Regression Tests**: Validation against known scientific models" >> $GITHUB_STEP_SUMMARY
+          echo "   - Ising Model (Onsager, 1944)" >> $GITHUB_STEP_SUMMARY
+          echo "   - Heisenberg Model (Bethe, 1931)" >> $GITHUB_STEP_SUMMARY
+          echo "   - Quantum Frequency Theory (JMMB, 2025)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "2. **Benchmarking**: Performance comparison with industry standards" >> $GITHUB_STEP_SUMMARY
+          echo "   - NumPy/SciPy baseline" >> $GITHUB_STEP_SUMMARY
+          echo "   - QuTiP (if available)" >> $GITHUB_STEP_SUMMARY
+          echo "   - OpenFermion (if available)" >> $GITHUB_STEP_SUMMARY
+          echo "   - Scaling analysis: O(N³)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "3. **Precision Certification**: Numerical accuracy verification" >> $GITHUB_STEP_SUMMARY
+          echo "   - High-precision constants (10⁻¹⁰)" >> $GITHUB_STEP_SUMMARY
+          echo "   - CPU consistency (float32 vs float64)" >> $GITHUB_STEP_SUMMARY
+          echo "   - GPU-CPU consistency (if available)" >> $GITHUB_STEP_SUMMARY
+          echo "   - Mixed precision validation" >> $GITHUB_STEP_SUMMARY
+          echo "   - Numerical stability" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📚 **Documentation:**" >> $GITHUB_STEP_SUMMARY
+          echo "- [BENCHMARKING.md](BENCHMARKING.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- [PRECISION_CERTIFICATION.md](PRECISION_CERTIFICATION.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- [tests/test_regression_scientific.py](tests/test_regression_scientific.py)" >> $GITHUB_STEP_SUMMARY
