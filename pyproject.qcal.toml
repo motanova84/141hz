@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qcal"
+version = "0.1.0"
+description = "QCAL — análisis reproducible de coherencia (141.7 Hz) y CLI científica"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "José Manuel Mota Burruezo", email = "example@example.com" }]
+keywords = ["gravitational-waves", "signal-processing", "coherence", "qcal"]
+dependencies = [
+  "numpy>=1.26,<3.0",
+  "scipy>=1.11,<2.0",
+  "matplotlib>=3.8,<4.0",
+  "pandas>=2.0,<3.0",
+  "click>=8.1,<9.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/motanova84/141hz"
+Repository = "https://github.com/motanova84/141hz"
+Documentation = "https://motanova84.github.io/141hz"
+
+[project.scripts]
+qcal = "qcal.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

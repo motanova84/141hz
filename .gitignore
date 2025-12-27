@@ -126,6 +126,10 @@ dist/
 build/
 *.egg-info/
 
+# QCAL package workarounds
+qcal_backup/
+qcal_llm_backup/
+repro/*/.venv/
 # MkDocs build directory
 # Omega ∞³ validation outputs
 omega_validation_*.json
