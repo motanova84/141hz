@@ -14,14 +14,14 @@ from pathlib import Path
 # Add parent directory to path to import the module
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+# Import the script as a module once at the module level
+import analyze_at2020afhd as at2020
 
 class TestAT2020afhdAnalysis(unittest.TestCase):
     """Test cases for AT2020afhd analysis."""
 
     def setUp(self):
         """Set up test fixtures."""
-        # Import the script as a module
-        import analyze_at2020afhd as at2020
         self.module = at2020
         
         # Set random seed for reproducibility
