@@ -213,7 +213,7 @@ def visualizar_resultados(results, amplitudes, output_dir='results'):
     figures_path.mkdir(parents=True, exist_ok=True)
     
     # Crear figura con dos subplots
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+    _, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
     
     # Subplot 1: Distribución de SNR
     for amp in amplitudes:
