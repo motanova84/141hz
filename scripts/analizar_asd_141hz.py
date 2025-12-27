@@ -50,6 +50,10 @@ except ImportError as e:
 GW150914_GPS_TIME = 1126259462.423  # Tiempo GPS del merger
 TARGET_FREQUENCY = 141.7  # Hz - Frecuencia objetivo del análisis
 
+# Constantes de configuración
+SECONDS_PER_DAY = 86400  # Segundos en un día (para conversión de días a segundos)
+MIN_DURATION = 4  # Duración mínima en segundos (requerida para calcular FFT con fftlength=4)
+
 
 def download_segment(detector, gps_start, duration, verbose=False):
     """
@@ -418,7 +422,7 @@ def analyze_gw150914(duration=64, control_days=None, output_dir='results/asd_ana
         print(f"\n📅 Control: {days} día(s) antes del evento")
         
         # Calcular GPS time del control (mismo tiempo UTC, diferente día)
-        control_gps = GW150914_GPS_TIME - (days * 86400)  # 86400 s = 1 día
+        control_gps = GW150914_GPS_TIME - (days * SECONDS_PER_DAY)
         control_gps_start = control_gps - duration / 2
         
         h1_control = download_segment('H1', control_gps_start, duration, verbose=verbose)
@@ -540,8 +544,8 @@ Ejemplos:
     args = parser.parse_args()
     
     # Validaciones
-    if args.duration < 4:
-        print("❌ Error: La duración debe ser al menos 4 segundos (para calcular FFT)")
+    if args.duration < MIN_DURATION:
+        print(f"❌ Error: La duración debe ser al menos {MIN_DURATION} segundos (para calcular FFT)")
         return 1
     
     if args.duration > 128:
