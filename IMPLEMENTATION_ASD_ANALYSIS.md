@@ -155,7 +155,7 @@ All 5 requirements from the problem statement have been fully implemented:
    - Duration: 32-64 seconds (configurable)
 
 2. **Welch's Method**:
-   - FFT length: 4 seconds (resolución ~0.25 Hz)
+   - FFT length: 4 seconds (resolution ~0.25 Hz)
    - Overlap: 50% (2 seconds)
    - Window: Hann (default in gwpy)
 
