@@ -28,7 +28,7 @@ from scipy import signal
 from scipy.fft import fft, fftfreq, rfft, rfftfreq
 from scipy.stats import chi2
 import matplotlib.pyplot as plt
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Any
 import json
 from pathlib import Path
 import sys
@@ -442,7 +442,7 @@ class IGETSGravimetryAnalysis:
     def validar_con_sensibilidad(self, 
                                 amplitud_detectada: float,
                                 snr_observado: float,
-                                output_dir: str = "igets_results") -> Dict[str, any]:
+                                output_dir: str = "igets_results") -> Dict[str, Any]:
         """
         Valida datos reales de IGETS contra el modelo de sensibilidad del gravímetro.
         

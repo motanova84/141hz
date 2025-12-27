@@ -31,7 +31,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 # Parámetros del gravímetro superconductor (basados en iGrav/SG típicos)
-F0 = 141.7  # Hz (frecuencia del repo)
+F0 = 141.7001  # Hz (frecuencia del repo - valor preciso usado en análisis IGETS)
 FS = 1000.0  # Hz (muestreo, >2*f0)
 DURATION = 1.0  # s (integración típica)
 N = int(FS * DURATION)
@@ -47,7 +47,8 @@ NOISE_RMS_EFFECTIVE = 3.2e-13  # g (ajustado para 1s con análisis Welch)
 
 def simular_salida_gravimetro(amplitud_g, num_realizaciones=1000, 
                               f0=F0, fs=FS, duration=DURATION,
-                              noise_rms_effective=NOISE_RMS_EFFECTIVE):
+                              noise_rms_effective=NOISE_RMS_EFFECTIVE,
+                              random_seed=None):
     """
     Simula la salida de un gravímetro superconductor con señal y ruido.
     
@@ -60,6 +61,8 @@ def simular_salida_gravimetro(amplitud_g, num_realizaciones=1000,
         fs (float): Frecuencia de muestreo [Hz]
         duration (float): Duración de la medida [s]
         noise_rms_effective (float): RMS efectivo del ruido [g]
+        random_seed (int, optional): Semilla para reproducibilidad. Si es None,
+            usa el estado aleatorio actual.
     
     Returns:
         np.ndarray: Array de SNRs de cada realización
@@ -67,11 +70,22 @@ def simular_salida_gravimetro(amplitud_g, num_realizaciones=1000,
     n_samples = int(fs * duration)
     t = np.linspace(0, duration, n_samples, endpoint=False)
     
+    # Validar parámetros para Welch
+    if n_samples < 4:
+        raise ValueError(
+            f"n_samples ({n_samples}) debe ser >= 4 para análisis Welch. "
+            f"Aumentar fs o duration."
+        )
+    
+    # Configurar semilla si se proporciona
+    if random_seed is not None:
+        np.random.seed(random_seed)
+    
+    # Pre-calcular señal (no cambia entre iteraciones)
+    signal = amplitud_g * np.cos(2 * np.pi * f0 * t)
+    
     snrs = []
     for _ in range(num_realizaciones):
-        # Señal: Delta_g * cos(2*pi*f0*t)
-        signal = amplitud_g * np.cos(2 * np.pi * f0 * t)
-        
         # Ruido gaussiano blanco (aprox. para auto-grav.)
         noise = np.random.normal(0, noise_rms_effective, n_samples)
         
@@ -81,7 +95,8 @@ def simular_salida_gravimetro(amplitud_g, num_realizaciones=1000,
         # Análisis espectral (Welch, como en el repo)
         # nperseg=n_samples//4 proporciona balance entre resolución frecuencial
         # y reducción de varianza (4 ventanas de 50% overlap)
-        freqs, psd = welch(output, fs=fs, nperseg=n_samples//4)
+        nperseg = max(n_samples // 4, 256)
+        freqs, psd = welch(output, fs=fs, nperseg=nperseg)
         idx = np.argmin(np.abs(freqs - f0))
         signal_power = psd[idx]
         noise_floor = np.median(psd)
