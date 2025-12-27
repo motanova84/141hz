@@ -1,0 +1,17 @@
+{
+  "time_window_s": 0.25,
+  "band_hz": [20, 1024],
+  "f0_hz": 141.7001,
+  "tolerance_hz": 0.3,
+  "psd": {
+    "nfft": 16384,
+    "overlap": 0.5,
+    "window": "hann"
+  },
+  "snr_stat": "coherent_fisher_mix",
+  "n_offsource": 10000,
+  "time_slides": 200,
+  "detectors": ["H1", "L1", "V1"],
+  "multiple_events": "hierarchical_bayes",
+  "leave_one_out": true
+}

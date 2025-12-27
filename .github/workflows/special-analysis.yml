@@ -1,0 +1,427 @@
+name: Special Analysis Methods
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/sage_*.py'
+      - 'scripts/*pycbc*.py'
+      - 'scripts/potencial_evac.py'
+      - 'scripts/busqueda_sistematica_gwtc1.py'
+      - '.github/workflows/special-analysis.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Run weekly on Saturday at 14:00 UTC
+    - cron: '0 14 * * 6'
+
+jobs:
+  pycbc-analysis:
+    name: PyCBC Analysis - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-pycbc-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-pycbc-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Download GW150914 data
+        run: |
+          python scripts/descargar_datos.py --event GW150914
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Run PyCBC analysis
+        run: |
+          python scripts/analizar_gw150914_pycbc.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test PyCBC analysis
+        run: |
+          python scripts/test_analizar_gw150914_pycbc.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Run PyCBC demo
+        run: |
+          if [ -f "scripts/demo_pycbc_analysis.py" ]; then
+            python scripts/demo_pycbc_analysis.py
+          fi
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload PyCBC results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: pycbc-analysis-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+            *.png
+            *.pdf
+          retention-days: 30
+  
+  sage-protocol:
+    name: SAGE Protocol - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-sage-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-sage-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run SAGE activation
+        run: |
+          python scripts/sage_activation.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test SAGE activation
+        run: |
+          python scripts/test_sage_activation.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Run SAGE protocol demo
+        run: |
+          if [ -f "scripts/demo_sage_protocolo.py" ]; then
+            python scripts/demo_sage_protocolo.py
+          fi
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload SAGE results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: sage-protocol-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+            *.png
+          retention-days: 30
+  
+  evac-potential:
+    name: EVAC Potential Analysis
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-evac-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-evac-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run EVAC potential analysis
+        run: |
+          python scripts/potencial_evac.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test EVAC potential
+        run: |
+          python scripts/test_potencial_evac.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload EVAC results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: evac-potential-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+            *.png
+          retention-days: 30
+  
+  gwtc1-search:
+    name: GWTC-1 Systematic Search
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-gwtc-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-gwtc-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run GWTC-1 systematic search
+        run: |
+          python scripts/busqueda_sistematica_gwtc1.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        timeout-minutes: 60
+        continue-on-error: false
+      
+      - name: Upload GWTC-1 results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: gwtc1-search-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+            *.png
+            *.csv
+          retention-days: 30
+  
+  corrections-and-derivations:
+    name: Corrections and Derivations
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-corr-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-corr-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run R_Ψ CODATA corrections
+        run: |
+          python scripts/correccion_rpsi_codata.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Test corrections
+        run: |
+          python scripts/test_correccion_rpsi_codata.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Run first principles derivation
+        run: |
+          python scripts/derivacion_primer_principios_f0.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload corrections results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: corrections-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+            *.png
+          retention-days: 30
+  
+  special-analysis-summary:
+    name: Special Analysis Summary
+    needs: [pycbc-analysis, sage-protocol, evac-potential, gwtc1-search, corrections-and-derivations]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## 🔮 Special Analysis Methods Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All special analysis workflows have completed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Methods executed:**" >> $GITHUB_STEP_SUMMARY
+          echo "- PyCBC-based GW analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- SAGE Protocol (Systematic Analysis for GW Events)" >> $GITHUB_STEP_SUMMARY
+          echo "- EVAC Potential analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- GWTC-1 systematic search" >> $GITHUB_STEP_SUMMARY
+          echo "- R_Ψ CODATA corrections" >> $GITHUB_STEP_SUMMARY
+          echo "- First principles f₀ derivation" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,197 @@
+#!/usr/bin/env python3
+"""
+QCAL - Quantum Coherence Analysis for LLMs and Gravitational Waves
+Command-line interface for analyzing GW data and validating coherence.
+"""
+
+import sys
+import argparse
+import json
+from pathlib import Path
+
+# Add parent directory to path to import qcal module
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+try:
+    import qcal
+except ImportError:
+    print("Error: QCAL module not found. Please install with: pip install -e .", file=sys.stderr)
+    sys.exit(1)
+
+
+def cmd_analyze(args):
+    """Analyze gravitational wave catalog."""
+    print(f"QCAL v{qcal.__version__} - Analyze Command")
+    print(f"Catalog: {args.catalog}")
+    print(f"Detector: {args.detector}")
+    print(f"Frequency band: {args.band} Hz ± {args.bandwidth/2} Hz")
+    print(f"Output directory: {args.outdir}")
+    
+    if args.event:
+        print(f"Event filter: {args.event}")
+    
+    # Create output directory
+    outdir = Path(args.outdir)
+    outdir.mkdir(parents=True, exist_ok=True)
+    
+    # Placeholder for actual analysis
+    # In a full implementation, this would call the analysis pipeline
+    result = {
+        "qcal_version": qcal.__version__,
+        "catalog": args.catalog,
+        "detector": args.detector,
+        "center_frequency": args.band,
+        "bandwidth": args.bandwidth,
+        "precision": args.precision,
+        "event_filter": args.event,
+        "status": "Analysis pipeline not yet implemented",
+        "note": "This is a placeholder for the full QCAL v0.1.0 implementation"
+    }
+    
+    # Save results
+    output_file = outdir / f"{args.catalog}_{args.detector}_{args.band}Hz_summary.json"
+    with open(output_file, 'w') as f:
+        json.dump(result, f, indent=2)
+    
+    print(f"\nResults saved to: {output_file}")
+    print("\nNote: Full analysis pipeline implementation in progress.")
+    print("      Current placeholder demonstrates CLI structure.")
+    
+    return 0
+
+
+def cmd_validate(args):
+    """Run validation protocols."""
+    print(f"QCAL v{qcal.__version__} - Validate Command")
+    print(f"Input: {args.input}")
+    print(f"Criteria: {args.criteria}")
+    print(f"Output directory: {args.outdir}")
+    
+    print("\nNote: Validation pipeline not yet implemented.")
+    return 0
+
+
+def cmd_compare(args):
+    """Compare results across detectors or catalogs."""
+    print(f"QCAL v{qcal.__version__} - Compare Command")
+    print(f"Directories: {args.dirs}")
+    print(f"Output directory: {args.outdir}")
+    
+    if args.plot:
+        print("Plotting enabled")
+    
+    print("\nNote: Comparison pipeline not yet implemented.")
+    return 0
+
+
+def cmd_export(args):
+    """Export results to different formats."""
+    print(f"QCAL v{qcal.__version__} - Export Command")
+    print(f"Input: {args.input}")
+    print(f"Format: {args.format}")
+    print(f"Output: {args.output}")
+    
+    print("\nNote: Export functionality not yet implemented.")
+    return 0
+
+
+def main():
+    """Main CLI entry point."""
+    parser = argparse.ArgumentParser(
+        description="QCAL - Quantum Coherence Analysis for LLMs and Gravitational Waves",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Analyze GWTC-1 catalog with H1 detector
+  qcal analyze --catalog GWTC-1 --band 141.7 --detector H1 --outdir artifacts
+
+  # Analyze specific event with high precision
+  qcal analyze --catalog GWTC-1 --event GW150914 --band 141.7001 \\
+               --detector H1 --precision 100 --outdir results/gw150914
+
+  # Validate results
+  qcal validate --input artifacts/summary.json --criteria all
+
+  # Compare multi-detector results
+  qcal compare --dirs artifacts/h1 artifacts/l1 artifacts/v1 --plot
+
+For more information, visit: https://github.com/motanova84/141hz
+        """
+    )
+    
+    parser.add_argument('--version', action='version', 
+                       version=f'QCAL v{qcal.__version__}')
+    
+    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    
+    # Analyze command
+    analyze_parser = subparsers.add_parser('analyze', 
+                                          help='Analyze GW catalog')
+    analyze_parser.add_argument('--catalog', required=True,
+                               choices=['GWTC-1', 'GWTC-2', 'GWTC-3', 'O4'],
+                               help='Catalog name')
+    analyze_parser.add_argument('--band', type=float, default=141.7,
+                               help='Center frequency (Hz)')
+    analyze_parser.add_argument('--bandwidth', type=float, default=2.0,
+                               help='Bandwidth around center frequency (Hz)')
+    analyze_parser.add_argument('--detector', default='H1',
+                               choices=['H1', 'L1', 'V1', 'KAGRA'],
+                               help='Detector name')
+    analyze_parser.add_argument('--outdir', default='artifacts',
+                               help='Output directory')
+    analyze_parser.add_argument('--precision', type=int, default=50,
+                               help='Decimal precision for calculations')
+    analyze_parser.add_argument('--event', type=str,
+                               help='Specific event name (e.g., GW150914)')
+    analyze_parser.add_argument('--format', default='json',
+                               choices=['json', 'csv', 'hdf5'],
+                               help='Output format')
+    analyze_parser.set_defaults(func=cmd_analyze)
+    
+    # Validate command
+    validate_parser = subparsers.add_parser('validate',
+                                           help='Run validation protocols')
+    validate_parser.add_argument('--input', required=True,
+                                help='Input file or directory')
+    validate_parser.add_argument('--criteria', default='all',
+                                choices=['radio_cuantico', 'energia_cuantica', 
+                                        'simetria_discreta', 'all'],
+                                help='Validation criteria')
+    validate_parser.add_argument('--outdir', default='validation_results',
+                                help='Output directory')
+    validate_parser.set_defaults(func=cmd_validate)
+    
+    # Compare command
+    compare_parser = subparsers.add_parser('compare',
+                                          help='Compare results')
+    compare_parser.add_argument('--dirs', nargs='+', required=True,
+                               help='Directories to compare')
+    compare_parser.add_argument('--outdir', default='comparison',
+                               help='Output directory')
+    compare_parser.add_argument('--plot', action='store_true',
+                               help='Generate comparison plots')
+    compare_parser.set_defaults(func=cmd_compare)
+    
+    # Export command
+    export_parser = subparsers.add_parser('export',
+                                         help='Export results')
+    export_parser.add_argument('--input', required=True,
+                              help='Input file or directory')
+    export_parser.add_argument('--format', required=True,
+                              choices=['latex', 'pdf', 'figures'],
+                              help='Output format')
+    export_parser.add_argument('--output', required=True,
+                              help='Output file or directory')
+    export_parser.set_defaults(func=cmd_export)
+    
+    args = parser.parse_args()
+    
+    if not args.command:
+        parser.print_help()
+        return 1
+    
+    return args.func(args)
+
+
+if __name__ == '__main__':
+    sys.exit(main())

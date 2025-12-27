@@ -18,6 +18,13 @@ Fecha: Octubre 2025
 """
 
 import numpy as np
+from pathlib import Path
+
+# Constantes fundamentales (CODATA 2022)
+c = 2.99792458e8  # m/s (velocidad de la luz)
+
+# Get repository root dynamically
+REPO_ROOT = Path(__file__).parent.parent.resolve()
 from scipy.optimize import minimize_scalar
 import matplotlib
 matplotlib.use('Agg')
@@ -272,8 +279,9 @@ axes[1, 1].text(0.1, 0.5, summary_text, fontsize=11, verticalalignment='center',
                 facecolor='wheat', alpha=0.8))
 
 plt.tight_layout()
-output_file = '/home/runner/work/gw250114-141hz-analysis/gw250114-141hz-analysis/results/acto_iii_validacion_cuantica.png'
-plt.savefig(output_file, dpi=300, bbox_inches='tight')
+output_file = REPO_ROOT / 'results' / 'acto_iii_validacion_cuantica.png'
+output_file.parent.mkdir(parents=True, exist_ok=True)
+plt.savefig(str(output_file), dpi=300, bbox_inches='tight')
 print(f"   Gráfico guardado en: {output_file}")
 
 # ============================================================================

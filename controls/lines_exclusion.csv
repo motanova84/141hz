@@ -1,0 +1,32 @@
+freq_hz,width_hz,reason,source
+60,2,mains harmonic,site
+120,2,mains harmonic,site
+180,2,mains harmonic,site
+60,2,mains harmonic fundamental,power_grid
+120,2,mains harmonic 2nd,power_grid
+180,2,mains harmonic 3rd,power_grid
+240,2,mains harmonic 4th,power_grid
+300,2,mains harmonic 5th,power_grid
+360,2,mains harmonic 6th,power_grid
+420,2,mains harmonic 7th,power_grid
+480,2,mains harmonic 8th,power_grid
+540,2,mains harmonic 9th,power_grid
+600,2,mains harmonic 10th,power_grid
+660,2,mains harmonic 11th,power_grid
+720,2,mains harmonic 12th,power_grid
+780,2,mains harmonic 13th,power_grid
+840,2,mains harmonic 14th,power_grid
+900,2,mains harmonic 15th,power_grid
+960,2,mains harmonic 16th,power_grid
+1020,2,mains harmonic 17th,power_grid
+393.1,1,violin mode suspension,mechanical_resonance
+500.3,1,violin mode suspension,mechanical_resonance
+1083.7,1,violin mode suspension,mechanical_resonance
+35.9,0.5,calibration line H1,calibration
+36.7,0.5,calibration line L1,calibration
+37.5,0.5,calibration line V1,calibration
+331.9,0.5,calibration line H1,calibration
+1083.0,0.5,calibration line L1,calibration
+1161.5,0.5,calibration line V1,calibration
+16,1,seismic noise low freq,environmental
+24,1,seismic noise low freq,environmental

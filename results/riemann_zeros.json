@@ -1,0 +1,50 @@
+{
+  "timestamp": "2025-10-29T07:54:36.123373+00:00",
+  "precision_digits": 100,
+  "validation_suite": "riemann_zeros",
+  "zeros_validation": {
+    "constants": {
+      "phi": 1.618033988749895,
+      "gamma": 0.5772156649015329,
+      "pi": 3.141592653589793,
+      "e_gamma_pi": 6.131114182422604,
+      "phi_400": 647.2135954999579,
+      "target_sum": 105.56215008284556
+    },
+    "parameters": {
+      "alpha": 0.006695,
+      "T": 3967.986,
+      "precision_digits": 100,
+      "num_zeros_used": 3438
+    },
+    "computation": {
+      "zeros_sum": 105.6587772603406,
+      "expected_sum": 105.56215008284556,
+      "validation_result": 647.8060277583052,
+      "expected_phi_400": 647.2135954999579,
+      "relative_error_sum": 0.0009153581792262072,
+      "relative_error_result": 0.0009153581792261174,
+      "absolute_difference_sum": 0.09662717749503713,
+      "absolute_difference_result": 0.5924322583472303
+    },
+    "status": "PASS"
+  },
+  "frequency_computation": {
+    "frequency_hz": 4.67334002183867,
+    "components": {
+      "f_base": 0.15915494309189535,
+      "scaling_factor": 1.413305271524531,
+      "psi_prime": 3968.1404544265188,
+      "psi_effective": 15.189148531929632,
+      "delta_correction": 1.3678480038157936,
+      "log_term": 6.448175798149843
+    },
+    "precision_digits": 100
+  },
+  "overall_status": "PASS",
+  "summary": {
+    "tests_run": 1,
+    "tests_passed": 1,
+    "tests_failed": 0
+  }
+}
