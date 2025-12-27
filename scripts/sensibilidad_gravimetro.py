@@ -28,7 +28,6 @@ Referencia:
 import numpy as np
 from scipy.signal import welch
 import matplotlib.pyplot as plt
-import os
 from pathlib import Path
 
 # Parámetros del gravímetro superconductor (basados en iGrav/SG típicos)
