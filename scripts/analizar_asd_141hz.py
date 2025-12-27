@@ -32,7 +32,7 @@ Fecha: 2025-10-24
 import argparse
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 
 try:
     import numpy as np
