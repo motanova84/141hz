@@ -14,7 +14,7 @@ Uso:
 import os
 import sys
 import tempfile
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 
 try:
     import pytest
