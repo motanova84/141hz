@@ -84,6 +84,8 @@
   - Test suite for GWTC-3 analysis script
 - `test_analizar_asd_141hz.py`
   - Tests para el análisis ASD de 141.7 Hz en GW150914
+- `test_analizar_at2020afhd.py`
+  - Test para analizar_at2020afhd.py
 - `test_analizar_cy_kpi_universal.py`
   - Tests para el análisis del invariante espectral k_Π en variedades Calabi-Yau.
 - `test_analizar_gw150914_pycbc.py`
@@ -118,6 +120,8 @@
   - Tests para Demostración Rigurosa de κ_Π = 2.5773 Universal
 - `test_demostracion_matematica.py`
   - Tests para la demostración matemática de 141.7001 Hz
+- `test_demostracion_matematica_primos.py`
+  - Tests para demostracion_matematica_primos.py
 - `test_derivacion_10d_supergravity.py`
   - Test suite for 10D Supergravity derivation of V_eff
 - `test_derivacion_primer_principios.py`
@@ -126,10 +130,14 @@
   - Tests para Validación de Estándares de Descubrimiento Científico
 - `test_ecuacion_latido_universal.py`
   - Tests para la Ecuación del Latido Universal
+- `test_einstein_noesis.py`
+  - Test suite for Einstein-Noēsis equation implementation.
 - `test_energia_cuantica.py`
   - Tests para el módulo de cálculo de energía cuántica fundamental
 - `test_evidencia_concluyente.py`
   - Test unitario para el módulo de evidencia concluyente
+- `test_fractal_resonance_constants.py`
+  - Tests for Fractal Resonance in Fundamental Constants module.
 - `test_generar_prediccion_gw250114.py`
   - Test para generar_prediccion_gw250114.py
 - `test_gw170817_eeg_analysis.py`
@@ -168,8 +176,12 @@
   - Tests para el módulo snr_utils
 - `test_teoria_unificada_141hz.py`
   - Tests for Unified Noetic Quantum Gravity Theory module.
+- `test_test_universalidad_virgo_kagra.py`
+  - Tests para el módulo test_universalidad_virgo_kagra
 - `test_torre_algebraica.py`
   - Tests para la Torre Algebraica
+- `test_universalidad_virgo_kagra.py`
+  - Test de Universalidad de 141.7 Hz en Virgo y KAGRA
 - `test_user_confirmation.py`
   - Test script for user_confirmation module.
 - `test_vacuum_energy.py`
@@ -184,6 +196,8 @@
   - Tests for Calabi-Yau Spectral Invariant k_Π Validation
 - `test_validacion_multievento_gaia.py`
   - Test Suite para Validación Multi-evento + GAIA
+- `test_validacion_noesis_at2020afhd.py`
+  - Tests para validacion_noesis_at2020afhd.py
 - `test_validacion_radio_cuantico.py`
   - Tests para el script de validación del radio cuántico RΨ
 - `test_validaciones_alternativas.py`
@@ -210,4 +224,4 @@
   - test_verify_kappa_pi_complete.py
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-25 00:10:23 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-27 12:31:36 UTC*

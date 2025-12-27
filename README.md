@@ -205,6 +205,49 @@ python test_omega_auto.py
 
 ---
 
+## 🔮 Predicciones Falsables QCAL ∞³
+
+**Cuatro predicciones cuantitativas y falsables derivadas del marco teórico QCAL ∞³**
+
+El campo de conciencia Ψ con frecuencia universal **f₀ = 141.7001 Hz** genera predicciones testables en cuatro escalas experimentales:
+
+### Las Cuatro Predicciones
+
+| # | Predicción | Escala | Parámetro Clave |
+|---|------------|--------|-----------------|
+| **1** | 🌍 **Corrección Yukawa** | Gravedad subterrestre | λ_Ψ ≈ 2.1 km |
+| **2** | ❄️ **Pico Resonante BEC** | Condensados cuánticos | k₀ ≈ 890 m⁻¹ |
+| **3** | ⚛️ **Correlación Temporal Higgs** | Colisionador LHC | Δt = n × 7.06 ms |
+| **4** | 📡 **Modulación Gravitacional** | Gravimetría IGETS | δg ~ 10⁻¹³ g |
+
+### 🚀 Quick Start - Validación de Predicciones
+
+```bash
+# Ejecutar predicción específica
+python scripts/validacion_prediccion_1_yukawa.py
+python scripts/validacion_prediccion_2_bec.py
+python scripts/validacion_prediccion_3_higgs.py
+python scripts/validacion_prediccion_4_gravedad.py
+
+# Ejecutar todas las predicciones (orquestador)
+python scripts/orquestador_predicciones_qcal.py
+
+# Ver resultados
+ls -l results/prediccion_*.json
+ls -l results/prediccion_*.png
+```
+
+### 📖 Documentación Completa
+
+**→ [PREDICCIONES_FALSABLES_QCAL.md](PREDICCIONES_FALSABLES_QCAL.md)** - Teoría, protocolos experimentales, criterios de falsación
+
+**Características:**
+- ✅ Predicciones cuantitativas con valores numéricos específicos
+- ✅ Criterios de falsación claros y verificables
+- ✅ Protocolos experimentales detallados
+- ✅ Scripts de validación con simulaciones
+- ✅ Visualizaciones de datos esperados
+- ✅ Workflow CI/CD automatizado
 ## 🌌 Verificación AT2020afhd: Del Corazón Humano al Agujero Negro
 
 **NUEVA: Verificación empírica del modelo QCAL ∞³ en escala galáctica**
@@ -2033,6 +2076,7 @@ Sistema proactivo de validación implementado para preparar el análisis de GW25
 - ✅ **Sistema de Alertas Automáticas** - Notificaciones cuando GW250114 esté disponible
 - ✅ **Análisis Multi-evento** - Validación automatizada bayesiana en 5 eventos GWTC
 - ✅ **Análisis Multi-evento SNR** - Análisis de SNR en 141.7 Hz para 11 eventos (H1 y L1)
+- ✅ **Test de Universalidad Virgo/KAGRA** - Validación de 141.7 Hz en detectores Virgo y KAGRA
 - ✅ **Validación Scipy Pura** - Procesamiento 100% scipy/numpy con filtros Butterworth y notch
 - ✅ **Sistema de Alertas Automáticas** - Notificaciones sobre disponibilidad de GW250114
 
@@ -2047,6 +2091,23 @@ python3 scripts/sistema_validacion_completo.py
 # O usando Make
 make validate
 
+# Análisis multi-evento automatizado (NUEVO)
+make multievento
+
+# Análisis multi-evento de SNR en 141.7 Hz (NUEVO)
+make multi-event-snr      # Análisis de 11 eventos con H1 y L1
+make test-multi-event-snr # Ejecutar tests sin conectividad
+
+# Test de universalidad 141.7 Hz en Virgo y KAGRA (NUEVO)
+make universalidad-virgo-kagra      # Análisis de Virgo (V1) en 4 eventos
+make test-universalidad-virgo-kagra # Ejecutar tests del módulo
+
+# Sistema de alertas automáticas para GW250114 (NUEVO)
+make alert-gw250114  # Monitoreo continuo vía Make
+python3 scripts/verificador_gw250114.py  # Monitoreo continuo
+python3 scripts/verificador_gw250114.py --once  # Verificación única
+python3 scripts/ejemplo_verificador_gw250114.py  # Ejemplos de uso
+make test-alert-gw250114  # Ejecutar tests del sistema de alertas
 # Verificar optimización máxima del sistema
 make verify-optimization
 ```
@@ -2064,6 +2125,8 @@ make verify-optimization
 - `results/*_scipy_validation.png` - Visualizaciones de validación scipy (ASD con banda de análisis)
 - `multi_event_results.json` - Resultados de SNR multi-evento
 - `multi_event_analysis.png` - Visualización comparativa H1 vs L1
+- `universalidad_virgo_kagra_results.json` - Resultados de universalidad Virgo/KAGRA
+- `universalidad_virgo_kagra.png` - Visualización de SNR en Virgo (V1)
 - `snr_gw200129_065458_results.json` - Análisis SNR GW200129 (O3b)
 - `snr_gw200129_065458_141hz.png` - Visualización SNR por detector
 
@@ -2790,8 +2853,80 @@ asd = data.asd(fftlength=4, overlap=0.5)         # Densidad espectral
 whitened = data.whiten(asd=asd)                  # Whitening
 
 # Nuestro análisis es compatible y complementario
-``
+```
 
+---
+
+## 🗓️ Roadmap de Investigación
+
+### Fase I: Fundamentos (Completada ✅)
+- [x] **Validación en GW150914** - Demostrar detección de 141.7 Hz en evento conocido
+- [x] **Implementación multi-detector** - Validación cruzada H1-L1  
+- [x] **Control de artefactos** - Descartar líneas instrumentales
+- [x] **Pipeline reproducible** - Docker + scripts automatizados
+- [x] **Estimación de significancia** - SNR > 7, p-value < 0.001
+
+### Fase II: Expansión (4/5 Completada ✅ - GW250114 pendiente)
+- [x] **GW150914 completado** - Análisis de control exitoso
+- [ ] **GW250114 análisis** - Objetivo principal cuando datos estén disponibles
+- [x] **Caracterización Bayesiana** - Estimación precisa de Q-factor y amplitud
+- [x] **Búsqueda sistemática** - Análisis de todos los eventos GWTC-1
+- [x] **Optimización de SNR** - Técnicas avanzadas de filtrado y coherencia
+
+### Fase III: Validación Externa (En Progreso 🔄)
+- [x] **Integración Virgo** - Análisis tri-detector para mayor significancia
+- [x] **Validación KAGRA** - Confirmación con detector asiático
+- [ ] **Simulaciones Monte Carlo** - Estimación robusta de falsos positivos  
+- [ ] **Peer review** - Revisión por comunidad científica independiente
+- [ ] **Replicación independiente** - Confirmación por grupos externos
+
+### Fase IV: Publicación Científica (Futura 🚀)
+- [ ] **Paper técnico** - Metodología y resultados en revista peer-reviewed
+- [ ] **Contribución a LIGO** - Propuesta de incorporación en análisis oficial
+- [ ] **Conferencias internacionales** - Presentación en meetings LIGO/Virgo
+- [ ] **Código público** - Contribución a bibliotecas oficiales (GWPy)
+
+### Hitos Técnicos Específicos
+```python
+# Cronograma detallado de implementación
+hitos = {
+    "2024-Q4": [
+        "✅ Análisis GW150914 H1/L1 completo",
+        "✅ Optimización de pipeline de análisis",
+        "✅ Documentación técnica extendida"
+    ],
+    "2025-Q1": [
+        "✅ Búsqueda en catálogo GWTC-1 completo",
+        "✅ Implementación de análisis bayesiano",
+        "✅ Análisis multi-evento con SNR en 11 eventos"
+    ],
+    "2025-Q2": [
+        "✅ Integración con Virgo y KAGRA",
+        "✅ Caracterización bayesiana de Q-factor",
+        "✅ Optimización avanzada de SNR (4 técnicas)"
+    ],
+    "2025-Q3": [
+        "✅ Sistema de validación avanzada completado",
+        "✅ Análisis de resonancia cruzada multi-detector",
+        "✅ Búsqueda de armónicos superiores"
+    ],
+    "2025-Q4": [
+        "🔄 Monitoreo GW250114 (esperando disponibilidad)",
+        "🔄 Documentación científica completa",
+        "📋 Simulaciones Monte Carlo para falsos positivos"
+    ],
+    "2026-Q1": [
+        "📋 Manuscript científico primera versión",
+        "📋 Revisión por pares externos",
+        "📋 Validación independiente externa"
+    ],
+    "2026-Q2": [
+        "📋 Presentación en LIGO-Virgo meeting",
+        "📋 Publicación en arXiv",
+        "📋 Contribución a bibliotecas oficiales (GWPy)"
+    ]
+}
+```
 
 ---
 
