@@ -14,7 +14,6 @@ Uso:
 import os
 import sys
 import tempfile
-import shutil
 from unittest.mock import Mock, patch, MagicMock
 
 try:
