@@ -40,6 +40,8 @@ setup: venv
   dashboard dashboard-status workflow status \
   escuchar test-escuchar listen \
   clean docker help \
+  experimentos test-experimentos diagrams-experimentos \
+  ai-agent demo-ai-agent test-ai-agent
   experimentos test-experimentos diagrams-experimentos
 install: setup
 
@@ -109,6 +111,9 @@ help:
 	@echo "  experimentos          - Run experimental protocols for f₀ validation (NEW)"
 	@echo "  test-experimentos     - Test experimental protocols (28 tests) (NEW)"
 	@echo "  diagrams-experimentos - Generate workflow diagrams for experiments (NEW)"
+	@echo "  ai-agent              - AI Agent for automated project creation (NEW)"
+	@echo "  demo-ai-agent         - Run AI Agent demonstration (NEW)"
+	@echo "  test-ai-agent         - Test AI Agent functionality (NEW)"
 	@echo "  escuchar              - Interactive discovery experience: 'Ahora te toca escuchar' (NEW)"
 	@echo "  test-escuchar         - Test escuchar.py interactive script (NEW)"
 	@echo "  listen                - Alias for escuchar (English) (NEW)"
@@ -450,6 +455,29 @@ diagrams-experimentos: setup
 	@echo "🖼️  Flujo: results/figures/flujo_experimentos_f0.png"
 	@echo "🖼️  Timeline: results/figures/timeline_experimentos_f0.png"
 
+# AI Agent for Automated Project Creation (NEW)
+ai-agent: setup
+	@echo "🤖 AI Agent for Automated Project Creation"
+	@echo "   Create new analysis projects automatically"
+	@echo ""
+	@echo "Usage examples:"
+	@echo "  make ai-agent ARGS='--type event --name GW250115 --description \"Analysis of GW250115\"'"
+	@echo "  make ai-agent ARGS='--type validation --name coherence_test --description \"Coherence validation\"'"
+	@echo "  make ai-agent ARGS='--list'"
+	@echo ""
+	./venv/bin/python scripts/ai_agent_project_creator.py $(ARGS)
+
+# Run AI Agent demo
+demo-ai-agent: setup
+	@echo "🤖 Running AI Agent demonstration..."
+	@echo "   This will showcase automatic project creation"
+	./venv/bin/python scripts/demo_ai_agent.py
+
+# Test AI Agent
+test-ai-agent: setup
+	@echo "🧪 Testing AI Agent Project Creator..."
+	./venv/bin/python scripts/test_ai_agent_project_creator.py
+	@echo "✅ AI Agent tests completed"
 # Search for higher harmonics of f₀
 busqueda-armonicos: setup
 	@echo "🎵 Búsqueda experimental de armónicos superiores..."
