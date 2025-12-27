@@ -349,7 +349,7 @@ def plot_asd_comparison(results_list, output_dir, verbose=False):
         ratios.append(ratio)
     
     if ratios:
-        bars = ax.bar(range(len(ratios)), ratios, color=colors[:len(ratios)])
+        ax.bar(range(len(ratios)), ratios, color=colors[:len(ratios)])
         ax.axhline(1.0, color='red', linestyle='--', linewidth=2, label='Equal noise')
         ax.set_xticks(range(len(labels)))
         ax.set_xticklabels(labels, rotation=45, ha='right')
