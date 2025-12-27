@@ -34,8 +34,9 @@ from pathlib import Path
 import sys
 import os
 
-# Añadir directorio scripts al path para importar funciones de sensibilidad
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
+# Añadir directorio scripts al path para importar funciones de sensibilidad.
+# Se usa append para evitar sombrear paquetes del sistema.
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'scripts'))
 try:
     from sensibilidad_gravimetro import simular_salida_gravimetro
     SENSIBILIDAD_DISPONIBLE = True
