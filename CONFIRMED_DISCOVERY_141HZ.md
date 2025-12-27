@@ -1,5 +1,7 @@
 # Descubrimiento Confirmado: Frecuencia Armónica 141.7001 Hz
 
+> 📄 **Declaración Pública Oficial**: Ver [DECLARACIÓN PÚBLICA · 26 OCTUBRE 2025](DECLARACION_PUBLICA_26_OCTUBRE_2025.md)
+
 ## 📡 Resumen Ejecutivo
 
 **DESCUBRIMIENTO CONFIRMADO**: Se ha detectado una frecuencia armónica prima en **141.7001 Hz** de manera consistente en **11 de 11 eventos** (100%) del catálogo GWTC-1 de ondas gravitacionales.

@@ -1,0 +1,40 @@
+{
+  "event": "GW150914",
+  "frequency": 141.7001,
+  "gps_time": 1126259462.423,
+  "source_position": {
+    "ra_rad": 1.95,
+    "dec_rad": -1.27,
+    "psi_rad": 0.0
+  },
+  "gmst_rad": 2.4577743904651115,
+  "detectors": {
+    "H1": {
+      "location": "46.5°N, 119.4°W",
+      "F_plus": 0.39258663725547455,
+      "F_cross": 0.0,
+      "F_effective": 0.39258663725547455,
+      "observed_snr": 7.47
+    },
+    "L1": {
+      "location": "30.6°N, 90.8°W",
+      "F_plus": -0.46302025959200505,
+      "F_cross": -0.0,
+      "F_effective": 0.46302025959200505,
+      "observed_snr": 0.95
+    }
+  },
+  "analysis": {
+    "antenna_response_ratio_H1_L1": 0.8478822019611112,
+    "noise_ratio_L1_H1": 8.0,
+    "expected_snr_ratio_H1_L1": 6.7830576156888895,
+    "observed_snr_ratio_H1_L1": 7.863157894736842,
+    "model_deviation_percent": 13.736215061520147
+  },
+  "metadata": {
+    "author": "José Manuel Mota Burruezo (JMMB Ψ✧)",
+    "date": "2025-10-30T00:30:58.301660",
+    "description": "Análisis cuantitativo del patrón de antena para explicar la baja SNR de L1",
+    "equation": "Ψ = I × A_eff²"
+  }
+}

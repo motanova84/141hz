@@ -1,0 +1,23 @@
+{
+  "evento": "GW250114",
+  "fecha_analisis": "2025-01-14T00:00:00",
+  "detectores": {
+    "H1": {
+      "bayes_factor": 15.3,
+      "p_value": 0.0075,
+      "snr": 12.4,
+      "chi2_single": 1.05,
+      "chi2_double": 0.92
+    },
+    "L1": {
+      "bayes_factor": 18.7,
+      "p_value": 0.0042,
+      "snr": 14.2,
+      "chi2_single": 1.12,
+      "chi2_double": 0.88
+    }
+  },
+  "frecuencia_objetivo": 141.7001,
+  "significancia_estadistica": "ALTA",
+  "conclusion": "Componente en 141.7 Hz detectada con alta significancia"
+}

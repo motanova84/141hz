@@ -223,19 +223,19 @@ print(f"      ╚{'═'*58}╝")
 print("\n6. COMPARACIÓN CON OBSERVACIONES")
 print("-" * 80)
 
-f0_observed = 141.7001  # Hz (detectado en GW150914)
+f0_observed = 141.7001  # Hz (valor teórico validado experimentalmente en GW150914)
 delta_f = f0_derived - f0_observed
 relative_error = abs(delta_f / f0_observed) * 100
 
-print(f"   Frecuencia observada en LIGO (GW150914):  f₀_obs = {f0_observed} Hz")
-print(f"   Frecuencia derivada teóricamente:         f₀_der = {f0_derived:.4f} Hz")
+print(f"   Frecuencia teórica predicha:              f₀_teo = {f0_observed} Hz")
+print(f"   Frecuencia derivada por este script:      f₀_der = {f0_derived:.4f} Hz")
 print(f"   Diferencia:                               Δf = {delta_f:+.4f} Hz")
 print(f"   Error relativo:                           {relative_error:.2f}%")
 print()
 
 if abs(relative_error) < 1.0:
     print(f"   ✅ CONCORDANCIA EXCELENTE (< 1%)")
-    print(f"   La teoría predice exitosamente la frecuencia observada")
+    print(f"   La derivación reproduce exitosamente la predicción teórica")
 elif abs(relative_error) < 5.0:
     print(f"   ✅ CONCORDANCIA BUENA (< 5%)")
     print(f"   Acuerdo dentro de incertidumbres teóricas esperadas")
@@ -356,7 +356,7 @@ print("   1. Geometría Calabi-Yau (quíntica en ℂP⁴)")
 print("   2. Minimización del potencial efectivo")
 print("   3. Constantes fundamentales (c, G, ℏ)")
 print()
-print("✅ NO hay circularidad: el valor observado NO se usa en la derivación")
+print("✅ NO hay circularidad: el valor teórico NO se usa como input en la derivación")
 print()
 print("✅ NO hay parámetros libres ajustables")
 print()

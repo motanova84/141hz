@@ -1,0 +1,169 @@
+name: Universal Validation Framework
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'universal_validation_framework.py'
+      - 'test_universal_validation_framework.py'
+      - '.github/workflows/universal-validation.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Run weekly on Sunday at 06:00 UTC
+    - cron: '0 6 * * 0'
+
+permissions:
+  contents: read
+
+jobs:
+  universal-validation:
+    name: Universal f₀ Search - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          # Install igraph - try version-specific package first, fallback to generic
+          sudo apt-get install -y libigraph-dev || sudo apt-get install -y libigraph3t64
+          sudo apt-get install -y \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-universal-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-universal-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Core dependencies for universal validation
+          pip install numpy scipy matplotlib pandas --timeout 300
+          pip install pytest pytest-cov --timeout 300
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Create artifacts directory
+        run: |
+          mkdir -p artifacts
+      
+      - name: Run unit tests
+        run: |
+          python -m pytest test_universal_validation_framework.py -v --tb=short
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Run universal validation framework
+        run: |
+          python universal_validation_framework.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Verify artifacts generated
+        run: |
+          ls -lh artifacts/
+          if [ -f "artifacts/universal_validation_summary.png" ]; then
+            echo "✅ Summary plot generated"
+          else
+            echo "❌ Summary plot NOT generated"
+            exit 1
+          fi
+          if [ -f "artifacts/universal_validation_report.txt" ]; then
+            echo "✅ Report generated"
+            cat artifacts/universal_validation_report.txt
+          else
+            echo "❌ Report NOT generated"
+            exit 1
+          fi
+      
+      - name: Upload validation results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: universal-validation-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            artifacts/
+            *.json
+          retention-days: 30
+  
+  validation-summary:
+    name: Generate Validation Summary
+    needs: universal-validation
+    runs-on: ubuntu-latest
+    if: always()
+    
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v6
+        with:
+          path: all-results/
+      
+      - name: Generate summary
+        run: |
+          echo "# Universal Validation Framework Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Run Information" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run Number:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Systems Validated" >> $GITHUB_STEP_SUMMARY
+          echo "1. 🌌 DESI (Cosmic Structure)" >> $GITHUB_STEP_SUMMARY
+          echo "2. 🌍 IGETS (Earth Tides)" >> $GITHUB_STEP_SUMMARY
+          echo "3. 🛰️ LISA (Gravitational Waves)" >> $GITHUB_STEP_SUMMARY
+          echo "4. 🧠 EEG (Brain Activity)" >> $GITHUB_STEP_SUMMARY
+          echo "5. ☀️ Helioseismology (Solar Oscillations)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "Validation results available in workflow artifacts." >> $GITHUB_STEP_SUMMARY
+          
+          # Display reports if available
+          if ls all-results/*/artifacts/universal_validation_report.txt 1> /dev/null 2>&1; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## Latest Report" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            head -100 all-results/*/artifacts/universal_validation_report.txt | tail -80 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Upload combined summary
+        uses: actions/upload-artifact@v5
+        with:
+          name: universal-validation-summary-${{ github.run_number }}
+          path: all-results/
+          retention-days: 90

@@ -1,0 +1,220 @@
+name: Detector Analysis
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/analizar_kagra_*.py'
+      - 'scripts/analizar_l1.py'
+      - 'scripts/analizar_asd_*.py'
+      - '.github/workflows/detector-analysis.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Run daily at 04:00 UTC
+    - cron: '0 4 * * *'
+
+jobs:
+  detector-analysis:
+    name: ${{ matrix.detector }} - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+        detector:
+          - KAGRA_K1
+          - LIGO_L1
+          - ASD_141Hz
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-det-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-det-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Cache detector data
+        uses: actions/cache@v4
+        with:
+          path: data/
+          key: detector-data-${{ matrix.detector }}-${{ hashFiles('scripts/descargar_datos.py') }}
+          restore-keys: |
+            detector-data-${{ matrix.detector }}-
+            detector-data-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Ensure visualization dependencies
+        run: |
+          pip install matplotlib seaborn --timeout 300
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Download detector data
+        run: |
+          python scripts/descargar_datos.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Analyze detector - ${{ matrix.detector }}
+        run: |
+          if [ "${{ matrix.detector }}" == "KAGRA_K1" ]; then
+            python scripts/analizar_kagra_k1.py
+          elif [ "${{ matrix.detector }}" == "LIGO_L1" ]; then
+            python scripts/analizar_l1.py
+          elif [ "${{ matrix.detector }}" == "ASD_141Hz" ]; then
+            python scripts/analizar_asd_141hz.py
+          fi
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Run detector tests
+        run: |
+          if [ "${{ matrix.detector }}" == "KAGRA_K1" ]; then
+            python scripts/test_analizar_kagra_k1.py
+          elif [ "${{ matrix.detector }}" == "ASD_141Hz" ]; then
+            python scripts/test_analizar_asd_141hz.py
+          fi
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: true
+      
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: detector-${{ matrix.detector }}-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            output/
+            *.json
+            *.png
+            *.pdf
+          retention-days: 30
+  
+  ringdown-analysis:
+    name: Ringdown Analysis - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-ring-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-ring-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Ensure visualization dependencies
+        run: |
+          pip install matplotlib seaborn --timeout 300
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run ringdown analysis
+        run: |
+          python scripts/analizar_ringdown.py
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Upload ringdown results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: ringdown-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/
+            *.json
+            *.png
+          retention-days: 30
+  
+  detector-summary:
+    name: Detector Analysis Summary
+    needs: [detector-analysis, ringdown-analysis]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## 📡 Detector Analysis Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All detector-specific analyses have completed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Detectors analyzed:**" >> $GITHUB_STEP_SUMMARY
+          echo "- KAGRA K1 (Japanese detector)" >> $GITHUB_STEP_SUMMARY
+          echo "- LIGO L1 (Livingston)" >> $GITHUB_STEP_SUMMARY
+          echo "- ASD analysis at 141 Hz" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Additional analysis:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Ringdown phase analysis" >> $GITHUB_STEP_SUMMARY

@@ -2,12 +2,12 @@
 
 <div align="center">
 
-[![Licencia: MIT](https://img.shields.io/github/license/motanova84/gw250114-141hz-analysis)](https://github.com/motanova84/gw250114-141hz-analysis/blob/main/LICENSE)
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
-[![GWPy](https://img.shields.io/badge/GWPy-3.0.13-green)](https://gwpy.github.io/)
+[![Licencia: MIT](https://img.shields.io/github/license/motanova84/141hz)](https://github.com/motanova84/141hz/blob/main/LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
+[![GWPy](https://img.shields.io/badge/GWPy-3.0+-green)](https://gwpy.github.io/)
 [![Ciencia Abierta](https://img.shields.io/badge/Ciencia-Abierta-✓-brightgreen)](https://www.fosteropenscience.eu/)
 
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/motanova84/gw250114-141hz-analysis/blob/main/notebooks/141hz_validation.ipynb)
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/motanova84/141hz/blob/main/notebooks/141hz_validation.ipynb)
 
 **Frecuencia Objetivo:** `141.7001 Hz`  
 **Investigador Principal:** José Manuel Mota Burruezo (JMMB Ψ✧)  

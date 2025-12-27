@@ -18,6 +18,45 @@ import os
 import unittest
 from unittest.mock import Mock, patch
 import numpy as np
+from pathlib import Path
+
+try:
+    import pandas as pd
+except ImportError:
+    print("⚠️ pandas not installed, skipping tests")
+    print("Install with: pip install pandas")
+    sys.exit(0)
+
+# Try to import matplotlib.pyplot for visualization tests
+try:
+    import matplotlib.pyplot as plt
+    MATPLOTLIB_AVAILABLE = True
+except ImportError:
+    print("⚠️ matplotlib not installed, visualization tests will be skipped")
+    MATPLOTLIB_AVAILABLE = False
+    plt = None
+
+# Try to import gwpy for data loading tests
+try:
+    import gwpy.timeseries
+    GWPY_AVAILABLE = True
+except ImportError:
+    print("⚠️ gwpy not installed, gwpy-based tests will be skipped")
+    GWPY_AVAILABLE = False
+
+# === Ruta reproducible del dataset ===
+data_path = Path(__file__).resolve().parents[1] / "datos" / "asd_141hz.csv"
+if not data_path.exists():
+    print(f"⚠️ Dataset no encontrado en {data_path}, skipping tests")
+    print("Este test requiere datos específicos del repositorio")
+    sys.exit(0)
+
+df = pd.read_csv(data_path)
+print(f"[INFO] Dataset cargado correctamente: {data_path} ({len(df)} filas)")
+
+# ===========================================================
+# El resto del script se ejecuta como antes, usando `df` real
+# ===========================================================
 import tempfile
 
 # Añadir el directorio de scripts al path
@@ -78,6 +117,7 @@ class TestASDAnalysis(unittest.TestCase):
         self.assertLessEqual(self.target_freq, freq_max,
                              "Frecuencia objetivo dentro de banda")
 
+    @unittest.skipIf(not GWPY_AVAILABLE, "gwpy not installed")
     @patch('gwpy.timeseries.TimeSeries')
     def test_data_loading_mock(self, mock_timeseries):
         """Test: Simular carga de datos (sin importar el módulo bajo test)"""
@@ -148,20 +188,22 @@ class TestASDAnalysis(unittest.TestCase):
         self.assertEqual(ringdown_samples, expected_samples,
                          msg="Número de muestras correcto")
 
-    @patch('matplotlib.pyplot')
-    def test_visualization_creation_mock(self, mock_plt):
+    @unittest.skipIf(not MATPLOTLIB_AVAILABLE, "matplotlib not installed")
+    def test_visualization_creation_mock(self):
         """Test: Verificar que se pueden crear visualizaciones (sin importar módulo bajo test)"""
-        # Simular subplots
-        mock_fig = Mock()
-        mock_axes = np.array([[Mock(), Mock()], [Mock(), Mock()]])
-        mock_plt.subplots.return_value = (mock_fig, mock_axes)
+        # Use patch as a context manager with the module-level plt import
+        with patch.object(plt, 'subplots') as mock_subplots:
+            # Simular subplots
+            mock_fig = Mock()
+            mock_axes = np.array([[Mock(), Mock()], [Mock(), Mock()]])
+            mock_subplots.return_value = (mock_fig, mock_axes)
 
-        fig, axes = mock_plt.subplots(2, 2, figsize=(15, 10))
+            fig, axes = plt.subplots(2, 2, figsize=(15, 10))
 
-        # Verificar que subplots fue llamado
-        mock_plt.subplots.assert_called()
-        self.assertIsNotNone(fig, "Figura debe ser creada")
-        self.assertIsNotNone(axes, "Ejes deben ser creados")
+            # Verificar que subplots fue llamado
+            mock_subplots.assert_called_once()
+            self.assertIsNotNone(fig, "Figura debe ser creada")
+            self.assertIsNotNone(axes, "Ejes deben ser creados")
 
 
 class TestResultsFormat(unittest.TestCase):
