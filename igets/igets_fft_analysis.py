@@ -492,7 +492,21 @@ class IGETSGravimetryAnalysis:
         tasa_deteccion_simulada = np.mean(snrs_simulados > 5) * 100
         
         # Calcular z-score (desviación del SNR observado respecto al esperado)
-        z_score = (snr_observado - snr_medio_simulado) / snr_std_simulado if snr_std_simulado > 0 else 0
+        if snr_std_simulado > 0:
+            z_score = (snr_observado - snr_medio_simulado) / snr_std_simulado
+        else:
+            # Caso degenerado: todas las simulaciones dan el mismo SNR.
+            # Si el observado coincide (numéricamente) con el simulado, tomamos z = 0;
+            # en caso contrario, el desvío es efectivamente infinito.
+            delta_snr = snr_observado - snr_medio_simulado
+            if np.isclose(delta_snr, 0.0, atol=1e-10):
+                z_score = 0.0
+            else:
+                print(
+                    "ADVERTENCIA: desviación estándar simulada nula; "
+                    "z-score tratado como infinito."
+                )
+                z_score = np.sign(delta_snr) * np.inf
         
         # Validación: ¿el SNR observado está dentro del rango esperado?
         # Usamos 3 sigma como criterio (99.7% de probabilidad)
