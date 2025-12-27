@@ -269,8 +269,8 @@ Los gravímetros superconductores (tipo iGrav/SG) tienen las siguientes caracter
 # Ejecutar análisis de sensibilidad
 python scripts/sensibilidad_gravimetro.py
 
-# Revisar resultados
-cat results/sensibilidad_gravimetro.npz
+# Revisar resultados (listar variables guardadas en el archivo NPZ)
+python -c "import numpy as np; data = np.load('results/sensibilidad_gravimetro.npz'); print(data.files)"
 ```
 
 ### Resultados Esperados
