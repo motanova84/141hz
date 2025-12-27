@@ -41,11 +41,10 @@ try:
     matplotlib.use('Agg')  # Backend sin GUI
     import matplotlib.pyplot as plt
 except ImportError as e:
-    print(f"❌ Error: Falta dependencia requerida: {e}")
-    print("   Instalar con: pip install gwpy numpy matplotlib")
-    sys.exit(1)
-
-
+    raise ImportError(
+        f"Falta dependencia requerida: {e}. "
+        "Instalar con: pip install gwpy numpy matplotlib"
+    ) from e
 # Parámetros del evento GW150914
 GW150914_GPS_TIME = 1126259462.423  # Tiempo GPS del merger
 TARGET_FREQUENCY = 141.7  # Hz - Frecuencia objetivo del análisis
