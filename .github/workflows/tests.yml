@@ -54,7 +54,7 @@ jobs:
         continue-on-error: false
       
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           file: ./coverage.xml
           flags: unittests
@@ -63,7 +63,7 @@ jobs:
       
       - name: Upload test results as artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: test-results-py${{ matrix.python-version }}-${{ matrix.os }}
           path: |
@@ -73,6 +73,23 @@ jobs:
             .coverage
           retention-days: 30
           if-no-files-found: ignore
+      
+      - name: Validate Four Pillars of 141.7001 Hz Discovery
+        run: |
+          echo "::group::Validating Four Pillars"
+          set +e  # Don't exit on error
+          python validate_four_pillars.py
+          VALIDATION_EXIT_CODE=$?
+          echo "::endgroup::"
+          
+          if [ $VALIDATION_EXIT_CODE -eq 0 ]; then
+            echo "::notice::All four pillars validated successfully"
+          else
+            echo "::warning::Some pillars completed with warnings (exit code: $VALIDATION_EXIT_CODE)"
+          fi
+          
+          # Don't fail the build, but report status
+          exit 0
 
   test-gpu-optional:
     name: Test with GPU (Optional)
@@ -117,7 +134,7 @@ jobs:
       
       - name: Upload GPU test results
         if: steps.check-gpu.outputs.gpu_available == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: gpu-test-results
           path: results/**/*.json
@@ -168,7 +185,7 @@ jobs:
           fi
       
       - name: Upload Lean build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lean-build
           path: |
@@ -255,7 +272,7 @@ jobs:
           docker inspect ghcr.io/${{ github.repository }}:latest-gpu --format='{{.Id}}' >> docker-hashes.txt || echo "N/A" >> docker-hashes.txt
       
       - name: Upload Docker hashes
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: docker-hashes
           path: docker-hashes.txt

@@ -31,12 +31,46 @@
 - Trigger: schedule (`0 8 * * 1`)
 - Trigger: manual (workflow_dispatch)
 
+### QCAL Analysis
+
+**Archivo:** `analysis.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### CI/CD - Tests and Analysis
 
 **Archivo:** `analyze.yml`
 
 - Trigger: push
 - Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
+### AT2020afhd TDE Analysis
+
+**Archivo:** `at2020afhd-analysis.yml`
+
+- Trigger: push
+- Trigger: schedule (`0 */4 * * *`)
+- Trigger: manual (workflow_dispatch)
+
+### AT2020afhd Validation
+
+**Archivo:** `at2020afhd-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * 1`)
+- Trigger: manual (workflow_dispatch)
+
+### AT2020afhd Noesis Verification
+
+**Archivo:** `at2020afhd-verification.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 */6 * * *  # Run every 6 hours`)
 - Trigger: manual (workflow_dispatch)
 
 ### Auto Label PRs and Issues
@@ -120,11 +154,12 @@
 - Trigger: schedule (`0 4 * * *`)
 - Trigger: manual (workflow_dispatch)
 
-### Docs
+### Documentation
 
 **Archivo:** `docs.yml`
 
 - Trigger: push
+- Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
 ### Issue Management Bot
@@ -132,6 +167,15 @@
 **Archivo:** `issue-management.yml`
 
 - Trigger: schedule (`0 0 * * *`)
+
+### Kappa Pi Verification
+
+**Archivo:** `kappa-pi-verification.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 4 * * *`)
+- Trigger: manual (workflow_dispatch)
 
 ### lean-ci
 
@@ -174,6 +218,13 @@
 - Trigger: schedule (`0 0,12 * * *`)
 - Trigger: manual (workflow_dispatch)
 
+### Omega ∞³ Auto-Validation
+
+**Archivo:** `omega-auto-validation.yml`
+
+- Trigger: schedule (`0 */6 * * *  # Run every 6 hours for Ω1 Auto-Ingestion`)
+- Trigger: manual (workflow_dispatch)
+
 ### Optimized Analysis with GPU Support
 
 **Archivo:** `optimized-analysis.yml`
@@ -189,6 +240,14 @@
 
 - Trigger: pull_request
 - Trigger: schedule (`0 9 * * *`)
+
+### QCAL Predictions Validation
+
+**Archivo:** `predicciones-qcal.yml`
+
+- Trigger: push
+- Trigger: schedule (`0 0 * * 0  # Weekly on Sunday at midnight`)
+- Trigger: manual (workflow_dispatch)
 
 ### QCAL Production Cycle
 
@@ -236,6 +295,13 @@
 - Trigger: pull_request
 - Trigger: schedule (`0 12 * * 1  # Run weekly on Monday at noon UTC`)
 - Trigger: manual (workflow_dispatch)
+
+### sci-validate
+
+**Archivo:** `sci-validate.yml`
+
+- Trigger: push
+- Trigger: pull_request
 
 ### Scientific Validation - 3 Pillars
 
@@ -304,4 +370,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-11-13 11:07:39 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-27 12:31:37 UTC*

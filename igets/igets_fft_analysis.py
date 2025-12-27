@@ -35,6 +35,11 @@ TOLERANCE = 0.5  # Hz - Tolerancia de búsqueda
 LAMBDA_BAR = 3.37e5  # m - Longitud característica Yukawa
 ALPHA_Y = 1e-6  # Amplitud Yukawa (orden de magnitud esperado)
 
+# Amplitud ajustada a rango testable con SG (Superconducting Gravimeter)
+# Ver sg_sensitivity_analysis.py para detalles de cálculo
+AMPLITUDE_TESTABLE_MIN = 1e-13  # g - Amplitud mínima testable (~3 días observación)
+AMPLITUDE_TESTABLE_MAX = 1e-12  # g - Amplitud máxima testable (~42 min observación)
+
 # Estaciones IGETS de referencia
 IGETS_STATIONS = {
     'CANTLEY': {'lat': 45.59, 'lon': -75.87, 'name': 'Cantley, Canada'},
@@ -222,7 +227,7 @@ class IGETSGravimetryAnalysis:
                 'frequency': float(peak_freq),
                 'power': float(peak_power),
                 'snr': float(snr),
-                'significant': snr > 6.0,
+                'significant': bool(snr > 6.0),
                 'delta_f': float(peak_freq - F0)
             }
         else:
@@ -282,7 +287,7 @@ class IGETSGravimetryAnalysis:
             'stations': stations,
             'coherence_matrix': coherence_matrix.tolist(),
             'global_coherence': float(global_coherence),
-            'highly_coherent': global_coherence > 0.7
+            'highly_coherent': bool(global_coherence > 0.7)
         }
     
     def run_analysis(self,
@@ -532,6 +537,27 @@ def main():
     
     analysis.plot_results(results_with, output_dir="igets_results")
     
+    # Validar con análisis de sensibilidad
+    print("\n\n" + "=" * 60)
+    print("VALIDACIÓN DE SENSIBILIDAD")
+    print("=" * 60)
+    try:
+        # Importar función de análisis de sensibilidad
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent.parent / 'scripts'))
+        from sensibilidad_gravimetro import simular_salida_gravimetro
+        
+        # Validar detección con amplitudes típicas
+        test_amplitude = 1e-12  # g
+        print(f"\nValidando con amplitud de prueba: {test_amplitude:.2e} g")
+        snr_samples = simular_salida_gravimetro(test_amplitude, num_realizaciones=100)
+        print(f"SNR medio: {np.mean(snr_samples):.2f}")
+        print(f"Detecciones (SNR>5): {np.sum(snr_samples > 5)}/100")
+        print("✓ Validación de sensibilidad completada")
+    except ImportError as e:
+        print(f"⚠ No se pudo importar análisis de sensibilidad: {e}")
+        print("  Ejecute 'python scripts/sensibilidad_gravimetro.py' para análisis completo")
+    
     print("\n\n" + "=" * 60)
     print("INTERPRETACIÓN")
     print("=" * 60)
@@ -540,6 +566,8 @@ def main():
     print("coherencia gravitatoria.")
     print("\nEste análisis proporciona una prueba directa terrestre de la")
     print("predicción GQN sobre interacciones gravitacionales modificadas.")
+    print("\nPara análisis detallado de sensibilidad:")
+    print("  python scripts/sensibilidad_gravimetro.py")
 
 
 if __name__ == "__main__":
