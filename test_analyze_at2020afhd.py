@@ -207,15 +207,12 @@ class TestVisualizationOutput(unittest.TestCase):
         # Should be less than 10MB (reasonable upper bound)
         self.assertLess(file_size, 10000000)
 
-    """Run the main analysis to generate test data and results."""
-def import_analysis_module():
-    """Import the analysis module and run main() to generate test data."""
-    results = at2020.main()
-    return results
 
 
 if __name__ == '__main__':
     # Run the main script first to generate data
+    print("Running analyze_at2020afhd.py to generate test data...")
+    at2020.main()
     print("Running analyze_at2020afhd.py to generate test data...")
     import_analysis_module()
     print("\nRunning tests...\n")
