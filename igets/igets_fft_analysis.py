@@ -504,9 +504,11 @@ class IGETSGravimetryAnalysis:
             else:
                 print(
                     "ADVERTENCIA: desviación estándar simulada nula; "
-                    "z-score tratado como infinito."
+                    "z-score tratado como muy grande (|z|=999) para evitar infinitos."
                 )
-                z_score = np.sign(delta_snr) * np.inf
+                # Usar un valor centinela grande en lugar de infinito para evitar
+                # problemas de serialización JSON con valores ±inf.
+                z_score = float(np.sign(delta_snr) * 999.0)
         
         # Validación: ¿el SNR observado está dentro del rango esperado?
         # Usamos 3 sigma como criterio (99.7% de probabilidad)
