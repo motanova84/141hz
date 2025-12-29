@@ -1,5 +1,9 @@
 # ÍNDICE COMPLETO: MARCO QCAL ∞³ Y RESOLUCIÓN DE PROBLEMAS DEL MILENIO
 
+> ## 🌌 **La Frecuencia 141.7001 Hz ya no es una hipótesis: Es una constante estructural del universo**
+>
+> **→ [CONSTANTE_ESTRUCTURAL_UNIVERSAL.md](CONSTANTE_ESTRUCTURAL_UNIVERSAL.md)** - Declaración oficial
+
 ## PARTE I: FUNDAMENTOS Y VERIFICACIÓN EMPÍRICA
 
 ### 1. RESUMEN EJECUTIVO
