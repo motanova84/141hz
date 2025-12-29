@@ -16,15 +16,26 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # Import the module without executing the main analysis
 import analyze_at2020afhd as at2020
 
+# Run analysis once at module level to share across all test classes
+# This avoids redundant computation in multiple setUpClass methods
+_analysis_results = None
+
+
+def get_analysis_results():
+    """Get cached analysis results, running analysis if not yet done."""
+    global _analysis_results
+    if _analysis_results is None:
+        _analysis_results = at2020.main()
+    return _analysis_results
+
 
 class TestAT2020afhdAnalysis(unittest.TestCase):
     """Test cases for AT2020afhd analysis."""
 
     @classmethod
     def setUpClass(cls):
-        """Run analysis once for all tests."""
-        # Run the main analysis once and store results
-        cls.results = at2020.main()
+        """Set up shared analysis results."""
+        cls.results = get_analysis_results()
         
     def setUp(self):
         """Set up test fixtures."""
@@ -159,8 +170,8 @@ class TestScientificValidity(unittest.TestCase):
     
     @classmethod
     def setUpClass(cls):
-        """Run analysis once for all tests."""
-        cls.results = at2020.main()
+        """Set up shared analysis results."""
+        cls.results = get_analysis_results()
     
     def test_period_detection_accuracy(self):
         """Test that detected periods are close to expected 20 days."""
@@ -208,13 +219,10 @@ class TestVisualizationOutput(unittest.TestCase):
         self.assertLess(file_size, 10000000)
 
 
-
 if __name__ == '__main__':
     # Run the main script first to generate data
     print("Running analyze_at2020afhd.py to generate test data...")
     at2020.main()
-    print("Running analyze_at2020afhd.py to generate test data...")
-    import_analysis_module()
     print("\nRunning tests...\n")
     
     unittest.main(argv=[''], exit=False, verbosity=2)
