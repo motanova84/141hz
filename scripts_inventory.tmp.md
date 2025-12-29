@@ -64,6 +64,8 @@
   - Test para Acto III: Validación Cuántica de la Frecuencia Fundamental
 - `test_agente_autonomo.py`
   - Tests para el Agente Autónomo 141Hz
+- `test_ai_agent_project_creator.py`
+  - Tests for AI Agent Project Creator
 - `test_ai_workflow_collaborator.py`
   - Test suite for AI Workflow Collaborator
 - `test_analisis_141hz_bandpass.py`
@@ -222,6 +224,10 @@
   - Tests for κ_Π (Kappa Pi) Invariant Verification
 - `test_verify_kappa_pi_complete.py`
   - test_verify_kappa_pi_complete.py
+- `test_virgo_v1_validation.py`
+  - Tests para el módulo de validación Virgo V1
+- `test_virgo_validation.py`
+  - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-27 12:31:36 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-28 03:50:49 UTC*
