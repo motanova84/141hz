@@ -241,7 +241,7 @@ El umbral de SNR = 5.0:
 
 Posibles extensiones del módulo:
 
-1. **Análisis de Virgo**: Agregar detector V1 cuando disponible
+1. ~~**Análisis de Virgo**: Agregar detector V1 cuando disponible~~ ✅ **IMPLEMENTADO** - Ver [VALIDACION_VIRGO_V1.md](VALIDACION_VIRGO_V1.md)
 2. **Análisis temporal**: Estudiar evolución de SNR en el tiempo
 3. **Análisis espectral completo**: Extender análisis a múltiples frecuencias
 4. **Estadística bayesiana**: Implementar inferencia bayesiana de SNR
