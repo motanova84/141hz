@@ -82,7 +82,7 @@ jobs:
         continue-on-error: false
       
       - name: Upload validation results
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: omega-validation-${{ matrix.event }}-py${{ matrix.python-version }}
           path: omega_${{ matrix.event }}*.json

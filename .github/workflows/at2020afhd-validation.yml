@@ -207,7 +207,7 @@ jobs:
           EOF
       
       - name: Upload verification report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: at2020afhd-verification-report
           path: at2020afhd_verification_report.json

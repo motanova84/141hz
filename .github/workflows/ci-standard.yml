@@ -34,7 +34,7 @@ jobs:
           osv-scanner --experimental --sbom=sbom.json || true
       
       - name: Upload artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: artifacts
           path: |

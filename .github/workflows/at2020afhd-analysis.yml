@@ -97,7 +97,7 @@ jobs:
           fi
       
       - name: Upload data as artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: at2020afhd-data-${{ github.run_number }}
           path: data/tde/at2020afhd/
@@ -174,14 +174,14 @@ jobs:
           fi
       
       - name: Upload analysis results
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: at2020afhd-results-${{ github.run_number }}
           path: results/at2020afhd/
           retention-days: 30
       
       - name: Upload plots
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: github.event.inputs.generate_plots != 'false'
         with:
           name: at2020afhd-plots-${{ github.run_number }}
