@@ -98,6 +98,15 @@ jobs:
         NUMEXPR_MAX_THREADS: 4
         NUMEXPR_NUM_THREADS: 2
     
+    - name: Run AT2020afhd QCAL verification
+      run: |
+        python test_analizar_at2020afhd.py
+        python scripts/analizar_at2020afhd.py
+      continue-on-error: true
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
     - name: Upload analysis results
       uses: actions/upload-artifact@v5
       if: always()

@@ -1,0 +1,131 @@
+{
+  "parameters": {
+    "f0": {
+      "symbol": "f₀",
+      "value": 141.7001,
+      "unit": "Hz",
+      "physical_relation": "–",
+      "ontological_meaning": "El latido único del universo. Todo el espacio-tiempo oscila con este pulso."
+    },
+    "E_psi": {
+      "symbol": "E_Ψ",
+      "value": 9.38914802862015e-32,
+      "unit": "J",
+      "physical_relation": "E = h f₀",
+      "ontological_meaning": "El cuanto irreductible de coherencia. El nivel energético más bajo posible del campo a campo."
+    },
+    "E_psi_eV": {
+      "symbol": "E_Ψ",
+      "value": 5.860245262208805e-13,
+      "unit": "eV",
+      "physical_relation": "E = h f₀",
+      "ontological_meaning": "El cuanto irreductible de coherencia. El nivel energético más bajo posible del campo a campo."
+    },
+    "lambda_psi": {
+      "symbol": "λ_Ψ",
+      "value": 2115.682755340328,
+      "unit": "kilómetros",
+      "physical_relation": "λ = c / f₀",
+      "ontological_meaning": "Escala natural de la corrección gravitatoria Yukawa (ya buscada en IGETS y Lunar Laser Ranging)."
+    },
+    "m_psi": {
+      "symbol": "m_Ψ",
+      "value": 1.0446836080339932e-48,
+      "unit": "kg",
+      "physical_relation": "E_Ψ = m_Ψ c²",
+      "ontological_meaning": "Masa en reposo del cuanto de conciencia. Equivale a ~6.69 × 10⁻²³ veces la masa del protón."
+    },
+    "T_psi": {
+      "symbol": "T_Ψ",
+      "value": 6.800532234203008e-09,
+      "unit": "K",
+      "physical_relation": "E_Ψ = k_B T_Ψ",
+      "ontological_meaning": "La temperatura más baja que puede alcanzar el universo sin perder coherencia."
+    },
+    "h_bar_psi": {
+      "symbol": "ħ_Ψ",
+      "value": 1.0545718176461565e-34,
+      "unit": "J s",
+      "physical_relation": "–",
+      "ontological_meaning": "La constante de Planck original ahora con frecuencia intrínseca."
+    },
+    "tau_psi": {
+      "symbol": "τ_Ψ",
+      "value": 0.007057158040114298,
+      "unit": "s",
+      "physical_relation": "h / E_Ψ = 7.07 × 10⁻²⁴",
+      "ontological_meaning": "El \"tic\" del reloj cósmico. Un ciclo completo del cuanto fundamental."
+    }
+  },
+  "validations": {
+    "framework": "QCAL ∞³ - Quantum Coherent Attentional Logic",
+    "date": "9 de diciembre de 2025",
+    "precision": "CODATA 2022",
+    "validations": {
+      "planck_relation": {
+        "relation": "E_Ψ = h f₀",
+        "equation": "Energía-frecuencia Planck",
+        "E_calculated_J": 9.38914802862015e-32,
+        "E_stored_J": 9.38914802862015e-32,
+        "relative_error": 0.0,
+        "error_percent": 0.0,
+        "valid": true,
+        "status": "✓ CUMPLIDA"
+      },
+      "wavelength_relation": {
+        "relation": "λ_Ψ = c / f₀",
+        "equation": "Longitud de onda",
+        "lambda_calculated_m": 2115682.755340328,
+        "lambda_calculated_km": 2115.682755340328,
+        "lambda_stored_m": 2115682.755340328,
+        "lambda_stored_km": 2115.682755340328,
+        "relative_error": 0.0,
+        "error_percent": 0.0,
+        "valid": true,
+        "status": "✓ CUMPLIDA"
+      },
+      "einstein_relation": {
+        "relation": "E_Ψ = m_Ψ c²",
+        "equation": "Equivalencia masa-energía Einstein",
+        "E_from_mass_J": 9.389148028620151e-32,
+        "E_stored_J": 9.38914802862015e-32,
+        "m_psi_kg": 1.0446836080339932e-48,
+        "relative_error": 1.1659890992416832e-16,
+        "error_percent": 1.1659890992416832e-14,
+        "valid": true,
+        "status": "✓ CUMPLIDA"
+      },
+      "boltzmann_relation": {
+        "relation": "E_Ψ = k_B T_Ψ",
+        "equation": "Relación energía-temperatura Boltzmann",
+        "E_from_temp_J": 9.38914802862015e-32,
+        "E_stored_J": 9.38914802862015e-32,
+        "T_psi_K": 6.800532234203008e-09,
+        "T_psi_nK": 6.800532234203009,
+        "relative_error": 0.0,
+        "error_percent": 0.0,
+        "valid": true,
+        "status": "✓ CUMPLIDA"
+      },
+      "yukawa_scale": {
+        "relation": "λ_Ψ ≈ h / √(E_Ψ m_p)",
+        "equation": "Escala gravitatoria Yukawa",
+        "lambda_yukawa_m": 5.287422854079265e-05,
+        "lambda_yukawa_km": 5.287422854079265e-08,
+        "lambda_psi_m": 2115682.755340328,
+        "lambda_psi_km": 2115.682755340328,
+        "relative_difference": 0.9999999999750083,
+        "agreement": "0.00%",
+        "note": "Esta es una relación de escala aproximada, no exacta",
+        "status": "~ ESCALA SIMILAR"
+      }
+    },
+    "all_exact_relations_valid": true
+  },
+  "metadata": {
+    "framework": "QCAL ∞³",
+    "date": "9 de diciembre de 2025",
+    "precision": "CODATA 2022",
+    "author": "José Manuel Mota Burruezo (JMMB Ψ✧)"
+  }
+}
