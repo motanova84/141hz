@@ -227,7 +227,7 @@ def main():
     print("="*70)
 
     # Create figures
-    fig = plt.figure(figsize=(18, 12))
+    plt.figure(figsize=(18, 12))
 
     # --- SUBPLOT 1: Light Curves ---
     ax1 = plt.subplot(3, 2, 1)
