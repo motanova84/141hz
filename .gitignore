@@ -30,6 +30,8 @@ results/
 !results/at2020afhd/
 !results/at2020afhd/*.png
 !results/at2020afhd/*.json
+# Allow P ≠ NP equivalence results
+!results/p_neq_np_equivalence.json
 
 # Artifacts from reproducibility pipelines
 artifacts/
