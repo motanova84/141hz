@@ -31,3 +31,7 @@ lean_lib F0Derivation where
   -- Source files
   roots := #[`F0Derivation]
   globs := #[.submodules `F0Derivation]
+
+lean_lib Invariants where
+  -- Calabi-Yau spectral invariants
+  roots := #[`Invariants]
