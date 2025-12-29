@@ -64,6 +64,15 @@
 - Trigger: schedule (`0 0 * * 1`)
 - Trigger: manual (workflow_dispatch)
 
+### AT2020afhd Noesis Verification
+
+**Archivo:** `at2020afhd-verification.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 */6 * * *  # Run every 6 hours`)
+- Trigger: manual (workflow_dispatch)
+
 ### Auto Label PRs and Issues
 
 **Archivo:** `auto-label.yml`
@@ -232,6 +241,14 @@
 - Trigger: pull_request
 - Trigger: schedule (`0 9 * * *`)
 
+### QCAL Predictions Validation
+
+**Archivo:** `predicciones-qcal.yml`
+
+- Trigger: push
+- Trigger: schedule (`0 0 * * 0  # Weekly on Sunday at midnight`)
+- Trigger: manual (workflow_dispatch)
+
 ### QCAL Production Cycle
 
 **Archivo:** `production-qcal.yml`
@@ -353,4 +370,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-25 00:10:24 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-28 03:50:49 UTC*

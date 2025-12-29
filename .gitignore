@@ -79,6 +79,25 @@ resultados/
 
 # Environment variables
 .env
+.env.*
+!.env.template
+config/alertas.env
+config/*.env
+
+# Generated plots
+potential_plot.png
+multi_event_analysis.png
+demo_multi_event_analysis.png
+virgo_v1_validation.png
+
+# Generated data files
+Evac_Rpsi_data.csv
+multi_event_results.json
+demo_multi_event_results.json
+virgo_v1_validation_results.json
+
+# Test results directories
+scripts/results/
 *.swp
 *.tmp
 
@@ -107,6 +126,10 @@ dist/
 build/
 *.egg-info/
 
+# QCAL package workarounds
+qcal_backup/
+qcal_llm_backup/
+repro/*/.venv/
 # MkDocs build directory
 # Omega ∞³ validation outputs
 omega_validation_*.json
