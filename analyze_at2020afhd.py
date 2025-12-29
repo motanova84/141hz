@@ -105,8 +105,6 @@ def main():
 
     print(f"✓ Generated {n_observations} synthetic observations")
 
-    print(f"✓ Generated {n_observations} synthetic observations")
-
     # ============================================================================
     # PART 2: PERIODICITY ANALYSIS
     # ============================================================================
