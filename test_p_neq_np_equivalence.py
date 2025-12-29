@@ -7,13 +7,17 @@ Este script valida la conexión teórica entre:
 2. Barrera cuántica (κ_Π)
 3. Frecuencia fundamental (f₀)
 
-Autor: GitHub Copilot
-Fecha: 2025-12-29
+Author: GitHub Copilot
+Date: 2025-12-29
 """
 
 import sys
 import json
 from scripts.revolucion_noesica import LimiteComputacional
+
+
+# Treewidth values for testing (from small to very large instances)
+TREEWIDTHS_TO_TEST = [10, 50, 100, 500, 1000, 10000]
 
 
 def test_equivalencia_basica():
@@ -34,9 +38,7 @@ def test_equivalencia_basica():
     print(f"\nVerificación de la equivalencia con diferentes instancias:")
     print("-" * 80)
     
-    treewidths = [10, 50, 100, 500, 1000, 10000]
-    
-    for tw in treewidths:
+    for tw in TREEWIDTHS_TO_TEST:
         resultado = lc.verificar_equivalencia(tw)
         
         print(f"\nTreewidth = {tw}:")
@@ -44,8 +46,9 @@ def test_equivalencia_basica():
         print(f"  C ≥ 1/κ_Π: {resultado['equivalencia_cumplida']}")
         print(f"  P ≠ NP: {'✅ Verificado' if resultado['P_neq_NP'] else '❌ No cumplido'}")
         
-        if tw == treewidths[-1]:  # Solo mostrar detalles para el último
-            print(f"\n  Revelación de f₀:")
+        if tw == TREEWIDTHS_TO_TEST[-1]:  # Solo mostrar detalles para el último
+            print(f"\n  Treewidth crítico: {resultado['tw_critico']:.0f}")
+            print(f"  Revelación de f₀:")
             for key, value in resultado['f0_revelacion'].items():
                 print(f"    {key}: {value}")
     
@@ -113,13 +116,14 @@ def test_exportar_resultados():
     }
     
     # Verificar para varios valores de treewidth
-    for tw in [10, 100, 1000, 10000]:
+    for tw in TREEWIDTHS_TO_TEST[::2]:  # Use every other value to avoid too many results
         resultado = lc.verificar_equivalencia(tw)
         resultados_completos['verificaciones'].append({
             'treewidth': tw,
             'C': resultado['C'],
             'P_neq_NP': resultado['P_neq_NP'],
-            'equivalencia_cumplida': resultado['equivalencia_cumplida']
+            'equivalencia_cumplida': resultado['equivalencia_cumplida'],
+            'tw_critico': resultado['tw_critico']
         })
     
     # Guardar resultados

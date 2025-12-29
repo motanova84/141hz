@@ -16,25 +16,22 @@
       "treewidth": 10,
       "C": 12.457818181818181,
       "P_neq_NP": true,
-      "equivalencia_cumplida": true
+      "equivalencia_cumplida": true,
+      "tw_critico": 18777.865296
     },
     {
       "treewidth": 100,
       "C": 1.3567920792079209,
       "P_neq_NP": true,
-      "equivalencia_cumplida": true
+      "equivalencia_cumplida": true,
+      "tw_critico": 18777.865296
     },
     {
       "treewidth": 1000,
       "C": 0.1368991008991009,
       "P_neq_NP": true,
-      "equivalencia_cumplida": true
-    },
-    {
-      "treewidth": 10000,
-      "C": 0.013702229777022299,
-      "P_neq_NP": true,
-      "equivalencia_cumplida": true
+      "equivalencia_cumplida": true,
+      "tw_critico": 18777.865296
     }
   ]
 }
