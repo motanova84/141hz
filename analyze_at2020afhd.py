@@ -10,7 +10,6 @@ Testing: Ψ = π · A²eff
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-from scipy import signal
 from scipy.signal import lombscargle
 import warnings
 import os
