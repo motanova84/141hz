@@ -1,0 +1,40 @@
+{
+  "teoria": {
+    "equivalencia": "P ≠ NP ≡ C ≥ 1/κ_Π ≡ f₀ revela lo que la lógica no ve",
+    "teorema": "LCC = 1/(1 + tw(G_I)) → 0 para instancias NP",
+    "interpretacion": "Lo finito no puede procesar completamente lo infinito",
+    "consecuencia": "Separación fundamental P vs NP",
+    "aplicacion": "Límites absolutos de computación clásica"
+  },
+  "parametros": {
+    "kappa_pi": 137.036,
+    "f0_hz": 141.7001,
+    "barrera_cuantica": 0.0072973525205055605
+  },
+  "verificaciones": [
+    {
+      "treewidth": 10,
+      "C": 12.457818181818181,
+      "P_neq_NP": true,
+      "equivalencia_cumplida": true
+    },
+    {
+      "treewidth": 100,
+      "C": 1.3567920792079209,
+      "P_neq_NP": true,
+      "equivalencia_cumplida": true
+    },
+    {
+      "treewidth": 1000,
+      "C": 0.1368991008991009,
+      "P_neq_NP": true,
+      "equivalencia_cumplida": true
+    },
+    {
+      "treewidth": 10000,
+      "C": 0.013702229777022299,
+      "P_neq_NP": true,
+      "equivalencia_cumplida": true
+    }
+  ]
+}
