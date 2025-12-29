@@ -33,16 +33,29 @@ import json
 from pathlib import Path
 import sys
 import os
+import importlib.util
 
-# Añadir directorio scripts al path para importar funciones de sensibilidad.
-# Se usa append para evitar sombrear paquetes del sistema.
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'scripts'))
-try:
-    from sensibilidad_gravimetro import simular_salida_gravimetro
-    SENSIBILIDAD_DISPONIBLE = True
-except ImportError:
+# Carga dinámica de simular_salida_gravimetro sin modificar sys.path.
+scripts_dir = Path(__file__).resolve().parent.parent / "scripts"
+sensibilidad_module_path = scripts_dir / "sensibilidad_gravimetro.py"
+
+if sensibilidad_module_path.is_file():
+    spec = importlib.util.spec_from_file_location(
+        "sensibilidad_gravimetro",
+        sensibilidad_module_path,
+    )
+    if spec and spec.loader:
+        sensibilidad_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(sensibilidad_module)
+        simular_salida_gravimetro = sensibilidad_module.simular_salida_gravimetro
+        SENSIBILIDAD_DISPONIBLE = True
+    else:
+        SENSIBILIDAD_DISPONIBLE = False
+        print("Advertencia: No se pudo cargar el módulo sensibilidad_gravimetro")
+        print("El análisis de sensibilidad no estará disponible.")
+else:
     SENSIBILIDAD_DISPONIBLE = False
-    print("Advertencia: No se pudo importar simular_salida_gravimetro")
+    print("Advertencia: No se encontró sensibilidad_gravimetro.py en el directorio scripts")
     print("El análisis de sensibilidad no estará disponible.")
 
 
