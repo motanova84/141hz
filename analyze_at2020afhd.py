@@ -29,17 +29,17 @@ def xray_flux_model(t, A=1.0, omega=None, phi=0, decay=0.003, baseline=0.5, nois
     """X-ray flux with Lense-Thirring precession and exponential decay"""
     if omega is None:
         omega = omega_frame
-    signal = A * np.sin(omega * t + phi) * np.exp(-decay * t) + baseline
-    signal += np.random.normal(0, noise, len(t))
-    return np.maximum(signal, 0.01)
+    flux_signal = A * np.sin(omega * t + phi) * np.exp(-decay * t) + baseline
+    flux_signal += np.random.normal(0, noise, len(t))
+    return np.maximum(flux_signal, 0.01)
 
 def radio_flux_model(t, A=0.8, omega=None, phi=np.pi/4, decay=0.002, baseline=0.3, noise=0.08):
     """Radio flux with similar precession"""
     if omega is None:
         omega = omega_frame
-    signal = A * np.sin(omega * t + phi) * np.exp(-decay * t) + baseline
-    signal += np.random.normal(0, noise, len(t))
-    return np.maximum(signal, 0.01)
+    flux_signal = A * np.sin(omega * t + phi) * np.exp(-decay * t) + baseline
+    flux_signal += np.random.normal(0, noise, len(t))
+    return np.maximum(flux_signal, 0.01)
 
 def compute_periodogram(time, flux, min_period=5, max_period=100):
     """Compute Lomb-Scargle periodogram"""
