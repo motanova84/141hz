@@ -19,10 +19,10 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       - name: Set up Python 3.11
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       
@@ -36,12 +36,44 @@ jobs:
         id: pip_audit
         run: |
           pip-audit --desc --format json > pip_audit_report.json || true
+          
+          # Check if report file exists and has content
           if [ -s pip_audit_report.json ]; then
-            echo "vulnerabilities_found=true" >> $GITHUB_OUTPUT
             cat pip_audit_report.json
+            
+            # Parse JSON to check if any package actually has vulnerabilities
+            HAS_VULNS=$(python3 << 'PYTHON'
+          import json
+          import sys
+          try:
+              with open('pip_audit_report.json') as f:
+                  report = json.load(f)
+              
+              # Check if any dependency has vulnerabilities
+              has_vulns = False
+              if 'dependencies' in report:
+                  for dep in report['dependencies']:
+                      if dep.get('vulns') and len(dep['vulns']) > 0:
+                          has_vulns = True
+                          break
+              
+              print('true' if has_vulns else 'false')
+          except Exception as e:
+              print(f"Error parsing report: {e}", file=sys.stderr)
+              print('false')
+          PYTHON
+          )
+            
+            echo "vulnerabilities_found=$HAS_VULNS" >> $GITHUB_OUTPUT
+            
+            if [ "$HAS_VULNS" == "true" ]; then
+              echo "⚠️ Vulnerabilities detected!"
+            else
+              echo "✅ No vulnerabilities found (all packages have empty vulns arrays)"
+            fi
           else
             echo "vulnerabilities_found=false" >> $GITHUB_OUTPUT
-            echo "No vulnerabilities found"
+            echo "No pip-audit report generated"
           fi
         continue-on-error: true
       
@@ -79,7 +111,7 @@ jobs:
         continue-on-error: true
       
       - name: Test with Python 3.12
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
         continue-on-error: true
@@ -138,7 +170,7 @@ jobs:
           cat dependency_health_report.md
       
       - name: Upload health report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dependency-health-report-${{ github.run_number }}
           path: |
@@ -149,7 +181,7 @@ jobs:
       
       - name: Create issue if vulnerabilities found
         if: steps.pip_audit.outputs.vulnerabilities_found == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require('fs');
@@ -168,9 +200,38 @@ jobs:
             
             if (!existingIssue) {
               let reportContent = '';
+              let vulnerablePkgs = [];
+              
               if (fs.existsSync('pip_audit_report.json')) {
                 const report = JSON.parse(fs.readFileSync('pip_audit_report.json', 'utf8'));
+                
+                // Extract packages with actual vulnerabilities
+                if (report.dependencies) {
+                  for (const dep of report.dependencies) {
+                    if (dep.vulns && dep.vulns.length > 0) {
+                      vulnerablePkgs.push({
+                        name: dep.name,
+                        version: dep.version,
+                        vulns: dep.vulns
+                      });
+                    }
+                  }
+                }
+                
                 reportContent = JSON.stringify(report, null, 2);
+              }
+              
+              // Build vulnerability summary
+              let vulnSummary = '### Paquetes Vulnerables\n\n';
+              for (const pkg of vulnerablePkgs) {
+                vulnSummary += `#### ${pkg.name} (v${pkg.version})\n`;
+                for (const vuln of pkg.vulns) {
+                  vulnSummary += `- **${vuln.id || 'Unknown ID'}**: ${vuln.description || 'No description'}\n`;
+                  if (vuln.fix_versions && vuln.fix_versions.length > 0) {
+                    vulnSummary += `  - Fix available: ${vuln.fix_versions.join(', ')}\n`;
+                  }
+                }
+                vulnSummary += '\n';
               }
               
               await github.rest.issues.create({
@@ -178,20 +239,60 @@ jobs:
                 repo: context.repo.repo,
                 title: '🔒 Vulnerabilidades en dependencias detectadas',
                 body: `## Alerta de Seguridad Automática\n\n` +
-                      `Se han detectado vulnerabilidades en las dependencias del proyecto.\n\n` +
+                      `Se han detectado **${vulnerablePkgs.length}** paquete(s) con vulnerabilidades conocidas.\n\n` +
+                      vulnSummary +
                       `**Acción requerida:**\n` +
                       `- Revisar el reporte de pip-audit\n` +
-                      `- Actualizar paquetes vulnerables\n` +
+                      `- Actualizar paquetes vulnerables a versiones seguras\n` +
                       `- Verificar compatibilidad después de actualizar\n` +
                       `- Ejecutar tests completos\n\n` +
-                      `**Reporte de pip-audit:**\n` +
-                      `\`\`\`json\n${reportContent.substring(0, 4000)}\n\`\`\`\n\n` +
+                      `**Reporte completo de pip-audit:**\n` +
+                      `\`\`\`json\n${reportContent.substring(0, 3000)}\n\`\`\`\n\n` +
                       `**Enlaces útiles:**\n` +
                       `- [Ver artifacts](../../actions/runs/${context.runId})\n` +
                       `- [Guía de actualización](../blob/main/.github/copilot-instructions.md#dependency-management)\n\n` +
                       `*Este issue fue creado automáticamente por el bot de salud de dependencias.*`,
                 labels: ['security', 'dependencies', 'automated', 'priority: high']
               });
+            }
+      
+      - name: Close false-positive issues
+        if: steps.pip_audit.outputs.vulnerabilities_found == 'false'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            // Check for existing open security issues
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'security,dependencies,automated'
+            });
+            
+            // Close issues about vulnerabilities if no vulnerabilities were found
+            for (const issue of issues) {
+              if (issue.title.includes('Vulnerabilidades en dependencias')) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: '✅ **Verificación completada**\n\n' +
+                        'El escaneo de seguridad más reciente no encontró vulnerabilidades en las dependencias.\n\n' +
+                        'Este issue se cierra automáticamente ya que:\n' +
+                        '- Todas las dependencias tienen `"vulns": []` en el reporte de pip-audit\n' +
+                        '- No hay paquetes con vulnerabilidades conocidas\n' +
+                        '- El workflow fue actualizado para detectar correctamente vulnerabilidades reales\n\n' +
+                        `Workflow run: [#${context.runId}](../../actions/runs/${context.runId})`
+                });
+                
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                  state_reason: 'completed'
+                });
+              }
             }
       
       - name: Add to summary

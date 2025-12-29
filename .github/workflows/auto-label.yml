@@ -17,7 +17,7 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       - name: Label based on file changes
         if: github.event_name == 'pull_request'
@@ -28,7 +28,7 @@ jobs:
           sync-labels: true
       
       - name: Label based on title and body
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const issue = context.payload.pull_request || context.payload.issue;
@@ -107,7 +107,7 @@ jobs:
       
       - name: Add comment on first PR
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const pr = context.payload.pull_request;

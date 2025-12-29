@@ -2,6 +2,7 @@
 """
 Test unitario para verificar la lógica corregida de búsqueda de frecuencias
 """
+import sys
 import numpy as np
 import scipy.signal
 
@@ -84,6 +85,8 @@ if __name__ == "__main__":
     print("\n" + "=" * 60)
     if test1_passed:
         print("✅ RESULTADO: Todas las correcciones validadas")
+        sys.exit(0)
     else:
         print("❌ RESULTADO: Verificar implementación")
+        sys.exit(1)
     print("=" * 60)

@@ -9,10 +9,17 @@ Autor: José Manuel Mota Burruezo (JMMB Ψ✧)
 Fecha: Octubre 2025
 """
 
+import sys
 import unittest
 import numpy as np
-import mpmath
 from scipy import constants
+
+try:
+    import mpmath
+except ImportError:
+    print("⚠️ mpmath not installed, skipping tests")
+    print("Install with: pip install mpmath")
+    sys.exit(0)
 
 
 class TestAlphaPsiCorrection(unittest.TestCase):

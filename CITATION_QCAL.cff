@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+title: "QCAL — Reproducible Coherence Analysis (141.7 Hz)"
+authors:
+  - family-names: "Mota Burruezo"
+    given-names: "José Manuel"
+date-released: "2025-11-11"
+version: "0.1.0"
+doi: "10.5281/zenodo.XXXXXXX"
+url: "https://github.com/motanova84/141hz"

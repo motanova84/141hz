@@ -16,30 +16,38 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.action == 'opened'
     permissions:
       pull-requests: write
-    
+
     steps:
       - name: Auto-assign reviewers
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const pr = context.payload.pull_request;
-            
+
             // Determine reviewers based on changed files
             const { data: files } = await github.rest.pulls.listFiles({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: pr.number
             });
-            
+
             const reviewers = ['motanova84'];
             const labels = [];
-            
+
             // Check file types for specialized review needs
-            const hasWorkflows = files.some(f => f.filename.startsWith('.github/workflows/'));
-            const hasTests = files.some(f => f.filename.includes('test_'));
-            const hasValidation = files.some(f => f.filename.includes('validat'));
-            const hasDocs = files.some(f => f.filename.endsWith('.md'));
-            
+            const hasWorkflows = files.some(f =>
+              f.filename.startsWith('.github/workflows/')
+            );
+            const hasTests = files.some(f =>
+              f.filename.includes('test_')
+            );
+            const hasValidation = files.some(f =>
+              f.filename.includes('validat')
+            );
+            const hasDocs = files.some(f =>
+              f.filename.endsWith('.md')
+            );
+
             // Request review
             try {
               await github.rest.pulls.requestReviewers({
@@ -48,56 +56,60 @@ jobs:
                 pull_number: pr.number,
                 reviewers: reviewers
               });
-              console.log(`Requested review from: ${reviewers.join(', ')}`);
+              const reviewerList = reviewers.join(', ');
+              console.log(`Requested review from: ${reviewerList}`);
             } catch (error) {
               console.log(`Could not request reviewers: ${error.message}`);
             }
-            
+
             // Add helpful comment
-            let comment = `🤖 **Asignación Automática de Revisión**\n\n`;
-            comment += `Se ha solicitado revisión automáticamente.\n\n`;
-            comment += `**Archivos modificados:**\n`;
-            
+            const title = '🤖 **Asignación Automática de Revisión**';
+            let comment = `${title}\n\n`;
+            comment += 'Se ha solicitado revisión automáticamente.\n\n';
+            comment += '**Archivos modificados:**\n';
+
             if (hasWorkflows) {
-              comment += `- ⚙️ Workflows de CI/CD\n`;
+              comment += '- ⚙️ Workflows de CI/CD\n';
               labels.push('ci/cd');
             }
             if (hasTests) {
-              comment += `- 🧪 Tests\n`;
+              comment += '- 🧪 Tests\n';
               labels.push('testing');
             }
             if (hasValidation) {
-              comment += `- ✅ Scripts de validación\n`;
+              comment += '- ✅ Scripts de validación\n';
               labels.push('validation');
             }
             if (hasDocs) {
-              comment += `- 📚 Documentación\n`;
+              comment += '- 📚 Documentación\n';
               labels.push('documentation');
             }
-            
-            comment += `\n**Checklist de Revisión:**\n`;
-            comment += `- [ ] Los tests pasan\n`;
-            comment += `- [ ] El código sigue los estándares del proyecto\n`;
-            comment += `- [ ] La documentación está actualizada\n`;
-            comment += `- [ ] No hay cambios que rompan compatibilidad\n`;
-            
+
+            comment += '\n**Checklist de Revisión:**\n';
+            comment += '- [ ] Los tests pasan\n';
+            comment += '- [ ] El código sigue los estándares ';
+            comment += 'del proyecto\n';
+            comment += '- [ ] La documentación está actualizada\n';
+            comment += '- [ ] No hay cambios que rompan ';
+            comment += 'compatibilidad\n';
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr.number,
               body: comment
             });
-  
+
   check-stale-reviews:
     name: Reminder for Stale PRs
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule'
     permissions:
       pull-requests: write
-    
+
     steps:
       - name: Check for PRs needing review
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const { data: prs } = await github.rest.pulls.list({
@@ -106,96 +118,126 @@ jobs:
               state: 'open',
               per_page: 100
             });
-            
+
             const now = new Date();
-            const twoDaysAgo = new Date(now - 2 * 24 * 60 * 60 * 1000);
-            
+            const twoDaysMs = 2 * 24 * 60 * 60 * 1000;
+            const twoDaysAgo = new Date(now - twoDaysMs);
+
             for (const pr of prs) {
               // Skip draft PRs
               if (pr.draft) continue;
-              
+
               const updatedAt = new Date(pr.updated_at);
-              
+
               // Get reviews
               const { data: reviews } = await github.rest.pulls.listReviews({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: pr.number
               });
-              
+
               // Check if PR needs review reminder
               const hasReviews = reviews.length > 0;
               const isStale = updatedAt < twoDaysAgo;
-              
+
               if (!hasReviews && isStale) {
                 // Get existing comments to avoid spam
-                const { data: comments } = await github.rest.issues.listComments({
+                const { data: comments } =
+                  await github.rest.issues.listComments({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: pr.number
-                });
-                
-                const hasReminderComment = comments.some(c => 
-                  c.body.includes('Recordatorio de revisión') && 
+                  });
+
+                const hasReminderComment = comments.some(c =>
+                  c.body.includes('Recordatorio de revisión') &&
                   c.user.login === 'github-actions[bot]'
                 );
-                
+
                 // Only comment if we haven't reminded recently
                 const lastComment = comments[comments.length - 1];
-                const lastCommentDate = lastComment ? new Date(lastComment.created_at) : new Date(0);
-                const oneDayAgo = new Date(now - 24 * 60 * 60 * 1000);
-                
-                if (!hasReminderComment || lastCommentDate < oneDayAgo) {
+                const lastCommentDate = lastComment ?
+                  new Date(lastComment.created_at) : new Date(0);
+                const oneDayMs = 24 * 60 * 60 * 1000;
+                const oneDayAgo = new Date(now - oneDayMs);
+
+                if (!hasReminderComment ||
+                    lastCommentDate < oneDayAgo) {
+                  const reminderTitle =
+                    '🤖 **Recordatorio de revisión**';
+                  const reminderBody =
+                    'Este PR lleva más de 2 días abierto y ' +
+                    'aún no ha sido revisado.';
+                  const nextSteps = '**Próximos pasos:**';
+                  const authorStep =
+                    '- Si eres el autor: verifica que todos ' +
+                    'los tests pasen';
+                  const reviewerStep =
+                    '- Si eres revisor: por favor revisa ' +
+                    'cuando tengas tiempo';
+                  const footer =
+                    '*Este es un recordatorio automático del ' +
+                    'bot de gestión de PRs.*';
+
                   await github.rest.issues.createComment({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     issue_number: pr.number,
-                    body: `🤖 **Recordatorio de revisión**\n\n` +
-                          `Este PR lleva más de 2 días abierto y aún no ha sido revisado.\n\n` +
-                          `**Próximos pasos:**\n` +
-                          `- Si eres el autor: verifica que todos los tests pasen\n` +
-                          `- Si eres revisor: por favor revisa cuando tengas tiempo\n\n` +
-                          `*Este es un recordatorio automático del bot de gestión de PRs.*`
+                    body: `${reminderTitle}\n\n${reminderBody}\n\n` +
+                          `${nextSteps}\n${authorStep}\n` +
+                          `${reviewerStep}\n\n${footer}`
                   });
-                  
-                  console.log(`Sent reminder for PR #${pr.number}: ${pr.title}`);
+
+                  console.log(`Sent reminder for PR #${pr.number}`);
                 }
               }
             }
-  
+
   celebrate-merge:
     name: Celebrate Successful Merges
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     permissions:
       pull-requests: write
-    
+
     steps:
       - name: Add celebration comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const pr = context.payload.pull_request;
-            
+
             const messages = [
-              '🎉 ¡PR mergeado con éxito! Gracias por tu contribución a la ciencia abierta.',
-              '✨ ¡Excelente trabajo! Este cambio mejora el proyecto.',
-              '🌟 ¡Merge completado! Tu contribución es valiosa para la comunidad científica.',
-              '🚀 ¡PR mergeado! Llevando la investigación de ondas gravitacionales al siguiente nivel.',
-              '💫 ¡Bien hecho! Tu contribución ayuda a hacer la ciencia más reproducible.'
+              '🎉 ¡PR mergeado con éxito! Gracias por tu ' +
+                'contribución a la ciencia abierta.',
+              '✨ ¡Excelente trabajo! Este cambio mejora ' +
+                'el proyecto.',
+              '🌟 ¡Merge completado! Tu contribución es ' +
+                'valiosa para la comunidad científica.',
+              '🚀 ¡PR mergeado! Llevando la investigación ' +
+                'de ondas gravitacionales al siguiente nivel.',
+              '💫 ¡Bien hecho! Tu contribución ayuda a ' +
+                'hacer la ciencia más reproducible.'
             ];
-            
-            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-            
+
+            const randomIndex = Math.floor(
+              Math.random() * messages.length
+            );
+            const randomMessage = messages[randomIndex];
+
+            const statsTitle = '**Estadísticas del PR:**';
+            const footer =
+              '*Gracias por hacer que GW250114-141Hz ' +
+              'sea mejor!* 🌌✨';
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr.number,
-              body: `${randomMessage}\n\n` +
-                    `**Estadísticas del PR:**\n` +
+              body: `${randomMessage}\n\n${statsTitle}\n` +
                     `- Commits: ${pr.commits}\n` +
                     `- Archivos cambiados: ${pr.changed_files}\n` +
                     `- Líneas añadidas: +${pr.additions}\n` +
                     `- Líneas eliminadas: -${pr.deletions}\n\n` +
-                    `*Gracias por hacer que GW250114-141Hz sea mejor!* 🌌✨`
+                    footer
             });

@@ -1,0 +1,19 @@
+# Lean build artifacts
+/.lake/
+/build/
+/lake-packages/
+
+# Lean cache
+*.olean
+*.ilean
+*.trace
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
