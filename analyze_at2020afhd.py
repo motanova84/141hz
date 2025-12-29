@@ -153,8 +153,8 @@ def main():
         print(f"   Decay: {decay_x:.5f} day⁻¹")
         
         fit_success_x = True
-    except:
-        print("\n⚠ X-ray fit failed, using initial parameters")
+    except (RuntimeError, ValueError, TypeError) as e:
+        print(f"\n⚠ X-ray fit failed, using initial parameters: {e}")
         params_x = p0_xray
         fit_success_x = False
 
@@ -174,8 +174,8 @@ def main():
         print(f"   Decay: {decay_r:.5f} day⁻¹")
         
         fit_success_r = True
-    except:
-        print("\n⚠ Radio fit failed, using initial parameters")
+    except (RuntimeError, ValueError, TypeError) as e:
+        print(f"\n⚠ Radio fit failed, using initial parameters: {e}")
         params_r = p0_radio
         fit_success_r = False
 

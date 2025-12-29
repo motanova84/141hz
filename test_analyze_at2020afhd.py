@@ -183,20 +183,22 @@ class TestScientificValidity(unittest.TestCase):
 class TestVisualizationOutput(unittest.TestCase):
     """Test visualization output."""
     
-    def test_plot_file_exists(self):
-        """Test that the plot file was created."""
-        output_path = os.path.join(
+    @staticmethod
+    def _get_output_path():
+        """Helper method to get the output path."""
+        return os.path.join(
             os.path.dirname(__file__), 'results', 'at2020afhd',
             'at2020afhd_complete_analysis.png'
         )
+    
+    def test_plot_file_exists(self):
+        """Test that the plot file was created."""
+        output_path = self._get_output_path()
         self.assertTrue(os.path.exists(output_path))
         
     def test_plot_file_size(self):
         """Test that the plot file has reasonable size."""
-        output_path = os.path.join(
-            os.path.dirname(__file__), 'results', 'at2020afhd',
-            'at2020afhd_complete_analysis.png'
-        )
+        output_path = self._get_output_path()
         file_size = os.path.getsize(output_path)
         
         # Should be at least 100KB (basic sanity check)
