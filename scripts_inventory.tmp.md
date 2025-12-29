@@ -6,10 +6,20 @@
 
 - `analizar_asd_141hz.py`
   - Análisis ASD (Amplitude Spectral Density) en 141.7 Hz para GW150914
+- `analizar_at2020afhd.py`
+  - 
+- `analizar_cy_kpi_universal.py`
+  - Análisis del invariante espectral universal k_Π en variedades Calabi-Yau
+- `analizar_eeg_real.py`
+  - 🧠 FASE 2 – ANÁLISIS DE DATOS EEG REALES
 - `analizar_gw150914_ejemplo.py`
   - Ejemplo de análisis espectral de GW150914 en 141.7 Hz
 - `analizar_gw150914_pycbc.py`
   - Análisis de GW150914 usando PyCBC
+- `analizar_gw170817.py`
+  - 🌀 FASE 1 – DATOS REALES DE LIGO (GW170817)
+- `analizar_gw200129.py`
+  - Análisis de GW200129_065458 con PyCBC
 - `analizar_gw200129_snr.py`
   - Análisis de SNR esperada para GW200129 a 141.7 Hz
 - `analizar_gw250114.py`
@@ -33,6 +43,8 @@
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
+- `validate_vacuum_energy_equation.py`
+  - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
 - `validation_support.py`
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
 - `validate_badges.py`
@@ -41,6 +53,8 @@
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
+- `validate_vacuum_energy_equation.py`
+  - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
 
 ## Scripts de Test
 
@@ -50,28 +64,44 @@
   - Test para Acto III: Validación Cuántica de la Frecuencia Fundamental
 - `test_agente_autonomo.py`
   - Tests para el Agente Autónomo 141Hz
+- `test_ai_agent_project_creator.py`
+  - Tests for AI Agent Project Creator
 - `test_ai_workflow_collaborator.py`
   - Test suite for AI Workflow Collaborator
+- `test_analisis_141hz_bandpass.py`
+  - Tests para el análisis de 141.7001 Hz con filtro bandpass [140.5-143.0 Hz]
 - `test_analisis_bayesiano_multievento.py`
   - Test del análisis bayesiano multi-evento con datos sintéticos.
+- `test_analisis_burst_alta_luminosidad.py`
+  - Tests para Análisis de Bursts de Alta Luminosidad en HL-LHC
 - `test_analisis_catalogo_o4.py`
   - Tests para el análisis del catálogo O4
 - `test_analisis_cmb_l144.py`
   - Test unitario para analisis_cmb_l144.py
+- `test_analisis_espectral_100_primos.py`
+  - Test suite for Spectral Analysis of the First 100 Prime Numbers.
 - `test_analisis_estadistico_avanzado.py`
   - Tests para el módulo de análisis estadístico avanzado
 - `test_analisis_gwtc3.py`
   - Test suite for GWTC-3 analysis script
 - `test_analizar_asd_141hz.py`
   - Tests para el análisis ASD de 141.7 Hz en GW150914
+- `test_analizar_at2020afhd.py`
+  - Test para analizar_at2020afhd.py
+- `test_analizar_cy_kpi_universal.py`
+  - Tests para el análisis del invariante espectral k_Π en variedades Calabi-Yau.
 - `test_analizar_gw150914_pycbc.py`
   - Test para el análisis de GW150914 con PyCBC
+- `test_analizar_gw200129.py`
+  - Test para analizar_gw200129.py
 - `test_analizar_gw200129_snr.py`
   - Test para el análisis de SNR de GW200129
 - `test_analizar_igets_gravimetro.py`
   - Test script para analizar_igets_gravimetro.py
 - `test_analizar_kagra_k1.py`
   - Tests para el análisis de KAGRA K1 en 141.7 Hz
+- `test_at2020afhd_analysis.py`
+  - Test script for AT2020afhd analysis
 - `test_busqueda_armonicos_superiores.py`
   - Tests para Búsqueda de Armónicos Superiores
 - `test_campo_conciencia.py`
@@ -84,18 +114,36 @@
   - Test de correcciones técnicas: RΨ y αΨ
 - `test_corrections.py`
   - Test unitario para verificar la lógica corregida de búsqueda de frecuencias
+- `test_cy_spectrum.py`
+  - Tests for Calabi-Yau Quintic Spectrum and κ_Π Invariant
 - `test_dashboard.py`
   - Tests para el Dashboard de Estado GW250114
+- `test_demostracion_kappa_pi.py`
+  - Tests para Demostración Rigurosa de κ_Π = 2.5773 Universal
 - `test_demostracion_matematica.py`
   - Tests para la demostración matemática de 141.7001 Hz
+- `test_demostracion_matematica_primos.py`
+  - Tests para demostracion_matematica_primos.py
+- `test_derivacion_10d_supergravity.py`
+  - Test suite for 10D Supergravity derivation of V_eff
+- `test_derivacion_primer_principios.py`
+  - Tests para el módulo de derivación desde primeros principios
 - `test_discovery_standards.py`
   - Tests para Validación de Estándares de Descubrimiento Científico
 - `test_ecuacion_latido_universal.py`
   - Tests para la Ecuación del Latido Universal
+- `test_einstein_noesis.py`
+  - Test suite for Einstein-Noēsis equation implementation.
 - `test_energia_cuantica.py`
   - Tests para el módulo de cálculo de energía cuántica fundamental
+- `test_evidencia_concluyente.py`
+  - Test unitario para el módulo de evidencia concluyente
+- `test_fractal_resonance_constants.py`
+  - Tests for Fractal Resonance in Fundamental Constants module.
 - `test_generar_prediccion_gw250114.py`
   - Test para generar_prediccion_gw250114.py
+- `test_gw170817_eeg_analysis.py`
+  - Tests for GW170817 and EEG analysis scripts.
 - `test_multi_event_snr_analysis.py`
   - Tests para el módulo multi_event_snr_analysis
 - `test_optimization_modules.py`
@@ -116,32 +164,54 @@
   - Test script for A_Rpsi_symmetry.ipynb
 - `test_sage_activation.py`
   - Tests para el módulo sage_activation.py - Protocolo Sage ∴
+- `test_sensibilidad_gravimetro.py`
+  - Test script para sensibilidad_gravimetro.py
 - `test_simetria_discreta.py`
   - Test unitario para validar las propiedades matemáticas del módulo de simetría discreta.
 - `test_sistema_alertas.py`
   - Tests para el Sistema de Alertas GW250114
+- `test_sistemas_espectrales_adelicos.py`
+  - Tests para el módulo de Sistemas Espectrales Adélicos.
 - `test_snr_gw200129_analysis.py`
   - Tests para el módulo snr_gw200129_analysis
 - `test_snr_utils.py`
   - Tests para el módulo snr_utils
+- `test_teoria_unificada_141hz.py`
+  - Tests for Unified Noetic Quantum Gravity Theory module.
+- `test_test_universalidad_virgo_kagra.py`
+  - Tests para el módulo test_universalidad_virgo_kagra
 - `test_torre_algebraica.py`
   - Tests para la Torre Algebraica
+- `test_universalidad_virgo_kagra.py`
+  - Test de Universalidad de 141.7 Hz en Virgo y KAGRA
 - `test_user_confirmation.py`
   - Test script for user_confirmation module.
 - `test_vacuum_energy.py`
   - Tests for Vacuum Energy Module
 - `test_validacion_alpha_psi.py`
   - Test suite for validacion_alpha_psi_corregida.py
+- `test_validacion_calabi_yau_espectral.py`
+  - Tests for Calabi-Yau Spectral Universality Validation
 - `test_validacion_gwtc1_tridetector.py`
   - Tests para la validación GWTC-1 tri-detector
+- `test_validacion_invariante_espectral_cy.py`
+  - Tests for Calabi-Yau Spectral Invariant k_Π Validation
+- `test_validacion_multievento_gaia.py`
+  - Test Suite para Validación Multi-evento + GAIA
+- `test_validacion_noesis_at2020afhd.py`
+  - Tests para validacion_noesis_at2020afhd.py
 - `test_validacion_radio_cuantico.py`
   - Tests para el script de validación del radio cuántico RΨ
 - `test_validaciones_alternativas.py`
   - Test Suite para Validaciones Alternativas - 141.7001 Hz
+- `test_validar_evidencias_solidas.py`
+  - Tests para validación de evidencias sólidas: λ₀ ≈ 0.001588
 - `test_validate_badges.py`
   - Test suite for badge validation script.
 - `test_validate_scipy_snr.py`
   - Test for validate_scipy_snr_141hz.py
+- `test_validate_vacuum_energy_equation.py`
+  - Test Suite for Vacuum Energy Equation Validation
 - `test_vercel_config.py`
   - Test para validar la configuración de Vercel
 - `test_verificacion_convergencia.py`
@@ -150,6 +220,14 @@
   - Test para verificacion_sistema_optimizado.py
 - `test_verificador_gw250114.py`
   - Script de prueba para el verificador GW250114
+- `test_verify_kappa.py`
+  - Tests for κ_Π (Kappa Pi) Invariant Verification
+- `test_verify_kappa_pi_complete.py`
+  - test_verify_kappa_pi_complete.py
+- `test_virgo_v1_validation.py`
+  - Tests para el módulo de validación Virgo V1
+- `test_virgo_validation.py`
+  - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-11-10 08:16:55 UTC*
+*Generado automáticamente por el bot de documentación - 2025-12-29 18:55:32 UTC*
