@@ -49,10 +49,11 @@ except ImportError:
         
         @staticmethod
         def std(lst):
-            if not lst:
+            if not lst or len(lst) < 2:
                 return 0
             mean_val = sum(lst) / len(lst)
-            variance = sum((x - mean_val) ** 2 for x in lst) / len(lst)
+            # Use sample standard deviation (n-1) for unbiased estimator
+            variance = sum((x - mean_val) ** 2 for x in lst) / (len(lst) - 1)
             return variance ** 0.5
     
     np = NumpyMock()

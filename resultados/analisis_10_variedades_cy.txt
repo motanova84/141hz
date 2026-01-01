@@ -23,27 +23,27 @@ Número de variedades: 10
 
 Números de Hodge h11:
   Rango: [1, 12]
-  Media: 6.70 ± 3.69
+  Media: 6.70 ± 3.89
 
 Números de Hodge h21:
   Rango: [48, 101]
-  Media: 64.10 ± 17.81
+  Media: 64.10 ± 18.78
 
 Parámetro α:
   Rango: [0.385, 0.402]
-  Media: 0.395 ± 0.005
+  Media: 0.395 ± 0.006
 
 Parámetro β:
   Rango: [0.233, 0.244]
-  Media: 0.238 ± 0.003
+  Media: 0.238 ± 0.004
 
 Entropía espectral κ_Π:
   Rango: [1.65194, 1.65805]
-  Media: 1.65414 ± 0.00203
+  Media: 1.65414 ± 0.00214
 
 Característica de Euler χ:
   Rango: [-200, -72]
-  Media: -114.80 ± 42.60
+  Media: -114.80 ± 44.90
 
 VALIDACIÓN:
 --------------------------------------------------------------------------------
