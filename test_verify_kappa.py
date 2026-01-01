@@ -136,12 +136,9 @@ class TestFourPillars(unittest.TestCase):
         self.assertEqual(psi_scaled, k ** 2 * psi)
 
 
-if __name__ == "__main__":
-    unittest.main()
-Tests for verify_kappa.py - Calabi-Yau Spectral Invariant Verification
-
-Author: José Manuel Mota Burruezo (JMMB Ψ✧∞³)
-"""
+# ============================================================================
+# Second implementation tests
+# ============================================================================
 
 import math
 import os
@@ -360,6 +357,72 @@ class TestInterpretation(unittest.TestCase):
         
         # Our universe has the same κ_Π
         self.assertAlmostEqual(kappa, vk.KAPPA_PI_UNIVERSAL, delta=0.1)
+
+
+class TestTopologicalInformationCapacity(unittest.TestCase):
+    """Test cases for topological information capacity interpretation."""
+    
+    def test_kappa_pi_topological_fermat_quintic(self):
+        """Test κ_Π topological formula for Fermat quintic."""
+        # Fermat quintic: h^{1,1} = 1, h^{2,1} = 101
+        kappa = vk.kappa_pi_topological(1, 101)
+        expected = math.log(102)
+        self.assertAlmostEqual(kappa, expected, places=10)
+        self.assertAlmostEqual(kappa, 4.624972813284271, places=6)
+    
+    def test_kappa_pi_topological_bicubic(self):
+        """Test κ_Π topological formula for bicubic CICY."""
+        # Bicubic: h^{1,1} = 2, h^{2,1} = 83
+        kappa = vk.kappa_pi_topological(2, 83)
+        expected = math.log(85)
+        self.assertAlmostEqual(kappa, expected, places=10)
+    
+    def test_kappa_pi_topological_mirror_symmetry(self):
+        """Test that mirror manifolds have same κ_Π."""
+        # Fermat quintic and its mirror
+        kappa1 = vk.kappa_pi_topological(1, 101)
+        kappa2 = vk.kappa_pi_topological(101, 1)
+        self.assertEqual(kappa1, kappa2)
+    
+    def test_kappa_pi_topological_positive_only(self):
+        """Test that Hodge numbers must be positive."""
+        with self.assertRaises(ValueError):
+            vk.kappa_pi_topological(0, 101)
+        with self.assertRaises(ValueError):
+            vk.kappa_pi_topological(1, 0)
+        with self.assertRaises(ValueError):
+            vk.kappa_pi_topological(-1, 101)
+    
+    def test_effective_topological_complexity(self):
+        """Test the inverse function for effective complexity."""
+        # exp(2.5773) should give ~13.16
+        complexity = vk.effective_topological_complexity(2.5773)
+        self.assertAlmostEqual(complexity, 13.161553946931869, places=6)
+    
+    def test_topological_round_trip(self):
+        """Test that the functions are inverses (for sum of Hodge numbers)."""
+        # For h11=1, h21=101, sum=102
+        h11, h21 = 1, 101
+        kappa = vk.kappa_pi_topological(h11, h21)
+        complexity = vk.effective_topological_complexity(kappa)
+        self.assertAlmostEqual(complexity, h11 + h21, places=10)
+    
+    def test_topological_interpretation_increases(self):
+        """Test that κ_Π increases with topological complexity."""
+        # More complex manifolds should have higher κ_Π
+        kappa1 = vk.kappa_pi_topological(1, 10)  # complexity = 11
+        kappa2 = vk.kappa_pi_topological(1, 100)  # complexity = 101
+        kappa3 = vk.kappa_pi_topological(1, 200)  # complexity = 201
+        self.assertLess(kappa1, kappa2)
+        self.assertLess(kappa2, kappa3)
+    
+    def test_universal_value_interpretation(self):
+        """Test interpretation of universal value 2.5773."""
+        # The universal value corresponds to an effective complexity
+        eff_complexity = vk.effective_topological_complexity(vk.KAPPA_PI_UNIVERSAL)
+        # Should be around 13
+        self.assertTrue(13.0 < eff_complexity < 13.2)
+        # This represents a coarse-grained topological structure
 
 
 if __name__ == '__main__':
