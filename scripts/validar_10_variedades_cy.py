@@ -7,9 +7,6 @@ Puede ejecutarse sin pytest
 import sys
 from pathlib import Path
 
-# Añadir scripts al path
-sys.path.insert(0, str(Path(__file__).parent.parent / 'scripts'))
-
 from analizar_variedades_cy_10 import (
     cargar_variedades_cy,
     validar_euler_caracteristica,

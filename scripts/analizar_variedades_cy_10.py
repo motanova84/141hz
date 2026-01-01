@@ -31,9 +31,6 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Any
 
-# Añadir src al path
-sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
-
 # Imports opcionales
 try:
     import matplotlib.pyplot as plt
@@ -286,7 +283,7 @@ def visualizar_variedades(variedades: List[Dict[str, Any]], output_dir: str = No
         output_dir: Directorio de salida para las figuras
     """
     if not MATPLOTLIB_AVAILABLE:
-        print("⚠ Matplotlib no disponible. Omitiendo visualizaciones.")
+        # Message will be printed by caller
         return
     
     if output_dir is None:
@@ -465,8 +462,14 @@ def main():
     
     # Generar visualizaciones
     print("Generando visualizaciones...")
-    visualizar_variedades(variedades, output_dir)
-    print("✓ Visualizaciones generadas")
+    try:
+        visualizar_variedades(variedades, output_dir)
+        if MATPLOTLIB_AVAILABLE:
+            print("✓ Visualizaciones generadas")
+        else:
+            print("⚠ Matplotlib no disponible. Visualizaciones omitidas.")
+    except Exception as e:
+        print(f"⚠ Error generando visualizaciones: {e}")
     print()
     
     print("=" * 80)
