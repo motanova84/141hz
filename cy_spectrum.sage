@@ -417,9 +417,72 @@ def compute_cicy_eigenvalues(config_matrix, seed=None):
 # 150 CALABI-YAU VARIETIES ANALYSIS
 # ============================================================================
 
+def load_cy_varieties_from_json(json_file="data/calabi_yau_varieties.json"):
+    """
+    Load the authentic 150 Calabi-Yau varieties from JSON database.
+    
+    This uses the real Hodge numbers from the Kreuzer-Skarke and CICY
+    databases, compiled in calabi_yau_varieties.json.
+    
+    Parameters:
+        json_file: Path to JSON database file
+        
+    Returns:
+        list: List of (h11, h21, id) tuples
+    """
+    import json
+    import os
+    
+    # Try to load from JSON file
+    if os.path.exists(json_file):
+        with open(json_file, 'r') as f:
+            data = json.load(f)
+        
+        varieties = []
+        for v in data.get('varieties', []):
+            varieties.append((v['h11'], v['h21'], v['id']))
+        
+        return varieties
+    else:
+        print(f"Warning: {json_file} not found. Using generated sample.")
+        return None
+
+
+def analyze_real_cy_varieties(seed=42):
+    """
+    Analyze the 150 authentic Calabi-Yau varieties from the database.
+    
+    Uses real Hodge numbers from Kreuzer-Skarke/CICY instead of random generation.
+    
+    Parameters:
+        seed: Random seed for eigenvalue computation
+        
+    Returns:
+        list: List of (h11, h21, kappa_pi) tuples
+    """
+    # Load real varieties
+    varieties_data = load_cy_varieties_from_json()
+    
+    if varieties_data is None:
+        # Fallback to generated sample
+        return generate_cy_sample(n_varieties=150, seed=seed)
+    
+    results = []
+    
+    for h11, h21, variety_id in varieties_data:
+        # Compute eigenvalues for this specific (h11, h21) pair
+        _, _, kappa_pi = compute_cy_eigenvalues(h21, seed + variety_id)
+        results.append((h11, h21, float(kappa_pi)))
+    
+    return results
+
+
 def generate_cy_sample(n_varieties=150, seed=42):
     """
     Generate a sample of n CY varieties covering the range of h^{2,1}.
+    
+    Note: This is a fallback method. Use analyze_real_cy_varieties() to
+    analyze the authentic 150 varieties from the Kreuzer-Skarke/CICY database.
     
     Distribution:
     - Quintic Fermat region: h^{2,1} ∈ [90, 110]
