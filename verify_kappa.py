@@ -86,6 +86,12 @@ def compute_kappa_pi() -> float:
 def verify_invariant(tolerance: float) -> Tuple[bool, float, float]:
     """
     Verify the κ_Π invariant against expected value.
+    
+    This function tests the algebraic formula:
+        κ_Π = √(φ³ × |ζ'(1/2)|) × (1 + 1/27)
+    
+    which gives κ_Π ≈ 2.5793. This is different from the spectral
+    invariant KAPPA_PI_UNIVERSAL = 2.5773 used in the second implementation.
 
     Args:
         tolerance: Maximum allowed difference from expected value
@@ -211,7 +217,10 @@ def print_physical_predictions():
 # CONSTANTS (Second Implementation)
 # ============================================================================
 
-# Universal spectral invariant
+# Universal spectral invariant (from Laplacian spectrum analysis)
+# Note: This differs from the φ³ × ζ'(1/2) calculation (2.5793) used in
+# verify_invariant(). The value 2.5773 emerges from spectral gap analysis
+# and is used as the reference for topological complexity interpretation.
 KAPPA_PI_UNIVERSAL = 2.5773
 
 # Physical constants
