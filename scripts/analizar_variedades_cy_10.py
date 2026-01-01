@@ -49,7 +49,8 @@ except ImportError:
             if not lst or len(lst) < 2:
                 return 0
             mean_val = sum(lst) / len(lst)
-            # Use sample standard deviation (n-1) for unbiased estimator
+            # Sample standard deviation with Bessel's correction (n-1)
+            # Provides unbiased estimate of population variance
             variance = sum((x - mean_val) ** 2 for x in lst) / (len(lst) - 1)
             return variance ** 0.5
     
@@ -283,8 +284,7 @@ def visualizar_variedades(variedades: List[Dict[str, Any]], output_dir: str = No
         output_dir: Directorio de salida para las figuras
     """
     if not MATPLOTLIB_AVAILABLE:
-        # Message will be printed by caller
-        return
+        return  # Caller will print appropriate message
     
     if output_dir is None:
         output_dir = Path(__file__).parent.parent / 'resultados'
