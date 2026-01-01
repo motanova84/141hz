@@ -417,12 +417,12 @@ def compute_cicy_eigenvalues(config_matrix, seed=None):
 # 150 CALABI-YAU VARIETIES ANALYSIS
 # ============================================================================
 
-def load_cy_varieties_from_json(json_file="data/calabi_yau_varieties.json"):
+def load_cy_varieties_from_json(json_file="calabi_yau_varieties_150.json"):
     """
     Load the authentic 150 Calabi-Yau varieties from JSON database.
     
     This uses the real Hodge numbers from the Kreuzer-Skarke and CICY
-    databases, compiled in calabi_yau_varieties.json.
+    databases, compiled in calabi_yau_varieties_150.json.
     
     Parameters:
         json_file: Path to JSON database file

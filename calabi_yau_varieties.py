@@ -81,7 +81,7 @@ class CalabiYauDatabase:
             data_file: Path to JSON data file. If None, uses default location.
         """
         if data_file is None:
-            data_file = Path(__file__).parent / "data" / "calabi_yau_varieties.json"
+            data_file = Path(__file__).parent / "calabi_yau_varieties_150.json"
         
         self.data_file = Path(data_file)
         self.varieties: List[CalabiYauVariety] = []
