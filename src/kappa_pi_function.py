@@ -11,26 +11,30 @@ Mathematical Formulation:
 
 The function f is defined as:
 
-    κ_Π = f(h₁₁, h₂₁) = H(ρ_{α(h), β(h)})
+    κ_Π = f(h₁₁, h₂₁) = η · H(ρ_{α(h), β(h)})
 
 where H(ρ) is the differential entropy:
 
     H(ρ) = -∫_{-π}^{π} ρ(θ) log ρ(θ) dθ
 
-and ρ(θ) is the normalized probability density:
+and ρ(θ) is the normalized probability density (with n=1, m=1):
 
-    ρ(θ) = (1 + α(h)cos(nθ) + β(h)sin(mθ))² / Z
+    ρ(θ) = (1 + α(h)cos(θ) + β(h)sin(θ))² / Z
 
 The parameters α and β are functions of the Hodge numbers:
 
     α(h) = A · h₁₁/(h₁₁ + h₂₁)
     β(h) = B · h₂₁/(h₁₁ + h₂₁)
 
-with calibrated constants A ≈ 0.45, B ≈ 0.28.
+with calibrated constants:
+- `A = 0.45`
+- `B = 0.28`
 
 The normalization constant Z is:
 
-    Z = ∫_{-π}^{π} (1 + α cos(nθ) + β sin(mθ))² dθ
+    Z = ∫_{-π}^{π} (1 + α cos(θ) + β sin(θ))² dθ
+
+The geometric scaling factor η connects abstract entropy to physical κ_Π.
 
 Key Results:
 ------------
@@ -73,12 +77,16 @@ KAPPA_PI_UNIVERSAL = 2.5773
 N_MODE = 1  # Cosine mode number
 M_MODE = 1  # Sine mode number
 
+# Raw differential entropy value (without scaling)
+# This is the baseline entropy H(ρ) for ideal parameters
+RAW_ENTROPY_VALUE = 1.656929  # H(ρ) at α_ideal, β_ideal
+
 # Scaling factor to match the physical κ_Π value
-# The differential entropy H(ρ) ≈ 1.657 needs to be scaled by this factor
+# The differential entropy H(ρ) ≈ RAW_ENTROPY_VALUE needs to be scaled by this factor
 # to match the observed spectral invariant κ_Π = 2.5773
 # This factor emerges from the full CY spectral geometry (e.g., volume factors,
 # Hodge structure, etc.) that are not captured in the simple density model
-KAPPA_SCALING_FACTOR = 1.555468  # = 2.5773 / 1.656929
+KAPPA_SCALING_FACTOR = KAPPA_PI_UNIVERSAL / RAW_ENTROPY_VALUE  # ≈ 1.555468
 
 # Numerical integration parameters
 INTEGRATION_LIMIT = np.pi
@@ -312,8 +320,8 @@ def differential_entropy(
     # Define entropy integrand: -ρ(θ) log ρ(θ)
     def integrand(theta):
         rho = density_function(theta, alpha, beta, Z, n, m)
-        # Avoid log(0) by adding small epsilon
-        rho_safe = np.maximum(rho, LOG_EPSILON)
+        # Avoid log(0) by clipping to minimum value
+        rho_safe = np.clip(rho, LOG_EPSILON, None)
         return -rho * np.log(rho_safe)
     
     # Compute integral
