@@ -214,10 +214,10 @@ def print_physical_predictions():
 
 
 # ============================================================================
-# CONSTANTS (Second Implementation)
+# UNIVERSAL SPECTRAL INVARIANT (Spectral Gap Analysis)
 # ============================================================================
 
-# Universal spectral invariant (from Laplacian spectrum analysis)
+# Universal spectral invariant (from Laplacian spectrum gap analysis)
 # Note: This differs from the φ³ × ζ'(1/2) calculation (2.5793) used in
 # verify_invariant(). The value 2.5773 emerges from spectral gap analysis
 # and is used as the reference for topological complexity interpretation.
@@ -580,7 +580,16 @@ def demonstrate_topological_interpretation(verbose: bool = False) -> Dict:
         verbose: Print detailed output
         
     Returns:
-        dict: Results for various CY manifolds
+        dict: Results dictionary with the following structure:
+            - Key: manifold name (str)
+            - Value: dict with keys:
+                - "h11": Hodge number h^{1,1}
+                - "h21": Hodge number h^{2,1}
+                - "complexity": Sum h^{1,1} + h^{2,1}
+                - "kappa_pi": Computed κ_Π value
+            - Special key "universal_interpretation": dict with:
+                - "kappa_pi_universal": Universal value 2.5773
+                - "effective_complexity": exp(2.5773)
     """
     # Known Calabi-Yau manifolds with their Hodge numbers
     cy_manifolds = [

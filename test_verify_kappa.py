@@ -137,7 +137,7 @@ class TestFourPillars(unittest.TestCase):
 
 
 # ============================================================================
-# Second implementation tests
+# Tests for Topological Interpretation Features
 # ============================================================================
 
 import math
