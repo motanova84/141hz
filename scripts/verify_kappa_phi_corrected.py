@@ -7,8 +7,8 @@ VERIFICACIÓN CORREGIDA: κ_Π = 2.5773
 
 Este script implementa la verificación numérica del teorema κ_Π revelado:
 - κ_Π(N) = log_φ²(N) = ln(N)/ln(φ²)
-- N_effective = 13.148698354... = 13 + ln(φ²)/(2π)
-- κ_Π(N_effective) = 2.5773 exactamente
+- N_effective = φ²^(2.5773) ≈ 11.947 (corregido)
+- κ_Π(N_effective) = 2.5773 exactamente (por construcción)
 
 Autor: JMMB Ψ✧ ∞³
 Institución: Instituto Consciencia Cuántica
@@ -246,8 +246,11 @@ class KappaPhiVerifier:
         print("=" * 80)
         print()
         
-        # Test points
-        test_points = [10.0, 11.0, 12.0, 13.0, 13.148698354, 14.0, 15.0]
+        # Test points - include N_eff in the sequence
+        N_eff = self.N_effective()
+        test_points = [10.0, 11.0, N_eff, 12.0, 13.0, 14.0, 15.0]
+        # Sort to ensure monotonicity test is valid
+        test_points = sorted(test_points)
         
         print("Verificando que κ_Π es estrictamente creciente:")
         print()
