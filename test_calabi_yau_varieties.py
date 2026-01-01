@@ -133,24 +133,25 @@ def test_export_functionality():
     
     db = CalabiYauDatabase()
     
-    # Create temporary output directory
-    output_dir = Path("/tmp/cy_test_output")
-    output_dir.mkdir(exist_ok=True)
-    
-    # Test CSV export
-    csv_file = output_dir / "test_export.csv"
-    db.export_to_csv(csv_file)
-    assert csv_file.exists(), "CSV export failed"
-    
-    # Verify CSV has correct number of lines (header + 150 varieties)
-    with open(csv_file, 'r') as f:
-        lines = f.readlines()
-        assert len(lines) == 151, f"CSV should have 151 lines (header + 150), got {len(lines)}"
-    
-    # Test JSON export
-    json_file = output_dir / "test_export.json"
-    db.export_to_json(json_file)
-    assert json_file.exists(), "JSON export failed"
+    # Create temporary output directory using tempfile for cross-platform compatibility
+    import tempfile
+    with tempfile.TemporaryDirectory() as output_dir:
+        output_path = Path(output_dir)
+        
+        # Test CSV export
+        csv_file = output_path / "test_export.csv"
+        db.export_to_csv(csv_file)
+        assert csv_file.exists(), "CSV export failed"
+        
+        # Verify CSV has correct number of lines (header + 150 varieties)
+        with open(csv_file, 'r') as f:
+            lines = f.readlines()
+            assert len(lines) == 151, f"CSV should have 151 lines (header + 150), got {len(lines)}"
+        
+        # Test JSON export
+        json_file = output_path / "test_export.json"
+        db.export_to_json(json_file)
+        assert json_file.exists(), "JSON export failed"
     
     print("✅ Export functionality works correctly")
 

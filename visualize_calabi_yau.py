@@ -34,12 +34,20 @@ def print_ascii_histogram(values, title, bins=20, width=60):
     min_val = min(values)
     max_val = max(values)
     
+    # Handle case where all values are the same
+    if min_val == max_val:
+        print(f"\n{title}")
+        print("=" * 80)
+        print(f"All values are {min_val:.1f}")
+        print()
+        return
+    
     # Create bins
     bin_width = (max_val - min_val) / bins
     bin_counts = [0] * bins
     
     for v in values:
-        bin_idx = int((v - min_val) / bin_width) if bin_width > 0 else 0
+        bin_idx = int((v - min_val) / bin_width)
         bin_idx = min(bin_idx, bins - 1)  # Handle max value
         bin_counts[bin_idx] += 1
     

@@ -542,7 +542,7 @@ def analyze_universality(results):
     kappa_min = min(kappa_values)
     kappa_max = max(kappa_values)
     
-    # Linear regression: κ_Π = a × h^{2,1} + b
+    # Linear regression: κ_Π = a × h^{2,1} + b.
     n = len(results)
     sum_x = sum(h21_values)
     sum_y = sum(kappa_values)
