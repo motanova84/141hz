@@ -110,6 +110,12 @@ class TestKappaPiComputation:
 
 class TestTableGeneration:
     """Test suite for table generation."""
+    
+    # Minimum percentage of pairs that should show decreasing trend
+    # This threshold is set to 70% to allow for small fluctuations while
+    # still verifying the overall decreasing spectral trend predicted by
+    # deformed Gibbs theory.
+    TREND_THRESHOLD = 0.70
 
     def test_generate_top_10(self):
         """Test generating top 10 varieties."""
@@ -151,8 +157,8 @@ class TestTableGeneration:
         decreasing_pairs = sum(1 for i in range(len(kappa_values)-1)
                               if kappa_values[i] >= kappa_values[i+1])
         
-        # At least 70% of pairs should show decrease
-        assert decreasing_pairs >= 0.7 * (len(kappa_values) - 1)
+        # Use class constant for threshold
+        assert decreasing_pairs >= self.TREND_THRESHOLD * (len(kappa_values) - 1)
 
 
 class TestCYDatabase:
