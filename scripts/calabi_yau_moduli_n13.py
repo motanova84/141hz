@@ -96,7 +96,7 @@ class CalabiYauManifold:
     
     def __repr__(self) -> str:
         return (
-            f"CY(h¹¹={self.h11}, h²¹={self.h21}, χ={self.euler_characteristic}, "
+            f"CY(h11={self.h11}, h21={self.h21}, chi={self.euler_characteristic}, "
             f"N={self.total_moduli}, catalog={self.catalog})"
         )
 
@@ -405,7 +405,6 @@ def main():
     print("∴ The invariant κ_Π = 2.5773 is geometrically meaningful")
     print("  and corresponds to CY manifolds with effective moduli N ≈ 13.15")
     print()
-    print("Signature: JMMB Ψ ✧ ∞³")
     print("=" * 80)
     
     return 0

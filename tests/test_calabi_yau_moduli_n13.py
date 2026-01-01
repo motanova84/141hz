@@ -74,7 +74,8 @@ class TestConstants(unittest.TestCase):
     
     def test_n_exact(self):
         """Test N = e^{κ_Π} ≈ 13.15."""
-        assert abs(N_EXACT - 13.16) < 0.02  # More lenient tolerance
+        # N_EXACT = exp(2.5773) = 13.161554...
+        assert abs(N_EXACT - 13.15) < 0.02  # Allow ~0.01 difference
         assert abs(N_EXACT - math.exp(KAPPA_PI)) < 1e-10
     
     def test_n_integer(self):
