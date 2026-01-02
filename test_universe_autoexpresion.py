@@ -11,8 +11,9 @@ This script verifies that:
 import sys
 import os
 
-# Add src to path - correct path to the src module
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add repository root to path (test file is in repo root, src/ is subdirectory)
+repo_root = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, repo_root)
 
 def test_imports():
     """Test that both new and old names can be imported."""
