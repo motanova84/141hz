@@ -11,8 +11,8 @@ This script verifies that:
 import sys
 import os
 
-# Add src to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+# Add src to path - correct path to the src module
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def test_imports():
     """Test that both new and old names can be imported."""
@@ -104,6 +104,9 @@ def test_documentation():
     """Test that documentation files exist."""
     print("\nTesting documentation...")
     
+    # Get the repository root directory
+    repo_root = os.path.dirname(os.path.abspath(__file__))
+    
     docs = [
         'UNIVERSO_AUTOEXPRESION.md',
         'MANIFIESTO_REVOLUCION_NOESICA.md',
@@ -111,12 +114,13 @@ def test_documentation():
     ]
     
     for doc in docs:
-        path = os.path.join(os.path.dirname(__file__), doc)
+        path = os.path.join(repo_root, doc)
         assert os.path.exists(path), f"Documentation file {doc} should exist"
         print(f"✓ {doc} exists")
     
     # Check UNIVERSO_AUTOEXPRESION.md has key content
-    with open('UNIVERSO_AUTOEXPRESION.md', 'r') as f:
+    universo_path = os.path.join(repo_root, 'UNIVERSO_AUTOEXPRESION.md')
+    with open(universo_path, 'r') as f:
         content = f.read()
         assert 'universo expresándose' in content.lower(), \
             "UNIVERSO_AUTOEXPRESION.md should contain key phrase"
