@@ -122,6 +122,11 @@ class UniversalStructureOrchestrator:
             }
         }
     
+    @property
+    def frameworks(self):
+        """Backward compatibility property. Returns self.expressions."""
+        return self.expressions
+    
     def validate_all_frameworks(self) -> Dict[str, Any]:
         """
         Validate mathematical consistency across all expressions.
@@ -150,6 +155,7 @@ class UniversalStructureOrchestrator:
         
         results['overall'] = {
             'all_expressions_consistent': all_passed,
+            'all_frameworks_valid': all_passed,  # Backward compatibility
             'num_expressions': len(self.expressions),
             'timestamp': datetime.now().isoformat(),
             'interpretation': (
