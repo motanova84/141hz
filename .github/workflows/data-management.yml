@@ -52,7 +52,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-data-${{ hashFiles('requirements.txt') }}
@@ -62,7 +62,7 @@ jobs:
       
       - name: Check existing data cache
         id: cache-check
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         if: github.event.inputs.force_download != 'true'
         with:
           path: data/
@@ -107,7 +107,7 @@ jobs:
           fi
       
       - name: Upload data as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: gwosc-data-${{ matrix.event }}-${{ github.run_number }}
@@ -138,7 +138,7 @@ jobs:
         continue-on-error: false
       
       - name: Upload connectivity results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: connectivity-check-${{ github.run_number }}

@@ -54,7 +54,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-adv-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -91,7 +91,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload analysis results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: adv-analysis-${{ matrix.analysis }}-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -131,7 +131,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-tower-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -172,7 +172,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload tower results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: algebraic-tower-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -210,7 +210,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-sym-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -251,7 +251,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload symmetry results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: discrete-symmetry-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -289,7 +289,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-act3-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -322,7 +322,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload Acto III results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: acto-iii-py${{ matrix.python-version }}-${{ github.run_number }}

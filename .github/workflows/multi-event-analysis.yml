@@ -51,7 +51,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-multi-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -60,7 +60,7 @@ jobs:
             ${{ runner.os }}-pip-
       
       - name: Cache GWOSC data
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: data/
           key: gwosc-data-${{ matrix.event }}-${{ hashFiles('scripts/descargar_datos.py') }}
@@ -105,7 +105,7 @@ jobs:
         continue-on-error: false
       
       - name: Upload analysis results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: event-analysis-${{ matrix.event }}-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -146,7 +146,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-snr-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -179,7 +179,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload SNR results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: multi-event-snr-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -218,7 +218,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-bayes-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -251,7 +251,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload Bayesian results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: bayesian-analysis-py${{ matrix.python-version }}-${{ github.run_number }}

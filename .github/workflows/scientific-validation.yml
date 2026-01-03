@@ -52,7 +52,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-sci-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -84,7 +84,7 @@ jobs:
         continue-on-error: false
       
       - name: Upload pillar results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: pillar-${{ matrix.pillar }}-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -123,7 +123,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-3p-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -161,7 +161,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload complete validation results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: complete-3-pillars-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -199,7 +199,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-ds-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -232,7 +232,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload discovery standards results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: discovery-standards-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -269,7 +269,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-fp-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -302,7 +302,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload falsification results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: falsification-py${{ matrix.python-version }}-${{ github.run_number }}
@@ -339,7 +339,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-exp-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -372,7 +372,7 @@ jobs:
         continue-on-error: true
       
       - name: Upload experimental results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: experimental-py${{ matrix.python-version }}-${{ github.run_number }}
