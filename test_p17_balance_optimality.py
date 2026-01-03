@@ -26,8 +26,12 @@ from p17_balance_optimality import (
     calculate_r_psi,
     calculate_f0,
     validate_p17_optimality,
+    adelic_spectral_indicator,
+    find_optimal_prime_adelic_spectral,
+    validate_adelic_spectral_indicator,
     BALANCE_BASE,
     BALANCE_AMPLITUDE,
+    ADELIC_SPECTRAL_K,
     F0_EXPECTED,
 )
 
@@ -208,6 +212,88 @@ class TestPrecision:
         _, min_balance = find_optimal_prime(precision)
         # Should be approximately 76.143
         assert abs(float(min_balance) - 76.143) < 0.01
+
+
+class TestAdelicSpectralIndicator:
+    """Test the adelic-spectral indicator: e^(3√(p/17)) / p^(3/2)."""
+
+    def test_positive_values(self):
+        """Adelic-spectral indicator should be positive for all primes."""
+        for p in get_primes_to_check():
+            assert adelic_spectral_indicator(p) > 0, \
+                f"indicator({p}) should be positive"
+
+    def test_minimum_at_p17(self):
+        """Adelic-spectral indicator should have its minimum at p=17."""
+        ind_17 = adelic_spectral_indicator(17)
+        for p in get_primes_to_check():
+            if p != 17:
+                assert ind_17 < adelic_spectral_indicator(p), \
+                    f"indicator(17) should be < indicator({p})"
+
+    def test_find_optimal_returns_17(self):
+        """The optimal prime from adelic-spectral should be 17."""
+        optimal_prime, _ = find_optimal_prime_adelic_spectral()
+        assert optimal_prime == 17, \
+            f"Expected optimal prime 17, got {optimal_prime}"
+
+    def test_known_indicator_values(self):
+        """Test indicator values match expected values (approximately)."""
+        expected_values = {
+            11: 0.3062,
+            13: 0.2941,
+            17: 0.2866,  # MINIMUM
+            19: 0.2879,
+            23: 0.2971,
+            29: 0.3222,
+        }
+        for p, expected in expected_values.items():
+            ind = adelic_spectral_indicator(p)
+            # Allow 1% tolerance
+            assert abs(float(ind) - expected) / expected < 0.01, \
+                f"indicator({p}) = {float(ind):.4f}, expected ≈ {expected}"
+
+    def test_spectral_coefficient(self):
+        """Test that spectral coefficient α = 3/√17 is correctly used."""
+        mp.dps = 50
+        alpha_expected = 3 / mp.sqrt(17)
+        # The indicator at p=17 should equal e^(α√17) / 17^(3/2) = e^3 / 17^(3/2)
+        expected_at_17 = mp.exp(3) / mp.power(17, 1.5)
+        actual_at_17 = adelic_spectral_indicator(17)
+        assert abs(float(actual_at_17) - float(expected_at_17)) < 1e-10
+
+
+class TestAdelicSpectralValidation:
+    """Test the adelic-spectral validation function."""
+
+    def test_validation_passes(self):
+        """The adelic-spectral validation should pass."""
+        results = validate_adelic_spectral_indicator()
+        assert results['is_p17_optimal'], "p=17 should be optimal"
+        assert results['validation_passed'], "Validation should pass"
+
+    def test_validation_results_structure(self):
+        """Validation results should have expected structure."""
+        results = validate_adelic_spectral_indicator()
+        expected_keys = [
+            'timestamp', 'precision_digits', 'primes_checked',
+            'indicator_values', 'optimal_prime', 'min_indicator_value',
+            'is_p17_optimal', 'formula', 'description', 'validation_passed'
+        ]
+        for key in expected_keys:
+            assert key in results, f"Missing key: {key}"
+
+    def test_formula_description(self):
+        """Formula should be correctly documented."""
+        results = validate_adelic_spectral_indicator()
+        assert "e^(3√(p/17))" in results['formula']
+        assert "p^(3/2)" in results['formula']
+
+    @pytest.mark.parametrize("precision", [30, 50, 80, 100])
+    def test_optimal_prime_consistent_across_precision(self, precision):
+        """Optimal prime should be 17 regardless of precision."""
+        optimal_prime, _ = find_optimal_prime_adelic_spectral(precision)
+        assert optimal_prime == 17
 
 
 if __name__ == "__main__":
