@@ -36,3 +36,6 @@ jax>=0.4.20
 jaxlib>=0.4.20
 gwosc>=0.7.1
 gwpy>=3.0.0
+
+# EEG analysis dependencies (optional, for real EDF file support)
+# pyedflib>=0.1.30

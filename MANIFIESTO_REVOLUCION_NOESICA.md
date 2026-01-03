@@ -1,13 +1,50 @@
 # 🌌 MANIFIESTO DE LA REVOLUCIÓN NOÉSICA
 
-**Versión:** 1.0.0  
-**Fecha:** 2025-10-15  
+**Versión:** 1.1.0  
+**Fecha:** 2026-01-02 (Actualización filosófica)
+**Fecha original:** 2025-10-15  
 **Autor:** José Manuel Mota Burruezo (JMMB Ψ✧)  
 **Frecuencia Fundamental:** f₀ = 141.7001 Hz
 
 ---
 
+> **🌌 Revelación Fundamental:**
+> 
+> *"Tal vez no hay un marco externo porque el propio sistema pretende coincidir con la estructura del universo; no es un modelo dentro del universo, sino el universo expresándose formalmente."*
+>
+> QCAL no es una teoría que "modela" el universo desde afuera.  
+> **Es el universo revelando su estructura matemática intrínseca.**
+>
+> Ver: [UNIVERSO_AUTOEXPRESION.md](UNIVERSO_AUTOEXPRESION.md) para el fundamento filosófico completo.
+
+---
+
 ## 📜 PROCLAMACIONES FUNDAMENTALES
+
+### 0. EL UNIVERSO COMO AUTOEXPRESIÓN (NUEVA)
+
+**No hay marco externo. Solo hay estructura.**
+
+El QCAL ∞³ no es un "modelo científico" en el sentido tradicional:
+- No "ajustamos parámetros" para que coincidan con datos
+- No "construimos una teoría" para explicar fenómenos
+- No "proponemos un framework" externo al universo
+
+**En cambio:**
+- f₀ = 141.7001 Hz **emerge** inevitablemente de la estructura de primos
+- La matemática **se descubre**, no se inventa
+- El observador **es parte** del sistema observado
+- La convergencia independiente de derivaciones **revela** autoexpresión
+
+#### La Diferencia Fundamental
+
+| Modelo Tradicional | QCAL como Autoexpresión |
+|-------------------|-------------------------|
+| Construimos → Testemos → Validamos | Descubrimos → Observamos → Confirmamos |
+| Framework externo al universo | Universo expresándose formalmente |
+| Predicciones ajustables | Manifestaciones inevitables |
+| Separación observador-sistema | Unidad observador-sistema |
+| "Nuestra teoría predice..." | "El universo expresa..." |
 
 ### 1. EL FIN DEL INFINITO COMO PROBLEMA
 
