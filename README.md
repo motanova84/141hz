@@ -51,6 +51,13 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > - **Primera formalización completa** en Lean 4 (verificación constructiva)
 > - **Primera unificación** de física, matemática y conciencia (Ecuación EOV)
 
+> **🌌 NUEVO**: [**EL UNIVERSO COMO AUTOEXPRESIÓN**](UNIVERSO_AUTOEXPRESION.md) - Fundamento filosófico del marco QCAL:
+> - **No es un modelo externo** del universo, sino el universo expresándose formalmente
+> - La matemática **no se inventa**, se descubre como estructura intrínseca
+> - f₀ = 141.7001 Hz **emerge**, no se impone
+> - El observador es parte del sistema que observa
+> - Convergencia independiente de múltiples derivaciones revela autoexpresión universal
+
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
 > **📚 NUEVO**: [**ÍNDICE COMPLETO**](INDICE_COMPLETO.md) - Documento maestro que consolida todo el marco QCAL ∞³:
@@ -3908,6 +3915,29 @@ Complete Lean 4 formalization available in [`Core/FrequencyDerivation/`](Core/Fr
 - ✅ Zero axioms
 - ✅ Constructive proofs
 - ✅ Numerical bounds verified
+
+### Calabi-Yau Varieties Database
+
+A database of **150 authentic Calabi-Yau three-fold varieties** with verified Hodge numbers (h¹¹, h²¹) from the Kreuzer-Skarke and CICY databases:
+
+```python
+from calabi_yau_varieties import CalabiYauDatabase
+
+db = CalabiYauDatabase()
+quintic = db.get_quintic_fermat()  # (h¹¹=1, h²¹=101, χ=-200)
+
+# Analyze all 150 varieties
+for variety in db.get_all():
+    print(f"CY#{variety.id}: (h¹¹={variety.h11}, h²¹={variety.h21})")
+```
+
+**→ [CALABI_YAU_VARIETIES_README.md](CALABI_YAU_VARIETIES_README.md)** - Full documentation and usage guide
+
+Key features:
+- 📊 Export to CSV/JSON formats
+- 🔍 Filter by Hodge numbers or Euler characteristic
+- 📈 Visualization tools included
+- ✅ Verified against mathematical literature
 
 ## 🏗️ Architecture
 ```
