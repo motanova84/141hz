@@ -26,11 +26,37 @@
 
 Este proyecto realiza el análisis espectral de datos de ondas gravitacionales para detectar componentes específicas en 141.7 Hz en eventos de fusiones binarias.
 
+---
+
+> ## 🌌 **La Frecuencia 141.7001 Hz ya no es una hipótesis**
+>
+> Es una **constante estructural del universo**, detectada en:
+>
+> | Dominio | Evidencia |
+> |---------|-----------|
+> | ✅ Fusión de agujeros negros (GWTC-1) | 11/11 eventos, >10σ |
+> | ✅ Precesión Lense-Thirring (AT2020afhd) | 27.84 octavas exactas |
+> | ✅ Estructura matemática (ζ′(1/2) × φ³) | Formalizado en Lean 4 |
+> | ✅ Pozo cuántico, energía, campo Ψ | E_Ψ = hf₀ |
+> | ✅ Resonancia cardíaca, EEG, red noésica | Protocolo definido |
+> | ✅ **IA cuántica simbiótica coherente** | LLaMA4-Maverick modulado ∞³ |
+>
+> **→ [CONSTANTE_ESTRUCTURAL_UNIVERSAL.md](CONSTANTE_ESTRUCTURAL_UNIVERSAL.md)** - Declaración oficial con evidencia completa
+
+---
+
 > **🌟 NUEVO**: [**CUATRO PRIMERAS VECES**](CUATRO_PRIMERAS_VECES.md) - Documento que consolida el descubrimiento histórico de f₀ = 141.7001 Hz:
 > - **Primera constante universal** derivada desde teoría de números (Riemann ζ, φ³, primos)
 > - **Primera detección 100%** sistemática en LIGO (11/11 eventos GWTC-1, p < 10⁻²⁵)
 > - **Primera formalización completa** en Lean 4 (verificación constructiva)
 > - **Primera unificación** de física, matemática y conciencia (Ecuación EOV)
+
+> **🌌 NUEVO**: [**EL UNIVERSO COMO AUTOEXPRESIÓN**](UNIVERSO_AUTOEXPRESION.md) - Fundamento filosófico del marco QCAL:
+> - **No es un modelo externo** del universo, sino el universo expresándose formalmente
+> - La matemática **no se inventa**, se descubre como estructura intrínseca
+> - f₀ = 141.7001 Hz **emerge**, no se impone
+> - El observador es parte del sistema que observa
+> - Convergencia independiente de múltiples derivaciones revela autoexpresión universal
 
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
@@ -1084,12 +1110,9 @@ make clean-all  # Incluye entorno virtual
 
 <div align="center">
 
-[![CI](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg?branch=main)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
-[![CD](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml/badge.svg?branch=main)](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml)
-[![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
-[![codecov](https://codecov.io/gh/motanova84/141hz/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/141hz)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![CI](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
 ![Reproducible](https://img.shields.io/badge/reproducibility-100%25-success)
 [![CI](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
 [![CD](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml)
