@@ -25,9 +25,12 @@ Date: December 2025
 """
 
 import argparse
+import json
 import math
+import os
+import random
 import sys
-from typing import Tuple
+from typing import Dict, List, Tuple
 
 # Try to use mpmath for high precision if available
 try:
@@ -83,6 +86,12 @@ def compute_kappa_pi() -> float:
 def verify_invariant(tolerance: float) -> Tuple[bool, float, float]:
     """
     Verify the κ_Π invariant against expected value.
+    
+    This function tests the algebraic formula:
+        κ_Π = √(φ³ × |ζ'(1/2)|) × (1 + 1/27)
+    
+    which gives κ_Π ≈ 2.5793. This is different from the spectral
+    invariant KAPPA_PI_UNIVERSAL = 2.5773 used in the second implementation.
 
     Args:
         tolerance: Maximum allowed difference from expected value
@@ -204,51 +213,14 @@ def print_physical_predictions():
     print()
 
 
-def main():
-    """Main function."""
-    parser = argparse.ArgumentParser(
-        description="Verify κ_Π universal invariant from CY quintic geometry"
-Verification of Spectral Invariant κ_Π from Calabi-Yau Quintic
-
-This script verifies that κ_Π = μ₂/μ₁ ≈ 2.5773 is the universal spectral
-invariant emerging from the Hodge-de Rham Laplacian on CY3 manifolds.
-
-Usage:
-    python verify_kappa.py --tol 1e-4  # Verify with tolerance 1e-4
-    python verify_kappa.py --verbose   # Verbose output
-    python verify_kappa.py --help      # Show help
-
-Key Invariant:
-    κ_Π = 2.5773 ± 0.01
-
-Verification Criteria:
-    1. |κ_Π - 2.5773| < tolerance
-    2. R² of regression < 0.05 (independence from h^{2,1})
-    3. Standard deviation σ < 0.1
-
-Mathematical Foundation:
-    - GEOMETRY: Laplacian Hodge-de Rham CY quintic
-    - ARITHMETIC: p=17 noetic → ϕ³ × ζ'(1/2)
-    - PHYSICS: f₀=141.7001 Hz → λ_Yukawa=2116km
-    - CONSCIOUSNESS: Ψ=I×A_eff² → τ_deco=1.2ms
-
-Author: José Manuel Mota Burruezo (JMMB Ψ✧∞³)
-DOI: 10.5281/zenodo.17379721
-"""
-
-import argparse
-import json
-import math
-import os
-import random
-import sys
-from typing import Dict, List, Tuple
-
 # ============================================================================
-# CONSTANTS
+# UNIVERSAL SPECTRAL INVARIANT (Spectral Gap Analysis)
 # ============================================================================
 
-# Universal spectral invariant
+# Universal spectral invariant (from Laplacian spectrum gap analysis)
+# Note: This differs from the φ³ × ζ'(1/2) calculation (2.5793) used in
+# verify_invariant(). The value 2.5773 emerges from spectral gap analysis
+# and is used as the reference for topological complexity interpretation.
 KAPPA_PI_UNIVERSAL = 2.5773
 
 # Physical constants
@@ -261,6 +233,70 @@ ZETA_PRIME_HALF = -0.207886224977354566
 
 # Speed of light (m/s)
 C = 299792458.0
+
+
+# ============================================================================
+# TOPOLOGICAL INFORMATION CAPACITY
+# ============================================================================
+
+def kappa_pi_topological(h11: int, h21: int) -> float:
+    """
+    Compute the information capacity κ_Π from discrete topological structure.
+    
+    This function defines the information capacity of the system not as a 
+    continuous flow, but as the discrete and pure structure of its internal 
+    geometry, based on Hodge numbers.
+    
+    The formula is:
+        κ_Π(h^{1,1}, h^{2,1}) = ln(h^{1,1} + h^{2,1})
+    
+    This reveals that κ_Π is the logarithm of the effective topological 
+    complexity of the Calabi-Yau manifold architecture.
+    
+    Parameters:
+        h11: Hodge number h^{1,1} (Kähler moduli)
+        h21: Hodge number h^{2,1} (complex structure moduli)
+    
+    Returns:
+        κ_Π as logarithm of topological complexity
+    
+    Examples:
+        >>> # Fermat quintic: h^{1,1} = 1, h^{2,1} = 101
+        >>> kappa_pi_topological(1, 101)
+        4.624972813284271
+        
+        >>> # Bicubic: h^{1,1} = 2, h^{2,1} = 83
+        >>> kappa_pi_topological(2, 83)
+        4.442651256490317
+    """
+    if h11 <= 0 or h21 <= 0:
+        raise ValueError("Hodge numbers must be positive integers")
+    
+    topological_complexity = h11 + h21
+    kappa_pi = math.log(topological_complexity)
+    
+    return kappa_pi
+
+
+def effective_topological_complexity(kappa_pi: float) -> float:
+    """
+    Compute the effective topological complexity from κ_Π.
+    
+    This is the inverse operation: given κ_Π, find the effective 
+    topological complexity h^{1,1} + h^{2,1}.
+    
+    Parameters:
+        kappa_pi: The information capacity κ_Π
+    
+    Returns:
+        Effective topological complexity exp(κ_Π)
+    
+    Examples:
+        >>> # From the universal value
+        >>> effective_topological_complexity(2.5773)
+        13.161553946931869
+    """
+    return math.exp(kappa_pi)
 
 
 # ============================================================================
@@ -532,6 +568,91 @@ def compute_physical_connections(verbose: bool = False) -> Dict:
     }
 
 
+def demonstrate_topological_interpretation(verbose: bool = False) -> Dict:
+    """
+    Demonstrate the topological information capacity interpretation of κ_Π.
+    
+    Shows how κ_Π can be understood as the logarithm of the effective 
+    topological complexity h^{1,1} + h^{2,1}, representing the discrete 
+    geometric structure rather than a continuous flow.
+    
+    Parameters:
+        verbose: Print detailed output
+        
+    Returns:
+        dict: Results dictionary with the following structure:
+            - Key: manifold name (str)
+            - Value: dict with keys:
+                - "h11": Hodge number h^{1,1}
+                - "h21": Hodge number h^{2,1}
+                - "complexity": Sum h^{1,1} + h^{2,1}
+                - "kappa_pi": Computed κ_Π value
+            - Special key "universal_interpretation": dict with:
+                - "kappa_pi_universal": Universal value 2.5773
+                - "effective_complexity": exp(2.5773)
+    """
+    # Known Calabi-Yau manifolds with their Hodge numbers
+    cy_manifolds = [
+        {"name": "Fermat Quintic", "h11": 1, "h21": 101},
+        {"name": "Bicubic CICY", "h11": 2, "h21": 83},
+        {"name": "Octic Fermat", "h11": 1, "h21": 145},
+        {"name": "Pfaffian CY", "h11": 2, "h21": 59},
+        {"name": "Mirror Quintic", "h11": 101, "h21": 1},
+    ]
+    
+    results = {}
+    
+    if verbose:
+        print()
+        print("=" * 70)
+        print("TOPOLOGICAL INFORMATION CAPACITY INTERPRETATION")
+        print("=" * 70)
+        print()
+        print("κ_Π as Discrete Topological Structure:")
+        print("  κ_Π(h^{1,1}, h^{2,1}) = ln(h^{1,1} + h^{2,1})")
+        print()
+        print("This reveals κ_Π not as an arbitrary constant, but as the")
+        print("logarithm of the effective topological complexity.")
+        print()
+        print("-" * 70)
+        print(f"{'Manifold':<20} {'h^{1,1}':<8} {'h^{2,1}':<8} {'h¹¹+h²¹':<10} {'κ_Π':<12}")
+        print("-" * 70)
+    
+    for cy in cy_manifolds:
+        kappa = kappa_pi_topological(cy["h11"], cy["h21"])
+        complexity = cy["h11"] + cy["h21"]
+        
+        results[cy["name"]] = {
+            "h11": cy["h11"],
+            "h21": cy["h21"],
+            "complexity": complexity,
+            "kappa_pi": kappa
+        }
+        
+        if verbose:
+            print(f"{cy['name']:<20} {cy['h11']:<8} {cy['h21']:<8} {complexity:<10} {kappa:<12.6f}")
+    
+    if verbose:
+        print("-" * 70)
+        print()
+        print("Universal Value Interpretation:")
+        print(f"  κ_Π = 2.5773 corresponds to:")
+        eff_complexity = effective_topological_complexity(KAPPA_PI_UNIVERSAL)
+        print(f"  Effective topological complexity = exp(2.5773) = {eff_complexity:.4f}")
+        print()
+        print("This suggests an effective combined Hodge number of ~13,")
+        print("which could represent a coarse-grained or renormalized")
+        print("topological structure in the quantum geometry.")
+        print()
+    
+    results["universal_interpretation"] = {
+        "kappa_pi_universal": KAPPA_PI_UNIVERSAL,
+        "effective_complexity": effective_topological_complexity(KAPPA_PI_UNIVERSAL)
+    }
+    
+    return results
+
+
 # ============================================================================
 # MAIN
 # ============================================================================
@@ -559,8 +680,22 @@ def main():
         action="store_true",
         help="Only print PASS/FAIL",
     )
+    parser.add_argument(
+        "--topological",
+        "-t",
+        action="store_true",
+        help="Show topological information capacity interpretation",
+    )
 
     args = parser.parse_args()
+
+    # Show topological interpretation if requested
+    if args.topological and not args.quiet:
+        demonstrate_topological_interpretation(verbose=True)
+        
+        # If only topological view is requested, exit
+        if not args.verbose:
+            sys.exit(0)
 
     if not args.quiet:
         if args.verbose:
@@ -608,47 +743,6 @@ def main():
             print("  ╚════════════════════════════════════════════╝")
             print()
             print(f"Difference {difference:.2e} exceeds tolerance {args.tol:.2e}")
-        default=1e-2,
-        help="Tolerance for verification (default: 1e-2)"
-    )
-    parser.add_argument(
-        "--verbose", "-v",
-        action="store_true",
-        help="Verbose output"
-    )
-    parser.add_argument(
-        "--json",
-        action="store_true",
-        help="Output results as JSON"
-    )
-    
-    args = parser.parse_args()
-    
-    # Run verification
-    success, results = verify_kappa(
-        tolerance=args.tol,
-        verbose=args.verbose or not args.json
-    )
-    
-    # Compute physical connections
-    physics = compute_physical_connections(verbose=args.verbose)
-    
-    if args.json:
-        output = {
-            "success": success,
-            "verification": results,
-            "physics": physics
-        }
-        print(json.dumps(output, indent=2))
-    
-    # Exit with appropriate code
-    if success:
-        if not args.json:
-            print("PASS")
-        sys.exit(0)
-    else:
-        if not args.json:
-            print("FAIL")
         sys.exit(1)
 
 
