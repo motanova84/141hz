@@ -11,7 +11,7 @@ represented by the living equation.
 import pytest
 import math
 from qcal.ecuacion_viva import EcuacionViva
-from qcal.constants import RAIZ_TRES, FRECUENCIA_PI_HZ, PI_VIVO
+from qcal.constants import RAIZ_TRES, FRECUENCIA_PI_HZ, PI_VIVO, COHERENCIA_UMBRAL
 
 
 class TestEcuacionViva:
@@ -36,7 +36,7 @@ class TestEcuacionViva:
         assert ecuacion.frecuencia == FRECUENCIA_PI_HZ
     
     def test_despertar_below_threshold(self):
-        """Test despertar method when coherencia_psi < 0.999"""
+        """Test despertar method when coherencia_psi < COHERENCIA_UMBRAL"""
         ecuacion = EcuacionViva()
         
         # Test various coherence values below threshold
@@ -51,21 +51,21 @@ class TestEcuacionViva:
             assert resultado == pytest.approx(expected, rel=1e-9)
     
     def test_despertar_at_threshold(self):
-        """Test despertar method when coherencia_psi = 0.999"""
+        """Test despertar method when coherencia_psi = COHERENCIA_UMBRAL"""
         ecuacion = EcuacionViva()
         
-        resultado = ecuacion.despertar(0.999)
+        resultado = ecuacion.despertar(COHERENCIA_UMBRAL)
         
         # Should return the revelation message
         assert isinstance(resultado, str)
         assert resultado == "La Verdad se ha revelado: π se ha abierto."
     
     def test_despertar_above_threshold(self):
-        """Test despertar method when coherencia_psi > 0.999"""
+        """Test despertar method when coherencia_psi > COHERENCIA_UMBRAL"""
         ecuacion = EcuacionViva()
         
         # Test various coherence values at or above threshold
-        coherencias = [0.999, 0.9999, 1.0, 1.5]
+        coherencias = [COHERENCIA_UMBRAL, 0.9999, 1.0, 1.5]
         
         for coherencia in coherencias:
             resultado = ecuacion.despertar(coherencia)
@@ -85,7 +85,7 @@ class TestEcuacionViva:
         assert resultado_below == pytest.approx(expected, rel=1e-9)
         
         # Test at threshold
-        resultado_at = ecuacion.despertar(0.999)
+        resultado_at = ecuacion.despertar(COHERENCIA_UMBRAL)
         assert resultado_at == "La Verdad se ha revelado: π se ha abierto."
     
     def test_constants_values(self):
@@ -98,6 +98,9 @@ class TestEcuacionViva:
         
         # PI_VIVO should be π
         assert PI_VIVO == pytest.approx(math.pi, rel=1e-9)
+        
+        # COHERENCIA_UMBRAL should be 0.999
+        assert COHERENCIA_UMBRAL == 0.999
     
     def test_despertar_formula_correctness(self):
         """Test that the Ψ formula is correctly implemented"""
@@ -114,15 +117,15 @@ class TestEcuacionViva:
         ecuacion = EcuacionViva()
         
         # Just below threshold
-        resultado_just_below = ecuacion.despertar(0.9989999)
+        resultado_just_below = ecuacion.despertar(COHERENCIA_UMBRAL - 0.0001)
         assert isinstance(resultado_just_below, float)
         
         # Exactly at threshold
-        resultado_exact = ecuacion.despertar(0.999)
+        resultado_exact = ecuacion.despertar(COHERENCIA_UMBRAL)
         assert isinstance(resultado_exact, str)
         
         # Just above threshold
-        resultado_just_above = ecuacion.despertar(0.9990001)
+        resultado_just_above = ecuacion.despertar(COHERENCIA_UMBRAL + 0.0001)
         assert isinstance(resultado_just_above, str)
     
     def test_ecuacion_viva_immutability_of_frequency(self):
@@ -145,7 +148,7 @@ class TestEcuacionViva:
         assert resultado == pytest.approx(0.0, abs=1e-9)
         
         # At threshold should still return revelation
-        resultado_revelation = ecuacion.despertar(0.999)
+        resultado_revelation = ecuacion.despertar(COHERENCIA_UMBRAL)
         assert resultado_revelation == "La Verdad se ha revelado: π se ha abierto."
     
     def test_ecuacion_viva_negative_amor(self):

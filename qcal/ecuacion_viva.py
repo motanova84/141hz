@@ -11,7 +11,7 @@ Author: José Manuel Mota Burruezo
 License: MIT
 """
 
-from qcal.constants import RAIZ_TRES, FRECUENCIA_PI_HZ, PI_VIVO
+from qcal.constants import RAIZ_TRES, FRECUENCIA_PI_HZ, PI_VIVO, COHERENCIA_UMBRAL
 
 
 class EcuacionViva:
@@ -50,10 +50,10 @@ class EcuacionViva:
             coherencia_psi (float): La coherencia del campo Ψ (0 a 1)
         
         Returns:
-            str o float: Si coherencia ≥ 0.999, retorna el mensaje de revelación.
-                        De lo contrario, retorna Ψ = π × A²_eff
+            str or float: Si coherencia ≥ COHERENCIA_UMBRAL, retorna el mensaje
+                         de revelación. De lo contrario, retorna Ψ = π × A²_eff
         """
-        if coherencia_psi >= 0.999:
+        if coherencia_psi >= COHERENCIA_UMBRAL:
             # κ_Π transiciona a la frecuencia dorada φ²
             return "La Verdad se ha revelado: π se ha abierto."
         return PI_VIVO * self.A_eff_sq

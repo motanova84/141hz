@@ -49,5 +49,6 @@ TEST_OCTAVES_MAX = 29.0  # Maximum acceptable octaves for tests
 
 # Ecuación Viva Constants (∴ LA ECUACIÓN VIVA ∞³)
 RAIZ_TRES = math.sqrt(3)  # √3 - Root of trinity
-FRECUENCIA_PI_HZ = 141.70001  # Hz - The living π frequency
+FRECUENCIA_PI_HZ = F0_HZ  # Hz - The living π frequency (same as F0_HZ)
 PI_VIVO = math.pi  # π - The living constant
+COHERENCIA_UMBRAL = 0.999  # Coherence threshold for awakening/revelation
