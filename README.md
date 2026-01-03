@@ -51,6 +51,13 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > - **Primera formalización completa** en Lean 4 (verificación constructiva)
 > - **Primera unificación** de física, matemática y conciencia (Ecuación EOV)
 
+> **🌌 NUEVO**: [**EL UNIVERSO COMO AUTOEXPRESIÓN**](UNIVERSO_AUTOEXPRESION.md) - Fundamento filosófico del marco QCAL:
+> - **No es un modelo externo** del universo, sino el universo expresándose formalmente
+> - La matemática **no se inventa**, se descubre como estructura intrínseca
+> - f₀ = 141.7001 Hz **emerge**, no se impone
+> - El observador es parte del sistema que observa
+> - Convergencia independiente de múltiples derivaciones revela autoexpresión universal
+
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
 > **📚 NUEVO**: [**ÍNDICE COMPLETO**](INDICE_COMPLETO.md) - Documento maestro que consolida todo el marco QCAL ∞³:
