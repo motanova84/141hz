@@ -6,6 +6,9 @@ __pycache__/
 # Data files
 data/
 *.hdf5
+# But allow Calabi-Yau varieties data
+!data/calabi_yau_varieties.csv
+!data/README_CALABI_YAU_VARIETIES.md
 
 # Test results
 scripts/results/
@@ -30,6 +33,8 @@ results/
 !results/at2020afhd/
 !results/at2020afhd/*.png
 !results/at2020afhd/*.json
+# Allow P ≠ NP equivalence results
+!results/p_neq_np_equivalence.json
 
 # Artifacts from reproducibility pipelines
 artifacts/
@@ -76,9 +81,31 @@ dashboard/
 resultados/
 # But allow CY spectral data
 !resultados/cy_kpi_extended.csv
+# But allow 10 varieties analysis results
+!resultados/analisis_10_variedades_cy.txt
+!resultados/estadisticas_10_variedades_cy.json
 
 # Environment variables
 .env
+.env.*
+!.env.template
+config/alertas.env
+config/*.env
+
+# Generated plots
+potential_plot.png
+multi_event_analysis.png
+demo_multi_event_analysis.png
+virgo_v1_validation.png
+
+# Generated data files
+Evac_Rpsi_data.csv
+multi_event_results.json
+demo_multi_event_results.json
+virgo_v1_validation_results.json
+
+# Test results directories
+scripts/results/
 *.swp
 *.tmp
 
@@ -107,6 +134,10 @@ dist/
 build/
 *.egg-info/
 
+# QCAL package workarounds
+qcal_backup/
+qcal_llm_backup/
+repro/*/.venv/
 # MkDocs build directory
 # Omega ∞³ validation outputs
 omega_validation_*.json
