@@ -1,0 +1,1 @@
+../noesis-qcal-llm/MANIFESTO.md

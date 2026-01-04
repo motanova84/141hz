@@ -3,7 +3,7 @@
 
 version: 2
 updates:
-  # Python dependencies
+  # Python dependencies - root directory
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
@@ -46,6 +46,19 @@ updates:
           - "patch"
     # Automatically rebase PRs when base branch updates
     rebase-strategy: "auto"
+
+  # Python dependencies - repro/GWTC-1 directory (if exists)
+  - package-ecosystem: "pip"
+    directory: "/repro/GWTC-1"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "motanova84"
+    labels:
+      - "dependencies"
+      - "python"
+      - "automated"
 
   # GitHub Actions updates
   - package-ecosystem: "github-actions"
