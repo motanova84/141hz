@@ -58,6 +58,21 @@ This is the **definitive notebook** that implements the full validation framewor
 
 ## 🆕 Focused Topic Notebooks
 
+### `at2020afhd_analysis.ipynb` 🌌 **NEW**
+
+**AT2020afhd: Resonador Gravitacional Cuántico Natural**
+
+Complete analysis of the AT2020afhd tidal disruption event and its connection to the 141.70001 Hz framework:
+- 📡 Swift X-ray and VLA Radio light curves
+- 🔍 Lomb-Scargle periodogram detecting ~20-day period
+- 🎯 Lense-Thirring precession model fitting: Ψ(t) = A·sin(ω·t + φ)·e^(-γt)
+- 🌟 Harmonic connection: ωframe ≈ 3.63 × 10⁻⁶ Hz ↔ f₀ = 141.70001 Hz
+- 📊 Ratio armónico ~10¹¹ demonstrating fractal resonance
+
+**Perfect for**: Understanding how frame-dragging at cosmological scales connects to quantum-conscious frequencies
+
+**Based on**: Science Advances (Pasham et al.) - "A 20-day periodicity in AT2020afhd"
+
 ### `spectral_analysis_gw150914.ipynb`
 
 **Interactive spectral analysis of GW150914 with inline explanations.**

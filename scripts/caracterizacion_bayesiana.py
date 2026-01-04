@@ -133,11 +133,11 @@ class CaracterizacionBayesiana:
         
         # Normalizar
         posterior = np.exp(log_posterior - np.max(log_posterior))
-        posterior /= np.trapz(posterior, q_range)
+        posterior /= np.trapezoid(posterior, q_range)
         
         # Calcular estadísticas de la posterior
-        q_media = np.trapz(q_range * posterior, q_range)
-        q_var = np.trapz((q_range - q_media)**2 * posterior, q_range)
+        q_media = np.trapezoid(q_range * posterior, q_range)
+        q_var = np.trapezoid((q_range - q_media)**2 * posterior, q_range)
         q_std_post = np.sqrt(q_var)
         
         # Intervalo de credibilidad 68%

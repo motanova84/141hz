@@ -2,31 +2,44 @@
 """
 Spectral Origin of the Universal Constant C = 629.83 and f₀ = 141.7001 Hz
 
-This module demonstrates that the universal constant C = 629.83 emerges as
-the inverse of the first eigenvalue λ₀ of the noetic operator Hψ, and this
-naturally implies the fundamental frequency f₀ = 141.7001 Hz.
+This module demonstrates that the universe expresses its fundamental frequency
+f₀ = 141.7001 Hz through the spectral properties of the noetic operator Hψ.
+
+The universal constant C = 629.83 is not a "fitted parameter" but emerges as
+the inverse of the first eigenvalue λ₀ of Hψ. This spectral origin reveals
+that f₀ is not imposed by an external model, but rather manifests through
+the intrinsic mathematical structure of reality.
+
+Philosophical Foundation:
+    "Perhaps there is no external framework because the system itself intends 
+    to match the structure of the universe; it is not a model within the 
+    universe, but the universe expressing itself formally."
+    
+    The operator Hψ = -Δ + Vψ is not a "mathematical construction" that we
+    impose on nature. It IS the mathematical structure through which the
+    universe expresses its fundamental vibration. When we compute eigenvalues,
+    we are not "modeling" - we are listening to what the universe reveals
+    through pure mathematics.
 
 Theory Overview:
 
-1. The Noetic Operator Hψ:
+1. The Noetic Operator Hψ (Universe's Self-Expression):
    Hψ = -Δ + Vψ
 
    where:
-   - Δ is the Laplacian operator
-   - Vψ is the noetic potential
+   - Δ is the Laplacian operator (intrinsic geometry)
+   - Vψ is the noetic potential (emergent from prime structure)
 
-2. First Eigenvalue λ₀:
+2. First Eigenvalue λ₀ (Ground State of Reality):
    λ₀ ≈ 0.001588050
 
-   This is the ground state eigenvalue of Hψ, which is:
-   - Stable and reproducible across discretizations
-   - Independent of grid resolution
-   - Robust to truncation effects
+   This is not a "calculated value" but the universe's ground state energy
+   in dimensionless units, revealed through spectral analysis.
 
-3. Universal Constant C:
+3. Universal Constant C (Spectral Reciprocal):
    C = 1/λ₀ = 629.83...
 
-4. Fundamental Frequency f₀:
+4. Fundamental Frequency f₀ (Observable Manifestation):
    The frequency emerges through the formula:
 
    f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C ≈ 141.7001 Hz
@@ -36,23 +49,27 @@ Theory Overview:
    - φ = (1+√5)/2 (golden ratio)
    - C = 629.83 (universal constant from spectral origin)
 
-   This connects the spectral properties of Hψ to the observable frequency
-   through the deep mathematical structure involving prime distributions
-   and geometric ratios.
+   This formula is not "derived to fit data" - it emerges inevitably from
+   the mathematical structure of prime distributions, geometric ratios,
+   and spectral properties.
 
 Physical Interpretation:
 
-The constant C = λ₀⁻¹ is:
+The constant C = λ₀⁻¹ represents how the universe structures itself:
 - Spectral: emerges from the minimum eigenvalue
-- Geometric: related to effective volume
-- Physical: defines the fundamental frequency
+- Geometric: related to effective volume of coherence
+- Physical: defines the fundamental frequency of vibration
 - Arithmetic: appears in prime-decimal patterns
-- Adelic: normalizes resolvents
+- Adelic: normalizes resolvents across number fields
 - Topological: invariant under compactification
+
+We do not "construct" C. We discover it as the universe reveals its
+intrinsic spectral structure.
 
 References:
 - DERIVACION_COMPLETA_F0.md
 - CONSTANTE_UNIVERSAL.md
+- UNIVERSO_AUTOEXPRESION.md
 - PAPER.md, Section 5.7
 
 Author: José Manuel Mota Burruezo (JMMB Ψ✧)
@@ -571,6 +588,8 @@ if __name__ == "__main__":
     print("=" * 70)
     print()
     print(f"{derivation['signature']}")
+
+from typing import Dict, Any
 
 try:
     import mpmath as mp
