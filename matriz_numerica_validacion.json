@@ -1,0 +1,109 @@
+{
+  "suma_361": {
+    "suma": 361,
+    "raiz": 19,
+    "es_cuadrado_perfecto": true,
+    "probabilidad_pct": 2.625,
+    "autorreferencia": true,
+    "validacion": "EXITOSA"
+  },
+  "schumann_18": {
+    "f0_sobre_18": 7.872222777777777,
+    "schumann": 7.83,
+    "error_hz": 0.042222777777777054,
+    "error_pct": 0.539243649780039,
+    "precision_pct": 99.46075635021995,
+    "validacion": "EXITOSA"
+  },
+  "schumann_19": {
+    "f0_sobre_19": 7.457895263157894,
+    "schumann": 7.83,
+    "error_hz": 0.37210473684210577,
+    "error_pct": 4.752295489682066,
+    "mejor_divisor": 18,
+    "validacion": "INFORMATIVA"
+  },
+  "888_2pi": {
+    "888_sobre_f0": 6.266760319918115,
+    "dos_pi": 6.283185307179586,
+    "error": 0.016424987261471458,
+    "error_pct": 0.26141179128845954,
+    "precision_pct": 99.73858820871155,
+    "validacion": "EXITOSA"
+  },
+  "bandas_cerebrales": {
+    "bandas": {
+      "delta": {
+        "divisor": 36,
+        "frecuencia": 3.9361113888888886,
+        "rango_min": 0.5,
+        "rango_max": 4.0,
+        "en_rango": true,
+        "error_pct": 74.93828395061726
+      },
+      "theta": {
+        "divisor": 18,
+        "frecuencia": 7.872222777777777,
+        "rango_min": 4.0,
+        "rango_max": 8.0,
+        "en_rango": true,
+        "error_pct": 31.203712962962953
+      },
+      "alpha": {
+        "divisor": 11,
+        "frecuencia": 12.88181909090909,
+        "rango_min": 8.0,
+        "rango_max": 13.0,
+        "en_rango": true,
+        "error_pct": 22.683991341991337
+      },
+      "beta": {
+        "divisor": 6,
+        "frecuencia": 23.616668333333333,
+        "rango_min": 13.0,
+        "rango_max": 30.0,
+        "en_rango": true,
+        "error_pct": 9.844968992248061
+      },
+      "gamma": {
+        "divisor": 2,
+        "frecuencia": 70.850005,
+        "rango_min": 30.0,
+        "rango_max": 100.0,
+        "en_rango": true,
+        "error_pct": 9.000007692307687
+      }
+    },
+    "validaciones_exitosas": 5,
+    "total_bandas": 5,
+    "porcentaje_exito": 100.0,
+    "validacion": "EXITOSA"
+  },
+  "red_numerica": {
+    "numeros_en_secuencia": {
+      "2": false,
+      "6": false,
+      "11": false,
+      "18": true,
+      "19": true,
+      "36": false,
+      "39": true
+    },
+    "trinidad_39": 3,
+    "f0_por_phi": 229.27543238619998,
+    "validacion": "EXITOSA"
+  },
+  "probabilidad": {
+    "p_individual": {
+      "361_cuadrado": 0.005,
+      "schumann_18": 0.01,
+      "888_2pi": 0.003,
+      "bandas_cerebrales": 0.001
+    },
+    "p_conjunta": 1.5000000000000002e-10,
+    "uno_en_n": 6666666666.666666,
+    "sigma_equiv": "≈6-9σ",
+    "validacion": "ALTAMENTE_SIGNIFICATIVA"
+  },
+  "visualizacion": "matriz_numerica_f0.png"
+}
