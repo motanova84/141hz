@@ -145,8 +145,19 @@ Check results in:
 
 ## Future Improvements
 
+### Potential Enhancements
+- [ ] Make fail-fast threshold configurable (currently hardcoded to 3)
+- [ ] Make pause cycles configurable (currently 10 cycles ≈ 70ms)
+- [ ] Centralize critical dependencies list in workflow YAML
+- [ ] Make workflow timeout configurable as input parameter
 - [ ] Add parallel execution for independent validations
 - [ ] Implement smart retry (skip validations that consistently fail)
 - [ ] Add validation result caching
 - [ ] Create validation priority levels
 - [ ] Add performance metrics tracking
+
+### Configuration Suggestions
+If the current defaults don't work well:
+- Adjust `fail_fast_threshold` from 3 to a different value
+- Adjust `pause_cycles` from 10 to balance speed vs coherence
+- Adjust `timeout-minutes` from 30 based on actual execution patterns
