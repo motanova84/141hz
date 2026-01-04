@@ -6,6 +6,9 @@ __pycache__/
 # Data files
 data/
 *.hdf5
+# But allow Calabi-Yau varieties data
+!data/calabi_yau_varieties.csv
+!data/README_CALABI_YAU_VARIETIES.md
 
 # Test results
 scripts/results/
@@ -78,6 +81,9 @@ dashboard/
 resultados/
 # But allow CY spectral data
 !resultados/cy_kpi_extended.csv
+# But allow 10 varieties analysis results
+!resultados/analisis_10_variedades_cy.txt
+!resultados/estadisticas_10_variedades_cy.json
 
 # Environment variables
 .env
