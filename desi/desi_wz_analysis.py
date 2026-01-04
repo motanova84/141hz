@@ -107,7 +107,7 @@ class DESICosmologyAnalysis:
                 z_integral = np.linspace(0, zi, 100)
                 w_integral = self.w_cpla(z_integral, w0, wa)
                 integrand = (1 + w_integral) / (1 + z_integral)
-                integral_value = np.trapz(integrand, z_integral)
+                integral_value = np.trapezoid(integrand, z_integral)
                 
                 dark_energy_term = self.omega_lambda * np.exp(3 * integral_value)
             else:
@@ -138,7 +138,7 @@ class DESICosmologyAnalysis:
             if zi > 0:
                 z_integral = np.linspace(0, zi, 100)
                 E_integral = self.E_z(z_integral, w0, wa)
-                integral_value = np.trapz(1/E_integral, z_integral)
+                integral_value = np.trapezoid(1/E_integral, z_integral)
                 D_L[i] = (1 + zi) * (C_LIGHT / self.h0) * integral_value
             else:
                 D_L[i] = 0

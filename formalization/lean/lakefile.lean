@@ -31,3 +31,11 @@ lean_lib F0Derivation where
   -- Source files
   roots := #[`F0Derivation]
   globs := #[.submodules `F0Derivation]
+
+lean_lib Invariants where
+  -- Calabi-Yau spectral invariants
+  roots := #[`Invariants]
+
+lean_lib KappaPhi where
+  -- κ_Π = 2.5773 corrected formalization
+  roots := #[`KappaPhi]
