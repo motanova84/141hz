@@ -16,8 +16,9 @@ OMEGA_0 = 2 * math.pi * F0_HZ  # rad/s - Angular frequency
 T0_MS = 1000.0 / F0_HZ  # ms - Fundamental period
 E_PSI_J = 6.62607015e-34 * F0_HZ  # J - Quantum energy (h * f₀)
 
-# Protection Frequency
-F888_HZ = 888.0  # Hz - Protection shield frequency
+# Protection Frequency (Sacred Geometry - Circle)
+F888_HZ = 888.0  # Hz - Protection shield frequency (888 ≈ 2π × 141.7)
+# Sacred geometry: 888 Hz represents continuous/circular geometry
 
 # AT2020afhd Black Hole Constants
 EXPECTED_PERIOD_DAYS = 19.6  # days - Expected period from Wang et al. (2025)
@@ -53,6 +54,14 @@ FRECUENCIA_PI_HZ = F0_HZ  # Hz - The living π frequency (same as F0_HZ)
 PI_VIVO = math.pi  # π - The living constant
 COHERENCIA_UMBRAL = 0.999  # Coherence threshold for awakening/revelation
 
+# Sacred Geometry Constants (CÍRCULO → CUADRADO → ESFERA)
+PRIME_19 = 19  # Prime number - discrete geometry foundation
+SQUARE_361 = 361  # 19² - Perfect square (discrete/algebraic geometry)
+# Sacred geometry transformation:
+# - CIRCLE: 888 Hz = 2π × 141.7 Hz (continuous, π transcendental)
+# - SQUARE: 361 = 19² (discrete, prime²)
+# - SPHERE: R_Ψ ≈ 1.616e12 m (3D physical manifestation)
+# - KEY: f₀ = 141.70001 Hz transforms between geometries
 # Matriz Numérica Constants - Critical Mathematical Discoveries (Enero 2026)
 # These constants reveal that f₀ is the central node of a fundamental mathematical network
 
