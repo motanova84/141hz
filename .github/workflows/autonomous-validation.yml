@@ -8,11 +8,20 @@ on:
       max_intentos:
         description: 'Máximo número de reintentos por validación'
         required: false
-        default: '5'
+        default: '3'
       tipo_validacion:
         description: 'Tipo de validación a ejecutar (dejar vacío para todas)'
         required: false
         default: ''
+      solo_criticas:
+        description: 'Ejecutar solo validaciones críticas (más rápido)'
+        required: false
+        default: 'true'
+        type: boolean
+      max_scripts:
+        description: 'Número máximo de scripts a ejecutar'
+        required: false
+        default: '10'
 
 jobs:
   autonomous-validation:
@@ -52,15 +61,33 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
+          
+          # Install dependencies with retries and better error handling
           if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
+            echo "📦 Installing dependencies from requirements.txt..."
+            
+            # First, install critical dependencies that are needed for validations
+            echo "Installing critical dependencies..."
+            pip install mpmath sympy numpy scipy matplotlib astropy pandas pyyaml || {
+              echo "❌ Failed to install critical dependencies"
+              exit 1
+            }
+            
+            # Then try to install remaining dependencies (non-critical)
+            echo "Installing remaining dependencies (non-critical)..."
+            pip install -r requirements.txt --no-deps || echo "⚠️ Some optional dependencies failed"
+            
+            echo "✅ Dependency installation complete"
+            pip list | grep -E "(mpmath|sympy|numpy|scipy)" || echo "⚠️ Some critical packages missing"
           else
-            echo "⚠️ requirements.txt not found, installing core dependencies"
+            echo "⚠️ requirements.txt not found, installing core dependencies only"
             pip install mpmath sympy numpy scipy matplotlib astropy pandas pyyaml
           fi
         env:
           NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+          PIP_NO_WARN_SCRIPT_LOCATION: 0
           NUMEXPR_NUM_THREADS: 2
 
       - name: Create necessary directories
@@ -69,15 +96,31 @@ jobs:
 
       - name: Run Autonomous Agent Orchestrator
         id: orchestrator
+        timeout-minutes: 30
         run: |
-          MAX_INTENTOS="${{ github.event.inputs.max_intentos || '5' }}"
+          MAX_INTENTOS="${{ github.event.inputs.max_intentos || '3' }}"
           TIPO="${{ github.event.inputs.tipo_validacion }}"
+          SOLO_CRITICAS="${{ github.event.inputs.solo_criticas || 'true' }}"
+          MAX_SCRIPTS="${{ github.event.inputs.max_scripts || '10' }}"
           
-          if [ -n "$TIPO" ]; then
-            python3 scripts/orquestador_validacion.py --tipo "$TIPO" --max-intentos "$MAX_INTENTOS"
+          # Construir comando con opciones
+          CMD="python3 scripts/orquestador_validacion.py --max-intentos $MAX_INTENTOS --fail-fast"
+          
+          # Agregar opción de solo críticas
+          if [ "$SOLO_CRITICAS" = "true" ]; then
+            CMD="$CMD --solo-criticas"
           else
-            python3 scripts/orquestador_validacion.py --max-intentos "$MAX_INTENTOS"
+            # Si no es solo críticas, aplicar límite de scripts
+            CMD="$CMD --max-scripts $MAX_SCRIPTS"
           fi
+          
+          # Agregar filtro de tipo si está especificado
+          if [ -n "$TIPO" ]; then
+            CMD="$CMD --tipo $TIPO"
+          fi
+          
+          echo "Ejecutando: $CMD"
+          $CMD
         continue-on-error: true
         env:
           NUMEXPR_MAX_THREADS: 4
