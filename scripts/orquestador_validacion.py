@@ -140,13 +140,10 @@ class DescubridorValidaciones:
         
         nombre = script.name
         
-        # Excluir patrones específicos
+        # Excluir patrones específicos usando fnmatch para glob patterns
+        from fnmatch import fnmatch
         for patron in self.EXCLUIR:
-            if patron.startswith('*') and nombre.endswith(patron[1:]):
-                return False
-            elif patron.endswith('*') and nombre.startswith(patron[:-1]):
-                return False
-            elif nombre == patron:
+            if fnmatch(nombre, patron):
                 return False
         
         return True
@@ -287,7 +284,7 @@ class OrquestadorValidacion:
             # Pausa coherente entre validaciones (reducida para eficiencia)
             if i < len(validaciones):
                 logger.info("⏸️  Pausa de coherencia cuántica...")
-                self.frecuencia.pausa_coherente(ciclos=10)  # Reducido de 100 a 10
+                self.frecuencia.pausa_coherente(ciclos=10)  # Reducida de 100 a 10 ciclos
         
         # Generar reporte consolidado
         return self._generar_reporte_consolidado()

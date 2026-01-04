@@ -143,7 +143,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### System Configuration" >> $GITHUB_STEP_SUMMARY
           echo "- **Frequency Alignment**: 141.7001 Hz" >> $GITHUB_STEP_SUMMARY
-          echo "- **Max Attempts**: ${{ github.event.inputs.max_intentos || '5' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Max Attempts**: ${{ github.event.inputs.max_intentos || '3' }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Run Number**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
