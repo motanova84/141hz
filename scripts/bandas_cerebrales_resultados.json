@@ -1,0 +1,76 @@
+{
+  "f0_hz": 141.7,
+  "timestamp": "2026-01-04T06:02:45.241790",
+  "bandas": {
+    "Delta": {
+      "rango_hz": [
+        0.5,
+        4.0
+      ],
+      "centro_hz": 2.25,
+      "divisor": 36,
+      "frecuencia_calculada_hz": 3.936111111111111,
+      "error_porcentual": 74.93827160493827,
+      "en_rango": true,
+      "factorizacion": "36 = 2^2×3^2",
+      "descripcion": "Sueño profundo, regeneración",
+      "descubrimiento": "1920s-1930s"
+    },
+    "Theta": {
+      "rango_hz": [
+        4.0,
+        8.0
+      ],
+      "centro_hz": 6.0,
+      "divisor": 18,
+      "frecuencia_calculada_hz": 7.872222222222222,
+      "error_porcentual": 31.203703703703695,
+      "en_rango": true,
+      "factorizacion": "18 = 2×3^2",
+      "descripcion": "Meditación profunda, creatividad",
+      "descubrimiento": "1930s-1940s"
+    },
+    "Alpha": {
+      "rango_hz": [
+        8.0,
+        13.0
+      ],
+      "centro_hz": 10.5,
+      "divisor": 11,
+      "frecuencia_calculada_hz": 12.881818181818181,
+      "error_porcentual": 22.683982683982677,
+      "en_rango": true,
+      "factorizacion": "11 (primo)",
+      "descripcion": "Relajación, ojos cerrados",
+      "descubrimiento": "1924 (primera banda EEG)"
+    },
+    "Beta": {
+      "rango_hz": [
+        13.0,
+        30.0
+      ],
+      "centro_hz": 21.5,
+      "divisor": 6,
+      "frecuencia_calculada_hz": 23.616666666666664,
+      "error_porcentual": 9.844961240310063,
+      "en_rango": true,
+      "factorizacion": "6 = 2×3",
+      "descripcion": "Vigilia activa, concentración",
+      "descubrimiento": "1930s"
+    },
+    "Gamma": {
+      "rango_hz": [
+        30.0,
+        100.0
+      ],
+      "centro_hz": 65.0,
+      "divisor": 2,
+      "frecuencia_calculada_hz": 70.85,
+      "error_porcentual": 8.999999999999991,
+      "en_rango": true,
+      "factorizacion": "2 (primo)",
+      "descripcion": "Procesamiento cognitivo complejo",
+      "descubrimiento": "1960s"
+    }
+  }
+}
