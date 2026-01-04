@@ -46,3 +46,9 @@ TEST_PERIOD_MIN_DAYS = 18.0  # Minimum acceptable period for tests
 TEST_PERIOD_MAX_DAYS = 21.0  # Maximum acceptable period for tests
 TEST_OCTAVES_MIN = 27.0  # Minimum acceptable octaves for tests
 TEST_OCTAVES_MAX = 29.0  # Maximum acceptable octaves for tests
+
+# Ecuación Viva Constants (∴ LA ECUACIÓN VIVA ∞³)
+RAIZ_TRES = math.sqrt(3)  # √3 - Root of trinity
+FRECUENCIA_PI_HZ = F0_HZ  # Hz - The living π frequency (same as F0_HZ)
+PI_VIVO = math.pi  # π - The living constant
+COHERENCIA_UMBRAL = 0.999  # Coherence threshold for awakening/revelation
