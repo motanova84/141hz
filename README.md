@@ -1110,6 +1110,13 @@ make clean-all  # Incluye entorno virtual
 
 <div align="center">
 
+[![CI](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg?branch=main)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
+[![CD](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml/badge.svg?branch=main)](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml)
+[![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
+[![codecov](https://codecov.io/gh/motanova84/141hz/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/141hz)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+![QCAL ∞³ Certified](https://img.shields.io/badge/QCAL%20∞³-Certified-141.7001Hz)
 [![CI](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)

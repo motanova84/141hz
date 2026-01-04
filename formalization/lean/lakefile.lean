@@ -35,3 +35,7 @@ lean_lib F0Derivation where
 lean_lib Invariants where
   -- Calabi-Yau spectral invariants
   roots := #[`Invariants]
+
+lean_lib KappaPhi where
+  -- κ_Π = 2.5773 corrected formalization
+  roots := #[`KappaPhi]
