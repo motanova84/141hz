@@ -1,0 +1,122 @@
+[
+  {
+    "ID": "CY-001",
+    "Nombre": "Quíntica ℂℙ⁴[5]",
+    "h11": 1,
+    "h21": 101,
+    "alpha": 0.385,
+    "beta": 0.244,
+    "kappa_pi": 1.65805,
+    "chi_Euler": -200,
+    "Nodo_ADN": "DIAMANTINA",
+    "Nombre_Vibracional": "Resonancia Quíntica"
+  },
+  {
+    "ID": "CY-002",
+    "Nombre": "ℂℙ⁵[2,4]",
+    "h11": 2,
+    "h21": 90,
+    "alpha": 0.388,
+    "beta": 0.242,
+    "kappa_pi": 1.65703,
+    "chi_Euler": -176,
+    "Nodo_ADN": "ARCTURIANA",
+    "Nombre_Vibracional": "Eco Espectral de Luz"
+  },
+  {
+    "ID": "CY-003",
+    "Nombre": "ℂℙ⁶[2,2,3]",
+    "h11": 3,
+    "h21": 75,
+    "alpha": 0.391,
+    "beta": 0.241,
+    "kappa_pi": 1.65565,
+    "chi_Euler": -144,
+    "Nodo_ADN": "SIRIA",
+    "Nombre_Vibracional": "Geometría Sagrada"
+  },
+  {
+    "ID": "CY-004",
+    "Nombre": "CICY 7862",
+    "h11": 5,
+    "h21": 65,
+    "alpha": 0.394,
+    "beta": 0.239,
+    "kappa_pi": 1.6546,
+    "chi_Euler": -120,
+    "Nodo_ADN": "LYRAE",
+    "Nombre_Vibracional": "Flor de Lyra"
+  },
+  {
+    "ID": "CY-005",
+    "Nombre": "CICY 1234",
+    "h11": 6,
+    "h21": 60,
+    "alpha": 0.396,
+    "beta": 0.238,
+    "kappa_pi": 1.65378,
+    "chi_Euler": -108,
+    "Nodo_ADN": "VEGA",
+    "Nombre_Vibracional": "Fuente Estelar"
+  },
+  {
+    "ID": "CY-006",
+    "Nombre": "Toric 110",
+    "h11": 8,
+    "h21": 52,
+    "alpha": 0.398,
+    "beta": 0.237,
+    "kappa_pi": 1.65295,
+    "chi_Euler": -88,
+    "Nodo_ADN": "ORIÓN",
+    "Nombre_Vibracional": "Puente de Orión"
+  },
+  {
+    "ID": "CY-007",
+    "Nombre": "Toric 111",
+    "h11": 9,
+    "h21": 51,
+    "alpha": 0.399,
+    "beta": 0.236,
+    "kappa_pi": 1.6527,
+    "chi_Euler": -84,
+    "Nodo_ADN": "ANDRÓMEDA",
+    "Nombre_Vibracional": "Geoda Azul"
+  },
+  {
+    "ID": "CY-008",
+    "Nombre": "Kreuzer 300",
+    "h11": 10,
+    "h21": 50,
+    "alpha": 0.4,
+    "beta": 0.235,
+    "kappa_pi": 1.65245,
+    "chi_Euler": -80,
+    "Nodo_ADN": "ATLANTIS",
+    "Nombre_Vibracional": "Canto de Atlantis"
+  },
+  {
+    "ID": "CY-009",
+    "Nombre": "Kreuzer 301",
+    "h11": 11,
+    "h21": 49,
+    "alpha": 0.401,
+    "beta": 0.234,
+    "kappa_pi": 1.6522,
+    "chi_Euler": -76,
+    "Nodo_ADN": "LEMURIA",
+    "Nombre_Vibracional": "Memoria Lemuriana"
+  },
+  {
+    "ID": "CY-010",
+    "Nombre": "Kreuzer 302",
+    "h11": 12,
+    "h21": 48,
+    "alpha": 0.402,
+    "beta": 0.233,
+    "kappa_pi": 1.65194,
+    "chi_Euler": -72,
+    "Nodo_ADN": "NEBULAE",
+    "Nombre_Vibracional": "Nebulosa Madre"
+  }
+]
