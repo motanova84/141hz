@@ -7,6 +7,7 @@ This module provides tools for evaluating LLM outputs using quantum coherence me
 
 from .coherence import psi_score, strich_rate, compute_intention, compute_effectiveness
 from .metrics import kl_divergence, snr, repetition_rate, semantic_density
+from .ecuacion_viva import EcuacionViva
 
 __version__ = "1.0.0"
 __all__ = [
@@ -18,6 +19,7 @@ __all__ = [
     "snr",
     "repetition_rate",
     "semantic_density",
+    "EcuacionViva",
 ]
 
 # Fundamental constants
