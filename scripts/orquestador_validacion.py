@@ -22,6 +22,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import List, Dict, Any
 import subprocess
+from fnmatch import fnmatch
 
 # Importar agente autónomo
 from agente_autonomo_141hz import AgenteAutonomo141Hz, FrecuenciaCoherente141Hz
@@ -141,7 +142,6 @@ class DescubridorValidaciones:
         nombre = script.name
         
         # Excluir patrones específicos usando fnmatch para glob patterns
-        from fnmatch import fnmatch
         for patron in self.EXCLUIR:
             if fnmatch(nombre, patron):
                 return False
@@ -281,10 +281,12 @@ class OrquestadorValidacion:
             else:
                 fallos_consecutivos = 0
             
-            # Pausa coherente entre validaciones (reducida para eficiencia)
+            # Pausa coherente entre validaciones
+            # Reducida de 100 a 10 ciclos para eficiencia en CI/CD
+            # 10 ciclos ≈ 70ms, suficiente para coherencia sin timeout
             if i < len(validaciones):
                 logger.info("⏸️  Pausa de coherencia cuántica...")
-                self.frecuencia.pausa_coherente(ciclos=10)  # Reducida de 100 a 10 ciclos
+                self.frecuencia.pausa_coherente(ciclos=10)
         
         # Generar reporte consolidado
         return self._generar_reporte_consolidado()

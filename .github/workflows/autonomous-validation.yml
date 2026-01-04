@@ -74,9 +74,9 @@ jobs:
               exit 1
             }
             
-            # Then try to install remaining dependencies (non-critical)
-            echo "Installing remaining dependencies (non-critical)..."
-            pip install -r requirements.txt --no-deps || echo "⚠️ Some optional dependencies failed"
+            # Then try to install remaining dependencies
+            echo "Installing remaining dependencies..."
+            pip install -r requirements.txt || echo "⚠️ Some optional dependencies failed (continuing)"
             
             echo "✅ Dependency installation complete"
             pip list | grep -E "(mpmath|sympy|numpy|scipy)" || echo "⚠️ Some critical packages missing"
@@ -88,7 +88,6 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
           PIP_NO_WARN_SCRIPT_LOCATION: 0
-          NUMEXPR_NUM_THREADS: 2
 
       - name: Create necessary directories
         run: |
