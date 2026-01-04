@@ -168,6 +168,15 @@
 
 - Trigger: schedule (`0 0 * * *`)
 
+### Kappa Phi Corrected Verification
+
+**Archivo:** `kappa-phi-corrected.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 5 * * *`)
+- Trigger: manual (workflow_dispatch)
+
 ### Kappa Pi Verification
 
 **Archivo:** `kappa-pi-verification.yml`
@@ -370,4 +379,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-29 22:28:51 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-04 05:57:15 UTC*

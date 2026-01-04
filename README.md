@@ -69,6 +69,14 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > - Predicciones falsables y ecosistema GitHub completo
 > - **~895 líneas, 32KB de documentación exhaustiva**
 
+> **🔢 NUEVO**: [**LA MATRIZ NUMÉRICA**](DESCUBRIMIENTOS_MATRIZ_NUMERICA.md) - Los números hablan, y revelan que f₀ es **imposible por casualidad**:
+> - **Suma = 361 = 19²**: Cuadrado perfecto (prob. 2.6%)
+> - **f₀/18 ≈ Schumann (7.83 Hz)**: 99.46% precisión
+> - **888/f₀ ≈ 2π**: Geometría pura (99.73% precisión)
+> - **Bandas cerebrales = armónicos exactos** de f₀ (100% en rango)
+> - **Probabilidad conjunta**: ~10⁻¹⁰ (6-9σ) - ¡IMPOSIBLE por azar!
+> - **→ Ejecuta**: `python scripts/validacion_matriz_numerica.py`
+
 ---
 
 ## ⚠️ Importante: Corrección Teórica
