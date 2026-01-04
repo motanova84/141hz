@@ -37,6 +37,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import json
 from datetime import datetime
+from collections import Counter
 import os
 
 # ============================================================================
@@ -155,7 +156,6 @@ def factorizar(n):
         factores.append(temp)
     
     # Agrupar factores repetidos
-    from collections import Counter
     contador = Counter(factores)
     
     partes = []
@@ -163,7 +163,7 @@ def factorizar(n):
         if count == 1:
             partes.append(str(factor))
         else:
-            partes.append(f"{factor}^{count}" if count > 1 else str(factor))
+            partes.append(f"{factor}^{count}")
     
     if len(partes) == 1 and '^' not in partes[0]:
         return f"{n} = " + "×".join(str(f) for f in factores)
