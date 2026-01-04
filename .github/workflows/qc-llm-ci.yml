@@ -35,7 +35,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     
     - name: Cache pip dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-qc-llm-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -114,7 +114,7 @@ jobs:
         sudo apt-get install -y build-essential gfortran
     
     - name: Cache pip dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-gw-${{ hashFiles('requirements.txt') }}

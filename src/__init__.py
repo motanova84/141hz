@@ -53,6 +53,19 @@ from .spectral_origin import (
     get_spectral_constants,
 )
 
+from .calabi_yau_invariant import (
+    CalabiYauQuintic,
+    LaplacianSpectrum,
+    get_k_pi,
+    verify_k_pi_invariant,
+    get_invariant_summary,
+    K_PI,
+    K_PI_EXPECTED,
+    MU_1,
+    MU_2,
+    NOETIC_PRIME,
+)
+
 __all__ = [
     # Constants
     'UniversalConstants',
@@ -86,6 +99,17 @@ __all__ = [
     'SpectralOrigin',
     'derive_f0_from_spectral',
     'get_spectral_constants',
+    # Calabi-Yau Invariant k_Π
+    'CalabiYauQuintic',
+    'LaplacianSpectrum',
+    'get_k_pi',
+    'verify_k_pi_invariant',
+    'get_invariant_summary',
+    'K_PI',
+    'K_PI_EXPECTED',
+    'MU_1',
+    'MU_2',
+    'NOETIC_PRIME',
     # Noetic Force
     'NoeticField',
     'NoeticForce',

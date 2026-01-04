@@ -46,7 +46,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-pycbc-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -137,7 +137,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-sage-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -218,7 +218,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-evac-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -289,7 +289,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-gwtc-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -354,7 +354,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-corr-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
