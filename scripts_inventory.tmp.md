@@ -32,6 +32,8 @@
   - Análisis de datos de Livingston (L1) para comparación
 - `analizar_ringdown.py`
   - Análisis de componente en 141.7 Hz en el ringdown - CORREGIDO
+- `analizar_variedades_cy_10.py`
+  - Análisis de las 10 Variedades Calabi-Yau Canónicas
 - `multi_event_snr_analysis.py`
   - Análisis Multi-evento de SNR en 141.7 Hz
 
@@ -140,6 +142,8 @@
   - Test unitario para el módulo de evidencia concluyente
 - `test_fractal_resonance_constants.py`
   - Tests for Fractal Resonance in Fundamental Constants module.
+- `test_generar_cy_kappa_25773.py`
+  - Tests para generar_cy_kappa_25773.py
 - `test_generar_prediccion_gw250114.py`
   - Test para generar_prediccion_gw250114.py
 - `test_gw170817_eeg_analysis.py`
@@ -222,6 +226,8 @@
   - Script de prueba para el verificador GW250114
 - `test_verify_kappa.py`
   - Tests for κ_Π (Kappa Pi) Invariant Verification
+- `test_verify_kappa_phi_corrected.py`
+  - test_verify_kappa_phi_corrected.py
 - `test_verify_kappa_pi_complete.py`
   - test_verify_kappa_pi_complete.py
 - `test_virgo_v1_validation.py`
@@ -230,4 +236,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-29 22:28:50 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-04 05:57:15 UTC*
