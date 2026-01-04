@@ -1110,6 +1110,13 @@ make clean-all  # Incluye entorno virtual
 
 <div align="center">
 
+[![CI](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg?branch=main)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
+[![CD](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml/badge.svg?branch=main)](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml)
+[![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
+[![codecov](https://codecov.io/gh/motanova84/141hz/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/141hz)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+![QCAL ∞³ Certified](https://img.shields.io/badge/QCAL%20∞³-Certified-141.7001Hz)
 [![CI](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
@@ -3915,6 +3922,29 @@ Complete Lean 4 formalization available in [`Core/FrequencyDerivation/`](Core/Fr
 - ✅ Zero axioms
 - ✅ Constructive proofs
 - ✅ Numerical bounds verified
+
+### Calabi-Yau Varieties Database
+
+A database of **150 authentic Calabi-Yau three-fold varieties** with verified Hodge numbers (h¹¹, h²¹) from the Kreuzer-Skarke and CICY databases:
+
+```python
+from calabi_yau_varieties import CalabiYauDatabase
+
+db = CalabiYauDatabase()
+quintic = db.get_quintic_fermat()  # (h¹¹=1, h²¹=101, χ=-200)
+
+# Analyze all 150 varieties
+for variety in db.get_all():
+    print(f"CY#{variety.id}: (h¹¹={variety.h11}, h²¹={variety.h21})")
+```
+
+**→ [CALABI_YAU_VARIETIES_README.md](CALABI_YAU_VARIETIES_README.md)** - Full documentation and usage guide
+
+Key features:
+- 📊 Export to CSV/JSON formats
+- 🔍 Filter by Hodge numbers or Euler characteristic
+- 📈 Visualization tools included
+- ✅ Verified against mathematical literature
 
 ## 🏗️ Architecture
 ```
