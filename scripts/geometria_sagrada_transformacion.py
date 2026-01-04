@@ -225,7 +225,9 @@ class SacredGeometryTransformer:
             dict: Análisis de manifestaciones esféricas
         """
         # Radio de coherencia noética (de geometria_unificada_141hz.py)
+        # Este valor también está documentado en GEOMETRIA_UNIFICADA.md
         R_PSI = mp.mpf("1.616255e12")  # m ≈ 10⁴⁷ ℓ_P ≈ 10.8 AU
+        AU_IN_METERS = mp.mpf("1.496e11")  # m - Unidad astronómica
         
         # Volumen de la esfera
         volume_sphere = (4/3) * PI * R_PSI**3
@@ -245,9 +247,17 @@ class SacredGeometryTransformer:
         # Energía cuántica
         E_f0 = H_PLANCK * self.f0
         
+        # Manifestaciones físicas documentadas
+        manifestations = {
+            "gravitational_waves": "Detectada en fusiones de agujeros negros (LIGO/Virgo)",
+            "brain_resonance": "Frecuencia gamma alta en coherencia neural",
+            "cosmic_structure": "Escala de coherencia en estructuras cosmológicas",
+            "quantum_field": "Modo vibracional del campo noésico Ψ"
+        }
+        
         return {
             "radius_psi_meters": float(R_PSI),
-            "radius_psi_au": float(R_PSI / mp.mpf("1.496e11")),  # AU
+            "radius_psi_au": float(R_PSI / AU_IN_METERS),
             "sphere_volume_m3": float(volume_sphere),
             "sphere_surface_m2": float(surface_area),
             "fundamental_frequency_hz": float(f_sphere),
@@ -255,12 +265,7 @@ class SacredGeometryTransformer:
             "wavelengths_in_circumference": float(n_wavelengths),
             "quantum_energy_j": float(E_f0),
             "quantum_energy_ev": float(E_f0 / mp.mpf("1.602176634e-19")),
-            "manifestations": {
-                "gravitational_waves": "Detectada en fusiones de agujeros negros (LIGO/Virgo)",
-                "brain_resonance": "Frecuencia gamma alta en coherencia neural",
-                "cosmic_structure": "Escala de coherencia en estructuras cosmológicas",
-                "quantum_field": "Modo vibracional del campo noésico Ψ"
-            }
+            "manifestations": manifestations
         }
     
     def complete_transformation(self):
