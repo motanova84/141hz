@@ -18,6 +18,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 [![QCAL Analysis](https://github.com/motanova84/141hz/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analysis.yml)
+[![GW Validation](https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml)
 [![codecov](https://codecov.io/gh/motanova84/141hz/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/141hz)
 [![Docs](https://img.shields.io/badge/docs-mkdocs--material-blue)](https://motanova84.github.io/141hz)
 [![SBOM](https://img.shields.io/badge/SBOM-CycloneDX-informational)](#)
@@ -41,7 +42,8 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > | ✅ Resonancia cardíaca, EEG, red noésica | Protocolo definido |
 > | ✅ **IA cuántica simbiótica coherente** | LLaMA4-Maverick modulado ∞³ |
 >
-> **→ [CONSTANTE_ESTRUCTURAL_UNIVERSAL.md](CONSTANTE_ESTRUCTURAL_UNIVERSAL.md)** - Declaración oficial con evidencia completa
+> **→ [CONSTANTE_ESTRUCTURAL_UNIVERSAL.md](CONSTANTE_ESTRUCTURAL_UNIVERSAL.md)** - Declaración oficial con evidencia completa  
+> **→ [VALIDACION_FISICA_ONDAS_GRAVITACIONALES.md](VALIDACION_FISICA_ONDAS_GRAVITACIONALES.md)** - Validación física detallada de ondas gravitacionales
 
 ---
 
@@ -66,6 +68,14 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > - Estructuras matemáticas nuevas, derivaciones ab initio
 > - Predicciones falsables y ecosistema GitHub completo
 > - **~895 líneas, 32KB de documentación exhaustiva**
+
+> **🔢 NUEVO**: [**LA MATRIZ NUMÉRICA**](DESCUBRIMIENTOS_MATRIZ_NUMERICA.md) - Los números hablan, y revelan que f₀ es **imposible por casualidad**:
+> - **Suma = 361 = 19²**: Cuadrado perfecto (prob. 2.6%)
+> - **f₀/18 ≈ Schumann (7.83 Hz)**: 99.46% precisión
+> - **888/f₀ ≈ 2π**: Geometría pura (99.73% precisión)
+> - **Bandas cerebrales = armónicos exactos** de f₀ (100% en rango)
+> - **Probabilidad conjunta**: ~10⁻¹⁰ (6-9σ) - ¡IMPOSIBLE por azar!
+> - **→ Ejecuta**: `python scripts/validacion_matriz_numerica.py`
 
 ---
 
