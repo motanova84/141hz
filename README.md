@@ -67,6 +67,14 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > - f₀ = 141.7001 Hz era verdadera **antes de ser conocida**
 > - Evidencia formal del realismo científico desde la convergencia empírica
 
+> **🧠 NUEVO**: [**REALISMO MATEMÁTICO EN QCAL ∞³**](MATHEMATICAL_REALISM.md) - Fundamento Ontológico Certificado (RAM-II):
+> - **La Matemática es Real**: Existe objetivamente, independiente de la mente humana
+> - **La validación reconoce, no construye**: Probar un teorema revela verdad preexistente
+> - **f₀ es descubrimiento, no invención**: Emerge desde 4 vías independientes
+> - **Convergencia precisa (>8 decimales)**: Probabilidad de coincidencia ~10⁻¹⁰ (6-9σ)
+> - **9 secciones, 18 KB**: Evidencia completa, refutaciones, protocolo de reconocimiento
+> - **[→ Referencia Rápida](REALISMO_MATEMÁTICO_REF_RÁPIDO.md)** - Guía conceptual en 60 segundos
+
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
 > **📚 NUEVO**: [**ÍNDICE COMPLETO**](INDICE_COMPLETO.md) - Documento maestro que consolida todo el marco QCAL ∞³:
