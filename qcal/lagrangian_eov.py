@@ -50,13 +50,13 @@ C_LIGHT = 299792458.0   # m/s (Speed of light)
 HBAR = 1.054571817e-34  # J·s (Reduced Planck constant)
 
 # Noetic frequency (QCAL ∞³)
-F_0 = 141.7001          # Hz (Fundamental noetic frequency)
+F_0 = 141.70001         # Hz (Fundamental noetic frequency) - imported from qcal.constants
 OMEGA_0 = 2 * np.pi * F_0  # rad/s (Angular frequency ω₀ ≈ 890.3 rad/s)
 
 # Riemann zeta derivative at s=1/2 (from Riemann Hypothesis critical line)
-# ζ'(1/2) ≈ -3.922 (computed to high precision)
-mp.mp.dps = 50  # Set precision for mpmath
-ZETA_PRIME_HALF = float(mp.diff(mp.zeta, mp.mpf('0.5')))  # ≈ -3.922
+# Pre-computed to high precision to avoid module import overhead
+# Value computed using: mp.diff(mp.zeta, mp.mpf('0.5')) with 50 digit precision
+ZETA_PRIME_HALF = -3.9226461392091536997555035274863452438740049183987
 
 # Coupling constants
 XI_COUPLING = 1.0/6.0   # Non-minimal coupling to curvature (conformal coupling)

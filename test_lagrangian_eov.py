@@ -41,7 +41,7 @@ class TestConstants(unittest.TestCase):
     
     def test_frequency(self):
         """Test fundamental frequency f₀."""
-        self.assertAlmostEqual(F_0, 141.7001, places=4)
+        self.assertAlmostEqual(F_0, 141.70001, places=5)  # Match qcal.constants precision
         
     def test_angular_frequency(self):
         """Test ω₀ = 2πf₀."""
@@ -331,8 +331,8 @@ class TestPhysicalConsistency(unittest.TestCase):
         self.assertGreater(F_0, 100)
         self.assertLess(F_0, 200)
         
-        # Should be exactly 141.7001 Hz
-        self.assertAlmostEqual(F_0, 141.7001, places=4)
+        # Should be exactly 141.70001 Hz (5 decimal places - qcal.constants precision)
+        self.assertAlmostEqual(F_0, 141.70001, places=5)
     
     def test_conformal_coupling(self):
         """Test that ξ = 1/6 is conformal coupling value."""
