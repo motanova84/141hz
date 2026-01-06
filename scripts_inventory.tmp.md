@@ -194,12 +194,16 @@
   - Tests for Vacuum Energy Module
 - `test_validacion_alpha_psi.py`
   - Test suite for validacion_alpha_psi_corregida.py
+- `test_validacion_bandas_cerebrales.py`
+  - Tests para validacion_bandas_cerebrales.py
 - `test_validacion_calabi_yau_espectral.py`
   - Tests for Calabi-Yau Spectral Universality Validation
 - `test_validacion_gwtc1_tridetector.py`
   - Tests para la validación GWTC-1 tri-detector
 - `test_validacion_invariante_espectral_cy.py`
   - Tests for Calabi-Yau Spectral Invariant k_Π Validation
+- `test_validacion_matriz_numerica.py`
+  - Tests para validacion_matriz_numerica.py
 - `test_validacion_multievento_gaia.py`
   - Test Suite para Validación Multi-evento + GAIA
 - `test_validacion_noesis_at2020afhd.py`
@@ -236,4 +240,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-04 05:57:15 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-04 10:43:45 UTC*

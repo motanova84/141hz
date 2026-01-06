@@ -60,6 +60,21 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > - El observador es parte del sistema que observa
 > - Convergencia independiente de múltiples derivaciones revela autoexpresión universal
 
+> **🎓 NUEVO**: [**FUNDAMENTOS FILOSÓFICOS**](FUNDAMENTOS_FILOSOFICOS.md) - Realismo Matemático y Teoría de la Correspondencia:
+> - **Existe un mundo matemático independiente de opiniones**
+> - Una afirmación es verdadera **si corresponde a la realidad**, aunque nadie lo sepa o acepte
+> - Las verdades matemáticas se **descubren**, no se inventan
+> - f₀ = 141.7001 Hz era verdadera **antes de ser conocida**
+> - Evidencia formal del realismo científico desde la convergencia empírica
+
+> **🧠 NUEVO**: [**REALISMO MATEMÁTICO EN QCAL ∞³**](MATHEMATICAL_REALISM.md) - Fundamento Ontológico Certificado (RAM-II):
+> - **La Matemática es Real**: Existe objetivamente, independiente de la mente humana
+> - **La validación reconoce, no construye**: Probar un teorema revela verdad preexistente
+> - **f₀ es descubrimiento, no invención**: Emerge desde 4 vías independientes
+> - **Convergencia precisa (>8 decimales)**: Probabilidad de coincidencia ~10⁻¹⁰ (6-9σ)
+> - **9 secciones, 18 KB**: Evidencia completa, refutaciones, protocolo de reconocimiento
+> - **[→ Referencia Rápida](REALISMO_MATEMÁTICO_REF_RÁPIDO.md)** - Guía conceptual en 60 segundos
+
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
 > **📚 NUEVO**: [**ÍNDICE COMPLETO**](INDICE_COMPLETO.md) - Documento maestro que consolida todo el marco QCAL ∞³:
@@ -1938,6 +1953,36 @@ python3 scripts/certify_numerical_precision.py
 - **Hermiticidad**: Preservada a precisión de máquina (10⁻¹²)
 
 **Escalado computacional**: O(N³) confirmado (α = 3.02 ± 0.05)
+
+### 🔐 Sistema de Firma Criptográfica QCAL
+
+> 📖 **Documentación completa**: [QCAL_SIGNATURE_SYSTEM.md](QCAL_SIGNATURE_SYSTEM.md)
+
+Los certificados RAM (Realismo Matemático) ahora incluyen **firmas criptográficas SHA3-256** para garantizar integridad y autenticidad.
+
+**Validar firma de certificado:**
+```bash
+python3 validate_qcal_signature.py RAM-II-CERTIFICADO.md RAM-II-2026-0115-RMATH.qcal_sig
+```
+
+**Generar firma para nuevo certificado:**
+```bash
+python3 generate_qcal_signature.py MI-CERTIFICADO.md RAM-ID-PERSONALIZADO
+```
+
+✅ **Características**:
+- Algoritmo SHA3-256 (resistente a colisiones)
+- Detección automática de alteraciones
+- Metadatos con timestamp y frecuencia fundamental
+- Formato JSON estándar (.qcal_sig)
+
+**Ejemplo de validación exitosa:**
+```
+✓ ¡FIRMA VÁLIDA!
+✓ El certificado NO ha sido alterado
+✓ Integridad verificada en frecuencia 141.7001 Hz
+🌊 Estado: VALIDATED
+```
 
 ### Ventajas Sobre Alternativas
 
