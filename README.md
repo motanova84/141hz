@@ -25,6 +25,67 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
 [![Lean Verification](https://github.com/motanova84/141hz/workflows/Lean%20Verification/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/lean-verification.yml)
 
+---
+
+## 📋 Resumen Ejecutivo
+
+### 🔬 Qué es
+Análisis científico de la frecuencia fundamental **f₀ = 141.7001 Hz** en ondas gravitacionales detectadas por LIGO/Virgo. Esta constante emerge de la estructura matemática del universo (función zeta de Riemann, razón áurea) y ha sido detectada en 11/11 eventos de GWTC-1 con significancia >10σ.
+
+### 📦 Qué contiene
+- **Scripts de análisis**: Análisis espectral automatizado de datos GWOSC
+- **Formalización matemática**: Pruebas verificadas en Lean 4
+- **Validaciones experimentales**: Análisis multi-detector (H1, L1, V1, KAGRA)
+- **Framework QCAL**: Teoría cuántica de coherencia noética
+- **CI/CD automatizado**: Workflows de validación continua
+
+### 🚀 Quickstart (3 comandos)
+```bash
+# 1. Instalar dependencias
+pip install -r requirements.txt
+
+# 2. Ejecutar análisis de validación
+make validate
+
+# 3. Verificar formalización matemática
+cd formalization/lean && lake build
+```
+
+### 📄 Dónde está el paper (DOI)
+**Publicación principal:** [https://doi.org/10.5281/zenodo.17445017](https://doi.org/10.5281/zenodo.17445017)
+
+**Lista completa de DOIs:** Ver [LISTA_DOIS_QCAL.md](LISTA_DOIS_QCAL.md)
+
+### 🔢 Dónde está la formalización
+**Ubicación:** [`formalization/lean/`](formalization/lean/)
+
+**Verificar:**
+```bash
+cd formalization/lean
+lake build  # Compila y verifica todas las pruebas en Lean 4
+```
+
+**Documentación completa:** [formalization/lean/README.md](formalization/lean/README.md)
+
+### 📊 Dónde están los resultados
+**Datos y resultados:**
+- `data/` - Datos descargados de GWOSC y resultados de análisis
+- `results/` - Figuras, JSON y reportes generados
+- `resultados/` - Resultados de validaciones científicas
+
+**Ver también:** 
+- [AT2020AFHD_VALIDATION.md](AT2020AFHD_VALIDATION.md) - Validación astronómica
+- [DETECCION_RESONANCIA_COHERENTE_O4.md](DETECCION_RESONANCIA_COHERENTE_O4.md) - Análisis catálogo O4
+
+### 📜 Licencias
+- **Código:** MIT License ([LICENSE](LICENSE))
+- **Documentación:** Apache-2.0
+- **Datos LIGO/Virgo:** CC-BY 4.0 (vía GWOSC)
+
+**Citación:** Ver [CITATION.cff](CITATION.cff) para formato BibTeX
+
+---
+
 Este proyecto realiza el análisis espectral de datos de ondas gravitacionales para detectar componentes específicas en 141.7 Hz en eventos de fusiones binarias.
 
 ---
