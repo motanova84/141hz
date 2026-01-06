@@ -37,7 +37,7 @@ class TestRAMModuleIntegration:
         content = ref_path.read_text()
         assert "REFERENCIA RÁPIDA" in content
         assert "CONCEPTOS CLAVE" in content
-        assert "60 segundos" in content or "60 segundos" in content
+        assert "60 segundos" in content, "Quick reference should mention 60-second overview"
     
     def test_qcal_beacon_updated(self):
         """Test that .qcal_beacon has been updated with RAM metadata."""
@@ -84,8 +84,9 @@ class TestRAMModuleIntegration:
         
         # Check for philosophical content
         assert "REALISMO MATEMÁTICO" in content or "Realismo Matemático" in content
-        assert "MATHEMATICAL_REALISM.md" in content
-        assert "REALISMO_MATEMÁTICO_REF_RÁPIDO.md" in content or "Referencia Rápida" in content
+        assert "MATHEMATICAL_REALISM.md" in content, "Should link to main documentation"
+        quick_ref_link = "REALISMO_MATEMÁTICO_REF_RÁPIDO.md" in content or "Referencia Rápida" in content
+        assert quick_ref_link, "Should link to quick reference guide"
     
     def test_implementation_summary_exists(self):
         """Test that implementation summary for RAM exists."""
@@ -290,7 +291,8 @@ class TestRAMPhilosophicalContent:
         
         # Should provide concrete evidence
         assert "convergencia" in content.lower(), "Convergence should be evidence"
-        assert "11/11" in content or "11 de 11" in content, "LIGO detection should be mentioned"
+        detection_mentioned = "11/11" in content or "11 de 11" in content
+        assert detection_mentioned, "All 11/11 LIGO GWTC-1 events detection should be mentioned"
         assert "precisión" in content.lower() or "precision" in content.lower()
     
     def test_scientific_implications(self):
