@@ -17,6 +17,7 @@ Date: 2025-01-06
 """
 
 import argparse
+import datetime
 import hashlib
 import json
 import os
@@ -217,6 +218,29 @@ def generate_environment_snapshot() -> Dict:
     Returns:
         Dictionary with environment information
     """
+    import datetime
+    
+    # Get git info safely
+    try:
+        git_commit = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True
+        ).stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        git_commit = "Not in git repo"
+    
+    try:
+        git_branch = subprocess.run(
+            ["git", "branch", "--show-current"],
+            capture_output=True,
+            text=True,
+            check=True
+        ).stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        git_branch = "Not in git repo"
+    
     return {
         "python_version": get_python_version(),
         "platform": {
@@ -224,22 +248,10 @@ def generate_environment_snapshot() -> Dict:
             "release": platform.release(),
             "machine": platform.machine(),
         },
-        "timestamp": subprocess.run(
-            ["date", "-u", "+%Y-%m-%dT%H:%M:%SZ"],
-            capture_output=True,
-            text=True
-        ).stdout.strip(),
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00', 'Z'),
         "git": {
-            "commit": subprocess.run(
-                ["git", "rev-parse", "HEAD"],
-                capture_output=True,
-                text=True
-            ).stdout.strip() or "Not in git repo",
-            "branch": subprocess.run(
-                ["git", "branch", "--show-current"],
-                capture_output=True,
-                text=True
-            ).stdout.strip() or "Not in git repo",
+            "commit": git_commit,
+            "branch": git_branch,
         }
     }
 

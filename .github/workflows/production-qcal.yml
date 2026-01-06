@@ -209,6 +209,8 @@ jobs:
             echo "### AT2020afhd Noesis Verification" >> $GITHUB_STEP_SUMMARY
             echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
             cat results/validacion_noesis_at2020afhd.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
           if [ -f "results/at2020afhd_validation.json" ]; then
             echo "### AT2020afhd Periodicity Validation" >> $GITHUB_STEP_SUMMARY
             echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
