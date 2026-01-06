@@ -10,6 +10,7 @@ import sys
 import json
 import tempfile
 import subprocess
+import traceback
 from pathlib import Path
 
 
@@ -151,7 +152,6 @@ def main():
         return 1
     except Exception as e:
         print(f"\n❌ Unexpected error: {e}")
-        import traceback
         traceback.print_exc()
         return 1
 

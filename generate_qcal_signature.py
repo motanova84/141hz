@@ -15,6 +15,7 @@ Ejemplo:
 import sys
 import json
 import hashlib
+import traceback
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -32,8 +33,10 @@ def compute_sha3_256(file_path: Path) -> str:
     sha3 = hashlib.sha3_256()
     
     with open(file_path, 'rb') as f:
-        while chunk := f.read(8192):
+        chunk = f.read(8192)
+        while chunk:
             sha3.update(chunk)
+            chunk = f.read(8192)
     
     return sha3.hexdigest()
 
@@ -126,7 +129,6 @@ def main():
         
     except Exception as e:
         print(f"\n❌ Error durante la generación: {e}")
-        import traceback
         traceback.print_exc()
         sys.exit(1)
 
