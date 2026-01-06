@@ -1954,6 +1954,36 @@ python3 scripts/certify_numerical_precision.py
 
 **Escalado computacional**: O(N³) confirmado (α = 3.02 ± 0.05)
 
+### 🔐 Sistema de Firma Criptográfica QCAL
+
+> 📖 **Documentación completa**: [QCAL_SIGNATURE_SYSTEM.md](QCAL_SIGNATURE_SYSTEM.md)
+
+Los certificados RAM (Realismo Matemático) ahora incluyen **firmas criptográficas SHA3-256** para garantizar integridad y autenticidad.
+
+**Validar firma de certificado:**
+```bash
+python3 validate_qcal_signature.py RAM-II-CERTIFICADO.md RAM-II-2026-0115-RMATH.qcal_sig
+```
+
+**Generar firma para nuevo certificado:**
+```bash
+python3 generate_qcal_signature.py MI-CERTIFICADO.md RAM-ID-PERSONALIZADO
+```
+
+✅ **Características**:
+- Algoritmo SHA3-256 (resistente a colisiones)
+- Detección automática de alteraciones
+- Metadatos con timestamp y frecuencia fundamental
+- Formato JSON estándar (.qcal_sig)
+
+**Ejemplo de validación exitosa:**
+```
+✓ ¡FIRMA VÁLIDA!
+✓ El certificado NO ha sido alterado
+✓ Integridad verificada en frecuencia 141.7001 Hz
+🌊 Estado: VALIDATED
+```
+
 ### Ventajas Sobre Alternativas
 
 | Característica | Nuestra Implementación | Otros Frameworks |
