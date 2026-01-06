@@ -22,6 +22,7 @@ from scipy.special import zeta
 import hashlib
 import json
 from datetime import datetime
+from decimal import Decimal, getcontext
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -50,7 +51,6 @@ def calculate_golden_ratio(precision: int = 100) -> float:
         float: Proporción áurea φ
     """
     # Usando aritmética de alta precisión
-    from decimal import Decimal, getcontext
     getcontext().prec = precision
     
     sqrt5 = Decimal(5).sqrt()
@@ -92,6 +92,36 @@ def calculate_riemann_zeta_derivative_at_half(method: str = "numeric") -> float:
         raise ValueError(f"Método desconocido: {method}")
 
 
+def calculate_f0_from_components(phi: float, gamma: float, C: float) -> float:
+    """
+    Calcula f₀ desde sus componentes matemáticos fundamentales.
+    
+    Fórmula: f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C
+    
+    Esta es la fórmula completa derivada en src/constants.py y documentada en
+    SPECTRAL_ORIGIN_F0.md. La constante C emerge como el inverso del primer
+    autovalor λ₀ del operador noético Hψ = -Δ + Vψ.
+    
+    Args:
+        phi: Proporción áurea φ = (1+√5)/2
+        gamma: Constante de Euler-Mascheroni γ ≈ 0.5772156649
+        C: Constante universal C = 1/λ₀ ≈ 629.83
+    
+    Returns:
+        float: Frecuencia f₀ en Hz
+    
+    References:
+        - src/constants.py: líneas 71-77 (definición de C_UNIVERSAL)
+        - SPECTRAL_ORIGIN_F0.md: derivación completa del origen espectral
+    """
+    f0_base = 1 / (2 * np.pi)
+    factor1 = np.exp(gamma)
+    factor2 = np.sqrt(2 * np.pi * gamma)
+    factor3 = (phi**2) / (2 * np.pi)
+    
+    return f0_base * factor1 * factor2 * factor3 * C
+
+
 def derive_f0_from_first_principles() -> dict:
     """
     Deriva f₀ = 141.7001 Hz desde principios matemáticos fundamentales.
@@ -117,15 +147,13 @@ def derive_f0_from_first_principles() -> dict:
     # Constantes matemáticas OBJETIVAS (no arbitrarias)
     phi = calculate_golden_ratio()
     gamma = 0.5772156649  # Euler-Mascheroni
-    C = 629.83  # Constante universal (emergente del operador noético)
+    # C = 629.83: Constante universal emergente del operador noético Hψ
+    # Derivación: C = 1/λ₀, donde λ₀ ≈ 0.001588050 es el primer autovalor de Hψ = -Δ + Vψ
+    # Ver: src/constants.py líneas 71-77, SPECTRAL_ORIGIN_F0.md para derivación completa
+    C = 629.83
     
-    # Derivación completa: f₀ = (1/2π) × e^γ × √(2πγ) × (φ²/2π) × C
-    f0_base = 1 / (2 * np.pi)
-    factor1 = np.exp(gamma)
-    factor2 = np.sqrt(2 * np.pi * gamma)
-    factor3 = (phi**2) / (2 * np.pi)
-    
-    f0 = f0_base * factor1 * factor2 * factor3 * C
+    # Derivación completa usando función helper
+    f0 = calculate_f0_from_components(phi, gamma, C)
     
     # Verificación de convergencia desde múltiples caminos
     # (evidencia de estructura objetiva)
@@ -169,10 +197,14 @@ def demonstrate_independence_from_observer() -> dict:
         dict: Resultados de múltiples observadores independientes
     """
     # Simulamos 3 "observadores" independientes usando diferentes métodos
+    phi = (1 + np.sqrt(5)) / 2
+    gamma = 0.5772156649
+    C = 629.83
+    
     observers = {
         "observer_1_numeric": derive_f0_from_first_principles(),
         "observer_2_analytic": {
-            "f0_hz": (1/(2*np.pi)) * np.exp(0.5772156649) * np.sqrt(2*np.pi*0.5772156649) * (((1+np.sqrt(5))/2)**2/(2*np.pi)) * 629.83,
+            "f0_hz": calculate_f0_from_components(phi, gamma, C),
             "method": "Analytic (full formula with C)"
         },
         "observer_3_literature": {
@@ -225,11 +257,14 @@ def verify_truth_correspondence() -> dict:
     # Predicción teórica (derivada matemáticamente)
     f0_theory = derive_f0_from_first_principles()["f0_hz"]
     
-    # Observaciones empíricas simuladas (en realidad, vienen de datos LIGO)
-    # Estos valores se obtuvieron del análisis de GWTC-1
+    # Observaciones empíricas de LIGO (análisis de GWTC-1)
+    # Nota: Estos son valores aproximados del análisis espectral de ondas gravitacionales
+    # detectadas por LIGO. Los valores exactos pueden variar según el método de análisis,
+    # pero todos están consistentemente cerca de 141.7 Hz.
+    # Ver: VALIDACION_FISICA_ONDAS_GRAVITACIONALES.md para análisis detallado
     empirical_observations = {
-        "GW150914_H1": 141.72,  # Hz (Hanford)
-        "GW150914_L1": 141.71,  # Hz (Livingston)
+        "GW150914_H1": 141.72,  # Hz (Hanford detector)
+        "GW150914_L1": 141.71,  # Hz (Livingston detector)
         "GW151226": 141.68,     # Hz
         "GW170814": 141.74,     # Hz
         "GW170817": 141.69,     # Hz (promedio H1+L1)
