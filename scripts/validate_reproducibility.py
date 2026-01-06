@@ -74,7 +74,8 @@ def load_env_lock(path: Path = Path("ENV.lock")) -> Dict[str, str]:
                 parts = line.split('==')
                 if len(parts) == 2:
                     pkg_name = parts[0].strip()
-                    version = parts[1].split()[0].strip()  # Remove any trailing content
+                    # Extract version, removing any trailing whitespace or comments
+                    version = parts[1].split()[0].strip()
                     packages[pkg_name] = version
     
     return packages
@@ -154,6 +155,8 @@ def compute_file_checksum(filepath: Path, algorithm: str = "sha256") -> str:
     """
     h = hashlib.new(algorithm)
     
+    # Read file in 8KB chunks to handle large files efficiently
+    # while avoiding excessive memory usage
     with open(filepath, 'rb') as f:
         while chunk := f.read(8192):
             h.update(chunk)
@@ -181,6 +184,9 @@ def verify_checksums(
     if not checksum_file.exists():
         return False, [f"Checksum file not found: {checksum_file}"]
     
+    # Resolve results_dir to absolute path for security
+    results_dir_abs = results_dir.resolve()
+    
     mismatches = []
     
     with open(checksum_file) as f:
@@ -192,7 +198,19 @@ def verify_checksums(
             parts = line.split()
             if len(parts) >= 2:
                 expected_hash = parts[0]
-                filepath = results_dir / parts[1].lstrip('./')
+                # Security: Use pathlib to resolve and validate path
+                # Prevent directory traversal attacks
+                raw_path = parts[1].lstrip('./')
+                filepath = (results_dir / raw_path).resolve()
+                
+                # Ensure resolved path is within results_dir
+                try:
+                    filepath.relative_to(results_dir_abs)
+                except ValueError:
+                    mismatches.append(
+                        f"Security: Path outside results directory: {raw_path}"
+                    )
+                    continue
                 
                 if not filepath.exists():
                     mismatches.append(f"File not found: {filepath}")
@@ -246,7 +264,7 @@ def generate_environment_snapshot() -> Dict:
             "release": platform.release(),
             "machine": platform.machine(),
         },
-        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00', 'Z'),
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
         "git": {
             "commit": git_commit,
             "branch": git_branch,

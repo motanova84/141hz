@@ -150,9 +150,13 @@ jobs:
         if: always()
         run: |
           mkdir -p results
-          find results/ -type f -name "*.json" -exec sha256sum {} \; > results/checksums.txt || echo "No results to checksum"
-          if [ -f "results/checksums.txt" ]; then
-            echo "Generated checksums for $(wc -l < results/checksums.txt) files"
+          if [ -d "results" ] && [ -r "results" ]; then
+            find results/ -type f -name "*.json" -exec sha256sum {} \; > results/checksums.txt || echo "No results to checksum"
+            if [ -f "results/checksums.txt" ]; then
+              echo "Generated checksums for $(wc -l < results/checksums.txt) files"
+            fi
+          else
+            echo "Results directory not accessible"
           fi
 
       - name: Generate validation summary
@@ -173,7 +177,8 @@ jobs:
           if [ -f "results/environment_snapshot.json" ]; then
             echo "### Environment Snapshot" >> $GITHUB_STEP_SUMMARY
             echo '```json' >> $GITHUB_STEP_SUMMARY
-            cat results/environment_snapshot.json >> $GITHUB_STEP_SUMMARY
+            # Limit output to first 50 lines to avoid exposing sensitive data or overloading summary
+            cat results/environment_snapshot.json | head -50 >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
           fi
