@@ -218,8 +218,6 @@ def generate_environment_snapshot() -> Dict:
     Returns:
         Dictionary with environment information
     """
-    import datetime
-    
     # Get git info safely
     try:
         git_commit = subprocess.run(
