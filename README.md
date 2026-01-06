@@ -3959,6 +3959,74 @@ curl -X POST "http://localhost:8000/validate" \
   -d '{"text": "Quantum coherence in language models..."}'
 ```
 
+## 🔒 Seguridad y Reproducibilidad
+
+Este proyecto implementa medidas exhaustivas de seguridad y reproducibilidad científica.
+
+### 📋 Documentación de Seguridad
+
+- **[SEGURIDAD.md](SEGURIDAD.md)** - Política de seguridad completa (español)
+- **[SECURITY.md](SECURITY.md)** - Security policy (English)
+- **[RESUMEN DE SEGURIDAD.md](RESUMEN%20DE%20SEGURIDAD.md)** - Resumen de implementación de seguridad
+
+### 🔁 Reproducibilidad Garantizada
+
+El proyecto utiliza múltiples capas para asegurar reproducibilidad completa:
+
+1. **ENV.lock** - Versiones exactas de todas las dependencias
+2. **Checksums SHA256** - Verificación de integridad de resultados
+3. **Snapshots de Entorno** - Documentación completa del entorno computacional
+4. **Pipelines Reproducibles** - Scripts automatizados en `repro/`
+
+```bash
+# Instalación reproducible
+pip install -r ENV.lock
+
+# Validar reproducibilidad
+python scripts/validate_reproducibility.py --strict
+
+# Generar snapshot de entorno
+python scripts/validate_reproducibility.py --generate-snapshot --output env.json
+
+# Pipeline reproducible GWTC-1
+cd repro/GWTC-1/
+./run.sh
+```
+
+### 📖 Guía Completa
+
+- **[REPRODUCIBILIDAD.md](REPRODUCIBILIDAD.md)** - Guía completa de reproducibilidad
+  - Instalación reproducible paso a paso
+  - Verificación de integridad de datos
+  - Pipelines automatizados
+  - Mejores prácticas para investigadores
+  - Resolución de problemas comunes
+
+### ✅ Verificación de Seguridad
+
+El proyecto incluye escaneo automatizado de seguridad:
+
+```bash
+# Escanear vulnerabilidades en dependencias
+pip-audit -r ENV.lock
+
+# Verificar que no hay tokens en el código
+python tests/test_security_no_tokens.py
+```
+
+### 🔐 Workflows de CI/CD
+
+Los workflows de GitHub Actions incluyen:
+
+- ✅ Instalación desde ENV.lock (reproducibilidad)
+- ✅ Generación de snapshots de entorno
+- ✅ Checksums SHA256 de todos los resultados
+- ✅ Escaneo semanal de vulnerabilidades (pip-audit)
+- ✅ Validación de compatibilidad Python 3.11 y 3.12
+- ✅ Retención de 30 días para artefactos de producción
+
+**Ver**: [`.github/workflows/production-qcal.yml`](.github/workflows/production-qcal.yml)
+
 ## 📐 Mathematical Foundation
 
 The fundamental frequency derives from:
