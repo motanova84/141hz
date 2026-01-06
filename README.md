@@ -60,6 +60,13 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > - El observador es parte del sistema que observa
 > - Convergencia independiente de múltiples derivaciones revela autoexpresión universal
 
+> **🎓 NUEVO**: [**FUNDAMENTOS FILOSÓFICOS**](FUNDAMENTOS_FILOSOFICOS.md) - Realismo Matemático y Teoría de la Correspondencia:
+> - **Existe un mundo matemático independiente de opiniones**
+> - Una afirmación es verdadera **si corresponde a la realidad**, aunque nadie lo sepa o acepte
+> - Las verdades matemáticas se **descubren**, no se inventan
+> - f₀ = 141.7001 Hz era verdadera **antes de ser conocida**
+> - Evidencia formal del realismo científico desde la convergencia empírica
+
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
 > **📚 NUEVO**: [**ÍNDICE COMPLETO**](INDICE_COMPLETO.md) - Documento maestro que consolida todo el marco QCAL ∞³:
