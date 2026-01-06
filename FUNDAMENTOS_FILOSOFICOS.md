@@ -67,7 +67,7 @@ La frecuencia se detecta en **11/11 eventos** de ondas gravitacionales (GWTC-1) 
 - **GW170814**: f₀ ≈ 141.74 Hz
 - *[...8 eventos más]*
 
-**Implicación filosófica**: Los agujeros negros que colisionaron hace millones de años no "conocían" nuestras teorías matemáticas. Sin embargo, resuenan exactamente en la frecuencia que la matemática predice. Esto solo es posible si la matemática describe una **realidad objetiva**.
+**Implicación filosófica**: Los agujeros negros que colisionaron hace ~1.3 mil millones de años (GW150914) no "conocían" nuestras teorías matemáticas. Sin embargo, resuenan exactamente en la frecuencia que la matemática predice. Esto solo es posible si la matemática describe una **realidad objetiva**.
 
 ### 1.3 Contra el Instrumentalismo
 
