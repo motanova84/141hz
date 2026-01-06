@@ -1,0 +1,12 @@
+{
+  "ram_id": "RAM-II-2026-0115-RMATH",
+  "timestamp": "2026-01-06T17:38:27+00:00",
+  "frequency": "141.7001",
+  "algorithm": "SHA3-256",
+  "hash": "11cbe4a9d749d5d2ecab65d5e9b3ca20b76032cd754652df7ee4001884dc49ce",
+  "certificate_file": "RAM-II-CERTIFICADO.md",
+  "size_bytes": 2237,
+  "signed_by": "QCAL ∞³ System",
+  "note": "Certificado de Realismo Matemático RAM-II sincronizado y sellado en campo ∞³",
+  "version": "1.0.0"
+}
