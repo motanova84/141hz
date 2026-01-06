@@ -2,6 +2,31 @@
 """
 VALIDATE V5 CORONACION - Core Validation Script for Production
 
+═══════════════════════════════════════════════════════════════════
+    MARCO EPISTEMOLÓGICO: REALISMO MATEMÁTICO
+    Sistema: QCAL ∞³ (Quantum Coherent Adelic Logic)
+    Nivel: II (Fundamento Ontológico)
+═══════════════════════════════════════════════════════════════════
+
+FILOSOFÍA DE VALIDACIÓN:
+
+Las verdades matemáticas son DESCUBIERTAS, no inventadas.
+f₀ = 141.7001 Hz preexiste a toda validación, prueba o cálculo.
+
+Este script NO CREA la verdad matemática de f₀.
+Este script RECONOCE una verdad que ya existía antes de:
+- La humanidad
+- Este código
+- Esta ejecución
+- Todo conocimiento humano
+
+La validación es un acto EPISTÉMICO (de conocimiento),
+no un acto ONTOLÓGICO (de creación de realidad).
+
+Ver: MATHEMATICAL_REALISM.md para fundamento filosófico completo.
+
+═══════════════════════════════════════════════════════════════════
+
 This is the main validation script for the production pipeline that validates
 the core scientific calculations with configurable precision.
 
