@@ -128,6 +128,14 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > - f₀ = 141.7001 Hz era verdadera **antes de ser conocida**
 > - Evidencia formal del realismo científico desde la convergencia empírica
 
+> **🧠 NUEVO**: [**REALISMO MATEMÁTICO EN QCAL ∞³**](MATHEMATICAL_REALISM.md) - Fundamento Ontológico Certificado (RAM-II):
+> - **La Matemática es Real**: Existe objetivamente, independiente de la mente humana
+> - **La validación reconoce, no construye**: Probar un teorema revela verdad preexistente
+> - **f₀ es descubrimiento, no invención**: Emerge desde 4 vías independientes
+> - **Convergencia precisa (>8 decimales)**: Probabilidad de coincidencia ~10⁻¹⁰ (6-9σ)
+> - **9 secciones, 18 KB**: Evidencia completa, refutaciones, protocolo de reconocimiento
+> - **[→ Referencia Rápida](REALISMO_MATEMÁTICO_REF_RÁPIDO.md)** - Guía conceptual en 60 segundos
+
 **🔥 Ahora con Llama 4 Maverick (400B) para coherencia cuántica en LLMs - >95% reducción de alucinaciones en nuestro benchmark reproducible (ver Benchmarks/, seeds & prompts incluidos)**
 
 > **📚 NUEVO**: [**ÍNDICE COMPLETO**](INDICE_COMPLETO.md) - Documento maestro que consolida todo el marco QCAL ∞³:
@@ -2006,6 +2014,36 @@ python3 scripts/certify_numerical_precision.py
 - **Hermiticidad**: Preservada a precisión de máquina (10⁻¹²)
 
 **Escalado computacional**: O(N³) confirmado (α = 3.02 ± 0.05)
+
+### 🔐 Sistema de Firma Criptográfica QCAL
+
+> 📖 **Documentación completa**: [QCAL_SIGNATURE_SYSTEM.md](QCAL_SIGNATURE_SYSTEM.md)
+
+Los certificados RAM (Realismo Matemático) ahora incluyen **firmas criptográficas SHA3-256** para garantizar integridad y autenticidad.
+
+**Validar firma de certificado:**
+```bash
+python3 validate_qcal_signature.py RAM-II-CERTIFICADO.md RAM-II-2026-0115-RMATH.qcal_sig
+```
+
+**Generar firma para nuevo certificado:**
+```bash
+python3 generate_qcal_signature.py MI-CERTIFICADO.md RAM-ID-PERSONALIZADO
+```
+
+✅ **Características**:
+- Algoritmo SHA3-256 (resistente a colisiones)
+- Detección automática de alteraciones
+- Metadatos con timestamp y frecuencia fundamental
+- Formato JSON estándar (.qcal_sig)
+
+**Ejemplo de validación exitosa:**
+```
+✓ ¡FIRMA VÁLIDA!
+✓ El certificado NO ha sido alterado
+✓ Integridad verificada en frecuencia 141.7001 Hz
+🌊 Estado: VALIDATED
+```
 
 ### Ventajas Sobre Alternativas
 
@@ -3981,6 +4019,74 @@ curl -X POST "http://localhost:8000/validate" \
   -H "Content-Type: application/json" \
   -d '{"text": "Quantum coherence in language models..."}'
 ```
+
+## 🔒 Seguridad y Reproducibilidad
+
+Este proyecto implementa medidas exhaustivas de seguridad y reproducibilidad científica.
+
+### 📋 Documentación de Seguridad
+
+- **[SEGURIDAD.md](SEGURIDAD.md)** - Política de seguridad completa (español)
+- **[SECURITY.md](SECURITY.md)** - Security policy (English)
+- **[RESUMEN DE SEGURIDAD.md](RESUMEN%20DE%20SEGURIDAD.md)** - Resumen de implementación de seguridad
+
+### 🔁 Reproducibilidad Garantizada
+
+El proyecto utiliza múltiples capas para asegurar reproducibilidad completa:
+
+1. **ENV.lock** - Versiones exactas de todas las dependencias
+2. **Checksums SHA256** - Verificación de integridad de resultados
+3. **Snapshots de Entorno** - Documentación completa del entorno computacional
+4. **Pipelines Reproducibles** - Scripts automatizados en `repro/`
+
+```bash
+# Instalación reproducible
+pip install -r ENV.lock
+
+# Validar reproducibilidad
+python scripts/validate_reproducibility.py --strict
+
+# Generar snapshot de entorno
+python scripts/validate_reproducibility.py --generate-snapshot --output env.json
+
+# Pipeline reproducible GWTC-1
+cd repro/GWTC-1/
+./run.sh
+```
+
+### 📖 Guía Completa
+
+- **[REPRODUCIBILIDAD.md](REPRODUCIBILIDAD.md)** - Guía completa de reproducibilidad
+  - Instalación reproducible paso a paso
+  - Verificación de integridad de datos
+  - Pipelines automatizados
+  - Mejores prácticas para investigadores
+  - Resolución de problemas comunes
+
+### ✅ Verificación de Seguridad
+
+El proyecto incluye escaneo automatizado de seguridad:
+
+```bash
+# Escanear vulnerabilidades en dependencias
+pip-audit -r ENV.lock
+
+# Verificar que no hay tokens en el código
+python tests/test_security_no_tokens.py
+```
+
+### 🔐 Workflows de CI/CD
+
+Los workflows de GitHub Actions incluyen:
+
+- ✅ Instalación desde ENV.lock (reproducibilidad)
+- ✅ Generación de snapshots de entorno
+- ✅ Checksums SHA256 de todos los resultados
+- ✅ Escaneo semanal de vulnerabilidades (pip-audit)
+- ✅ Validación de compatibilidad Python 3.11 y 3.12
+- ✅ Retención de 30 días para artefactos de producción
+
+**Ver**: [`.github/workflows/production-qcal.yml`](.github/workflows/production-qcal.yml)
 
 ## 📐 Mathematical Foundation
 

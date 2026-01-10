@@ -41,6 +41,8 @@
 
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_reproducibility.py`
+  - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_synthetic_data.py`
@@ -51,6 +53,8 @@
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_reproducibility.py`
+  - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_synthetic_data.py`
@@ -240,4 +244,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-04 10:43:45 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-06 23:45:20 UTC*
