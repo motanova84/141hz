@@ -36,13 +36,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Install dependencies
+      - name: Install dependencies from ENV.lock for reproducibility
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r ENV.lock
         env:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
+      
+      - name: Validate reproducibility
+        run: |
+          python scripts/validate_reproducibility.py --generate-snapshot --output results/environment_snapshot.json
+          python scripts/validate_reproducibility.py
+        continue-on-error: true
 
       - name: Validate core with precision
         run: python3 validate_v5_coronacion.py --precision 30
@@ -62,6 +68,13 @@ jobs:
         run: python3 scripts/validacion_noesis_at2020afhd.py
       - name: Validate AT2020afhd periodicity
         run: python3 validate_at2020afhd_periodicity.py --precision 50
+        continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Validate brain wave bands as f₀ divisors
+        run: python3 scripts/validacion_bandas_cerebrales.py
         continue-on-error: false
         env:
           NUMEXPR_MAX_THREADS: 4
@@ -132,33 +145,82 @@ jobs:
             results/
             *.json
           retention-days: 30
+      
+      - name: Generate checksums for reproducibility
+        if: always()
+        run: |
+          mkdir -p results
+          if [ -d "results" ] && [ -r "results" ]; then
+            find results/ -type f -name "*.json" -exec sha256sum {} \; > results/checksums.txt || echo "No results to checksum"
+            if [ -f "results/checksums.txt" ]; then
+              echo "Generated checksums for $(wc -l < results/checksums.txt) files"
+            fi
+          else
+            echo "Results directory not accessible"
+          fi
 
       - name: Generate validation summary
         if: always()
         run: |
           echo "## Validation Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Add reproducibility information
+          echo "### Reproducibility Information" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment Lock**: ENV.lock" >> $GITHUB_STEP_SUMMARY
+          echo "- **Python Version**: $(python3 --version)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Git Commit**: ${GITHUB_SHA::8}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workflow Run**: #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "results/environment_snapshot.json" ]; then
+            echo "### Environment Snapshot" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            # Limit output to first 50 lines to avoid exposing sensitive data or overloading summary
+            cat results/environment_snapshot.json | head -50 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -f "results/checksums.txt" ]; then
+            echo "### Result Checksums" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Generated SHA256 checksums for $(wc -l < results/checksums.txt) result files" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "<details><summary>View Checksums</summary>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat results/checksums.txt | head -20 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "</details>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
           if [ -f "results/validation_v5.json" ]; then
             echo "### Core Validation Results" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/validation_v5.json | head -30 >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/riemann_zeros.json" ]; then
             echo "### Riemann Zeros Validation" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/riemann_zeros.json | head -40 >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/validacion_noesis_at2020afhd.json" ]; then
             echo "### AT2020afhd Noesis Verification" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/validacion_noesis_at2020afhd.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
           if [ -f "results/at2020afhd_validation.json" ]; then
             echo "### AT2020afhd Periodicity Validation" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/at2020afhd_validation.json | head -40 >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/aggregated_report.json" ]; then
             echo "### Aggregated Results" >> $GITHUB_STEP_SUMMARY
