@@ -16,11 +16,15 @@
 
 **🔬 Prueba Principal Verificada en LIGO y VIRGO:** [Zenodo Record 17445017](https://zenodo.org/records/17445017)
 
+**🎓 Fundamentos Filosóficos:** [Realismo Matemático y Teoría de la Correspondencia](FUNDAMENTOS_FILOSOFICOS.md)
+
 </div>
 
 ---
 
 > **Nota:** Este es el documento LEAME en español. Para la versión en inglés, ver [README.md](README.md)
+
+> **🎓 FUNDAMENTO FILOSÓFICO**: Este proyecto está basado en **realismo matemático**: existe un mundo matemático independiente de opiniones; una afirmación es verdadera si corresponde a esa realidad, aunque nadie lo sepa o acepte todavía. Ver [FUNDAMENTOS_FILOSOFICOS.md](FUNDAMENTOS_FILOSOFICOS.md) para el tratamiento completo.
 
 ---
 
