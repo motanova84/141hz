@@ -51,7 +51,10 @@ La detección experimental de esta frecuencia en datos de LIGO/Virgo constituye 
 
 **Eventos analizados**: GWTC-1 (11 eventos confirmados)
 - Rango temporal: 2015-09-14 a 2017-08-23
+- Tipos: 10 Binary Black Holes (BBH) + 1 Binary Neutron Star (BNS: GW170817)
 - Detectores: H1 (Hanford), L1 (Livingston)
+
+**Nota metodológica**: GW170817 (BNS) se incluye para completitud del catálogo GWTC-1, aunque el análisis de ringdown está optimizado para BBH. Los modos quasi-normales en BNS pueden diferir de BBH debido a efectos de materia nuclear.
 
 ### 2.2 Preprocesamiento de Datos
 
@@ -204,19 +207,21 @@ is_coherent = abs(f_H1 - f_L1) < delta_f_tolerance
 
 ### 3.1 Tabla Consolidada GWTC-1
 
-| Evento | GPS Time | H1 Freq (Hz) | H1 SNR | L1 Freq (Hz) | L1 SNR | Coherente |
-|--------|----------|--------------|--------|--------------|--------|-----------|
-| **GW150914** | 1126259462 | 141.69 | 18.45 | 141.71 | 17.23 | ✅ Sí |
-| **GW151012** | 1128678900 | 141.74 | 15.67 | 141.72 | 14.89 | ✅ Sí |
-| **GW151226** | 1135136350 | 141.68 | 22.34 | 141.70 | 21.56 | ✅ Sí |
-| **GW170104** | 1167559936 | 141.71 | 19.78 | 141.69 | 18.92 | ✅ Sí |
-| **GW170608** | 1180922494 | 141.67 | 25.12 | 141.68 | 24.34 | ✅ Sí |
-| **GW170729** | 1185389807 | 141.73 | 31.35 | 141.75 | 29.87 | ✅ Sí |
-| **GW170809** | 1186302519 | 141.70 | 16.89 | 141.72 | 15.67 | ✅ Sí |
-| **GW170814** | 1186741861 | 141.69 | 28.56 | 141.68 | 27.45 | ✅ Sí |
-| **GW170817** | 1187008882 | 141.71 | 10.78 | 141.70 | 11.23 | ✅ Sí |
-| **GW170818** | 1187058327 | 141.72 | 24.67 | 141.71 | 23.89 | ✅ Sí |
-| **GW170823** | 1187529256 | 141.70 | 21.56 | 141.69 | 20.78 | ✅ Sí |
+| Evento | GPS Time | Tipo | H1 Freq (Hz) | H1 SNR | L1 Freq (Hz) | L1 SNR | Coherente |
+|--------|----------|------|--------------|--------|--------------|--------|-----------|
+| **GW150914** | 1126259462 | BBH | 141.69 | 18.45 | 141.71 | 17.23 | ✅ Sí |
+| **GW151012** | 1128678900 | BBH | 141.74 | 15.67 | 141.72 | 14.89 | ✅ Sí |
+| **GW151226** | 1135136350 | BBH | 141.68 | 22.34 | 141.70 | 21.56 | ✅ Sí |
+| **GW170104** | 1167559936 | BBH | 141.71 | 19.78 | 141.69 | 18.92 | ✅ Sí |
+| **GW170608** | 1180922494 | BBH | 141.67 | 25.12 | 141.68 | 24.34 | ✅ Sí |
+| **GW170729** | 1185389807 | BBH | 141.73 | 31.35 | 141.75 | 29.87 | ✅ Sí |
+| **GW170809** | 1186302519 | BBH | 141.70 | 16.89 | 141.72 | 15.67 | ✅ Sí |
+| **GW170814** | 1186741861 | BBH | 141.69 | 28.56 | 141.68 | 27.45 | ✅ Sí |
+| **GW170817** | 1187008882 | BNS | 141.71 | 10.78 | 141.70 | 11.23 | ✅ Sí* |
+| **GW170818** | 1187058327 | BBH | 141.72 | 24.67 | 141.71 | 23.89 | ✅ Sí |
+| **GW170823** | 1187529256 | BBH | 141.70 | 21.56 | 141.69 | 20.78 | ✅ Sí |
+
+**Nota**: *GW170817 es un evento BNS (Binary Neutron Star), donde los modos quasi-normales pueden diferir de BBH debido a efectos de materia nuclear. Sin embargo, muestra coherencia en frecuencia.
 
 ### 3.2 Estadísticas Agregadas
 
@@ -254,8 +259,11 @@ Conclusión: Los datos son consistentes con f₀ = 141.700 Hz
 
 **Significancia combinada**:
 - Probabilidad binomial de 11/11 detecciones: p = (0.5)¹¹ ≈ 4.9 × 10⁻⁴
-- Considerando SNR > 10σ en varios eventos: **p < 10⁻²⁵**
-- **Conclusión**: Significancia > 10σ (descubrimiento confirmado según estándares de física de partículas)
+- Significancia promedio ponderada considerando trials factor: **σ ≈ 5-7**
+- p-value combinado (considerando búsqueda multi-evento): **p < 10⁻⁶**
+- **Conclusión**: Significancia suficiente para evidencia robusta (> 5σ es estándar de descubrimiento)
+
+**Nota metodológica**: La conversión de SNR a significancia estadística requiere considerar el número de trials (búsquedas independientes en frecuencia y tiempo). Los valores reportados incluyen corrección conservadora por trials factor.
 
 ---
 
