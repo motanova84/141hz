@@ -132,10 +132,13 @@ F_UNIF_HZ = F0_HZ * FACTOR_UNIFICACION  # ≈ 20.243 Hz (Banda Beta Alta)
 
 # Constantes de Acoplamiento de Fuerzas Fundamentales
 # (en escalas relevantes para física de partículas)
-ALPHA_S = 1.0           # Nuclear Fuerte (α_s ≈ 1 a escala de QCD)
-ALPHA_EM = 1.0 / 137.0  # Electromagnética (constante de estructura fina)
-ALPHA_W = 1.0 / 30.0    # Nuclear Débil (α_w ≈ 1/30 a escala electrodébil)
-ALPHA_G = 1e-38         # Gravitacional (α_G ≈ 10⁻³⁸)
+FINE_STRUCTURE_DENOMINATOR = 137.0  # Denominador de la constante de estructura fina
+WEAK_FORCE_DENOMINATOR = 30.0       # Denominador de la constante débil
+
+ALPHA_S = 1.0                              # Nuclear Fuerte (α_s ≈ 1 a escala de QCD)
+ALPHA_EM = 1.0 / FINE_STRUCTURE_DENOMINATOR  # Electromagnética (α ≈ 1/137)
+ALPHA_W = 1.0 / WEAK_FORCE_DENOMINATOR       # Nuclear Débil (α_w ≈ 1/30)
+ALPHA_G = 1e-38                            # Gravitacional (α_G ≈ 10⁻³⁸)
 
 # Dimensiones de Teoría de Cuerdas
 DIM_MACROSCOPICAS = 3   # 3 dimensiones espaciales

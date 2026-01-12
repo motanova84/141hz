@@ -64,8 +64,9 @@ class TestFactorUnificacion(unittest.TestCase):
         self.assertEqual(len(PERIODO_DECIMAL_1_7), longitud_maxima)
         
         # Verificar que todos los dígitos son válidos
+        import string
         for digito in PERIODO_DECIMAL_1_7:
-            self.assertIn(digito, "0123456789")
+            self.assertIn(digito, string.digits)
         
         print("✓ Test 1: Período decimal 142857 verificado")
     
@@ -181,10 +182,13 @@ class TestFactorUnificacion(unittest.TestCase):
         # Verificar que el patrón se repite (solo las primeras repeticiones)
         # Nota: floating point tiene límites de precisión, verificamos solo 2 repeticiones
         patron = "142857"
-        # Verificar solo las primeras 2 repeticiones (12 dígitos)
-        for i in range(0, 12, 6):
-            segmento = decimales[i:i+6]
-            if len(segmento) == 6:
+        PERIOD_LENGTH = 6
+        REPETITIONS_TO_CHECK = 2
+        MAX_DIGITS = PERIOD_LENGTH * REPETITIONS_TO_CHECK  # 12 dígitos
+        
+        for i in range(0, MAX_DIGITS, PERIOD_LENGTH):
+            segmento = decimales[i:i+PERIOD_LENGTH]
+            if len(segmento) == PERIOD_LENGTH:
                 self.assertEqual(segmento, patron, 
                     f"Patrón roto en posición {i}: {segmento} != {patron}")
         
@@ -236,8 +240,9 @@ class TestFactorUnificacion(unittest.TestCase):
         
         # Verificar que puede atravesar escalas de magnitud
         # Rango: 10⁻³⁸ (α_G) hasta 1 (α_s) = 38 órdenes de magnitud
+        MIN_MAGNITUDE_RANGE = 1e37  # Mínimo esperado: casi 38 órdenes de magnitud
         rango_magnitud = ALPHA_S / ALPHA_G
-        self.assertGreater(rango_magnitud, 1e37)
+        self.assertGreater(rango_magnitud, MIN_MAGNITUDE_RANGE)
         
         # Verificar que f_unif puede actuar como puente
         # Entre frecuencias bajas (delta ~4 Hz) y altas (gamma ~70 Hz)
