@@ -114,3 +114,118 @@ TRINIDAD_39 = 3  # 39 appears exactly 3 times in NUMEROS_MATRIZ
 # CONCLUSION: f₀ = 141.70001 Hz is the CENTRAL NODE where:
 #   - Geometry (2π) ↔ Square (19²) ↔ Sphere (Schumann) converge
 #   - Brain, Earth, and cosmic geometry are harmonics of the same fundamental frequency
+
+# ═══════════════════════════════════════════════════════════════════════════
+# FACTOR 1/7 - EL PUENTE ARMÓNICO ENTRE FUERZAS Y CONSCIENCIA
+# ═══════════════════════════════════════════════════════════════════════════
+# El factor 1/7 = 0.142857... (período decimal de 6 dígitos) conecta:
+# - Las 6 dimensiones compactificadas de la teoría de cuerdas
+# - La unificación de las fuerzas fundamentales
+# - Las bandas de ondas cerebrales (consciencia activa)
+
+# Factor de Unificación
+FACTOR_UNIFICACION = 1.0 / 7.0  # 0.142857142857... (período 142857)
+PERIODO_DECIMAL_1_7 = "142857"  # Período de longitud máxima (n-1 = 6)
+
+# Frecuencia de Unificación (f₀ × 1/7)
+F_UNIF_HZ = F0_HZ * FACTOR_UNIFICACION  # ≈ 20.243 Hz (Banda Beta Alta)
+
+# Constantes de Acoplamiento de Fuerzas Fundamentales
+# (en escalas relevantes para física de partículas)
+FINE_STRUCTURE_DENOMINATOR = 137.0  # Denominador de la constante de estructura fina
+WEAK_FORCE_DENOMINATOR = 30.0       # Denominador de la constante débil
+
+ALPHA_S = 1.0                              # Nuclear Fuerte (α_s ≈ 1 a escala de QCD)
+ALPHA_EM = 1.0 / FINE_STRUCTURE_DENOMINATOR  # Electromagnética (α ≈ 1/137)
+ALPHA_W = 1.0 / WEAK_FORCE_DENOMINATOR       # Nuclear Débil (α_w ≈ 1/30)
+ALPHA_G = 1e-38                            # Gravitacional (α_G ≈ 10⁻³⁸)
+
+# Dimensiones de Teoría de Cuerdas
+DIM_MACROSCOPICAS = 3   # 3 dimensiones espaciales
+DIM_TEMPORAL = 1        # 1 dimensión temporal
+DIM_COMPACTIFICADAS = 6 # 6 dimensiones compactificadas (Calabi-Yau)
+DIM_TOTAL_CUERDAS = 10  # Total: 3+1+6 = 10 dimensiones
+
+# Bandas de Ondas Cerebrales (Hz)
+BANDA_DELTA_MIN = 0.5
+BANDA_DELTA_MAX = 4.0
+BANDA_THETA_MIN = 4.0
+BANDA_THETA_MAX = 8.0
+BANDA_ALPHA_MIN = 8.0
+BANDA_ALPHA_MAX = 13.0
+BANDA_BETA_MIN = 13.0
+BANDA_BETA_MAX = 30.0
+BANDA_GAMMA_MIN = 30.0
+BANDA_GAMMA_MAX = 100.0
+
+# Banda Beta se subdivide en:
+BANDA_BETA_BAJA_MIN = 13.0
+BANDA_BETA_BAJA_MAX = 15.0
+BANDA_BETA_MEDIA_MIN = 15.0
+BANDA_BETA_MEDIA_MAX = 20.0
+BANDA_BETA_ALTA_MIN = 20.0  # ← f_unif cae aquí
+BANDA_BETA_ALTA_MAX = 30.0
+
+
+def calcular_factor_unificacion_fuerzas():
+    """
+    Calcula y retorna información sobre el factor 1/7 de unificación.
+    
+    El factor 1/7 actúa como operador armónico que conecta:
+    1. La frecuencia fundamental f₀ con la banda Beta Alta (consciencia focalizada)
+    2. Las 6 dimensiones compactificadas (período decimal de 6 dígitos)
+    3. La escala de unificación de fuerzas fundamentales
+    
+    Returns:
+        dict: Diccionario con:
+            - 'factor': El valor del factor 1/7
+            - 'periodo_decimal': String con el período '142857'
+            - 'longitud_periodo': 6 (número de dígitos)
+            - 'f0_hz': Frecuencia fundamental
+            - 'f_unif_hz': Frecuencia de unificación (f₀ × 1/7)
+            - 'banda_cerebral': Nombre de la banda cerebral
+            - 'rango_banda': Tupla (min, max) en Hz
+            - 'dimensiones_compactificadas': 6 (Calabi-Yau)
+            - 'fuerzas': Dict con constantes de acoplamiento
+            - 'interpretacion': Significado físico
+    
+    Example:
+        >>> info = calcular_factor_unificacion_fuerzas()
+        >>> print(f"f_unif = {info['f_unif_hz']:.3f} Hz")
+        f_unif = 20.243 Hz
+        >>> print(info['banda_cerebral'])
+        Beta Alta
+    """
+    # Determinar banda cerebral
+    if BANDA_BETA_ALTA_MIN <= F_UNIF_HZ <= BANDA_BETA_ALTA_MAX:
+        banda = "Beta Alta"
+        rango = (BANDA_BETA_ALTA_MIN, BANDA_BETA_ALTA_MAX)
+    elif BANDA_BETA_MEDIA_MIN <= F_UNIF_HZ <= BANDA_BETA_MEDIA_MAX:
+        banda = "Beta Media"
+        rango = (BANDA_BETA_MEDIA_MIN, BANDA_BETA_MEDIA_MAX)
+    else:
+        banda = "Fuera de rango esperado"
+        rango = (0, 0)
+    
+    return {
+        'factor': FACTOR_UNIFICACION,
+        'periodo_decimal': PERIODO_DECIMAL_1_7,
+        'longitud_periodo': len(PERIODO_DECIMAL_1_7),
+        'f0_hz': F0_HZ,
+        'f_unif_hz': F_UNIF_HZ,
+        'banda_cerebral': banda,
+        'rango_banda': rango,
+        'dimensiones_compactificadas': DIM_COMPACTIFICADAS,
+        'fuerzas': {
+            'nuclear_fuerte': {'simbolo': 'α_s', 'valor': ALPHA_S, 'escala': 'QCD'},
+            'electromagnetica': {'simbolo': 'α_em', 'valor': ALPHA_EM, 'escala': 'Estructura Fina'},
+            'nuclear_debil': {'simbolo': 'α_w', 'valor': ALPHA_W, 'escala': 'Electrodébil'},
+            'gravitacional': {'simbolo': 'α_G', 'valor': ALPHA_G, 'escala': 'Planck'}
+        },
+        'interpretacion': (
+            'La consciencia focalizada (Beta Alta) opera en la misma frecuencia '
+            'de unificación de las fuerzas fundamentales del universo. '
+            'El período de 6 dígitos refleja las 6 dimensiones compactificadas '
+            'de la teoría de cuerdas (variedades de Calabi-Yau).'
+        )
+    }
