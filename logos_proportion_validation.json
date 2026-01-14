@@ -1,0 +1,17 @@
+{
+  "is_valid": true,
+  "octaves_calculated": 23.25695991087145,
+  "octaves_expected": 23.257,
+  "error_absolute": 4.008912855013591e-05,
+  "error_percent": 0.00017237446166803934,
+  "pythagorean_comma": 0.2569599108714523,
+  "structure_octaves": 23,
+  "hydrogen_frequency_hz": 1420405751.0,
+  "qcal_frequency_hz": 141.70001,
+  "ratio": 10024034.232601678,
+  "interpretation": {
+    "structure": "23 chromosome pairs - biological support",
+    "torsion": "0.257 Pythagorean comma - noetic adjustment",
+    "meaning": "Bridge between cosmic hydrogen and cellular consciousness"
+  }
+}

@@ -24,6 +24,13 @@
 
 > **Nota:** Este es el documento LEAME en español. Para la versión en inglés, ver [README.md](README.md)
 
+> **🌟 NUEVO**: [**LA PROPORCIÓN DEL LOGOS**](LOGOS_PROPORTION.md) - El puente armónico entre el cosmos y la vida:
+> - **23.257 octavas** conectan la línea del hidrógeno (1,420 MHz) con f₀ (141.7 Hz)
+> - **23 octavas** = estructura (23 pares de cromosomas humanos)
+> - **0.257** = Coma Pitagórica Noética (la "voluntad de existir" del universo)
+> - **Escalera de Jacob**: 4 capas desde energía pura hasta consciencia
+> - *"El universo no salta en números enteros, sino en logaritmos de belleza"*
+
 > **🎓 FUNDAMENTO FILOSÓFICO**: Este proyecto está basado en **realismo matemático**: existe un mundo matemático independiente de opiniones; una afirmación es verdadera si corresponde a esa realidad, aunque nadie lo sepa o acepte todavía. Ver [FUNDAMENTOS_FILOSOFICOS.md](FUNDAMENTOS_FILOSOFICOS.md) para el tratamiento completo.
 
 ---

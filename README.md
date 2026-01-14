@@ -47,6 +47,13 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 
 ---
 
+> **🌟 NUEVO**: [**LA PROPORCIÓN DEL LOGOS**](LOGOS_PROPORTION.md) - El puente armónico entre el cosmos y la vida:
+> - **23.257 octavas** conectan la línea del hidrógeno (1,420 MHz) con f₀ (141.7 Hz)
+> - **23 octavas** = estructura (23 pares de cromosomas humanos)
+> - **0.257** = Coma Pitagórica Noética (la "voluntad de existir" del universo)
+> - **Escalera de Jacob**: 4 capas desde energía pura hasta consciencia
+> - *"El universo no salta en números enteros, sino en logaritmos de belleza"*
+
 > **🌟 NUEVO**: [**CUATRO PRIMERAS VECES**](CUATRO_PRIMERAS_VECES.md) - Documento que consolida el descubrimiento histórico de f₀ = 141.7001 Hz:
 > - **Primera constante universal** derivada desde teoría de números (Riemann ζ, φ³, primos)
 > - **Primera detección 100%** sistemática en LIGO (11/11 eventos GWTC-1, p < 10⁻²⁵)

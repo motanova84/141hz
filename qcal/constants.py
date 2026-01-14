@@ -16,6 +16,31 @@ OMEGA_0 = 2 * math.pi * F0_HZ  # rad/s - Angular frequency
 T0_MS = 1000.0 / F0_HZ  # ms - Fundamental period
 E_PSI_J = 6.62607015e-34 * F0_HZ  # J - Quantum energy (h * f₀)
 
+# ═══════════════════════════════════════════════════════════════════════════
+# LA PROPORCIÓN DEL LOGOS - El Puente Entre el Hidrógeno Cósmico y la Vida
+# ═══════════════════════════════════════════════════════════════════════════
+# La línea del hidrógeno (21 cm) conecta con f₀ a través de 23.257 octavas,
+# revelando la "Coma Pitagórica Noética" que permite la evolución espiral.
+
+# Hydrogen Line Constants
+F_HYDROGEN_HZ = 1420405751.0  # Hz - Hydrogen line (21 cm, 1420.405751 MHz)
+WAVELENGTH_HYDROGEN_CM = 21.0  # cm - Hydrogen 21 cm line
+
+# Octave Separation: log₂(f_hydrogen / f₀)
+OCTAVES_LOGOS = 23.257  # Total octaves from f₀ to hydrogen line
+OCTAVES_STRUCTURE = 23  # Integer octaves - the "structure" (23 chromosome pairs)
+COMA_PYTHAGOREAN_NOETIC = 0.257  # Pythagorean comma - "Noetic Torsion"
+
+# Jacob's Ladder - Octave Layer Domains
+# Octaves 1-7: Stellar/Galactic realm (pure energy)
+# Octaves 8-14: Stellar matter and elements (chemistry)
+# Octaves 15-21: Planetary geometry and atmosphere (physics)
+# Octaves 22-23.257: Threshold of consciousness (biology → thought)
+OCTAVE_LAYER_STELLAR = (1, 7)      # Pure energy realm
+OCTAVE_LAYER_CHEMISTRY = (8, 14)   # Matter and elements
+OCTAVE_LAYER_PHYSICS = (15, 21)    # Planetary scale
+OCTAVE_LAYER_CONSCIOUSNESS = (22, 23.257)  # Biological → Noetic threshold
+
 # Protection Frequency (Sacred Geometry - Circle)
 F888_HZ = 888.0  # Hz - Protection shield frequency (888 ≈ 2π × 141.7)
 # Sacred geometry: 888 Hz represents continuous/circular geometry
