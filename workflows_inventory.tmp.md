@@ -171,6 +171,15 @@
 - Trigger: schedule (`0 0 * * *`)
 - Trigger: manual (workflow_dispatch)
 
+### Hydrogen Line Quantum Phase Validation
+
+**Archivo:** `hydrogen-line-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * *`)
+- Trigger: manual (workflow_dispatch)
+
 ### Issue Management Bot
 
 **Archivo:** `issue-management.yml`
@@ -397,4 +406,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-11 02:53:26 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-14 14:07:00 UTC*
