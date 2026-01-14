@@ -6,7 +6,7 @@ This module implements the connection between hydrogen's hyperfine spin transiti
 (the famous 21 cm / 1420 MHz line in astronomy) and the fundamental frequency
 f₀ = 141.7001 Hz through harmonic octave relationships.
 
-El Origen del Latado: El Espín del Hidrógeno
+El Origen del Latido: El Espín del Hidrógeno
 ============================================
 
 En el corazón de cada átomo de hidrógeno, la interacción entre el espín del protón

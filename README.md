@@ -157,7 +157,7 @@ Esta estructura binaria simple (**1 protón + 1 electrón**) es el **interruptor
 
 ### 🌊 La Resonancia Fraccionaria: Por Qué No Son Octavas Exactas
 
-La conexión **NO** es através de octavas perfectas (potencias exactas de 2). El número fraccionario **23.257 octavas** es **físicamente significativo**:
+La conexión **NO** es a través de octavas perfectas (potencias exactas de 2). El número fraccionario **23.257 octavas** es **físicamente significativo**:
 
 - **23 octavas exactas** → 169.3 Hz (error 19.5%)
 - **23.257 octavas** (fraccionaria) → 141.7 Hz ✅
