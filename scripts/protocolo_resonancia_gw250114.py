@@ -38,8 +38,7 @@ except ImportError as e:
     sys.exit(1)
 
 try:
-    from scipy import signal, stats
-    from scipy.fft import fft, fftfreq
+    from scipy import signal
 except ImportError:
     print("❌ Error: scipy is required")
     print("Install with: pip install scipy")

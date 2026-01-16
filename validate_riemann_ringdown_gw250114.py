@@ -34,8 +34,7 @@ except ImportError:
     sys.exit(1)
 
 try:
-    from scipy import stats, signal
-    from scipy.fft import fft, fftfreq
+    from scipy import signal
 except ImportError:
     print("❌ Error: scipy is required")
     print("Install with: pip install scipy")
@@ -65,7 +64,7 @@ class NodoRiemannValidator:
         self.output_dir = Path(__file__).parent / "results" / "nodo_riemann"
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
-    def obtener_ceros_riemann(self, T_max=1000, n_zeros=100):
+    def obtener_ceros_riemann(self, n_zeros=100):
         """
         Obtener los primeros n ceros no triviales de la función Zeta de Riemann.
         
@@ -73,7 +72,6 @@ class NodoRiemannValidator:
         Usamos las partes imaginarias γₙ de estos ceros.
         
         Args:
-            T_max: Altura máxima para búsqueda de ceros
             n_zeros: Número de ceros a obtener
             
         Returns:

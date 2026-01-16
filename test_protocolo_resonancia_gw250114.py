@@ -10,9 +10,7 @@ Verifica que:
 
 import unittest
 import sys
-import os
 from pathlib import Path
-import json
 
 # Añadir directorio scripts al path
 sys.path.insert(0, str(Path(__file__).parent / 'scripts'))
