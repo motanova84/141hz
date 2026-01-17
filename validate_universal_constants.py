@@ -34,11 +34,15 @@ def main():
         "--save", type=str, metavar="FILE",
         help="Save results to file"
     )
+    parser.add_argument(
+        "--precision", type=int, default=50,
+        help="Precision for calculations (default: 50)"
+    )
     
     args = parser.parse_args()
     
-    # Create demonstration instance
-    demo = UniversalConstantsEmergence()
+    # Create demonstration instance with precision
+    demo = UniversalConstantsEmergence(precision=args.precision)
     
     if args.format == "json":
         results = demo.full_demonstration()
