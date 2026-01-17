@@ -268,7 +268,7 @@ class TestRiemannHorizonIntegration(unittest.TestCase):
         
         self.assertEqual(results['parameters']['n_zeros'], 15)
         self.assertEqual(results['parameters']['grid_size'], 40)
-        self.assertEqual(results['parameters']['f0_hz'], 141.7001)
+        self.assertEqual(results['parameters']['f0_hz'], 141.70001)
         self.assertEqual(results['parameters']['f888_hz'], 888.0)
     
     def test_analysis_json_serializable(self):
@@ -292,7 +292,7 @@ class TestConstants(unittest.TestCase):
     
     def test_fundamental_constants(self):
         """Test fundamental constants are defined."""
-        self.assertEqual(rh.F0_HZ, 141.7001)
+        self.assertEqual(rh.F0_HZ, 141.70001)
         self.assertEqual(rh.F888_HZ, 888.0)
         self.assertAlmostEqual(rh.PHI, 1.618033988749895, places=10)
         self.assertEqual(rh.HBAR, 1.054571817e-34)

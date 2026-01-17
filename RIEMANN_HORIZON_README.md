@@ -315,7 +315,7 @@ MIT License - See LICENSE file for details.
 
 ## Author
 
-José Manuel Mota Burruezo (2026)
+José Manuel Mota Burruezo (January 2026)
 
 ## See Also
 

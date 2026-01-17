@@ -32,7 +32,7 @@ import math
 
 
 # Constants
-F0_HZ = 141.7001  # Fundamental frequency (Hz)
+F0_HZ = 141.70001  # Fundamental frequency (Hz) - matches QCAL constants
 F888_HZ = 888.0  # Protection frequency (Hz)
 PHI = (1 + np.sqrt(5)) / 2  # Golden ratio
 HBAR = 1.054571817e-34  # Reduced Planck constant (J·s)
@@ -210,20 +210,45 @@ class HpsiOperator:
         self.primes = self._generate_primes(max_primes)
         
     def _generate_primes(self, n: int) -> List[int]:
-        """Generate first n prime numbers."""
+        """
+        Generate first n prime numbers using optimized algorithm.
+        
+        Args:
+            n: Number of primes to generate
+            
+        Returns:
+            List of first n primes
+        """
+        if n <= 0:
+            return []
+        
+        # Start with known small primes for efficiency
         primes = []
+        
+        # Use trial division with optimization
         candidate = 2
         while len(primes) < n:
+            if candidate == 2:
+                primes.append(2)
+                candidate = 3
+                continue
+            
+            # Check only odd numbers
             is_prime = True
+            sqrt_candidate = int(np.sqrt(candidate)) + 1
+            
             for p in primes:
-                if p * p > candidate:
+                if p > sqrt_candidate:
                     break
                 if candidate % p == 0:
                     is_prime = False
                     break
+            
             if is_prime:
                 primes.append(candidate)
-            candidate += 1
+            
+            candidate += 2  # Skip even numbers
+        
         return primes
     
     def potential(self, x: np.ndarray) -> np.ndarray:
