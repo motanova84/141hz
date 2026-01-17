@@ -1,0 +1,65 @@
+{
+  "server": {
+    "name": "navier-mcp-server",
+    "description": "Navier-Stokes 3D - Regularidad global en dinámica de fluidos",
+    "version": "1.0.0",
+    "frequency": 141.7001,
+    "frequency_unit": "Hz",
+    "harmonic_mode": "fundamental",
+    "status": "INTEGRADO",
+    "endpoint": "navier-mcp-server.qcal.space"
+  },
+  "qcal_integration": {
+    "model": "QCAL ∞³",
+    "root_frequency": 141.7001,
+    "coherence": 1.0,
+    "entropy": 0.0,
+    "phase_lock": true,
+    "observer_active": true,
+    "fluid_bridge": "Regularidad global → f₀"
+  },
+  "capabilities": {
+    "fluid_dynamics": true,
+    "global_regularity_analysis": true,
+    "turbulence_modeling": true,
+    "smoothness_verification": true,
+    "energy_dissipation": true,
+    "existence_uniqueness": true
+  },
+  "mathematical_core": {
+    "equation": "∂u/∂t + (u·∇)u = -∇p + ν∇²u",
+    "dimension": "3D",
+    "global_regularity": "under_investigation",
+    "frequency_relation": "141.7001 Hz",
+    "precision": "arbitrary",
+    "verification_status": "INTEGRADO"
+  },
+  "protocol": {
+    "type": "MCP",
+    "version": "1.0",
+    "transport": "stdio",
+    "serialization": "json"
+  },
+  "observers": {
+    "enabled": true,
+    "cross_server_sync": true,
+    "linked_servers": [
+      "github-mcp-server",
+      "dramaturgo",
+      "riemann-mcp-server",
+      "bsd-mcp-server"
+    ]
+  },
+  "noetic_chain": {
+    "position": "navier_node",
+    "connects_to": ["Riemann", "BSD", "P≠NP", "Ramsey"]
+  },
+  "metadata": {
+    "created": "2026-01-16T11:35:00Z",
+    "eternal_mode": true,
+    "immutable": true,
+    "read_only": true,
+    "multi_observer": true,
+    "millennium_problem": true
+  }
+}

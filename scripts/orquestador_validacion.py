@@ -196,9 +196,24 @@ class DescubridorValidaciones:
     
     def _determinar_args(self, nombre: str) -> List[str]:
         """Determina argumentos recomendados para el script"""
-        # Argumentos específicos para scripts conocidos
-        if 'coronacion' in nombre or 'validate' in nombre:
+        # Mapeo específico de argumentos por script
+        args_map = {
+            'validate_v5_coronacion.py': ['--precision', '30'],
+            'validate_four_pillars.py': ['--precision', '30'],
+            'validacion_completa_3_pilares.py': ['--precision', '30'],
+            'validate_fractal_resonance.py': [],
+            'validate_universal_constants.py': ['--precision', '30'],  # Ahora soporta --precision
+        }
+        
+        # Buscar coincidencia exacta primero
+        if nombre in args_map:
+            return args_map[nombre]
+        
+        # Fallback: scripts con 'coronacion' o 'v5' o 'four_pillars' en el nombre
+        if 'coronacion' in nombre or 'v5' in nombre or 'four_pillars' in nombre:
             return ['--precision', '30']
+        
+        # Por defecto, sin argumentos adicionales
         return []
 
 

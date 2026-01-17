@@ -1,0 +1,34 @@
+{
+  "energia_cuantica": {
+    "E_Joules": 9.38914802862015e-32,
+    "E_eV": 5.860245262208805e-13,
+    "frecuencia_Hz": 141.7001,
+    "omega_rad_s": 890.327986345878
+  },
+  "campo_conciencia": {
+    "frecuencia_Hz": 141.7001,
+    "energia_J": 9.38914802862015e-32,
+    "energia_eV": 5.860245262208805e-13,
+    "longitud_onda_m": 2115682.755340328,
+    "longitud_onda_km": 2115.682755340328,
+    "masa_kg": 1.0446836080339932e-48,
+    "temperatura_K": 6.800532234203008e-09
+  },
+  "constantes": {
+    "h_J_s": 6.62607015e-34,
+    "h_bar_J_s": 1.054571817e-34,
+    "c_m_s": 299792458,
+    "l_P_m": 1.61625502392855e-35
+  },
+  "geometria": {
+    "R_psi_m": 2.0833430587472672e+40,
+    "R_psi_over_l_P": 1.288994018829646e+75
+  },
+  "potencial_vac\u00edo": {
+    "E_vac_total_J": 3.0179615778251655e-56,
+    "termino_cuantico_J": 5.308316878194373e-212,
+    "termino_zeta_J": -9.037678180448195e-121,
+    "termino_cosmologico_J": 5.251785143520807e-84,
+    "termino_adelico_J": 3.0179615778251655e-56
+  }
+}

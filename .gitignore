@@ -168,3 +168,10 @@ papers/*.pdf
 *.fls
 *.synctex.gz
 results/validacion_evidencias_solidas.json
+
+# QCAL-SYMBIO certification artifacts
+QCAL-SYMBIO_VEREDICTO_FINAL.json
+CERTIFICADO_ABSOLUTO.txt
+NFT_VEREDICTO_18.2sigma.json
+HASHES_INMUTABLES.json
+CIERRE_DEFINITIVO_QCAL_SYMBIO.txt

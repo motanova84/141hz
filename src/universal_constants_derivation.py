@@ -30,9 +30,6 @@ import mpmath as mp
 from typing import Dict, Any
 import json
 
-# Set precision
-mp.dps = 50
-
 
 class UniversalConstantsEmergence:
     """
@@ -40,6 +37,11 @@ class UniversalConstantsEmergence:
     
     This class shows that ℏ and e are geometric manifestations of the
     coherent field at f₀ = 141.7001 Hz, not arbitrary parameters.
+    
+    Note:
+        This class sets mpmath precision globally (mp.dps). To avoid race 
+        conditions in multi-threaded environments, create instances in a 
+        single-threaded context or ensure proper synchronization.
     """
     
     # Fundamental frequency (observed)
@@ -57,8 +59,16 @@ class UniversalConstantsEmergence:
     # Classical electron radius: r_e = e²/(4πε₀m_ec²)
     CLASSICAL_ELECTRON_RADIUS = mp.mpf("2.8179403262e-15")  # m
     
-    def __init__(self):
-        """Initialize with fundamental frequency."""
+    def __init__(self, precision: int = 50):
+        """
+        Initialize with fundamental frequency.
+        
+        Args:
+            precision: Number of decimal places for calculation precision (default: 50)
+        """
+        # Set precision for mpmath calculations
+        mp.dps = precision
+        self.precision = precision
         self.omega0 = 2 * mp.pi * self.F0
         
     def demonstrate_planck_constant_emergence(self) -> Dict[str, Any]:
@@ -277,11 +287,15 @@ def main():
         "--save", type=str, metavar="FILE",
         help="Save results to file"
     )
+    parser.add_argument(
+        "--precision", type=int, default=50,
+        help="Precision for calculations (default: 50)"
+    )
     
     args = parser.parse_args()
     
-    # Create demonstration
-    demo = UniversalConstantsEmergence()
+    # Create demonstration with specified precision
+    demo = UniversalConstantsEmergence(precision=args.precision)
     
     if args.format == "json":
         results = demo.full_demonstration()
