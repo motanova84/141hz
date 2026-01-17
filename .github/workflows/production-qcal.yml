@@ -94,6 +94,20 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: Analyze GW150914 complete (141.7 Hz resonance with Ψ-NSE filter)
+        run: python3 scripts/analisis_gw150914_completo.py
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Population analysis GWTC-1 (√N scaling validation)
+        run: python3 scripts/analisis_poblacional_gwtc1.py
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Aggregate results
         run: python3 scripts/aggregate_results.py
         continue-on-error: true
@@ -247,6 +261,18 @@ jobs:
             echo "### Multimessenger Resonance (GW250114 ↔ AT2020afhd)" >> $GITHUB_STEP_SUMMARY
             echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/correlacion_multimensajero/correlacion_multimensajero.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/gw150914_1417hz/GW150914_1417Hz_complete_analysis.json" ]; then
+            echo "### GW150914 Complete Analysis (141.7 Hz Ψ-NSE Filter)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/gw150914_1417hz/GW150914_1417Hz_complete_analysis.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/gwtc1_population/gwtc1_population_analysis.json" ]; then
+            echo "### GWTC-1 Population Analysis (√N Scaling)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/gwtc1_population/gwtc1_population_analysis.json | head -40 >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/aggregated_report.json" ]; then
