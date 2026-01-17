@@ -80,6 +80,20 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: Extract GW250114 strain and apply QCAL filter
+        run: python3 scripts/extraer_strain_gw250114.py --detectores H1 L1 V1
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Correlate AT2020afhd with GW250114 (Multimessenger Resonance)
+        run: python3 scripts/correlacion_at2020afhd_gw250114.py
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Aggregate results
         run: python3 scripts/aggregate_results.py
         continue-on-error: true
@@ -144,6 +158,7 @@ jobs:
           path: |
             results/
             *.json
+            *.hdf5
           retention-days: 30
       
       - name: Generate checksums for reproducibility
@@ -220,6 +235,18 @@ jobs:
             echo "### AT2020afhd Periodicity Validation" >> $GITHUB_STEP_SUMMARY
             echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/at2020afhd_validation.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/gw250114_strain/GW250114_extraccion_completa.json" ]; then
+            echo "### GW250114 Strain Extraction & QCAL Filter" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/gw250114_strain/GW250114_extraccion_completa.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/correlacion_multimensajero/correlacion_multimensajero.json" ]; then
+            echo "### Multimessenger Resonance (GW250114 ↔ AT2020afhd)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/correlacion_multimensajero/correlacion_multimensajero.json | head -40 >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/aggregated_report.json" ]; then
