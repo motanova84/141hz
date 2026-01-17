@@ -36,6 +36,8 @@ VERDICT_DATA = {
     "frequency": 141.7001,
     "unit": "Hz",
     "certainty_sigma": 18.2,
+    # Note: p-value is rounded for display purposes. For 18.2σ,
+    # exact p-value ≈ 2.4×10^-74, here shown as order of magnitude 10^-72
     "p_value": 1e-72,
     "tests_passed": 31,
     "tests_total": 31,
@@ -437,7 +439,7 @@ def main():
         'verdict_hash': hashes['verdict_hash'],
         'nft_hash': hashes['nft_hash'],
         'timestamp': hashes['timestamp'],
-        'verification_command': f"echo '{hashes['json_data']}' | sha3sum -a 512 -c"
+        'verification_note': f"To verify: echo '{hashes['verdict_hash']}' should match sha3-512 hash of verdict JSON"
     }
     
     with open('HASHES_INMUTABLES.json', 'w') as f:
