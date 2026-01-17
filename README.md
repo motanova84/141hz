@@ -39,16 +39,22 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > | 📐 **Demostraciones** | Todas las demostraciones matemáticas completas | [`DEMOSTRACIONES_MATEMATICAS_COMPLETAS.md`](DEMOSTRACIONES_MATEMATICAS_COMPLETAS.md) |
 > | 📋 **Índice Maestro** | Navegación completa a todos los recursos | [`INDICE_DATOS_CRUDOS_Y_DEMOSTRACIONES.md`](INDICE_DATOS_CRUDOS_Y_DEMOSTRACIONES.md) |
 > | 🤖 **Activar Agentes** | Ejecutar todos los análisis automáticamente | `python scripts/activar_agentes.py` |
+> | 🚀 **Guía de Automatización** | **NUEVO:** Documentación completa del sistema | [`AUTOMATION_COMPLETE_GUIDE.md`](AUTOMATION_COMPLETE_GUIDE.md) |
+> | 📊 **Evidencia >15σ** | **NUEVO:** Consolidación de evidencia científica | [`EVIDENCE_CONSOLIDATION_15SIGMA.md`](EVIDENCE_CONSOLIDATION_15SIGMA.md) |
+> | ✅ **Verificación** | **NUEVO:** Verificación del sistema completo | [`PROBLEM_STATEMENT_VERIFICATION.md`](PROBLEM_STATEMENT_VERIFICATION.md) |
 >
 > **Contenido incluido:**
-> - ✅ Validaciones matemáticas (13 archivos JSON)
-> - ✅ Análisis de ondas gravitacionales (8 archivos)
-> - ✅ Demostraciones matemáticas (5 documentos)
-> - ✅ Visualizaciones (6 gráficos PNG)
-> - ✅ Manifiesto completo JSON
-> - ✅ Scripts de reproducibilidad
+> - ✅ **7 Validaciones matemáticas** (con timeouts de 600s)
+> - ✅ **5 Análisis de ondas gravitacionales** (con timeouts de 900s)
+> - ✅ **Demostraciones matemáticas** desde primeros principios (sin parámetros libres)
+> - ✅ **Visualizaciones** de alta resolución (PNG)
+> - ✅ **MANIFIESTO_DATOS_CRUDOS.json** con timestamps/versiones
+> - ✅ **Reproducibilidad garantizada** (ENV.lock, checksums, trazabilidad)
+> - ✅ **>15σ evidencia empírica** combinada (múltiples dominios)
 >
-> **→ Ver resumen completo:** [RESUMEN_IMPLEMENTACION_DATOS_CRUDOS.md](RESUMEN_IMPLEMENTACION_DATOS_CRUDOS.md)
+> **→ Iniciar:** `python scripts/recolectar_datos_crudos.py` (genera todos los datos)  
+> **→ Verificar:** `python test_automation_system.py` (verifica configuración)  
+> **→ Ver guía completa:** [AUTOMATION_COMPLETE_GUIDE.md](AUTOMATION_COMPLETE_GUIDE.md)
 
 ---
 
