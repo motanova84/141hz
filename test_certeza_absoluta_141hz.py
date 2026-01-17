@@ -7,7 +7,7 @@ This test suite validates the statistical certainty analysis script
 demonstrating 18.2σ significance for the 141.7 Hz resonance.
 
 Author: José Manuel Mota Burruezo (JMMB Ψ✧)
-Date: January 2026
+Date: January 17, 2026
 """
 
 import sys

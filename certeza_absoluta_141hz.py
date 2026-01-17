@@ -11,11 +11,14 @@ def calculate_absolute_certainty():
     Demuestra matemáticamente la certeza absoluta de 18.2σ
     """
     sigma = 18.2
-    p_value = 2 * (1 - stats.norm.cdf(sigma))  # Two-tailed
+    # Two-tailed p-value (use consistent approach throughout)
+    p_value = 2 * (1 - stats.norm.cdf(sigma))
     
-    # Handle extremely small p-values (use log scale for very small numbers)
+    # Handle extremely small p-values
+    # For very large sigma, both formulas converge to the same value
     if p_value == 0:
-        p_value = np.exp(-sigma**2/2) / (sigma * np.sqrt(2*np.pi))
+        # Use one-tailed approximation for extreme values
+        p_value = 2 * np.exp(-sigma**2/2) / (sigma * np.sqrt(2*np.pi))
     
     # Conversiones para perspectiva (handle division by very small numbers)
     razon_contraria = 1/p_value if p_value > 0 else np.inf
@@ -121,18 +124,17 @@ def demonstrate_persistent_resonance():
     plt.savefig('Persistent_Resonance_Proof.png', dpi=150, bbox_inches='tight')
     plt.close()
     
-    # Métricas de persistencia (use trapezoid instead of deprecated trapz)
+    # Métricas de persistencia (use trapezoid for numpy 2.x or trapz for older versions)
     try:
         # Try numpy 2.x
         persistence_ratio = np.trapezoid(np.abs(decay_persistent_norm), t) / np.trapezoid(np.abs(decay_exp_norm), t)
         area_qnm = np.trapezoid(np.abs(decay_exp_norm), t)
         area_141 = np.trapezoid(np.abs(decay_persistent_norm), t)
     except AttributeError:
-        # Fallback to scipy.integrate for older versions
-        from scipy.integrate import trapezoid
-        persistence_ratio = trapezoid(np.abs(decay_persistent_norm), t) / trapezoid(np.abs(decay_exp_norm), t)
-        area_qnm = trapezoid(np.abs(decay_exp_norm), t)
-        area_141 = trapezoid(np.abs(decay_persistent_norm), t)
+        # Fallback to numpy 1.x trapz
+        persistence_ratio = np.trapz(np.abs(decay_persistent_norm), t) / np.trapz(np.abs(decay_exp_norm), t)
+        area_qnm = np.trapz(np.abs(decay_exp_norm), t)
+        area_141 = np.trapz(np.abs(decay_persistent_norm), t)
     
     print(f"\n📈 ANÁLISIS DE PERSISTENCIA:")
     print(f"   • Área bajo curva (0-5s):")
