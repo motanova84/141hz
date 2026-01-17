@@ -53,7 +53,7 @@ class RecolectorDatosCrudos:
         (self.datos_crudos_dir / "demostraciones").mkdir(exist_ok=True)
         (self.datos_crudos_dir / "visualizaciones").mkdir(exist_ok=True)
     
-    def ejecutar_script(self, script_path: Path, descripcion: str, timeout: int = 300) -> Dict[str, Any]:
+    def ejecutar_script(self, script_path: Path, descripcion: str, timeout: int = 600) -> Dict[str, Any]:
         """Ejecuta un script y captura su salida."""
         print(f"\n{'='*80}")
         print(f"Ejecutando: {descripcion}")

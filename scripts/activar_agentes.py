@@ -339,7 +339,9 @@ class ActivadorMaestroAgentes:
             # Fase 4: Recolectar datos crudos
             recoleccion_ok = self.recolectar_datos_crudos()
             
-            # Fase 5: Activar agente autónomo (opcional, puede tardar mucho)
+            # Fase 5: Activar agente autónomo
+            # TODO: Descomentar cuando sea necesario ejecutar auto-corrección completa
+            # Nota: Este paso puede tardar 30+ minutos en completarse
             # agente_ok = self.activar_agente_autonomo()
             
             # Fase 6: Generar informe
