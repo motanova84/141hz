@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-10-29T07:54:36.123373+00:00",
-  "precision_digits": 100,
+  "timestamp": "2026-01-17T12:59:55.763652+00:00",
+  "precision_digits": 30,
   "validation_suite": "riemann_zeros",
   "zeros_validation": {
     "constants": {
@@ -14,7 +14,7 @@
     "parameters": {
       "alpha": 0.006695,
       "T": 3967.986,
-      "precision_digits": 100,
+      "precision_digits": 30,
       "num_zeros_used": 3438
     },
     "computation": {
@@ -39,7 +39,7 @@
       "delta_correction": 1.3678480038157936,
       "log_term": 6.448175798149843
     },
-    "precision_digits": 100
+    "precision_digits": 30
   },
   "overall_status": "PASS",
   "summary": {
