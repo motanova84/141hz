@@ -10,7 +10,7 @@ de reporte científico completo.
 Basado en Abbott et al. 2016, PRL 116, 061102 (GW150914 detection)
 
 Author: Análisis científico automatizado
-Date: 2026
+Date: 2025
 """
 
 import numpy as np
@@ -118,11 +118,27 @@ def cargar_datos_gw150914():
         
         # Crear TimeSeries simulado
         class SimTimeSeries:
+            """Simple TimeSeries class for simulated data"""
             def __init__(self, data, times, sample_rate):
                 self.value = data
-                self.times = type('obj', (object,), {'value': times + GW150914_PARAMS['GPS']})()
-                self.sample_rate = type('obj', (object,), {'value': sample_rate})()
-                self.dt = type('obj', (object,), {'value': 1/sample_rate})()
+                self.sample_rate_value = sample_rate
+                self.dt_value = 1/sample_rate
+                
+                # Create times object with value attribute
+                self.times_value = times + GW150914_PARAMS['GPS']
+                
+                # Expose attributes through nested objects for compatibility
+                class TimeWrapper:
+                    def __init__(self, val):
+                        self.value = val
+                
+                class RateWrapper:
+                    def __init__(self, val):
+                        self.value = val
+                        
+                self.times = TimeWrapper(self.times_value)
+                self.sample_rate = RateWrapper(self.sample_rate_value)
+                self.dt = RateWrapper(self.dt_value)
             
             def __len__(self):
                 return len(self.value)
@@ -193,7 +209,8 @@ def analyze_postmerger_resonances(strain_data, merger_time_offset=0.01):
         try:
             f_psd, psd = signal.welch(post_merger, fs=1/dt, nperseg=min(256, N//4))
             psd_data = {'frequencies': f_psd, 'psd': psd}
-        except:
+        except (ValueError, RuntimeError) as e:
+            print(f"   ⚠️  PSD calculation failed for {det}: {e}")
             psd_data = None
         
         results[det] = {
@@ -223,8 +240,11 @@ analysis_results = analyze_postmerger_resonances(strain_data)
 # ============================================================================
 print("\n3. 📈 CALCULANDO SIGNIFICANCIA ESTADÍSTICA (Monte Carlo, N=1000)...")
 
-def calculate_statistical_significance(analysis_results, n_trials=1000):
+def calculate_statistical_significance(analysis_results, n_trials=1000, random_seed=42):
     """Calcular significancia estadística con Monte Carlo"""
+    # Set random seed for reproducibility
+    np.random.seed(random_seed)
+    
     if 'H1' not in analysis_results:
         return {
             'p_value': 1.0,
@@ -607,7 +627,7 @@ def generate_scientific_report(analysis_results, stats_results, detailed_results
 {'='*100}
 
 FECHA DEL ANÁLISIS: {timestamp}
-CÓDIGO HASH DE INTEGRIDAD: 1d62f6d4 (protocolo de verificación de datos)
+PROTOCOLO DE VERIFICACIÓN: Análisis automatizado reproducible
 
 1. INTRODUCCIÓN
 ---------------
@@ -822,8 +842,8 @@ print(f"   2. results/reports/GW150914_1417Hz_Scientific_Report_*.txt - Reporte 
 print(f"   3. results/reports/GW150914_1417Hz_Results_*.json - Resultados JSON")
 
 print(f"\n🔒 INTEGRIDAD DEL ANÁLISIS:")
-print(f"   • Hash de verificación: 1d62f6d4")
-print(f"   • Protocolo reproducible")
+print(f"   • Protocolo reproducible con semilla aleatoria fija")
+print(f"   • Parámetros documentados en reporte")
 print(f"   • Análisis completado exitosamente")
 
 print(f"\n" + "="*80)

@@ -219,10 +219,10 @@ pip install gwpy gwosc
 
 ## 🔒 Reproducibility
 
-- **Hash verification**: 1d62f6d4
-- **Seed**: Fixed random seed for Monte Carlo (when applicable)
+- **Random seed**: Fixed at 42 for Monte Carlo simulations
 - **Data source**: GWOSC public data or documented simulated data
 - **Protocol**: Complete methodology documented in scientific report
+- **Parameter tracking**: All analysis parameters saved in JSON output
 
 ## 📊 Example Results
 
