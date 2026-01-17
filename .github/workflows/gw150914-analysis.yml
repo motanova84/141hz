@@ -1,0 +1,192 @@
+name: GW150914 Complete Analysis - 141.7 Hz
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'analisis_completo_gw150914.py'
+      - '.github/workflows/gw150914-analysis.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Run weekly on Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  gw150914-complete-analysis:
+    name: GW150914 Analysis - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-gw150914-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-gw150914-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy matplotlib
+      
+      - name: Run GW150914 complete analysis
+        run: |
+          python3 analisis_completo_gw150914.py
+      
+      - name: Validate analysis outputs
+        run: |
+          python3 << 'EOF'
+          import json
+          import sys
+          import os
+          import glob
+          
+          print("=" * 70)
+          print("GW150914 ANALYSIS VALIDATION")
+          print("=" * 70)
+          
+          # Find the most recent JSON results file
+          json_files = glob.glob('results/reports/GW150914_1417Hz_Results_*.json')
+          
+          if not json_files:
+              print("❌ No results JSON file found")
+              sys.exit(1)
+          
+          json_file = sorted(json_files)[-1]  # Get most recent
+          print(f"\n📂 Loading results from: {json_file}")
+          
+          with open(json_file, 'r') as f:
+              results = json.load(f)
+          
+          print("\n📊 Analysis Results:")
+          print(f"   • Timestamp: {results.get('timestamp', 'N/A')}")
+          
+          # Check GW150914 parameters
+          params = results.get('gw150914_params', {})
+          print(f"\n🌌 GW150914 Parameters:")
+          print(f"   • GPS Time: {params.get('GPS', 'N/A')}")
+          print(f"   • Final Mass: {params.get('M_final', 'N/A')} M☉")
+          print(f"   • Final Spin: {params.get('a_final', 'N/A')}")
+          print(f"   • Distance: {params.get('distance', 'N/A')} Mpc")
+          
+          # Check analysis results
+          analysis = results.get('analysis_results', {})
+          print(f"\n📈 Analysis Results:")
+          print(f"   • H1 SNR: {analysis.get('H1_snr', 0):.2f}")
+          print(f"   • L1 SNR: {analysis.get('L1_snr', 0):.2f}")
+          
+          # Check statistics
+          stats = results.get('statistics', {})
+          print(f"\n📊 Statistical Metrics:")
+          print(f"   • Observed SNR: {stats.get('observed_snr', 0):.2f}")
+          print(f"   • P-value: {stats.get('p_value', 1):.2e}")
+          print(f"   • FAP: {stats.get('fap', 1):.2e}")
+          print(f"   • Significance: {stats.get('significance_sigma', 0):.2f}σ")
+          
+          # Check detailed analysis
+          detailed = results.get('detailed_analysis', {})
+          print(f"\n🔬 Detailed Analysis:")
+          print(f"   • Phase Coherence: {detailed.get('phase_coherence', 0):.3f} rad")
+          print(f"   • SNR Combined: {detailed.get('snr_combined', 0):.2f}")
+          print(f"   • Energy Estimate: {detailed.get('energy_estimate_msun', 0):.2e} M☉")
+          
+          # Validate that key fields exist
+          required_fields = ['timestamp', 'gw150914_params', 'analysis_results', 'statistics', 'detailed_analysis']
+          missing_fields = [field for field in required_fields if field not in results]
+          
+          if missing_fields:
+              print(f"\n❌ Missing required fields: {missing_fields}")
+              sys.exit(1)
+          
+          # Check that figure exists
+          if not os.path.exists('results/figures/GW150914_1417Hz_Analysis_Complete.png'):
+              print("\n❌ Analysis figure not generated")
+              sys.exit(1)
+          
+          print("\n✅ GW150914 analysis validation PASSED")
+          print("=" * 70)
+          EOF
+      
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: gw150914-analysis-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            results/figures/GW150914_1417Hz_Analysis_Complete.png
+            results/reports/GW150914_1417Hz_Scientific_Report_*.txt
+            results/reports/GW150914_1417Hz_Results_*.json
+          retention-days: 30
+  
+  analysis-summary:
+    name: Analysis Summary
+    needs: [gw150914-complete-analysis]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "# 🌌 GW150914 Complete Analysis — 141.7 Hz Post-Merger Search" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Analysis Components" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Implemented Sections" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. ✅ **Data Loading** - GWOSC fetch with simulated fallback" >> $GITHUB_STEP_SUMMARY
+          echo "2. ✅ **Spectrotemporal Analysis** - Post-merger window (10-500 ms)" >> $GITHUB_STEP_SUMMARY
+          echo "3. ✅ **Statistical Significance** - Monte Carlo (N=1000)" >> $GITHUB_STEP_SUMMARY
+          echo "4. ✅ **141.7 Hz Analysis** - Phase coherence, SNR, energy estimation" >> $GITHUB_STEP_SUMMARY
+          echo "5. ✅ **Comprehensive Visualizations** - 9 subplot figure" >> $GITHUB_STEP_SUMMARY
+          echo "6. ✅ **Scientific Conclusions** - Thresholds: SNR>8, σ>5" >> $GITHUB_STEP_SUMMARY
+          echo "7. ✅ **Report Generation** - TXT and JSON formats" >> $GITHUB_STEP_SUMMARY
+          echo "8. ✅ **Executive Summary** - Key findings and recommendations" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Outputs Generated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 **Figure**: 9-panel comprehensive analysis plot" >> $GITHUB_STEP_SUMMARY
+          echo "- 📄 **Report**: Scientific report in text format" >> $GITHUB_STEP_SUMMARY
+          echo "- 📋 **Data**: Results in JSON format for reproducibility" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Key Features" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Post-merger resonance search (141.7 Hz)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Statistical significance testing (Monte Carlo)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Comparison with GR predictions (QNM frequencies)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Multi-detector coherence analysis (H1/L1)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Energy estimation and physical interpretation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**∞³ NOĒSIS GW150914 ANALYSIS ∞³**" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check analysis status
+        run: |
+          if [ "${{ needs.gw150914-complete-analysis.result }}" == "success" ]; then
+            echo "✅ GW150914 analysis completed successfully"
+            exit 0
+          else
+            echo "⚠️ GW150914 analysis failed or was skipped"
+            echo "Status: ${{ needs.gw150914-complete-analysis.result }}"
+            exit 1
+          fi
