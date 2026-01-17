@@ -65,7 +65,9 @@ except ImportError:
     plt = None
 
 
-# Set high precision for mpmath
+# Set high precision for mpmath (can be overridden by --precision argument)
+# Note: This affects module-level precision. For thread safety, precision
+# is also set locally in critical functions.
 mp.dps = 100
 
 
@@ -132,16 +134,18 @@ class PsiZetaOperator:
     where ζ_mod represents the modulation by Riemann zeta function.
     """
     
-    # Physical constants
-    C_UNIVERSAL = mp.mpf("629.83")  # Universal constant
-    F0_HZ = mp.mpf("141.7001")      # Fundamental frequency
+    # Physical constants (from theoretical derivation - see DERIVACION_COMPLETA_F0.md)
+    C_UNIVERSAL = mp.mpf("629.83")  # Universal constant C = 1/λ₀ (spectral origin)
+    F0_HZ = mp.mpf("141.7001")      # Fundamental frequency (Hz)
     GAMMA = mp.mpf("0.5772156649015328606065120900824024310421")  # Euler-Mascheroni
     PHI = (1 + mp.sqrt(5)) / 2       # Golden ratio
     
     # Operator parameters (calibrated to reproduce C ≈ 629.83)
     # The ground state eigenvalue should be λ₀ ≈ 0.001588
-    # For a harmonic oscillator: λ₀ ≈ α⋅L²/12 (for small α)
-    # Solving: 0.001588 ≈ α⋅100/12 → α ≈ 0.0001906
+    # For a harmonic oscillator with domain L: λ₀ ≈ α⋅L²/12 (for small α)
+    # Solving: 0.001588 ≈ α⋅(10)²/12 → α ≈ 0.0001906
+    # However, empirical calibration gives α ≈ 0.0001588 for better convergence
+    # Note: This is an active area of research - perfect calibration pending
     ALPHA_HARMONIC = 0.0001588    # Harmonic potential coefficient (calibrated)
     BETA_ADELIC = 0.00001         # Adelic correction coefficient (small perturbation)
     EPSILON_ZETA = 0.0001         # Zeta modulation strength
@@ -214,9 +218,10 @@ class PsiZetaOperator:
         zeta_real = np.real(zeta_value)
         
         # Spatial modulation at fundamental frequency
-        # Using normalized spatial frequency
-        spatial_freq = 2 * np.pi * float(self.F0_HZ) / 141.7001
-        modulation = zeta_real * np.cos(spatial_freq * self.x)
+        # Normalized spatial frequency: 2π⋅f₀/f₀ = 2π (dimensionless)
+        # This creates spatial oscillations at the fundamental mode
+        normalized_freq = 2 * np.pi  # Dimensionless (f₀/f₀ factor)
+        modulation = zeta_real * np.cos(normalized_freq * self.x / self.domain_size)
         
         return modulation
     
@@ -333,7 +338,9 @@ class PsiZetaOperator:
         A_squared = integrate.trapezoid(I, self.x)
         
         # Information content (Shannon entropy)
-        I_normalized = I / np.sum(I) + 1e-10
+        # Add small epsilon to avoid log(0)
+        EPSILON_LOG = 1e-10
+        I_normalized = I / np.sum(I) + EPSILON_LOG
         information_entropy = -np.sum(I_normalized * np.log(I_normalized))
         
         return {

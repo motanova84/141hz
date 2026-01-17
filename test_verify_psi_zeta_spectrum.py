@@ -18,6 +18,9 @@ from verify_psi_zeta_spectrum import (
     PsiZetaOperator
 )
 
+# Numerical tolerance for zeta zero detection
+ZETA_ZERO_TOLERANCE = 1e-5  # |ζ(½+i⋅γₙ)| < tolerance implies zero
+
 
 def test_zeta_critical_line():
     """Test Riemann zeta function evaluation on critical line."""
@@ -35,7 +38,7 @@ def test_zeta_critical_line():
     t_zero = 14.134725
     zeta_zero = ZetaCriticalLine.evaluate(t_zero, precision=30)
     
-    assert abs(zeta_zero) < 1e-5, f"Zeta at first zero should be ~0, got {abs(zeta_zero)}"
+    assert abs(zeta_zero) < ZETA_ZERO_TOLERANCE, f"Zeta at first zero should be ~0, got {abs(zeta_zero)}"
     print(f"  ζ(1/2 + 14.134725i) ≈ 0 ✓")
     
     # Test zeros list
