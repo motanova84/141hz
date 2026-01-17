@@ -108,6 +108,13 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: GW170814 triple-detector triangulation (H1-L1-V1 phase coherence)
+        run: python3 scripts/analisis_gw170814_triangulacion.py
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Aggregate results
         run: python3 scripts/aggregate_results.py
         continue-on-error: true
@@ -273,6 +280,12 @@ jobs:
             echo "### GWTC-1 Population Analysis (√N Scaling)" >> $GITHUB_STEP_SUMMARY
             echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/gwtc1_population/gwtc1_population_analysis.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/gw170814_triangulacion/gw170814_triangulacion_completa.json" ]; then
+            echo "### GW170814 Triple-Detector Triangulation (Noetic Map Closure)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/gw170814_triangulacion/gw170814_triangulacion_completa.json | head -40 >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/aggregated_report.json" ]; then
