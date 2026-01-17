@@ -35,7 +35,7 @@ REFERENCIAS:
 - Berti et al. 2009, PRD 93, 124051 (QNM de Kerr)
 
 Autor: José Manuel Mota Burruezo (JMMB Ψ✧)
-Fecha: Enero 2026
+Fecha: Enero 2024
 """
 
 import numpy as np
@@ -228,7 +228,8 @@ def calculate_statistical_significance(analysis_results, n_trials=10000):
     
     # 2. Ajustar distribución de Rayleigh para ruido
     from scipy.stats import rayleigh
-    scale = np.std(noise_amplitudes) / np.sqrt(2 - np.pi/2)
+    # Estimate scale parameter using MLE for Rayleigh distribution
+    scale = np.sqrt(np.mean(noise_amplitudes**2) / 2)
     
     # 3. Estadístico observado
     obs_amplitude = np.abs(analysis_results['H1']['amplitude'])
@@ -242,10 +243,13 @@ def calculate_statistical_significance(analysis_results, n_trials=10000):
     
     simulated_snrs = []
     for i in range(n_trials):
-        # Generar ruido sintético con misma PSD
-        noise_sim = np.random.normal(0, scale, len(noise_amplitudes))
-        # Tomar "amplitud" en frecuencia objetivo
-        sim_amplitude = np.abs(noise_sim[np.random.randint(len(noise_sim))])
+        # Generar ruido complejo gaussiano con misma estadística
+        noise_real = np.random.normal(0, scale/np.sqrt(2), len(noise_amplitudes))
+        noise_imag = np.random.normal(0, scale/np.sqrt(2), len(noise_amplitudes))
+        noise_complex = noise_real + 1j * noise_imag
+        
+        # Calcular amplitud en frecuencia aleatoria (simulando FFT)
+        sim_amplitude = np.abs(noise_complex[np.random.randint(len(noise_complex))])
         simulated_snrs.append(sim_amplitude / scale)
     
     simulated_snrs = np.array(simulated_snrs)
@@ -530,7 +534,7 @@ def plot_comprehensive_results(strain_data, analysis_results, stats_results):
     
     plt.tight_layout()
     plt.savefig('gw150914_1417Hz_analysis.png', dpi=300, bbox_inches='tight')
-    plt.close()
+    # Don't close the figure so it can be returned
     
     return fig
 
@@ -715,8 +719,11 @@ def coherent_signal_analysis(analysis_results, target_freq=141.7):
     # Índice de frecuencia objetivo
     idx_target = np.argmin(np.abs(freqs - target_freq))
     
-    # Coherencia normalizada
-    coherence_normalized = coherence_magnitude / (np.abs(fft_H1) * np.abs(fft_L1) + 1e-20)
+    # Coherencia normalizada (with proper handling of zero denominators)
+    denominator = np.abs(fft_H1) * np.abs(fft_L1)
+    coherence_normalized = np.divide(coherence_magnitude, denominator,
+                                     out=np.zeros_like(coherence_magnitude),
+                                     where=denominator > 1e-30)
     
     # Coherencia en banda estrecha alrededor de 141.7 Hz
     bandwidth = 1.0  # Hz
@@ -995,14 +1002,14 @@ if __name__ == "__main__":
         
         # Comparativa: QNM Clásicos vs. Resonancia 141.7 Hz
         print("\n" + "="*80)
-        print("COMPARATIVA: QNM CLÁSICOS vs. RESONANCIA 141.7 Hz")
+        print("COMPARATIVA: ANÁLISIS ESPECTRAL")
         print("="*80)
-        print("\nAtributo                | Modos Cuasinormales (QNM) | Resonancia Noética (f₀)")
+        print("\nAtributo                | Modos QNM Predichos   | Búsqueda a 141.7 Hz")
         print("-" * 80)
-        print(f"Frecuencia (l=2, m=2)   | ~251 Hz (Predicho)        | 141.7 Hz (Observado)")
-        print(f"Origen                  | Geometría Schwarzschild   | Geometría Cuántica/Riemann")
-        print(f"Persistencia            | Decaimiento Exponencial   | Persistencia Residual (Tail)")
-        print(f"Significancia           | Confirmada (Abbott+2016)  | SNR={results['detailed']['snr_combined']:.2f}")
+        print(f"Frecuencia (l=2, m=2)   | ~251 Hz (Kerr)        | 141.7 Hz (Objetivo)")
+        print(f"Método                  | Relatividad General   | Análisis Espectral")
+        print(f"Ventana temporal        | Post-merger completo  | 10-500 ms post-peak")
+        print(f"Significancia           | Confirmada (>5σ)      | SNR={results['detailed']['snr_combined']:.2f}")
         print("=" * 80)
         
     except KeyboardInterrupt:

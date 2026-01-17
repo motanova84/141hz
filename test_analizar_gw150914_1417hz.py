@@ -10,6 +10,11 @@ import numpy as np
 import sys
 import os
 
+# Get script directory dynamically
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SCRIPT_PATH = os.path.join(SCRIPT_DIR, 'analizar_gw150914_1417hz.py')
+
+
 def test_imports():
     """Test that all required imports are available"""
     print("Testing imports...")
@@ -71,13 +76,11 @@ def test_script_exists():
     """Test that the analysis script exists"""
     print("\nTesting script existence...")
     
-    script_path = "/home/runner/work/141hz/141hz/analizar_gw150914_1417hz.py"
-    
-    if os.path.exists(script_path):
-        print(f"  ✅ Script found at {script_path}")
+    if os.path.exists(SCRIPT_PATH):
+        print(f"  ✅ Script found at {SCRIPT_PATH}")
         return True
     else:
-        print(f"  ❌ Script not found at {script_path}")
+        print(f"  ❌ Script not found at {SCRIPT_PATH}")
         return False
 
 
@@ -86,7 +89,7 @@ def test_script_syntax():
     print("\nTesting script syntax...")
     
     try:
-        with open("/home/runner/work/141hz/141hz/analizar_gw150914_1417hz.py", 'r') as f:
+        with open(SCRIPT_PATH, 'r') as f:
             code = f.read()
         
         compile(code, 'analizar_gw150914_1417hz.py', 'exec')
@@ -103,7 +106,8 @@ def test_functions_defined():
     
     try:
         # Add the script directory to path
-        sys.path.insert(0, '/home/runner/work/141hz/141hz')
+        if SCRIPT_DIR not in sys.path:
+            sys.path.insert(0, SCRIPT_DIR)
         
         import analizar_gw150914_1417hz as gw_script
         
@@ -143,7 +147,8 @@ def test_constants_defined():
     print("\nTesting constant definitions...")
     
     try:
-        sys.path.insert(0, '/home/runner/work/141hz/141hz')
+        if SCRIPT_DIR not in sys.path:
+            sys.path.insert(0, SCRIPT_DIR)
         import analizar_gw150914_1417hz as gw_script
         
         if hasattr(gw_script, 'GW150914_PARAMS'):
