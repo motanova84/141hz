@@ -113,7 +113,8 @@ def generate_primes(n: int) -> List[int]:
     if n < 6:
         limit = 20
     else:
-        limit = int(n * (np.log(n) + np.log(np.log(n)) + 2))
+        log_n = np.log(n)
+        limit = int(n * (log_n + np.log(log_n) + 2))
 
     # Criba de Eratóstenes optimizada
     sieve = np.ones(limit + 1, dtype=bool)
@@ -290,8 +291,11 @@ def perform_rigorous_spectral_analysis(n_primes: int = 100) -> VerificationResul
     print("\nPaso 2: Calculando datos espectrales...")
     prime_data = []
     
+    # Configurar intervalo de progreso basado en cantidad
+    progress_interval = max(1, n_primes // 10)
+    
     for i, p in enumerate(primes, 1):
-        if i % 10 == 0:
+        if i % progress_interval == 0 or i == n_primes:
             print(f"  Progreso: {i}/{n_primes} primos procesados...")
         
         # Cálculos de alta precisión
@@ -504,9 +508,10 @@ def verify_precision(prime_data: List[PrimeSpectralData],
         p17_precision = 0.0
         p17_error = 0.0
     
-    # Criterio de éxito: >99.98%
+    # Criterio de éxito: >99.98% para p=17, >95% para R² (ajustable con n_primes)
     precision_threshold = 99.98
-    passed = r_squared_precision >= 95.0 and p17_precision >= precision_threshold
+    r_squared_threshold = 95.0  # R² alcanza ~0.99 con 50+ primos
+    passed = r_squared_precision >= r_squared_threshold and p17_precision >= precision_threshold
     
     return {
         "r_squared_achieved": r_squared,

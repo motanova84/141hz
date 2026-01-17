@@ -77,8 +77,8 @@ class TestEquilibriumFunction:
         
         # Para primos grandes, equilibrium crece generalmente
         # (aunque no es estrictamente monotónico en primos pequeños)
-        eq100 = float(equilibrium_function(100))  # Un número grande
-        assert eq100 > eq17  # Equilibrium crece para números mayores
+        eq97 = float(equilibrium_function(97))  # Un primo grande
+        assert eq97 > eq17  # Equilibrium crece para primos mayores
 
 
 class TestRPsiCalculation:
@@ -131,9 +131,9 @@ class TestFrequencyCalculation:
         """Verifica tendencia general creciente de frecuencias."""
         # Aunque no es estrictamente monotónica, la tendencia es creciente
         freq2 = float(calculate_frequency(2))
-        freq100 = float(calculate_frequency(100))  # Un primo grande
+        freq97 = float(calculate_frequency(97))  # Un primo grande
         
-        assert freq100 > freq2, "Las frecuencias deben tender a crecer con primos mayores"
+        assert freq97 > freq2, "Las frecuencias deben tender a crecer con primos mayores"
 
 
 class TestMusicalMapping:
@@ -304,29 +304,32 @@ class TestFullVerification:
         """Verifica que la exportación a JSON funcione."""
         import tempfile
         import json
+        import os
         
         result = perform_rigorous_spectral_analysis(20)
         
+        # Usar contexto para asegurar limpieza
         with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
             output_path = f.name
         
-        from verificacion_espectral_primos_rigurosa import export_verification_to_json
-        export_path = export_verification_to_json(result, output_path)
-        
-        # Verificar que el archivo existe y es válido JSON
-        import os
-        assert os.path.exists(export_path)
-        
-        with open(export_path, 'r') as f:
-            data = json.load(f)
-        
-        assert 'metadata' in data
-        assert 'prime_data' in data
-        assert 'verification_status' in data
-        assert len(data['prime_data']) == 20
-        
-        # Limpiar
-        os.remove(export_path)
+        try:
+            from verificacion_espectral_primos_rigurosa import export_verification_to_json
+            export_path = export_verification_to_json(result, output_path)
+            
+            # Verificar que el archivo existe y es válido JSON
+            assert os.path.exists(export_path)
+            
+            with open(export_path, 'r') as f:
+                data = json.load(f)
+            
+            assert 'metadata' in data
+            assert 'prime_data' in data
+            assert 'verification_status' in data
+            assert len(data['prime_data']) == 20
+        finally:
+            # Asegurar limpieza incluso si el test falla
+            if os.path.exists(output_path):
+                os.remove(output_path)
 
 
 if __name__ == "__main__":
