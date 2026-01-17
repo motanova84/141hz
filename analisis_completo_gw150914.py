@@ -58,6 +58,13 @@ print("🚀 EJECUTANDO ANÁLISIS CIENTÍFICO COMPLETO DE GW150914")
 print("BÚSQUEDA DE RESONANCIA POST-MERGER A 141.7 Hz")
 print("="*80)
 
+# Set random seed for reproducibility
+np.random.seed(42)
+
+# Physical constants
+GM_OVER_C3 = 4.9255e-6  # Geometric unit conversion: GM/c³ in seconds for 1 solar mass
+CONFIDENCE_LEVEL_95 = 0.05  # Alpha for 95% confidence level
+
 # ============================================================================
 # 1. CARGA DE DATOS REALES DESDE GWOSC
 # ============================================================================
@@ -533,7 +540,7 @@ def plot_comprehensive_results(strain_data, analysis_results, stats_results, det
     ax9.scatter([M_f], [f_obs], color='red', s=100, label='141.7 Hz (obs)', zorder=5)
     
     m_range = np.linspace(50, 100, 50)
-    f_range = 1 / (2*np.pi) / (m_range * 4.9255e-6)
+    f_range = 1 / (2*np.pi) / (m_range * GM_OVER_C3)
     ax9.plot(m_range, f_range, 'k--', alpha=0.5, label='f ∝ 1/M')
     
     ax9.set_xlabel('Masa Final [M☉]')
@@ -608,7 +615,8 @@ else:
     print(f"\n📈 LÍMITES SUPERIORES ESTABLECIDOS:")
     scale = stats_results.get('noise_distribution', {}).get('scale', 0)
     if scale > 0:
-        print(f"   • Amplitud máxima (95% CL): {scale*np.sqrt(-2*np.log(0.05)):.2e}")
+        upper_limit = scale * np.sqrt(-2 * np.log(CONFIDENCE_LEVEL_95))
+        print(f"   • Amplitud máxima (95% CL): {upper_limit:.2e}")
     print(f"   • Energía radiada máxima en 141.7 Hz: {detailed_results['energy_estimate_msun']:.2e} M☉")
 
 # ============================================================================
@@ -723,7 +731,7 @@ Relatividad General.
     compatibles con fluctuaciones estadísticas del ruido instrumental.
     
     LÍMITES SUPERIORES ESTABLECIDOS:
-    1. Amplitud máxima (95% CL): {scale*np.sqrt(-2*np.log(0.05)) if scale > 0 else 0:.2e}
+    1. Amplitud máxima (95% CL): {scale*np.sqrt(-2*np.log(CONFIDENCE_LEVEL_95)) if scale > 0 else 0:.2e}
     2. Energía radiada máxima: {detailed_results.get('energy_estimate_msun', 0):.2e} M☉
     3. Fracción de masa máxima: {detailed_results.get('energy_estimate_msun', 0)/GW150914_PARAMS['M_final']:.2e}
     
