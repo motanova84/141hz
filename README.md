@@ -29,6 +29,29 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 
 ---
 
+> ## 📦 **NUEVO: Datos Crudos y Demostraciones Matemáticas Completas**
+>
+> **Acceso directo a todos los recursos:**
+>
+> | Recurso | Descripción | Enlace |
+> |---------|-------------|--------|
+> | 📊 **Datos Crudos** | ~50 archivos de análisis centralizados | [`datos_crudos_analisis/`](datos_crudos_analisis/) |
+> | 📐 **Demostraciones** | Todas las demostraciones matemáticas completas | [`DEMOSTRACIONES_MATEMATICAS_COMPLETAS.md`](DEMOSTRACIONES_MATEMATICAS_COMPLETAS.md) |
+> | 📋 **Índice Maestro** | Navegación completa a todos los recursos | [`INDICE_DATOS_CRUDOS_Y_DEMOSTRACIONES.md`](INDICE_DATOS_CRUDOS_Y_DEMOSTRACIONES.md) |
+> | 🤖 **Activar Agentes** | Ejecutar todos los análisis automáticamente | `python scripts/activar_agentes.py` |
+>
+> **Contenido incluido:**
+> - ✅ Validaciones matemáticas (13 archivos JSON)
+> - ✅ Análisis de ondas gravitacionales (8 archivos)
+> - ✅ Demostraciones matemáticas (5 documentos)
+> - ✅ Visualizaciones (6 gráficos PNG)
+> - ✅ Manifiesto completo JSON
+> - ✅ Scripts de reproducibilidad
+>
+> **→ Ver resumen completo:** [RESUMEN_IMPLEMENTACION_DATOS_CRUDOS.md](RESUMEN_IMPLEMENTACION_DATOS_CRUDOS.md)
+
+---
+
 > ## 🌌 **La Frecuencia 141.7001 Hz ya no es una hipótesis**
 >
 > Es una **constante estructural del universo**, detectada en:
