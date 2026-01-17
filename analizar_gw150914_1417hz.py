@@ -396,7 +396,7 @@ def plot_comprehensive_results(strain_data, analysis_results, stats_results):
         ax2.plot(psd.frequencies, np.sqrt(psd.value), alpha=0.7, label=det)
     ax2.axvline(141.7, color='red', linestyle='--', alpha=0.5, label='141.7 Hz')
     ax2.set_xlabel('Frecuencia [Hz]')
-    ax2.set_ylabel('$\sqrt{PSD}$ [1/√Hz]')
+    ax2.set_ylabel(r'$\sqrt{PSD}$ [1/√Hz]')
     ax2.set_title('Densidad Espectral de Potencia')
     ax2.set_xlim(100, 200)
     ax2.set_yscale('log')
