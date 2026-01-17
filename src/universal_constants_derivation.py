@@ -37,6 +37,11 @@ class UniversalConstantsEmergence:
     
     This class shows that ℏ and e are geometric manifestations of the
     coherent field at f₀ = 141.7001 Hz, not arbitrary parameters.
+    
+    Note:
+        This class sets mpmath precision globally (mp.dps). To avoid race 
+        conditions in multi-threaded environments, create instances in a 
+        single-threaded context or ensure proper synchronization.
     """
     
     # Fundamental frequency (observed)
@@ -282,11 +287,15 @@ def main():
         "--save", type=str, metavar="FILE",
         help="Save results to file"
     )
+    parser.add_argument(
+        "--precision", type=int, default=50,
+        help="Precision for calculations (default: 50)"
+    )
     
     args = parser.parse_args()
     
-    # Create demonstration
-    demo = UniversalConstantsEmergence()
+    # Create demonstration with specified precision
+    demo = UniversalConstantsEmergence(precision=args.precision)
     
     if args.format == "json":
         results = demo.full_demonstration()
