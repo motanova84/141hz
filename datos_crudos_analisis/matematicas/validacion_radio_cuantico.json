@@ -1,0 +1,27 @@
+{
+  "titulo": "Validación Numérica del Radio Cuántico RΨ",
+  "constantes": {
+    "c_m_s": 299792458.0,
+    "l_p_m": 1.616255e-35,
+    "f0_Hz": 141.7001
+  },
+  "resultado_principal": {
+    "R_psi_metros": 336721.3685266942,
+    "R_psi_unidades_planck": 2.083343089591025e+40,
+    "orden_magnitud": 40,
+    "mantisa": 2.083343089591025
+  },
+  "verificacion": {
+    "f0_recuperada_Hz": 141.7001,
+    "error_relativo_porcentaje": 0.0,
+    "consistente": true
+  },
+  "jerarquia_escalas": {
+    "longitud_planck_m": 1.616255e-35,
+    "radio_cuantico_m": 336721.3685266942,
+    "longitud_onda_GW_m": 2115682.755340328,
+    "horizonte_cosmologico_m": 1.362692990909091e+26
+  },
+  "referencia": "DOI: 10.5281/zenodo.17379721",
+  "autor": "José Manuel Mota Burruezo (JMMB Ψ✧)"
+}

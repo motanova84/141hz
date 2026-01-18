@@ -1,0 +1,35 @@
+{
+  "falsabilidad": "EXPLÍCITA",
+  "criterios": {
+    "gravitacional": {
+      "criterio": "Ausencia en GWTC-3+",
+      "descripcion": "Si la frecuencia 141.7 Hz no aparece en ningún evento de GWTC-3 o catálogos posteriores",
+      "metodo_verificacion": "Análisis espectral de todos los eventos con SNR > 5",
+      "umbral_falsacion": "Ausencia en >10 eventos con masa total >50 M☉",
+      "estado": "VERIFICABLE"
+    },
+    "topologico": {
+      "criterio": "No detección en Bi₂Se₃ @ 4K",
+      "descripcion": "Si experimentos en aislantes topológicos Bi₂Se₃ a 4K no muestran resonancia",
+      "metodo_verificacion": "Espectroscopía de impedancia en banda 140-143 Hz",
+      "umbral_falsacion": "Ausencia de pico espectral con Q > 100 en ±1 Hz",
+      "estado": "PENDIENTE EXPERIMENTAL"
+    },
+    "cosmologico": {
+      "criterio": "Compatibilidad total con ΛCDM",
+      "descripcion": "Si efectos predichos son indistinguibles de ΛCDM estándar",
+      "metodo_verificacion": "Análisis Bayesiano comparativo de modelos cosmológicos",
+      "umbral_falsacion": "Bayes Factor BF < 1 favoreciendo ΛCDM puro",
+      "estado": "VERIFICABLE"
+    },
+    "neurociencia": {
+      "criterio": "Ausencia en EEG doble ciego",
+      "descripcion": "Si estudios EEG controlados no detectan componente 141.7 Hz",
+      "metodo_verificacion": "EEG de alta resolución (n>100) con protocolo doble ciego",
+      "umbral_falsacion": "p-value > 0.05 en todos los grupos experimentales",
+      "estado": "PENDIENTE EXPERIMENTAL"
+    }
+  },
+  "principio": "Hipótesis científica falsable según criterio de Popper",
+  "verificacion": "Independiente por cualquier laboratorio con equipamiento apropiado"
+}

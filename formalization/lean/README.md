@@ -55,7 +55,9 @@ formalization/lean/
 │   ├── Primes.lean            # Prime number theory
 │   ├── Emergence.lean         # Emergence theorem: f₀ from ζ' and φ
 │   ├── Convergence.lean       # Convergence from prime distribution
-│   └── Main.lean              # Complete derivation theorem
+│   ├── Main.lean              # Complete derivation theorem
+│   └── H_psi_core.lean        # Berry-Keating operator H_Ψ [NEW]
+├── BerryKeating.lean          # Berry-Keating module wrapper [NEW]
 └── Tests/
     └── Verification.lean      # Test suite (15 tests)
 ```
@@ -295,6 +297,27 @@ Unified theorem statement combining all results:
 - `angular_frequency_determined`: ω₀ = 2πf₀
 - `f0_has_algebraic_structure`: Algebraic properties
 - `f0_connected_to_primes`: Connection to prime distribution
+
+### F0Derivation/H_psi_core.lean [NEW]
+
+**Berry-Keating operator H_Ψ** formalization:
+
+- `H_psi_action`: Operator definition H_Ψ(f) = -x·f'(x)
+- `H_psi_smooth`: H_Ψ preserves smoothness
+- `H_psi_bounded_L2`: Bounded with constant 4 (via Hardy inequality)
+- `H_psi_symmetric`: Symmetric operator via integration by parts
+- `H_psi_add`, `H_psi_smul`: Linearity properties
+
+**Mathematical Significance**: Provides the spectral framework connecting:
+- Quantum operators on Hilbert space
+- Riemann zeta function zeros
+- The fundamental frequency f₀ = 141.7001 Hz
+
+See `H_PSI_CORE_README.md` for complete documentation.
+
+### BerryKeating.lean [NEW]
+
+Module wrapper for easy import of Berry-Keating operator.
 
 ### Tests/Verification.lean
 
