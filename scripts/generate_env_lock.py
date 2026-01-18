@@ -213,7 +213,10 @@ def get_dataset_checksums(data_dir: Path = Path("data")) -> Dict:
             try:
                 h = hashlib.sha256()
                 with open(filepath, 'rb') as f:
-                    while chunk := f.read(8192):
+                    while True:
+                        chunk = f.read(8192)
+                        if not chunk:
+                            break
                         h.update(chunk)
                 
                 rel_path = filepath.relative_to(data_dir)
