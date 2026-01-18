@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-01-18T17:02:32.321125",
+  "timestamp": "2026-01-18T17:05:46.936728",
   "frequency": 141.7001,
   "optimized_mode": false,
   "files": {
-    "total_files": 1389,
-    "total_size_bytes": 64714607,
+    "total_files": 1392,
+    "total_size_bytes": 64725421,
     "extensions": {
-      ".md": 515,
+      ".md": 517,
       ".py": 571,
       "no_extension": 22,
       ".png": 70,
@@ -17,7 +17,7 @@
       ".txt": 6,
       ".yml": 4,
       ".pdf": 7,
-      ".json": 79,
+      ".json": 80,
       ".ipynb": 16,
       ".html": 6,
       ".cff": 2,
@@ -40,9 +40,9 @@
     }
   },
   "qcal": {
-    "qcal_references": 384,
-    "frequency_references": 849,
-    "manifesto_count": 49,
-    "qcal_files": 384
+    "qcal_references": 386,
+    "frequency_references": 851,
+    "manifesto_count": 50,
+    "qcal_files": 386
   }
 }
