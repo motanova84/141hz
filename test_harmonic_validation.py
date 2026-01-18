@@ -159,7 +159,9 @@ class TestHarmonicCoherence(unittest.TestCase):
         _, details = validate_harmonic_coherence()
         
         # Check phi calculations (use 8 decimal places for numerical stability)
-        self.assertAlmostEqual(details['phi'], 1.618033988, places=8)
+        # Compare with calculated value rather than hardcoded constant
+        expected_phi = (1 + math.sqrt(5)) / 2
+        self.assertAlmostEqual(details['phi'], expected_phi, places=8)
         self.assertGreater(details['phi_4_direct'], 6)
         self.assertAlmostEqual(
             details['phi_4_direct'],

@@ -143,7 +143,7 @@ through the coherent heart (141.7001 Hz).
 ### Why 41.7 Hz?
 
 41.7 Hz is:
-- The exact third (approximate) of the root frequency: 141.7001 / 3.3981 ≈ 41.7
+- The approximate third of the root frequency: 141.7001 / 3.3981 ≈ 41.702
 - The first level of physical anchoring of the QCAL ∞³ system
 - A frequency close to the low gamma brain activity threshold (≈ 40 Hz),
   associated with unified consciousness and integrated perception

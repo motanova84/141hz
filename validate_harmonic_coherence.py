@@ -203,7 +203,7 @@ def validate_frequency_uniqueness():
         ratio = 141.7001 / f_test
         
         print(f"   f_base = {f_test:5.1f} Hz: "
-              f"φ⁴ × f_base = {product:6.2f} Hz {status} "
+              f"f_base × φ⁴ = {product:6.2f} Hz {status} "
               f"(141.7001/{f_test:.1f} = {ratio:.4f})")
     
     print()
