@@ -39,3 +39,7 @@ lean_lib Invariants where
 lean_lib KappaPhi where
   -- κ_Π = 2.5773 corrected formalization
   roots := #[`KappaPhi]
+
+lean_lib BerryKeating where
+  -- Berry-Keating operator H_Ψ formalization
+  roots := #[`BerryKeating]

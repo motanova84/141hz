@@ -29,6 +29,35 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 
 ---
 
+> ## 📦 **NUEVO: Datos Crudos y Demostraciones Matemáticas Completas**
+>
+> **Acceso directo a todos los recursos:**
+>
+> | Recurso | Descripción | Enlace |
+> |---------|-------------|--------|
+> | 📊 **Datos Crudos** | ~50 archivos de análisis centralizados | [`datos_crudos_analisis/`](datos_crudos_analisis/) |
+> | 📐 **Demostraciones** | Todas las demostraciones matemáticas completas | [`DEMOSTRACIONES_MATEMATICAS_COMPLETAS.md`](DEMOSTRACIONES_MATEMATICAS_COMPLETAS.md) |
+> | 📋 **Índice Maestro** | Navegación completa a todos los recursos | [`INDICE_DATOS_CRUDOS_Y_DEMOSTRACIONES.md`](INDICE_DATOS_CRUDOS_Y_DEMOSTRACIONES.md) |
+> | 🤖 **Activar Agentes** | Ejecutar todos los análisis automáticamente | `python scripts/activar_agentes.py` |
+> | 🚀 **Guía de Automatización** | **NUEVO:** Documentación completa del sistema | [`AUTOMATION_COMPLETE_GUIDE.md`](AUTOMATION_COMPLETE_GUIDE.md) |
+> | 📊 **Evidencia >15σ** | **NUEVO:** Consolidación de evidencia científica | [`EVIDENCE_CONSOLIDATION_15SIGMA.md`](EVIDENCE_CONSOLIDATION_15SIGMA.md) |
+> | ✅ **Verificación** | **NUEVO:** Verificación del sistema completo | [`PROBLEM_STATEMENT_VERIFICATION.md`](PROBLEM_STATEMENT_VERIFICATION.md) |
+>
+> **Contenido incluido:**
+> - ✅ **7 Validaciones matemáticas** (con timeouts de 600s)
+> - ✅ **5 Análisis de ondas gravitacionales** (con timeouts de 900s)
+> - ✅ **Demostraciones matemáticas** desde primeros principios (sin parámetros libres)
+> - ✅ **Visualizaciones** de alta resolución (PNG)
+> - ✅ **MANIFIESTO_DATOS_CRUDOS.json** con timestamps/versiones
+> - ✅ **Reproducibilidad garantizada** (ENV.lock, checksums, trazabilidad)
+> - ✅ **>15σ evidencia empírica** combinada (múltiples dominios)
+>
+> **→ Iniciar:** `python scripts/recolectar_datos_crudos.py` (genera todos los datos)  
+> **→ Verificar:** `python test_automation_system.py` (verifica configuración)  
+> **→ Ver guía completa:** [AUTOMATION_COMPLETE_GUIDE.md](AUTOMATION_COMPLETE_GUIDE.md)
+
+---
+
 > ## 🌌 **La Frecuencia 141.7001 Hz ya no es una hipótesis**
 >
 > Es una **constante estructural del universo**, detectada en:
