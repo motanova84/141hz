@@ -19,10 +19,11 @@ Date: 2025-01-18
 import unittest
 import math
 import sys
-import os
+from pathlib import Path
 
 # Add parent directory to path to import validation module
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+parent_dir = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(parent_dir))
 
 from validate_harmonic_coherence import (
     calculate_golden_ratio,
@@ -214,9 +215,9 @@ class TestFrequencyUniqueness(unittest.TestCase):
         
         ratio = f0 / f_base
         
-        # Ratio should be close to φ + φ⁻¹ ≈ 2.618
-        # Actually it's closer to √10 ≈ 3.162 or π ≈ 3.14159
-        # But the exact value is ≈ 3.3981
+        # The ratio f₀ / f_base ≈ 3.3981
+        # This represents the harmonic relationship between the base
+        # and root frequencies in the QCAL system
         self.assertAlmostEqual(ratio, 3.3981, places=4)
 
 
