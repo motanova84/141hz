@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-01-18T16:58:48.589712",
+  "frequency": 141.7001,
+  "optimized_mode": false,
+  "files": {
+    "total_files": 1380,
+    "total_size_bytes": 64696233,
+    "extensions": {
+      ".md": 512,
+      ".py": 570,
+      "no_extension": 22,
+      ".png": 70,
+      ".csv": 8,
+      ".sh": 17,
+      ".2\u03c3": 1,
+      ".mp3": 1,
+      ".txt": 6,
+      ".yml": 4,
+      ".pdf": 7,
+      ".json": 74,
+      ".ipynb": 16,
+      ".html": 6,
+      ".cff": 2,
+      ".qcal_sig": 1,
+      ".toml": 2,
+      ".lock": 2,
+      ".system_backup": 1,
+      ".yaml": 2,
+      ".sage": 3,
+      ".gpu": 1,
+      ".in": 1,
+      ".lean": 38,
+      ".js": 4,
+      ".css": 1,
+      ".tsx": 2,
+      ".ts": 3,
+      ".svg": 1,
+      ".tex": 1,
+      ".bib": 1
+    }
+  },
+  "qcal": {
+    "qcal_references": 380,
+    "frequency_references": 845,
+    "manifesto_count": 46,
+    "qcal_files": 380
+  }
+}
