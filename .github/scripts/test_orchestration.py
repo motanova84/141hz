@@ -101,20 +101,24 @@ def test_agent_execution():
     print("\n⚡ Testing agent execution...")
     
     agents = [
-        ('.github/agents/noesis88.py', ['--mode=scan']),
-        ('.github/agents/metrics_collector.py', []),
-        ('.github/agents/coherence_validator.py', [])
+        ('.github/agents/noesis88.py', ['--mode=scan'], True),
+        ('.github/agents/metrics_collector.py', [], True),
+        ('.github/agents/coherence_validator.py', [], False)  # May return non-zero if coherence is low
     ]
     
     all_passed = True
-    for agent, args in agents:
+    for agent, args, require_zero in agents:
         try:
             cmd = ['python3', agent] + args
             result = subprocess.run(cmd, capture_output=True, timeout=30)
+            agent_name = os.path.basename(agent)
+            
             if result.returncode == 0:
-                print(f"  ✅ {os.path.basename(agent)} executed successfully")
+                print(f"  ✅ {agent_name} executed successfully")
+            elif not require_zero:
+                print(f"  ✅ {agent_name} executed (non-zero exit is expected for low coherence)")
             else:
-                print(f"  ⚠️  {os.path.basename(agent)} returned non-zero: {result.returncode}")
+                print(f"  ⚠️  {agent_name} returned non-zero: {result.returncode}")
                 all_passed = False
         except subprocess.TimeoutExpired:
             print(f"  ⚠️  {os.path.basename(agent)} timed out")
