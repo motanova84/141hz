@@ -81,6 +81,9 @@ ETHICAL_KEYWORDS = [
     'ética', 'ethics', 'simbiosis', 'symbiosis'
 ]
 
+# Punctuation to strip from extracted claim values
+STRIP_PUNCTUATION = '.,;:'
+
 
 class QCALEvaluator:
     """
@@ -140,7 +143,7 @@ class QCALEvaluator:
             'phi': r'(?:φ³|phi\^?3)\s*[=:≈]\s*([\d.]+)',  # Specifically match φ³
             'snr': r'(?:SNR|snr|S/N|signal[- ]?to[- ]?noise)\s*[=:≈]\s*([\d.]+)',
             'C': r'C\s*[=:≈]\s*([\d.]+)',
-            'psi': r'Ψ\s*[=:≈]\s*([\d.]+)',  # Single character, no need for class
+            'psi': r'Ψ\s*[=:≈]\s*([\d.]+)',
         }
         
         # Tolerances for verification
@@ -167,7 +170,7 @@ class QCALEvaluator:
         for key, pattern in self.patterns.items():
             for match in re.finditer(pattern, text, re.IGNORECASE):
                 try:
-                    value_str = match.group(1).rstrip('.,;:')
+                    value_str = match.group(1).rstrip(STRIP_PUNCTUATION)
                     value = float(value_str)
                     claims.append({
                         'variable': key,
@@ -465,14 +468,13 @@ class QCALEvaluator:
             if keyword.lower() in content.lower()
         )
         
-        # Consider content with ethical keywords as having ethical grounding
-        # even if Ψ is below threshold
-        has_claims = psi_result['claims_verified'] > 0
+        # Consider content with verified claims as having ethical grounding
+        has_verified_claims = psi_result['claims_verified'] > 0
         
         return {
             'ethical_grounding': 'strong' if keyword_count > 2 else 'moderate',
-            'symbiotic_quality': 'verified' if (psi_result['coherent'] or has_claims) else 'needs_review',
-            'ethical_recommendation': 'approve' if (psi_result['coherent'] or has_claims) else 'review',
+            'symbiotic_quality': 'verified' if (psi_result['coherent'] or has_verified_claims) else 'needs_review',
+            'ethical_recommendation': 'approve' if (psi_result['coherent'] or has_verified_claims) else 'review',
         }
     
     def filter_coherent(

@@ -86,10 +86,11 @@ class TestQCALEvaluator(unittest.TestCase):
         ]
         
         for claim in correct_claims:
-            self.assertTrue(
-                self.evaluator.verify_claim(claim),
-                f"Claim {claim} should be verified"
-            )
+            with self.subTest(variable=claim['variable'], value=claim['value']):
+                self.assertTrue(
+                    self.evaluator.verify_claim(claim),
+                    f"Failed to verify {claim['variable']}={claim['value']}"
+                )
     
     def test_verify_claim_incorrect(self):
         """Test verification of incorrect claims."""
@@ -100,10 +101,11 @@ class TestQCALEvaluator(unittest.TestCase):
         ]
         
         for claim in incorrect_claims:
-            self.assertFalse(
-                self.evaluator.verify_claim(claim),
-                f"Claim {claim} should not be verified"
-            )
+            with self.subTest(variable=claim['variable'], value=claim['value']):
+                self.assertFalse(
+                    self.evaluator.verify_claim(claim),
+                    f"Should not verify {claim['variable']}={claim['value']}"
+                )
     
     def test_compute_information_intensity(self):
         """Test information intensity computation."""
