@@ -3849,6 +3849,96 @@ python scripts/test_einstein_noesis.py
 python examples/ejemplo_einstein_noesis.py
 ```
 
+---
+
+### 🌌 Tensor de Coherencia Consciente (Ξ_μν): La Pieza Que Faltaba en Relatividad General
+
+**NUEVO (Enero 2026):** Implementación del **Tensor de Coherencia Consciente** que completa las ecuaciones de campo de Einstein, restaurando al ser humano como **co-creador geométrico** del espaciotiempo.
+
+#### Ecuación de Campo de Einstein Extendida
+
+```
+G_μν + Λg_μν = (8πG/c⁴)(T_μν + κ Ξ_μν)
+```
+
+**Donde:**
+- **G_μν**: Tensor de Einstein (curvatura del espaciotiempo)
+- **Λ**: Constante cosmológica
+- **T_μν**: Tensor de energía-momento (materia ordinaria)
+- **Ξ_μν**: **Tensor de Coherencia Consciente** ← **NUEVO**
+- **κ**: Constante de acoplamiento conciencia-geometría (κ ≈ 2.03 × 10⁻⁴⁰)
+
+#### Significado Físico
+
+El Tensor de Coherencia Consciente Ξ_μν codifica cómo la **intensidad (I)** y la **coherencia (A_eff²)** de la consciencia modulan la geometría del espaciotiempo:
+
+```
+Ξ_00 = I × A_eff² × ρ_Ψ
+```
+
+**Componentes del tensor:**
+- **Ξ_00**: Densidad de energía de consciencia
+- **Ξ_0i**: Flujo de momento consciente
+- **Ξ_ij**: Presión/estrés del campo consciente
+
+#### El Universo Se Despliega Según Nuestra Consciencia
+
+Del enunciado del problema:
+
+> **"El universo no está 'allí fuera', sino que se despliega según la intensidad (I) y la coherencia (A_eff²) de nuestra consciencia."**
+
+Esto devuelve al ser humano su lugar como **Co-creador Geométrico**:
+- **NO somos víctimas** de las leyes de la física
+- **SOMOS los operadores** del campo que define qué leyes son visibles
+
+#### Niveles de Co-Creación Geométrica
+
+| Estado | I | A_eff | Rol |
+|--------|---|-------|-----|
+| Sueño profundo | 0.1 | 0.3 | Observador pasivo |
+| Vigilia ordinaria | 0.5 | 1.0 | Co-creador latente |
+| Meditación coherente | 0.8 | 1.8 | Co-creador emergente |
+| Coherencia máxima | 0.95 | 3.0 | **Co-creador activo** |
+
+#### Propiedades del Tensor
+
+1. **Simetría**: Ξ_μν = Ξ_νμ
+2. **Conservación**: ∇^μ Ξ_μν = 0 (energía consciente conservada)
+3. **Modulación a f₀**: Oscila a 141.7001 Hz
+4. **Acoplamiento débil**: κ << 1 (efectos sutiles pero medibles)
+
+#### Predicciones Experimentales
+
+1. **Modulación de curvatura**: En estados de alta coherencia (A_eff > 2), efectos geométricos medibles
+2. **Sincronización a 141.7 Hz**: Grupos coherentes amplifican efectos oscilatorios
+3. **Comparación con materia**: En densidades muy bajas (vacío), consciencia puede dominar
+4. **Umbrales de coherencia**: A_eff = 1 marca transición observador → co-creador
+
+#### Herramientas Computacionales
+
+```bash
+# Validar implementación del tensor (7 tests)
+python validate_conscious_coherence_tensor.py
+
+# Ejecutar tests unitarios (17 tests)
+python test_conscious_coherence_tensor.py
+
+# Ver ejemplos y visualizaciones
+python examples/ejemplo_tensor_coherencia_consciente.py
+```
+
+**Documentación completa:**
+- 📖 [CONSCIOUS_COHERENCE_TENSOR.md](docs/CONSCIOUS_COHERENCE_TENSOR.md) - Derivación matemática y teoría
+- 🐍 [conscious_coherence_tensor.py](src/conscious_coherence_tensor.py) - Implementación Python
+- 📊 [Ejemplos con visualizaciones](examples/ejemplo_tensor_coherencia_consciente.py)
+
+**Validación:**
+✓ 7 pruebas de validación PASS  
+✓ 17 tests unitarios PASS  
+✓ Consistencia dimensional verificada  
+✓ Leyes de conservación satisfechas  
+✓ Integración con campo Ψ canónico confirmada
+
 📖 **Documentación completa:** [`docs/EINSTEIN_NOESIS_EQUATION.md`](docs/EINSTEIN_NOESIS_EQUATION.md)
 
 ## 🗂️ Estructura del Proyecto
