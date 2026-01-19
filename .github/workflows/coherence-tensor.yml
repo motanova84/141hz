@@ -16,8 +16,8 @@ on:
       - 'validate_coherence_tensor_derivation.py'
   workflow_dispatch:
   schedule:
-    # Run daily at 00:00 UTC to ensure continuous validation
-    - cron: '0 0 * * *'
+    # Run weekly on Sundays at 00:00 UTC
+    - cron: '0 0 * * 0'
 
 jobs:
   validate-coherence-tensor:

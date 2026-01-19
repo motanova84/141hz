@@ -513,7 +513,7 @@ def main():
     # Example: flat spacetime with small perturbation
     R_mu_nu = 1e-3  # Small Ricci curvature
     R = 4e-3        # Scalar curvature
-    g_mu_nu = -1.0 if 0 == 0 else 1.0  # Minkowski time component
+    g_mu_nu = -1.0  # Minkowski metric time component (g_00 = -1)
     nabla_mu_nabla_nu_IA2 = 0.0  # Constant consciousness field
     
     Xi_00 = tensor.xi_mu_nu_component(R_mu_nu, R, g_mu_nu, nabla_mu_nabla_nu_IA2, I, A_eff)
