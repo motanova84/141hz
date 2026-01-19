@@ -386,6 +386,8 @@ jobs:
   psi-q1-protocol:
     name: Ψ-Q1 Protocol Validation
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     strategy:
       matrix:
