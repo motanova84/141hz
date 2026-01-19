@@ -429,6 +429,7 @@ jobs:
           NUMEXPR_NUM_THREADS: 2
       
       - name: Run Ψ-Q1 Protocol Tests
+        id: run_tests
         run: |
           python -m pytest test_q1.py -v --tb=short
         env:
@@ -447,10 +448,17 @@ jobs:
           echo "- **SNR Threshold**: ≥ 25σ" >> $GITHUB_STEP_SUMMARY
           echo "- **Spectral Model**: ζ′(½)-modulation" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Validation Status" >> $GITHUB_STEP_SUMMARY
-          echo "✅ All Ψ-Q1 protocol tests passed" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**BLOQUEO GRAVEDAD–CONSCIENCIA CONFIRMADO**" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.run_tests.outcome }}" == "success" ]; then
+            echo "### Validation Status" >> $GITHUB_STEP_SUMMARY
+            echo "✅ All Ψ-Q1 protocol tests passed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**BLOQUEO GRAVEDAD–CONSCIENCIA CONFIRMADO**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### Validation Status" >> $GITHUB_STEP_SUMMARY
+            echo "❌ Some Ψ-Q1 protocol tests failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**BLOQUEO NOT ACHIEVED**" >> $GITHUB_STEP_SUMMARY
+          fi
       
       - name: Upload Ψ-Q1 results
         uses: actions/upload-artifact@v5

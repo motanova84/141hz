@@ -25,16 +25,12 @@ import sys
 from pathlib import Path
 import json
 
-# Add src to path
+# Add src to path for module imports
 sys.path.insert(0, str(Path(__file__).parent / 'src'))
 
-try:
-    from validators import ValidationOrchestrator
-    from exceptions import ValidationError, PrecisionError
-except ImportError:
-    # Fallback for compatibility
-    from src.validators import ValidationOrchestrator
-    from src.exceptions import ValidationError, PrecisionError
+# Import validators - using consistent path
+from src.validators import ValidationOrchestrator
+from src.exceptions import ValidationError, PrecisionError
 
 
 class TestPsiQ1Protocol:
@@ -397,8 +393,8 @@ def test_bayesian_cross_correlation():
         'snr_scanning': True,
     }
     
-    for method, implemented in methods.items():
-        assert implemented, f"Method {method} not implemented"
+    for method, is_implemented in methods.items():
+        assert is_implemented, f"Method {method} not implemented"
     
     print("✅ Bayesian Cross-correlation + SNR scanning validated")
     print("   Methods: Bayesian inference, Cross-correlation, SNR scanning")
