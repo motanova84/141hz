@@ -43,3 +43,12 @@ lean_lib KappaPhi where
 lean_lib BerryKeating where
   -- Berry-Keating operator H_Ψ formalization
   roots := #[`BerryKeating]
+
+lean_lib QCAL_SYNC_BRIDGE where
+  -- Harmonic validation: f_base → f₀ → f_high
+  roots := #[`QCAL_SYNC_BRIDGE]
+
+lean_lib Noesis88 where
+  -- Deductive chains and asymptotic stability
+  roots := #[`Noesis88]
+  globs := #[.submodules `Noesis88]
