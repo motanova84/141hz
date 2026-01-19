@@ -30,6 +30,8 @@
   - Análisis de 141.7 Hz en KAGRA (K1) - O4 Open Data
 - `analizar_l1.py`
   - Análisis de datos de Livingston (L1) para comparación
+- `analizar_resonancias_schumann.py`
+  - Análisis de Resonancias Schumann y f₀
 - `analizar_ringdown.py`
   - Análisis de componente en 141.7 Hz en el ringdown - CORREGIDO
 - `analizar_variedades_cy_10.py`
@@ -244,4 +246,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-17 14:09:42 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-19 00:39:54 UTC*
