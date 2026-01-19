@@ -42,6 +42,10 @@ from src.einstein_consciousness_gravity import (
     create_vacuum_stress_energy
 )
 
+# Constants for detection thresholds
+LIGO_DETECTION_THRESHOLD = 1e-10  # radians - LIGO sensitivity
+LARGE_INTERFEROMETER_THRESHOLD = 100  # meters - threshold for "large" setup
+
 
 def example_1_observer_modulated_curvature():
     """Example 1: Observer consciousness modulates spacetime curvature."""
@@ -122,8 +126,8 @@ def example_2_interferometer_experiments():
                 A_eff_incoherent=0.5
             )
             
-            # Detection threshold: ~10⁻¹⁰ rad for LIGO sensitivity
-            detectable = "YES ✓" if abs(Delta_phi) > 1e-10 and L > 100 else "Marginal"
+            # Detection threshold based on LIGO sensitivity
+            detectable = "YES ✓" if abs(Delta_phi) > LIGO_DETECTION_THRESHOLD and L > LARGE_INTERFEROMETER_THRESHOLD else "Marginal"
             
             print(f"{setup_name:<24} {A_eff:.1f}      {Delta_phi:.6e}    "
                   f"{Delta_phi/np.pi:.6e}    {detectable}")
