@@ -65,6 +65,22 @@ CONTENT_DIALOGUE = "dialogue"
 CONTENT_SCIENTIFIC = "scientific"
 CONTENT_ETHICAL = "ethical"
 
+# C^∞ normalization factor
+# Using 80.0 as divisor provides appropriate scaling for Ψ metric:
+# - Single verified claim: Ψ ≈ 5.46 (just above coherence threshold)
+# - Two verified claims: Ψ ≈ 8.65 (high coherence)
+# - Four verified claims: Ψ ≈ 12.67 (high coherence)
+# This ensures that content with at least one verified QCAL claim
+# passes the coherence threshold.
+C_INFINITY_NORMALIZATION_FACTOR = 80.0
+
+# Ethical keywords for content assessment
+ETHICAL_KEYWORDS = [
+    'ético', 'ethical', 'simbiótico', 'symbiotic',
+    'coherencia', 'coherence', 'responsabilidad', 'responsibility',
+    'ética', 'ethics', 'simbiosis', 'symbiosis'
+]
+
 
 class QCALEvaluator:
     """
@@ -121,10 +137,10 @@ class QCALEvaluator:
         self.patterns = {
             'f0': r'(?:f[₀0]|freq(?:uencia)?)\s*[=:≈]\s*([\d.]+)\s*(?:Hz)?',
             'zeta': r"(?:ζ'|zeta'?)\s*(?:\(1/2\))?\s*[=:≈]\s*(-?[\d.]+)",
-            'phi': r'(?:φ³?|phi\^?3?)\s*[=:≈]\s*([\d.]+)',
-            'snr': r'SNR\s*[=:≈]\s*([\d.]+)',
+            'phi': r'(?:φ³|phi\^?3)\s*[=:≈]\s*([\d.]+)',  # Specifically match φ³
+            'snr': r'(?:SNR|snr|S/N|signal[- ]?to[- ]?noise)\s*[=:≈]\s*([\d.]+)',
             'C': r'C\s*[=:≈]\s*([\d.]+)',
-            'psi': r'[ΨΨ]\s*[=:≈]\s*([\d.]+)',
+            'psi': r'Ψ\s*[=:≈]\s*([\d.]+)',  # Single character, no need for class
         }
         
         # Tolerances for verification
@@ -269,16 +285,14 @@ class QCALEvaluator:
         The infinite exponent is represented as a normalization factor
         that scales the coherence metric appropriately.
         
-        In practice: C^∞_factor = C_universal / 80
-        This provides appropriate scaling for the Ψ metric to ensure
-        single verified claims reach the coherence threshold.
+        Uses C_INFINITY_NORMALIZATION_FACTOR = 80.0 to ensure that
+        content with at least one verified QCAL claim passes the
+        coherence threshold (Ψ ≥ 5.0).
         
         Returns:
             C^∞ factor for Ψ computation
         """
-        # Normalize C to appropriate scale
-        # Using /80 instead of /100 to ensure verified claims pass threshold
-        return self.C_universal / 80.0
+        return self.C_universal / C_INFINITY_NORMALIZATION_FACTOR
     
     def compute_psi(
         self,
@@ -445,14 +459,9 @@ class QCALEvaluator:
         Returns:
             Ethical analysis
         """
-        # Check for ethical keywords
-        ethical_keywords = [
-            'ético', 'ethical', 'simbiótico', 'symbiotic',
-            'coherencia', 'coherence', 'responsabilidad', 'responsibility'
-        ]
-        
+        # Count ethical keywords
         keyword_count = sum(
-            1 for keyword in ethical_keywords
+            1 for keyword in ETHICAL_KEYWORDS
             if keyword.lower() in content.lower()
         )
         
