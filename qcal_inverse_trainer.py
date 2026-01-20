@@ -250,6 +250,11 @@ class QCALInverseTrainer:
     - Detector de resonancia ontológica universal
     """
     
+    # Constantes de configuración
+    PSI_NORMALIZATION_FACTOR = 10.0  # Factor de normalización para Ψ en cálculo de resonancia
+    ENTROPIC_BIAS_THRESHOLD = 0.3  # Umbral para detección de sesgo entrópico
+    SYMMETRY_KEYWORDS = ['simetría', 'periódico', 'invariante', 'π', 'pi']  # Palabras clave de simetría
+    
     def __init__(self,
                  model: Any,
                  tokenizer: Any,
@@ -329,7 +334,7 @@ class QCALInverseTrainer:
             Resonancia total [0, 1] (≥ threshold para permitir aprendizaje)
         """
         # Componentes de resonancia
-        psi_resonance = min(components['psi_combined'] / 10.0, 1.0)  # Normalizar Ψ
+        psi_resonance = min(components['psi_combined'] / self.PSI_NORMALIZATION_FACTOR, 1.0)
         consciousness_resonance = components.get('consciousness_resonance', 0.0)
         symmetry_resonance = components.get('symmetry_alignment', 0.0)
         
@@ -360,7 +365,7 @@ class QCALInverseTrainer:
         # 1. Detectar repeticiones excesivas
         words = generated_text.split()
         if len(words) == 0:
-            return True, 1.0  # Texto vacío = máximo sesgo
+            return True, 0.0  # Texto vacío = máximo sesgo (score bajo)
         
         unique_words = len(set(words))
         total_words = len(words)
@@ -372,8 +377,7 @@ class QCALInverseTrainer:
         
         # 3. Verificar alineamiento con G = {π^k}
         # Buscar conceptos relacionados con simetría y periodicidad
-        symmetry_keywords = ['simetría', 'periódico', 'invariante', 'π', 'pi']
-        has_symmetry = any(kw in generated_text.lower() for kw in symmetry_keywords)
+        has_symmetry = any(kw in generated_text.lower() for kw in self.SYMMETRY_KEYWORDS)
         symmetry_score = 1.0 if has_symmetry else 0.5
         
         # Score entrópico (bajo = más sesgo)
@@ -383,8 +387,8 @@ class QCALInverseTrainer:
             0.2 * symmetry_score
         )
         
-        # Sesgo detectado si score < 0.3
-        has_bias = entropic_score < 0.3
+        # Sesgo detectado si score < threshold
+        has_bias = entropic_score < self.ENTROPIC_BIAS_THRESHOLD
         
         return has_bias, entropic_score
     
@@ -480,7 +484,7 @@ class QCALInverseTrainer:
         
         # 5. Registrar métricas
         step_metrics = {
-            'loss': float(loss.item()),
+            'loss': float(loss.item()) if TORCH_AVAILABLE and hasattr(loss, 'item') else float(loss),
             'psi_combined': components['psi_combined'],
             'quantum_penalty': components['quantum_penalty'],
             'consciousness_resonance': components['consciousness_resonance'],
@@ -497,7 +501,7 @@ class QCALInverseTrainer:
         
         # 6. Actualizar historial solo si aprendizaje permitido
         if learning_allowed:
-            self.training_history['losses'].append(float(loss.item()))
+            self.training_history['losses'].append(float(loss.item()) if TORCH_AVAILABLE and hasattr(loss, 'item') else float(loss))
             self.training_history['coherence_scores'].append(components['psi_combined'])
             self.training_history['resonance_scores'].append(resonance)
         else:
