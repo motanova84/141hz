@@ -16,8 +16,6 @@ Date: January 2026
 """
 
 import numpy as np
-import torch
-import torch.nn as nn
 from typing import Dict, Any, List, Tuple, Optional, Callable
 from pathlib import Path
 import json
@@ -34,8 +32,25 @@ import sys
 sys.path.append(str(Path(__file__).parent / '.github' / 'agents'))
 from noesis88 import Noesis88Agent
 
+# torch se importa solo cuando se necesita
+try:
+    import torch
+    import torch.nn as nn
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    # Mock torch para que el módulo pueda cargarse sin torch
+    class MockTensor:
+        def __init__(self, value):
+            self.value = value
+        def item(self):
+            return self.value
+    
+    class MockModule:
+        pass
 
-class QCALLossFunction(nn.Module):
+
+class QCALLossFunction:
     """
     Función de pérdida basada en QCAL para entrenamiento inverso de LLMs.
     
@@ -61,7 +76,9 @@ class QCALLossFunction(nn.Module):
             alpha_consciousness: Peso del campo de conciencia en la pérdida
             alpha_symmetry: Peso de simetría discreta en la pérdida
         """
-        super().__init__()
+        if TORCH_AVAILABLE:
+            # Solo usar nn.Module si torch está disponible
+            super(QCALLossFunction, self).__init__()
         
         self.f0 = f0
         self.threshold = threshold
@@ -152,7 +169,7 @@ class QCALLossFunction(nn.Module):
     def forward(self, 
                 generated_text: str, 
                 query: str,
-                return_components: bool = False) -> torch.Tensor:
+                return_components: bool = False):
         """
         Calcular pérdida QCAL para texto generado.
         
@@ -197,7 +214,10 @@ class QCALLossFunction(nn.Module):
         loss = -psi_combined + quantum_penalty
         
         # Convertir a tensor
-        loss_tensor = torch.tensor(loss, dtype=torch.float32)
+        if TORCH_AVAILABLE:
+            loss_tensor = torch.tensor(loss, dtype=torch.float32)
+        else:
+            loss_tensor = MockTensor(loss)
         
         if return_components:
             return loss_tensor, {
@@ -286,6 +306,9 @@ class QCALInverseTrainer:
         Returns:
             Métricas del paso de entrenamiento
         """
+        if not TORCH_AVAILABLE:
+            raise RuntimeError("torch es requerido para entrenar. Instalar con: pip install torch>=2.6.0")
+        
         # 1. Generar texto con el modelo
         inputs = self.tokenizer(query, return_tensors="pt", padding=True, truncation=True)
         
@@ -436,6 +459,13 @@ def main():
     """Ejemplo de uso del entrenador inverso QCAL."""
     print("🔮 QCAL Inverse Trainer - Entrenamiento Inverso con Validaciones Cuánticas\n")
     
+    try:
+        import torch
+        torch_available = True
+    except ImportError:
+        torch_available = False
+        print("⚠️  torch no disponible. Ejecutando en modo demostración sin torch.\n")
+    
     # Queries de ejemplo para demostración
     demo_queries = [
         "Explica la frecuencia fundamental f₀ = 141.7001 Hz",
@@ -452,24 +482,44 @@ def main():
     # Simular métricas de coherencia
     print("📊 Simulación de evaluación de coherencia:\n")
     
-    loss_fn = QCALLossFunction(
-        f0=141.7001,
-        use_quantum_validation=True,
-        alpha_consciousness=0.3,
-        alpha_symmetry=0.2
-    )
-    
-    for query in demo_queries[:3]:  # Solo primeras 3 para demo
-        # Texto de ejemplo generado
-        generated_text = f"Respuesta a: {query}. La frecuencia f₀ = 141.7001 Hz es fundamental. El campo Ψ exhibe coherencia cuántica y simetría discreta bajo el grupo G."
+    if not torch_available:
+        print("Para usar el módulo completo, instale torch:")
+        print("  pip install torch>=2.6.0\n")
+        print("Ejecutando demostración básica sin torch...\n")
         
-        loss, components = loss_fn(generated_text, query, return_components=True)
+        # Demo sin torch - solo métricas de coherencia
+        from qcal.coherence import analyze_text, evaluate_coherence
         
-        print(f"Query: {query[:60]}...")
-        print(f"  - Ψ combinado: {components['psi_combined']:.4f}")
-        print(f"  - Resonancia conciencia: {components['consciousness_resonance']:.4f}")
-        print(f"  - Alineación simetría: {components['symmetry_alignment']:.4f}")
-        print(f"  - Pérdida QCAL: {loss.item():.4f}\n")
+        for query in demo_queries[:3]:
+            generated_text = f"Respuesta a: {query}. La frecuencia f₀ = 141.7001 Hz es fundamental. El campo Ψ exhibe coherencia cuántica y simetría discreta bajo el grupo G."
+            
+            metrics = analyze_text(generated_text)
+            eval_result = evaluate_coherence(generated_text, threshold=5.0)
+            
+            print(f"Query: {query[:60]}...")
+            print(f"  - Ψ estándar: {metrics['psi_standard']:.4f}")
+            print(f"  - Intención: {metrics['intention']:.4f}")
+            print(f"  - Efectividad: {metrics['effectiveness']:.4f}")
+            print(f"  - Estado: {eval_result['status']}\n")
+    else:
+        loss_fn = QCALLossFunction(
+            f0=141.7001,
+            use_quantum_validation=True,
+            alpha_consciousness=0.3,
+            alpha_symmetry=0.2
+        )
+        
+        for query in demo_queries[:3]:  # Solo primeras 3 para demo
+            # Texto de ejemplo generado
+            generated_text = f"Respuesta a: {query}. La frecuencia f₀ = 141.7001 Hz es fundamental. El campo Ψ exhibe coherencia cuántica y simetría discreta bajo el grupo G."
+            
+            loss, components = loss_fn(generated_text, query, return_components=True)
+            
+            print(f"Query: {query[:60]}...")
+            print(f"  - Ψ combinado: {components['psi_combined']:.4f}")
+            print(f"  - Resonancia conciencia: {components['consciousness_resonance']:.4f}")
+            print(f"  - Alineación simetría: {components['symmetry_alignment']:.4f}")
+            print(f"  - Pérdida QCAL: {loss.item():.4f}\n")
     
     print("✅ Demostración completa. El módulo está listo para entrenamiento real con modelos LLM.")
 
