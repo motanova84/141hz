@@ -248,7 +248,8 @@ class UDPMulticastReceiver:
     def __init__(
         self,
         multicast_group: str = '224.0.0.141',
-        port: int = 14170
+        port: int = 14170,
+        bind_address: str = '0.0.0.0'  # Default to all interfaces for multicast
     ):
         """
         Initialize UDP multicast receiver.
@@ -256,16 +257,25 @@ class UDPMulticastReceiver:
         Args:
             multicast_group: Multicast IP address
             port: UDP port
+            bind_address: Address to bind to (default: '0.0.0.0' for multicast,
+                         use '127.0.0.1' for localhost-only in production)
+        
+        Security Note:
+            Binding to all interfaces (0.0.0.0) is required for proper multicast
+            operation. For production deployments, use firewall rules to restrict
+            access or bind to specific interface via bind_address parameter.
         """
         self.multicast_group = multicast_group
         self.port = port
+        self.bind_address = bind_address
         
         # Create socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         
-        # Bind to port
-        self.sock.bind(('', port))
+        # Bind to port (required for multicast receiver)
+        # Security: For production, use firewall rules or specific bind_address
+        self.sock.bind((bind_address, port))
         
         # Join multicast group
         mreq = struct.pack('4sl', socket.inet_aton(multicast_group), socket.INADDR_ANY)
