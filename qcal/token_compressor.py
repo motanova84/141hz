@@ -45,6 +45,9 @@ class EmissionAxiom:
         """
         self.f0 = f0
         # Precision for mpmath calculations
+        # Using 50 digits to accurately compute ζ'(1/2) and other mathematical constants
+        # Note: The repository uses -1.460 as an approximation, but mpmath computes
+        # the more accurate value of ζ'(1/2) ≈ -3.92 for the Riemann zeta derivative
         mpmath.mp.dps = 50
         
         # Calculate Riemann zeta derivative at 1/2
@@ -83,6 +86,9 @@ class EmissionAxiom:
         """
         Decode quantum spectral state back to token.
         
+        Note: This is a simplified nearest-neighbor lookup. A production implementation
+        would use learned vocabulary mappings or more sophisticated reconstruction.
+        
         Args:
             state: Complex spectral state
             token_map: Mapping of states to tokens
@@ -90,7 +96,7 @@ class EmissionAxiom:
         Returns:
             Decoded token string
         """
-        # Find closest state in map
+        # Find closest state in map (simplified for demo)
         min_dist = float('inf')
         best_token = ""
         

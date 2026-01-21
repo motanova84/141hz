@@ -257,13 +257,16 @@ class UDPMulticastReceiver:
         Args:
             multicast_group: Multicast IP address
             port: UDP port
-            bind_address: Address to bind to (default: '0.0.0.0' for multicast,
-                         use '127.0.0.1' for localhost-only in production)
-        
+            bind_address: Address to bind to (default: '0.0.0.0' for multicast).
+                         
         Security Note:
-            Binding to all interfaces (0.0.0.0) is required for proper multicast
-            operation. For production deployments, use firewall rules to restrict
-            access or bind to specific interface via bind_address parameter.
+            - '0.0.0.0': Required for proper multicast operation (production)
+            - '127.0.0.1': For localhost-only TESTING (disables multicast)
+            - Specific IP: Bind to specific interface (e.g., '192.168.1.100')
+            
+            For production multicast deployments, use '0.0.0.0' with firewall
+            rules to restrict access. The '127.0.0.1' option is for testing
+            only and will not receive multicast packets.
         """
         self.multicast_group = multicast_group
         self.port = port
