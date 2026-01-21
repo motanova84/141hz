@@ -4,39 +4,39 @@
     "normal": {
       "name": "Normal Context",
       "pickle_size": 9083,
-      "json_size": 16643,
+      "json_size": 16645,
       "serialization_time": 1.6e-05,
       "pickle_size_kb": 8.8701171875,
-      "json_size_kb": 16.2529296875
+      "json_size_kb": 16.2548828125
     },
     "qcal": {
       "name": "QCAL-Encoded Context",
       "pickle_size": 670,
-      "json_size": 843,
-      "serialization_time": 5e-06,
+      "json_size": 845,
+      "serialization_time": 6e-06,
       "pickle_size_kb": 0.654296875,
-      "json_size_kb": 0.8232421875
+      "json_size_kb": 0.8251953125
     },
     "size_reduction_percent": 92.62358251678961,
     "size_ratio": 13.556716417910447,
     "qcal_metadata": {
       "embeddings_nft": {
         "nft_id": 1,
-        "density": 5313.553196179538,
+        "density": 5390.9365964408935,
         "resonance": 141.7001,
-        "coherence": 0.4480174690432559,
-        "encoded_vibration_hash": "sha256-a4a558ced78197f75beb6fbda5cc66d8b2715bf9f6ea0aedc27e1d64afd52e58",
+        "coherence": 0.4458837972615243,
+        "encoded_vibration_hash": "sha256-21fa92b5fa4673005d8b7ec38fd886a124050ab35c97d641d1417cde04a81464",
         "axiom_validated": true,
-        "infinity3_certified": "2026-01-21T02:52:43.100399Z"
+        "infinity3_certified": "2026-01-21T02:55:14.854480Z"
       },
       "attention_nft": {
         "nft_id": 2,
-        "density": 6767.977527356959,
+        "density": 6698.9048159722115,
         "resonance": 141.7001,
-        "coherence": 0.6456567299559423,
-        "encoded_vibration_hash": "sha256-3a51563e07ef3abd99ffd6a7bb0456942a521471d96db04f5a5ec8bf1de0474e",
+        "coherence": 0.6281284081837785,
+        "encoded_vibration_hash": "sha256-4f1d09cbb9b94f4e6a6655890ffe6161a1cf4a63690192c4e55192d7f1d50def",
         "axiom_validated": true,
-        "infinity3_certified": "2026-01-21T02:52:43.100671Z"
+        "infinity3_certified": "2026-01-21T02:55:14.854739Z"
       }
     }
   },
@@ -45,16 +45,16 @@
     "normal": {
       "name": "Normal Context",
       "pickle_size": 17885,
-      "json_size": 33001,
+      "json_size": 33067,
       "serialization_time": 2.6e-05,
       "pickle_size_kb": 17.4658203125,
-      "json_size_kb": 32.2275390625
+      "json_size_kb": 32.2919921875
     },
     "qcal": {
       "name": "QCAL-Encoded Context",
       "pickle_size": 670,
       "json_size": 843,
-      "serialization_time": 5e-06,
+      "serialization_time": 6e-06,
       "pickle_size_kb": 0.654296875,
       "json_size_kb": 0.8232421875
     },
@@ -63,21 +63,21 @@
     "qcal_metadata": {
       "embeddings_nft": {
         "nft_id": 1,
-        "density": 5433.245018225577,
+        "density": 5450.733157534996,
         "resonance": 141.7001,
-        "coherence": 0.4454781054766349,
-        "encoded_vibration_hash": "sha256-ccd6674a0e96bd6b4db6581631064cdbd55645fc8a9ea6139717597a25c3c6ef",
+        "coherence": 0.4460947731583178,
+        "encoded_vibration_hash": "sha256-afeb614f001d424237328d51bfacec6dc7f67b47e170c4e4a33e080595362e3e",
         "axiom_validated": true,
-        "infinity3_certified": "2026-01-21T02:52:43.101482Z"
+        "infinity3_certified": "2026-01-21T02:55:14.855528Z"
       },
       "attention_nft": {
         "nft_id": 2,
-        "density": 6775.389144056041,
+        "density": 6698.513953115439,
         "resonance": 141.7001,
-        "coherence": 0.6433298011472042,
-        "encoded_vibration_hash": "sha256-b652552cc4d996ce3d886fe1ccdab75eb5dfcca03d2f7dbe0b7e8a0aeb210a2d",
+        "coherence": 0.6316125219844569,
+        "encoded_vibration_hash": "sha256-e2ca5ec4f467c7b1ae13d8a8480fe0795c041771cc9732acb6ebc6d82eea58ca",
         "axiom_validated": true,
-        "infinity3_certified": "2026-01-21T02:52:43.101702Z"
+        "infinity3_certified": "2026-01-21T02:55:14.855745Z"
       }
     }
   },
@@ -86,39 +86,39 @@
     "normal": {
       "name": "Normal Context",
       "pickle_size": 44287,
-      "json_size": 82297,
-      "serialization_time": 5.7e-05,
+      "json_size": 82185,
+      "serialization_time": 7.3e-05,
       "pickle_size_kb": 43.2490234375,
-      "json_size_kb": 80.3681640625
+      "json_size_kb": 80.2587890625
     },
     "qcal": {
       "name": "QCAL-Encoded Context",
       "pickle_size": 670,
-      "json_size": 844,
-      "serialization_time": 6e-06,
+      "json_size": 845,
+      "serialization_time": 7e-06,
       "pickle_size_kb": 0.654296875,
-      "json_size_kb": 0.82421875
+      "json_size_kb": 0.8251953125
     },
     "size_reduction_percent": 98.48714069591527,
     "size_ratio": 66.1,
     "qcal_metadata": {
       "embeddings_nft": {
         "nft_id": 1,
-        "density": 5232.987919927657,
+        "density": 5391.211797333479,
         "resonance": 141.7001,
-        "coherence": 0.44301868243490555,
-        "encoded_vibration_hash": "sha256-7b2dd452dfd8068293cb0f0cf915d52fabcfef5b36650ddbc020cbea223aa65b",
+        "coherence": 0.44457846123457706,
+        "encoded_vibration_hash": "sha256-f39cb4e66de2fa3149c236c3eacffc25d4a097e4dc311e2397b93f8d7e7ac165",
         "axiom_validated": true,
-        "infinity3_certified": "2026-01-21T02:52:43.102970Z"
+        "infinity3_certified": "2026-01-21T02:55:14.857034Z"
       },
       "attention_nft": {
         "nft_id": 2,
-        "density": 6682.915585263101,
+        "density": 6753.451145581932,
         "resonance": 141.7001,
-        "coherence": 0.6327004144293406,
-        "encoded_vibration_hash": "sha256-3083844661ee8d1c66808d46e5eec41e4f5126df1786461a151e467e7b7634ca",
+        "coherence": 0.6296951183518977,
+        "encoded_vibration_hash": "sha256-d2f0a10042dc4c9549c42d818e0930a4cd7f4a7410619d8a3fbe7cf66573b697",
         "axiom_validated": true,
-        "infinity3_certified": "2026-01-21T02:52:43.103218Z"
+        "infinity3_certified": "2026-01-21T02:55:14.857280Z"
       }
     }
   },
@@ -127,16 +127,16 @@
     "normal": {
       "name": "Normal Context",
       "pickle_size": 88305,
-      "json_size": 164284,
-      "serialization_time": 0.000122,
+      "json_size": 164316,
+      "serialization_time": 0.000108,
       "pickle_size_kb": 86.2353515625,
-      "json_size_kb": 160.43359375
+      "json_size_kb": 160.46484375
     },
     "qcal": {
       "name": "QCAL-Encoded Context",
       "pickle_size": 671,
       "json_size": 846,
-      "serialization_time": 6e-06,
+      "serialization_time": 7e-06,
       "pickle_size_kb": 0.6552734375,
       "json_size_kb": 0.826171875
     },
@@ -145,21 +145,21 @@
     "qcal_metadata": {
       "embeddings_nft": {
         "nft_id": 1,
-        "density": 5239.658123935988,
+        "density": 5315.231953350382,
         "resonance": 141.7001,
-        "coherence": 0.4425615301283529,
-        "encoded_vibration_hash": "sha256-0e9c40e588e5b8fb11bda784cf3b93f9e67755ee7929f795a4829f24bc2fb886",
+        "coherence": 0.4436474029494609,
+        "encoded_vibration_hash": "sha256-d054eccc18b9f63f46265be942e5cf5a449dddfc06645b2a60531e326b7fb3af",
         "axiom_validated": true,
-        "infinity3_certified": "2026-01-21T02:52:43.105924Z"
+        "infinity3_certified": "2026-01-21T02:55:14.860001Z"
       },
       "attention_nft": {
         "nft_id": 2,
-        "density": 6646.097644822262,
+        "density": 6692.416415468028,
         "resonance": 141.7001,
-        "coherence": 0.6261613014988833,
-        "encoded_vibration_hash": "sha256-e517a52710ee97606ff1508e59deeb351abc14e77e075a20d032719e7898b576",
+        "coherence": 0.6379237947580172,
+        "encoded_vibration_hash": "sha256-c40f56079a91675368595f6eab78cd2ea3cbe10b5a4ef059e91f4a74bf798344",
         "axiom_validated": true,
-        "infinity3_certified": "2026-01-21T02:52:43.106228Z"
+        "infinity3_certified": "2026-01-21T02:55:14.860305Z"
       }
     }
   }

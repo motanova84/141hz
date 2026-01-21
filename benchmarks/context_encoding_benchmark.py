@@ -297,7 +297,6 @@ def main():
     # Save results
     output_file = 'context_encoding_benchmark_results.json'
     with open(output_file, 'w') as f:
-        json.dumps(results, indent=2, default=str)
         f.write(json.dumps(results, indent=2, default=str))
     
     print(f"\nResults saved to: {output_file}")
