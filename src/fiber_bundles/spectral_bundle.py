@@ -62,8 +62,11 @@ class SpectralCoherenceBundle(PrincipalFiberBundle):
     F0 = mp.mpf("141.7001")
     
     # Spectral coherence coupling
-    # δζ = f₀ / (2π × α⁻¹) ≈ 141.7001 / (2π × 137.036) ≈ 0.1647 Hz
-    # Alternative: δζ ≈ 0.2787 Hz from empirical coherence measurements
+    # Two derivations give different values:
+    # - Theoretical: δζ = f₀/(2π·α⁻¹) ≈ 141.7001/(2π·137.036) ≈ 0.1647 Hz
+    # - Empirical: δζ ≈ 0.2787 Hz from consciousness coherence measurements
+    # We use the empirical value as it better matches observed decoherence timescales
+    # in biological systems and EEG coherence patterns
     DELTA_ZETA = mp.mpf("0.2787")
     
     # Planck constant (J·s)

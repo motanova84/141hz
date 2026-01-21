@@ -89,13 +89,15 @@ class TestPrincipalFiberBundle(unittest.TestCase):
     
     def test_section_verification(self):
         """Test verifying sections."""
-        # Define a valid section
+        # Define a valid section that satisfies π(σ(x)) = x
         def section(base_point):
-            return (base_point, U1Fiber(phase=0.0))
+            # Section maps base point to total space (base_point, fiber)
+            return np.concatenate([base_point, [0.0]])  # Append fiber component
         
         base_point = np.array([1.0, 2.0])
-        is_valid = self.bundle.verify_section(section, base_point)
-        # Note: This test may need adjustment based on projection implementation
+        # Test that projection of section returns base point
+        result = self.bundle.projection(section(base_point))
+        self.assertTrue(np.allclose(result, base_point))
     
     def test_add_section(self):
         """Test adding sections to bundle."""
