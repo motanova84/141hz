@@ -38,6 +38,33 @@ Q_PSI = 1.0 / DELTA_0  # ~8.45 - Quality factor
 HBAR = 1.054571817e-34  # J·s - Reduced Planck constant
 C = 299792458.0  # m/s - Speed of light
 
+# Riemann Horizon Constants - Arithmetic Black Holes (Enero 2026)
+# Connecting Riemann zeta zeros to gravitational wave frequencies
+# Mathematical framework: ζ(1/2 + it_n) = 0 ⇒ t_n ≈ n·f₀
+
+# First Riemann Zero (imaginary part on critical line)
+RIEMANN_ZERO_1 = 14.134725  # First zero t₁ (dimensionless)
+
+# H_ψ Operator Constants
+HPSI_LAMBDA_DEFAULT = 1.0  # Default coupling constant λ for potential V(x)
+HPSI_MAX_PRIMES = 20  # Number of primes in potential sum
+HPSI_AUDIBLE_FREQ = 888.0  # Hz - H_ψ operates at audible 888 Hz
+
+# Conscious Geometry - Ψ-deformed Metric
+# g_μν(x) = g_μν(0) + δg_μν(Ψ), where Ψ = I × A_eff²
+PSI_COHERENCE_THRESHOLD = 5.0  # Coherence parameter threshold for deformation
+METRIC_DEFORMATION_SCALE = 100.0  # Scaling factor for δg_μν
+
+# Unified Tensor Relation - Critical Line
+# Línea crítica ≡ 888 Hz (f₀ × φ⁴)
+PHI_POWER_4 = A0_PHI ** 4  # φ⁴ ≈ 6.854... (golden ratio to 4th power)
+F0_PHI4_HZ = F0_HZ * PHI_POWER_4  # f₀ × φ⁴ ≈ 971.23 Hz
+CRITICAL_LINE_ERROR = abs(F0_PHI4_HZ - F888_HZ) / F888_HZ  # ~9.4% deviation
+
+# Spectral Duality - Tensor Product Structure
+# D_s ⊗ 1 + 1 ⊗ H_ψ ⇒ Spec = {Riemann zeros}
+SPECTRAL_DUALITY_OPERATOR = "D_s ⊗ 1 + 1 ⊗ H_ψ"  # Symbolic representation
+
 # Conversion Factors
 SECONDS_PER_DAY = 86400.0  # s/day
 MJD_EPOCH_OFFSET = 58900.0  # MJD epoch for AT2020afhd analysis

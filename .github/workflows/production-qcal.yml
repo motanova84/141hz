@@ -44,11 +44,28 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
       
-      - name: Validate reproducibility
+      - name: Generate environment snapshot (reproducibility audit trail)
         run: |
-          python scripts/validate_reproducibility.py --generate-snapshot --output results/environment_snapshot.json
-          python scripts/validate_reproducibility.py
-        continue-on-error: true
+          python scripts/validate_reproducibility.py --generate-snapshot --output results/environment_snapshot_${{ github.run_number }}.json
+          # Also save ENV.lock metadata for this run
+          cp ENV.lock.json results/env_lock_metadata_${{ github.run_number }}.json
+      
+      - name: Validate reproducibility (strict mode for production)
+        run: |
+          python scripts/validate_reproducibility.py --strict
+        continue-on-error: false  # Fail workflow if environment doesn't match
+
+      - name: Upload environment snapshots (reproducibility audit trail)
+        if: always()  # Upload even if validation fails
+        uses: actions/upload-artifact@v4
+        with:
+          name: reproducibility-snapshots-${{ github.run_number }}
+          path: |
+            results/environment_snapshot_${{ github.run_number }}.json
+            results/env_lock_metadata_${{ github.run_number }}.json
+            ENV.lock
+            ENV.lock.json
+          retention-days: 90  # Keep for 90 days for long-term auditing
 
       - name: Validate core with precision
         run: python3 validate_v5_coronacion.py --precision 30
