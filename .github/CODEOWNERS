@@ -4,7 +4,6 @@
 autoflow/ @motanova84
 
 # Scripts de automatización
-start_autoflow.sh @motanova84
 
 # Workflows de GitHub Actions
 .github/workflows/ @motanova84
