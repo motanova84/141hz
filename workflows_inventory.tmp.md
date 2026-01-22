@@ -162,6 +162,33 @@
 - Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
+### GW Validation - 141.7 Hz
+
+**Archivo:** `gw-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * *`)
+- Trigger: manual (workflow_dispatch)
+
+### GW150914 Complete Analysis - 141.7 Hz
+
+**Archivo:** `gw150914-analysis.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * 1`)
+- Trigger: manual (workflow_dispatch)
+
+### Hydrogen Line Quantum Phase Validation
+
+**Archivo:** `hydrogen-line-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * *`)
+- Trigger: manual (workflow_dispatch)
+
 ### Issue Management Bot
 
 **Archivo:** `issue-management.yml`
@@ -216,6 +243,15 @@
 - Trigger: push
 - Trigger: pull_request
 - Trigger: schedule (`0 0 * * 0  # Run weekly on Sunday at midnight UTC`)
+- Trigger: manual (workflow_dispatch)
+
+### Mathematical Matrix Validation
+
+**Archivo:** `mathematical-matrix.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * 1`)
 - Trigger: manual (workflow_dispatch)
 
 ### Multi-Event Analysis
@@ -379,4 +415,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-04 05:57:15 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-19 00:39:55 UTC*

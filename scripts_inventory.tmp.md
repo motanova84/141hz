@@ -30,6 +30,8 @@
   - Análisis de 141.7 Hz en KAGRA (K1) - O4 Open Data
 - `analizar_l1.py`
   - Análisis de datos de Livingston (L1) para comparación
+- `analizar_resonancias_schumann.py`
+  - Análisis de Resonancias Schumann y f₀
 - `analizar_ringdown.py`
   - Análisis de componente en 141.7 Hz en el ringdown - CORREGIDO
 - `analizar_variedades_cy_10.py`
@@ -41,6 +43,8 @@
 
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_reproducibility.py`
+  - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_synthetic_data.py`
@@ -51,6 +55,8 @@
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_reproducibility.py`
+  - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_synthetic_data.py`
@@ -194,12 +200,16 @@
   - Tests for Vacuum Energy Module
 - `test_validacion_alpha_psi.py`
   - Test suite for validacion_alpha_psi_corregida.py
+- `test_validacion_bandas_cerebrales.py`
+  - Tests para validacion_bandas_cerebrales.py
 - `test_validacion_calabi_yau_espectral.py`
   - Tests for Calabi-Yau Spectral Universality Validation
 - `test_validacion_gwtc1_tridetector.py`
   - Tests para la validación GWTC-1 tri-detector
 - `test_validacion_invariante_espectral_cy.py`
   - Tests for Calabi-Yau Spectral Invariant k_Π Validation
+- `test_validacion_matriz_numerica.py`
+  - Tests para validacion_matriz_numerica.py
 - `test_validacion_multievento_gaia.py`
   - Test Suite para Validación Multi-evento + GAIA
 - `test_validacion_noesis_at2020afhd.py`
@@ -236,4 +246,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-04 05:57:15 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-19 00:39:54 UTC*
