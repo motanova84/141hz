@@ -311,7 +311,7 @@ def main():
     _em_bundle, _spectral_bundle = example_1_bundles()
     
     # Example 2: Intersection constant
-    const = example_2_intersection_constant()
+    example_2_intersection_constant()
     
     # Example 3: Consciousness states
     intersection, state = example_3_consciousness_states()
