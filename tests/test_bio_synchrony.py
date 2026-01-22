@@ -107,10 +107,10 @@ class TestBioSynchronyRelationships:
     def test_merkaba_triple_eight_pattern(self):
         """Test A_Merkaba = 8/9 has repeating 8s in decimal."""
         const = UniversalConstants()
-        # 8/9 = 0.888... (repeating)
-        merkaba_str = str(float(const.A_MERKABA))
-        # Should have multiple 8s after decimal point
-        assert '888' in merkaba_str
+        # 8/9 = 0.888... (repeating); check numeric equivalence robustly
+        merkaba_value = float(const.A_MERKABA)
+        assert merkaba_value == pytest.approx(8.0 / 9.0, rel=0, abs=1e-12)
+    
     
     def test_perfect_synchrony_scales(self):
         """Test Λ_bio = S_∞ = 1 (perfect synchrony at all scales)."""
