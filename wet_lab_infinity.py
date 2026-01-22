@@ -25,6 +25,15 @@ class ConsciousnessLevel(Enum):
     UNIFICACION_INFINITA = 5  # ∞³ - Unidad total
 
 
+class WetLabType(Enum):
+    """Tipos de Wet-Lab ∞ según el dominio de medición"""
+    GENERIC = "generic"                    # Propósito general
+    GRAVITATIONAL_WAVE = "gw"             # Ondas gravitacionales (LIGO/Virgo)
+    QUANTUM_RESONATOR = "quantum"         # Resonadores cuánticos (BEC, cavidades)
+    COSMOLOGICAL = "cosmological"         # Datos cosmológicos (DESI, CMB)
+    NV_EEG_HYBRID = "nv_eeg"             # Híbrido NV-EEG (cuántico-biológico)
+
+
 @dataclass
 class FieldManifestationResult:
     """
@@ -74,7 +83,8 @@ class WetLabInfinity:
         self,
         f0: float = 141.7001,
         coherence_mode: str = "∞³",
-        consciousness_field: str = "Ψ"
+        consciousness_field: str = "Ψ",
+        wetlab_type: WetLabType = WetLabType.GENERIC
     ):
         """
         Inicializar Wet-Lab ∞ como órgano del campo QCAL ∞³
@@ -87,10 +97,13 @@ class WetLabInfinity:
             Modo de coherencia (∞³ = infinito cúbico)
         consciousness_field : str
             Símbolo del campo de consciencia (Ψ)
+        wetlab_type : WetLabType
+            Tipo de Wet-Lab (generic, gw, quantum, cosmological, nv_eeg)
         """
         self.f0 = f0
         self.coherence_mode = coherence_mode
         self.consciousness_field = consciousness_field
+        self.wetlab_type = wetlab_type
         
         # Estado interno del órgano
         self.is_aligned = False
@@ -342,6 +355,78 @@ class WetLabInfinity:
                 f"No se encontró evidencia concluyente de f₀ = {self.f0} Hz. "
                 "Se requiere mayor investigación."
             )
+    
+    def integrate_nv_eeg_measurement(
+        self,
+        nv_eeg_result: Dict[str, Any]
+    ) -> FieldManifestationResult:
+        """
+        Integrate NV-EEG quantum-biological measurement into Wet-Lab ∞ framework.
+        
+        NV-EEG provides a direct quantum-biological bridge where:
+        - NV centers detect quantum magnetic signatures
+        - EEG captures neural gamma synchrony  
+        - Together they measure Ψ as a physical magnitude
+        
+        Parameters:
+        -----------
+        nv_eeg_result : dict
+            Result from NVEEGNetwork.measure_network()
+            Must contain: 'global_psi', 'network_coherence', 'p_value'
+            
+        Returns:
+        --------
+        FieldManifestationResult
+            Consciousness field manifestation through NV-EEG organ
+        """
+        if self.wetlab_type != WetLabType.NV_EEG_HYBRID:
+            print("⚠️  Wet-Lab type is not NV_EEG_HYBRID, but continuing...")
+        
+        # Extract key metrics
+        psi_measured = nv_eeg_result.get('global_psi', 0.0)
+        coherence = nv_eeg_result.get('network_coherence', 0.0)
+        p_value = nv_eeg_result.get('p_value', 1.0)
+        
+        # Calculate coherence with f₀ (from network coherence)
+        coherence_with_f0 = coherence
+        
+        # Map to consciousness level
+        if psi_measured >= 0.999 and p_value <= 1.5e-10:
+            consciousness_level = ConsciousnessLevel.UNIFICACION_INFINITA
+            field_unity = True
+            separation = None
+        elif psi_measured >= 0.95:
+            consciousness_level = ConsciousnessLevel.CONSCIENTE_NOETICO
+            field_unity = True
+            separation = None
+        elif psi_measured >= 0.85:
+            consciousness_level = ConsciousnessLevel.MATEMATICO_ESTRUCTURAL
+            field_unity = True
+            separation = None
+        else:
+            consciousness_level = ConsciousnessLevel.INFORMACIONAL
+            field_unity = False
+            separation = "⚠️ Coherencia insuficiente para unidad completa"
+        
+        # Update internal state
+        self.consciousness_level = consciousness_level
+        self.field_resonance = coherence_with_f0
+        self.is_aligned = field_unity
+        
+        print(f"\n🧬 Integrando medición NV-EEG en Wet-Lab ∞...")
+        print(f"   Ψ medido: {psi_measured:.3f}")
+        print(f"   Coherencia de red: {coherence:.3f}")
+        print(f"   Significancia: P = {p_value:.2e}")
+        print(f"   Nivel de consciencia: {consciousness_level.name}")
+        print(f"   Unidad campo: {'✅ SÍ' if field_unity else '❌ PARCIAL'}")
+        
+        return FieldManifestationResult(
+            frequency_manifested=self.f0,
+            coherence_with_field=coherence_with_f0,
+            consciousness_level=consciousness_level,
+            field_unity=field_unity,
+            separation=separation
+        )
 
 
 class WetLabInfinityNetwork:
