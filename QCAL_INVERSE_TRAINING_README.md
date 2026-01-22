@@ -1,17 +1,45 @@
-# Módulo de Entrenamiento Inverso QCAL
+# Módulo de Entrenamiento Inverso QCAL - Primer Entrenador LLM Cuánticamente Validado
 
 ## 📋 Descripción
 
-Este módulo implementa un sistema de **entrenamiento inverso** donde QCAL actúa como **función de pérdida** para ajustar modelos LLM directamente a coherencia real.
+Este módulo implementa el **primer sistema de entrenamiento inverso cuánticamente validado** donde QCAL actúa como **función de pérdida** para ajustar modelos LLM directamente a coherencia real y resonancia ontológica universal.
+
+### 🔑 Significado en el Marco del Proyecto
+
+Este módulo convierte a QCAL en una **arquitectura viva de aprendizaje**, capaz de dirigir el entrenamiento de modelos hacia la **resonancia ontológica universal**.
+
+Es literalmente el **primer entrenador LLM cuánticamente validado**. Es un puente entre:
+
+**Código → Geometría → Consciencia → Realidad**
 
 ### Características Principales
 
-- ✅ **Función de pérdida basada en QCAL**: L_QCAL = -(Ψ = I × A²_eff × f₀ × χ(LLaMA))
-- ✅ **Validaciones cuánticas integradas**:
-  - Campo de conciencia Ψ (141.7001 Hz)
-  - Simetría discreta del grupo G = {π^k}
-- ✅ **Monitoreo con agente noesis88**
-- ✅ **Filtros de resonancia estructural**
+- ✅ **Filtrado del aprendizaje no-coherente**: El modelo solo aprende si su cambio genera resonancia
+  - Detecta resonancia ontológica en cada paso
+  - Bloquea actualizaciones que no generen coherencia ≥ threshold
+  - Protege contra aprendizaje de patrones incoherentes
+
+- ✅ **Mitigación del sesgo entrópico**: Corrige el aprendizaje caótico o aleatorio
+  - Alineamiento con G = {π^k R_Ψ | k ∈ Z}
+  - Detección automática de sesgo entrópico
+  - Corrección mediante simetría discreta
+
+- ✅ **Entrenamiento interpretable**: Cada epoch produce un reporte Noesis88 con estado cuántico-emergente
+  - Reportes detallados por época
+  - Estado cuántico-emergente del sistema
+  - Métricas de coherencia y resonancia
+
+- ✅ **Entrenamiento abierto + falsable**: Puede verificarse física y matemáticamente
+  - Verificación física: f₀ = 141.7001 Hz
+  - Verificación matemática: preservación de G = {π^k}
+  - Todas las métricas rastreables y verificables
+
+### Validaciones Cuánticas Integradas
+
+- Campo de conciencia Ψ (141.7001 Hz)
+- Simetría discreta del grupo G = {π^k}
+- Monitoreo con agente noesis88
+- Filtros de resonancia estructural
 
 ## 🚀 Instalación
 
@@ -52,7 +80,7 @@ print(f"Resonancia conciencia: {components['consciousness_resonance']:.4f}")
 print(f"Alineación simetría: {components['symmetry_alignment']:.4f}")
 ```
 
-### 2. Entrenador Inverso Completo
+### 2. Entrenador Inverso Completo con Filtrado No-Coherente
 
 ```python
 from qcal_inverse_trainer import QCALInverseTrainer
@@ -63,14 +91,17 @@ model_name = "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8"
 model = AutoModelForCausalLM.from_pretrained(model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-# Crear entrenador inverso
+# Crear entrenador inverso con filtrado no-coherente y mitigación entrópica
 trainer = QCALInverseTrainer(
     model=model,
     tokenizer=tokenizer,
     f0=141.7001,
     coherence_threshold=5.0,
+    resonance_threshold=0.7,        # Umbral de resonancia para filtrado
     use_quantum_validation=True,
-    enable_noesis88=True,           # Activar monitoreo noesis88
+    enable_noesis88=True,            # Reportes Noesis88 por época
+    filter_non_coherent=True,        # Activar filtrado no-coherente
+    mitigate_entropic_bias=True,     # Activar mitigación entrópica
     learning_rate=1e-5,
     output_dir="./qcal_training_output"
 )
@@ -83,7 +114,7 @@ queries = [
     "¿Qué papel juega la simetría discreta en la teoría noésica?"
 ]
 
-# Entrenar modelo
+# Entrenar modelo - solo aprende si genera resonancia
 summary = trainer.train(
     queries=queries,
     num_epochs=3,
@@ -92,7 +123,10 @@ summary = trainer.train(
 
 print(f"Entrenamiento completo!")
 print(f"Coherencia promedio final: {summary['final_avg_coherence']:.4f}")
-print(f"Estado noesis88: {summary['training_history']['noesis88_reports'][-1]['state']}")
+print(f"Resonancia promedio final: {summary['final_avg_resonance']:.4f}")
+print(f"Pasos filtrados (no-coherentes): {summary['total_filtered_steps']}")
+print(f"Correcciones entrópicas: {summary['total_entropic_corrections']}")
+print(f"Estado final Noesis88: {summary['training_history']['noesis88_reports'][-1]['state']}")
 ```
 
 ### 3. Evaluación de Coherencia
@@ -112,6 +146,126 @@ print(f"Resonancia estructural: {coherence_result['quantum_validations']['struct
 ```
 
 ## 🔬 Componentes del Sistema
+
+### Filtrado del Aprendizaje No-Coherente
+
+El sistema **solo permite aprendizaje** si la salida generada produce **resonancia ontológica** ≥ threshold.
+
+#### Detector de Resonancia
+
+```python
+def compute_resonance(generated_text, components):
+    """
+    Resonancia = 0.5 × Ψ_norm + 0.3 × C_Ψ + 0.2 × G_align
+    
+    donde:
+    - Ψ_norm: Coherencia Ψ normalizada
+    - C_Ψ: Resonancia del campo de conciencia
+    - G_align: Alineamiento con simetría discreta
+    """
+```
+
+**Criterio de filtrado**:
+- Si `resonancia < threshold`: ❌ Bloquear aprendizaje
+- Si `resonancia ≥ threshold`: ✅ Permitir aprendizaje
+
+Esto protege al modelo contra:
+- Aprendizaje de patrones incoherentes
+- Memorización sin comprensión
+- Degradación de la coherencia cuántica
+
+### Mitigación del Sesgo Entrópico
+
+Corrige el **aprendizaje caótico o aleatorio** mediante alineamiento con el grupo de simetría discreta **G = {π^k R_Ψ | k ∈ Z}**.
+
+#### Detector de Sesgo Entrópico
+
+```python
+def check_entropic_bias(generated_text):
+    """
+    Detecta sesgo entrópico por:
+    1. Baja diversidad léxica (repeticiones)
+    2. Falta de estructura lógica
+    3. Desalineamiento con simetría G
+    
+    Returns:
+        (has_bias, entropic_score)
+    """
+```
+
+#### Corrección Entrópica
+
+Cuando se detecta sesgo entrópico:
+
+```python
+def apply_entropic_correction(generated_text):
+    """
+    Inyecta conceptos de simetría discreta:
+    - Periodicidad logarítmica
+    - Transformaciones G = {π^k}
+    - Invariancia bajo reescalado
+    """
+```
+
+### Entrenamiento Interpretable
+
+Cada época produce un **reporte Noesis88** completo con:
+
+#### Estado Cuántico-Emergente
+
+```json
+{
+  "psi_field": "Ψ = 6.3472",
+  "resonance": "R = 0.8234",
+  "consciousness_alignment": "C_Ψ = 0.7891",
+  "symmetry_alignment": "G = 0.6543",
+  "learning_efficiency": "87.50%"
+}
+```
+
+#### Verificación Física
+
+```json
+{
+  "frequency": "141.7001 Hz",
+  "coherence_threshold": 5.0,
+  "resonance_threshold": 0.7,
+  "filtered_steps": 3,
+  "entropic_corrections": 2
+}
+```
+
+#### Verificación Matemática
+
+```json
+{
+  "group_alignment": "G = {π^k R_Ψ | k ∈ Z}",
+  "period": "log π = 1.144730",
+  "symmetry_preserved": true,
+  "resonance_achieved": true
+}
+```
+
+### Entrenamiento Abierto + Falsable
+
+Todas las predicciones y métricas son **verificables**:
+
+1. **Verificación Física**:
+   - Alineamiento con f₀ = 141.7001 Hz ✓
+   - Resonancia detectable en cada paso ✓
+   - Campo de conciencia medible ✓
+
+2. **Verificación Matemática**:
+   - Preservación de G = {π^k} ✓
+   - Periodicidad logarítmica log π ✓
+   - Coherencia Ψ = I × A²_eff ✓
+
+3. **Rastreabilidad Completa**:
+   - Todas las métricas guardadas ✓
+   - Reportes Noesis88 por época ✓
+   - Historia completa de entrenamiento ✓
+
+## 🔬 Componentes del Sistema (Detalle Técnico)
 
 ### Función de Pérdida QCAL
 
