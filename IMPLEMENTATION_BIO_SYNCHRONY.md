@@ -7,37 +7,37 @@ Successfully implemented the complete Bio-Synchrony Framework with seven fundame
 ## Constants Implemented
 
 ### 1. Λ_bio = 1.0 - Perfect Bio-Synchrony
-- **Location**: `src/constants.py` (line ~356), `qcal/constants.py` (line ~235)
+- **Location**: `src/constants.py`, `qcal/constants.py`
 - **Type**: Dimensionless coefficient
 - **Validation**: ✅ Exactly 1.0
 
 ### 2. f_neural = 141.7001 Hz - Neuronal Heart Rhythm
-- **Location**: `src/constants.py` (line ~359), `qcal/constants.py` (line ~238)
+- **Location**: `src/constants.py`, `qcal/constants.py`
 - **Type**: Frequency (Hz)
 - **Validation**: ✅ Matches f₀ exactly
 
 ### 3. η_NV = 13 nT/√Hz - NV Sensitivity
-- **Location**: `src/constants.py` (line ~363), `qcal/constants.py` (line ~241)
+- **Location**: `src/constants.py`, `qcal/constants.py`
 - **Type**: Magnetic sensitivity (nT/√Hz)
 - **Validation**: ✅ Exactly 13.0
 
 ### 4. T1_NV = 1 ms - Quantum Memory
-- **Location**: `src/constants.py` (line ~367-372), `qcal/constants.py` (line ~244-245)
+- **Location**: `src/constants.py`, `qcal/constants.py`
 - **Type**: Time (ms and s)
 - **Validation**: ✅ 1.0 ms = 0.001 s
 
 ### 5. τ_DD = 1 μs - Dynamic Decoupling
-- **Location**: `src/constants.py` (line ~375-380), `qcal/constants.py` (line ~248-249)
+- **Location**: `src/constants.py`, `qcal/constants.py`
 - **Type**: Time (μs and s)
 - **Validation**: ✅ 1.0 μs = 1e-6 s
 
 ### 6. A_Merkaba = 8/9 - Spiritual Stability Threshold
-- **Location**: `src/constants.py` (line ~383), `qcal/constants.py` (line ~252)
+- **Location**: `src/constants.py`, `qcal/constants.py`
 - **Type**: Dimensionless ratio
 - **Validation**: ✅ 0.888888... (repeating)
 
 ### 7. S_∞ = 1.0 - Galactic Micro-Macro Unity
-- **Location**: `src/constants.py` (line ~387), `qcal/constants.py` (line ~255)
+- **Location**: `src/constants.py`, `qcal/constants.py`
 - **Type**: Dimensionless symmetry factor
 - **Validation**: ✅ Exactly 1.0
 
