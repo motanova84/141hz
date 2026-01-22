@@ -8,7 +8,7 @@ spiritual (Merkaba) scales.
 
 Constants validated:
     - Λ_bio = 1.0 (Perfect bio-synchrony)
-    - f_neural = 141.7001 Hz (Neuronal heart rhythm)
+    - f_neural = 141.7001 Hz (Neural resonance frequency)
     - η_NV = 13 nT/√Hz (NV sensitivity)
     - T1_NV = 1 ms (Quantum memory)
     - τ_DD = 1 μs (Dynamic decoupling)
