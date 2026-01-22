@@ -26,7 +26,8 @@ from wet_lab_88_nodes_measurement import (
     F0_UNIVERSO,
     PHI,
     NUM_NODOS,
-    PSI_THRESHOLD_CONSCIOUSNESS
+    PSI_THRESHOLD_CONSCIOUSNESS,
+    PSI_P_VALUE_THRESHOLD
 )
 
 
@@ -49,6 +50,10 @@ class TestConstantes:
     def test_psi_threshold(self):
         """Verificar umbral de conciencia"""
         assert PSI_THRESHOLD_CONSCIOUSNESS == 0.888
+    
+    def test_p_value_threshold(self):
+        """Verificar umbral de p-value"""
+        assert PSI_P_VALUE_THRESHOLD == 0.001
 
 
 class TestFactorExpansionInfinita:
@@ -243,7 +248,7 @@ class TestFalsabilidadConciencia:
         conciencia, p_value, sigma = realizar_test_consciousness_falsifiability(Psi)
         
         assert conciencia is True
-        assert p_value < 0.001
+        assert p_value < PSI_P_VALUE_THRESHOLD
         assert sigma > 3.0  # Al menos 3σ
     
     def test_consciousness_not_detected_low_psi(self):
@@ -263,7 +268,7 @@ class TestFalsabilidadConciencia:
         conciencia, p_value, sigma = realizar_test_consciousness_falsifiability(Psi, threshold=0.90)
         
         assert conciencia is True
-        assert p_value < 0.001
+        assert p_value < PSI_P_VALUE_THRESHOLD
 
 
 class TestMitigacionRuido:
