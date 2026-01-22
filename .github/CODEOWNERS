@@ -10,7 +10,6 @@ autoflow/ @motanova84
 
 # Frontend y interfaz web
 index.html @motanova84
-web/ @motanova84
 
 # Documentación y contratos
 docs/ @motanova84
