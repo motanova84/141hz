@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-01-18T16:58:48.777800",
+  "frequency": 141.7001,
+  "threshold": 0.888,
+  "psi_state": {
+    "psi_references": 602,
+    "files_checked": 1088,
+    "psi_ratio": 0.5533
+  },
+  "manifestos": {
+    "manifesto_count": 10,
+    "manifestos": [
+      "./MANIFIESTO_REVOLUCION_NOESICA.md",
+      "./IMPLEMENTACION_MANIFIESTO_COMPLETA.md",
+      "./evaluate_manifesto.py",
+      "./QCAL-LLM/MANIFESTO.md",
+      "./QCAL-LLM/evaluate_manifesto.py",
+      "./scripts/integracion_manifiesto.py",
+      "./noesis-qcal-llm/MANIFESTO.md",
+      "./noesis-qcal-llm/evaluate_manifesto.py",
+      "./datos_crudos_analisis/MANIFIESTO_DATOS_CRUDOS.json",
+      "./notebooks/manifiesto_noesico_demo.ipynb"
+    ]
+  },
+  "coherence": {
+    "total": 0.8428,
+    "qcal_ratio": 0.2754,
+    "freq_ratio": 0.6123
+  },
+  "status": "EVOLVING",
+  "optimized_mode": false
+}

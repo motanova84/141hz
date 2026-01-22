@@ -1,0 +1,66 @@
+{
+  "server": {
+    "name": "bsd-mcp-server",
+    "description": "Conjetura BSD - dR + PT - Curvas elípticas y L-funciones",
+    "version": "1.0.0",
+    "frequency": 888,
+    "frequency_unit": "Hz",
+    "harmonic_mode": "πCODE-888",
+    "status": "INTEGRADO",
+    "endpoint": "bsd-mcp-server.qcal.space"
+  },
+  "qcal_integration": {
+    "model": "QCAL ∞³",
+    "harmonic_frequency": 888,
+    "coherence": 1.0,
+    "entropy": 0.0,
+    "phase_lock": true,
+    "observer_active": true,
+    "algebraic_bridge": "dR + PT → 888 Hz harmonic"
+  },
+  "capabilities": {
+    "elliptic_curve_analysis": true,
+    "l_function_computation": true,
+    "rank_determination": true,
+    "torsion_analysis": true,
+    "bsd_conjecture_verification": true,
+    "descent_theory": true,
+    "parity_theory": true
+  },
+  "mathematical_core": {
+    "equation": "dR + PT",
+    "descent_theory": "dR",
+    "parity_theory": "PT",
+    "harmonic_relation": "888 Hz",
+    "precision": "arbitrary",
+    "verification_status": "INTEGRADO"
+  },
+  "protocol": {
+    "type": "MCP",
+    "version": "1.0",
+    "transport": "stdio",
+    "serialization": "json"
+  },
+  "observers": {
+    "enabled": true,
+    "cross_server_sync": true,
+    "linked_servers": [
+      "github-mcp-server",
+      "dramaturgo",
+      "riemann-mcp-server",
+      "navier-mcp-server"
+    ]
+  },
+  "noetic_chain": {
+    "position": "bsd_node",
+    "connects_to": ["Riemann", "P≠NP", "Navier-Stokes"]
+  },
+  "metadata": {
+    "created": "2026-01-16T11:35:00Z",
+    "eternal_mode": true,
+    "immutable": true,
+    "read_only": true,
+    "multi_observer": true,
+    "millennium_problem": true
+  }
+}

@@ -171,6 +171,15 @@
 - Trigger: schedule (`0 0 * * *`)
 - Trigger: manual (workflow_dispatch)
 
+### GW150914 Complete Analysis - 141.7 Hz
+
+**Archivo:** `gw150914-analysis.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * 1`)
+- Trigger: manual (workflow_dispatch)
+
 ### Hydrogen Line Quantum Phase Validation
 
 **Archivo:** `hydrogen-line-validation.yml`
@@ -406,4 +415,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-14 14:07:00 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-19 00:39:55 UTC*
