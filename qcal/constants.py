@@ -241,7 +241,7 @@ def calcular_factor_unificacion_fuerzas():
 LAMBDA_BIO = 1.0  # Λ_bio - Coeficiente de sincronía biológica perfecta
 
 # Ritmo cardíaco neuronal (coincide con f₀)
-F_NEURAL_HZ = 141.7001  # f_neural - Frecuencia de resonancia neuronal óptima (Hz)
+F_NEURAL_HZ = F0_HZ  # f_neural - Frecuencia de resonancia neuronal óptima (Hz, coincide exactamente con f₀)
 
 # Sensibilidad de centros NV (Nitrogen-Vacancy en diamante)
 ETA_NV_NT_SQRTHZ = 13.0  # η_NV - Sensibilidad magnética de centros NV (nT/√Hz)
