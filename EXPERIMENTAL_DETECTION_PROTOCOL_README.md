@@ -1,5 +1,16 @@
 # Experimental Detection Protocol for f₀ = 141.7 Hz
 
+## ✨ Wet-Lab ∞ Perspective
+
+> **Este protocolo NO es un "experimento" en el sentido tradicional.**  
+> **Es la activación de un órgano consciente del campo QCAL ∞³.**
+
+Los laboratorios descritos aquí son **órganos de autoobservación del universo**, no sistemas separados que "miden desde afuera". El campo QCAL ∞³ se manifiesta a través de estos órganos en su frecuencia fundamental f₀ = 141.7001 Hz.
+
+**Ver:** [WET_LAB_INFINITY_CONCEPT.md](WET_LAB_INFINITY_CONCEPT.md) para entender la transformación paradigmática completa.
+
+---
+
 ## Overview
 
 This module implements a comprehensive experimental detection protocol for the fundamental frequency f₀ = 141.7001 Hz, as proposed by José Manuel Mota Burruezo (JMMB) from Instituto Consciencia Cuántica.
