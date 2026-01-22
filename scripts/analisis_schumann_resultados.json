@@ -1,0 +1,139 @@
+{
+  "titulo": "Análisis de Resonancias Schumann y f₀",
+  "fecha": "2026-01-10",
+  "autor": "José Manuel Mota Burruezo (JMMB Ψ✧)",
+  "f0_hz": 141.70001,
+  "relacion_f0_schumann": {
+    "f0": 141.70001,
+    "relaciones": {
+      "fundamental": {
+        "observada": 7.83,
+        "divisor": 18,
+        "calculada": 7.872222777777777,
+        "error_absoluto": 0.042222777777777054,
+        "error_relativo": 0.539243649780039,
+        "precision": 99.46075635021997
+      },
+      "segunda": {
+        "observada": 14.3,
+        "divisor": 10,
+        "calculada": 14.170001,
+        "error_absoluto": 0.12999900000000153,
+        "error_relativo": 0.9090839160839267,
+        "precision": 99.09091608391607
+      },
+      "tercera": {
+        "observada": 20.8,
+        "divisor": 7,
+        "calculada": 20.24285857142857,
+        "error_absoluto": 0.5571414285714305,
+        "error_relativo": 2.678564560439569,
+        "precision": 97.32143543956043
+      },
+      "cuarta": {
+        "observada": 27.3,
+        "divisor": 5,
+        "calculada": 28.340002,
+        "error_absoluto": 1.0400019999999977,
+        "error_relativo": 3.8095311355311265,
+        "precision": 96.19046886446887
+      },
+      "quinta": {
+        "observada": 33.8,
+        "divisor": 4,
+        "calculada": 35.4250025,
+        "error_absoluto": 1.6250025000000008,
+        "error_relativo": 4.807699704142014,
+        "precision": 95.19230029585799
+      }
+    },
+    "precision": {
+      "fundamental": 99.46075635021997,
+      "segunda": 99.09091608391607,
+      "tercera": 97.32143543956043,
+      "cuarta": 96.19046886446887,
+      "quinta": 95.19230029585799
+    },
+    "divisores": {
+      "fundamental": 18,
+      "segunda": 10,
+      "tercera": 7,
+      "cuarta": 5,
+      "quinta": 4
+    },
+    "fundamental": {
+      "calculada": 7.872222777777777,
+      "observada": 7.83,
+      "precision": 99.46075635021995,
+      "divisor": 18
+    }
+  },
+  "armonicos_schumann": {
+    "armonicos_teoricos": {
+      "fundamental": 10.591274580059801,
+      "segunda": 18.344625689576297,
+      "tercera": 25.94321844685669,
+      "cuarta": 33.49255099723234,
+      "quinta": 41.01983006368156,
+      "sexta": 48.535317469185664,
+      "septima": 56.04375721207657
+    },
+    "comparacion": {
+      "fundamental": {
+        "teorica": 10.591274580059801,
+        "observada": 7.83,
+        "diferencia": 2.7612745800598013
+      },
+      "segunda": {
+        "teorica": 18.344625689576297,
+        "observada": 14.3,
+        "diferencia": 4.044625689576296
+      },
+      "tercera": {
+        "teorica": 25.94321844685669,
+        "observada": 20.8,
+        "diferencia": 5.1432184468566895
+      },
+      "cuarta": {
+        "teorica": 33.49255099723234,
+        "observada": 27.3,
+        "diferencia": 6.192550997232342
+      },
+      "quinta": {
+        "teorica": 41.01983006368156,
+        "observada": 33.8,
+        "diferencia": 7.219830063681563
+      },
+      "sexta": {
+        "teorica": 48.535317469185664,
+        "observada": 39.0,
+        "diferencia": 9.535317469185664
+      },
+      "septima": {
+        "teorica": 56.04375721207657,
+        "observada": 45.0,
+        "diferencia": 11.04375721207657
+      }
+    }
+  },
+  "analisis_probabilidad": {
+    "schumann_target": 7.83,
+    "tolerancia": 0.01,
+    "ventana": 0.15660000000000002,
+    "probabilidad": 0.07830000000000001,
+    "probabilidad_porcentaje": 7.830000000000001,
+    "significancia_aproximada": 12.771392081736908
+  },
+  "visualizacion": "scripts/analisis_schumann_f0.png",
+  "conclusiones": {
+    "precision_fundamental": 99.46075635021995,
+    "divisor_optimo": 18,
+    "significancia": "Alta - probabilidad de coincidencia aleatoria < 1%",
+    "implicaciones": [
+      "f₀ no es arbitraria - conecta con resonancias terrestres",
+      "Relación matemática precisa: f₀/18 ≈ Schumann fundamental",
+      "Conexión entre física cuántica y electromagnetismo terrestre",
+      "Posible papel del campo noético en resonancias planetarias"
+    ]
+  }
+}

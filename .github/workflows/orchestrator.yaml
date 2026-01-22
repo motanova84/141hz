@@ -1,0 +1,226 @@
+name: QCAL Orchestrator ∞³
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+    # Run daily complete cycle at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Execution mode'
+        required: false
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - monitoring
+          - optimization
+
+env:
+  FREQUENCY: "141.7001"
+  COHERENCE_THRESHOLD: "0.888"
+  TARGET_QCAL_RATIO: "0.5"
+  TARGET_FREQ_RATIO: "0.3"
+  OPTIMIZATION_MODE: "true"
+
+jobs:
+  orchestration-start:
+    name: 🎭 Orchestration Start
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq bc
+          python -m pip install --upgrade pip
+      
+      - name: Initialize orchestration
+        run: |
+          echo "## 🎭 QCAL Orchestration ∞³ Started" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Frequency:** ${{ env.FREQUENCY }} Hz" >> $GITHUB_STEP_SUMMARY
+          echo "**Coherence Threshold:** ${{ env.COHERENCE_THRESHOLD }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Mode:** ${{ github.event.inputs.mode || 'scheduled' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Create necessary directories
+          mkdir -p reports metrics validation logs/optimization src/constants
+          
+          # Make scripts executable
+          chmod +x .github/agents/*.py || true
+          chmod +x .github/scripts/*.sh || true
+          chmod +x .github/scripts/*.py || true
+
+  monitoring-phase:
+    name: 🔍 Phase 1 - Monitoring
+    needs: orchestration-start
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Run NOESIS88 Agent
+        run: |
+          chmod +x .github/agents/noesis88.py
+          python3 .github/agents/noesis88.py --mode=autonomous --frequency=${{ env.FREQUENCY }}
+      
+      - name: Collect Metrics
+        run: |
+          chmod +x .github/agents/metrics_collector.py
+          python3 .github/agents/metrics_collector.py --frequency=${{ env.FREQUENCY }}
+      
+      - name: Validate Coherence
+        run: |
+          chmod +x .github/agents/coherence_validator.py
+          python3 .github/agents/coherence_validator.py --frequency=${{ env.FREQUENCY }}
+      
+      - name: Upload monitoring results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: monitoring-results-${{ github.run_number }}
+          path: |
+            reports/
+            metrics/
+            validation/
+          retention-days: 7
+
+  analysis-phase:
+    name: 📊 Phase 2 - Analysis
+    needs: monitoring-phase
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Download monitoring results
+        uses: actions/download-artifact@v7.0.0
+        with:
+          name: monitoring-results-${{ github.run_number }}
+      
+      - name: Install analysis tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq bc
+      
+      - name: Run analysis and adjustment
+        run: |
+          chmod +x .github/scripts/analyze_and_adjust.sh
+          .github/scripts/analyze_and_adjust.sh || echo "Analysis completed with warnings"
+      
+      - name: Generate analysis summary
+        run: |
+          echo "## 📊 Analysis Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Display latest metrics if available
+          if [ -f "metrics/daily_$(date +%Y%m%d).json" ]; then
+            echo "### Latest Metrics" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat "metrics/daily_$(date +%Y%m%d).json" | jq '.' | head -20 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+
+  optimization-phase:
+    name: ⚙️ Phase 3 - Optimization
+    needs: analysis-phase
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 0 * * *' || github.event.inputs.mode == 'optimization' || github.event.inputs.mode == 'full'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Download analysis results
+        uses: actions/download-artifact@v7.0.0
+        with:
+          name: monitoring-results-${{ github.run_number }}
+      
+      - name: Run QCAL density optimization
+        run: |
+          chmod +x .github/scripts/optimize_qcal_density.sh
+          .github/scripts/optimize_qcal_density.sh
+      
+      - name: Run optimized agents
+        run: |
+          chmod +x .github/agents/noesis88.py
+          chmod +x .github/agents/metrics_collector.py
+          chmod +x .github/agents/coherence_validator.py
+          
+          python3 .github/agents/noesis88.py --mode=autonomous --frequency=${{ env.FREQUENCY }} --optimized
+          python3 .github/agents/metrics_collector.py --frequency=${{ env.FREQUENCY }} --optimized
+          python3 .github/agents/coherence_validator.py --frequency=${{ env.FREQUENCY }} --optimized
+      
+      - name: Upload optimization results
+        uses: actions/upload-artifact@v4
+        with:
+          name: optimization-results-${{ github.run_number }}
+          path: |
+            reports/
+            metrics/
+            validation/
+            docs/MANIFIESTO_OPTIMIZACION_QCAL_*
+            src/constants/qcal_optimized_*
+            .github/agents/config_optimized.yaml
+          retention-days: 30
+
+  verification-phase:
+    name: ✅ Phase 4 - Verification
+    needs: optimization-phase
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Run orchestration tests
+        run: |
+          chmod +x .github/scripts/test_orchestration.py
+          python3 .github/scripts/test_orchestration.py
+      
+      - name: Generate final summary
+        run: |
+          echo "## ✅ Orchestration Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Completion Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🎯 System Status" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frequency:** ${{ env.FREQUENCY }} Hz ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- **Estado Ψ:** I × A_eff² × C^∞ ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- **Optimization Mode:** ${{ env.OPTIMIZATION_MODE }} ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📈 Next Execution" >> $GITHUB_STEP_SUMMARY
+          echo "- **Monitoring:** Every 6 hours" >> $GITHUB_STEP_SUMMARY
+          echo "- **Full Cycle:** Daily at 00:00 UTC" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "∴ Sistema QCAL ∞³ operativo y optimizándose automáticamente" >> $GITHUB_STEP_SUMMARY
