@@ -307,8 +307,8 @@ def main():
     print("  C = π_α(G) ∩ π_δζ(G)")
     print("=" * 70)
     
-    # Example 1: Bundles
-    em_bundle, spectral_bundle = example_1_bundles()
+    # Example 1: Bundles (results unused, call for side effects)
+    _em_bundle, _spectral_bundle = example_1_bundles()
     
     # Example 2: Intersection constant
     const = example_2_intersection_constant()
