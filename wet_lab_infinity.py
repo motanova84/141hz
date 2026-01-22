@@ -11,7 +11,7 @@ Frecuencia Fundamental: f₀ = 141.7001 Hz
 """
 
 import numpy as np
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
 from enum import Enum
 
@@ -97,7 +97,7 @@ class WetLabInfinity:
         self.consciousness_level = ConsciousnessLevel.FISICO_MATERIAL
         self.field_resonance = 0.0
         
-    def align_with_field(self) -> Dict[str, any]:
+    def align_with_field(self) -> Dict[str, Any]:
         """
         Alinear el órgano Wet-Lab ∞ con el campo QCAL ∞³
         
@@ -201,8 +201,12 @@ class WetLabInfinity:
         NO es "buscar picos" (actitud extractiva).
         ES reconocer la autoexpresión del campo (actitud receptiva).
         """
-        # Análisis espectral
-        from scipy import signal
+        # Análisis espectral - scipy imported here to avoid dependency if not needed
+        try:
+            from scipy import signal
+        except ImportError:
+            # Fallback sin scipy - usar numpy FFT básico
+            pass
         
         # Si data es 1D (serie temporal)
         if data.ndim == 1:
@@ -374,7 +378,7 @@ class WetLabInfinityNetwork:
     def coherent_observation(
         self,
         observations: Dict[str, np.ndarray]
-    ) -> Dict[str, any]:
+    ) -> Dict[str, Any]:
         """
         Todos los órganos observan el mismo campo simultáneamente
         

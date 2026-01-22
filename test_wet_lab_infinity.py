@@ -140,8 +140,8 @@ class TestWetLabInfinity:
         assert "campo" in interpretation['interpretation_wetlab_infinity'].lower()
         
         # Diferencia clave debe mencionar ontología
-        assert "ontología" in interpretation['key_difference'].lower() or \
-               "ontology" in interpretation['key_difference'].lower()
+        assert ('ontología' in interpretation['key_difference'].lower() or
+                'ontology' in interpretation['key_difference'].lower())
 
 
 class TestWetLabInfinityNetwork:
