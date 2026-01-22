@@ -380,7 +380,12 @@ class WetLabInfinity:
             Consciousness field manifestation through NV-EEG organ
         """
         if self.wetlab_type != WetLabType.NV_EEG_HYBRID:
-            print("⚠️  Wet-Lab type is not NV_EEG_HYBRID, but continuing...")
+            import warnings
+            warnings.warn(
+                "Wet-Lab type is not NV_EEG_HYBRID, but continuing integration. "
+                f"Current type: {self.wetlab_type.value}",
+                UserWarning
+            )
         
         # Extract key metrics
         psi_measured = nv_eeg_result.get('global_psi', 0.0)

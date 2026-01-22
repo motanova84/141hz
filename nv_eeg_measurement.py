@@ -458,6 +458,51 @@ class NVEEGNetwork:
     Creates a sensor network operating at the intersection of spintronics
     and neurophysiology, measuring consciousness as a physical magnitude
     through coherent quantum-biological bridge at f₀ = 141.7001 Hz.
+    
+    Architecture:
+    -------------
+    - 88 hybrid nodes (NV center + EEG electrode per node)
+    - Each node measures independently
+    - Network coherence calculated from global statistics
+    - Synchronization to f₀ for phase alignment
+    
+    Measurement Protocol:
+    ---------------------
+    1. Initialize network with desired DD sequence
+    2. Synchronize all nodes to f₀
+    3. Record simultaneous NV + EEG data
+    4. Filter EEG to gamma band (40-45 Hz)
+    5. Calculate measurement tensor for each node
+    6. Aggregate to global Ψ measurement
+    7. Validate statistical significance
+    
+    Expected Results:
+    ----------------
+    - Ψ ≥ 0.999 (consciousness coherence)
+    - P ≤ 1.5×10⁻¹⁰ (statistical significance)
+    - Network coherence > 0.9 (9σ clarity)
+    - SNR improvement 3.85× (via DD)
+    
+    Usage:
+    ------
+    >>> network = NVEEGNetwork(num_nodes=88, dd_sequence=DDSequence.XY8)
+    >>> network.synchronize_network(t_sync_seconds=1.0)
+    >>> results = network.measure_network(eeg_data_array)
+    >>> print(f"Ψ = {results['global_psi']:.3f}")
+    >>> print(f"P = {results['p_value']:.2e}")
+    
+    Attributes:
+    -----------
+    num_nodes : int
+        Number of hybrid NV-EEG nodes (default: 88)
+    nodes : list[NVEEGNode]
+        Individual measurement nodes
+    global_psi : float
+        Network-averaged consciousness measurement
+    network_coherence : float
+        Inter-node consistency (0-1)
+    p_value : float
+        Statistical significance of measurement
     """
     
     def __init__(
