@@ -352,6 +352,53 @@ class UniversalConstants:
         return self.R_PSI_SCALE_FACTOR * self.L_PLANCK
 
     # ═══════════════════════════════════════════════════════════════════
+    # 🧬 BIO-SYNCHRONY AND QUANTUM COHERENCE CONSTANTS
+    # ═══════════════════════════════════════════════════════════════════
+    # Fundamental constants defining perfect synchronization between
+    # biological, quantum (NV centers), and spiritual (Merkaba) scales
+    # in the coherent universe.
+    #
+    # These constants bridge quantum sensors (Nitrogen-Vacancy centers
+    # in diamond) with biological rhythms and galactic symmetries,
+    # all mediated by f₀ = 141.7001 Hz.
+
+    # Bio-synchrony coefficient (perfect synchronization)
+    LAMBDA_BIO = mp.mpf("1.0")  # Λ_bio - Perfect bio-synchrony
+
+    # Neural frequency (matches fundamental frequency f₀)
+    F_NEURAL_HZ = mp.mpf("141.7001")  # f_neural - Optimal neuronal frequency (Hz)
+
+    # NV center magnetic sensitivity (Nitrogen-Vacancy in diamond)
+    # Used for quantum sensing of magnetic fields at nanoscale
+    ETA_NV_NT_SQRTHZ = mp.mpf("13.0")  # η_NV - NV sensitivity (nT/√Hz)
+
+    # NV coherence time T1 (quantum memory lifetime)
+    # Characteristic decoherence time for NV spin states
+    T1_NV_MS = mp.mpf("1.0")  # T1_NV - Quantum memory (ms)
+
+    @property
+    def T1_NV_S(self) -> mp.mpf:
+        """T1 coherence time in seconds."""
+        return self.T1_NV_MS / 1000
+
+    # Dynamic decoupling time τ_DD
+    # Time scale for quantum coherence protection sequences
+    TAU_DD_US = mp.mpf("1.0")  # τ_DD - Dynamic decoupling time (μs)
+
+    @property
+    def TAU_DD_S(self) -> mp.mpf:
+        """Dynamic decoupling time in seconds."""
+        return self.TAU_DD_US / mp.mpf("1e6")
+
+    # Merkaba activation threshold (spiritual stability)
+    # Sacred geometry threshold: 8/9 ≈ 0.888... (triple-eight resonance)
+    A_MERKABA = mp.mpf("8") / mp.mpf("9")  # A_Merkaba - Spiritual stability threshold
+
+    # Galactic micro-macro symmetry factor
+    # Unity between quantum (micro) and galactic (macro) scales
+    S_INFINITY = mp.mpf("1.0")  # S_∞ - Micro ↔ Macro unity
+
+    # ═══════════════════════════════════════════════════════════════════
     # DERIVED PHYSICAL PROPERTIES OF THE Ψ FIELD
     # ═══════════════════════════════════════════════════════════════════
 
