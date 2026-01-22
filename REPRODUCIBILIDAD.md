@@ -4,6 +4,30 @@
 
 Este documento proporciona instrucciones completas para asegurar la reproducibilidad de todos los análisis y resultados del proyecto QCAL. La reproducibilidad es un pilar fundamental de la investigación científica y este proyecto implementa múltiples capas de garantías.
 
+**IMPORTANTE**: Para auditores externos y verificación completa, consulte también:
+- **[ENV_LOCK_GUIDE.md](ENV_LOCK_GUIDE.md)**: Guía completa para auditores (en inglés)
+- **ENV.lock**: Archivo de bloqueo de ambiente con metadata completa
+- **ENV.lock.json**: Metadata del ambiente en formato JSON para procesamiento automático
+
+## Nuevo Sistema ENV.lock 2.0
+
+A partir de enero 2026, el proyecto incluye un sistema mejorado de bloqueo de ambiente que garantiza:
+
+✅ **Reproducibilidad bit a bit** de todos los resultados numéricos  
+✅ **Verificación externa** por auditores independientes  
+✅ **Trazabilidad completa** del sistema, dependencias y datasets  
+✅ **Validación cross-platform** (Linux, macOS con misma versión de Python)  
+
+### ¿Qué incluye ENV.lock 2.0?
+
+1. **Información del sistema**: OS, arquitectura, kernel, versión de Python
+2. **Versiones de toolchain**: GCC, GFortran, CMake, compiladores
+3. **Dependencias Python**: Versiones exactas de NumPy, SciPy, LALSuite, etc.
+4. **Herramientas externas**: Lean 4, SAT solvers, LALSuite (si están instalados)
+5. **Checksums de datasets**: SHA256 de archivos de datos LIGO/GWOSC
+6. **Configuración**: Seeds aleatorios, configuración de precisión, constantes físicas
+7. **Estado de Git**: Commit SHA, branch, información de versión
+
 ## Principios de Reproducibilidad
 
 ### 1. Versiones Exactas de Dependencias
@@ -47,7 +71,49 @@ source venv/bin/activate  # En Windows: venv\Scripts\activate
 pip install -r ENV.lock
 
 # Verificar la instalación
-python scripts/validate_reproducibility.py
+python scripts/validate_reproducibility.py --strict
+
+# Ver metadata del ambiente
+cat ENV.lock.json
+```
+
+### Scripts de Mantenimiento de ENV.lock
+
+El proyecto incluye scripts para generar y mantener ENV.lock:
+
+#### Generar ENV.lock desde cero
+
+```bash
+# Genera ENV.lock completo con todas las dependencias
+python scripts/generate_env_lock.py --output ENV.lock
+```
+
+#### Mejorar ENV.lock existente
+
+```bash
+# Añade metadata a ENV.lock existente (preserva paquetes)
+python scripts/enhance_env_lock.py --input ENV.lock --output ENV.lock
+```
+
+#### Regenerar después de actualizar dependencias
+
+```bash
+# 1. Crear ambiente limpio
+python3 -m venv venv_temp
+source venv_temp/bin/activate
+
+# 2. Instalar dependencias actualizadas
+pip install -r requirements.txt
+
+# 3. Congelar versiones
+pip freeze > ENV.lock.temp
+
+# 4. Añadir metadata
+python scripts/enhance_env_lock.py --input ENV.lock.temp --output ENV.lock
+
+# 5. Limpiar
+deactivate
+rm -rf venv_temp ENV.lock.temp
 ```
 
 ### Ejecución Reproducible
