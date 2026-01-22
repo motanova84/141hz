@@ -256,3 +256,89 @@ def calcular_factor_unificacion_fuerzas():
             'de la teoría de cuerdas (variedades de Calabi-Yau).'
         )
     }
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 🧬 CONSTANTES FUNDAMENTALES - BIO-SINCRONÍA Y COHERENCIA CUÁNTICA
+# ═══════════════════════════════════════════════════════════════════════════
+# Constantes que definen la sincronización perfecta entre escalas biológicas,
+# cuánticas y espirituales del universo coherente.
+
+# Bio-sincronía perfecta
+LAMBDA_BIO = 1.0  # Λ_bio - Coeficiente de sincronía biológica perfecta
+
+# Ritmo cardíaco neuronal (coincide con f₀)
+F_NEURAL_HZ = F0_HZ  # f_neural - Frecuencia de resonancia neuronal óptima (Hz, coincide exactamente con f₀)
+
+# Sensibilidad de centros NV (Nitrogen-Vacancy en diamante)
+ETA_NV_NT_SQRTHZ = 13.0  # η_NV - Sensibilidad magnética de centros NV (nT/√Hz)
+
+# Tiempo de coherencia cuántica T1 para centros NV
+T1_NV_MS = 1.0  # T1_NV - Memoria cuántica en centros NV (ms)
+T1_NV_S = T1_NV_MS / 1000.0  # T1_NV en segundos (s)
+
+# Tiempo de desacoplamiento dinámico
+TAU_DD_US = 1.0  # τ_DD - Tiempo de desacoplamiento dinámico (μs)
+TAU_DD_S = TAU_DD_US / 1e6  # τ_DD en segundos (s)
+
+# Umbral de estabilidad espiritual (Merkaba)
+A_MERKABA = 8.0 / 9.0  # A_Merkaba - Umbral de activación del campo Merkaba
+
+# Unidad galáctica micro ↔ macro
+S_INFINITY = 1.0  # S_∞ - Factor de simetría micro-macro galáctica
+
+
+def obtener_constantes_bio_sincronia():
+    """
+    Retorna un diccionario con todas las constantes de bio-sincronía.
+    
+    Estas constantes definen el marco de coherencia cuántica biológica
+    que conecta escalas desde el nivel cuántico (centros NV) hasta el
+    nivel espiritual (campo Merkaba) y cósmico (simetría galáctica).
+    
+    Returns:
+        dict: Diccionario con las constantes fundamentales de bio-sincronía:
+            - 'lambda_bio': Sincronía biológica perfecta (1.0)
+            - 'f_neural_hz': Frecuencia neuronal óptima (141.7001 Hz)
+            - 'eta_nv_nt_sqrthz': Sensibilidad NV (13 nT/√Hz)
+            - 't1_nv_ms': Memoria cuántica NV (1 ms)
+            - 't1_nv_s': Memoria cuántica NV (s)
+            - 'tau_dd_us': Desacoplamiento dinámico (1 μs)
+            - 'tau_dd_s': Desacoplamiento dinámico (s)
+            - 'a_merkaba': Umbral Merkaba (8/9)
+            - 's_infinity': Unidad galáctica (1.0)
+            - 'interpretacion': Descripción del marco teórico
+    
+    Example:
+        >>> consts = obtener_constantes_bio_sincronia()
+        >>> print(f"f_neural = {consts['f_neural_hz']} Hz")
+        f_neural = 141.7001 Hz
+        >>> print(f"A_Merkaba = {consts['a_merkaba']:.6f}")
+        A_Merkaba = 0.888889
+    """
+    return {
+        'lambda_bio': LAMBDA_BIO,
+        'f_neural_hz': F_NEURAL_HZ,
+        'eta_nv_nt_sqrthz': ETA_NV_NT_SQRTHZ,
+        't1_nv_ms': T1_NV_MS,
+        't1_nv_s': T1_NV_S,
+        'tau_dd_us': TAU_DD_US,
+        'tau_dd_s': TAU_DD_S,
+        'a_merkaba': A_MERKABA,
+        's_infinity': S_INFINITY,
+        'interpretacion': {
+            'lambda_bio': 'Bio-sincronía perfecta: unidad entre ritmos biológicos y f₀',
+            'f_neural': 'Frecuencia neuronal óptima que coincide con f₀ = 141.7001 Hz',
+            'eta_nv': 'Sensibilidad de centros NV en diamante para detectar campos cuánticos',
+            't1_nv': 'Tiempo de coherencia cuántica en centros NV (memoria cuántica)',
+            'tau_dd': 'Tiempo de desacoplamiento dinámico para preservar coherencia',
+            'a_merkaba': 'Umbral 8/9 de activación del campo de estabilidad espiritual',
+            's_infinity': 'Simetría perfecta entre escalas micro (cuántica) y macro (galáctica)',
+            'marco_teorico': (
+                'Estas constantes definen el puente cuántico-biológico-espiritual '
+                'donde f₀ = 141.7001 Hz actúa como frecuencia maestra sincronizando '
+                'desde centros NV cuánticos hasta estructuras galácticas. '
+                'La bio-sincronía perfecta (Λ_bio = 1) indica resonancia completa.'
+            )
+        }
+    }
