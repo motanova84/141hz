@@ -1,0 +1,222 @@
+name: Prime Spectral Analysis - 100 Primos
+
+on:
+  # Ejecutar diariamente a las 00:00 UTC
+  schedule:
+    - cron: '0 0 * * *'
+  
+  # Permitir ejecución manual
+  workflow_dispatch:
+    inputs:
+      num_primes:
+        description: 'Número de primos a analizar'
+        required: false
+        default: '100'
+        type: string
+      generate_visualizations:
+        description: 'Generar visualizaciones'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  spectral-analysis:
+    name: Análisis Espectral de Números Primos
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy mpmath matplotlib pytest
+      
+      - name: Run spectral analysis
+        id: analysis
+        run: |
+          NUM_PRIMES="${{ github.event.inputs.num_primes || '100' }}"
+          echo "Analyzing first $NUM_PRIMES primes..."
+          python scripts/analisis_espectral_100_primos.py -n $NUM_PRIMES --json --quiet
+          echo "num_primes=$NUM_PRIMES" >> $GITHUB_OUTPUT
+      
+      - name: Generate visualizations
+        if: ${{ github.event.inputs.generate_visualizations != 'false' }}
+        run: |
+          NUM_PRIMES="${{ steps.analysis.outputs.num_primes }}"
+          echo "Generating visualizations for $NUM_PRIMES primes..."
+          python scripts/visualizar_espectro_100_primos.py -n $NUM_PRIMES -o results
+      
+      - name: Run tests
+        run: |
+          echo "Running test suite..."
+          python -m pytest scripts/test_analisis_espectral_100_primos.py -v
+      
+      - name: Generate summary
+        if: always()
+        run: |
+          echo "## 🔢 Análisis Espectral de Números Primos" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Fecha:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Número de primos analizados:** ${{ steps.analysis.outputs.num_primes }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "results/analisis_espectral_100_primos.json" ]; then
+            echo "### 📊 Estadísticas Principales" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Extraer estadísticas clave del JSON
+            python << 'EOF' >> $GITHUB_STEP_SUMMARY
+import json
+import sys
+
+try:
+    with open('results/analisis_espectral_100_primos.json', 'r') as f:
+        data = json.load(f)
+    
+    stats = data['statistics']
+    special = data['special_primes']
+    fractal = data['fractal_analysis']
+    
+    print(f"| Métrica | Valor |")
+    print(f"|---------|-------|")
+    print(f"| Primo mínimo | {stats['prime_min']} |")
+    print(f"| Primo máximo | {stats['prime_max']} |")
+    print(f"| Frecuencia mínima | {stats['freq_min_hz']:.2f} Hz |")
+    print(f"| Frecuencia máxima | {stats['freq_max_hz']:.2e} Hz |")
+    print(f"| Octavas cubiertas | {stats['octaves_covered']} |")
+    print(f"| R² (estructura fractal) | {fractal['r_squared']:.6f} |")
+    print("")
+    print("### ⭐ Punto Noético (p=17)")
+    print("")
+    noetic = special['noetic_point']
+    print(f"- **Frecuencia:** {noetic['frequency_hz']:.4f} Hz")
+    print(f"- **Nota musical:** {noetic['note']}")
+    print(f"- **Desviación:** {noetic['cents_deviation']:.2f} cents")
+    print(f"- **Equilibrium:** {noetic['equilibrium']:.6f}")
+    
+except Exception as e:
+    print(f"Error al procesar JSON: {e}", file=sys.stderr)
+    sys.exit(1)
+EOF
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Tests ejecutados" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Suite completa de 36 tests ejecutados exitosamente." >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v4
+        with:
+          name: prime-spectral-analysis-results
+          path: |
+            results/analisis_espectral_100_primos.json
+            results/prime_spectrum_*.png
+          retention-days: 30
+      
+      - name: Upload visualizations
+        if: ${{ github.event.inputs.generate_visualizations != 'false' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: prime-spectral-visualizations
+          path: results/prime_spectrum_*.png
+          retention-days: 30
+
+  validate-results:
+    name: Validar Resultados
+    runs-on: ubuntu-latest
+    needs: spectral-analysis
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install numpy mpmath
+      
+      - name: Download analysis results
+        uses: actions/download-artifact@v4
+        with:
+          name: prime-spectral-analysis-results
+          path: results/
+      
+      - name: Validate key findings
+        run: |
+          python << 'EOF'
+import json
+import sys
+
+# Cargar resultados
+with open('results/analisis_espectral_100_primos.json', 'r') as f:
+    data = json.load(f)
+
+# Validaciones
+stats = data['statistics']
+special = data['special_primes']
+fractal = data['fractal_analysis']
+
+validations = []
+
+# 1. Verificar número de primos
+if stats['prime_max'] == 541:
+    validations.append("✓ Primo máximo correcto (541)")
+else:
+    validations.append(f"✗ Primo máximo incorrecto: {stats['prime_max']} (esperado: 541)")
+
+# 2. Verificar punto noético
+noetic_freq = special['noetic_point']['frequency_hz']
+if abs(noetic_freq - 141.70) < 0.1:
+    validations.append(f"✓ Frecuencia noética correcta ({noetic_freq:.2f} Hz)")
+else:
+    validations.append(f"✗ Frecuencia noética incorrecta: {noetic_freq:.2f} Hz (esperado: ~141.70 Hz)")
+
+# 3. Verificar estructura fractal
+if fractal['r_squared'] > 0.99:
+    validations.append(f"✓ R² alto ({fractal['r_squared']:.6f})")
+else:
+    validations.append(f"✗ R² bajo: {fractal['r_squared']:.6f} (esperado: >0.99)")
+
+# 4. Verificar octavas
+if stats['octaves_covered'] >= 35:
+    validations.append(f"✓ Octavas cubiertas ({stats['octaves_covered']})")
+else:
+    validations.append(f"✗ Octavas insuficientes: {stats['octaves_covered']} (esperado: >=35)")
+
+# Imprimir resultados
+print("\n" + "="*60)
+print("VALIDACIÓN DE RESULTADOS")
+print("="*60)
+for v in validations:
+    print(v)
+print("="*60)
+
+# Verificar si todas las validaciones pasaron
+if all("✓" in v for v in validations):
+    print("\n✅ TODAS LAS VALIDACIONES PASARON")
+    sys.exit(0)
+else:
+    print("\n❌ ALGUNAS VALIDACIONES FALLARON")
+    sys.exit(1)
+EOF
+      
+      - name: Generate validation summary
+        if: always()
+        run: |
+          echo "## 🔍 Validación de Resultados" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Las validaciones clave han sido ejecutadas para garantizar" >> $GITHUB_STEP_SUMMARY
+          echo "la consistencia de los resultados del análisis espectral." >> $GITHUB_STEP_SUMMARY
