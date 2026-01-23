@@ -36,7 +36,7 @@ frequency = 141.7001 Hz
 ontological_level = "II"
 ram_id = "RAM-TEST-001"
 license = "MIT"
-last_update = 2025-01-23
+last_update = "2025-01-23"
 """
         (tmp_path / ".qcal_beacon").write_text(beacon_content)
         

@@ -201,7 +201,8 @@ class ActiveSystemMonitor:
                     ["pip-audit", "--version"],
                     capture_output=True,
                     text=True,
-                    timeout=10
+                    timeout=10,
+                    shell=False
                 )
                 if result.returncode != 0:
                     # pip-audit no disponible, usar verificación básica
@@ -210,12 +211,25 @@ class ActiveSystemMonitor:
                 # pip-audit no disponible, usar verificación básica
                 return self._basic_security_check()
             
+            # Validar que el archivo requirements existe y es seguro
+            if not requirements_file.is_file():
+                return False, "❌ Archivo requirements.txt no es un archivo válido"
+            
+            # Resolver la ruta para prevenir path traversal
+            try:
+                requirements_file = requirements_file.resolve(strict=True)
+                if not str(requirements_file).startswith(str(self.base_path)):
+                    return False, "❌ Ruta de requirements.txt fuera del repositorio"
+            except (OSError, RuntimeError):
+                return False, "❌ Error al validar ruta de requirements.txt"
+            
             # Ejecutar pip-audit
             result = subprocess.run(
                 ["pip-audit", "-r", str(requirements_file), "--format", "json"],
                 capture_output=True,
                 text=True,
-                timeout=60
+                timeout=60,
+                shell=False
             )
             
             if result.returncode == 0:
@@ -231,7 +245,22 @@ class ActiveSystemMonitor:
                 # Analizar vulnerabilidades
                 try:
                     vuln_data = json.loads(result.stdout)
-                    vuln_count = sum(len(pkg.get("vulns", [])) for pkg in vuln_data.get("dependencies", []))
+                    
+                    # Validar estructura del JSON
+                    if not isinstance(vuln_data, dict):
+                        return self._basic_security_check()
+                    
+                    dependencies = vuln_data.get("dependencies", [])
+                    if not isinstance(dependencies, list):
+                        return self._basic_security_check()
+                    
+                    # Contar vulnerabilidades de forma segura
+                    vuln_count = 0
+                    for pkg in dependencies:
+                        if isinstance(pkg, dict):
+                            vulns = pkg.get("vulns", [])
+                            if isinstance(vulns, list):
+                                vuln_count += len(vulns)
                     
                     self.results["security"] = {
                         "status": "vulnerabilities_found",
@@ -241,7 +270,7 @@ class ActiveSystemMonitor:
                     }
                     
                     return False, f"⚠️  {vuln_count} vulnerabilidad(es) detectada(s)"
-                except json.JSONDecodeError:
+                except (json.JSONDecodeError, KeyError, TypeError):
                     return self._basic_security_check()
                     
         except Exception as e:
@@ -386,7 +415,10 @@ class ActiveSystemMonitor:
         Returns:
             Valor del campo o None
         """
-        pattern = rf'{field_name}\s*=\s*["\']?([^"\'\n]+)["\']?'
+        # Escapar el nombre del campo para prevenir inyección regex
+        escaped_field = re.escape(field_name)
+        # Usar una expresión regular más segura y simple
+        pattern = rf'{escaped_field}\s*=\s*["\']?([^"\n]*?)["\']?(?:\n|$)'
         match = re.search(pattern, content)
         return match.group(1).strip() if match else None
 
