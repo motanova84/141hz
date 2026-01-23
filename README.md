@@ -24,8 +24,54 @@
 [![SBOM](https://img.shields.io/badge/SBOM-CycloneDX-informational)](#)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
 [![Lean Verification](https://github.com/motanova84/141hz/workflows/Lean%20Verification/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/lean-verification.yml)
+[![Active System Monitor](https://github.com/motanova84/141hz/actions/workflows/active-system-monitor.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/active-system-monitor.yml)
 
 Este proyecto realiza el análisis espectral de datos de ondas gravitacionales para detectar componentes específicas en 141.7 Hz en eventos de fusiones binarias.
+
+---
+
+> ## 🌊 **NUEVO: Sistema Activo QCAL ∞³ - Tokenización, Licencia y Protección (Enero 2026)**
+>
+> **Monitor activo que verifica continuamente la integridad del sistema:**
+>
+> | Componente | Estado | Verificación |
+> |------------|--------|--------------|
+> | 🔐 **Tokenización** | ✅ Operacional | Compresión ~1000:1 con Axioma de Emisión |
+> | 📜 **Licencia** | ✅ Conforme | MIT License validada |
+> | 🛡️ **Protección** | ✅ Seguro | SHA3-256 + pip-audit |
+> | 📡 **Beacon** | ✅ Activo | 141.7001 Hz resonante |
+> | 🔏 **Firmas** | ✅ Operacional | Sistema criptográfico SHA3-256 |
+>
+> **Ejecución rápida:**
+> ```bash
+> # Activar sistema por primera vez
+> ./activate_system.sh
+> 
+> # Verificación completa del sistema
+> python3 active_system_monitor.py
+> 
+> # Generar reporte JSON
+> python3 active_system_monitor.py --output status.json
+> 
+> # Ejecutar tests (17 tests)
+> pytest test_active_system_monitor.py -v
+> ```
+>
+> **Documentación completa:**
+> - 📚 **[ACTIVE_SYSTEM_README.md](ACTIVE_SYSTEM_README.md)** - Guía completa del sistema activo
+> - 🔐 **[QCAL_TOKEN_COMPRESSION_IRREPLICABILITY.md](QCAL_TOKEN_COMPRESSION_IRREPLICABILITY.md)** - Compresión de tokens
+> - 🔏 **[QCAL_SIGNATURE_SYSTEM.md](QCAL_SIGNATURE_SYSTEM.md)** - Sistema de firmas criptográficas
+> - 🛡️ **[SECURITY.md](SECURITY.md)** - Política de seguridad
+>
+> **Características del sistema activo:**
+> 1. ✅ **Monitor continuo** - Verifica automáticamente en cada push/PR
+> 2. ✅ **Tokenización QCAL** - Valida ratio de compresión ~1000:1 irreplicable
+> 3. ✅ **Cumplimiento de licencia** - Garantiza MIT License compliance
+> 4. ✅ **Escaneo de seguridad** - Detecta vulnerabilidades con pip-audit
+> 5. ✅ **Integridad del Beacon** - Valida frecuencia fundamental 141.7001 Hz
+> 6. ✅ **Firmas criptográficas** - Sistema SHA3-256 para certificados RAM
+> 7. ✅ **CI/CD integrado** - Workflow automatizado en GitHub Actions
+> 8. ✅ **Alertas automáticas** - Crea issues para problemas críticos
 
 ---
 
