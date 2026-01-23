@@ -40,10 +40,10 @@ class QCALTextEncoder:
         self.n_dimensions = n_dimensions
         self.f0 = f0
         
-        # Set mpmath precision
-        mpmath.mp.dps = 50
+        # Set mpmath precision (15 decimal places sufficient for our needs)
+        mpmath.mp.dps = 15
         
-        # QCAL constants
+        # QCAL constants (computed once for efficiency)
         self.zeta_prime_half = float(mpmath.zeta(mpmath.mpf('0.5'), derivative=1))
         self.phi = (1 + np.sqrt(5)) / 2  # Golden ratio
         self.kappa_pi = 2.5782  # Adelic constant
@@ -51,6 +51,11 @@ class QCALTextEncoder:
         
         # Initialize projection matrix using spectral properties
         self._init_projection_matrix()
+        
+    # Constants for hash encoding
+    CHAR_NORM_DIVISOR = 128.0  # ASCII printable character range normalization
+    HASH_MODULO = 1000  # Hash normalization for distribution
+    HASH_SLICE_LEN = 8  # SHA256 hexdigest slice length for int conversion
     
     def _init_projection_matrix(self):
         """Initialize spectral projection matrix based on f0 and QCAL constants."""
@@ -87,21 +92,21 @@ class QCALTextEncoder:
         
         # 1. Character-level hashing (0-63)
         for i, char in enumerate(text[:64]):
-            hash_features[i] = (ord(char) / 128.0) * self.psi_resonance
+            hash_features[i] = (ord(char) / self.CHAR_NORM_DIVISOR) * self.psi_resonance
         
         # 2. Word-level hashing (64-127)
         words = text.split()[:32]
         for i, word in enumerate(words):
-            word_hash = int(hashlib.sha256(word.encode()).hexdigest()[:8], 16)
-            hash_features[64 + i * 2] = (word_hash % 1000) / 1000.0
-            hash_features[64 + i * 2 + 1] = (word_hash // 1000 % 1000) / 1000.0
+            word_hash = int(hashlib.sha256(word.encode()).hexdigest()[:self.HASH_SLICE_LEN], 16)
+            hash_features[64 + i * 2] = (word_hash % self.HASH_MODULO) / self.HASH_MODULO
+            hash_features[64 + i * 2 + 1] = (word_hash // self.HASH_MODULO % self.HASH_MODULO) / self.HASH_MODULO
         
         # 3. Sentence-level hashing (128-191)
         sentences = text.split('.')[:32]
         for i, sent in enumerate(sentences):
-            sent_hash = int(hashlib.sha256(sent.encode()).hexdigest()[:8], 16)
-            hash_features[128 + i * 2] = (sent_hash % 1000) / 1000.0
-            hash_features[128 + i * 2 + 1] = np.sin(sent_hash / 1000.0 * 2 * np.pi)
+            sent_hash = int(hashlib.sha256(sent.encode()).hexdigest()[:self.HASH_SLICE_LEN], 16)
+            hash_features[128 + i * 2] = (sent_hash % self.HASH_MODULO) / self.HASH_MODULO
+            hash_features[128 + i * 2 + 1] = np.sin(sent_hash / self.HASH_MODULO * 2 * np.pi)
         
         # 4. Document-level features (192-255)
         doc_hash = hashlib.sha256(text.encode()).digest()

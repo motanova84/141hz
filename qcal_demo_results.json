@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-01-23T12:29:13.138488",
+  "timestamp": "2026-01-23T12:33:34.993279",
   "n_texts": 25,
   "results": {
     "QCAL-16": {
       "n_dimensions": 16,
-      "encoding_time": 0.008526802062988281,
+      "encoding_time": 0.00668787956237793,
       "memory_kb": 3.125,
       "similarity": {
         "mean_similarity": 0.8457178489346467,
@@ -25,7 +25,7 @@
     },
     "QCAL-32": {
       "n_dimensions": 32,
-      "encoding_time": 0.0073659420013427734,
+      "encoding_time": 0.00632166862487793,
       "memory_kb": 6.25,
       "similarity": {
         "mean_similarity": 0.8786972986839984,
@@ -46,7 +46,7 @@
     },
     "QCAL-64": {
       "n_dimensions": 64,
-      "encoding_time": 0.007508993148803711,
+      "encoding_time": 0.006339550018310547,
       "memory_kb": 12.5,
       "similarity": {
         "mean_similarity": 0.84317859534453,

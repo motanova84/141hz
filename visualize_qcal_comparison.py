@@ -21,12 +21,14 @@ def create_comparison_plot():
     compression_ratio = [24, 12, 6, 3.8, 1]
     
     # QCAL-specific metrics from demo
+    # Note: Word2Vec and SBERT values are estimated for comparison purposes
+    # Run experimento_qcal_sbert_word2vec.py with network access for actual measurements
     precision_at_3 = [0.2667, 0.1733, 0.1867, 0.20, 0.25]  # Estimated for W2V and SBERT
     silhouette = [0.0928, 0.0653, 0.0468, 0.08, 0.10]  # Estimated for W2V and SBERT
     
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
-    fig.suptitle('QCAL vs SBERT vs Word2Vec - Comparación de Embeddings de Texto', 
-                 fontsize=16, fontweight='bold')
+    fig.suptitle('QCAL vs SBERT vs Word2Vec - Comparación de Embeddings de Texto\n(SBERT/Word2Vec: valores estimados)', 
+                 fontsize=15, fontweight='bold')
     
     colors = ['#2E86AB', '#A23B72', '#F18F01', '#C73E1D', '#6A994E']
     
