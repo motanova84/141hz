@@ -30,6 +30,8 @@
   - Análisis de 141.7 Hz en KAGRA (K1) - O4 Open Data
 - `analizar_l1.py`
   - Análisis de datos de Livingston (L1) para comparación
+- `analizar_resonancias_schumann.py`
+  - Análisis de Resonancias Schumann y f₀
 - `analizar_ringdown.py`
   - Análisis de componente en 141.7 Hz en el ringdown - CORREGIDO
 - `analizar_variedades_cy_10.py`
@@ -41,6 +43,8 @@
 
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_harmonic_coherence.py`
+  - Validación de Coherencia Armónica QCAL ∞³
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
@@ -53,6 +57,8 @@
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_harmonic_coherence.py`
+  - Validación de Coherencia Armónica QCAL ∞³
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
@@ -152,6 +158,8 @@
   - Test para generar_prediccion_gw250114.py
 - `test_gw170817_eeg_analysis.py`
   - Tests for GW170817 and EEG analysis scripts.
+- `test_harmonic_validation.py`
+  - Test suite for harmonic validation theorem
 - `test_multi_event_snr_analysis.py`
   - Tests para el módulo multi_event_snr_analysis
 - `test_optimization_modules.py`
@@ -228,6 +236,8 @@
   - Test para validar la configuración de Vercel
 - `test_verificacion_convergencia.py`
   - Tests para Verificación de Convergencia y Constantes Fundamentales
+- `test_verificacion_espectral_primos_rigurosa.py`
+  - Test Suite para Verificación Espectral de Números Primos
 - `test_verificacion_sistema.py`
   - Test para verificacion_sistema_optimizado.py
 - `test_verificador_gw250114.py`
@@ -244,4 +254,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-06 23:45:20 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-23 11:49:19 UTC*

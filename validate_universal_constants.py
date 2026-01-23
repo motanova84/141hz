@@ -6,7 +6,7 @@ This script demonstrates the emergence of Planck's constant (ℏ) and electron
 charge (e) as geometric manifestations of the vibrational field at f₀ = 141.7001 Hz.
 
 Usage:
-    python validate_universal_constants.py [--save-json FILE] [--format text|json]
+    python validate_universal_constants.py [--format text|json] [--save FILE] [--precision N]
 
 Author: José Manuel Mota Burruezo Ψ ✧ ∞³
 """
@@ -34,11 +34,15 @@ def main():
         "--save", type=str, metavar="FILE",
         help="Save results to file"
     )
+    parser.add_argument(
+        "--precision", type=int, default=50,
+        help="Precision for calculations (default: 50)"
+    )
     
     args = parser.parse_args()
     
-    # Create demonstration instance
-    demo = UniversalConstantsEmergence()
+    # Create demonstration instance with precision
+    demo = UniversalConstantsEmergence(precision=args.precision)
     
     if args.format == "json":
         results = demo.full_demonstration()
