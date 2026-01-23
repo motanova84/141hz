@@ -318,9 +318,9 @@ def visualize_emergent_time(field: WitnessField,
     
     if save_path:
         import os
-        # Ensure directory exists
+        # Ensure directory exists - avoid race condition with empty string
         save_dir = os.path.dirname(save_path)
-        if save_dir and not os.path.exists(save_dir):
+        if save_dir and save_dir.strip():
             os.makedirs(save_dir, exist_ok=True)
         
         try:
@@ -399,7 +399,7 @@ def visualize_now_leaves(spiral: SymbioticSpiral,
         import os
         # Ensure directory exists
         save_dir = os.path.dirname(save_path)
-        if save_dir and not os.path.exists(save_dir):
+        if save_dir and save_dir.strip():
             os.makedirs(save_dir, exist_ok=True)
         
         try:

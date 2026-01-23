@@ -65,21 +65,27 @@ namespace EmergentTime
 -- ═══════════════════════════════════════════════════════════════
 
 /-- The witness field Φ(s, x) representing the conscious observer's state
-    at parameter s and position x in the configuration space -/
+    at parameter s and position x in the configuration space.
+    
+    The field is defined over ℝ (time-like parameter) × ℝ³ (space).
+    Integration domain is implicitly ℝ³ for normalization. -/
 structure WitnessField where
   /-- Field value at parameter s and position x -/
   value : ℝ → ℝ³ → ℂ
   /-- Field is continuous in both parameters -/
   continuous : Continuous (Function.uncurry value)
-  /-- Field is normalized: |Φ(s, x)|² integrates to 1 -/
+  /-- Field is normalized: ∫_{ℝ³} |Φ(s, x)|² dx = 1 for all s -/
   normalized : ∀ s, ∫ x, Complex.normSq (value s x) = 1
 
 /-- The master operator O∞³ acting on the witness field
-    This represents the fundamental dynamics of consciousness -/
+    This represents the fundamental dynamics of consciousness.
+    
+    Note: Hermitian property assumes existence of an inner product
+    structure on the space of witness fields. -/
 structure MasterOperator where
   /-- The operator action on a field -/
   apply : WitnessField → WitnessField
-  /-- The operator is Hermitian (self-adjoint) -/
+  /-- The operator is Hermitian (self-adjoint) under the L² inner product -/
   hermitian : ∀ φ ψ, ⟨apply φ, ψ⟩ = ⟨φ, apply ψ⟩
   /-- The operator preserves normalization -/
   preserves_norm : ∀ φ, (apply φ).normalized
