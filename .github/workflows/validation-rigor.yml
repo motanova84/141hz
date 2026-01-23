@@ -7,6 +7,8 @@ on:
       - 'tests/test_regression_scientific.py'
       - 'scripts/benchmark_quantum_solvers.py'
       - 'scripts/certify_numerical_precision.py'
+      - 'validate_qcal_random_noise.py'
+      - 'test_validate_qcal_random_noise.py'
       - '.github/workflows/validation-rigor.yml'
   pull_request:
     branches: [ main ]
@@ -192,9 +194,84 @@ jobs:
             echo "See [PRECISION_CERTIFICATION.md](PRECISION_CERTIFICATION.md) for full details." >> $GITHUB_STEP_SUMMARY
           fi
   
+  random-noise-validation:
+    name: QCAL Random Noise Validation
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      actions: read
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+        samples: [200, 300]
+        projection-dim: [16, 24, 32]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy mpmath
+      
+      - name: Run QCAL random noise validation
+        run: |
+          python3 validate_qcal_random_noise.py \
+            --samples ${{ matrix.samples }} \
+            --projection-dim ${{ matrix.projection-dim }} \
+            --output validation_random_noise_results_${{ matrix.samples }}_${{ matrix.projection-dim }}d.json
+        timeout-minutes: 10
+      
+      - name: Run tests for random noise validation
+        run: |
+          python3 test_validate_qcal_random_noise.py
+        timeout-minutes: 5
+      
+      - name: Upload validation results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: random-noise-validation-${{ matrix.samples }}s-${{ matrix.projection-dim }}d-py${{ matrix.python-version }}-${{ github.run_number }}
+          path: |
+            validation_random_noise_results_*.json
+          retention-days: 30
+      
+      - name: Generate validation summary
+        if: always()
+        run: |
+          echo "## 🎲 QCAL Random Noise Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Configuration:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Python: ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Samples: ${{ matrix.samples }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Projection dimension: ${{ matrix.projection-dim }}D" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f validation_random_noise_results_${{ matrix.samples }}_${{ matrix.projection-dim }}d.json ]; then
+            echo "**Results:**" >> $GITHUB_STEP_SUMMARY
+            python3 -c "
+import json
+with open('validation_random_noise_results_${{ matrix.samples }}_${{ matrix.projection-dim }}d.json') as f:
+    r = json.load(f)
+    print(f\"- Silhouette (random): {r['silhouette_scores']['aleatorio']:.4f}\")
+    print(f\"- Silhouette (semantic): {r['silhouette_scores']['semantico']:.4f}\")
+    print(f\"- Improvement: {r['silhouette_scores']['diferencia_relativa_percent']:.1f}%\")
+    print(f\"- Ratio: {r.get('ratio_semantico_aleatorio', 0):.2f}x\")
+    print(f\"- Validation: {'✅ PASSED' if r['validacion_exitosa'] else '⚠️ MODERATE' if r.get('validacion_moderada', False) else '❌ FAILED'}\")
+            " >> $GITHUB_STEP_SUMMARY
+          fi
+  
   validation-summary:
     name: Validation Rigor Summary
-    needs: [regression-tests, benchmarking, precision-certification]
+    needs: [regression-tests, benchmarking, precision-certification, random-noise-validation]
     runs-on: ubuntu-latest
     if: always()
     
@@ -228,7 +305,14 @@ jobs:
           echo "   - Mixed precision validation" >> $GITHUB_STEP_SUMMARY
           echo "   - Numerical stability" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "4. **Random Noise Validation**: Proof QCAL is not pattern matching" >> $GITHUB_STEP_SUMMARY
+          echo "   - Silhouette score comparison (random vs semantic texts)" >> $GITHUB_STEP_SUMMARY
+          echo "   - Topology preservation in 16-32D projection (SVD)" >> $GITHUB_STEP_SUMMARY
+          echo "   - Deterministic reproducibility with fixed seeds" >> $GITHUB_STEP_SUMMARY
+          echo "   - Multiple sample sizes (200, 300) and dimensions" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           echo "📚 **Documentation:**" >> $GITHUB_STEP_SUMMARY
           echo "- [BENCHMARKING.md](BENCHMARKING.md)" >> $GITHUB_STEP_SUMMARY
           echo "- [PRECISION_CERTIFICATION.md](PRECISION_CERTIFICATION.md)" >> $GITHUB_STEP_SUMMARY
           echo "- [tests/test_regression_scientific.py](tests/test_regression_scientific.py)" >> $GITHUB_STEP_SUMMARY
+          echo "- [validate_qcal_random_noise.py](validate_qcal_random_noise.py)" >> $GITHUB_STEP_SUMMARY
