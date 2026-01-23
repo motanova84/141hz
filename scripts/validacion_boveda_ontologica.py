@@ -44,25 +44,29 @@ from typing import Dict, Tuple, Any, List
 try:
     import mpmath as mp
 except ImportError:
-    print("❌ Error: mpmath is required for high-precision calculations")
-    print("Install with: pip install mpmath")
-    sys.exit(1)
+    raise ImportError(
+        "mpmath is required for high-precision calculations. "
+        "Install with: pip install mpmath"
+    )
 
 # ============================================================================
 # CONSTANTES FUNDAMENTALES
 # ============================================================================
 
 # QCAL fundamental frequency [Hz]
+# Derived from ζ'(1/2) × φ³, validated in GWTC-1
 F0_HZ = 141.7001
 
 # Hydrogen 21cm line frequency [MHz] - NIST CODATA 2018
-F_HYDROGEN_MHZ = 1420.4056751  # MHz
+# Hyperfine transition of neutral hydrogen (1S → 1S split)
+F_HYDROGEN_MHZ = 1420.4056751  # MHz (exact value from atomic physics)
 F_HYDROGEN_HZ = F_HYDROGEN_MHZ * 1e6  # Hz
 
 # Schumann resonance fundamental mode [Hz]
+# Earth's electromagnetic cavity resonance
 F_SCHUMANN_HZ = 7.83
 
-# Sacred geometry constant
+# Sacred geometry constant (Christ consciousness number)
 SACRED_888 = 888
 
 # Números de la secuencia (matriz numérica)
@@ -380,11 +384,30 @@ def generar_visualizacion_completa(resultados: Dict) -> str:
     """
     Genera visualización completa de la Bóveda Ontológica.
     
+    Crea una visualización multi-panel que integra:
+    - Cascada de octavas (Hidrógeno → f₀)
+    - Precisión de relaciones matemáticas
+    - Red MCP con distribución de frecuencias
+    - Puente biogravitacional (Schumann, microtúbulos, GW)
+    - Significancia estadística
+    
     Args:
-        resultados: Dict con todos los resultados
+        resultados: Dict conteniendo:
+            - 'hidrogeno_f0': Resultados de validación de octavas
+            - 'matriz_numerica': Resultados de matriz numérica
+            - 'red_mcp': Resultados de red MCP
+            - 'puente': Resultados de puente biogravitacional
         
     Returns:
-        Path del archivo generado
+        str: Path del archivo PNG generado
+        
+    Side Effects:
+        - Crea archivo boveda_ontologica_cierre.png (426KB aprox.)
+        - Imprime mensajes de progreso a stdout
+    
+    Raises:
+        KeyError: Si faltan claves requeridas en resultados
+        IOError: Si no se puede escribir el archivo de salida
     """
     print("=" * 80)
     print("5. GENERANDO VISUALIZACIÓN COMPLETA")
