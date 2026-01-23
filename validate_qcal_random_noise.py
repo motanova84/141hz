@@ -48,6 +48,38 @@ PHI = 1.618033988749895  # Proporción áurea
 ZETA_PRIME_HALF = -1.460  # ζ'(1/2) aproximado
 KAPPA_PI = 2.5782  # Constante topológica
 
+# ═══════════════════════════════════════════════════════════════════════════
+# PARÁMETROS DE EMBEDDING
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Pesos para combinación de características semánticas y hash
+SEMANTIC_WEIGHT = 0.7  # Peso de información semántica (keywords)
+HASH_WEIGHT = 0.3  # Peso de hash criptográfico para determinismo
+
+# Keywords QCAL/física para análisis semántico
+QCAL_KEYWORDS = [
+    'frecuencia', 'fundamental', 'espectral', 'cuántico', 'cuántica',
+    'resonancia', 'coherencia', 'operador', 'eigenvalor', 'autovalor',
+    'función', 'zeta', 'riemann', 'áurea', 'topológica', 'gravitacional',
+    'noético', 'noética', 'colapso', 'svd', 'proyección', 'dimensión',
+    'cluster', 'embedding', 'hash', 'determinista', 'reproducible',
+    'matemática', 'física', 'geometría', 'estructura', 'espacio',
+    'vector', 'transformación', 'análisis', 'teorema', 'ecuación'
+]
+
+# ═══════════════════════════════════════════════════════════════════════════
+# UMBRALES DE VALIDACIÓN
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Umbral para silueta aleatoria (debe ser bajo)
+THRESHOLD_RANDOM_SILHOUETTE = 0.1
+
+# Umbral para diferencia absoluta mínima entre semántico y aleatorio
+THRESHOLD_MIN_DIFFERENCE = 0.01
+
+# Umbral para ratio mínimo semántico/aleatorio (mejora relativa)
+THRESHOLD_MIN_RATIO = 1.2  # 20% de mejora mínima
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 # GENERACIÓN DE TEXTOS DE PRUEBA
@@ -219,28 +251,31 @@ def qcal_embed_text(text: str, dimension: int = 64) -> np.ndarray:
     
     Args:
         text: Texto a codificar
-        dimension: Dimensión del vector de salida
+        dimension: Dimensión del vector de salida (default: 64)
         
     Returns:
-        Vector de embedding
+        np.ndarray: Vector de embedding normalizado de forma (dimension,)
+                   con norma L2 = 1.0. Los valores están en el rango
+                   aproximado [-0.5, 0.5] antes de la normalización.
+                   Cada dimensión captura una combinación de:
+                   - Frecuencia de keywords QCAL/física (componente semántica)
+                   - Hash criptográfico del texto (componente determinista)
+                   - Modulación por resonancia f₀ (componente espectral)
+                   - Factores adélicos y coherencia Ψ (componente matemático)
+    
+    Notes:
+        - La función es determinista: mismo texto → mismo embedding
+        - Textos similares semánticamente tienen embeddings cercanos
+        - La normalización L2 asegura que todos los vectores estén en la
+          hiperesfera unitaria, permitiendo usar distancia euclidiana o
+          coseno indistintamente para medir similitud
     """
     # 1. Crear vector base con información semántica
     words = text.lower().split()
     
-    # Vocabulario de palabras clave QCAL/física para dar estructura semántica
-    keywords_qcal = [
-        'frecuencia', 'fundamental', 'espectral', 'cuántico', 'cuántica',
-        'resonancia', 'coherencia', 'operador', 'eigenvalor', 'autovalor',
-        'función', 'zeta', 'riemann', 'áurea', 'topológica', 'gravitacional',
-        'noético', 'noética', 'colapso', 'svd', 'proyección', 'dimensión',
-        'cluster', 'embedding', 'hash', 'determinista', 'reproducible',
-        'matemática', 'física', 'geometría', 'estructura', 'espacio',
-        'vector', 'transformación', 'análisis', 'teorema', 'ecuación'
-    ]
-    
     # Contar presencia de palabras clave
-    keyword_counts = np.zeros(len(keywords_qcal))
-    for i, keyword in enumerate(keywords_qcal):
+    keyword_counts = np.zeros(len(QCAL_KEYWORDS))
+    for i, keyword in enumerate(QCAL_KEYWORDS):
         keyword_counts[i] = sum(1 for word in words if keyword in word)
     
     # Normalizar conteos
@@ -261,9 +296,8 @@ def qcal_embed_text(text: str, dimension: int = 64) -> np.ndarray:
     n_repeats_hash = (dimension // len(hash_normalized)) + 1
     hash_vector = np.tile(hash_normalized, n_repeats_hash)[:dimension]
     
-    # Mezclar semántica (70%) con hash (30%) para mantener determinismo
-    # con estructura semántica
-    base_vector = 0.7 * semantic_vector + 0.3 * hash_vector
+    # Mezclar semántica con hash usando pesos definidos
+    base_vector = SEMANTIC_WEIGHT * semantic_vector + HASH_WEIGHT * hash_vector
     
     # 4. Aplicar resonancia f₀ (modulación espectral)
     phases = np.arange(dimension) * 2 * np.pi * F0 / 1000.0
@@ -297,7 +331,7 @@ def qcal_embed_text(text: str, dimension: int = 64) -> np.ndarray:
     embedding[0] *= (1 + text_length_factor)
     embedding[1] *= (1 + lexical_diversity)
     
-    # 9. Normalizar
+    # 9. Normalizar a norma L2 = 1.0
     norm = np.linalg.norm(embedding)
     if norm > 0:
         embedding = embedding / norm
@@ -593,16 +627,16 @@ def validar_qcal_ruido_aleatorio(n_samples: int = 100,
     # Criterios de validación
     # Para textos cortos, incluso diferencias modestas son significativas:
     # 1. Silueta semántica > silueta aleatoria (cualquier mejora)
-    # 2. Silueta aleatoria cercana a 0 (< 0.1, idealmente < 0.05)
-    # 3. Diferencia absoluta positiva y > 0.01
-    # 4. Ratio semántico/aleatorio > 1.2 (mejora del 20%)
+    # 2. Silueta aleatoria cercana a 0 (< THRESHOLD_RANDOM_SILHOUETTE)
+    # 3. Diferencia absoluta positiva y > THRESHOLD_MIN_DIFFERENCE
+    # 4. Ratio semántico/aleatorio > THRESHOLD_MIN_RATIO
     #
     # Si logramos estos criterios con datos cortos, demuestra que QCAL
     # captura estructura semántica real, no solo patrones predefinidos.
     
     criterio_1 = silhouette_semantico > silhouette_aleatorio
-    criterio_2 = silhouette_aleatorio < 0.1
-    criterio_3 = diferencia_abs > 0.01
+    criterio_2 = silhouette_aleatorio < THRESHOLD_RANDOM_SILHOUETTE
+    criterio_3 = diferencia_abs > THRESHOLD_MIN_DIFFERENCE
     
     # Calcular ratio (evitar división por cero)
     if abs(silhouette_aleatorio) > 1e-6:
@@ -610,7 +644,7 @@ def validar_qcal_ruido_aleatorio(n_samples: int = 100,
     else:
         ratio_sem_aleatorio = float('inf') if silhouette_semantico > 0 else 1.0
     
-    criterio_4 = ratio_sem_aleatorio > 1.2
+    criterio_4 = ratio_sem_aleatorio > THRESHOLD_MIN_RATIO
     
     # Validación fuerte: todos los criterios
     validacion_exitosa = criterio_1 and criterio_2 and criterio_3 and criterio_4
