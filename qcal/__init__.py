@@ -29,6 +29,12 @@ try:
 except ImportError:
     TOKEN_COMPRESSION_AVAILABLE = False
 
+# Text encoding module
+try:
+    from .text_encoder import QCALTextEncoder
+    TEXT_ENCODER_AVAILABLE = True
+except ImportError:
+    TEXT_ENCODER_AVAILABLE = False
 # Spectral embedding modules (new)
 try:
     from .spectral_embedding import SpectralEmbedding
@@ -69,6 +75,10 @@ if TOKEN_COMPRESSION_AVAILABLE:
         "QCALVibrationalTransport"
     ])
 
+# Add text encoder exports if available
+if TEXT_ENCODER_AVAILABLE:
+    __all__.extend([
+        "QCALTextEncoder"
 # Add spectral embedding exports if available
 if SPECTRAL_EMBEDDING_AVAILABLE:
     __all__.extend([
