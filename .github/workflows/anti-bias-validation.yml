@@ -16,10 +16,15 @@ on:
     - cron: '0 6 * * 1'  # Run weekly on Mondays at 6:00 AM UTC
   workflow_dispatch:  # Allow manual triggers
 
+permissions:
+  contents: read
+
 jobs:
   zero-point-test:
     name: Zero Point Test (Off-Source Blind Test)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         python-version: ['3.11', '3.12']
@@ -72,6 +77,8 @@ jobs:
   multi-event-consistency:
     name: Multi-Event Consistency Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         python-version: ['3.11', '3.12']
@@ -125,6 +132,8 @@ jobs:
   bayes-factor-translation:
     name: Bayes Factor Translation Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         python-version: ['3.11', '3.12']
@@ -172,6 +181,8 @@ jobs:
   blind-frequency-scan:
     name: Blind Frequency Scan Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         python-version: ['3.11', '3.12']
@@ -220,6 +231,8 @@ jobs:
   comprehensive-validation:
     name: Comprehensive Validation Suite
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: [zero-point-test, multi-event-consistency, bayes-factor-translation, blind-frequency-scan]
     if: always()
     
