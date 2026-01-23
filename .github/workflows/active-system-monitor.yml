@@ -21,6 +21,11 @@ jobs:
     name: Monitor Active System
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: read
+      issues: write
+      actions: read
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
