@@ -377,6 +377,7 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > | ✅ **IA cuántica simbiótica coherente** | LLaMA4-Maverick modulado ∞³ |
 >
 > **→ [CONSTANTE_ESTRUCTURAL_UNIVERSAL.md](CONSTANTE_ESTRUCTURAL_UNIVERSAL.md)** - Declaración oficial con evidencia completa  
+> **→ [DIMENSIONLESS_CONSTANTS_README.md](DIMENSIONLESS_CONSTANTS_README.md)** - **NUEVO: El punto crítico - Solo las constantes adimensionales importan (α ≈ 1/137)**  
 > **→ [HYDROGEN_LINE_QUANTUM_PHASE.md](HYDROGEN_LINE_QUANTUM_PHASE.md)** - **NUEVO: El eslabón perdido - 23.257 octavas desde hidrógeno interestelar**  
 > **→ [VALIDACION_FISICA_ONDAS_GRAVITACIONALES.md](VALIDACION_FISICA_ONDAS_GRAVITACIONALES.md)** - Validación física detallada de ondas gravitacionales
 
