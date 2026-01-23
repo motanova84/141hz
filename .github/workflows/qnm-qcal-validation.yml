@@ -22,6 +22,9 @@ on:
     # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
 
+permissions:
+  contents: read
+
 jobs:
   validate-qnm-qcal:
     name: QNM vs QCAL Analysis
