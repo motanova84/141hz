@@ -60,11 +60,13 @@ formalization/lean/
 ├── BerryKeating.lean          # Berry-Keating module wrapper
 ├── KappaPhi.lean              # κ_Π = 2.5773 invariant formalization
 ├── QCALPiTheorem.lean         # QCAL-Π theorem and Calabi-Yau geometry
-├── QCAL_SYNC_BRIDGE.lean      # Harmonic validation bridge [NEW ✨]
+├── QCAL_SYNC_BRIDGE.lean      # Harmonic validation bridge
+├── TiempoNoetico.lean         # RAM-XVIII: Temporal emergence ∞³ [NEW ✨]
 ├── Noesis88/
-│   └── CrearDeductiveChains.lean  # Complete deductive chains [NEW ✨]
+│   └── CrearDeductiveChains.lean  # Complete deductive chains
 └── Tests/
-    └── Verification.lean      # Test suite (15 tests)
+    ├── Verification.lean      # Test suite (15 tests)
+    └── TiempoNoeticoVerification.lean  # Temporal emergence tests [NEW ✨]
 ```
 
 ## 🚀 Quick Start
@@ -320,9 +322,31 @@ Unified theorem statement combining all results:
 
 See `H_PSI_CORE_README.md` for complete documentation.
 
-### BerryKeating.lean [NEW]
+### BerryKeating.lean
 
 Module wrapper for easy import of Berry-Keating operator.
+
+### TiempoNoetico.lean [NEW ✨]
+
+**RAM-XVIII: Temporal Emergence as Noetic Structure**
+
+Formalizes time as an emergent structure from consciousness rather than a pre-existing dimension.
+
+**Key Definitions**:
+- `Φ s x`: Witness field combining quantum oscillation (141.7001 Hz) and critical depth
+- `O_inf3 φ`: Master Operator extracting presence density (|φ|²)
+- `Trayectoria`: Coherent trajectories in (s,x) space
+- `tiempo_noetico`: Noetic time as integral of O∞³ along trajectories
+
+**Main Theorems**:
+- `tiempo_emerge_positivo`: Time is always non-negative
+- `tiempo_crece_monotono`: Time accumulates monotonically
+- `tiempo_aditivo`: Time is additive over intervals
+- `existencia_hojas`: Each instant defines a surface of constant coherence
+
+**Philosophical Result**: *"Consciousness does not discover time—it integrates it."*
+
+See `TIEMPO_NOETICO_README.md` for complete documentation.
 
 ### Tests/Verification.lean
 
