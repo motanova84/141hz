@@ -105,6 +105,35 @@ class TestWetLabNoesis88Validator:
         # Error debe ser razonable (< 0.020)
         assert result['sigma_psi'] < 0.020
     
+    def test_bootstrap_validation(self):
+        """Test validación bootstrap con muestras reducidas (para velocidad)"""
+        # NOTE: Using 10,000 samples instead of 10^6 for test speed optimization
+        # Full production runs use 1,000,000 samples as specified
+        result = self.validator.bootstrap_validation(n_bootstrap=10000)
+        
+        assert 'n_bootstrap' in result
+        assert 'mean' in result
+        assert 'std' in result
+        assert 'median' in result
+        assert 'ci_95' in result
+        assert 'ci_99' in result
+        assert 'bootstrap_valid' in result
+        
+        # Verificar que se ejecutó el número correcto de ensayos
+        assert result['n_bootstrap'] == 10000
+        
+        # Media debe estar cerca del valor experimental
+        assert abs(result['mean'] - 0.999) < 0.02
+        
+        # Desviación estándar debe ser del orden esperado
+        assert 0.010 < result['std'] < 0.020
+        
+        # Verificar que bootstrap es válido
+        assert result['bootstrap_valid'] is True
+        
+        # La mayoría de muestras deben estar sobre umbral
+        assert result['fraction_above_threshold'] > 0.99
+    
     def test_statistical_significance(self):
         """Test validación significancia estadística 9σ"""
         result = self.validator.validate_statistical_significance()
@@ -120,6 +149,44 @@ class TestWetLabNoesis88Validator:
         
         # Debe cumplir con umbral de falsabilidad
         assert result['p_value'] <= 1e-9  # Más estricto que 1.5e-10 * margen
+    
+    def test_enhanced_significance(self):
+        """Test validación significancia mejorada (111σ y 999σ)"""
+        result = self.validator.validate_enhanced_significance()
+        
+        # Verificar campos en resultado
+        assert 'sigma_111_threshold' in result
+        assert 'sigma_999_null' in result
+        assert 'p_value_111' in result
+        assert 'p_value_999' in result
+        assert 'delta_threshold' in result
+        assert 'delta_null' in result
+        assert 'all_valid' in result
+        
+        # Verificar cálculo 111σ vs threshold
+        # Z = (0.999 - 0.888) / 0.001 = 111
+        expected_sigma_111 = (0.999 - 0.888) / 0.001
+        assert abs(result['sigma_111_threshold'] - expected_sigma_111) < 0.1
+        assert result['sigma_111_threshold'] >= 100  # Debe ser al menos 100σ
+        
+        # Verificar cálculo 999σ vs null
+        # Z = (0.999 - 0) / 0.001 = 999
+        expected_sigma_999 = 0.999 / 0.001
+        assert abs(result['sigma_999_null'] - expected_sigma_999) < 0.1
+        assert result['sigma_999_null'] >= 900  # Debe ser al menos 900σ
+        
+        # p-values deben ser prácticamente cero
+        assert result['p_value_111'] < 1e-100
+        assert result['p_value_999'] < 1e-100
+        
+        # Deltas deben ser correctos
+        assert abs(result['delta_threshold'] - 0.111) < 0.001
+        assert abs(result['delta_null'] - 0.999) < 0.001
+        
+        # Validación debe ser exitosa
+        assert result['sigma_111_valid'] is True
+        assert result['sigma_999_valid'] is True
+        assert result['all_valid'] is True
     
     def test_snr_validation(self):
         """Test validación SNR > 100"""
