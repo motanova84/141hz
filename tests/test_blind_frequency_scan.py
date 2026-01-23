@@ -14,8 +14,8 @@ of coherence without telling the software about 141.7 Hz beforehand. If the
 maximum coherence emerges spontaneously at 141.7001 Hz, the look-elsewhere
 effect is eliminated.
 
-This would be DISCOVERY OF THE CENTURY - finding a fundamental frequency without
-prior knowledge.
+This represents a strong validation of the 141.7 Hz signal as a physical phenomenon
+rather than an artifact of targeted search.
 
 Author: José Manuel Mota Burruezo (JMMB Ψ✧)
 Date: January 2026

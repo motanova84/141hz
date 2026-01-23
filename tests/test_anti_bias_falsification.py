@@ -223,9 +223,9 @@ class TestAntiBiasFalsification(unittest.TestCase):
         if GWPY_AVAILABLE:
             try:
                 # Use a known quiet period in LIGO data (no catalogued events)
-                # GPS time: 1187056618 is 2017-08-01, well before O3 run
+                # GPS time: 1135136350 is 2015-12-25, between O1 events
                 # This is a period with no significant events nearby
-                gps_start = 1187056618  # A quiet period
+                gps_start = 1135136350  # A quiet period (2015-12-25)
                 
                 # Try to fetch real LIGO noise
                 detector = 'H1'  # Hanford detector

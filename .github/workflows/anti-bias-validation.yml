@@ -45,8 +45,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install numpy scipy matplotlib
-          # Try to install gwpy for real LIGO data (optional)
-          pip install gwpy || echo "⚠️ gwpy not available, will use simulated data"
+      
+      - name: Install optional gwpy for real LIGO data
+        run: |
+          # Try to install gwpy for real LIGO data (optional dependency)
+          pip install gwpy || echo "::warning::gwpy not available, tests will use simulated data"
+        continue-on-error: true
       
       - name: Run Zero Point Tests
         run: |
@@ -93,7 +97,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install numpy scipy matplotlib
-          pip install gwpy || echo "⚠️ gwpy not available, will use simulated data"
+      
+      - name: Install optional gwpy for real LIGO data
+        run: |
+          # Try to install gwpy for real LIGO data (optional dependency)
+          pip install gwpy || echo "::warning::gwpy not available, tests will use simulated data"
+        continue-on-error: true
       
       - name: Run Multi-Event Consistency Tests
         run: |
@@ -227,7 +236,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install numpy scipy matplotlib
-          pip install gwpy || echo "⚠️ gwpy not available"
+      
+      - name: Install optional gwpy for real LIGO data
+        run: |
+          # Try to install gwpy for real LIGO data (optional dependency)
+          pip install gwpy || echo "::warning::gwpy not available, tests will use simulated data"
+        continue-on-error: true
       
       - name: Run all anti-bias tests
         run: |

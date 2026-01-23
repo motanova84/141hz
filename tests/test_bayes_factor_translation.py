@@ -325,13 +325,17 @@ class TestBayesFactorTranslation(unittest.TestCase):
         """
         # Simple mapping: ICV > 1 suggests signal presence
         # log(BF) ~ log(ICV) for ICV > 1
+        # For ICV < 1, we penalize more strongly (evidence against signal)
         # This is a heuristic conversion; rigorous calculation would use
         # full Bayesian evidence calculation
         
         if icv > 1:
             log_bf = np.log(icv)
+        elif icv > 0:
+            # For ICV < 1, stronger penalty (evidence against signal)
+            log_bf = -2 * np.log(1/icv)  # Doubled penalty for sub-unity coherence
         else:
-            log_bf = -np.log(1/icv) if icv > 0 else -10
+            log_bf = -10  # Very strong evidence against signal
             
         interpretation = self._interpret_bayes_factor(log_bf)
         
