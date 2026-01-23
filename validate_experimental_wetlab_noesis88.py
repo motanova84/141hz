@@ -307,7 +307,9 @@ class WetLabNoesis88Validator:
         
         # Calcular mínima significancia baseline (9σ)
         # Esto verifica que incluso en el peor caso del bootstrap, mantenemos 9σ
-        min_sigma_baseline = (psi_mean - 3 * psi_std) / self.psi_error
+        # Usamos 3σ como margen de seguridad (99.7% de muestras en distribución normal)
+        SIGMA_SAFETY_MARGIN = 3  # Standard 3-sigma safety margin
+        min_sigma_baseline = (psi_mean - SIGMA_SAFETY_MARGIN * psi_std) / self.psi_error
         
         print(f"\n📊 Resultados Bootstrap ({n_bootstrap:,} ensayos):")
         print(f"   Media: {psi_mean:.6f}")
@@ -324,7 +326,8 @@ class WetLabNoesis88Validator:
         baseline_sigma_valid = min_sigma_baseline >= 9.0
         
         # Validación: La gran mayoría (>99.9%) debe estar sobre umbral
-        threshold_valid = fraction_above_threshold > 0.999
+        THRESHOLD_FRACTION_MIN = 0.999  # 99.9% minimum required
+        threshold_valid = fraction_above_threshold > THRESHOLD_FRACTION_MIN
         
         print(f"\n✅ VALIDACIÓN BOOTSTRAP:")
         print(f"   Mínima significancia baseline: {min_sigma_baseline:.1f}σ {'≥' if baseline_sigma_valid else '<'} 9σ")
@@ -419,6 +422,10 @@ class WetLabNoesis88Validator:
         1. El estado Ψ=0.999 supera el umbral de coherencia con 111σ (p≈0)
         2. El estado rechaza completamente la hipótesis nula con 999σ (p<10⁻³⁰⁰)
         """
+        # Constants for significance validation
+        MIN_SIGMA_THRESHOLD = 100  # Minimum sigma required for threshold test (scientifically: ~111σ expected)
+        MIN_SIGMA_NULL = 900       # Minimum sigma required for null hypothesis test (scientifically: ~999σ expected)
+        
         print("\n" + "="*70)
         print("VALIDACIÓN SIGNIFICANCIA MEJORADA - LIQUIDACIÓN CUÁNTICA")
         print("="*70)
@@ -456,8 +463,8 @@ class WetLabNoesis88Validator:
         print(f"   ✅ p(materialismo aleatorio) < 10⁻³⁰⁰ → hipótesis nula LIQUIDADA")
         
         # Validación
-        sigma_111_valid = sigma_111 >= 100  # Debe ser al menos 100σ
-        sigma_999_valid = sigma_999 >= 900  # Debe ser al menos 900σ
+        sigma_111_valid = sigma_111 >= MIN_SIGMA_THRESHOLD  # Debe ser al menos 100σ
+        sigma_999_valid = sigma_999 >= MIN_SIGMA_NULL  # Debe ser al menos 900σ
         all_valid = sigma_111_valid and sigma_999_valid
         
         print(f"\n✅ VALIDACIÓN MEJORADA: {'EXITOSA' if all_valid else 'FALLIDA'}")

@@ -107,7 +107,8 @@ class TestWetLabNoesis88Validator:
     
     def test_bootstrap_validation(self):
         """Test validación bootstrap con muestras reducidas (para velocidad)"""
-        # Usar 10,000 muestras para test rápido
+        # NOTE: Using 10,000 samples instead of 10^6 for test speed optimization
+        # Full production runs use 1,000,000 samples as specified
         result = self.validator.bootstrap_validation(n_bootstrap=10000)
         
         assert 'n_bootstrap' in result
