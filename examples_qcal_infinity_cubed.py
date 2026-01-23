@@ -11,7 +11,8 @@ from qcal_infinity_cubed import (
     QCALInfinityCubed,
     F0_HZ,
     PSI_THRESHOLD,
-    PSI_Q1_THRESHOLD
+    PSI_Q1_THRESHOLD,
+    convert_to_json_serializable
 )
 import json
 
@@ -385,19 +386,7 @@ def example_6_full_system_integration():
     # Save report
     print("\n💾 Saving comprehensive report...")
     with open("qcal_infinity_cubed_full_integration_report.json", "w") as f:
-        # Convert numpy types for JSON serialization
-        def convert(obj):
-            if isinstance(obj, dict):
-                return {k: convert(v) for k, v in obj.items()}
-            elif isinstance(obj, list):
-                return [convert(item) for item in obj]
-            elif isinstance(obj, (np.bool_, np.integer, np.floating)):
-                return obj.item()
-            elif isinstance(obj, np.ndarray):
-                return obj.tolist()
-            return obj
-        
-        json.dump(convert(report), f, indent=2)
+        json.dump(convert_to_json_serializable(report), f, indent=2)
     
     print(f"   ✅ Report saved to: qcal_infinity_cubed_full_integration_report.json")
     

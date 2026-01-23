@@ -22,12 +22,39 @@ import warnings
 from datetime import datetime
 import json
 
+
+def convert_to_json_serializable(obj: Any) -> Any:
+    """
+    Convert numpy types to Python native types for JSON serialization.
+    
+    Args:
+        obj: Object to convert (may be nested dict/list)
+        
+    Returns:
+        JSON-serializable version of the object
+    """
+    if isinstance(obj, dict):
+        return {k: convert_to_json_serializable(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_to_json_serializable(item) for item in obj]
+    elif isinstance(obj, np.bool_):
+        return bool(obj)
+    elif isinstance(obj, np.integer):
+        return int(obj)
+    elif isinstance(obj, np.floating):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    else:
+        return obj
+
 # Constants
 F0_HZ = 141.7001  # Fundamental frequency
 PSI_THRESHOLD = 0.9288  # Global coherence threshold (Trinity consensus)
 PSI_Q1_THRESHOLD = 0.888  # Merkaba stability threshold (8/9)
 COMPRESSION_RATIO = 1000.0  # QCAL token compression ratio
 N_NODES_NV_EEG = 88  # Number of NV-EEG nodes
+EPSILON_LOG_SAFE = 1e-10  # Small value to prevent log(0) errors
 
 
 class NodeType(Enum):
@@ -563,7 +590,7 @@ class QCALInfinityCubed:
         weights = np.array([0.4, 0.3, 0.2, 0.1])
         coherences = np.array([psi_trinity, psi_neuronal, psi_gw, psi_wetlab])
         
-        self.global_psi = np.exp(np.sum(weights * np.log(coherences + 1e-10)))
+        self.global_psi = np.exp(np.sum(weights * np.log(coherences + EPSILON_LOG_SAFE)))
         
         # Update system status
         self._update_system_status()
@@ -790,27 +817,9 @@ def demo_qcal_infinity_cubed():
     print("🌟 QCAL ∞³ ecosystem operational - Real-time bio-quantum-gravitational coherence achieved!")
     print("=" * 80)
     
-    # Save report (convert numpy bools to Python bools for JSON serialization)
+    # Save report
     report_file = "qcal_infinity_cubed_report.json"
-    
-    def convert_to_serializable(obj):
-        """Convert numpy types to Python native types for JSON serialization."""
-        if isinstance(obj, dict):
-            return {k: convert_to_serializable(v) for k, v in obj.items()}
-        elif isinstance(obj, list):
-            return [convert_to_serializable(item) for item in obj]
-        elif isinstance(obj, np.bool_):
-            return bool(obj)
-        elif isinstance(obj, np.integer):
-            return int(obj)
-        elif isinstance(obj, np.floating):
-            return float(obj)
-        elif isinstance(obj, np.ndarray):
-            return obj.tolist()
-        else:
-            return obj
-    
-    serializable_report = convert_to_serializable(report)
+    serializable_report = convert_to_json_serializable(report)
     with open(report_file, 'w') as f:
         json.dump(serializable_report, f, indent=2)
     print(f"\n📄 Full report saved to: {report_file}")
