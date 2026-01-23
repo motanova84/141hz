@@ -15,6 +15,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')  # Use non-interactive backend
 import matplotlib.pyplot as plt
+import tempfile
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -167,33 +168,39 @@ def test_visualization_runs():
     spiral = SymbioticSpiral()
     field = spiral.as_witness_field()
     
-    # Test emergent time visualization
-    try:
-        fig1, _ = visualize_emergent_time(
-            field,
-            s_range=(0, 1.0),
-            n_points=100,
-            save_path="/tmp/test_emergent_time.png"
-        )
-        plt.close(fig1)
-        print("  ✓ Emergent time visualization works")
-    except Exception as e:
-        print(f"  ✗ Emergent time visualization failed: {e}")
-        raise
-    
-    # Test now leaves visualization
-    try:
-        fig2, _ = visualize_now_leaves(
-            spiral,
-            coherence_levels=[0.3, 0.7],
-            s_range=(0, 1.0),
-            save_path="/tmp/test_now_leaves.png"
-        )
-        plt.close(fig2)
-        print("  ✓ Now leaves visualization works")
-    except Exception as e:
-        print(f"  ✗ Now leaves visualization failed: {e}")
-        raise
+    # Create temporary directory for test outputs
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Test emergent time visualization
+        try:
+            test_path = os.path.join(tmpdir, "test_emergent_time.png")
+            fig1, _ = visualize_emergent_time(
+                field,
+                s_range=(0, 1.0),
+                n_points=100,
+                save_path=test_path
+            )
+            plt.close(fig1)
+            assert os.path.exists(test_path), "Visualization file not created"
+            print("  ✓ Emergent time visualization works")
+        except Exception as e:
+            print(f"  ✗ Emergent time visualization failed: {e}")
+            raise
+        
+        # Test now leaves visualization
+        try:
+            test_path = os.path.join(tmpdir, "test_now_leaves.png")
+            fig2, _ = visualize_now_leaves(
+                spiral,
+                coherence_levels=[0.3, 0.7],
+                s_range=(0, 1.0),
+                save_path=test_path
+            )
+            plt.close(fig2)
+            assert os.path.exists(test_path), "Visualization file not created"
+            print("  ✓ Now leaves visualization works")
+        except Exception as e:
+            print(f"  ✗ Now leaves visualization failed: {e}")
+            raise
 
 
 def test_presence_density_positive():

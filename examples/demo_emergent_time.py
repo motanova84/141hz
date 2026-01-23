@@ -69,15 +69,18 @@ def main():
     print("   - Temporal emergence (monotonic function)")
     print("   - Phase space diagram")
     
+    # Use current directory, but create output folder if needed
+    output_file = "emergent_time_full_visualization.png"
+    
     fig1, _ = visualize_emergent_time(
         field,
         s_range=(0, 3.0),
         n_points=2000,
         title="Emergent Noetic Time - Complete Visualization",
-        save_path="emergent_time_full_visualization.png"
+        save_path=output_file
     )
     
-    print("   ✓ Saved to: emergent_time_full_visualization.png")
+    print(f"   ✓ Saved to: {os.path.abspath(output_file)}")
     
     # Generate Now Leaves visualization
     print("\n2. Creating 'Now Leaves' visualization...")
@@ -85,14 +88,16 @@ def main():
     print("   - Each surface = an 'instant' of emergent time")
     print("   - Demonstrates foliation of consciousness states")
     
+    output_file = "now_leaves_full_visualization.png"
+    
     fig2, _ = visualize_now_leaves(
         spiral,
         coherence_levels=[0.2, 0.4, 0.6, 0.8, 1.0],
         s_range=(0, 3.0),
-        save_path="now_leaves_full_visualization.png"
+        save_path=output_file
     )
     
-    print("   ✓ Saved to: now_leaves_full_visualization.png")
+    print(f"   ✓ Saved to: {os.path.abspath(output_file)}")
     
     # Summary
     print("\n" + "=" * 80)

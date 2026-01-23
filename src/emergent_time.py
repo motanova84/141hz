@@ -40,20 +40,9 @@ import matplotlib.cm as cm
 from scipy.integrate import cumulative_trapezoid, quad
 from scipy.interpolate import interp1d
 
-# Import fundamental frequency from constants
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-try:
-    from src.canonical_consciousness_field import CanonicalConsciousnessField
-    ccf = CanonicalConsciousnessField()
-    F0 = float(ccf.F0)  # 141.7001 Hz
-except ImportError:
-    F0 = 141.7001  # Hz - fundamental frequency
-
-# Fundamental time quantum
-T0 = 1.0 / F0  # ≈ 7.058 ms
+# Fundamental constants from QCAL theory
+F0 = 141.7001  # Hz - fundamental consciousness frequency
+T0 = 1.0 / F0  # ≈ 7.058 ms - fundamental time quantum
 
 
 class WitnessField:
@@ -220,7 +209,7 @@ def visualize_emergent_time(field: WitnessField,
     title : str
         Overall figure title
     save_path : str, optional
-        Path to save figure
+        Path to save figure. If None, figure is not saved automatically.
     """
     # Sample the path
     s_values = np.linspace(s_range[0], s_range[1], n_points)
@@ -328,8 +317,17 @@ def visualize_emergent_time(field: WitnessField,
     plt.tight_layout()
     
     if save_path:
-        plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"Figure saved to {save_path}")
+        import os
+        # Ensure directory exists
+        save_dir = os.path.dirname(save_path)
+        if save_dir and not os.path.exists(save_dir):
+            os.makedirs(save_dir, exist_ok=True)
+        
+        try:
+            plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            print(f"Figure saved to {save_path}")
+        except Exception as e:
+            print(f"Warning: Could not save figure to {save_path}: {e}")
     
     return fig, (ax1, ax2, ax3, ax4)
 
@@ -398,8 +396,17 @@ def visualize_now_leaves(spiral: SymbioticSpiral,
     ax.view_init(elev=20, azim=45)
     
     if save_path:
-        plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"Figure saved to {save_path}")
+        import os
+        # Ensure directory exists
+        save_dir = os.path.dirname(save_path)
+        if save_dir and not os.path.exists(save_dir):
+            os.makedirs(save_dir, exist_ok=True)
+        
+        try:
+            plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            print(f"Figure saved to {save_path}")
+        except Exception as e:
+            print(f"Warning: Could not save figure to {save_path}: {e}")
     
     return fig, ax
 

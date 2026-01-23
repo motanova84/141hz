@@ -15,6 +15,18 @@ This file formalizes the concept of emergent time as defined in QCAL theory.
 Time is not a preexistent dimension but emerges from the integration of
 consciousness over the coherence of experience.
 
+## Implementation Status
+
+**Structures**: ✓ Complete
+**Theorems**: ✓ Stated with correct types
+**Proofs**: ⚠️ To be completed (currently use `sorry` placeholders)
+
+The theorem statements are formally correct and capture the mathematical
+properties. Completing the proofs is future work that will require:
+- Integration theory from Mathlib
+- Measure theory foundations
+- Continuity and monotonicity lemmas
+
 ## Main Concepts
 
 - **Witness Field** Φ(s, x): A field representing the conscious observer's state
