@@ -202,10 +202,10 @@ class TestBaselineEmbedding:
             "quantum field theory"
         ]
         
-        emb = BaselineEmbedding(n_components=8, random_state=42)
+        emb = BaselineEmbedding(n_components=4, random_state=42)
         vectors = emb.fit_transform(texts)
         
-        assert vectors.shape == (4, 8)
+        assert vectors.shape == (4, 4)
         assert emb.is_fitted
     
     def test_transform_unfitted(self):

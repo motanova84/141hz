@@ -170,25 +170,44 @@ class SpectralEmbedding:
         """
         Compute high-dimensional feature matrix for spectral decomposition.
         
-        Combines character spectrum and semantic hash for each text.
+        Combines multiple feature types with fixed dimensionality:
+        - Character spectrum (256 dims)
+        - Word frequency features (512 dims - hashed)
+        - Semantic hash with QCAL resonance (512 dims)
         
         Args:
             texts: List of input texts
             
         Returns:
-            Feature matrix (n_texts, n_features)
+            Feature matrix (n_texts, 1280 features)
         """
         feature_vectors = []
+        word_feature_size = 512
         
         for text in texts:
-            # Character-level spectrum
+            # Character-level spectrum (256 dims)
             char_spec = self._compute_char_spectrum(text)
             
-            # Semantic hash with QCAL resonance
+            # Word-level hashed features (512 dims)
+            # Use hashing trick to get fixed-size representation
+            word_features = np.zeros(word_feature_size)
+            words = self._tokenize(text)
+            
+            for word in words:
+                # Hash word to feature index
+                word_hash = int(hashlib.sha256(word.encode()).hexdigest(), 16)
+                idx = word_hash % word_feature_size
+                word_features[idx] += 1
+            
+            # Normalize word frequencies
+            if len(words) > 0:
+                word_features /= len(words)
+            
+            # Semantic hash with QCAL resonance (512 dims)
             semantic_hash = self._compute_semantic_hash(text)
             
-            # Concatenate features
-            features = np.concatenate([char_spec, semantic_hash])
+            # Concatenate features (256 + 512 + 512 = 1280)
+            features = np.concatenate([char_spec, word_features, semantic_hash])
             feature_vectors.append(features)
         
         return np.array(feature_vectors)
