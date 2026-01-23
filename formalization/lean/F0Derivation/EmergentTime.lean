@@ -7,7 +7,6 @@ import F0Derivation.Basic
 import Mathlib.Analysis.Calculus.LineIntegral.Basic
 import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.Topology.Basic
-import Mathlib.MeasureTheory.Integral.PathIntegral
 
 /-!
 # Emergent Noetic Time
