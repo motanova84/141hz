@@ -1,0 +1,107 @@
+{
+  "configuration": {
+    "dataset_size": 500,
+    "spectral_dims": 32,
+    "baseline_dims": 256,
+    "random_state": 42
+  },
+  "full_dataset_results": {
+    "Spectral-32D": {
+      "similarity_correlation": -0.07654335909937876,
+      "similarity_mae": 0.733268153037298,
+      "mean_similarity": 0.7731123921315372,
+      "std_similarity": 0.06859364521197109,
+      "silhouette_score": 0.03215185945816051,
+      "inertia": 18541.5030972623,
+      "n_clusters": 5,
+      "mean_retrieval_score": 0.09011219744307979,
+      "std_retrieval_score": 0.10599064567293584,
+      "k": 5,
+      "n_dimensions": 32,
+      "compression_ratio": 24.0
+    },
+    "Baseline-256D": {
+      "similarity_correlation": 0.9292887813592836,
+      "similarity_mae": 0.021985115645273074,
+      "mean_similarity": 0.030200552066013398,
+      "std_similarity": 0.07958400834269999,
+      "silhouette_score": 0.037121510109376456,
+      "inertia": 423.91252869251224,
+      "n_clusters": 5,
+      "mean_retrieval_score": 0.4563109668109668,
+      "std_retrieval_score": 0.13315984489765958,
+      "k": 5,
+      "n_dimensions": 256,
+      "compression_ratio": 3.0
+    },
+    "Word2Vec-256D": {
+      "similarity_correlation": 0.656992082484564,
+      "similarity_mae": 0.6641644304568463,
+      "mean_similarity": 0.7141343951225281,
+      "std_similarity": 0.10232451558113098,
+      "silhouette_score": 0.10219471156597137,
+      "inertia": 0.08966173976659775,
+      "n_clusters": 5,
+      "mean_retrieval_score": 0.5549664502164501,
+      "std_retrieval_score": 0.10362486540620143,
+      "k": 5,
+      "n_dimensions": 256,
+      "compression_ratio": 3.0
+    }
+  },
+  "clustered_data_results": {
+    "Spectral-32D": {
+      "similarity_correlation": -0.02803444559399355,
+      "similarity_mae": 0.8247114982211579,
+      "mean_similarity": 0.882442739202399,
+      "std_similarity": 0.02743822515705974,
+      "silhouette_score": 0.027902138034562932,
+      "inertia": 1478.0137493726347,
+      "n_clusters": 5,
+      "purity": 0.32,
+      "mean_retrieval_score": 0.0696491008991009,
+      "std_retrieval_score": 0.06649898382336557,
+      "k": 5,
+      "n_dimensions": 32,
+      "compression_ratio": 24.0
+    },
+    "Baseline-256D": {
+      "similarity_correlation": 0.9225962499113061,
+      "similarity_mae": 0.037723683291616454,
+      "mean_similarity": 0.07331835640779442,
+      "std_similarity": 0.1437647160355105,
+      "silhouette_score": 0.10578764575891272,
+      "inertia": 47.12124369537892,
+      "n_clusters": 5,
+      "purity": 0.37,
+      "mean_retrieval_score": 0.32871212121212123,
+      "std_retrieval_score": 0.11129013777858864,
+      "k": 5,
+      "n_dimensions": 256,
+      "compression_ratio": 3.0
+    },
+    "Word2Vec-256D": {
+      "similarity_correlation": 0.5704945083889443,
+      "similarity_mae": 0.525302516194755,
+      "mean_similarity": 0.5686476230621338,
+      "std_similarity": 0.1362634152173996,
+      "silhouette_score": 0.12711626291275024,
+      "inertia": 0.017547614872455597,
+      "n_clusters": 5,
+      "purity": 0.31,
+      "mean_retrieval_score": 0.3097727272727272,
+      "std_retrieval_score": 0.09470611006530016,
+      "k": 5,
+      "n_dimensions": 256,
+      "compression_ratio": 3.0
+    }
+  },
+  "summary": {
+    "spectral_compression": 8.0,
+    "performance_ratios": {
+      "similarity_correlation": -0.08236767798640346,
+      "silhouette_score": 0.8661247714176188,
+      "mean_retrieval_score": 0.19747979776346253
+    }
+  }
+}
