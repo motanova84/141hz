@@ -28,6 +28,10 @@ sentence-transformers>=2.2.0
 gensim>=4.3.0
 scikit-learn>=1.0.0
 
+# Spectral embedding dependencies
+scikit-learn>=1.0.0
+gensim>=4.0.0
+
 # Documentation dependencies
 mkdocs-material[imaging]>=9.0.0
 mkdocs-minify-plugin>=0.6.0

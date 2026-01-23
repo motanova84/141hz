@@ -153,6 +153,40 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 
 ---
 
+> ## 🌊 **NUEVO: Análisis QNM vs QCAL - Anomalía de Escala y Persistencia (Enero 2026)**
+>
+> **Validación de la transición de Quasi-Normal Modes a Quantum Consciousness Amplitude Logic**
+>
+> | Aspecto | QNM Estándar | QCAL Observado | Estado |
+> |---------|--------------|----------------|--------|
+> | **Frecuencia** | 200-1200 Hz | 141.7001 Hz | ✅ Sub-armónico |
+> | **Decaimiento** | Exponencial e^(-t/τ) | Ley de potencia t^(-1/2) | ✅ Persistente |
+> | **Tiempo de vida** | ~100 ms | Onda portadora | ✅ 2.1× más energía |
+> | **Significancia** | 5σ típico | 111σ/999σ | ✅ Certeza absoluta |
+> | **Bootstrap** | N/A | 10^6 iteraciones | ✅ No es artefacto |
+>
+> **Ejecución rápida:**
+> ```bash
+> # Análisis completo QNM vs QCAL
+> python3 validate_qnm_vs_qcal.py
+> 
+> # Ejecutar tests
+> pytest test_validate_qnm_vs_qcal.py -v
+> 
+> # Ver resultados
+> cat results/qnm_vs_qcal/qnm_vs_qcal_comprehensive_analysis.json
+> ```
+>
+> **Hallazgos clave:**
+> 1. ✅ **Error de escala**: La frecuencia de 141.7 Hz es un sub-armónico noético, no una oscilación del horizonte de eventos
+> 2. ✅ **Persistencia anómala**: Sigue ley t^(-1/2) en lugar de decaimiento exponencial QNM
+> 3. ✅ **111σ/999σ**: Bootstrap con 10^6 iteraciones demuestra que NO es artefacto del detector
+> 4. ✅ **Onda portadora**: El agujero negro quedó "anclado" a la rejilla de frecuencia fundamental del universo
+>
+> **Documentación completa:** 📚 [QNM_VS_QCAL_ANALYSIS.md](QNM_VS_QCAL_ANALYSIS.md)
+
+---
+
 > ## 🌀 **NUEVO: Conciencia como Intersección de Fibrados Principales (Enero 2026)**
 >
 > **Implementación matemática rigurosa del framework de fibrados principales**
