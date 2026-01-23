@@ -199,7 +199,7 @@ def calcular_jerarquia_masas() -> Dict[str, float]:
     }
 
 
-def calcular_acoplamietos_unificados() -> Dict[str, float]:
+def calcular_acoplamientos_unificados() -> Dict[str, float]:
     """
     Calcula las constantes de acoplamiento de las 4 fuerzas fundamentales.
     
@@ -217,7 +217,7 @@ def calcular_acoplamietos_unificados() -> Dict[str, float]:
             - 'ratio_debil_gravedad': α_W/α_G ≈ 10³⁶
     
     Example:
-        >>> acoplamientos = calcular_acoplamietos_unificados()
+        >>> acoplamientos = calcular_acoplamientos_unificados()
         >>> ratio = acoplamientos['ratio_fuerte_EM']
         >>> print(f"Fuerte/EM ≈ {ratio:.1f}")
         Fuerte/EM ≈ 137.0
@@ -431,7 +431,7 @@ def resumen_constantes_adimensionales() -> str:
     
     # 3. Constantes de acoplamiento
     output.append("3. CONSTANTES DE ACOPLAMIENTO DE FUERZAS")
-    acoplamientos = calcular_acoplamietos_unificados()
+    acoplamientos = calcular_acoplamientos_unificados()
     output.append(f"   α_s (fuerte) = {acoplamientos['fuerte']:.6f}")
     output.append(f"   α_EM (EM) = {acoplamientos['electromagnetica']:.10f}")
     output.append(f"   α_W (débil) = {acoplamientos['debil']:.6f}")

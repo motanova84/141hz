@@ -30,7 +30,7 @@ from dimensionless_constants_core import (
     ALPHA, ALPHA_INV, PHI,
     calcular_alpha_efectivo,
     calcular_jerarquia_masas,
-    calcular_acoplamietos_unificados,
+    calcular_acoplamientos_unificados,
     calcular_numeros_fundamentales,
     calcular_137_como_centro,
     validar_principio_adimensional,
@@ -112,7 +112,7 @@ def validar_leyes_fisicas_adimensionales():
     # 5. Constantes de acoplamiento
     print("\n5. CONSTANTES DE ACOPLAMIENTO")
     print("   Todas las fuerzas expresadas como α_i (adimensional)")
-    acoplamientos = calcular_acoplamietos_unificados()
+    acoplamientos = calcular_acoplamientos_unificados()
     validacion_acoplamientos = {
         'ley': 'Constantes de acoplamiento',
         'forma_dimensional': 'Intensidad de fuerza',

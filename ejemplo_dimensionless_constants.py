@@ -26,7 +26,7 @@ from dimensionless_constants_core import (
     MASS_RATIO_PROTON_ELECTRON,
     calcular_alpha_efectivo,
     calcular_jerarquia_masas,
-    calcular_acoplamietos_unificados,
+    calcular_acoplamientos_unificados,
     calcular_numeros_fundamentales,
     calcular_137_como_centro,
     resumen_constantes_adimensionales,
@@ -82,7 +82,7 @@ def ejemplo_3_acoplamientos():
     print("EJEMPLO 3: Constantes de Acoplamiento de las 4 Fuerzas")
     print("=" * 70)
     
-    acoplamientos = calcular_acoplamietos_unificados()
+    acoplamientos = calcular_acoplamientos_unificados()
     
     print("\nConstantes de acoplamiento:")
     print(f"   α_s (fuerte)      = {acoplamientos['fuerte']:.6f}")

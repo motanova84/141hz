@@ -25,7 +25,7 @@ from dimensionless_constants_core import (
     es_adimensional,
     calcular_alpha_efectivo,
     calcular_jerarquia_masas,
-    calcular_acoplamietos_unificados,
+    calcular_acoplamientos_unificados,
     calcular_numeros_fundamentales,
     calcular_137_como_centro,
     validar_principio_adimensional,
@@ -99,7 +99,7 @@ class TestAcoplamientos:
     
     def test_acoplamientos_fuerzas(self):
         """Test constantes de acoplamiento de las 4 fuerzas."""
-        acoplamientos = calcular_acoplamietos_unificados()
+        acoplamientos = calcular_acoplamientos_unificados()
         
         # Verificar que están en orden correcto: fuerte > débil > EM > gravedad
         # (α_W ≈ 1/30 > α_EM ≈ 1/137)
@@ -109,7 +109,7 @@ class TestAcoplamientos:
     
     def test_ratio_fuerte_em(self):
         """Test α_s/α_EM ≈ 137."""
-        acoplamientos = calcular_acoplamietos_unificados()
+        acoplamientos = calcular_acoplamientos_unificados()
         ratio = acoplamientos['ratio_fuerte_EM']
         
         # α_s / α_EM ≈ 1 / (1/137) = 137
@@ -117,7 +117,7 @@ class TestAcoplamientos:
     
     def test_ratio_em_debil(self):
         """Test α_EM/α_W."""
-        acoplamientos = calcular_acoplamietos_unificados()
+        acoplamientos = calcular_acoplamientos_unificados()
         ratio = acoplamientos['ratio_EM_debil']
         
         # α_EM / α_W ≈ (1/137) / (1/30) ≈ 30/137 ≈ 0.219
@@ -307,7 +307,7 @@ class TestIntegracion:
         """Test que todas las funciones están disponibles."""
         # Verificar que se pueden llamar sin errores
         jerarquias = calcular_jerarquia_masas()
-        acoplamientos = calcular_acoplamietos_unificados()
+        acoplamientos = calcular_acoplamientos_unificados()
         numeros = calcular_numeros_fundamentales()
         centro = calcular_137_como_centro()
         
