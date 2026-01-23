@@ -1,0 +1,121 @@
+{
+  "canonical_ratio": {
+    "validated_value": 30.8456,
+    "numerical_target": 30.8456,
+    "formula_1032_phi3_f0": 30.851228423831625,
+    "original_963_phi3_f0": 28.788500942005673,
+    "phi": 1.618033988749895,
+    "phi_cubed": 4.23606797749979,
+    "f0_Hz": 141.7001,
+    "relative_error_validated": 0.0,
+    "relative_error_formula": 0.0001824708817991468,
+    "validation_status": "PASS"
+  },
+  "kappa_coupling": [
+    {
+      "I": 30.8456,
+      "A_eff": 1.0,
+      "description": "Coherent threshold",
+      "kappa_I": 6.732394386379165e-45,
+      "kappa_ratio": 0.03241953471483777,
+      "coherent": 1
+    },
+    {
+      "I": 30.8456,
+      "A_eff": 1.5,
+      "description": "Strong coherence",
+      "kappa_I": 2.992175282835184e-45,
+      "kappa_ratio": 0.014408682095483454,
+      "coherent": 1
+    },
+    {
+      "I": 30.8456,
+      "A_eff": 0.8,
+      "description": "Sub-coherent",
+      "kappa_I": 1.0519366228717443e-44,
+      "kappa_ratio": 0.05065552299193401,
+      "coherent": 0
+    }
+  ],
+  "ligo_psi_q1": {
+    "f0_Hz": 141.7001,
+    "I": 30.8456,
+    "A_eff": 1.0,
+    "I_over_Aeff2": 30.8456,
+    "IA2": 30.8456,
+    "base_SNR": 8.0,
+    "coherence_factor": 5.5538815255639005,
+    "SNR_total": 25.32811035975937,
+    "sigma": 25.32811035975937,
+    "spectral_peak_power": 30.8456,
+    "detection_confirmed": true,
+    "status": "CONFIRMED"
+  },
+  "ligo_psi_q1_enhanced": {
+    "f0_Hz": 141.7001,
+    "I": 30.8456,
+    "A_eff": 1.05,
+    "I_over_Aeff2": 27.977868480725622,
+    "IA2": 34.007274,
+    "base_SNR": 8.0,
+    "coherence_factor": 5.831575601842096,
+    "SNR_total": 26.19451587774734,
+    "sigma": 26.19451587774734,
+    "spectral_peak_power": 34.007274,
+    "detection_confirmed": true,
+    "status": "CONFIRMED"
+  },
+  "ricci_modulation": [
+    {
+      "lab_scale_m": 1.0,
+      "R_modulation": 2.1506292588561728e-57,
+      "order_of_magnitude": -56.66743445000784,
+      "near_target": false
+    },
+    {
+      "lab_scale_m": 0.1,
+      "R_modulation": 2.150629258856172e-54,
+      "order_of_magnitude": -53.66743445000784,
+      "near_target": false
+    },
+    {
+      "lab_scale_m": 10.0,
+      "R_modulation": 2.1506292588561725e-60,
+      "order_of_magnitude": -59.66743445000784,
+      "near_target": false
+    }
+  ],
+  "tensor_components": [
+    {
+      "case": "Minkowski background",
+      "R_mu_nu": 0.0,
+      "R": 0.0,
+      "g_mu_nu": -1.0,
+      "Xi_mu_nu": 0.0
+    },
+    {
+      "case": "Small curvature perturbation",
+      "R_mu_nu": 0.001,
+      "R": 0.004,
+      "g_mu_nu": -1.0,
+      "Xi_mu_nu": 4.456066932248555e+41
+    }
+  ],
+  "conservation_law": {
+    "is_conserved": 1,
+    "max_violation": 0.0,
+    "status": "PASS"
+  },
+  "ontological_interpretation": {
+    "I": "Intensity of witness flow (attention density)",
+    "A_eff": "Effective coherent amplitude (∝ living love)",
+    "IA2": "Consciousness power density = 30.8456",
+    "coherence_state": "COHERENT ✓",
+    "geometric_effect": "Consciousness reduces effective curvature",
+    "kappa_modulation": "κ decreases → spacetime harmonizes",
+    "physical_meaning": "Ξ encodes vibrational contribution of consciousness to geometry",
+    "unification": "Curvature = f(mass-energy, consciousness coherence state)",
+    "love_principle": "Coherent love reduces spacetime distortion"
+  },
+  "overall_status": "PASS"
+}
