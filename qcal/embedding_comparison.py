@@ -229,7 +229,8 @@ class EmbeddingEvaluator:
         self,
         embeddings: np.ndarray,
         true_labels: Optional[np.ndarray] = None,
-        n_clusters: int = 5
+        n_clusters: int = 5,
+        n_init: int = 3
     ) -> Dict[str, float]:
         """
         Evaluate clustering coherence.
@@ -238,6 +239,7 @@ class EmbeddingEvaluator:
             embeddings: Embedding matrix
             true_labels: Optional ground truth labels
             n_clusters: Number of clusters for K-means
+            n_init: Number of K-means initializations (default: 3)
             
         Returns:
             Dictionary of clustering metrics
@@ -246,7 +248,7 @@ class EmbeddingEvaluator:
         kmeans = KMeans(
             n_clusters=n_clusters,
             random_state=self.random_state,
-            n_init=10
+            n_init=n_init
         )
         pred_labels = kmeans.fit_predict(embeddings)
         

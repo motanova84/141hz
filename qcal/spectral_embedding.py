@@ -26,7 +26,6 @@ from typing import List, Union, Optional, Tuple
 import hashlib
 from sklearn.decomposition import TruncatedSVD
 from sklearn.metrics.pairwise import cosine_similarity
-import mpmath
 
 
 class SpectralEmbedding:
@@ -58,9 +57,9 @@ class SpectralEmbedding:
         self.use_qcal_resonance = use_qcal_resonance
         self.random_state = random_state
         
-        # QCAL constants
-        mpmath.mp.dps = 50
-        self.zeta_prime_half = float(mpmath.zeta(mpmath.mpf('0.5'), derivative=1))
+        # QCAL constants - use pre-computed values for efficiency
+        # Note: Using approximations from qcal/__init__.py to avoid expensive mpmath calls
+        self.zeta_prime_half = -1.460  # Approximation of ζ'(1/2)
         self.phi = (1 + np.sqrt(5)) / 2  # Golden ratio
         self.kappa_pi = 2.5782  # Topological constant
         self.psi_resonance = 0.923  # Noetic resonance
@@ -140,16 +139,17 @@ class SpectralEmbedding:
         hash_vector = np.zeros(n_features)
         
         # Distribute hash bits across spectral bands
-        for i in range(n_features):
-            bit_position = (hash_int >> i) & 1
+        if self.use_qcal_resonance:
+            # Pre-compute resonance factors for efficiency
+            freq_bands = self.f0 * (1 + np.arange(n_features) / n_features)
+            resonance_factors = np.cos(2 * np.pi * freq_bands / 1000.0)
             
-            # Apply QCAL resonance modulation
-            if self.use_qcal_resonance:
-                # Frequency band centered at f₀
-                freq_band = self.f0 * (1 + i / n_features)
-                resonance_factor = np.cos(2 * np.pi * freq_band / 1000.0)
-                hash_vector[i] = bit_position * (1 + resonance_factor * self.psi_resonance)
-            else:
+            for i in range(n_features):
+                bit_position = (hash_int >> i) & 1
+                hash_vector[i] = bit_position * (1 + resonance_factors[i] * self.psi_resonance)
+        else:
+            for i in range(n_features):
+                bit_position = (hash_int >> i) & 1
                 hash_vector[i] = bit_position
         
         # Add length and entropy features
