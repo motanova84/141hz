@@ -62,6 +62,17 @@ QNM_FREQUENCIES_ARXIV_2507_08789 = {
 FREQUENCY_TOLERANCE_HZ = 0.5  # ±0.5 Hz alrededor de 141.7
 SNR_THRESHOLD_LOCAL = 3.0  # Umbral para detección significativa
 
+# Parámetros de simulación
+SIMULATED_SIGNAL_DECAY_TIME = 0.02  # 20 ms - tiempo de decaimiento para señal simulada
+
+# Umbrales de significancia para interpretación
+SIGMA_THRESHOLD_HIGH = 5.0  # Alta significancia (> 5σ)
+SIGMA_THRESHOLD_MODERATE = 3.0  # Evidencia moderada (3-5σ)
+SIGMA_THRESHOLD_WEAK = 2.0  # Evidencia débil (2-3σ)
+
+# Tolerancia para tests
+TEST_FREQUENCY_TOLERANCE_HZ = 2.0  # Tolerancia amplia para tests
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 # CLASE PRINCIPAL: QNMModel
@@ -236,6 +247,35 @@ def load_qnm_model(arxiv_id: str = "2507.08789") -> QNMModel:
     return QNMModel(arxiv_id=arxiv_id)
 
 
+def _generate_simulated_strain(
+    duration: float = 4.0,
+    sample_rate: float = 4096
+) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Generar datos simulados de strain
+    
+    Args:
+        duration: Duración total de datos (segundos)
+        sample_rate: Tasa de muestreo (Hz)
+    
+    Returns:
+        (time, strain) arrays
+    """
+    n_samples = int(duration * sample_rate)
+    time = np.linspace(-duration/2, duration/2, n_samples)
+    
+    # Ruido gaussiano + señal simulada
+    noise = np.random.normal(0, 1e-21, n_samples)
+    
+    # Agregar componente a 141.7 Hz en post-merger
+    mask = time > 0
+    signal_141 = 5e-22 * np.exp(-time[mask] / SIMULATED_SIGNAL_DECAY_TIME) * np.sin(2 * np.pi * F0_QCAL * time[mask])
+    strain = noise.copy()
+    strain[mask] += signal_141
+    
+    return time, strain
+
+
 def load_strain_data_gwosc(
     event: str = "GW150914",
     detector: str = "H1",
@@ -255,20 +295,7 @@ def load_strain_data_gwosc(
     if not GWPY_AVAILABLE:
         # Generar datos simulados si gwpy no está disponible
         print(f"⚠️  gwpy no disponible, generando datos simulados para {event}")
-        sample_rate = 4096
-        n_samples = int(duration * sample_rate)
-        time = np.linspace(-duration/2, duration/2, n_samples)
-        
-        # Ruido gaussiano + señal simulada
-        noise = np.random.normal(0, 1e-21, n_samples)
-        
-        # Agregar componente a 141.7 Hz en post-merger
-        mask = time > 0
-        signal_141 = 5e-22 * np.exp(-time[mask] / 0.02) * np.sin(2 * np.pi * F0_QCAL * time[mask])
-        strain = noise.copy()
-        strain[mask] += signal_141
-        
-        return time, strain
+        return _generate_simulated_strain(duration)
     
     # Cargar datos reales de GWOSC
     gps_time = GW150914_GPS_TIME
@@ -293,7 +320,7 @@ def load_strain_data_gwosc(
     except Exception as e:
         print(f"⚠️  Error cargando datos de GWOSC: {e}")
         print(f"   Generando datos simulados...")
-        return load_strain_data_gwosc(event, detector, duration)
+        return _generate_simulated_strain(duration)
 
 
 def calculate_psd(
@@ -407,9 +434,13 @@ def compute_residual(
     
     # Escalar plantilla para mejor ajuste (en práctica usaríamos matched filtering)
     # Aquí usamos correlación simple para estimar escala
-    correlation = np.corrcoef(strain, template)[0, 1]
-    if not np.isnan(correlation):
-        scale = correlation * (np.std(strain) / np.std(template))
+    template_std = np.std(template)
+    if template_std > 0:
+        correlation = np.corrcoef(strain, template)[0, 1]
+        if not np.isnan(correlation):
+            scale = correlation * (np.std(strain) / template_std)
+        else:
+            scale = 0.0
     else:
         scale = 0.0
     
@@ -605,14 +636,14 @@ def validate_enhanced_significance_psd_normalized(
     print(f"\n✅ Significancia calibrada: {sigma_calibrated:.2f}σ")
     
     # Interpretación
-    if sigma_calibrated > 5.0:
-        interpretation = "Detección de alta significancia (> 5σ)"
-    elif sigma_calibrated > 3.0:
-        interpretation = "Evidencia moderada (3-5σ)"
-    elif sigma_calibrated > 2.0:
-        interpretation = "Evidencia débil (2-3σ)"
+    if sigma_calibrated > SIGMA_THRESHOLD_HIGH:
+        interpretation = f"Detección de alta significancia (> {SIGMA_THRESHOLD_HIGH}σ)"
+    elif sigma_calibrated > SIGMA_THRESHOLD_MODERATE:
+        interpretation = f"Evidencia moderada ({SIGMA_THRESHOLD_MODERATE}-{SIGMA_THRESHOLD_HIGH}σ)"
+    elif sigma_calibrated > SIGMA_THRESHOLD_WEAK:
+        interpretation = f"Evidencia débil ({SIGMA_THRESHOLD_WEAK}-{SIGMA_THRESHOLD_MODERATE}σ)"
     else:
-        interpretation = "No significativo (< 2σ)"
+        interpretation = f"No significativo (< {SIGMA_THRESHOLD_WEAK}σ)"
     
     print(f"\n💠 Interpretación: {interpretation}")
     
@@ -624,7 +655,7 @@ def validate_enhanced_significance_psd_normalized(
         'icv': float(icv),
         'sigma_calibrated': float(sigma_calibrated),
         'interpretation': interpretation,
-        'is_significant_5sigma': bool(sigma_calibrated > 5.0)
+        'is_significant_5sigma': bool(sigma_calibrated > SIGMA_THRESHOLD_HIGH)
     }
 
 
@@ -649,8 +680,8 @@ def test_qnm_template_generation():
     
     assert len(template) == len(time)
     assert not np.all(template == 0)
-    # Verificar que template es 0 para t < 0
-    assert np.all(template[time < 0] == 0)
+    # Verificar que template es 0 para t < 0 (o muy cercano a 0 por precisión numérica)
+    assert np.allclose(template[time < 0], 0, atol=1e-10)
 
 
 def test_strain_data_loading():
@@ -692,7 +723,7 @@ def test_find_frequency_basic():
     result = find_frequency(signal_test, time, target=141.7, tolerance=1.0)
     
     assert result is not None
-    assert abs(result.frequency - 141.7) < 2.0  # Tolerancia amplia
+    assert abs(result.frequency - 141.7) < TEST_FREQUENCY_TOLERANCE_HZ
     assert result.snr_local > 0
 
 
