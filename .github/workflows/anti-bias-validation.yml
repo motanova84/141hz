@@ -1,0 +1,302 @@
+name: Anti-Bias Validation Tests
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'tests/test_anti_bias_*.py'
+      - 'tests/test_multi_event_*.py'
+      - 'tests/test_bayes_factor_*.py'
+      - 'tests/test_blind_frequency_*.py'
+      - 'qcal/**.py'
+      - '.github/workflows/anti-bias-validation.yml'
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 6 * * 1'  # Run weekly on Mondays at 6:00 AM UTC
+  workflow_dispatch:  # Allow manual triggers
+
+permissions:
+  contents: read
+
+jobs:
+  zero-point-test:
+    name: Zero Point Test (Off-Source Blind Test)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-py${{ matrix.python-version }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-py${{ matrix.python-version }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy matplotlib
+      
+      - name: Install optional gwpy for real LIGO data
+        run: |
+          # Try to install gwpy for real LIGO data (optional dependency)
+          pip install gwpy || echo "::warning::gwpy not available, tests will use simulated data"
+        continue-on-error: true
+      
+      - name: Run Zero Point Tests
+        run: |
+          echo "🧪 Running Zero Point Test (Off-Source Blind Test)"
+          echo "=================================================="
+          python -m unittest tests.test_anti_bias_falsification -v
+        continue-on-error: false
+      
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "# Zero Point Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Tests verify that the pipeline produces < 1 sigma significance in pure noise." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Python Version:** ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+
+  multi-event-consistency:
+    name: Multi-Event Consistency Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-py${{ matrix.python-version }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-py${{ matrix.python-version }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy matplotlib
+      
+      - name: Install optional gwpy for real LIGO data
+        run: |
+          # Try to install gwpy for real LIGO data (optional dependency)
+          pip install gwpy || echo "::warning::gwpy not available, tests will use simulated data"
+        continue-on-error: true
+      
+      - name: Run Multi-Event Consistency Tests
+        run: |
+          echo "🧪 Running Multi-Event Consistency Test"
+          echo "========================================"
+          python -m unittest tests.test_multi_event_consistency -v
+        continue-on-error: false
+      
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "# Multi-Event Consistency Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Tests verify 141.7 Hz appears consistently across independent GW events." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Events:** GW150914, GW170817, GW250114" >> $GITHUB_STEP_SUMMARY
+          echo "- **Python Version:** ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+
+  bayes-factor-translation:
+    name: Bayes Factor Translation Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-py${{ matrix.python-version }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-py${{ matrix.python-version }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy matplotlib
+      
+      - name: Run Bayes Factor Translation Tests
+        run: |
+          echo "🧪 Running Bayes Factor Translation Test"
+          echo "========================================="
+          python -m unittest tests.test_bayes_factor_translation -v
+        continue-on-error: false
+      
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "# Bayes Factor Translation Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Tests convert ICV to Bayes Factors for peer review compatibility." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Scale:** Kass & Raftery (1995)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Python Version:** ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+
+  blind-frequency-scan:
+    name: Blind Frequency Scan Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-py${{ matrix.python-version }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-py${{ matrix.python-version }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy matplotlib
+      
+      - name: Run Blind Frequency Scan Tests
+        run: |
+          echo "🧪 Running Blind Frequency Scan Test"
+          echo "====================================="
+          python -m unittest tests.test_blind_frequency_scan -v
+        continue-on-error: false
+      
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "# Blind Frequency Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Tests verify 141.7 Hz emerges spontaneously in blind scan (10-2000 Hz)." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Scan Range:** 10-2000 Hz" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trials Correction:** Bonferroni-like" >> $GITHUB_STEP_SUMMARY
+          echo "- **Python Version:** ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+
+  comprehensive-validation:
+    name: Comprehensive Validation Suite
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs: [zero-point-test, multi-event-consistency, bayes-factor-translation, blind-frequency-scan]
+    if: always()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy matplotlib
+      
+      - name: Install optional gwpy for real LIGO data
+        run: |
+          # Try to install gwpy for real LIGO data (optional dependency)
+          pip install gwpy || echo "::warning::gwpy not available, tests will use simulated data"
+        continue-on-error: true
+      
+      - name: Run all anti-bias tests
+        run: |
+          echo "🧪 Running Complete Anti-Bias Validation Suite"
+          echo "==============================================="
+          python -m unittest \
+            tests.test_anti_bias_falsification \
+            tests.test_multi_event_consistency \
+            tests.test_bayes_factor_translation \
+            tests.test_blind_frequency_scan \
+            -v
+      
+      - name: Generate comprehensive summary
+        if: always()
+        run: |
+          echo "# 🎯 Anti-Bias Validation Framework - Complete Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Test Suite Overview" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "This framework addresses critical peer review concerns:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. **Zero Point Test:** Pipeline doesn't produce false positives in noise" >> $GITHUB_STEP_SUMMARY
+          echo "2. **Multi-Event Consistency:** 141.7 Hz appears across independent events" >> $GITHUB_STEP_SUMMARY
+          echo "3. **Bayes Factor Translation:** Results expressed in peer-review standard language" >> $GITHUB_STEP_SUMMARY
+          echo "4. **Blind Frequency Scan:** 141.7 Hz emerges without prior specification" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Zero Point Test:** ${{ needs.zero-point-test.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Multi-Event Consistency:** ${{ needs.multi-event-consistency.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Bayes Factor Translation:** ${{ needs.bayes-factor-translation.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Blind Frequency Scan:** ${{ needs.blind-frequency-scan.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "**Documentation:** See \`tests/VALIDATION_FRAMEWORK_README.md\`" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: anti-bias-validation-results-${{ github.run_number }}
+          path: |
+            tests/test_*.py
+            tests/VALIDATION_FRAMEWORK_README.md
+          retention-days: 30
