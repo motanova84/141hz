@@ -1,0 +1,9 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
+rootdir: /home/runner/work/141hz/141hz
+configfile: pyproject.toml
+collected 13 items
+
+test_q1.py .............                                                 [100%]
+
+============================== 13 passed in 0.18s ==============================
