@@ -4681,6 +4681,14 @@ for chunk in text_stream:
 
 ## 📚 Documentation
 
+### Core Methodology
+- **[Metodología de Análisis de Ondas Gravitacionales](METODOLOGIA_ANALISIS_GW.md)** - Complete technical methodology including:
+  - Theoretical motivation (f₀ derivation from Riemann zeta and golden ratio)
+  - Exact methodology (filters, windows, corrections)
+  - Numerical results for all GWTC-1 events
+  - Comprehensive artifact controls
+
+### General Documentation
 - [Getting Started](Documentation/Tutorials/01_getting_started.md)
 - [API Reference](Documentation/API/python_api.md)
 - [Mathematical Theory](Documentation/Theory/mathematical_foundation.md)
