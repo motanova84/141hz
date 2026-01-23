@@ -1,0 +1,11 @@
+{
+  "total_servers": 5,
+  "online_servers": 5,
+  "coherence_global": 1.0,
+  "entropy_global": 0.0,
+  "frequency_sync": true,
+  "observer_sync": true,
+  "noetic_chain_complete": true,
+  "errors": [],
+  "warnings": []
+}

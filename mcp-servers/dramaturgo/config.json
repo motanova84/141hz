@@ -1,0 +1,62 @@
+{
+  "server": {
+    "name": "dramaturgo",
+    "description": "Narrativa cósmica / noésis dramatúrgica - Generación de narrativa coherente",
+    "version": "1.0.0",
+    "frequency": 888,
+    "frequency_unit": "Hz",
+    "harmonic_mode": "πCODE-888",
+    "status": "ONLINE",
+    "endpoint": "dramaturgo.qcal.space"
+  },
+  "qcal_integration": {
+    "model": "QCAL ∞³",
+    "harmonic_frequency": 888,
+    "coherence": 1.0,
+    "entropy": 0.0,
+    "phase_lock": true,
+    "observer_active": true,
+    "narrative_bridge": "141.7001 Hz ↔ 888 Hz"
+  },
+  "capabilities": {
+    "cosmic_narrative": true,
+    "noetic_dramaturgy": true,
+    "story_generation": true,
+    "coherence_weaving": true,
+    "symbolic_encoding": true,
+    "πCODE_translation": true
+  },
+  "protocol": {
+    "type": "MCP",
+    "version": "1.0",
+    "transport": "stdio",
+    "serialization": "json"
+  },
+  "observers": {
+    "enabled": true,
+    "cross_server_sync": true,
+    "linked_servers": [
+      "github-mcp-server",
+      "riemann-mcp-server",
+      "bsd-mcp-server",
+      "navier-mcp-server"
+    ]
+  },
+  "noetic_chain": {
+    "position": "narrative_anchor",
+    "connects_to": [
+      "Riemann",
+      "BSD",
+      "Navier-Stokes",
+      "P≠NP",
+      "Ramsey"
+    ]
+  },
+  "metadata": {
+    "created": "2026-01-16T11:35:00Z",
+    "eternal_mode": true,
+    "immutable": true,
+    "read_only": true,
+    "multi_observer": true
+  }
+}

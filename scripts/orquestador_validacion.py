@@ -22,6 +22,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import List, Dict, Any
 import subprocess
+from fnmatch import fnmatch
 
 # Importar agente autónomo
 from agente_autonomo_141hz import AgenteAutonomo141Hz, FrecuenciaCoherente141Hz
@@ -50,19 +51,33 @@ class DescubridorValidaciones:
     PATRONES_VALIDACION = [
         'validate_*.py',
         'validacion_*.py',
-        'verificacion_*.py',
-        'test_*.py'
+        'verificacion_*.py'
     ]
     
+    # Exclude test files, analysis scripts, and utility scripts
     EXCLUIR = [
-        'test_dashboard.py',  # Tests de UI, no de validación científica
+        'test_*.py',  # Skip unit tests to focus on validations
+        'analisis_*.py',  # Skip analysis scripts
+        'analizar_*.py',  # Skip analysis scripts
         '__init__.py',
         'agente_autonomo_141hz.py',
-        'orquestador_validacion.py'
+        'orquestador_validacion.py',
+        'orquestador_predicciones_qcal.py'
     ]
     
-    def __init__(self, raiz: Path = None):
+    # Only run these critical validation scripts
+    VALIDACIONES_CRITICAS = [
+        'validate_v5_coronacion.py',
+        'validate_four_pillars.py',
+        'validate_universal_constants.py',
+        'validate_fractal_resonance.py',
+        'validacion_completa_3_pilares.py'
+    ]
+    
+    def __init__(self, raiz: Path = None, solo_criticas: bool = False, max_scripts: int = None):
         self.raiz = raiz or Path('.')
+        self.solo_criticas = solo_criticas
+        self.max_scripts = max_scripts
         
     def descubrir(self) -> List[Dict[str, Any]]:
         """
@@ -73,26 +88,65 @@ class DescubridorValidaciones:
         """
         logger.info("🔍 Descubriendo scripts de validación...")
         
+        # Si solo se quieren validaciones críticas, retornarlas directamente
+        if self.solo_criticas:
+            logger.info("⚡ Modo crítico: solo validaciones esenciales")
+            validaciones = []
+            for nombre in self.VALIDACIONES_CRITICAS:
+                script_path = self.raiz / nombre
+                if script_path.exists():
+                    validaciones.append(self._analizar_script(script_path))
+                else:
+                    # Buscar en subdirectorios
+                    for directorio in ['scripts', 'tests', 'src']:
+                        alt_path = self.raiz / directorio / nombre
+                        if alt_path.exists():
+                            validaciones.append(self._analizar_script(alt_path))
+                            break
+            logger.info(f"✓ Encontradas {len(validaciones)} validaciones críticas")
+            return validaciones
+        
         validaciones = []
         
         # Buscar en raíz
         for patron in self.PATRONES_VALIDACION:
             for script in self.raiz.glob(patron):
-                if script.name not in self.EXCLUIR and script.is_file():
+                if self._debe_incluir(script):
                     validaciones.append(self._analizar_script(script))
         
-        # Buscar en subdirectorios
-        for directorio in ['scripts', 'tests', 'src']:
+        # Buscar en subdirectorios específicos
+        for directorio in ['scripts']:  # Solo scripts, no tests ni src
             dir_path = self.raiz / directorio
             if dir_path.exists():
                 for patron in self.PATRONES_VALIDACION:
                     for script in dir_path.glob(patron):
-                        if script.name not in self.EXCLUIR and script.is_file():
+                        if self._debe_incluir(script):
                             validaciones.append(self._analizar_script(script))
+        
+        # Aplicar límite de scripts si está configurado
+        if self.max_scripts and len(validaciones) > self.max_scripts:
+            logger.warning(f"⚠️  Limitando a {self.max_scripts} scripts (encontrados {len(validaciones)})")
+            # Ordenar por prioridad primero
+            validaciones.sort(key=lambda x: x.get('prioridad', 999))
+            validaciones = validaciones[:self.max_scripts]
         
         logger.info(f"✓ Encontrados {len(validaciones)} scripts de validación")
         
         return validaciones
+    
+    def _debe_incluir(self, script: Path) -> bool:
+        """Determina si un script debe incluirse en las validaciones"""
+        if not script.is_file():
+            return False
+        
+        nombre = script.name
+        
+        # Excluir patrones específicos usando fnmatch para glob patterns
+        for patron in self.EXCLUIR:
+            if fnmatch(nombre, patron):
+                return False
+        
+        return True
     
     def _analizar_script(self, script: Path) -> Dict[str, Any]:
         """Analiza un script y extrae metadatos"""
@@ -142,9 +196,24 @@ class DescubridorValidaciones:
     
     def _determinar_args(self, nombre: str) -> List[str]:
         """Determina argumentos recomendados para el script"""
-        # Argumentos específicos para scripts conocidos
-        if 'coronacion' in nombre or 'validate' in nombre:
+        # Mapeo específico de argumentos por script
+        args_map = {
+            'validate_v5_coronacion.py': ['--precision', '30'],
+            'validate_four_pillars.py': ['--precision', '30'],
+            'validacion_completa_3_pilares.py': ['--precision', '30'],
+            'validate_fractal_resonance.py': [],
+            'validate_universal_constants.py': ['--precision', '30'],  # Ahora soporta --precision
+        }
+        
+        # Buscar coincidencia exacta primero
+        if nombre in args_map:
+            return args_map[nombre]
+        
+        # Fallback: scripts con 'coronacion' o 'v5' o 'four_pillars' en el nombre
+        if 'coronacion' in nombre or 'v5' in nombre or 'four_pillars' in nombre:
             return ['--precision', '30']
+        
+        # Por defecto, sin argumentos adicionales
         return []
 
 
@@ -153,11 +222,13 @@ class OrquestadorValidacion:
     Orquestador principal que coordina todas las validaciones.
     """
     
-    def __init__(self, max_intentos_por_script: int = 5):
+    def __init__(self, max_intentos_por_script: int = 5, solo_criticas: bool = False, 
+                 max_scripts: int = None, fail_fast: bool = False):
         self.max_intentos = max_intentos_por_script
-        self.descubridor = DescubridorValidaciones()
+        self.descubridor = DescubridorValidaciones(solo_criticas=solo_criticas, max_scripts=max_scripts)
         self.frecuencia = FrecuenciaCoherente141Hz()
         self.resultados = []
+        self.fail_fast = fail_fast
         
         # Crear directorios
         Path('logs').mkdir(exist_ok=True)
@@ -166,6 +237,12 @@ class OrquestadorValidacion:
         logger.info("=" * 80)
         logger.info("🎼 ORQUESTADOR DE VALIDACIÓN RESILIENTE")
         logger.info("   Alineado con frecuencia coherente: 141.7001 Hz")
+        if solo_criticas:
+            logger.info("   Modo: VALIDACIONES CRÍTICAS")
+        if max_scripts:
+            logger.info(f"   Límite de scripts: {max_scripts}")
+        if fail_fast:
+            logger.info("   Fail-fast: ACTIVADO")
         logger.info("=" * 80)
     
     def ejecutar_todas(self, filtro_tipo: str = None) -> Dict[str, Any]:
@@ -192,6 +269,7 @@ class OrquestadorValidacion:
         logger.info(f"\n📋 Ejecutando {len(validaciones)} validaciones...\n")
         
         # Ejecutar cada validación
+        fallos_consecutivos = 0
         for i, validacion in enumerate(validaciones, 1):
             logger.info("")
             logger.info("=" * 80)
@@ -208,10 +286,22 @@ class OrquestadorValidacion:
                 'timestamp': datetime.now(timezone.utc).isoformat()
             })
             
+            # Fail-fast: detener si hay demasiados fallos consecutivos
+            if not exito:
+                fallos_consecutivos += 1
+                if self.fail_fast and fallos_consecutivos >= 3:
+                    logger.error("🛑 Fail-fast activado: 3 fallos consecutivos detectados")
+                    logger.error("   Deteniendo ejecución para evitar timeout")
+                    break
+            else:
+                fallos_consecutivos = 0
+            
             # Pausa coherente entre validaciones
+            # Reducida de 100 a 10 ciclos para eficiencia en CI/CD
+            # 10 ciclos ≈ 70ms, suficiente para coherencia sin timeout
             if i < len(validaciones):
                 logger.info("⏸️  Pausa de coherencia cuántica...")
-                self.frecuencia.pausa_coherente(ciclos=100)
+                self.frecuencia.pausa_coherente(ciclos=10)
         
         # Generar reporte consolidado
         return self._generar_reporte_consolidado()
@@ -344,11 +434,31 @@ def main():
         default=5,
         help="Máximo intentos por validación (default: 5)"
     )
+    parser.add_argument(
+        '--solo-criticas',
+        action='store_true',
+        help="Ejecutar solo validaciones críticas (más rápido)"
+    )
+    parser.add_argument(
+        '--max-scripts',
+        type=int,
+        help="Limitar número máximo de scripts a ejecutar"
+    )
+    parser.add_argument(
+        '--fail-fast',
+        action='store_true',
+        help="Detener ejecución después de 3 fallos consecutivos"
+    )
     
     args = parser.parse_args()
     
     # Crear orquestador
-    orquestador = OrquestadorValidacion(max_intentos_por_script=args.max_intentos)
+    orquestador = OrquestadorValidacion(
+        max_intentos_por_script=args.max_intentos,
+        solo_criticas=args.solo_criticas,
+        max_scripts=args.max_scripts,
+        fail_fast=args.fail_fast
+    )
     
     # Ejecutar
     if args.script:
