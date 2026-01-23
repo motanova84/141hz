@@ -29,6 +29,19 @@ try:
 except ImportError:
     TOKEN_COMPRESSION_AVAILABLE = False
 
+# Spectral embedding modules (new)
+try:
+    from .spectral_embedding import SpectralEmbedding
+    from .dataset import DatasetGenerator
+    from .embedding_comparison import (
+        BaselineEmbedding,
+        Word2VecEmbedding,
+        EmbeddingEvaluator
+    )
+    SPECTRAL_EMBEDDING_AVAILABLE = True
+except ImportError:
+    SPECTRAL_EMBEDDING_AVAILABLE = False
+
 __version__ = "1.0.0"
 __all__ = [
     "psi_score",
@@ -54,6 +67,16 @@ if TOKEN_COMPRESSION_AVAILABLE:
         "UDPMulticastTransmitter",
         "UDPMulticastReceiver",
         "QCALVibrationalTransport"
+    ])
+
+# Add spectral embedding exports if available
+if SPECTRAL_EMBEDDING_AVAILABLE:
+    __all__.extend([
+        "SpectralEmbedding",
+        "DatasetGenerator",
+        "BaselineEmbedding",
+        "Word2VecEmbedding",
+        "EmbeddingEvaluator"
     ])
 
 # Fundamental constants

@@ -25,6 +25,10 @@ accelerate>=0.20.0
 sentencepiece>=0.1.99
 protobuf>=3.20.0
 
+# Spectral embedding dependencies
+scikit-learn>=1.0.0
+gensim>=4.0.0
+
 # Documentation dependencies
 mkdocs-material[imaging]>=9.0.0
 mkdocs-minify-plugin>=0.6.0
