@@ -240,6 +240,8 @@ class EmbeddingEvaluator:
             true_labels: Optional ground truth labels
             n_clusters: Number of clusters for K-means
             n_init: Number of K-means initializations (default: 3)
+                   Note: Reduced from 10 for performance. Trade-off: faster
+                   evaluation with slightly less stable clustering results.
             
         Returns:
             Dictionary of clustering metrics

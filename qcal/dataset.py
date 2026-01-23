@@ -295,18 +295,23 @@ class DatasetGenerator:
         n_defs = int(n_total * 0.4)
         all_sentences.extend(self.generate_definitions(n_defs))
         
-        # QA pairs (40% - just the questions and answers as separate samples)
-        n_qa = int(n_total * 0.2)
-        qa_pairs = self.generate_qa_pairs(n_qa)
+        # QA pairs (30% as pairs = 15% questions + 15% answers = 30% total samples)
+        n_qa_pairs = int(n_total * 0.15)
+        qa_pairs = self.generate_qa_pairs(n_qa_pairs)
         for q, a in qa_pairs:
             all_sentences.append(q)
             all_sentences.append(a)
         
-        # Clustered content (20%)
-        n_clustered = n_total - len(all_sentences)
-        clusters = self.generate_semantic_clusters(n_clusters=5, samples_per_cluster=n_clustered // 5)
-        for sentences in clusters.values():
-            all_sentences.extend(sentences)
+        # Clustered content (remaining ~30%)
+        n_remaining = n_total - len(all_sentences)
+        if n_remaining > 0:
+            samples_per_cluster = max(n_remaining // 5, 1)
+            clusters = self.generate_semantic_clusters(
+                n_clusters=5,
+                samples_per_cluster=samples_per_cluster
+            )
+            for sentences in clusters.values():
+                all_sentences.extend(sentences)
         
         # Shuffle to mix content types
         random.shuffle(all_sentences)
