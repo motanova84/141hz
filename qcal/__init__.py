@@ -29,6 +29,13 @@ try:
 except ImportError:
     TOKEN_COMPRESSION_AVAILABLE = False
 
+# Text encoding module
+try:
+    from .text_encoder import QCALTextEncoder
+    TEXT_ENCODER_AVAILABLE = True
+except ImportError:
+    TEXT_ENCODER_AVAILABLE = False
+
 __version__ = "1.0.0"
 __all__ = [
     "psi_score",
@@ -54,6 +61,12 @@ if TOKEN_COMPRESSION_AVAILABLE:
         "UDPMulticastTransmitter",
         "UDPMulticastReceiver",
         "QCALVibrationalTransport"
+    ])
+
+# Add text encoder exports if available
+if TEXT_ENCODER_AVAILABLE:
+    __all__.extend([
+        "QCALTextEncoder"
     ])
 
 # Fundamental constants
