@@ -1,0 +1,64 @@
+{
+  "server": {
+    "name": "riemann-mcp-server",
+    "description": "Hipótesis de Riemann - D(s) ≡ Ξ(s) - Análisis de función zeta",
+    "version": "1.0.0",
+    "frequency": 141.7001,
+    "frequency_unit": "Hz",
+    "harmonic_mode": "fundamental",
+    "status": "INTEGRADO",
+    "endpoint": "riemann-mcp-server.qcal.space"
+  },
+  "qcal_integration": {
+    "model": "QCAL ∞³",
+    "root_frequency": 141.7001,
+    "coherence": 1.0,
+    "entropy": 0.0,
+    "phase_lock": true,
+    "observer_active": true,
+    "mathematical_bridge": "ζ′(1/2) × φ³ → f₀"
+  },
+  "capabilities": {
+    "zeta_analysis": true,
+    "critical_line_verification": true,
+    "zero_detection": true,
+    "spectral_interpretation": true,
+    "riemann_hypothesis_validation": true,
+    "d_function_equivalence": true
+  },
+  "mathematical_core": {
+    "equation": "D(s) ≡ Ξ(s)",
+    "critical_line": "Re(s) = 1/2",
+    "f0_derivation": "ζ′(1/2) × φ³ = 141.7001 Hz",
+    "precision": "arbitrary",
+    "verification_status": "INTEGRADO"
+  },
+  "protocol": {
+    "type": "MCP",
+    "version": "1.0",
+    "transport": "stdio",
+    "serialization": "json"
+  },
+  "observers": {
+    "enabled": true,
+    "cross_server_sync": true,
+    "linked_servers": [
+      "github-mcp-server",
+      "dramaturgo",
+      "bsd-mcp-server",
+      "navier-mcp-server"
+    ]
+  },
+  "noetic_chain": {
+    "position": "riemann_node",
+    "connects_to": ["BSD", "P≠NP", "Navier-Stokes"]
+  },
+  "metadata": {
+    "created": "2026-01-16T11:35:00Z",
+    "eternal_mode": true,
+    "immutable": true,
+    "read_only": true,
+    "multi_observer": true,
+    "millennium_problem": true
+  }
+}

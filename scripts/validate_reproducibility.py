@@ -229,6 +229,27 @@ def verify_checksums(
     return all_match, mismatches
 
 
+def load_env_lock_metadata(json_path: Path = Path("ENV.lock.json")) -> Dict:
+    """
+    Load ENV.lock.json metadata file if it exists.
+    
+    Args:
+        json_path: Path to ENV.lock.json file
+        
+    Returns:
+        Dictionary with metadata, or empty dict if file doesn't exist
+    """
+    if not json_path.exists():
+        return {}
+    
+    try:
+        with open(json_path) as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Warning: Could not load {json_path}: {e}", file=sys.stderr)
+        return {}
+
+
 def generate_environment_snapshot() -> Dict:
     """
     Generate a complete snapshot of the computational environment.
@@ -257,7 +278,7 @@ def generate_environment_snapshot() -> Dict:
     except (subprocess.CalledProcessError, FileNotFoundError):
         git_branch = "Not in git repo"
     
-    return {
+    snapshot = {
         "python_version": get_python_version(),
         "platform": {
             "system": platform.system(),
@@ -270,6 +291,13 @@ def generate_environment_snapshot() -> Dict:
             "branch": git_branch,
         }
     }
+    
+    # Include ENV.lock metadata if available
+    env_metadata = load_env_lock_metadata()
+    if env_metadata:
+        snapshot["env_lock_metadata"] = env_metadata
+    
+    return snapshot
 
 
 def main():
