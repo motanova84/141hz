@@ -74,6 +74,20 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: Run Anti-Bias Validation Suite
+        run: |
+          echo "🧪 Running Anti-Bias Validation Framework"
+          echo "=========================================="
+          python -m unittest \
+            tests.test_anti_bias_falsification.TestAntiBiasFalsification.test_null_hypothesis_exposure_single_window \
+            tests.test_bayes_factor_translation.TestBayesFactorTranslation.test_icv_to_bayes_factor_conversion \
+            tests.test_blind_frequency_scan.TestBlindFrequencyScan.test_blind_scan_finds_injected_signal \
+            -v
+        continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Validate Riemann zeros relationship
         run: python3 validate_riemann_zeros.py --precision 50
         continue-on-error: false

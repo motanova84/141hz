@@ -56,3 +56,6 @@ lean_lib Noesis88 where
 lean_lib EmergentTime where
   -- Emergent noetic time formalization
   roots := #[`F0Derivation.EmergentTime]
+lean_lib TiempoNoetico where
+  -- RAM-XVIII: Temporal emergence as noetic structure
+  roots := #[`TiempoNoetico]
