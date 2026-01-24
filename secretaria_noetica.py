@@ -132,8 +132,13 @@ class SecretariaNoetica:
         # Verificar si ya está en un directorio de destino
         try:
             relative_path = archivo.relative_to(self.repo_root)
+            # Solo excluir si el archivo está en un subdirectorio de destino
+            # No excluir archivos en root que casualmente comienzan con el nombre del destino
             for destino in self.DESTINOS.values():
-                if str(relative_path).startswith(destino):
+                # Verificar que el archivo está realmente dentro del directorio de destino
+                # y no solo que el nombre del archivo comienza con el nombre del destino
+                partes = relative_path.parts
+                if len(partes) > 1 and partes[0] == destino.split('/')[0]:
                     return True
         except ValueError:
             # El archivo está fuera del repositorio - excluir
