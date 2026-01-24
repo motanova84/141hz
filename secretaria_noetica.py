@@ -46,6 +46,9 @@ logger = logging.getLogger(__name__)
 class SecretariaNoetica:
     """Sistema de organización automática de archivos QCAL."""
     
+    # Número máximo de intentos para resolver conflictos de nombres
+    MAX_FILE_CONFLICTS = 1000
+    
     # Directorios de destino según el tipo de archivo
     DESTINOS = {
         'formalization': 'formalization',
@@ -265,13 +268,12 @@ class SecretariaNoetica:
             # Si el archivo ya existe en destino, agregar sufijo
             if destino_path.exists():
                 contador = 1
-                max_intentos = 1000  # Evitar bucles infinitos
-                while destino_path.exists() and contador < max_intentos:
+                while destino_path.exists() and contador < self.MAX_FILE_CONFLICTS:
                     stem = archivo.stem
                     destino_path = destino_dir / f"{stem}_{contador}{extension}"
                     contador += 1
                 
-                if contador >= max_intentos:
+                if contador >= self.MAX_FILE_CONFLICTS:
                     logger.error(f"❌ No se pudo encontrar nombre único para {archivo.name}")
                     return False
             
@@ -286,6 +288,10 @@ class SecretariaNoetica:
     
     def organizar_repositorio(self) -> Dict[str, int]:
         """Organiza todos los archivos del repositorio.
+        
+        NOTA: Solo organiza archivos en el directorio raíz del repositorio.
+        Los archivos en subdirectorios no son movidos para evitar reorganizar
+        estructuras existentes.
         
         Returns:
             Diccionario con estadísticas de la organización
