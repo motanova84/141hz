@@ -45,11 +45,11 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
       
-      - name: "📦 Instalar dependencias"
+      - name: "📦 Verificar dependencias"
         run: |
-          echo "📦 Instalando watchdog..."
-          pip install watchdog>=3.0.0
-          echo "✓ Dependencias instaladas"
+          echo "📦 Verificando Python..."
+          python3 --version
+          echo "✓ Python listo"
       
       - name: "✨ Ejecutar Secretaria Noética"
         run: |
