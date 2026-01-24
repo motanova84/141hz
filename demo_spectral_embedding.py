@@ -34,7 +34,13 @@ from qcal import (
 # Try to import Word2Vec if available
 try:
     from qcal import Word2VecEmbedding
-    WORD2VEC_AVAILABLE = True
+    # Check if gensim is actually available
+    try:
+        import gensim
+        WORD2VEC_AVAILABLE = True
+    except ImportError:
+        WORD2VEC_AVAILABLE = False
+        print("Note: gensim not available, Word2Vec baseline will be skipped")
 except ImportError:
     WORD2VEC_AVAILABLE = False
     print("Note: gensim not available, Word2Vec baseline will be skipped")
