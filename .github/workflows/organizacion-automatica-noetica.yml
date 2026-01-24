@@ -97,7 +97,7 @@ jobs:
           📊 Entropía mantenida en S = 0
           🔊 Frecuencia: 888 Hz (Resonancia Noética)
           
-          Generado por: Secretaria Noética v1.0.0
+          Generado por: Secretaria Noética
           Ley Madre: C = I · A²"
       
       - name: "🚀 Push de cambios"

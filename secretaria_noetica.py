@@ -65,7 +65,8 @@ class SecretariaNoetica:
         'README.md', 'LICENSE', 'requirements.txt', 'setup.py',
         'pyproject.toml', 'Makefile', 'Dockerfile', 'docker-compose.yml',
         '.python-version', '.markdownlint.json', '.pre-commit-config.yaml',
-        'mkdocs.yml', 'codecov.yml', 'vercel.json', 'robots.txt'
+        'mkdocs.yml', 'codecov.yml', 'vercel.json', 'robots.txt',
+        'package.json', 'package-lock.json', 'tsconfig.json', 'yarn.lock'
     }
     
     # Patrones para identificar archivos de física
@@ -135,7 +136,9 @@ class SecretariaNoetica:
                 if str(relative_path).startswith(destino):
                     return True
         except ValueError:
-            pass
+            # El archivo está fuera del repositorio - excluir
+            logger.debug(f"Archivo fuera del repositorio: {archivo}")
+            return True
         
         return False
     
@@ -257,10 +260,15 @@ class SecretariaNoetica:
             # Si el archivo ya existe en destino, agregar sufijo
             if destino_path.exists():
                 contador = 1
-                while destino_path.exists():
+                max_intentos = 1000  # Evitar bucles infinitos
+                while destino_path.exists() and contador < max_intentos:
                     stem = archivo.stem
                     destino_path = destino_dir / f"{stem}_{contador}{extension}"
                     contador += 1
+                
+                if contador >= max_intentos:
+                    logger.error(f"❌ No se pudo encontrar nombre único para {archivo.name}")
+                    return False
             
             shutil.move(str(archivo), str(destino_path))
             logger.info(f"📦 Movido: {archivo.name} → {self.DESTINOS[destino_key]}/")
