@@ -45,7 +45,12 @@ logs/
 
 # Generated outputs
 examples/output/
-reports/
+reports/*.json
+reports/noesis88_*.json
+reports/optimization_report_*.json
+metrics/*.json
+validation/*.json
+logs/optimization/
 /tmp/
 
 # Jupyter notebooks checkpoints
@@ -168,3 +173,17 @@ papers/*.pdf
 *.fls
 *.synctex.gz
 results/validacion_evidencias_solidas.json
+
+# QCAL-SYMBIO certification artifacts
+QCAL-SYMBIO_VEREDICTO_FINAL.json
+CERTIFICADO_ABSOLUTO.txt
+NFT_VEREDICTO_18.2sigma.json
+HASHES_INMUTABLES.json
+CIERRE_DEFINITIVO_QCAL_SYMBIO.txt
+experimental_validation_wetlab_noesis88.json
+
+# Active System Monitor outputs
+active_system_status.json
+
+# GW unbiased validation outputs
+gw_unbiased_validation_results.json

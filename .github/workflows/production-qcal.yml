@@ -36,16 +36,53 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Install dependencies
+      - name: Install dependencies from ENV.lock for reproducibility
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r ENV.lock
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Generate environment snapshot (reproducibility audit trail)
+        run: |
+          python scripts/validate_reproducibility.py --generate-snapshot --output results/environment_snapshot_${{ github.run_number }}.json
+          # Also save ENV.lock metadata for this run
+          cp ENV.lock.json results/env_lock_metadata_${{ github.run_number }}.json
+      
+      - name: Validate reproducibility (strict mode for production)
+        run: |
+          python scripts/validate_reproducibility.py --strict
+        continue-on-error: false  # Fail workflow if environment doesn't match
+
+      - name: Upload environment snapshots (reproducibility audit trail)
+        if: always()  # Upload even if validation fails
+        uses: actions/upload-artifact@v4
+        with:
+          name: reproducibility-snapshots-${{ github.run_number }}
+          path: |
+            results/environment_snapshot_${{ github.run_number }}.json
+            results/env_lock_metadata_${{ github.run_number }}.json
+            ENV.lock
+            ENV.lock.json
+          retention-days: 90  # Keep for 90 days for long-term auditing
+
+      - name: Validate core with precision
+        run: python3 validate_v5_coronacion.py --precision 30
+        continue-on-error: false
         env:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
-      - name: Validate core with precision
-        run: python3 validate_v5_coronacion.py --precision 30
+      - name: Run Anti-Bias Validation Suite
+        run: |
+          echo "🧪 Running Anti-Bias Validation Framework"
+          echo "=========================================="
+          python -m unittest \
+            tests.test_anti_bias_falsification.TestAntiBiasFalsification.test_null_hypothesis_exposure_single_window \
+            tests.test_bayes_factor_translation.TestBayesFactorTranslation.test_icv_to_bayes_factor_conversion \
+            tests.test_blind_frequency_scan.TestBlindFrequencyScan.test_blind_scan_finds_injected_signal \
+            -v
         continue-on-error: false
         env:
           NUMEXPR_MAX_THREADS: 4
@@ -70,6 +107,41 @@ jobs:
       - name: Validate brain wave bands as f₀ divisors
         run: python3 scripts/validacion_bandas_cerebrales.py
         continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Extract GW250114 strain and apply QCAL filter
+        run: python3 scripts/extraer_strain_gw250114.py --detectores H1 L1 V1
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Correlate AT2020afhd with GW250114 (Multimessenger Resonance)
+        run: python3 scripts/correlacion_at2020afhd_gw250114.py
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Analyze GW150914 complete (141.7 Hz resonance with Ψ-NSE filter)
+        run: python3 scripts/analisis_gw150914_completo.py
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Population analysis GWTC-1 (√N scaling validation)
+        run: python3 scripts/analisis_poblacional_gwtc1.py
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: GW170814 triple-detector triangulation (H1-L1-V1 phase coherence)
+        run: python3 scripts/analisis_gw170814_triangulacion.py
+        continue-on-error: true
         env:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
@@ -138,34 +210,114 @@ jobs:
           path: |
             results/
             *.json
+            *.hdf5
           retention-days: 30
+      
+      - name: Generate checksums for reproducibility
+        if: always()
+        run: |
+          mkdir -p results
+          if [ -d "results" ] && [ -r "results" ]; then
+            find results/ -type f -name "*.json" -exec sha256sum {} \; > results/checksums.txt || echo "No results to checksum"
+            if [ -f "results/checksums.txt" ]; then
+              echo "Generated checksums for $(wc -l < results/checksums.txt) files"
+            fi
+          else
+            echo "Results directory not accessible"
+          fi
 
       - name: Generate validation summary
         if: always()
         run: |
           echo "## Validation Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Add reproducibility information
+          echo "### Reproducibility Information" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment Lock**: ENV.lock" >> $GITHUB_STEP_SUMMARY
+          echo "- **Python Version**: $(python3 --version)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Git Commit**: ${GITHUB_SHA::8}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workflow Run**: #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "results/environment_snapshot.json" ]; then
+            echo "### Environment Snapshot" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            # Limit output to first 50 lines to avoid exposing sensitive data or overloading summary
+            cat results/environment_snapshot.json | head -50 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -f "results/checksums.txt" ]; then
+            echo "### Result Checksums" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Generated SHA256 checksums for $(wc -l < results/checksums.txt) result files" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "<details><summary>View Checksums</summary>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat results/checksums.txt | head -20 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "</details>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
           if [ -f "results/validation_v5.json" ]; then
             echo "### Core Validation Results" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/validation_v5.json | head -30 >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/riemann_zeros.json" ]; then
             echo "### Riemann Zeros Validation" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/riemann_zeros.json | head -40 >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/validacion_noesis_at2020afhd.json" ]; then
             echo "### AT2020afhd Noesis Verification" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/validacion_noesis_at2020afhd.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
           if [ -f "results/at2020afhd_validation.json" ]; then
             echo "### AT2020afhd Periodicity Validation" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/at2020afhd_validation.json | head -40 >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/gw250114_strain/GW250114_extraccion_completa.json" ]; then
+            echo "### GW250114 Strain Extraction & QCAL Filter" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/gw250114_strain/GW250114_extraccion_completa.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/correlacion_multimensajero/correlacion_multimensajero.json" ]; then
+            echo "### Multimessenger Resonance (GW250114 ↔ AT2020afhd)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/correlacion_multimensajero/correlacion_multimensajero.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/gw150914_1417hz/GW150914_1417Hz_complete_analysis.json" ]; then
+            echo "### GW150914 Complete Analysis (141.7 Hz Ψ-NSE Filter)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/gw150914_1417hz/GW150914_1417Hz_complete_analysis.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/gwtc1_population/gwtc1_population_analysis.json" ]; then
+            echo "### GWTC-1 Population Analysis (√N Scaling)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/gwtc1_population/gwtc1_population_analysis.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/gw170814_triangulacion/gw170814_triangulacion_completa.json" ]; then
+            echo "### GW170814 Triple-Detector Triangulation (Noetic Map Closure)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/gw170814_triangulacion/gw170814_triangulacion_completa.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/aggregated_report.json" ]; then
             echo "### Aggregated Results" >> $GITHUB_STEP_SUMMARY
