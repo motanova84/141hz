@@ -18,6 +18,7 @@ import F0Derivation.Zeta
 import F0Derivation.GoldenRatio
 import F0Derivation.Emergence
 import F0Derivation.Convergence
+import F0Derivation.HarmonicValidation
 
 /-!
 # Main Theorem: Complete Derivation of f₀ = 141.7001 Hz
