@@ -23,7 +23,6 @@ Ley Madre: C = I · A²
 ════════════════════════════════════════════════════════════════════
 """
 
-import os
 import sys
 import shutil
 import argparse
@@ -35,7 +34,7 @@ import json
 # CONFIGURACIÓN
 # ============================================================================
 
-# Frecuencia base y coherencia
+# Frecuencia base y coherencia (solo para display/logging, no cálculos)
 F0 = 141.7001  # Hz
 RESONANCIA_NOETICA = 888.014  # Hz
 COHERENCIA_MIN = 0.888
@@ -217,6 +216,9 @@ def classify_file(file_path: Path) -> str:
 def organize_files(repo_path: Path, dry_run: bool = False) -> dict:
     """
     Organiza los archivos del repositorio según las reglas QCAL.
+    
+    NOTA: Solo procesa archivos en el nivel raíz del repositorio,
+    no en subdirectorios (que ya están organizados).
     
     Args:
         repo_path: Ruta al repositorio
