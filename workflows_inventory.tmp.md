@@ -56,6 +56,15 @@
 - Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
+### Anti-Bias Validation Tests
+
+**Archivo:** `anti-bias-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 6 * * 1  # Run weekly on Mondays at 6:00 AM UTC`)
+- Trigger: manual (workflow_dispatch)
+
 ### AT2020afhd TDE Analysis
 
 **Archivo:** `at2020afhd-analysis.yml`
@@ -350,6 +359,15 @@
 - Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
+### QNM vs QCAL Validation
+
+**Archivo:** `qnm-qcal-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * *`)
+- Trigger: manual (workflow_dispatch)
+
 ### Quantum Validations
 
 **Archivo:** `quantum-validations.yml`
@@ -448,4 +466,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-23 11:49:20 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-23 17:13:52 UTC*
