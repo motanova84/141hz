@@ -42,6 +42,7 @@ artifacts/
 # Logs
 logs/
 *.log
+coherencia_organizacional.json
 
 # Generated outputs
 examples/output/
