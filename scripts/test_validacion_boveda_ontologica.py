@@ -2,337 +2,289 @@
 """
 Tests para validacion_boveda_ontologica.py
 
-Este módulo contiene tests unitarios para verificar que la validación
-del Cierre de la Bóveda Ontológica funciona correctamente.
+Verifica que todas las validaciones del Cierre de la Bóveda Ontológica
+funcionan correctamente.
 """
 
-import unittest
 import sys
+import os
+import pytest
+import numpy as np
 import json
 from pathlib import Path
-import tempfile
-import os
 
-# Importar el módulo a testear
-sys.path.insert(0, str(Path(__file__).parent))
-import validacion_boveda_ontologica as vbo
+# Agregar el directorio de scripts al path
+sys.path.insert(0, os.path.dirname(__file__))
 
-
-class TestConstantesFundamentales(unittest.TestCase):
-    """Tests para las constantes fundamentales"""
-    
-    def test_f0_hz_value(self):
-        """Verifica que f₀ = 141.7001 Hz"""
-        self.assertEqual(vbo.F0_HZ, 141.7001)
-    
-    def test_hydrogen_frequency(self):
-        """Verifica la frecuencia del hidrógeno"""
-        self.assertAlmostEqual(vbo.F_HYDROGEN_MHZ, 1420.4056751, places=7)
-        self.assertAlmostEqual(vbo.F_HYDROGEN_HZ, 1420405675.1, places=1)
-    
-    def test_schumann_frequency(self):
-        """Verifica la resonancia de Schumann"""
-        self.assertEqual(vbo.F_SCHUMANN_HZ, 7.83)
-    
-    def test_sacred_888(self):
-        """Verifica la constante sagrada 888"""
-        self.assertEqual(vbo.SACRED_888, 888)
-    
-    def test_expected_octaves(self):
-        """Verifica las octavas esperadas"""
-        self.assertAlmostEqual(vbo.OCTAVES_EXPECTED, 23.257, places=3)
+from validacion_boveda_ontologica import (
+    validar_octavas_hidrogeno_f0,
+    validar_matriz_numerica,
+    validar_red_mcp,
+    validar_puente_biogravitacional,
+    F0_HZ,
+    F_HYDROGEN_MHZ,
+    F_HYDROGEN_HZ,
+    F_SCHUMANN_HZ,
+    SACRED_888,
+    NUMEROS_SECUENCIA,
+    MCP_SERVERS
+)
 
 
-class TestRedMCP(unittest.TestCase):
-    """Tests para la Red MCP QCAL ∞³"""
+class TestValidacionHidrogenoF0:
+    """Tests para la validación de octavas hidrógeno-f₀"""
     
-    def test_mcp_network_size(self):
-        """Verifica que hay exactamente 5 nodos"""
-        self.assertEqual(len(vbo.MCP_NETWORK), 5)
-    
-    def test_mcp_network_nodes(self):
-        """Verifica que todos los nodos esperados están presentes"""
-        expected_nodes = {'Riemann-MCP', 'BSD-MCP', 'Navier-MCP', 'Dramaturgo', 'GitHub-MCP'}
-        self.assertEqual(set(vbo.MCP_NETWORK.keys()), expected_nodes)
-    
-    def test_mcp_coherent_phase(self):
-        """Verifica que todos los nodos tienen fase coherente 1.0"""
-        for nodo, config in vbo.MCP_NETWORK.items():
-            with self.subTest(nodo=nodo):
-                self.assertEqual(config['fase_coherente'], 1.0)
-    
-    def test_mcp_frequencies(self):
-        """Verifica que solo hay dos frecuencias: 141.7001 Hz y 888 Hz"""
-        frecuencias = set(config['frecuencia_hz'] for config in vbo.MCP_NETWORK.values())
-        self.assertEqual(frecuencias, {141.7001, 888})
-    
-    def test_mcp_distribution(self):
-        """Verifica la distribución correcta de frecuencias"""
-        freq_141 = sum(1 for config in vbo.MCP_NETWORK.values() if config['frecuencia_hz'] == 141.7001)
-        freq_888 = sum(1 for config in vbo.MCP_NETWORK.values() if config['frecuencia_hz'] == 888)
+    def test_octavas_hidrogeno_f0(self):
+        """Test que valida la relación de 23.257 octavas"""
+        resultado = validar_octavas_hidrogeno_f0(precision=50)
         
-        self.assertEqual(freq_141, 3)  # 3 nodos a 141.7001 Hz
-        self.assertEqual(freq_888, 2)  # 2 nodos a 888 Hz
-
-
-class TestValidacionOctavas(unittest.TestCase):
-    """Tests para la validación de octavas armónicas"""
+        assert 'octaves' in resultado
+        assert 'validacion' in resultado
+        
+        # Verificar que las octavas están cerca de 23.257
+        assert abs(resultado['octaves'] - 23.257) < 0.001
+        
+        # Validación debe ser exitosa
+        assert resultado['validacion'] == 'EXITOSA'
+        
+        # Error debe ser muy pequeño
+        assert resultado['error_pct'] < 0.01  # Menos del 0.01%
     
-    def test_validar_octavas_hidrogenio(self):
-        """Verifica que las octavas se calculan correctamente"""
-        resultado = vbo.validar_octavas_hidrogenio(precision=50)
-        
-        # Verificar que se calculan las octavas
-        self.assertIn('octaves_calculadas', resultado)
-        self.assertAlmostEqual(resultado['octaves_calculadas'], 23.257, places=3)
-        
-        # Verificar que la precisión es alta
-        self.assertGreater(resultado['precision_pct'], 99.9)
-        
-        # Verificar que la validación es exitosa
-        self.assertEqual(resultado['validacion'], 'EXITOSA')
+    def test_constantes_basicas(self):
+        """Test que las constantes fundamentales están bien definidas"""
+        assert F0_HZ == 141.7001
+        assert F_HYDROGEN_MHZ == 1420.4056751
+        assert F_HYDROGEN_HZ == F_HYDROGEN_MHZ * 1e6
+        assert F_SCHUMANN_HZ == 7.83
+        assert SACRED_888 == 888
     
-    def test_octave_relationship(self):
-        """Verifica la relación f_H = f₀ · 2^23.257"""
+    def test_formula_octavas(self):
+        """Test que verifica la fórmula f_H = f₀ × 2^23.257"""
         import mpmath as mp
         mp.dps = 50
         
-        f_0 = mp.mpf(vbo.F0_HZ)
-        f_h_calculado = f_0 * mp.power(2, vbo.OCTAVES_EXPECTED)
+        f_h_calculado = F0_HZ * (2 ** 23.257)
+        error_relativo = abs(f_h_calculado - F_HYDROGEN_HZ) / F_HYDROGEN_HZ
         
-        error_relativo = abs(f_h_calculado - vbo.F_HYDROGEN_HZ) / vbo.F_HYDROGEN_HZ
-        
-        # El error debe ser menor al 1%
-        self.assertLess(float(error_relativo), 0.01)
+        # El error debe ser muy pequeño
+        assert error_relativo < 0.0002  # Menos del 0.02%
 
 
-class TestValidacionGeometria(unittest.TestCase):
-    """Tests para la geometría sagrada"""
+class TestValidacionMatrizNumerica:
+    """Tests para la validación de la matriz numérica"""
     
-    def test_validar_geometria_sagrada(self):
-        """Verifica que 888/f₀ ≈ 2π"""
-        resultado = vbo.validar_geometria_sagrada()
+    def test_matriz_numerica_completa(self):
+        """Test de validación completa de matriz numérica"""
+        resultado = validar_matriz_numerica()
         
-        # Verificar que se calcula la razón
-        self.assertIn('888_sobre_f0', resultado)
+        assert 'suma_361' in resultado
+        assert 'schumann' in resultado
+        assert 'geometria_sagrada' in resultado
+        assert 'probabilidad' in resultado
+        assert 'validacion' in resultado
         
-        # Verificar que la precisión es > 99.5%
-        self.assertGreater(resultado['precision_pct'], 99.5)
-        
-        # Verificar que la validación es exitosa
-        self.assertEqual(resultado['validacion'], 'EXITOSA')
+        # Validación debe ser exitosa
+        assert resultado['validacion'] == 'EXITOSA'
     
-    def test_sacred_ratio(self):
-        """Verifica numéricamente la relación 888/f₀ ≈ 2π"""
-        import numpy as np
+    def test_suma_361(self):
+        """Test que verifica suma = 361 = 19²"""
+        resultado = validar_matriz_numerica()
         
-        ratio = vbo.SACRED_888 / vbo.F0_HZ
+        assert resultado['suma_361']['suma'] == 361
+        assert resultado['suma_361']['raiz'] == 19
+        assert resultado['suma_361']['es_cuadrado'] is True
+    
+    def test_schumann_precision(self):
+        """Test de precisión Schumann"""
+        resultado = validar_matriz_numerica()
+        
+        # Precisión debe ser mayor al 99%
+        assert resultado['schumann']['precision_pct'] > 99.0
+        
+        # f₀/18 debe estar cerca de Schumann
+        f0_18 = F0_HZ / 18
+        error = abs(f0_18 - F_SCHUMANN_HZ) / F_SCHUMANN_HZ
+        assert error < 0.01  # Menos del 1%
+    
+    def test_geometria_sagrada(self):
+        """Test de geometría sagrada 888/f₀ ≈ 2π"""
+        resultado = validar_matriz_numerica()
+        
+        # Precisión debe ser mayor al 99%
+        assert resultado['geometria_sagrada']['precision_pct'] > 99.0
+        
+        # 888/f₀ debe estar cerca de 2π
+        razon = SACRED_888 / F0_HZ
         dos_pi = 2 * np.pi
-        
-        error_relativo = abs(ratio - dos_pi) / dos_pi
-        
-        # Error debe ser menor a 0.5%
-        self.assertLess(error_relativo, 0.005)
-
-
-class TestValidacionSchumann(unittest.TestCase):
-    """Tests para la resonancia de Schumann"""
+        error = abs(razon - dos_pi) / dos_pi
+        assert error < 0.005  # Menos del 0.5%
     
-    def test_validar_resonancia_schumann(self):
-        """Verifica que f₀/18 ≈ Schumann"""
-        resultado = vbo.validar_resonancia_schumann()
+    def test_significancia_estadistica(self):
+        """Test de significancia estadística"""
+        resultado = validar_matriz_numerica()
         
-        # Verificar que se calcula f₀/18
-        self.assertIn('f0_sobre_18', resultado)
+        # La probabilidad conjunta debe ser muy pequeña
+        assert resultado['probabilidad']['p_conjunta'] < 1e-6
         
-        # Verificar que la precisión es > 99%
-        self.assertGreater(resultado['precision_pct'], 99.0)
-        
-        # Verificar que la validación es exitosa
-        self.assertEqual(resultado['validacion'], 'EXITOSA')
-    
-    def test_schumann_calculation(self):
-        """Verifica numéricamente f₀/18 ≈ 7.83"""
-        f0_sobre_18 = vbo.F0_HZ / 18
-        
-        error_relativo = abs(f0_sobre_18 - vbo.F_SCHUMANN_HZ) / vbo.F_SCHUMANN_HZ
-        
-        # Error debe ser menor a 1%
-        self.assertLess(error_relativo, 0.01)
+        # Sigma debe ser mayor a 5
+        assert resultado['probabilidad']['sigma'] > 5.0
 
 
-class TestValidacionRedMCP(unittest.TestCase):
+class TestValidacionRedMCP:
     """Tests para la validación de la red MCP"""
     
-    def test_validar_red_mcp(self):
-        """Verifica que la red MCP está en estado coherente"""
-        resultado = vbo.validar_red_mcp()
+    def test_red_mcp_completa(self):
+        """Test de validación completa de red MCP"""
+        resultado = validar_red_mcp()
         
-        # Verificar estructura del resultado
-        self.assertIn('nodos', resultado)
-        self.assertIn('fase_coherente_media', resultado)
-        self.assertIn('estado_instante_eterno', resultado)
+        assert 'total_servidores' in resultado
+        assert 'fase_coherente' in resultado
+        assert 'estado_instante_eterno' in resultado
+        assert 'validacion' in resultado
         
-        # Verificar que hay 5 nodos
-        self.assertEqual(resultado['n_nodos'], 5)
+        # Validación debe ser exitosa
+        assert resultado['validacion'] == 'EXITOSA'
+    
+    def test_numero_servidores(self):
+        """Test que verifica el número correcto de servidores"""
+        assert len(MCP_SERVERS) == 5
         
-        # Verificar fase coherente perfecta
-        self.assertEqual(resultado['fase_coherente_media'], 1.0)
+        resultado = validar_red_mcp()
+        assert resultado['total_servidores'] == 5
+    
+    def test_distribucion_frecuencias(self):
+        """Test de distribución de frecuencias en servidores"""
+        resultado = validar_red_mcp()
         
-        # Verificar estado de instante eterno
-        self.assertTrue(resultado['estado_instante_eterno'])
+        # Debe haber 3 servidores a 141.7001 Hz
+        assert resultado['freq_141_7001'] == 3
         
-        # Verificar validación exitosa
-        self.assertEqual(resultado['validacion'], 'EXITOSA')
+        # Debe haber 2 servidores a 888 Hz
+        assert resultado['freq_888'] == 2
+    
+    def test_fase_coherente(self):
+        """Test de fase coherente"""
+        resultado = validar_red_mcp()
+        
+        # Fase coherente debe ser 1.0 (100%)
+        assert resultado['fase_coherente'] == 1.0
+        
+        # Estado de instante eterno debe estar alcanzado
+        assert resultado['estado_instante_eterno'] is True
+    
+    def test_servidores_configuracion(self):
+        """Test de configuración de servidores individuales"""
+        # Verificar que cada servidor tiene frecuencia y función
+        for nombre, config in MCP_SERVERS.items():
+            assert 'frequency' in config
+            assert 'function' in config
+            assert isinstance(config['frequency'], (int, float))
+            assert isinstance(config['function'], str)
+            
+            # Frecuencia debe ser 141.7001 o 888
+            assert config['frequency'] in [141.7001, 888]
 
 
-class TestSignificanciaEstadistica(unittest.TestCase):
-    """Tests para la significancia estadística"""
+class TestValidacionPuenteBiogravitacional:
+    """Tests para la validación del puente biogravitacional"""
     
-    def test_calcular_significancia_estadistica(self):
-        """Verifica el cálculo de significancia estadística"""
-        resultado = vbo.calcular_significancia_estadistica()
+    def test_puente_completo(self):
+        """Test de validación completa del puente"""
+        resultado = validar_puente_biogravitacional()
         
-        # Verificar estructura
-        self.assertIn('p_conjunta', resultado)
-        self.assertIn('sigma_calculada', resultado)
-        self.assertIn('sigma_rango', resultado)
+        assert 'schumann_connection' in resultado
+        assert 'microtubulos' in resultado
+        assert 'ondas_gravitacionales' in resultado
+        assert 'validacion' in resultado
         
-        # Verificar que p_conjunta es muy pequeña (< 1e-6)
-        self.assertLess(resultado['p_conjunta'], 1e-6)
-        
-        # Verificar que sigma es al menos 5
-        self.assertGreater(resultado['sigma_calculada'], 5.0)
-        
-        # Verificar validación
-        self.assertIn(resultado['validacion'], ['SIGNIFICATIVA', 'ALTAMENTE_SIGNIFICATIVA'])
+        # Validación debe ser exitosa
+        assert resultado['validacion'] == 'EXITOSA'
     
-    def test_probabilidades_individuales(self):
-        """Verifica que las probabilidades individuales son razonables"""
-        resultado = vbo.calcular_significancia_estadistica()
+    def test_conexion_schumann(self):
+        """Test de conexión con Schumann"""
+        resultado = validar_puente_biogravitacional()
         
-        p_ind = resultado['p_individual']
+        f0_18 = resultado['schumann_connection']['f0_sobre_18']
+        schumann = resultado['schumann_connection']['schumann']
         
-        # Todas las probabilidades deben estar entre 0 y 1
-        for nombre, prob in p_ind.items():
-            with self.subTest(probabilidad=nombre):
-                self.assertGreaterEqual(prob, 0.0)
-                self.assertLessEqual(prob, 1.0)
+        # Debe estar cerca de Schumann
+        assert abs(f0_18 - schumann) < 0.1
+    
+    def test_rango_microtubulos(self):
+        """Test que f₀ está en el rango de microtúbulos"""
+        resultado = validar_puente_biogravitacional()
         
-        # La probabilidad conjunta debe ser menor que cualquier individual
-        for prob in p_ind.values():
-            self.assertLess(resultado['p_conjunta'], prob)
+        assert resultado['microtubulos']['en_rango'] is True
+        assert 100 <= F0_HZ <= 200
+    
+    def test_rango_ondas_gravitacionales(self):
+        """Test que f₀ está en el rango de GW"""
+        resultado = validar_puente_biogravitacional()
+        
+        assert resultado['ondas_gravitacionales']['en_rango'] is True
+        assert 100 <= F0_HZ <= 250
 
 
-class TestOutputFiles(unittest.TestCase):
-    """Tests para la generación de archivos de salida"""
+class TestIntegracion:
+    """Tests de integración que verifican el flujo completo"""
     
-    def setUp(self):
-        """Crear directorio temporal para tests"""
-        self.temp_dir = tempfile.mkdtemp()
-    
-    def tearDown(self):
-        """Limpiar directorio temporal"""
-        import shutil
-        shutil.rmtree(self.temp_dir, ignore_errors=True)
-    
-    def test_generar_visualizacion(self):
-        """Verifica que se puede generar la visualización"""
-        # Preparar resultados mínimos
-        resultados = {
-            'octavas': vbo.validar_octavas_hidrogenio(precision=50),
-            'geometria': vbo.validar_geometria_sagrada(),
-            'schumann': vbo.validar_resonancia_schumann(),
-            'red_mcp': vbo.validar_red_mcp(),
-            'estadistica': vbo.calcular_significancia_estadistica()
-        }
-        
-        output_path = os.path.join(self.temp_dir, 'test_viz.png')
-        
-        # No debe lanzar excepción
-        try:
-            vbo.generar_visualizacion(resultados, output_path)
-        except Exception as e:
-            self.fail(f"generar_visualizacion() lanzó excepción: {e}")
-        
-        # Verificar que el archivo existe
-        self.assertTrue(os.path.exists(output_path))
-        
-        # Verificar que tiene contenido
-        self.assertGreater(os.path.getsize(output_path), 0)
-    
-    def test_generar_reporte_markdown(self):
-        """Verifica que se puede generar el reporte Markdown"""
-        # Preparar resultados mínimos
-        resultados = {
-            'octavas': vbo.validar_octavas_hidrogenio(precision=50),
-            'geometria': vbo.validar_geometria_sagrada(),
-            'schumann': vbo.validar_resonancia_schumann(),
-            'red_mcp': vbo.validar_red_mcp(),
-            'estadistica': vbo.calcular_significancia_estadistica()
-        }
-        
-        output_path = os.path.join(self.temp_dir, 'test_report.md')
-        
-        # No debe lanzar excepción
-        try:
-            vbo.generar_reporte_markdown(resultados, output_path)
-        except Exception as e:
-            self.fail(f"generar_reporte_markdown() lanzó excepción: {e}")
-        
-        # Verificar que el archivo existe
-        self.assertTrue(os.path.exists(output_path))
-        
-        # Verificar que tiene contenido
-        self.assertGreater(os.path.getsize(output_path), 100)
-        
-        # Verificar que contiene las secciones esperadas
-        with open(output_path, 'r', encoding='utf-8') as f:
-            contenido = f.read()
-        
-        self.assertIn('Bóveda Ontológica', contenido)
-        self.assertIn('Hidrógeno', contenido)
-        self.assertIn('23.257', contenido)
-        self.assertIn('888', contenido)
-        self.assertIn('Schumann', contenido)
-
-
-class TestIntegration(unittest.TestCase):
-    """Tests de integración"""
-    
-    def test_validacion_completa(self):
-        """Test de integración: ejecutar validación completa"""
+    def test_validacion_completa_integrada(self):
+        """Test que ejecuta todas las validaciones integradas"""
         # Ejecutar todas las validaciones
         resultados = {
-            'octavas': vbo.validar_octavas_hidrogenio(precision=50),
-            'geometria': vbo.validar_geometria_sagrada(),
-            'schumann': vbo.validar_resonancia_schumann(),
-            'red_mcp': vbo.validar_red_mcp(),
-            'estadistica': vbo.calcular_significancia_estadistica()
+            'hidrogeno_f0': validar_octavas_hidrogeno_f0(),
+            'matriz_numerica': validar_matriz_numerica(),
+            'red_mcp': validar_red_mcp(),
+            'puente': validar_puente_biogravitacional()
         }
         
-        # Verificar que todas las validaciones son exitosas
-        validaciones = [
-            resultados['octavas']['validacion'],
-            resultados['geometria']['validacion'],
-            resultados['schumann']['validacion'],
-            resultados['red_mcp']['validacion'],
-            resultados['estadistica']['validacion']
-        ]
-        
-        for validacion in validaciones:
-            self.assertIn(validacion, ['EXITOSA', 'ALTAMENTE_SIGNIFICATIVA'])
-
-
-def run_tests():
-    """Ejecuta todos los tests"""
-    loader = unittest.TestLoader()
-    suite = loader.loadTestsFromModule(sys.modules[__name__])
-    runner = unittest.TextTestRunner(verbosity=2)
-    result = runner.run(suite)
+        # Todas deben ser exitosas
+        assert resultados['hidrogeno_f0']['validacion'] == 'EXITOSA'
+        assert resultados['matriz_numerica']['validacion'] == 'EXITOSA'
+        assert resultados['red_mcp']['validacion'] == 'EXITOSA'
+        assert resultados['puente']['validacion'] == 'EXITOSA'
     
-    return 0 if result.wasSuccessful() else 1
+    def test_coherencia_frecuencias(self):
+        """Test que verifica coherencia entre frecuencias"""
+        r_h = validar_octavas_hidrogeno_f0()
+        r_m = validar_matriz_numerica()
+        r_p = validar_puente_biogravitacional()
+        
+        # Todas las validaciones deben usar la misma f₀
+        assert r_h['f0_hz'] == F0_HZ
+        assert r_m['schumann']['calculado'] == F0_HZ / 18
+        assert r_p['microtubulos']['f0'] == F0_HZ
+    
+    def test_numeros_secuencia(self):
+        """Test de propiedades de la secuencia numérica"""
+        assert len(NUMEROS_SECUENCIA) == 9
+        assert sum(NUMEROS_SECUENCIA) == 361
+        assert 19 in NUMEROS_SECUENCIA
+        assert 18 in NUMEROS_SECUENCIA
+        assert NUMEROS_SECUENCIA.count(39) == 3
+
+
+class TestSalidaArchivos:
+    """Tests para verificación de salidas de archivos"""
+    
+    def test_estructura_json(self):
+        """Test que verifica estructura JSON de salida"""
+        # Ejecutar validaciones
+        resultados = {
+            'hidrogeno_f0': validar_octavas_hidrogeno_f0(),
+            'matriz_numerica': validar_matriz_numerica(),
+            'red_mcp': validar_red_mcp(),
+            'puente': validar_puente_biogravitacional()
+        }
+        
+        # Verificar que se puede serializar a JSON
+        try:
+            json_str = json.dumps(resultados, indent=2)
+            assert len(json_str) > 0
+        except Exception as e:
+            pytest.fail(f"No se pudo serializar a JSON: {e}")
 
 
 if __name__ == '__main__':
-    sys.exit(run_tests())
+    # Ejecutar tests
+    pytest.main([__file__, '-v'])

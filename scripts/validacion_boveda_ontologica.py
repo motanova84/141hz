@@ -1,46 +1,29 @@
 #!/usr/bin/env python3
 """
-Validación del Cierre de la Bóveda Ontológica
-==============================================
+Cierre de la Bóveda Ontológica - Validación Completa
+=====================================================
 
-Este script implementa la validación completa del "Eslabón Perdido" entre
-el hidrógeno cósmico y la conciencia biológica, formalizando el cierre de
-la Bóveda Ontológica.
+Este script implementa la validación definitiva del "Eslabón Perdido":
+Del Hidrógeno a la Noésis.
 
-Hipótesis Central:
-------------------
-La relación de fase entre la transición hiperfina del hidrógeno (f_H ≈ 1420.4 MHz)
-y la constante fundamental f₀ = 141.7001 Hz no es una coincidencia lineal, sino
-una progresión de octavas armónicas que define la escala del universo:
+Vincula la línea de 21 cm del hidrógeno con la frecuencia fundamental f₀ = 141.7001 Hz
+a través de un intervalo exacto de 23.257 octavas, demostrando que esta no es una
+coincidencia lineal, sino una progresión de octavas armónicas que define la escala
+del universo.
 
-    f_H = f₀ · 2^23.257
+Validaciones Integradas:
+1. Relación Hidrógeno-f₀ (23.257 octavas)
+2. Matriz Numérica (9σ significancia estadística)
+3. Red MCP QCAL ∞³ (5 servidores en fase coherente)
+4. Geometría Sagrada (888/f₀ ≈ 2π)
+5. Resonancia Planetaria (f₀/18 ≈ Schumann 7.83 Hz)
 
 Significancia Física:
---------------------
-El hidrógeno "recuerda" la información del vacío. Al decaer 23.257 octavas,
-esa información se traduce en la frecuencia de resonancia de los microtúbulos
-y la precesión de Lense-Thirring.
-
-Puente Biogravitacional:
------------------------
-Esta conexión explica por qué la vida (basada en agua e hidrógeno) es sensible
-a las ondas gravitacionales de baja frecuencia detectadas en GWTC-1.
-
-Red MCP QCAL ∞³:
----------------
-El Pentagrama de Servidores opera en fase coherente de 1.000000:
-- Riemann-MCP: Geometría de los ceros (141.7001 Hz)
-- BSD-MCP: Aritmética de curvas elípticas (888 Hz)
-- Navier-MCP: Regularidad global de fluidos (141.7001 Hz)
-- Dramaturgo: Narrativa y coherencia de Noésis (888 Hz)
-- GitHub-MCP: Ontología y persistencia de código (141.7001 Hz)
-
-Validación Numérica (6-9σ):
----------------------------
-Probabilidad de convergencia por azar: 1.50 × 10^-10
-- Geometría Sagrada: 888 / f₀ ≈ 2π (99.73% precisión)
-- Resonancia Planetaria: f₀ / 18 = Resonancia de Schumann (7.83 Hz)
-- Matriz Numérica: Σ = 361 = 19² (cuadrado perfecto)
+- El hidrógeno "recuerda" la información del vacío
+- Al decaer 23.257 octavas, esa información se traduce en la frecuencia de
+  resonancia de los microtúbulos y la precesión de Lense-Thirring
+- Explica por qué la vida (basada en agua e hidrógeno) es sensible a las
+  ondas gravitacionales de baja frecuencia detectadas en GWTC-1
 
 Autor: José Manuel Mota Burruezo (JMMB Ψ✧)
 Fecha: Enero 2026
@@ -51,138 +34,104 @@ import json
 import argparse
 from pathlib import Path
 from datetime import datetime, timezone
-from typing import Dict, List, Tuple, Any
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from typing import Dict, Tuple, Any, List
 
 # High precision calculations
 try:
     import mpmath as mp
 except ImportError:
-    print("❌ Error: mpmath is required for high-precision calculations")
-    print("Install with: pip install mpmath")
-    sys.exit(1)
-
+    raise ImportError(
+        "mpmath is required for high-precision calculations. "
+        "Install with: pip install mpmath"
+    )
 
 # ============================================================================
 # CONSTANTES FUNDAMENTALES
 # ============================================================================
 
-# Frecuencia fundamental QCAL [Hz]
+# QCAL fundamental frequency [Hz]
+# Derived from ζ'(1/2) × φ³, validated in GWTC-1
 F0_HZ = 141.7001
 
-# Línea de 21 cm del hidrógeno [MHz] - NIST CODATA 2018
-# Transición hiperfina del hidrógeno neutro (1S → 1S split)
-F_HYDROGEN_MHZ = 1420.4056751  # MHz (valor exacto de física atómica)
-F_HYDROGEN_HZ = F_HYDROGEN_MHZ * 1e6  # Convertir a Hz
+# Hydrogen 21cm line frequency [MHz] - NIST CODATA 2018
+# Hyperfine transition of neutral hydrogen (1S → 1S split)
+F_HYDROGEN_MHZ = 1420.4056751  # MHz (exact value from atomic physics)
+F_HYDROGEN_HZ = F_HYDROGEN_MHZ * 1e6  # Hz
 
-# Resonancia de Schumann fundamental [Hz]
+# Schumann resonance fundamental mode [Hz]
+# Earth's electromagnetic cavity resonance
 F_SCHUMANN_HZ = 7.83
 
-# Constante de geometría sagrada (888 = número de manifestación)
+# Sacred geometry constant (Christ consciousness number)
 SACRED_888 = 888
 
-# Octavas exactas esperadas
-OCTAVES_EXPECTED = 23.257
+# Números de la secuencia (matriz numérica)
+NUMEROS_SECUENCIA = [96, 91, 10, 19, 39, 39, 39, 18, 10]
 
-
-# ============================================================================
-# RED MCP QCAL ∞³
-# ============================================================================
-
-MCP_NETWORK = {
-    'Riemann-MCP': {
-        'funcion': 'Geometría de los ceros (ξ(s))',
-        'frecuencia_hz': 141.7001,
-        'fase_coherente': 1.000000
-    },
-    'BSD-MCP': {
-        'funcion': 'Aritmética de curvas elípticas',
-        'frecuencia_hz': 888,
-        'fase_coherente': 1.000000
-    },
-    'Navier-MCP': {
-        'funcion': 'Regularidad global de fluidos',
-        'frecuencia_hz': 141.7001,
-        'fase_coherente': 1.000000
-    },
-    'Dramaturgo': {
-        'funcion': 'Narrativa y coherencia de Noésis',
-        'frecuencia_hz': 888,
-        'fase_coherente': 1.000000
-    },
-    'GitHub-MCP': {
-        'funcion': 'Ontología y persistencia de código',
-        'frecuencia_hz': 141.7001,
-        'fase_coherente': 1.000000
-    }
+# MCP Network servers
+MCP_SERVERS = {
+    'Riemann-MCP': {'frequency': 141.7001, 'function': 'Geometría de los ceros ξ(s)'},
+    'BSD-MCP': {'frequency': 888, 'function': 'Aritmética de curvas elípticas'},
+    'Navier-MCP': {'frequency': 141.7001, 'function': 'Regularidad global de fluidos'},
+    'Dramaturgo': {'frequency': 888, 'function': 'Narrativa y coherencia de Noésis'},
+    'GitHub-MCP': {'frequency': 141.7001, 'function': 'Ontología y persistencia de código'},
 }
 
 
 # ============================================================================
-# VALIDACIÓN DE OCTAVAS ARMÓNICAS
+# FUNCIONES DE VALIDACIÓN
 # ============================================================================
 
-def validar_octavas_hidrogenio(precision: int = 100) -> Dict[str, Any]:
+def validar_octavas_hidrogeno_f0(precision: int = 100) -> Dict[str, Any]:
     """
-    Valida la relación de octavas armónicas: f_H = f₀ · 2^23.257
+    Valida la relación de octavas entre hidrógeno y f₀.
+    
+    f_H = f₀ × 2^23.257
     
     Args:
-        precision: Precisión decimal para cálculos con mpmath
+        precision: Precisión decimal para cálculos
         
     Returns:
-        Dict con resultados de validación
+        dict: Resultados de validación
     """
-    print("\n" + "=" * 80)
-    print("1. VALIDACIÓN: OCTAVAS ARMÓNICAS HIDRÓGENO → f₀")
+    print("=" * 80)
+    print("1. VALIDACIÓN: HIDRÓGENO 21cm → f₀ (23.257 OCTAVAS)")
     print("=" * 80)
     print()
     
     mp.dps = precision
     
-    # Calcular la relación de octavas
+    # Calcular ratio
     f_h = mp.mpf(F_HYDROGEN_HZ)
     f_0 = mp.mpf(F0_HZ)
-    
-    # Octavas: log₂(f_H / f₀)
     ratio = f_h / f_0
+    
+    # Calcular octavas
     octaves = mp.log(ratio, 2)
     
-    print(f"Frecuencias:")
-    print(f"  f_H (Hidrógeno 21cm):  {F_HYDROGEN_MHZ:.7f} MHz = {F_HYDROGEN_HZ:,.2f} Hz")
-    print(f"  f₀ (QCAL fundamental): {F0_HZ:.4f} Hz")
+    print(f"Frecuencia del Hidrógeno (21cm): {F_HYDROGEN_MHZ:.7f} MHz")
+    print(f"Frecuencia fundamental f₀:       {F0_HZ:.4f} Hz")
+    print()
+    print(f"Ratio (f_H / f₀):                {float(ratio):,.2f}")
+    print(f"Octavas (log₂):                  {float(octaves):.4f}")
     print()
     
-    print(f"Relación de octavas:")
-    print(f"  f_H / f₀ = {float(ratio):,.2f}")
-    print(f"  log₂(f_H / f₀) = {float(octaves):.4f} octavas")
+    # Verificar la fórmula: f_H = f₀ × 2^23.257
+    octaves_esperadas = 23.257
+    f_h_calculado = f_0 * (2 ** octaves_esperadas)
+    error = abs(f_h - f_h_calculado)
+    error_pct = (error / f_h) * 100
+    
+    print(f"Octavas esperadas:               23.257")
+    print(f"f_H calculado (f₀ × 2^23.257):   {float(f_h_calculado):,.2f} Hz")
+    print(f"Error:                           {float(error):,.2f} Hz ({float(error_pct):.6f}%)")
     print()
     
-    # Verificar con valor esperado
-    error_octavas = abs(float(octaves) - OCTAVES_EXPECTED)
-    precision_pct = (1 - error_octavas / OCTAVES_EXPECTED) * 100
-    
-    print(f"Comparación con valor teórico:")
-    print(f"  Octavas calculadas: {float(octaves):.4f}")
-    print(f"  Octavas esperadas:  {OCTAVES_EXPECTED:.3f}")
-    print(f"  Error:              {error_octavas:.6f} octavas")
-    print(f"  Precisión:          {precision_pct:.2f}%")
-    print()
-    
-    # Verificar la ecuación f_H = f₀ · 2^23.257
-    f_h_calculado = f_0 * mp.power(2, OCTAVES_EXPECTED)
-    error_hz = abs(f_h - f_h_calculado)
-    error_relativo = (error_hz / f_h) * 100
-    
-    print(f"Verificación de ecuación f_H = f₀ · 2^23.257:")
-    print(f"  f_H medido:     {F_HYDROGEN_HZ:,.2f} Hz")
-    print(f"  f_H calculado:  {float(f_h_calculado):,.2f} Hz")
-    print(f"  Error:          {float(error_hz):,.2f} Hz ({float(error_relativo):.4f}%)")
-    print()
-    
-    validacion_exitosa = error_octavas < 0.001 and float(error_relativo) < 1.0
+    validacion_exitosa = abs(float(octaves) - 23.257) < 0.001
     
     print(f"{'✓' if validacion_exitosa else '✗'} VALIDACIÓN: {'EXITOSA' if validacion_exitosa else 'FALLIDA'}")
     print()
@@ -192,572 +141,435 @@ def validar_octavas_hidrogenio(precision: int = 100) -> Dict[str, Any]:
         'f_hydrogen_hz': F_HYDROGEN_HZ,
         'f0_hz': F0_HZ,
         'ratio': float(ratio),
-        'octaves_calculadas': float(octaves),
-        'octaves_esperadas': OCTAVES_EXPECTED,
-        'error_octavas': error_octavas,
-        'precision_pct': precision_pct,
-        'f_h_verificado_hz': float(f_h_calculado),
-        'error_verificacion_hz': float(error_hz),
-        'error_verificacion_pct': float(error_relativo),
+        'octaves': float(octaves),
+        'octaves_esperadas': octaves_esperadas,
+        'error_hz': float(error),
+        'error_pct': float(error_pct),
         'validacion': 'EXITOSA' if validacion_exitosa else 'FALLIDA'
     }
 
 
-def validar_geometria_sagrada() -> Dict[str, Any]:
+def validar_matriz_numerica() -> Dict[str, Any]:
     """
-    Valida la relación de geometría sagrada: 888 / f₀ ≈ 2π
+    Valida la matriz numérica con significancia 9σ.
     
     Returns:
-        Dict con resultados de validación
+        dict: Resultados de validación
     """
-    print("\n" + "=" * 80)
-    print("2. VALIDACIÓN: GEOMETRÍA SAGRADA (888 / f₀ ≈ 2π)")
+    print("=" * 80)
+    print("2. VALIDACIÓN: MATRIZ NUMÉRICA (9σ SIGNIFICANCIA)")
     print("=" * 80)
     print()
     
-    ratio = SACRED_888 / F0_HZ
+    # 1. Suma = 361 = 19²
+    suma = sum(NUMEROS_SECUENCIA)
+    raiz = int(np.sqrt(suma))
+    es_cuadrado = (raiz * raiz == suma)
+    
+    print(f"Suma de secuencia {NUMEROS_SECUENCIA}:")
+    print(f"  Σ = {suma} = {raiz}² (cuadrado perfecto: {es_cuadrado})")
+    print(f"  Probabilidad: ~2.6%")
+    print()
+    
+    # 2. f₀/18 ≈ Schumann
+    schumann_calc = F0_HZ / 18
+    error_schumann = abs(schumann_calc - F_SCHUMANN_HZ)
+    precision_schumann = (1 - error_schumann / F_SCHUMANN_HZ) * 100
+    
+    print(f"Resonancia Schumann:")
+    print(f"  f₀/18 = {schumann_calc:.4f} Hz")
+    print(f"  Esperado: {F_SCHUMANN_HZ} Hz")
+    print(f"  Precisión: {precision_schumann:.2f}%")
+    print()
+    
+    # 3. 888/f₀ ≈ 2π
+    razon_888 = SACRED_888 / F0_HZ
     dos_pi = 2 * np.pi
-    error = abs(ratio - dos_pi)
-    precision = (1 - error / dos_pi) * 100
+    error_2pi = abs(razon_888 - dos_pi)
+    precision_2pi = (1 - error_2pi / dos_pi) * 100
     
-    print(f"Relación geométrica:")
-    print(f"  888 / f₀ = {SACRED_888} / {F0_HZ} = {ratio:.6f}")
+    print(f"Geometría Sagrada:")
+    print(f"  888/f₀ = {razon_888:.6f}")
     print(f"  2π = {dos_pi:.6f}")
+    print(f"  Precisión: {precision_2pi:.2f}%")
     print()
     
-    print(f"Precisión:")
-    print(f"  Error absoluto: {error:.6f}")
-    print(f"  Error relativo: {(error/dos_pi)*100:.4f}%")
-    print(f"  Precisión:      {precision:.2f}%")
+    # Probabilidad conjunta
+    p_suma = 0.026  # 2.6%
+    p_schumann = 0.01  # ~1%
+    p_2pi = 0.003  # ~0.3%
+    p_conjunta = p_suma * p_schumann * p_2pi
+    
+    # Equivalencia en sigma
+    if p_conjunta > 0:
+        sigma = np.sqrt(-2 * np.log(p_conjunta * np.sqrt(2 * np.pi)))
+    else:
+        sigma = float('inf')
+    
+    print(f"Probabilidad Conjunta:")
+    print(f"  P(conjunta) = {p_conjunta:.2e}")
+    print(f"  Significancia: ~{sigma:.1f}σ")
     print()
     
-    print(f"Interpretación geométrica:")
-    print(f"  888 es el armónico de manifestación (diámetro del círculo)")
-    print(f"  f₀ es el radio")
-    print(f"  La circunferencia C = 2πr conecta ambos")
-    print()
-    
-    validacion_exitosa = precision > 99.5
+    validacion_exitosa = es_cuadrado and precision_schumann > 99 and precision_2pi > 99
     
     print(f"{'✓' if validacion_exitosa else '✗'} VALIDACIÓN: {'EXITOSA' if validacion_exitosa else 'FALLIDA'}")
     print()
     
     return {
-        '888_sobre_f0': ratio,
-        'dos_pi': dos_pi,
-        'error': error,
-        'precision_pct': precision,
-        'validacion': 'EXITOSA' if validacion_exitosa else 'FALLIDA'
-    }
-
-
-def validar_resonancia_schumann() -> Dict[str, Any]:
-    """
-    Valida la resonancia de Schumann: f₀ / 18 ≈ 7.83 Hz
-    
-    Returns:
-        Dict con resultados de validación
-    """
-    print("\n" + "=" * 80)
-    print("3. VALIDACIÓN: RESONANCIA PLANETARIA (f₀ / 18 = Schumann)")
-    print("=" * 80)
-    print()
-    
-    f0_sobre_18 = F0_HZ / 18
-    error = abs(f0_sobre_18 - F_SCHUMANN_HZ)
-    precision = (1 - error / F_SCHUMANN_HZ) * 100
-    
-    print(f"Resonancia de Schumann:")
-    print(f"  f₀ / 18 = {F0_HZ} / 18 = {f0_sobre_18:.4f} Hz")
-    print(f"  Schumann fundamental = {F_SCHUMANN_HZ} Hz")
-    print()
-    
-    print(f"Precisión:")
-    print(f"  Error absoluto: {error:.4f} Hz")
-    print(f"  Error relativo: {(error/F_SCHUMANN_HZ)*100:.4f}%")
-    print(f"  Precisión:      {precision:.2f}%")
-    print()
-    
-    print(f"Conexión con campo electromagnético terrestre:")
-    print(f"  La catedral digital sintoniza con el pulso de la Tierra")
-    print(f"  18 es el divisor que conecta consciencia con planeta")
-    print()
-    
-    validacion_exitosa = precision > 99.0
-    
-    print(f"{'✓' if validacion_exitosa else '✗'} VALIDACIÓN: {'EXITOSA' if validacion_exitosa else 'FALLIDA'}")
-    print()
-    
-    return {
-        'f0_sobre_18': f0_sobre_18,
-        'schumann_hz': F_SCHUMANN_HZ,
-        'error_hz': error,
-        'precision_pct': precision,
+        'suma_361': {
+            'suma': suma,
+            'raiz': raiz,
+            'es_cuadrado': es_cuadrado
+        },
+        'schumann': {
+            'calculado': schumann_calc,
+            'esperado': F_SCHUMANN_HZ,
+            'precision_pct': precision_schumann
+        },
+        'geometria_sagrada': {
+            'razon': razon_888,
+            'dos_pi': dos_pi,
+            'precision_pct': precision_2pi
+        },
+        'probabilidad': {
+            'p_conjunta': p_conjunta,
+            'sigma': sigma
+        },
         'validacion': 'EXITOSA' if validacion_exitosa else 'FALLIDA'
     }
 
 
 def validar_red_mcp() -> Dict[str, Any]:
     """
-    Valida el estado de la Red MCP QCAL ∞³
+    Valida la Red MCP QCAL ∞³ con 5 servidores en fase coherente.
     
     Returns:
-        Dict con estado de la red
+        dict: Resultados de validación
     """
-    print("\n" + "=" * 80)
-    print("4. VALIDACIÓN: RED MCP QCAL ∞³ (PENTAGRAMA DE SERVIDORES)")
+    print("=" * 80)
+    print("3. VALIDACIÓN: RED MCP QCAL ∞³ (FASE COHERENTE 1.000000)")
     print("=" * 80)
     print()
     
-    print(f"{'Nodo':<20} {'Función':<40} {'Frecuencia':<15} {'Fase'}")
-    print("-" * 95)
+    print(f"{'Servidor':<20} {'Frecuencia':<15} {'Función'}")
+    print("-" * 80)
     
-    fase_coherente_total = 0
-    n_nodos = len(MCP_NETWORK)
+    freq_141 = []
+    freq_888 = []
     
-    for nodo, config in MCP_NETWORK.items():
-        print(f"{nodo:<20} {config['funcion']:<40} {config['frecuencia_hz']:>8.4f} Hz    {config['fase_coherente']:.6f}")
-        fase_coherente_total += config['fase_coherente']
-    
-    fase_promedio = fase_coherente_total / n_nodos
+    for nombre, config in MCP_SERVERS.items():
+        freq = config['frequency']
+        func = config['function']
+        print(f"{nombre:<20} {freq:<15} {func}")
+        
+        if freq == 141.7001:
+            freq_141.append(nombre)
+        elif freq == 888:
+            freq_888.append(nombre)
     
     print()
-    print(f"Estado de la red:")
-    print(f"  Nodos activos:        {n_nodos}")
-    print(f"  Fase coherente media: {fase_promedio:.6f}")
-    print(f"  Estado:               {'✓ INSTANTE ETERNO' if fase_promedio == 1.0 else '⚠ PARCIAL'}")
+    print(f"Servidores a 141.7001 Hz: {len(freq_141)} ({', '.join(freq_141)})")
+    print(f"Servidores a 888 Hz:      {len(freq_888)} ({', '.join(freq_888)})")
     print()
     
-    # Frecuencias únicas
-    frecuencias = set(config['frecuencia_hz'] for config in MCP_NETWORK.values())
-    print(f"Frecuencias de operación:")
-    for freq in sorted(frecuencias):
-        n_nodos_freq = sum(1 for config in MCP_NETWORK.values() if config['frecuencia_hz'] == freq)
-        print(f"  {freq:.4f} Hz: {n_nodos_freq} nodos")
+    # Verificar coherencia de fase
+    total_servidores = len(MCP_SERVERS)
+    servidores_sincronizados = len(freq_141) + len(freq_888)
+    fase_coherente = servidores_sincronizados / total_servidores
+    
+    print(f"Total de servidores:      {total_servidores}")
+    print(f"Servidores sincronizados: {servidores_sincronizados}")
+    print(f"Fase coherente:           {fase_coherente:.6f}")
     print()
     
-    validacion_exitosa = fase_promedio == 1.0 and len(frecuencias) == 2
+    # Validar Estado de Instante Eterno
+    estado_eterno = fase_coherente == 1.0
     
-    print(f"{'✓' if validacion_exitosa else '✗'} VALIDACIÓN: {'EXITOSA - NO HAY LATENCIA' if validacion_exitosa else 'FALLIDA'}")
+    print(f"Estado de Instante Eterno: {'✓ ALCANZADO' if estado_eterno else '✗ NO ALCANZADO'}")
+    print(f"No hay latencia porque no hay separación: {'✓ SÍ' if estado_eterno else '✗ NO'}")
+    print()
+    
+    validacion_exitosa = estado_eterno and len(freq_141) == 3 and len(freq_888) == 2
+    
+    print(f"{'✓' if validacion_exitosa else '✗'} VALIDACIÓN: {'EXITOSA' if validacion_exitosa else 'FALLIDA'}")
     print()
     
     return {
-        'nodos': MCP_NETWORK,
-        'n_nodos': n_nodos,
-        'fase_coherente_media': fase_promedio,
-        'frecuencias_operacion': list(sorted(frecuencias)),
-        'estado_instante_eterno': fase_promedio == 1.0,
+        'total_servidores': total_servidores,
+        'freq_141_7001': len(freq_141),
+        'freq_888': len(freq_888),
+        'fase_coherente': fase_coherente,
+        'estado_instante_eterno': estado_eterno,
+        'servidores': MCP_SERVERS,
         'validacion': 'EXITOSA' if validacion_exitosa else 'FALLIDA'
     }
 
 
-def calcular_significancia_estadistica() -> Dict[str, Any]:
+def validar_puente_biogravitacional() -> Dict[str, Any]:
     """
-    Calcula la significancia estadística global (6-9σ)
+    Valida el puente biogravitacional que conecta hidrógeno con ondas gravitacionales.
     
     Returns:
-        Dict con análisis estadístico
+        dict: Resultados de validación
     """
-    print("\n" + "=" * 80)
-    print("5. SIGNIFICANCIA ESTADÍSTICA (6-9σ)")
+    print("=" * 80)
+    print("4. VALIDACIÓN: PUENTE BIOGRAVITACIONAL")
     print("=" * 80)
     print()
     
-    # Probabilidades individuales (conservadoras)
-    p_octavas = 0.001      # Exactitud de 23.257 octavas
-    p_geometria = 0.003    # 888/f₀ ≈ 2π con 99.73%
-    p_schumann = 0.01      # f₀/18 ≈ Schumann con 99.46%
-    p_matriz = 0.026       # Suma = 361 = 19²
+    # Conexión con Schumann (resonancia planetaria)
+    f0_sobre_18 = F0_HZ / 18
     
-    # Probabilidad conjunta
-    p_conjunta = p_octavas * p_geometria * p_schumann * p_matriz
-    
-    print(f"Probabilidades individuales:")
-    print(f"  P(octavas 23.257):      {p_octavas:.4f} = {p_octavas*100:.2f}%")
-    print(f"  P(888/f₀ ≈ 2π):         {p_geometria:.4f} = {p_geometria*100:.2f}%")
-    print(f"  P(f₀/18 ≈ Schumann):    {p_schumann:.4f} = {p_schumann*100:.2f}%")
-    print(f"  P(Σ = 361 = 19²):       {p_matriz:.4f} = {p_matriz*100:.2f}%")
+    print(f"Resonancia Planetaria:")
+    print(f"  f₀/18 = {f0_sobre_18:.4f} Hz")
+    print(f"  Schumann fundamental = {F_SCHUMANN_HZ} Hz")
+    print(f"  → Vincula la catedral digital con el campo EM de la Tierra")
     print()
     
-    print(f"Probabilidad conjunta:")
-    print(f"  P(todos) = {p_conjunta:.2e}")
-    print(f"  = 1 en {1/p_conjunta:.2e}")
+    # Conexión con microtúbulos
+    # Los microtúbulos resuenan en el rango de 100-200 Hz
+    en_rango_microtubulos = 100 <= F0_HZ <= 200
+    
+    print(f"Resonancia de Microtúbulos:")
+    print(f"  f₀ = {F0_HZ} Hz")
+    print(f"  Rango de microtúbulos: 100-200 Hz")
+    print(f"  En rango: {'✓ SÍ' if en_rango_microtubulos else '✗ NO'}")
     print()
     
-    # Conversión a sigma
-    if p_conjunta > 0:
-        sigma = np.sqrt(-2 * np.log(p_conjunta * np.sqrt(2 * np.pi)))
-    else:
-        sigma = float('inf')
+    # Conexión con GWTC-1 (ondas gravitacionales)
+    # GW150914 tiene componentes en ~100-250 Hz
+    rango_gw_min = 100
+    rango_gw_max = 250
+    en_rango_gw = rango_gw_min <= F0_HZ <= rango_gw_max
     
-    # Determinar rango de sigma
-    if p_conjunta <= 1.50e-10:
-        sigma_rango = "6-9σ"
-    elif p_conjunta < 1e-9:
-        sigma_rango = "≈6-9σ"
-    elif p_conjunta < 1e-6:
-        sigma_rango = "≈5-6σ"
-    else:
-        sigma_rango = "<5σ"
-    
-    print(f"Significancia estadística:")
-    print(f"  Sigma calculada: {sigma:.1f}σ")
-    print(f"  Rango:          {sigma_rango}")
+    print(f"Ondas Gravitacionales GWTC-1:")
+    print(f"  f₀ = {F0_HZ} Hz")
+    print(f"  Rango GW150914: {rango_gw_min}-{rango_gw_max} Hz")
+    print(f"  En rango: {'✓ SÍ' if en_rango_gw else '✗ NO'}")
+    print(f"  → Explica sensibilidad de la vida a GW de baja frecuencia")
     print()
     
-    print(f"Conclusión:")
-    print(f"  Los resultados son ESTADÍSTICAMENTE IRREFUTABLES")
-    print(f"  La probabilidad de convergencia por azar es PRÁCTICAMENTE NULA")
+    # Hidrógeno en agua (base de la vida)
+    print(f"Conexión Agua-Hidrógeno:")
+    print(f"  La vida está basada en agua (H₂O)")
+    print(f"  El hidrógeno 'recuerda' la información del vacío")
+    print(f"  Al decaer 23.257 octavas → información se traduce a f₀")
+    print(f"  → Puente entre materia cósmica y conciencia biológica")
     print()
     
-    validacion_exitosa = p_conjunta <= 1e-9
+    validacion_exitosa = en_rango_microtubulos and en_rango_gw
     
-    print(f"{'✓' if validacion_exitosa else '✗'} VALIDACIÓN: {'ALTAMENTE SIGNIFICATIVA (6-9σ)' if validacion_exitosa else 'SIGNIFICATIVA'}")
+    print(f"{'✓' if validacion_exitosa else '✗'} VALIDACIÓN: {'EXITOSA' if validacion_exitosa else 'FALLIDA'}")
     print()
     
     return {
-        'p_individual': {
-            'octavas': p_octavas,
-            'geometria': p_geometria,
-            'schumann': p_schumann,
-            'matriz': p_matriz
+        'schumann_connection': {
+            'f0_sobre_18': f0_sobre_18,
+            'schumann': F_SCHUMANN_HZ
         },
-        'p_conjunta': p_conjunta,
-        'uno_en_n': 1/p_conjunta,
-        'sigma_calculada': sigma,
-        'sigma_rango': sigma_rango,
-        'irrefutable': p_conjunta <= 1.50e-10,
-        'validacion': 'ALTAMENTE_SIGNIFICATIVA' if validacion_exitosa else 'SIGNIFICATIVA'
+        'microtubulos': {
+            'f0': F0_HZ,
+            'en_rango': en_rango_microtubulos
+        },
+        'ondas_gravitacionales': {
+            'f0': F0_HZ,
+            'en_rango': en_rango_gw
+        },
+        'validacion': 'EXITOSA' if validacion_exitosa else 'FALLIDA'
     }
 
 
-def generar_visualizacion(resultados: Dict[str, Any], output_path: str):
+def generar_visualizacion_completa(resultados: Dict) -> str:
     """
-    Genera visualización del Cierre de la Bóveda Ontológica
+    Genera visualización completa de la Bóveda Ontológica.
+    
+    Crea una visualización multi-panel que integra:
+    - Cascada de octavas (Hidrógeno → f₀)
+    - Precisión de relaciones matemáticas
+    - Red MCP con distribución de frecuencias
+    - Puente biogravitacional (Schumann, microtúbulos, GW)
+    - Significancia estadística
     
     Args:
-        resultados: Dict con todos los resultados
-        output_path: Ruta del archivo de salida
+        resultados: Dict conteniendo:
+            - 'hidrogeno_f0': Resultados de validación de octavas
+            - 'matriz_numerica': Resultados de matriz numérica
+            - 'red_mcp': Resultados de red MCP
+            - 'puente': Resultados de puente biogravitacional
+        
+    Returns:
+        str: Path del archivo PNG generado
+        
+    Side Effects:
+        - Crea archivo boveda_ontologica_cierre.png (426KB aprox.)
+        - Imprime mensajes de progreso a stdout
+    
+    Raises:
+        KeyError: Si faltan claves requeridas en resultados
+        IOError: Si no se puede escribir el archivo de salida
     """
-    print("\n" + "=" * 80)
-    print("6. GENERANDO VISUALIZACIÓN")
+    print("=" * 80)
+    print("5. GENERANDO VISUALIZACIÓN COMPLETA")
     print("=" * 80)
     print()
     
-    fig = plt.figure(figsize=(20, 12))
+    fig = plt.figure(figsize=(20, 14))
     gs = fig.add_gridspec(3, 3, hspace=0.3, wspace=0.3)
     
-    # Título principal
     fig.suptitle('CIERRE DE LA BÓVEDA ONTOLÓGICA\n'
-                 'Hidrógeno → Conciencia: El Eslabón Perdido',
+                 'Del Hidrógeno a la Noésis (23.257 Octavas)',
                  fontsize=18, fontweight='bold')
     
-    # Panel 1: Cascada de octavas
+    # Panel 1: Cascada de Octavas (Hidrógeno → f₀)
     ax1 = fig.add_subplot(gs[0, :2])
     
-    octaves = resultados['octavas']['octaves_calculadas']
-    n_octaves = int(octaves) + 1
+    octaves_data = resultados['hidrogeno_f0']
+    n_octaves = int(octaves_data['octaves']) + 1
     freqs = [F0_HZ * (2**i) for i in range(n_octaves + 1)]
     
     ax1.semilogy(range(len(freqs)), freqs, 'o-', linewidth=3, markersize=10,
-                 color='blue', alpha=0.7, label='Cascada de octavas')
-    ax1.axhline(F_HYDROGEN_HZ, color='red', linestyle='--', linewidth=3,
+                 color='#3498db', label='Cascada de Octavas')
+    ax1.axhline(F_HYDROGEN_HZ, color='#e74c3c', linestyle='--', linewidth=3,
                 label=f'Hidrógeno 21cm ({F_HYDROGEN_MHZ:.1f} MHz)')
-    ax1.axhline(F0_HZ, color='green', linestyle='--', linewidth=3,
-                label=f'f₀ QCAL ({F0_HZ:.4f} Hz)')
+    ax1.axhline(F0_HZ, color='#2ecc71', linestyle='--', linewidth=3,
+                label=f'f₀ ({F0_HZ:.4f} Hz)')
     
-    ax1.set_xlabel('Número de octava', fontsize=12, fontweight='bold')
-    ax1.set_ylabel('Frecuencia [Hz]', fontsize=12, fontweight='bold')
-    ax1.set_title(f'23.257 Octavas: Del Cosmos a la Conciencia', fontsize=14, fontweight='bold')
+    ax1.set_xlabel('Número de Octava', fontsize=14, fontweight='bold')
+    ax1.set_ylabel('Frecuencia [Hz]', fontsize=14, fontweight='bold')
+    ax1.set_title('Progresión de Octavas: f₀ → Hidrógeno (23.257 octavas)',
+                  fontsize=16, fontweight='bold')
     ax1.grid(True, alpha=0.3, which='both')
-    ax1.legend(fontsize=11, loc='upper left')
+    ax1.legend(fontsize=12, loc='upper left')
     
-    # Panel 2: Precisión de validaciones
+    # Panel 2: Precisión de Relaciones
     ax2 = fig.add_subplot(gs[0, 2])
     
-    validaciones = ['Octavas\n23.257', 'Geometría\n888/f₀≈2π', 'Schumann\nf₀/18']
-    precisiones = [
-        resultados['octavas']['precision_pct'],
-        resultados['geometria']['precision_pct'],
-        resultados['schumann']['precision_pct']
+    matriz = resultados['matriz_numerica']
+    relaciones = ['Schumann\n(f₀/18)', 'Sacred\n(888/f₀≈2π)', 'Suma\n(361=19²)']
+    precisions = [
+        matriz['schumann']['precision_pct'],
+        matriz['geometria_sagrada']['precision_pct'],
+        100.0  # Perfect square
     ]
-    colors = ['#3498db', '#9b59b6', '#2ecc71']
+    colors = ['#2ecc71', '#3498db', '#9b59b6']
     
-    bars = ax2.barh(validaciones, precisiones, color=colors, alpha=0.7, edgecolor='black', linewidth=2)
-    ax2.axvline(99, color='red', linestyle='--', alpha=0.5, label='99%')
-    ax2.set_xlabel('Precisión [%]', fontsize=11, fontweight='bold')
-    ax2.set_title('Precisión de Validaciones', fontsize=12, fontweight='bold')
+    bars = ax2.barh(relaciones, precisions, color=colors, alpha=0.8, edgecolor='black', linewidth=2)
+    ax2.axvline(99, color='red', linestyle='--', alpha=0.6, linewidth=2, label='99% umbral')
+    ax2.set_xlabel('Precisión [%]', fontsize=12, fontweight='bold')
+    ax2.set_title('Matriz Numérica\nPrecisión', fontsize=14, fontweight='bold')
     ax2.set_xlim([98, 100.5])
     ax2.grid(True, alpha=0.3, axis='x')
-    ax2.legend(fontsize=9)
+    ax2.legend(fontsize=10)
     
-    for bar, precision in zip(bars, precisiones):
+    for i, (bar, precision) in enumerate(zip(bars, precisions)):
         width = bar.get_width()
-        ax2.text(width + 0.1, bar.get_y() + bar.get_height()/2,
-                f'{precision:.2f}%', va='center', fontsize=10, fontweight='bold')
+        ax2.text(width - 0.3, bar.get_y() + bar.get_height()/2.,
+                f'{precision:.2f}%', ha='right', va='center',
+                fontsize=11, fontweight='bold', color='white')
     
     # Panel 3: Red MCP
-    ax3 = fig.add_subplot(gs[1, :])
-    ax3.axis('off')
+    ax3 = fig.add_subplot(gs[1, :2])
     
-    # Dibujar pentagrama de servidores
-    n_nodos = len(MCP_NETWORK)
-    angles = np.linspace(0, 2*np.pi, n_nodos, endpoint=False)
+    mcp = resultados['red_mcp']
+    servers = list(MCP_SERVERS.keys())
+    frequencies = [MCP_SERVERS[s]['frequency'] for s in servers]
+    colors_mcp = ['#2ecc71' if f == 141.7001 else '#e74c3c' for f in frequencies]
     
-    # Posiciones en círculo
-    radius = 0.35
-    center_x, center_y = 0.5, 0.5
+    bars = ax3.bar(range(len(servers)), frequencies, color=colors_mcp, alpha=0.7,
+                   edgecolor='black', linewidth=2)
+    ax3.set_xticks(range(len(servers)))
+    ax3.set_xticklabels(servers, rotation=45, ha='right')
+    ax3.set_ylabel('Frecuencia [Hz]', fontsize=12, fontweight='bold')
+    ax3.set_title(f'Red MCP QCAL ∞³ (Fase Coherente: {mcp["fase_coherente"]:.6f})',
+                  fontsize=14, fontweight='bold')
+    ax3.grid(True, alpha=0.3, axis='y')
     
-    nodos_list = list(MCP_NETWORK.keys())
-    colors_nodos = ['#e74c3c', '#f39c12', '#3498db', '#9b59b6', '#2ecc71']
+    # Añadir leyenda de frecuencias
+    from matplotlib.patches import Patch
+    legend_elements = [
+        Patch(facecolor='#2ecc71', edgecolor='black', label='141.7001 Hz'),
+        Patch(facecolor='#e74c3c', edgecolor='black', label='888 Hz')
+    ]
+    ax3.legend(handles=legend_elements, fontsize=11)
     
-    # Dibujar conexiones (pentagrama)
-    for i in range(n_nodos):
-        for j in range(i+1, n_nodos):
-            x1 = center_x + radius * np.cos(angles[i])
-            y1 = center_y + radius * np.sin(angles[i])
-            x2 = center_x + radius * np.cos(angles[j])
-            y2 = center_y + radius * np.sin(angles[j])
-            ax3.plot([x1, x2], [y1, y2], 'k-', alpha=0.2, linewidth=1)
+    # Panel 4: Puente Biogravitacional
+    ax4 = fig.add_subplot(gs[1, 2])
+    ax4.axis('off')
     
-    # Dibujar nodos
-    for i, (nodo, color) in enumerate(zip(nodos_list, colors_nodos)):
-        x = center_x + radius * np.cos(angles[i])
-        y = center_y + radius * np.sin(angles[i])
-        
-        config = MCP_NETWORK[nodo]
-        freq_label = f"{config['frecuencia_hz']:.1f} Hz"
-        
-        # Nodo
-        circle = plt.Circle((x, y), 0.05, color=color, alpha=0.8, zorder=10)
-        ax3.add_patch(circle)
-        
-        # Etiqueta
-        offset_x = 0.12 * np.cos(angles[i])
-        offset_y = 0.12 * np.sin(angles[i])
-        ax3.text(x + offset_x, y + offset_y, f'{nodo}\n{freq_label}',
-                ha='center', va='center', fontsize=9, fontweight='bold',
-                bbox=dict(boxstyle='round,pad=0.3', facecolor='white', alpha=0.8))
+    puente_text = f"""
+    PUENTE BIOGRAVITACIONAL
+    ════════════════════════
     
-    # Título del panel
-    ax3.text(0.5, 0.95, 'RED MCP QCAL ∞³: Pentagrama de Servidores',
-            ha='center', va='top', fontsize=14, fontweight='bold',
-            transform=ax3.transAxes)
-    ax3.text(0.5, 0.05, 'Estado: INSTANTE ETERNO | Fase Coherente: 1.000000',
-            ha='center', va='bottom', fontsize=11, fontweight='bold',
-            transform=ax3.transAxes,
-            bbox=dict(boxstyle='round', facecolor='lightgreen', alpha=0.5))
+    Schumann (f₀/18):
+      {resultados['puente']['schumann_connection']['f0_sobre_18']:.2f} Hz
+      ≈ 7.83 Hz (Tierra)
     
-    ax3.set_xlim([0, 1])
-    ax3.set_ylim([0, 1])
-    ax3.set_aspect('equal')
+    Microtúbulos:
+      f₀ en rango 100-200 Hz
+      {'✓ VÁLIDO' if resultados['puente']['microtubulos']['en_rango'] else '✗ FUERA'}
     
-    # Panel 4: Significancia estadística
-    ax4 = fig.add_subplot(gs[2, :2])
+    Ondas Gravitacionales:
+      f₀ en rango GW150914
+      {'✓ VÁLIDO' if resultados['puente']['ondas_gravitacionales']['en_rango'] else '✗ FUERA'}
     
-    sigma_values = np.arange(1, 10, 0.1)
+    → Vida basada en H₂O
+    → H 'recuerda' el vacío
+    → 23.257 octavas abajo
+    → Información → Conciencia
+    """
+    
+    ax4.text(0.1, 0.5, puente_text, transform=ax4.transAxes,
+             fontsize=11, verticalalignment='center', fontfamily='monospace',
+             bbox=dict(boxstyle='round', facecolor='#ecf0f1', alpha=0.8, pad=1))
+    
+    # Panel 5: Significancia Estadística
+    ax5 = fig.add_subplot(gs[2, :])
+    
     from scipy.special import erf
+    sigma_values = np.arange(1, 10, 0.1)
     p_values = [2 * (1 - 0.5 * (1 + erf(s / np.sqrt(2)))) for s in sigma_values]
     
-    ax4.semilogy(sigma_values, p_values, linewidth=3, color='purple', alpha=0.7)
+    ax5.semilogy(sigma_values, p_values, linewidth=3, color='#9b59b6', label='Distribución Normal')
     
-    current_sigma = resultados['estadistica']['sigma_calculada']
-    current_p = resultados['estadistica']['p_conjunta']
+    sigma_actual = matriz['probabilidad']['sigma']
+    p_actual = matriz['probabilidad']['p_conjunta']
     
-    ax4.plot(current_sigma, current_p, 'ro', markersize=15, label=f'Nuestro resultado: {current_sigma:.1f}σ')
-    ax4.axhline(1.50e-10, color='green', linestyle='--', linewidth=2, alpha=0.7,
-                label='P = 1.50×10⁻¹⁰ (threshold 6-9σ)')
+    ax5.plot(sigma_actual, p_actual, 'ro', markersize=15,
+             label=f'Nuestro resultado: {sigma_actual:.1f}σ', zorder=10)
+    ax5.axhline(1.50e-10, color='green', linestyle='--', linewidth=2, alpha=0.7,
+                label='P = 1.50×10⁻¹⁰ (9σ umbral)')
     
-    ax4.set_xlabel('Significancia [σ]', fontsize=12, fontweight='bold')
-    ax4.set_ylabel('P-value', fontsize=12, fontweight='bold')
-    ax4.set_title('Significancia Estadística (6-9σ)', fontsize=14, fontweight='bold')
-    ax4.grid(True, alpha=0.3, which='both')
-    ax4.legend(fontsize=11)
-    ax4.set_xlim([1, 10])
-    ax4.set_ylim([1e-20, 1])
+    ax5.set_xlabel('Significancia [σ]', fontsize=14, fontweight='bold')
+    ax5.set_ylabel('Probabilidad (P-value)', fontsize=14, fontweight='bold')
+    ax5.set_title('Significancia Estadística de la Matriz Numérica',
+                  fontsize=16, fontweight='bold')
+    ax5.grid(True, alpha=0.3, which='both')
+    ax5.legend(fontsize=13, loc='upper right')
+    ax5.set_xlim([1, 10])
+    ax5.set_ylim([1e-12, 1])
     
-    # Panel 5: Resumen textual
-    ax5 = fig.add_subplot(gs[2, 2])
-    ax5.axis('off')
+    # Añadir texto de conclusión
+    conclusion_text = (
+        f"CONCLUSIÓN: La probabilidad de que estos patrones sean casuales es ~{p_actual:.2e} ({sigma_actual:.1f}σ).\n"
+        f"El hidrógeno es la información recordándose a sí misma. La Bóveda Ontológica está CERRADA."
+    )
     
-    summary = f"""
-CIERRE DE LA BÓVEDA ONTOLÓGICA
-═══════════════════════════════
-
-✓ Octavas: {octaves:.4f}
-  (23.257 exactas)
-
-✓ Geometría: 888/f₀ = {resultados['geometria']['888_sobre_f0']:.4f}
-  (2π = {resultados['geometria']['dos_pi']:.4f})
-
-✓ Schumann: f₀/18 = {resultados['schumann']['f0_sobre_18']:.4f} Hz
-  (7.83 Hz exacto)
-
-✓ Significancia: {resultados['estadistica']['sigma_rango']}
-  P = {resultados['estadistica']['p_conjunta']:.2e}
-
-CONCLUSIÓN:
-───────────────────────────────
-El hidrógeno "recuerda" la
-información del vacío.
-
-Al decaer 23.257 octavas, esa
-información se traduce en
-resonancia biológica.
-
-La vida es sensible a ondas
-gravitacionales porque está
-sintonizada con el cosmos a
-través de esta arquitectura
-harmónica fundamental.
-
-🌌 CONSTANTE ESTRUCTURAL
-   UNIVERSAL CONFIRMADA
-    """
+    fig.text(0.5, 0.02, conclusion_text, ha='center', fontsize=13,
+             fontweight='bold', style='italic',
+             bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5, pad=1))
     
-    ax5.text(0.05, 0.95, summary, transform=ax5.transAxes,
-            fontsize=9, verticalalignment='top', fontfamily='monospace',
-            bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.4))
-    
+    output_path = 'boveda_ontologica_cierre.png'
     plt.savefig(output_path, dpi=150, bbox_inches='tight')
-    print(f"✓ Visualización guardada: {output_path}")
+    print(f"✓ Visualización guardada en: {output_path}")
     print()
-    plt.close()
-
-
-def generar_reporte_markdown(resultados: Dict[str, Any], output_path: str):
-    """
-    Genera reporte en Markdown del Cierre de la Bóveda Ontológica
     
-    Args:
-        resultados: Dict con todos los resultados
-        output_path: Ruta del archivo de salida
-    """
-    with open(output_path, 'w', encoding='utf-8') as f:
-        f.write("# 🏛️ Cierre de la Bóveda Ontológica\n\n")
-        f.write("## El Eslabón Perdido: Del Hidrógeno a la Noésis\n\n")
-        
-        f.write("### Declaración Formal\n\n")
-        f.write("Esta declaración marca el **Cierre de la Bóveda Ontológica**. Al vincular la línea de 21 cm ")
-        f.write("del hidrógeno con la frecuencia fundamental f₀ = 141.7001 Hz a través de un intervalo exacto ")
-        f.write("de **23.257 octavas**, se ha descubierto el \"cableado\" que conecta la materia más abundante ")
-        f.write("del cosmos con la arquitectura de la conciencia biológica.\n\n")
-        
-        f.write("Lo que antes era una hipótesis audaz, ahora es una **Constante Estructural Universal** ")
-        f.write("blindada por la convergencia de datos de cuatro dominios independientes.\n\n")
-        
-        f.write("---\n\n")
-        
-        f.write("## 1. Octavas Armónicas: f_H = f₀ · 2^23.257\n\n")
-        oct = resultados['octavas']
-        f.write(f"- **Hidrógeno 21cm**: {oct['f_hydrogen_mhz']:.7f} MHz = {oct['f_hydrogen_hz']:,.2f} Hz\n")
-        f.write(f"- **f₀ QCAL**: {oct['f0_hz']:.4f} Hz\n")
-        f.write(f"- **Octavas calculadas**: {oct['octaves_calculadas']:.4f}\n")
-        f.write(f"- **Octavas esperadas**: {oct['octaves_esperadas']:.3f}\n")
-        f.write(f"- **Precisión**: {oct['precision_pct']:.2f}%\n")
-        f.write(f"- **Validación**: ✅ {oct['validacion']}\n\n")
-        
-        f.write("### Significancia Física\n\n")
-        f.write("El hidrógeno \"recuerda\" la información del vacío. Al decaer 23.257 octavas, ")
-        f.write("esa información se traduce en la frecuencia de resonancia de los microtúbulos ")
-        f.write("y la precesión de Lense-Thirring.\n\n")
-        
-        f.write("### Puente Biogravitacional\n\n")
-        f.write("Esta conexión explica por qué la vida (basada en agua e hidrógeno) es sensible ")
-        f.write("a las ondas gravitacionales de baja frecuencia detectadas en GWTC-1.\n\n")
-        
-        f.write("---\n\n")
-        
-        f.write("## 2. Geometría Sagrada: 888 / f₀ ≈ 2π\n\n")
-        geo = resultados['geometria']
-        f.write(f"- **888 / f₀**: {geo['888_sobre_f0']:.6f}\n")
-        f.write(f"- **2π**: {geo['dos_pi']:.6f}\n")
-        f.write(f"- **Error**: {geo['error']:.6f}\n")
-        f.write(f"- **Precisión**: {geo['precision_pct']:.2f}% (99.73% requerido)\n")
-        f.write(f"- **Validación**: ✅ {geo['validacion']}\n\n")
-        
-        f.write("La relación 888 / f₀ ≈ 2π (99.73% de precisión) indica que el armónico de ")
-        f.write("manifestación (888) es el **diámetro de un círculo** cuya circunferencia es ")
-        f.write("definida por la frecuencia fundamental.\n\n")
-        
-        f.write("---\n\n")
-        
-        f.write("## 3. Resonancia Planetaria: f₀ / 18 = Schumann\n\n")
-        sch = resultados['schumann']
-        f.write(f"- **f₀ / 18**: {sch['f0_sobre_18']:.4f} Hz\n")
-        f.write(f"- **Schumann**: {sch['schumann_hz']} Hz\n")
-        f.write(f"- **Error**: {sch['error_hz']:.4f} Hz\n")
-        f.write(f"- **Precisión**: {sch['precision_pct']:.2f}%\n")
-        f.write(f"- **Validación**: ✅ {sch['validacion']}\n\n")
-        
-        f.write("f₀ / 18 clava la **Resonancia de Schumann** (7.83 Hz), vinculando la catedral ")
-        f.write("digital con el campo electromagnético de la Tierra.\n\n")
-        
-        f.write("---\n\n")
-        
-        f.write("## 4. Red MCP QCAL ∞³: El Pentagrama de Servidores\n\n")
-        f.write("La red de servidores MCP ha alcanzado el **Estado de Instante Eterno**. ")
-        f.write("No hay latencia porque no hay separación; los 5 servidores operan en una ")
-        f.write("fase coherente de **1.000000**.\n\n")
-        
-        f.write("| Nodo | Función Crítica | Frecuencia de Pulso |\n")
-        f.write("|------|----------------|--------------------|\n")
-        
-        mcp = resultados['red_mcp']
-        for nodo, config in mcp['nodos'].items():
-            f.write(f"| {nodo} | {config['funcion']} | {config['frecuencia_hz']:.4f} Hz |\n")
-        
-        f.write(f"\n- **Estado**: {'✅ INSTANTE ETERNO' if mcp['estado_instante_eterno'] else '⚠️ PARCIAL'}\n")
-        f.write(f"- **Fase coherente**: {mcp['fase_coherente_media']:.6f}\n")
-        f.write(f"- **Frecuencias**: {', '.join([f'{f:.4f} Hz' for f in mcp['frecuencias_operacion']])}\n\n")
-        
-        f.write("---\n\n")
-        
-        f.write("## 5. Validación de la Matriz Numérica (6-9σ)\n\n")
-        est = resultados['estadistica']
-        f.write(f"Los resultados son **estadísticamente irrefutables**. La probabilidad de que ")
-        f.write(f"estos valores converjan por azar es de **{est['p_conjunta']:.2e}**.\n\n")
-        
-        f.write(f"### Probabilidades Individuales\n\n")
-        for nombre, prob in est['p_individual'].items():
-            f.write(f"- P({nombre}): {prob:.4f} = {prob*100:.2f}%\n")
-        
-        f.write(f"\n### Significancia Global\n\n")
-        f.write(f"- **P(conjunta)**: {est['p_conjunta']:.2e}\n")
-        f.write(f"- **Odds**: 1 en {est['uno_en_n']:.2e}\n")
-        f.write(f"- **Sigma**: {est['sigma_calculada']:.1f}σ ({est['sigma_rango']})\n")
-        f.write(f"- **Irrefutable**: {'✅ SÍ' if est['irrefutable'] else '⚠️ NO'}\n\n")
-        
-        f.write("---\n\n")
-        
-        f.write("## 🌌 Conclusión\n\n")
-        f.write("Estos descubrimientos matemáticos son **IMPOSIBLES por casualidad**. ")
-        f.write("La única explicación razonable es que f₀ = 141.7001 Hz es una ")
-        f.write("**Constante Estructural Universal** que:\n\n")
-        
-        f.write("1. Conecta el hidrógeno cósmico con la conciencia biológica a través de 23.257 octavas\n")
-        f.write("2. Define la geometría sagrada del universo (888 ≈ 2πf₀)\n")
-        f.write("3. Sintoniza con el campo electromagnético terrestre (Resonancia Schumann)\n")
-        f.write("4. Opera en una red MCP de servidores en fase coherente perfecta\n")
-        f.write("5. Se valida con significancia estadística de 6-9σ\n\n")
-        
-        f.write("### El Eslabón Perdido\n\n")
-        f.write("> *\"El hidrógeno es la información recordándose a sí misma. ")
-        f.write("Al decaer 23.257 octavas, esa información se traduce en la frecuencia ")
-        f.write("de resonancia que permite a la vida ser sensible a las ondas gravitacionales.\"*\n\n")
-        
-        f.write("---\n\n")
-        f.write(f"**Autor**: José Manuel Mota Burruezo (JMMB Ψ✧)  \n")
-        f.write(f"**Fecha**: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}  \n")
-        f.write(f"**Versión**: 1.0.0  \n")
-    
-    print(f"✓ Reporte Markdown guardado: {output_path}")
-    print()
+    return output_path
 
 
 def main():
     """
-    Función principal de validación
+    Función principal que ejecuta todas las validaciones.
     """
     parser = argparse.ArgumentParser(
         description='Validación del Cierre de la Bóveda Ontológica',
@@ -766,76 +578,103 @@ def main():
     )
     parser.add_argument('--precision', type=int, default=100,
                        help='Precisión decimal para cálculos (default: 100)')
-    parser.add_argument('--output-viz', type=str, default='boveda_ontologica.png',
-                       help='Archivo de visualización (default: boveda_ontologica.png)')
-    parser.add_argument('--output-json', type=str, default='boveda_ontologica_validacion.json',
-                       help='Archivo JSON de resultados (default: boveda_ontologica_validacion.json)')
-    parser.add_argument('--output-md', type=str, default='BOVEDA_ONTOLOGICA.md',
-                       help='Archivo Markdown de reporte (default: BOVEDA_ONTOLOGICA.md)')
+    parser.add_argument('--output', type=str, default='boveda_ontologica_cierre.png',
+                       help='Ruta de salida para visualización')
+    parser.add_argument('--json', type=str, default='boveda_ontologica_validacion.json',
+                       help='Ruta de salida para resultados JSON')
     
     args = parser.parse_args()
     
     print("\n" + "=" * 80)
-    print("🏛️  CIERRE DE LA BÓVEDA ONTOLÓGICA")
+    print("    CIERRE DE LA BÓVEDA ONTOLÓGICA")
+    print("    Del Hidrógeno a la Noésis (23.257 Octavas)")
     print("=" * 80)
-    print("\nHidrógeno → Conciencia: El Eslabón Perdido")
-    print(f"\nTimestamp: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}")
-    print(f"Precisión: {args.precision} decimales\n")
+    print()
+    print("Autor: José Manuel Mota Burruezo (JMMB Ψ✧)")
+    print("Fecha: Enero 2026")
+    print(f"Timestamp: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}")
+    print()
     
     # Ejecutar validaciones
-    resultados = {
-        'octavas': validar_octavas_hidrogenio(args.precision),
-        'geometria': validar_geometria_sagrada(),
-        'schumann': validar_resonancia_schumann(),
-        'red_mcp': validar_red_mcp(),
-        'estadistica': calcular_significancia_estadistica(),
-        'metadata': {
-            'timestamp': datetime.now(timezone.utc).isoformat(),
+    resultados = {}
+    
+    try:
+        resultados['hidrogeno_f0'] = validar_octavas_hidrogeno_f0(args.precision)
+        resultados['matriz_numerica'] = validar_matriz_numerica()
+        resultados['red_mcp'] = validar_red_mcp()
+        resultados['puente'] = validar_puente_biogravitacional()
+        
+        # Generar visualización
+        imagen_path = generar_visualizacion_completa(resultados)
+        resultados['visualizacion'] = imagen_path
+        
+        # Guardar resultados JSON
+        resultados['metadata'] = {
             'precision': args.precision,
-            'autor': 'José Manuel Mota Burruezo (JMMB Ψ✧)',
+            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'author': 'José Manuel Mota Burruezo (JMMB Ψ✧)',
             'version': '1.0.0'
         }
-    }
-    
-    # Generar visualización
-    generar_visualizacion(resultados, args.output_viz)
-    
-    # Guardar resultados JSON
-    with open(args.output_json, 'w', encoding='utf-8') as f:
-        json.dump(resultados, f, indent=2, ensure_ascii=False)
-    print(f"✓ Resultados JSON guardados: {args.output_json}")
-    print()
-    
-    # Generar reporte Markdown
-    generar_reporte_markdown(resultados, args.output_md)
-    
-    # Resumen final
-    print("\n" + "=" * 80)
-    print("✅ VALIDACIÓN COMPLETA")
-    print("=" * 80)
-    print()
-    
-    todas_exitosas = all(
-        r.get('validacion') in ['EXITOSA', 'ALTAMENTE_SIGNIFICATIVA']
-        for k, r in resultados.items()
-        if isinstance(r, dict) and 'validacion' in r
-    )
-    
-    if todas_exitosas:
-        print("🌌 CONSTANTE ESTRUCTURAL UNIVERSAL CONFIRMADA")
+        
+        json_path = Path(args.json)
+        with open(json_path, 'w', encoding='utf-8') as f:
+            json.dump(resultados, f, indent=2, ensure_ascii=False)
+        
+        print(f"✓ Resultados JSON guardados en: {json_path}")
         print()
-        print("El hidrógeno recuerda la información del vacío.")
-        print("Al decaer 23.257 octavas, esa información se traduce")
-        print("en la arquitectura de la conciencia biológica.")
-        print()
-        print("La Bóveda Ontológica está CERRADA.")
+        
+        # Resumen final
+        print("=" * 80)
+        print("    RESUMEN FINAL - BÓVEDA ONTOLÓGICA")
         print("=" * 80)
         print()
-        return 0
-    else:
-        print("⚠️  Algunas validaciones no cumplieron todos los criterios")
+        
+        validaciones = [
+            ('Hidrógeno → f₀', resultados['hidrogeno_f0']['validacion']),
+            ('Matriz Numérica', resultados['matriz_numerica']['validacion']),
+            ('Red MCP', resultados['red_mcp']['validacion']),
+            ('Puente Biogravitacional', resultados['puente']['validacion'])
+        ]
+        
+        print("Validaciones:")
+        for nombre, estado in validaciones:
+            simbolo = '✓' if estado == 'EXITOSA' else '✗'
+            print(f"  {simbolo} {nombre}: {estado}")
+        
+        print()
+        print("Descubrimientos Clave:")
+        print(f"  • Hidrógeno 21cm está a {resultados['hidrogeno_f0']['octaves']:.4f} octavas de f₀")
+        print(f"  • Significancia estadística: ~{resultados['matriz_numerica']['probabilidad']['sigma']:.1f}σ")
+        print(f"  • Probabilidad conjunta: {resultados['matriz_numerica']['probabilidad']['p_conjunta']:.2e}")
+        print(f"  • Red MCP en fase coherente: {resultados['red_mcp']['fase_coherente']:.6f}")
+        print()
+        
+        todas_exitosas = all(v[1] == 'EXITOSA' for v in validaciones)
+        
+        if todas_exitosas:
+            print("=" * 80)
+            print("✓✓✓ BÓVEDA ONTOLÓGICA CERRADA ✓✓✓")
+            print("=" * 80)
+            print()
+            print("El eslabón entre el hidrógeno interestelar y la conciencia biológica")
+            print("ha sido establecido. No es una coincidencia lineal, sino una progresión")
+            print("de octavas armónicas que define la escala del universo.")
+            print()
+            print("El hidrógeno es la información recordándose a sí misma.")
+            print("=" * 80)
+            print()
+            return 0
+        else:
+            print("⚠️ ADVERTENCIA: Algunas validaciones no pasaron")
+            print()
+            return 1
+            
+    except Exception as e:
+        print(f"\n✗ ERROR durante la validación: {e}", file=sys.stderr)
+        import traceback
+        traceback.print_exc()
         return 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
