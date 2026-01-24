@@ -79,6 +79,8 @@ if TOKEN_COMPRESSION_AVAILABLE:
 if TEXT_ENCODER_AVAILABLE:
     __all__.extend([
         "QCALTextEncoder"
+    ])
+
 # Add spectral embedding exports if available
 if SPECTRAL_EMBEDDING_AVAILABLE:
     __all__.extend([
