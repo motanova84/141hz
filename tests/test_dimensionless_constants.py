@@ -27,8 +27,8 @@ from pathlib import Path
 import mpmath as mp
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent / 'src'))
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from dimensionless_constants_core import DimensionlessConstantsCore, DimensionlessConstants
 
@@ -84,7 +84,7 @@ class TestDimensionlessConstantsCore(unittest.TestCase):
         zeta = float(self.core.zeta_prime_half)
         # ζ'(1/2) ≈ -0.207886
         self.assertAlmostEqual(zeta, -0.207886, places=4)
-        self.assertTrue(zeta < 0)
+        self.assertLess(zeta, 0)
         
     def test_07_mass_ratio_p_e(self):
         """Test proton-to-electron mass ratio."""
@@ -127,9 +127,9 @@ class TestDimensionlessConstantsCore(unittest.TestCase):
         f0_derived = result["f0_derived_hz"]
         f0_observed = result["f0_observed_hz"]
         
-        # Should be within 5% (calibration allows some variation)
+        # Should be within 0.1% (tightened to match stated precision goal)
         rel_error = abs(f0_derived - f0_observed) / f0_observed
-        self.assertLess(rel_error, 0.05)
+        self.assertLess(rel_error, 0.001)
         
     def test_13_f0_uses_pure_constants(self):
         """Test f₀ derivation uses only dimensionless constants."""
@@ -306,12 +306,13 @@ class TestDimensionlessConstantsCore(unittest.TestCase):
         self.assertIn("interpretation", result)
         self.assertIn("coupled", result["interpretation"].lower())
         
-    def test_33_multiple_instances_independent(self):
-        """Test multiple instances maintain independence."""
+    def test_33_multiple_instances_store_precision(self):
+        """Test multiple instances store their precision setting."""
         core1 = DimensionlessConstantsCore(precision=50)
         core2 = DimensionlessConstantsCore(precision=100)
         
-        # Should have different precision
+        # Note: mp.dps is global, so computational independence
+        # is not guaranteed. This test only verifies precision storage.
         self.assertEqual(core1.precision, 50)
         self.assertEqual(core2.precision, 100)
         

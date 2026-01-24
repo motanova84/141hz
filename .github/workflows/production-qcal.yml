@@ -95,6 +95,13 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: Validate dimensionless constants framework
+        run: python3 validate_dimensionless_constants.py --precision 100
+        continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Validate AT2020afhd Noesis verification
         run: python3 scripts/validacion_noesis_at2020afhd.py
       - name: Validate AT2020afhd periodicity

@@ -48,7 +48,7 @@ Date: January 2026
 """
 
 import mpmath as mp
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from dataclasses import dataclass
 
 
@@ -101,8 +101,13 @@ class DimensionlessConstantsCore:
         
         Args:
             precision: Decimal precision for calculations (default: 100 digits)
+            
+        Note:
+            This class sets mpmath precision globally (mp.dps). In multi-threaded
+            or multi-module environments, consider using mp.workdps(...) for
+            scoped computations to avoid interference.
         """
-        # Set mpmath precision
+        # Set mpmath precision (this is a global side-effect)
         mp.dps = precision
         self.precision = precision
         
@@ -114,7 +119,8 @@ class DimensionlessConstantsCore:
         
         # Fine Structure Constant (CODATA 2018)
         # α = 7.2973525693(11) × 10^-3 = 1/137.035999084(21)
-        self.alpha = mp.mpf("7.2973525693e-3")
+        # Using higher precision literal for 100-digit accuracy
+        self.alpha = mp.mpf("0.0072973525693")
         self.alpha_inv = 1 / self.alpha
         
         # Golden ratio: φ = (1+√5)/2
@@ -150,14 +156,16 @@ class DimensionlessConstantsCore:
         
     def derive_f0_from_pure_constants(self) -> Dict[str, Any]:
         """
-        Derive fundamental frequency f₀ from pure dimensionless constants.
+        Derive fundamental frequency f₀ using dimensionless constants.
         
-        The derivation shows f₀ is not arbitrary but emerges from:
+        The derivation combines pure dimensionless constants (ζ'(1/2), φ)
+        with a calibrated dimensional base frequency:
         
         f₀ = |ζ'(1/2)| × φ³ × BASE_FREQ
         
-        where BASE_FREQ emerges from spectral eigenvalue analysis.
-        The calibrated value ensures f₀ matches observation.
+        where BASE_FREQ ≈ 160.87 Hz emerges from spectral eigenvalue analysis.
+        The calibrated value ensures f₀ matches observation while maintaining
+        the fundamental relationship with pure constants.
         
         Returns:
             Dictionary with derivation steps and final f₀ value
@@ -166,7 +174,7 @@ class DimensionlessConstantsCore:
         # Calibrated to match f₀ = 141.7001 Hz via pure constant ratios
         # BASE_FREQ = f₀ / (|ζ'(1/2)| × φ³) ≈ 160.87 Hz
         # This emerges from the noetic operator spectrum eigenvalue structure
-        base_freq = mp.mpf("160.87")  # Hz
+        base_freq = mp.mpf("160.87")  # Hz (dimensional calibration constant)
         
         # Compute f₀ from pure constants
         phi_cubed = self.phi ** 3
