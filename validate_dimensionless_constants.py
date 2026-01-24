@@ -64,7 +64,9 @@ class DimensionlessPhysicsValidator:
         
         # Additional dimensionless ratios
         # Electron-to-Planck mass ratio
-        # m_e/m_P ≈ 4.185 × 10^-23
+        # m_e/m_P = sqrt(G m_e² / (ℏc)) ≈ 4.185 × 10^-23
+        # Computed from: m_e = 9.109×10^-31 kg, m_P = 2.176×10^-8 kg (CODATA 2018)
+        # This ratio is dimensionless and fundamental to hierarchy problem
         self.mass_ratio_e_planck = mp.mpf("4.185e-23")
         
         # Proton-to-Planck mass ratio

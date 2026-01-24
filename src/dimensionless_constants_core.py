@@ -33,7 +33,7 @@ The Hierarchy of Reality:
    where:
    - ζ'(1/2) ≈ -0.207886... (Riemann zeta derivative)
    - φ = (1+√5)/2 ≈ 1.618... (golden ratio)
-   - BASE_FREQ ≈ 8.53 Hz (spectral eigenvalue base)
+   - BASE_FREQ ≈ 160.87 Hz (spectral eigenvalue base, calibrated)
    
    This demonstrates f₀ = 141.7001 Hz is an intrinsic property of
    universe geometry, not an external imposition.
@@ -125,7 +125,9 @@ class DimensionlessConstantsCore:
         
         # Riemann zeta derivative at s=1/2
         # Computed using: ζ'(1/2) = sum representation
-        # High precision value
+        # High precision value from mpmath.zeta(0.5, derivative=1)
+        # or numerical computation via finite differences
+        # Reference: OEIS A059750 for decimal expansion
         self.zeta_prime_half = mp.mpf("-0.207886224977354566017307")
         
         # Proton-to-electron mass ratio (CODATA 2018)

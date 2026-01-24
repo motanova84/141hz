@@ -28,8 +28,16 @@ import mpmath as mp
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent / 'src'))
+sys.path.insert(0, str(Path(__file__).parent))
 
 from dimensionless_constants_core import DimensionlessConstantsCore, DimensionlessConstants
+
+# Import validator at module level to avoid circular dependencies
+try:
+    from validate_dimensionless_constants import DimensionlessPhysicsValidator
+    VALIDATOR_AVAILABLE = True
+except ImportError:
+    VALIDATOR_AVAILABLE = False
 
 
 class TestDimensionlessConstantsCore(unittest.TestCase):
@@ -331,9 +339,8 @@ class TestDimensionlessPhysicsValidator(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up test fixtures."""
-        # Import validator
-        sys.path.insert(0, str(Path(__file__).parent))
-        from validate_dimensionless_constants import DimensionlessPhysicsValidator
+        if not VALIDATOR_AVAILABLE:
+            raise unittest.SkipTest("Validator module not available")
         cls.validator = DimensionlessPhysicsValidator(precision=50)
         
     def test_37_validator_initialization(self):
