@@ -350,6 +350,7 @@ MIT License - Copyright (c) 2025
 import F0Derivation.Constants
 import F0Derivation.PrimeSeries
 import F0Derivation.MainTheorem
+import F0Derivation.HarmonicValidation
 
 /-!
 # Formal Verification of f₀ = 141.7001 Hz Derivation
