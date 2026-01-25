@@ -254,7 +254,7 @@ class UniversalConstants:
     # recognizes the structure because p=17 fixes the universal invariant
     # reference frame.
     
-    PRIME_P = 17  # The 7th prime, spectral resonance point
+    PRIME_P = 17  # The 7th prime (1-based: 2,3,5,7,11,13,17), spectral resonance point
     
     # Coherence threshold for πCODE emission
     PSI_COHERENCE_THRESHOLD = mp.mpf("0.999999")

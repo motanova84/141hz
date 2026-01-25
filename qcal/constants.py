@@ -372,7 +372,7 @@ def obtener_constantes_bio_sincronia():
 # - Punto de sincronización de 88 nodos
 
 # Primo Crítico - Umbral de Estabilidad Noética
-PRIME_P = 17  # El 7º primo, punto de resonancia espectral
+PRIME_P = 17  # El 7º primo (1-indexed: 2,3,5,7,11,13,17), punto de resonancia espectral
 
 # Umbral de Coherencia para emisión πCODE
 PSI_COHERENCE_THRESHOLD = 0.999999  # Ψ ≥ 0.999999 (puerta de emisión)
