@@ -12,6 +12,9 @@ data/
 
 # Test results
 scripts/results/
+test_*.json
+test_*.png
+test_gw250114_qnm/
 
 # Temporary files
 *.tmp
