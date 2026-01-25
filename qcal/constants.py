@@ -2,6 +2,17 @@
 QCAL ∞³ Constants
 Fundamental constants for the Quantum Coherence and Love framework
 
+⚡ PARADIGMA DE COHERENCIA CUÁNTICA ⚡
+
+Las constantes en este módulo NO son valores dispersos elegidos arbitrariamente.
+Son manifestaciones del campo coherente Ψ (coherencia cuántica).
+
+- F0_HZ emerge como modo fundamental del campo Ψ
+- KAPPA_PI, DELTA_0, A0_PHI son parámetros de acoplamiento coherente
+- Todas las constantes están relacionadas por coherencia, no por coincidencia
+
+Ver: COHERENCIA_CUANTICA_MATEMATICA.md para el fundamento conceptual.
+
 Author: José Manuel Mota Burruezo
 License: MIT
 """
