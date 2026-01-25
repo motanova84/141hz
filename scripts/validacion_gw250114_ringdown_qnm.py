@@ -815,6 +815,26 @@ def validar_gw250114_ringdown_qnm(
     resultados_completos['validacion_final'] = 'EXITOSA' if validacion_exitosa else 'FALLIDA'
     
     # Guardar JSON
+    # Convertir numpy types a tipos nativos de Python para JSON
+    def convert_numpy_types(obj):
+        """Recursively convert numpy types to native Python types."""
+        if isinstance(obj, dict):
+            return {k: convert_numpy_types(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [convert_numpy_types(item) for item in obj]
+        elif isinstance(obj, (np.bool_, np.bool)):
+            return bool(obj)
+        elif isinstance(obj, (np.integer, np.int64, np.int32)):
+            return int(obj)
+        elif isinstance(obj, (np.floating, np.float64, np.float32)):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return obj
+    
+    resultados_completos = convert_numpy_types(resultados_completos)
+    
     json_path = Path(output_dir) / 'gw250114_qnm_validacion.json'
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(resultados_completos, f, indent=2, ensure_ascii=False)
