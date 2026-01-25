@@ -208,6 +208,8 @@
   - Test suite for validacion_alpha_psi_corregida.py
 - `test_validacion_bandas_cerebrales.py`
   - Tests para validacion_bandas_cerebrales.py
+- `test_validacion_boveda_ontologica.py`
+  - Tests para validacion_boveda_ontologica.py
 - `test_validacion_calabi_yau_espectral.py`
   - Tests for Calabi-Yau Spectral Universality Validation
 - `test_validacion_gwtc1_tridetector.py`
@@ -254,4 +256,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-23 17:13:51 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-25 01:43:38 UTC*
