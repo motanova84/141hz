@@ -120,6 +120,8 @@ jobs:
 
       - name: Validate GW250114 Ringdown QNM (Harmonic Attractor)
         run: python3 scripts/validacion_gw250114_ringdown_qnm.py --precision 100 --snr 8.0
+        # Note: This validation may fail if real GW250114 data is not yet available
+        # It will run in simulation mode which tests the analysis pipeline
         continue-on-error: true
         env:
           NUMEXPR_MAX_THREADS: 4

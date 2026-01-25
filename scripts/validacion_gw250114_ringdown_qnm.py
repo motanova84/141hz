@@ -208,6 +208,11 @@ def cargar_strain_gw250114_real(
 # ANÁLISIS ESPECTRAL QNM
 # ============================================================================
 
+
+# ============================================================================
+# ANÁLISIS ESPECTRAL QNM
+# ============================================================================
+
 def calcular_psd_welch(
     strain: np.ndarray,
     sample_rate: float,
@@ -718,7 +723,23 @@ def validar_gw250114_ringdown_qnm(
     print("=" * 80)
     print()
     
-    sample_rate = simular_params.get('sample_rate', 4096.0) if not use_real_data else 4096.0
+    # Determine sample rate
+    if use_real_data:
+        # For real data, calculate from time array
+        if len(time) > 1:
+            dt = time[1] - time[0]
+            if dt > 0:
+                sample_rate = 1.0 / dt
+            else:
+                sample_rate = 4096.0  # Default fallback
+        else:
+            sample_rate = 4096.0  # Default fallback
+    else:
+        sample_rate = simular_params.get('sample_rate', 4096.0) if simular_params else 4096.0
+    
+    # Ensure sample_rate is valid
+    if sample_rate <= 0:
+        sample_rate = 4096.0
     freqs, psd = calcular_psd_welch(strain, sample_rate)
     
     print(f"   ✅ PSD calculada: {len(freqs)} puntos de frecuencia")
@@ -822,7 +843,7 @@ def validar_gw250114_ringdown_qnm(
             return {k: convert_numpy_types(v) for k, v in obj.items()}
         elif isinstance(obj, list):
             return [convert_numpy_types(item) for item in obj]
-        elif isinstance(obj, (np.bool_, np.bool)):
+        elif isinstance(obj, (np.bool_, bool)):
             return bool(obj)
         elif isinstance(obj, (np.integer, np.int64, np.int32)):
             return int(obj)
