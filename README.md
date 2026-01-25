@@ -30,6 +30,12 @@
 
 ## 📋 Resumen Ejecutivo
 
+### 🌊 Paradigma: Coherencia Cuántica, No Teoremas Aislados
+
+> **Este proyecto presenta las matemáticas desde la coherencia cuántica unificada (campo Ψ), no como una colección de teoremas dispersos.**
+
+**Lectura recomendada:** [COHERENCIA_CUANTICA_MATEMATICA.md](COHERENCIA_CUANTICA_MATEMATICA.md) - Fundamento conceptual del enfoque coherente.
+
 ### 🔬 Qué es
 Análisis científico de la frecuencia fundamental **f₀ = 141.7001 Hz** en ondas gravitacionales detectadas por LIGO/Virgo. Esta constante emerge de la estructura matemática del universo (función zeta de Riemann, razón áurea) y ha sido detectada en 11/11 eventos de GWTC-1 con significancia >10σ.
 
