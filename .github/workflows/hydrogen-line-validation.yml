@@ -40,11 +40,11 @@ jobs:
           
       - name: Run hydrogen octave validation tests
         run: |
-          python test_validate_hydrogen_octave.py
+          python tests/test_validate_hydrogen_octave.py
           
       - name: Run hydrogen octave validation
         run: |
-          python validate_hydrogen_octave_relationship.py \
+          python core/validate_hydrogen_octave_relationship.py \
             --output hydrogen_f0_quantum_phase_${{ matrix.python-version }}.png \
             --json hydrogen_f0_validation_${{ matrix.python-version }}.json
           
@@ -131,8 +131,8 @@ jobs:
           
       - name: Lint validation scripts
         run: |
-          flake8 validate_hydrogen_octave_relationship.py \
-            test_validate_hydrogen_octave.py \
+          flake8 core/validate_hydrogen_octave_relationship.py \
+            tests/test_validate_hydrogen_octave.py \
             --max-line-length=120 \
             --max-complexity=10 \
             --ignore=E501,W503,E203
