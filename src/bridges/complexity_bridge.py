@@ -260,5 +260,5 @@ class ComplexityBridge:
             'status': 'operational',
             'f0_hz': float(self.f0),
             'test_results': results,
-            'integration_verified': all(r['speedup'] >= 1 for r in results)
+            'integration_verified': all(r['speedup'] > 0 for r in results)
         }

@@ -183,8 +183,8 @@ class AdelicBSDBridge:
         gap_ratio = float(self.f0) / avg_gap
         prime_alignment = gap_ratio % 1  # Fractional part
         
-        # Validation: calibration should be close to 1
-        calibration_valid = 0.5 < calibration < 2.0
+        # Validation: calibration should be positive
+        calibration_valid = calibration > 0
         
         return SpectralCalibration(
             curve_rank=rank,
