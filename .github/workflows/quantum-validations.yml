@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'scripts/validacion_*.py'
+      - 'scripts/analizar_*.py'
       - 'scripts/energia_cuantica_fundamental.py'
       - '.github/workflows/quantum-validations.yml'
   pull_request:
@@ -29,6 +30,8 @@ jobs:
           - alpha_psi
           - compactificacion_quintica
           - numerica_5_7f
+          - bandas_cerebrales
+          - resonancias_schumann
     
     steps:
       - name: Checkout repository
@@ -68,7 +71,11 @@ jobs:
       
       - name: Run validation - ${{ matrix.validation }}
         run: |
-          python scripts/validacion_${{ matrix.validation }}.py
+          if [ "${{ matrix.validation }}" == "resonancias_schumann" ]; then
+            python scripts/analizar_resonancias_schumann.py
+          else
+            python scripts/validacion_${{ matrix.validation }}.py
+          fi
         env:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
@@ -76,7 +83,11 @@ jobs:
       
       - name: Run test - ${{ matrix.validation }}
         run: |
-          if [ -f "scripts/test_validacion_${{ matrix.validation }}.py" ]; then
+          if [ "${{ matrix.validation }}" == "resonancias_schumann" ]; then
+            if [ -f "test_analizar_resonancias_schumann.py" ]; then
+              python -m pytest test_analizar_resonancias_schumann.py -v
+            fi
+          elif [ -f "scripts/test_validacion_${{ matrix.validation }}.py" ]; then
             python scripts/test_validacion_${{ matrix.validation }}.py
           else
             echo "No test file found for ${{ matrix.validation }}"
@@ -94,6 +105,8 @@ jobs:
           path: |
             results/
             output/
+            scripts/analisis_schumann_*.png
+            scripts/analisis_schumann_*.json
             *.json
             *.png
           retention-days: 30
@@ -117,3 +130,5 @@ jobs:
           echo "- Alpha Psi (α_Ψ corrections)" >> $GITHUB_STEP_SUMMARY
           echo "- Compactificación Quíntica (5th dimension)" >> $GITHUB_STEP_SUMMARY
           echo "- Validación Numérica 5/7f₀" >> $GITHUB_STEP_SUMMARY
+          echo "- Bandas Cerebrales (Brain Wave Bands as f₀ divisors)" >> $GITHUB_STEP_SUMMARY
+          echo "- Resonancias Schumann (f₀/18 ≈ 7.83 Hz Earth resonance)" >> $GITHUB_STEP_SUMMARY

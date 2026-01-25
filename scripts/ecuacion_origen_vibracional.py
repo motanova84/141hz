@@ -7,8 +7,26 @@ Implementación computacional de la Ecuación del Origen Vibracional,
 una ampliación de las ecuaciones de Einstein con términos noéticos y
 oscilación holográfica.
 
+La EOV se deriva variacionalmente del Lagrangiano QCAL ∞³.
+Ver qcal/lagrangian_eov.py para la derivación completa desde primeros principios.
+
+Theoretical Foundation:
+----------------------
+From the QCAL ∞³ action with Lagrangian density:
+    ℒ = ℒ_EH + ℒ_kinetic + ℒ_potential + ℒ_modulation
+
+Variational principle (δS/δΨ = 0) yields the EOV:
+    □Ψ - (ω₀² + ξR)Ψ - (ζ'(1/2)/π) R cos(2πf₀t) Ψ = 0
+
+Where:
+    - □ = ∇_μ∇^μ (d'Alembertian in curved spacetime)
+    - ω₀ = 2πf₀ = 890.33 rad/s (angular frequency)
+    - ξ = 1/6 (conformal coupling)
+    - ζ'(1/2) ≈ -3.922 (Riemann zeta derivative at critical line)
+    - f₀ = 141.7001 Hz (fundamental noetic frequency)
+
 Autor: José Manuel Mota Burruezo (JMMB Ψ✧)
-Fecha: 2025-10-12
+Fecha: 2025-10-12 (Updated: 2026-01-06)
 Marco Teórico: QCAL ∞³
 """
 

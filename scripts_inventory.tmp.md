@@ -30,8 +30,12 @@
   - Análisis de 141.7 Hz en KAGRA (K1) - O4 Open Data
 - `analizar_l1.py`
   - Análisis de datos de Livingston (L1) para comparación
+- `analizar_resonancias_schumann.py`
+  - Análisis de Resonancias Schumann y f₀
 - `analizar_ringdown.py`
   - Análisis de componente en 141.7 Hz en el ringdown - CORREGIDO
+- `analizar_variedades_cy_10.py`
+  - Análisis de las 10 Variedades Calabi-Yau Canónicas
 - `multi_event_snr_analysis.py`
   - Análisis Multi-evento de SNR en 141.7 Hz
 
@@ -39,6 +43,10 @@
 
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_harmonic_coherence.py`
+  - Validación de Coherencia Armónica QCAL ∞³
+- `validate_reproducibility.py`
+  - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_synthetic_data.py`
@@ -49,6 +57,10 @@
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_harmonic_coherence.py`
+  - Validación de Coherencia Armónica QCAL ∞³
+- `validate_reproducibility.py`
+  - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_synthetic_data.py`
@@ -140,10 +152,14 @@
   - Test unitario para el módulo de evidencia concluyente
 - `test_fractal_resonance_constants.py`
   - Tests for Fractal Resonance in Fundamental Constants module.
+- `test_generar_cy_kappa_25773.py`
+  - Tests para generar_cy_kappa_25773.py
 - `test_generar_prediccion_gw250114.py`
   - Test para generar_prediccion_gw250114.py
 - `test_gw170817_eeg_analysis.py`
   - Tests for GW170817 and EEG analysis scripts.
+- `test_harmonic_validation.py`
+  - Test suite for harmonic validation theorem
 - `test_multi_event_snr_analysis.py`
   - Tests para el módulo multi_event_snr_analysis
 - `test_optimization_modules.py`
@@ -190,12 +206,16 @@
   - Tests for Vacuum Energy Module
 - `test_validacion_alpha_psi.py`
   - Test suite for validacion_alpha_psi_corregida.py
+- `test_validacion_bandas_cerebrales.py`
+  - Tests para validacion_bandas_cerebrales.py
 - `test_validacion_calabi_yau_espectral.py`
   - Tests for Calabi-Yau Spectral Universality Validation
 - `test_validacion_gwtc1_tridetector.py`
   - Tests para la validación GWTC-1 tri-detector
 - `test_validacion_invariante_espectral_cy.py`
   - Tests for Calabi-Yau Spectral Invariant k_Π Validation
+- `test_validacion_matriz_numerica.py`
+  - Tests para validacion_matriz_numerica.py
 - `test_validacion_multievento_gaia.py`
   - Test Suite para Validación Multi-evento + GAIA
 - `test_validacion_noesis_at2020afhd.py`
@@ -216,12 +236,16 @@
   - Test para validar la configuración de Vercel
 - `test_verificacion_convergencia.py`
   - Tests para Verificación de Convergencia y Constantes Fundamentales
+- `test_verificacion_espectral_primos_rigurosa.py`
+  - Test Suite para Verificación Espectral de Números Primos
 - `test_verificacion_sistema.py`
   - Test para verificacion_sistema_optimizado.py
 - `test_verificador_gw250114.py`
   - Script de prueba para el verificador GW250114
 - `test_verify_kappa.py`
   - Tests for κ_Π (Kappa Pi) Invariant Verification
+- `test_verify_kappa_phi_corrected.py`
+  - test_verify_kappa_phi_corrected.py
 - `test_verify_kappa_pi_complete.py`
   - test_verify_kappa_pi_complete.py
 - `test_virgo_v1_validation.py`
@@ -230,4 +254,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-29 22:28:50 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-23 17:13:51 UTC*
