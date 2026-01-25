@@ -139,7 +139,7 @@ class NavierStokesBridge:
         
         # f₀ regularization term
         # Ψ_reg = f₀ · exp(-|v|²/f₀)
-        norm_sq = np.sum(velocity**2, axis=0) if velocity.ndim > 1 else velocity**2
+        norm_sq = np.sum(velocity**2, axis=-1, keepdims=True) if velocity.ndim > 1 else velocity**2
         regularization = float(self.f0) * np.exp(-norm_sq / float(self.f0))
         
         # Update: v_new = v + dt*(ν·Δv + Ψ_reg)

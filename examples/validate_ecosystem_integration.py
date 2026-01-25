@@ -11,10 +11,11 @@ Usage:
 
 import sys
 import json
+import os
 from typing import Dict, Any, List
 
-# Add src to path
-sys.path.insert(0, '/home/runner/work/141hz/141hz')
+# Add src to path dynamically
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from src.bridges import (
     RamseyBridge,

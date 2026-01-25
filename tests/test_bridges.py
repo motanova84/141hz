@@ -13,9 +13,10 @@ Tests all five bridge modules:
 import pytest
 import numpy as np
 import sys
+import os
 
-# Add src to path
-sys.path.insert(0, '/home/runner/work/141hz/141hz')
+# Add src to path dynamically
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from src.bridges import (
     RamseyBridge,

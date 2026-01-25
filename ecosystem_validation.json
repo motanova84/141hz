@@ -44,21 +44,21 @@
       "test_results": [
         {
           "state_dim": 16,
-          "decoherence_rate": 1.3826532567023389e-05,
+          "decoherence_rate": 9.753759805748896e-06,
           "suppression_factor": 142.7001,
-          "regularity": 0.999986173467433
+          "regularity": 0.9999902462401943
         },
         {
           "state_dim": 32,
-          "decoherence_rate": 5.304866197971542e-06,
+          "decoherence_rate": 1.4280216038010498e-05,
           "suppression_factor": 142.7001,
-          "regularity": 0.999994695133802
+          "regularity": 0.999985719783962
         },
         {
           "state_dim": 64,
-          "decoherence_rate": 7.106083895446417e-06,
+          "decoherence_rate": 6.871762634513548e-06,
           "suppression_factor": 142.7001,
-          "regularity": 0.9999928939161046
+          "regularity": 0.9999931282373655
         }
       ],
       "integration_verified": true
@@ -85,7 +85,7 @@
         {
           "algorithm": "factoring",
           "size": 8,
-          "speedup": 0.014431750193223927,
+          "speedup": 0.01443175019322394,
           "gate_count": 512,
           "circuit_depth": 64
         },

@@ -98,7 +98,11 @@ class ComplexityBridge:
             # Shor's algorithm
             classical = f"O(exp(n^(1/3)))"
             quantum = f"O(n³)"
-            speedup = np.exp(n**(1/3)) / (n**3) if n > 1 else 1
+            # Use logarithmic calculation for numerical stability
+            if n > 1:
+                speedup = np.exp(min(n**(1/3), 20) - 3 * np.log(n))
+            else:
+                speedup = 1
             gate_count = int(n**3)
             circuit_depth = int(n**2)
             

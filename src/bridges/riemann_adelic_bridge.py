@@ -130,11 +130,13 @@ class RiemannAdelicBridge:
         p_adic_product = mp.mpf(1)
         
         for p in primes:
-            # p-adic valuation (simplified)
+            # p-adic valuation (simplified, with safety limit)
             val = float(value)
             p_val = 0
-            while val > 0 and val % p == 0:
-                val //= p
+            max_iterations = 100  # Safety limit
+            
+            while val > 0 and abs(val % p) < 1e-10 and p_val < max_iterations:
+                val = val / p
                 p_val += 1
             
             # p-adic norm: |x|_p = p^(-v_p(x))
