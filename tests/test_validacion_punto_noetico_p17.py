@@ -48,9 +48,11 @@ class TestPrimeP17Constants:
         assert PRIME_P == 17, "Critical prime must be 17"
     
     def test_prime_p_is_7th_prime(self):
-        """p=17 should be the 7th prime number."""
+        """p=17 should be the 7th prime number (1-based counting)."""
         primes = [2, 3, 5, 7, 11, 13, 17]
-        assert primes.index(17) == 6, "17 is the 7th prime (0-indexed: 6)"
+        # In 0-based indexing: 17 is at index 6
+        assert primes.index(17) == 6, "17 is at index 6 in 0-based array"
+        # In 1-based counting: 17 is the 7th prime
         assert len([p for p in primes if p <= 17]) == 7
     
     def test_coherence_threshold(self):
@@ -169,13 +171,13 @@ class TestNoenticInvariance:
         """Phoenix Solver should be mentioned in interpretation."""
         result = verificar_acoplamiento_p17()
         interp = str(result['interpretacion'])
-        assert 'Phoenix' in interp or 'phoenix' in interp.lower()
+        assert 'phoenix' in interp.lower()
     
     def test_secretaria_noetica_enabled(self):
         """Secretaría Noética should be mentioned in interpretation."""
         result = verificar_acoplamiento_p17()
         interp = str(result['interpretacion'])
-        assert 'Secretar' in interp or 'secretar' in interp.lower()
+        assert 'secretar' in interp.lower()
 
 
 class TestSrcConstantsConsolidation:

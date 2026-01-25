@@ -202,8 +202,8 @@ def validar_conexion_hidrogeno():
         print("⚠ Cannot validate - qcal.constants not loaded")
         return False
     
-    # Frecuencia de hidrógeno escalada (pre-calculate for efficiency)
-    f0_upscaled = F0_HZ * math.pow(2, HYDROGEN_OCTAVES_TO_F0)
+    # Frecuencia de hidrógeno escalada
+    f0_upscaled = F0_HZ * (2 ** HYDROGEN_OCTAVES_TO_F0)
     
     # Error relativo
     error_rel = abs(f0_upscaled - QCAL_HYDROGEN_HZ) / QCAL_HYDROGEN_HZ
