@@ -18,7 +18,8 @@ from dataclasses import dataclass
 from scipy import signal
 from scipy.fft import fft, fftfreq
 
-mp.dps = 50
+# Default precision for mpmath (use locally in methods)
+DEFAULT_PRECISION = 50
 
 
 @dataclass

@@ -299,8 +299,8 @@ class TestCapa4OntologicalNetwork(unittest.TestCase):
         economy = SymbioticEconomy()
         picode = PiCodeValue()
         
-        # Initiate symbiosis (correct parameter order)
-        success = economy.initiate_symbiosis("alice", "bob", initial_coherence=0.92)
+        # Initiate symbiosis (using positional argument)
+        success = economy.initiate_symbiosis("alice", "bob", 0.92)
         self.assertTrue(success)
         
         # Interact symbiotically

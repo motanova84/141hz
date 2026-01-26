@@ -16,8 +16,8 @@ import numpy as np
 from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
 
-# Set high precision for mathematical calculations
-mp.dps = 100
+# Default precision (modules can override locally)
+DEFAULT_PRECISION = 100
 
 
 @dataclass
@@ -47,16 +47,19 @@ class RiemannOperatorSpectrum:
         Args:
             precision: Number of decimal places for calculations
         """
-        mp.dps = precision
+        # Set precision locally using context
+        self.precision = precision
         
-        # First eigenvalue of the noetic operator H_ψ
-        self.lambda_0 = mp.mpf("0.001588050")
-        
-        # Universal constant C = 1/λ₀
-        self.C_universal = 1 / self.lambda_0
-        
-        # Riemann zeta derivative at s = 1/2
-        self.zeta_prime_half = mp.mpf("-0.207886224977354566017307")
+        # Use with statement for precision-sensitive operations
+        with mp.workdps(self.precision):
+            # First eigenvalue of the noetic operator H_ψ
+            self.lambda_0 = mp.mpf("0.001588050")
+            
+            # Universal constant C = 1/λ₀
+            self.C_universal = 1 / self.lambda_0
+            
+            # Riemann zeta derivative at s = 1/2
+            self.zeta_prime_half = mp.mpf("-0.207886224977354566017307")
         
     def compute_eigenvalue(self, n: int) -> OperatorEigenvalue:
         """

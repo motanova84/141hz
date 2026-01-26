@@ -18,7 +18,8 @@ from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass
 from enum import Enum
 
-mp.dps = 50
+# Default precision (use locally in methods if needed)
+DEFAULT_PRECISION = 50
 
 
 class RegisterState(Enum):
