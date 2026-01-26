@@ -4,9 +4,11 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'multi_event_analysis.py'
-      - 'validate_at2020afhd_harmonic.py'
-      - 'gw_spectral_evidence.py'
+      - 'core/multi_event_analysis.py'
+      - 'physics/validate_at2020afhd_harmonic.py'
+      - 'core/gw_spectral_evidence.py'
+      - 'physics/validate_qnm_vs_qcal.py'
+      - 'tests/test_validate_qnm_vs_qcal.py'
       - 'VALIDACION_FISICA_ONDAS_GRAVITACIONALES.md'
       - '.github/workflows/gw-validation.yml'
   pull_request:
@@ -54,7 +56,7 @@ jobs:
       
       - name: Run GWTC-1 multi-event analysis
         run: |
-          python3 multi_event_analysis.py
+          python3 core/multi_event_analysis.py
       
       - name: Validate GWTC-1 results
         run: |
@@ -144,7 +146,7 @@ jobs:
       
       - name: Run AT2020afhd harmonic verification
         run: |
-          python3 validate_at2020afhd_harmonic.py --no-figure
+          python3 physics/validate_at2020afhd_harmonic.py --no-figure
       
       - name: Validate AT2020afhd results
         run: |
@@ -231,6 +233,8 @@ jobs:
       - name: Generate spectral evidence
         run: |
           python3 << 'EOF'
+          import sys
+          sys.path.insert(0, 'core')
           from gw_spectral_evidence import plot_gw_spectral_evidence
           
           print("Generating GW spectral evidence plot...")
@@ -272,11 +276,11 @@ jobs:
       
       - name: Run QNM vs QCAL validation
         run: |
-          python validate_qnm_vs_qcal.py
+          python physics/validate_qnm_vs_qcal.py
       
       - name: Run tests
         run: |
-          python -m pytest test_validate_qnm_vs_qcal.py -v
+          python -m pytest tests/test_validate_qnm_vs_qcal.py -v
       
       - name: Upload QNM-QCAL results
         uses: actions/upload-artifact@v5
@@ -341,10 +345,10 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Scripts Ejecutados" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "1. \`multi_event_analysis.py\` - GWTC-1 multi-evento" >> $GITHUB_STEP_SUMMARY
-          echo "2. \`validate_at2020afhd_harmonic.py\` - Cascada armónica" >> $GITHUB_STEP_SUMMARY
-          echo "3. \`gw_spectral_evidence.py\` - Evidencia espectral" >> $GITHUB_STEP_SUMMARY
-          echo "4. \`validate_qnm_vs_qcal.py\` - Comparación QNM vs QCAL" >> $GITHUB_STEP_SUMMARY
+          echo "1. \`core/multi_event_analysis.py\` - GWTC-1 multi-evento" >> $GITHUB_STEP_SUMMARY
+          echo "2. \`physics/validate_at2020afhd_harmonic.py\` - Cascada armónica" >> $GITHUB_STEP_SUMMARY
+          echo "3. \`core/gw_spectral_evidence.py\` - Evidencia espectral" >> $GITHUB_STEP_SUMMARY
+          echo "4. \`physics/validate_qnm_vs_qcal.py\` - Comparación QNM vs QCAL" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
