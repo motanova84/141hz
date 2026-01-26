@@ -1,0 +1,78 @@
+{
+  "configuration": {
+    "dataset_size": 500,
+    "spectral_dims": 32,
+    "baseline_dims": 256,
+    "random_state": 42
+  },
+  "full_dataset_results": {
+    "Spectral-32D": {
+      "similarity_correlation": 0.06920303841334077,
+      "similarity_mae": 0.741359968388127,
+      "mean_similarity": 0.7757225363756952,
+      "std_similarity": 0.06624783101416211,
+      "silhouette_score": 0.01964213832541649,
+      "inertia": 18096.665569330653,
+      "n_clusters": 5,
+      "mean_retrieval_score": 0.11381815406815403,
+      "std_retrieval_score": 0.1696622041474635,
+      "k": 5,
+      "n_dimensions": 32,
+      "compression_ratio": 24.0
+    },
+    "Baseline-256D": {
+      "similarity_correlation": 0.8174945252097225,
+      "similarity_mae": 0.02081098238182238,
+      "mean_similarity": 0.0193499095666674,
+      "std_similarity": 0.04681371287125385,
+      "silhouette_score": 0.03197611754272416,
+      "inertia": 423.90933943778566,
+      "n_clusters": 5,
+      "mean_retrieval_score": 0.48212837162837163,
+      "std_retrieval_score": 0.13531520942325773,
+      "k": 5,
+      "n_dimensions": 256,
+      "compression_ratio": 3.0
+    }
+  },
+  "clustered_data_results": {
+    "Spectral-32D": {
+      "similarity_correlation": -0.09814778977385778,
+      "similarity_mae": 0.8087064747995749,
+      "mean_similarity": 0.8795082880256306,
+      "std_similarity": 0.031738004594657504,
+      "silhouette_score": 0.025515489010418745,
+      "inertia": 1476.2157857913935,
+      "n_clusters": 5,
+      "purity": 0.28,
+      "mean_retrieval_score": 0.07047979797979799,
+      "std_retrieval_score": 0.056313714496232875,
+      "k": 5,
+      "n_dimensions": 32,
+      "compression_ratio": 24.0
+    },
+    "Baseline-256D": {
+      "similarity_correlation": 0.9247807647865858,
+      "similarity_mae": 0.019447740545404393,
+      "mean_similarity": 0.041721380032265436,
+      "std_similarity": 0.09695592754295422,
+      "silhouette_score": 0.07483591723007998,
+      "inertia": 51.6741830108427,
+      "n_clusters": 5,
+      "purity": 0.43,
+      "mean_retrieval_score": 0.3385072150072149,
+      "std_retrieval_score": 0.1142389931186877,
+      "k": 5,
+      "n_dimensions": 256,
+      "compression_ratio": 3.0
+    }
+  },
+  "summary": {
+    "spectral_compression": 8.0,
+    "performance_ratios": {
+      "similarity_correlation": 0.08465260167410567,
+      "silhouette_score": 0.6142752727616819,
+      "mean_retrieval_score": 0.23607437513734614
+    }
+  }
+}
