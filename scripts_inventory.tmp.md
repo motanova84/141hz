@@ -43,6 +43,8 @@
 
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_harmonic_coherence.py`
+  - Validación de Coherencia Armónica QCAL ∞³
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
@@ -55,6 +57,8 @@
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_harmonic_coherence.py`
+  - Validación de Coherencia Armónica QCAL ∞³
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
@@ -154,6 +158,8 @@
   - Test para generar_prediccion_gw250114.py
 - `test_gw170817_eeg_analysis.py`
   - Tests for GW170817 and EEG analysis scripts.
+- `test_harmonic_validation.py`
+  - Test suite for harmonic validation theorem
 - `test_multi_event_snr_analysis.py`
   - Tests para el módulo multi_event_snr_analysis
 - `test_optimization_modules.py`
@@ -202,6 +208,8 @@
   - Test suite for validacion_alpha_psi_corregida.py
 - `test_validacion_bandas_cerebrales.py`
   - Tests para validacion_bandas_cerebrales.py
+- `test_validacion_boveda_ontologica.py`
+  - Tests para validacion_boveda_ontologica.py
 - `test_validacion_calabi_yau_espectral.py`
   - Tests for Calabi-Yau Spectral Universality Validation
 - `test_validacion_gwtc1_tridetector.py`
@@ -216,6 +224,8 @@
   - Tests para validacion_noesis_at2020afhd.py
 - `test_validacion_radio_cuantico.py`
   - Tests para el script de validación del radio cuántico RΨ
+- `test_validacion_sat_solver.py`
+  - Tests para Validación SAT Solver - Teoría Noésica
 - `test_validaciones_alternativas.py`
   - Test Suite para Validaciones Alternativas - 141.7001 Hz
 - `test_validar_evidencias_solidas.py`
@@ -230,6 +240,8 @@
   - Test para validar la configuración de Vercel
 - `test_verificacion_convergencia.py`
   - Tests para Verificación de Convergencia y Constantes Fundamentales
+- `test_verificacion_espectral_primos_rigurosa.py`
+  - Test Suite para Verificación Espectral de Números Primos
 - `test_verificacion_sistema.py`
   - Test para verificacion_sistema_optimizado.py
 - `test_verificador_gw250114.py`
@@ -246,4 +258,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-19 00:39:54 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-25 16:46:07 UTC*

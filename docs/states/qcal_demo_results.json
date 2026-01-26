@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-01-23T12:33:34.993279",
+  "n_texts": 25,
+  "results": {
+    "QCAL-16": {
+      "n_dimensions": 16,
+      "encoding_time": 0.00668787956237793,
+      "memory_kb": 3.125,
+      "similarity": {
+        "mean_similarity": 0.8457178489346467,
+        "std_similarity": 0.06035089673241033,
+        "min_similarity": 0.5766352785890305,
+        "max_similarity": 0.9655809884152282
+      },
+      "clustering": {
+        "silhouette_score": 0.09277060645300242,
+        "inertia": 2.154193139767039,
+        "n_clusters": 5
+      },
+      "retrieval": {
+        "precision@3": 0.26666666666666666,
+        "recall@3": 0.2,
+        "f1@3": 0.2285714236734695
+      }
+    },
+    "QCAL-32": {
+      "n_dimensions": 32,
+      "encoding_time": 0.00632166862487793,
+      "memory_kb": 6.25,
+      "similarity": {
+        "mean_similarity": 0.8786972986839984,
+        "std_similarity": 0.035077961300785165,
+        "min_similarity": 0.7579173540022873,
+        "max_similarity": 0.9670516394314493
+      },
+      "clustering": {
+        "silhouette_score": 0.06531967390347881,
+        "inertia": 1.9352612922095607,
+        "n_clusters": 5
+      },
+      "retrieval": {
+        "precision@3": 0.1733333333333333,
+        "recall@3": 0.13,
+        "f1@3": 0.14857142367346954
+      }
+    },
+    "QCAL-64": {
+      "n_dimensions": 64,
+      "encoding_time": 0.006339550018310547,
+      "memory_kb": 12.5,
+      "similarity": {
+        "mean_similarity": 0.84317859534453,
+        "std_similarity": 0.03429538316239495,
+        "min_similarity": 0.7109550397021095,
+        "max_similarity": 0.9390010552016234
+      },
+      "clustering": {
+        "silhouette_score": 0.04684781170951136,
+        "inertia": 2.694333088375564,
+        "n_clusters": 5
+      },
+      "retrieval": {
+        "precision@3": 0.18666666666666665,
+        "recall@3": 0.14,
+        "f1@3": 0.159999995102041
+      }
+    }
+  }
+}

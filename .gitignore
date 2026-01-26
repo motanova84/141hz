@@ -12,6 +12,9 @@ data/
 
 # Test results
 scripts/results/
+test_*.json
+test_*.png
+test_gw250114_qnm/
 
 # Temporary files
 *.tmp
@@ -42,6 +45,7 @@ artifacts/
 # Logs
 logs/
 *.log
+coherencia_organizacional.json
 
 # Generated outputs
 examples/output/
@@ -180,3 +184,10 @@ CERTIFICADO_ABSOLUTO.txt
 NFT_VEREDICTO_18.2sigma.json
 HASHES_INMUTABLES.json
 CIERRE_DEFINITIVO_QCAL_SYMBIO.txt
+experimental_validation_wetlab_noesis88.json
+
+# Active System Monitor outputs
+active_system_status.json
+
+# GW unbiased validation outputs
+gw_unbiased_validation_results.json
