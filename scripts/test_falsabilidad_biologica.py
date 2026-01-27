@@ -66,10 +66,13 @@ class QCALBiologicalExperiment:
         self.config = config
         self.responses: List[BiologicalResponse] = []
         
-        # QCAL parameters
-        self.f0 = 141.7001  # Hz - Frecuencia fundamental QCAL
-        self.resonance_width = 5.0  # Hz - Ancho de resonancia
-        self.qcal_enhancement = 2.5  # Factor de mejora en resonancia
+        # QCAL parameters (derived from theoretical framework)
+        self.F0_HZ = 141.7001  # Hz - Fundamental frequency from QCAL theory
+        self.RESONANCE_WIDTH_HZ = 5.0  # Hz - Resonance width (FWHM)
+        self.QCAL_ENHANCEMENT_FACTOR = 2.5  # Enhancement factor at resonance
+        
+        # Thresholds for statistical tests
+        self.FLATNESS_CV_THRESHOLD = 0.05  # 5% coefficient of variation threshold
         
     def calculate_qcal_response(self, frequency: float, energy: float) -> float:
         """
@@ -81,9 +84,9 @@ class QCALBiologicalExperiment:
         base_response = energy
         
         # Spectral enhancement at resonance frequency
-        # Lorentzian peak centered at f0
-        delta_f = frequency - self.f0
-        lorentzian = self.qcal_enhancement / (1 + (delta_f / self.resonance_width)**2)
+        # Lorentzian peak centered at F0_HZ
+        delta_f = frequency - self.F0_HZ
+        lorentzian = self.QCAL_ENHANCEMENT_FACTOR / (1 + (delta_f / self.RESONANCE_WIDTH_HZ)**2)
         
         # Enhanced response at resonance
         qcal_response = base_response * (1.0 + lorentzian)
@@ -169,14 +172,17 @@ class QCALBiologicalExperiment:
         Returns:
             Diccionario con resultados del test de ratio
         """
+        # Frequency matching tolerance (Hz)
+        FREQ_MATCH_TOLERANCE = 1.0
+        
         # Find responses at key frequencies
         response_141_7 = None
         response_100 = None
         
         for resp in self.responses:
-            if abs(resp.frequency - 141.7) < 1.0:
+            if abs(resp.frequency - 141.7) < FREQ_MATCH_TOLERANCE:
                 response_141_7 = resp
-            if abs(resp.frequency - 100.0) < 1.0:
+            if abs(resp.frequency - 100.0) < FREQ_MATCH_TOLERANCE:
                 response_100 = resp
         
         if response_141_7 is None or response_100 is None:
@@ -228,9 +234,9 @@ class QCALBiologicalExperiment:
         # Coefficient of variation
         cv = std_response / mean_response
         
-        # Test if response is constant within experimental error
-        # Threshold: CV < 0.05 (5% variation)
-        is_flat = cv < 0.05
+        # Test if response is flat within experimental error
+        # Using threshold defined in __init__
+        is_flat = cv < self.FLATNESS_CV_THRESHOLD
         
         return {
             'mean_response': mean_response,
