@@ -1,5 +1,20 @@
 # Lean 4 Formalization: f₀ = 141.7001 Hz
 
+## ⚡ Paradigma de Coherencia Cuántica
+
+> **IMPORTANTE:** Esta formalización NO es una colección de teoremas independientes que se combinan al final. Cada módulo representa una **manifestación local del campo coherente Ψ**.
+
+**Narrativa coherente:**
+1. El campo de coherencia cuántica Ψ es el objeto fundamental
+2. Los números primos son resonancias de Ψ
+3. La función zeta ζ(s) es la proyección espectral de Ψ
+4. La proporción áurea φ es el acoplamiento óptimo de Ψ
+5. f₀ = 141.7001 Hz es el modo fundamental único de Ψ
+
+**Ver:** [COHERENCIA_CUANTICA_MATEMATICA.md](../../COHERENCIA_CUANTICA_MATEMATICA.md) para el fundamento conceptual.
+
+---
+
 This directory contains a complete formal verification in Lean 4 that the fundamental frequency **f₀ = 141.7001 Hz** emerges from fundamental mathematical constants.
 
 ## 🎯 Main Result
@@ -60,11 +75,13 @@ formalization/lean/
 ├── BerryKeating.lean          # Berry-Keating module wrapper
 ├── KappaPhi.lean              # κ_Π = 2.5773 invariant formalization
 ├── QCALPiTheorem.lean         # QCAL-Π theorem and Calabi-Yau geometry
-├── QCAL_SYNC_BRIDGE.lean      # Harmonic validation bridge [NEW ✨]
+├── QCAL_SYNC_BRIDGE.lean      # Harmonic validation bridge
+├── TiempoNoetico.lean         # RAM-XVIII: Temporal emergence ∞³ [NEW ✨]
 ├── Noesis88/
-│   └── CrearDeductiveChains.lean  # Complete deductive chains [NEW ✨]
+│   └── CrearDeductiveChains.lean  # Complete deductive chains
 └── Tests/
-    └── Verification.lean      # Test suite (15 tests)
+    ├── Verification.lean      # Test suite (15 tests)
+    └── TiempoNoeticoVerification.lean  # Temporal emergence tests [NEW ✨]
 ```
 
 ## 🚀 Quick Start
@@ -320,9 +337,31 @@ Unified theorem statement combining all results:
 
 See `H_PSI_CORE_README.md` for complete documentation.
 
-### BerryKeating.lean [NEW]
+### BerryKeating.lean
 
 Module wrapper for easy import of Berry-Keating operator.
+
+### TiempoNoetico.lean [NEW ✨]
+
+**RAM-XVIII: Temporal Emergence as Noetic Structure**
+
+Formalizes time as an emergent structure from consciousness rather than a pre-existing dimension.
+
+**Key Definitions**:
+- `Φ s x`: Witness field combining quantum oscillation (141.7001 Hz) and critical depth
+- `O_inf3 φ`: Master Operator extracting presence density (|φ|²)
+- `Trayectoria`: Coherent trajectories in (s,x) space
+- `tiempo_noetico`: Noetic time as integral of O∞³ along trajectories
+
+**Main Theorems**:
+- `tiempo_emerge_positivo`: Time is always non-negative
+- `tiempo_crece_monotono`: Time accumulates monotonically
+- `tiempo_aditivo`: Time is additive over intervals
+- `existencia_hojas`: Each instant defines a surface of constant coherence
+
+**Philosophical Result**: *"Consciousness does not discover time—it integrates it."*
+
+See `TIEMPO_NOETICO_README.md` for complete documentation.
 
 ### Tests/Verification.lean
 

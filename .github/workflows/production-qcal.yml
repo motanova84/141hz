@@ -74,6 +74,20 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: Run Anti-Bias Validation Suite
+        run: |
+          echo "🧪 Running Anti-Bias Validation Framework"
+          echo "=========================================="
+          python -m unittest \
+            tests.test_anti_bias_falsification.TestAntiBiasFalsification.test_null_hypothesis_exposure_single_window \
+            tests.test_bayes_factor_translation.TestBayesFactorTranslation.test_icv_to_bayes_factor_conversion \
+            tests.test_blind_frequency_scan.TestBlindFrequencyScan.test_blind_scan_finds_injected_signal \
+            -v
+        continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Validate Riemann zeros relationship
         run: python3 validate_riemann_zeros.py --precision 50
         continue-on-error: false
@@ -93,6 +107,22 @@ jobs:
       - name: Validate brain wave bands as f₀ divisors
         run: python3 scripts/validacion_bandas_cerebrales.py
         continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Validate Bóveda Ontológica (Hydrogen-GW Consonance)
+        run: python3 scripts/validacion_boveda_ontologica.py --precision 100
+        continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Validate GW250114 Ringdown QNM (Harmonic Attractor)
+        run: python3 scripts/validacion_gw250114_ringdown_qnm.py --precision 100 --snr 8.0
+        # Note: This validation may fail if real GW250114 data is not yet available
+        # It will run in simulation mode which tests the analysis pipeline
+        continue-on-error: true
         env:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
@@ -273,6 +303,18 @@ jobs:
             echo "### AT2020afhd Periodicity Validation" >> $GITHUB_STEP_SUMMARY
             echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/at2020afhd_validation.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "boveda_ontologica_validacion.json" ]; then
+            echo "### Bóveda Ontológica (Hydrogen-GW Consonance)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat boveda_ontologica_validacion.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "resultados/gw250114_qnm/gw250114_qnm_validacion.json" ]; then
+            echo "### GW250114 Ringdown QNM Validation" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat resultados/gw250114_qnm/gw250114_qnm_validacion.json | head -40 >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/gw250114_strain/GW250114_extraccion_completa.json" ]; then
