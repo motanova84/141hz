@@ -17,7 +17,7 @@ Components:
 """
 
 import numpy as np
-from typing import Tuple, Optional, Dict
+from typing import Tuple, Optional, Dict, Any
 from dataclasses import dataclass
 
 
@@ -241,7 +241,7 @@ class EnergyController:
         frequencies_hz: list,
         duration: float = 1.0,
         sampling_rate: int = 10000
-    ) -> Dict[str, any]:
+    ) -> Dict[str, Any]:
         """
         Validate energy constancy across multiple frequencies.
         

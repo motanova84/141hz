@@ -6,9 +6,9 @@ Successfully implemented a comprehensive experimental framework for testing QCAL
 
 ## Implementation Statistics
 
-- **Total Lines**: ~3,274 lines
-- **Files Created**: 7
-- **Test Coverage**: 24 tests (100% passing)
+- **Total Lines**: ~2,825 lines
+- **Files Created**: 8
+- **Test Coverage**: 31 tests (100% passing)
 - **Components**: 3 main modules + tests + demo + documentation
 
 ## Files Implemented
@@ -18,7 +18,7 @@ Successfully implemented a comprehensive experimental framework for testing QCAL
 #### 1. `experiments/__init__.py` (40 lines)
 Package initialization exporting all public APIs.
 
-#### 2. `experiments/energy_controller.py` (380 lines)
+#### 2. `experiments/energy_controller.py` (340 lines)
 **Purpose**: Maintain constant energy (±0.03%) while varying frequency.
 
 **Classes**:
@@ -39,7 +39,7 @@ Package initialization exporting all public APIs.
 
 **Key Achievement**: ±0.03% energy constancy across frequencies
 
-#### 3. `experiments/frequency_response_analyzer.py` (530 lines)
+#### 3. `experiments/frequency_response_analyzer.py` (493 lines)
 **Purpose**: Measure ΔF(ω) with ~0.3% precision through multi-sensor averaging.
 
 **Classes**:
@@ -63,7 +63,7 @@ Package initialization exporting all public APIs.
 
 **Key Achievement**: ~0.3% measurement precision, SNR > 40 dB
 
-#### 4. `experiments/falsifiability_experiment.py` (510 lines)
+#### 4. `experiments/falsifiability_experiment.py` (418 lines)
 **Purpose**: Orchestrate critical tests with statistical analysis.
 
 **Classes**:
@@ -81,8 +81,8 @@ Package initialization exporting all public APIs.
 
 ### Test Suite
 
-#### 5. `test_falsifiability.py` (615 lines)
-Comprehensive test suite with 24 tests organized in 9 test classes:
+#### 5. `test_falsifiability.py` (528 lines)
+Comprehensive test suite with 31 tests organized in 9 test classes:
 
 **TestAdaptiveAmplitudeController** (3 tests):
 - Frequency-independent amplitude
@@ -117,7 +117,7 @@ Comprehensive test suite with 24 tests organized in 9 test classes:
 - Spectral analysis
 - QCAL enhancement
 
-**TestFalsifiabilityExperiment** (6 tests):
+**TestFalsifiabilityExperiment** (7 tests):
 - Initialization
 - Verdict logic (3 cases: supported, falsified, inconclusive)
 - Critical test execution
@@ -133,7 +133,7 @@ Comprehensive test suite with 24 tests organized in 9 test classes:
 
 ### Demonstration
 
-#### 6. `demo_falsifiability_experiment.py` (310 lines)
+#### 6. `demo_falsifiability_experiment.py` (256 lines)
 Interactive demonstration script showcasing all components:
 
 **Functions**:
@@ -147,7 +147,7 @@ Interactive demonstration script showcasing all components:
 
 ### Documentation
 
-#### 7. `FALSIFIABILITY_README.md` (365 lines)
+#### 7. `FALSIFIABILITY_README.md` (328 lines)
 Complete user documentation including:
 - Overview and critical test description
 - Component architecture
@@ -408,8 +408,8 @@ The QCAL falsifiability framework successfully implements a rigorous experimenta
 
 **Branch**: `copilot/add-validation-experimental-qcal`
 **Files Added**: 8
-**Lines Added**: ~3,274
-**Tests**: 24 (100% passing)
+**Lines Added**: ~2,825
+**Tests**: 31 (100% passing)
 **Documentation**: Complete
 
 ## Next Steps

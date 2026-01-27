@@ -14,7 +14,7 @@ Key features:
 """
 
 import numpy as np
-from typing import Tuple, List, Dict, Optional
+from typing import Tuple, List, Dict, Optional, Any
 from dataclasses import dataclass
 from scipy import signal
 from scipy.optimize import curve_fit
@@ -399,7 +399,7 @@ class FrequencyResponseAnalyzer:
         frequencies: np.ndarray,
         coherence: float = 0.923,
         duration: float = 1.0
-    ) -> Dict[str, any]:
+    ) -> Dict[str, Any]:
         """
         Analyze frequency response over a range of frequencies.
         

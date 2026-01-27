@@ -8,7 +8,7 @@ experimental framework, including:
 - Frequency response analyzer (~0.3% precision)
 - Falsifiability experiment orchestration
 
-Total: 24 unit + integration tests
+Total: 31 unit + integration tests
 """
 
 import pytest
@@ -48,11 +48,11 @@ class TestAdaptiveAmplitudeController:
         
         # Test at different frequencies
         amp_100hz = controller.calculate_amplitude(100.0, duration=1.0)
-        amp_1417hz = controller.calculate_amplitude(141.7, duration=1.0)
+        amp_qcal = controller.calculate_amplitude(141.7, duration=1.0)
         amp_1000hz = controller.calculate_amplitude(1000.0, duration=1.0)
         
         # All should be equal (frequency-independent)
-        assert amp_100hz == pytest.approx(amp_1417hz, rel=1e-10)
+        assert amp_100hz == pytest.approx(amp_qcal, rel=1e-10)
         assert amp_100hz == pytest.approx(amp_1000hz, rel=1e-10)
     
     def test_amplitude_scales_with_energy(self):

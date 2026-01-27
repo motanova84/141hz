@@ -237,7 +237,7 @@ pytest test_falsifiability.py::TestIntegration -v
   - Energy control integration
   - Statistical significance
 
-**Total: 24 tests, 100% passing**
+**Total: 31 tests, 100% passing**
 
 ## Key Features
 
@@ -267,15 +267,15 @@ pytest test_falsifiability.py::TestIntegration -v
 
 ```
 experiments/
-├── __init__.py                         # Package initialization
-├── energy_controller.py                # Energy control (570 lines)
-├── frequency_response_analyzer.py      # Response measurement (580 lines)
-└── falsifiability_experiment.py        # Experiment orchestration (600 lines)
+├── __init__.py                         # Package initialization (41 lines)
+├── energy_controller.py                # Energy control (340 lines)
+├── frequency_response_analyzer.py      # Response measurement (493 lines)
+└── falsifiability_experiment.py        # Experiment orchestration (418 lines)
 
-test_falsifiability.py                  # Test suite (500 lines, 24 tests)
-demo_falsifiability_experiment.py       # Demonstration (160 lines)
-FALSIFIABILITY_README.md                # This file
-FALSIFIABILITY_IMPLEMENTATION_SUMMARY.md # Technical summary
+test_falsifiability.py                  # Test suite (528 lines, 31 tests)
+demo_falsifiability_experiment.py       # Demonstration (256 lines)
+FALSIFIABILITY_README.md                # This file (328 lines)
+FALSIFIABILITY_IMPLEMENTATION_SUMMARY.md # Technical summary (421 lines)
 ```
 
 ## Physical Significance
