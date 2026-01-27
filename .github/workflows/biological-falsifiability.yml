@@ -32,6 +32,10 @@ jobs:
     name: Test Biological Falsifiability
     runs-on: ubuntu-latest
     
+    # Set minimal permissions for security
+    permissions:
+      contents: read
+    
     strategy:
       matrix:
         python-version: ['3.11', '3.12']
@@ -157,6 +161,10 @@ jobs:
     name: Validate 0.1% Precision Requirement
     runs-on: ubuntu-latest
     needs: test-falsifiability
+    
+    # Set minimal permissions for security
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
