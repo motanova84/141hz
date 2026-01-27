@@ -16,6 +16,9 @@ test_*.json
 test_*.png
 *_test.json
 *_test.png
+# CI-generated validation outputs (with version suffix)
+hydrogen_f0_quantum_phase_*.png
+hydrogen_f0_validation_*.json
 test_gw250114_qnm/
 
 # Temporary files
