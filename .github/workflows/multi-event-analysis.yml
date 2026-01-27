@@ -6,7 +6,7 @@ on:
     paths:
       - 'scripts/analisis_*.py'
       - 'scripts/multi_event_*.py'
-      - 'multi_event_analysis.py'
+      - 'core/multi_event_analysis.py'
       - '.github/workflows/multi-event-analysis.yml'
   pull_request:
     branches: [ main ]
@@ -51,7 +51,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-multi-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -60,7 +60,7 @@ jobs:
             ${{ runner.os }}-pip-
       
       - name: Cache GWOSC data
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: data/
           key: gwosc-data-${{ matrix.event }}-${{ hashFiles('scripts/descargar_datos.py') }}
@@ -146,7 +146,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-snr-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
@@ -218,7 +218,7 @@ jobs:
             gfortran
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-bayes-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}

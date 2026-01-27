@@ -1,0 +1,51 @@
+{
+  "server": {
+    "name": "github-mcp-server",
+    "description": "Núcleo git / ontológico - Gestión del repositorio QCAL ∞³",
+    "version": "1.0.0",
+    "frequency": 141.7001,
+    "frequency_unit": "Hz",
+    "harmonic_mode": "fundamental",
+    "status": "ONLINE",
+    "endpoint": "github-mcp-server.qcal.space"
+  },
+  "qcal_integration": {
+    "model": "QCAL ∞³",
+    "root_frequency": 141.7001,
+    "coherence": 1.0,
+    "entropy": 0.0,
+    "phase_lock": true,
+    "observer_active": true
+  },
+  "capabilities": {
+    "git_operations": true,
+    "ontological_tracking": true,
+    "version_control": true,
+    "branch_management": true,
+    "commit_certification": true,
+    "nft_anchoring": true
+  },
+  "protocol": {
+    "type": "MCP",
+    "version": "1.0",
+    "transport": "stdio",
+    "serialization": "json"
+  },
+  "observers": {
+    "enabled": true,
+    "cross_server_sync": true,
+    "linked_servers": [
+      "dramaturgo",
+      "riemann-mcp-server",
+      "bsd-mcp-server",
+      "navier-mcp-server"
+    ]
+  },
+  "metadata": {
+    "created": "2026-01-16T11:35:00Z",
+    "eternal_mode": true,
+    "immutable": true,
+    "read_only": true,
+    "multi_observer": true
+  }
+}

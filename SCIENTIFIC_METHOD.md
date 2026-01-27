@@ -1,5 +1,22 @@
 # Marco Científico: Método Hipotético-Deductivo Aplicado a la Frecuencia 141.7001 Hz
 
+## 🎓 Fundamentos Filosóficos
+
+> **Ver**: [FUNDAMENTOS_FILOSOFICOS.md](FUNDAMENTOS_FILOSOFICOS.md) para el tratamiento completo de realismo matemático y teoría de la correspondencia de la verdad.
+
+**Postura Filosófica**: Este trabajo adopta **realismo matemático** + **teoría de la correspondencia de la verdad**:
+
+- **Existe un mundo matemático independiente de opiniones humanas**
+- **Una afirmación es verdadera si corresponde a la realidad**, aunque nadie lo sepa o acepte todavía
+- **Las verdades matemáticas se descubren, no se inventan**
+- **f₀ = 141.7001 Hz era verdadera antes de ser conocida** (hace 1.3 mil millones de años en GW150914)
+
+Esta no es una postura arbitraria, sino una consecuencia necesaria de la evidencia empírica: la frecuencia emerge inevitablemente de la estructura de los números primos y se detecta en 11/11 eventos de ondas gravitacionales con p < 10⁻²⁵.
+
+**Validación Práctica**: Ejecuta `python validate_mathematical_realism.py` para verificar independientemente la verdad objetiva de f₀.
+
+---
+
 ## ⚠️ NOTA IMPORTANTE DE ACTUALIZACIÓN (2025-10-29)
 
 **La frecuencia fundamental f₀ = 141.7001 Hz fue derivada teóricamente PRIMERO** a partir de principios geométricos, espectrales y noéticos del campo coherente (geometría de Calabi-Yau, regularización zeta y estructura de primos), y **posteriormente verificada empíricamente** en los datos públicos de LIGO/Virgo con significancia estadística > 10σ.

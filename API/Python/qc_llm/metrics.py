@@ -250,6 +250,10 @@ def compute_coherence(text: str, use_bert: bool = True) -> dict:
         recommendation = "HIGH COHERENCE"
     elif coherence > 0.6:
         recommendation = "MODERATE COHERENCE"
+    
+    # Calcular entropy antes de usarla
+    entropy = compute_quantum_entropy(text)
+    
     # Weighted average
     coherence = WEIGHT_FREQUENCY_ALIGNMENT * freq_align + WEIGHT_QUANTUM_ENTROPY * entropy
     

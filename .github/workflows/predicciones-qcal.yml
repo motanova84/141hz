@@ -1,0 +1,139 @@
+name: QCAL Predictions Validation
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
+  workflow_dispatch:  # Allow manual triggers
+  push:
+    paths:
+      - 'scripts/validacion_prediccion_*.py'
+      - 'scripts/orquestador_predicciones_qcal.py'
+      - 'scripts/predicciones_helpers.py'
+      - '.github/workflows/predicciones-qcal.yml'
+
+jobs:
+  validate-predictions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    # Limit permissions for security
+    permissions:
+      contents: read
+      pull-requests: write  # For PR comments
+      actions: read         # For accessing artifacts
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-predicciones-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-predicciones-
+            ${{ runner.os }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install numpy scipy matplotlib mpmath
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Create results directory
+        run: mkdir -p results
+      
+      - name: Run predictions orchestrator
+        id: predictions
+        run: |
+          python scripts/orquestador_predicciones_qcal.py
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Check results
+        run: |
+          if [ -f "results/predicciones_qcal_consolidado.json" ]; then
+            echo "✓ Consolidated results generated"
+            cat results/predicciones_qcal_informe.txt
+          else
+            echo "✗ No consolidated results found"
+            exit 1
+          fi
+      
+      - name: Upload JSON results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: predicciones-qcal-json
+          path: |
+            results/prediccion_*.json
+            results/predicciones_qcal_consolidado.json
+          retention-days: 30
+      
+      - name: Upload plots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: predicciones-qcal-plots
+          path: results/prediccion_*.png
+          retention-days: 30
+      
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: predicciones-qcal-report
+          path: results/predicciones_qcal_informe.txt
+          retention-days: 90
+      
+      - name: Comment on PR (if applicable)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('results/predicciones_qcal_informe.txt', 'utf8');
+            const truncatedReport = report.length > 65000 
+              ? report.substring(0, 65000) + '\n\n... (truncated)'
+              : report;
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🔬 QCAL ∞³ Predictions Validation Results\n\n\`\`\`\n${truncatedReport}\n\`\`\``
+            });
+      
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Predictions Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "results/predicciones_qcal_informe.txt" ]; then
+            echo "### Results" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            head -50 results/predicciones_qcal_informe.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "📊 Full report available in artifacts" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No results generated" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- JSON results: \`predicciones-qcal-json\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Plots: \`predicciones-qcal-plots\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Report: \`predicciones-qcal-report\`" >> $GITHUB_STEP_SUMMARY
