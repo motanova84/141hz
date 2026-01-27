@@ -16,8 +16,6 @@ test_*.json
 test_*.png
 *_test.json
 *_test.png
-hydrogen_*.json
-hydrogen_*.png
 test_gw250114_qnm/
 
 # Temporary files

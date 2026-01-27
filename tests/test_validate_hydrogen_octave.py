@@ -23,8 +23,7 @@ except ImportError:
     # If running from different directory, try to add parent to path
     repo_root = Path(__file__).parent.parent
     sys.path.insert(0, str(repo_root))
-    sys.path.insert(0, str(repo_root / 'core'))
-    import validate_hydrogen_octave_relationship as vhor
+    import core.validate_hydrogen_octave_relationship as vhor
 
 
 class TestOctaveCalculations(unittest.TestCase):
