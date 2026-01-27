@@ -175,25 +175,25 @@ class BiologicalFilter:
         
         # Default multi-band biological filter
         # Based on section 7.6.1 of the hypothesis
-        H = np.zeros_like(freq_hz, dtype=complex)
+        H = np.ones_like(freq_hz, dtype=float) * 0.01  # Small baseline
         
         # Band Low (10⁻⁶ - 10⁻³ Hz): slow integration of environmental cycles
         mask_low = (freq_hz >= 1e-6) & (freq_hz < 1e-3)
         H[mask_low] = 0.5
         
-        # Band Medium (0.1 - 100 Hz): protein resonances, cell membranes
+        # Band Medium (0.1 - 200 Hz): protein resonances, cell membranes
         # This is where f₀ = 141.7 Hz lives!
-        mask_medium = (freq_hz >= 0.1) & (freq_hz <= 100)
+        mask_medium = (freq_hz >= 0.1) & (freq_hz <= 200)
         H[mask_medium] = 1.0
         
         # Peak at f₀ = 141.7001 Hz (QCAL fundamental frequency)
         f0 = 141.7001
-        gaussian_peak = np.exp(-((freq_hz - f0) / 10) ** 2)
-        H += 0.5 * gaussian_peak
+        gaussian_peak = 2.0 * np.exp(-((freq_hz - f0) / 10) ** 2)
+        H = H + gaussian_peak
         
         # Band High (> 1 kHz): thermal noise, filtered out
         mask_high = freq_hz > 1000
-        H[mask_high] = 0.0
+        H[mask_high] = 0.01
         
         return H
     
@@ -253,23 +253,26 @@ class PhaseAccumulator:
         filtered_power : np.ndarray
             Filtered power spectrum |H(ω)*Ψₑ(ω)|²
         dt : float
-            Time step (seconds)
+            Time step (in years or consistent units)
             
         Returns
         -------
         float
             Current accumulated phase
         """
-        # Integrate power over frequency space
-        current_phase = np.sum(filtered_power) * dt
+        # Integrate power over frequency space and time
+        # This represents the energy accumulated in this timestep
+        current_increment = np.sum(filtered_power) * dt
         
-        # Apply memory
+        # Accumulate with memory
+        # The biological system integrates signal over time
+        # but with exponential memory decay
         if len(self.phase_history) > 0:
             previous_phase = self.phase_history[-1]
-            self.accumulated_phase = (self.alpha * current_phase + 
-                                     (1 - self.alpha) * previous_phase)
+            # Pure accumulation with slight decay (memory retention)
+            self.accumulated_phase = previous_phase * (1 - self.alpha * 0.01) + current_increment
         else:
-            self.accumulated_phase = current_phase
+            self.accumulated_phase = current_increment
         
         self.phase_history.append(self.accumulated_phase)
         return self.accumulated_phase
@@ -347,9 +350,13 @@ class MagicicadaModel:
         self.spectral_field = SpectralField(self.frequencies, self.amplitudes, self.phases)
         self.bio_filter = BiologicalFilter()
         
-        # Calculate critical threshold: N cycles × average energy per cycle
-        # This is simplified; in reality would be calibrated from data
-        self.threshold = cycle_years * 1.0  # Normalized units
+        # Calculate critical threshold based on actual filtered power
+        # Get filtered power for one cycle
+        sample_filtered = self.bio_filter.apply(self.spectral_field)
+        energy_per_cycle = np.sum(sample_filtered)
+        
+        # Threshold = N cycles × energy per cycle
+        self.threshold = cycle_years * energy_per_cycle * 0.8  # 80% of total needed
         self.accumulator = PhaseAccumulator(alpha=alpha, threshold=self.threshold)
     
     def simulate_lifecycle(self, years: int = 20, timesteps_per_year: int = 12):
@@ -377,15 +384,17 @@ class MagicicadaModel:
         phase_values = []
         activation_status = []
         
-        for t in time_seconds:
-            # Evaluate spectral field at current time
-            psi = self.spectral_field.evaluate(np.array([t]))
-            
-            # Apply biological filter
-            filtered_power = self.bio_filter.apply(self.spectral_field)
-            
-            # Accumulate phase
-            phase = self.accumulator.accumulate(filtered_power, dt)
+        # Get filtered power once (it's constant for this model)
+        filtered_power = self.bio_filter.apply(self.spectral_field)
+        power_per_step = np.sum(filtered_power)
+        
+        for i, t in enumerate(time_seconds):
+            # Accumulate phase (integrate power over time)
+            # Each timestep adds power × dt contribution
+            phase = self.accumulator.accumulate(
+                np.array([power_per_step]), 
+                dt / (365 * 24 * 3600)  # Normalize to years
+            )
             phase_values.append(phase)
             
             # Check activation
