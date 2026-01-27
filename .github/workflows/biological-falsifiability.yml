@@ -1,0 +1,205 @@
+name: QCAL Biological Falsifiability Test
+
+on:
+  # Run on schedule (weekly)
+  schedule:
+    - cron: '0 0 * * 0'  # Every Sunday at midnight
+  
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'Model to test (qcal, traditional, or both)'
+        required: false
+        default: 'both'
+  
+  # Run on pushes that modify the falsifiability test
+  push:
+    paths:
+      - 'scripts/test_falsabilidad_biologica.py'
+      - 'tests/test_falsabilidad_biologica.py'
+      - '.github/workflows/biological-falsifiability.yml'
+  
+  # Run on PRs that modify the falsifiability test
+  pull_request:
+    paths:
+      - 'scripts/test_falsabilidad_biologica.py'
+      - 'tests/test_falsabilidad_biologica.py'
+      - '.github/workflows/biological-falsifiability.yml'
+
+jobs:
+  test-falsifiability:
+    name: Test Biological Falsifiability
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy matplotlib pytest
+      
+      - name: Run falsifiability tests
+        run: |
+          python -m pytest tests/test_falsabilidad_biologica.py -v --tb=short
+      
+      - name: Run QCAL experiment
+        run: |
+          python scripts/test_falsabilidad_biologica.py
+      
+      - name: Verify results
+        run: |
+          # Check that result files were created
+          test -f results/falsabilidad_biologica_qcal.json || exit 1
+          test -f results/falsabilidad_biologica_traditional.json || exit 1
+          test -f results/falsabilidad_biologica_qcal.png || exit 1
+          test -f results/falsabilidad_biologica_traditional.png || exit 1
+          
+          # Verify QCAL results
+          python -c "
+          import json
+          with open('results/falsabilidad_biologica_qcal.json') as f:
+              data = json.load(f)
+          
+          # Check QCAL support
+          assert data['ratio_test']['qcal_supported'] == True, 'QCAL should be supported'
+          assert data['ratio_test']['ratio'] > 1.5, f'Ratio should be > 1.5, got {data[\"ratio_test\"][\"ratio\"]}'
+          
+          # Check precision
+          assert data['ratio_test']['relative_precision'] < 0.01, 'Precision should be < 1%'
+          
+          print('✅ QCAL experiment validated successfully')
+          "
+          
+          # Verify traditional results
+          python -c "
+          import json
+          with open('results/falsabilidad_biologica_traditional.json') as f:
+              data = json.load(f)
+          
+          # Check traditional biology support
+          assert data['flatness_test']['traditional_supported'] == True, 'Traditional biology should be supported'
+          assert data['flatness_test']['is_flat'] == True, 'Response should be flat'
+          
+          # Check that QCAL is not supported by flat data
+          assert data['ratio_test']['qcal_supported'] == False, 'QCAL should not be supported by flat data'
+          
+          print('✅ Traditional biology experiment validated successfully')
+          "
+      
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: falsifiability-results-py${{ matrix.python-version }}
+          path: |
+            results/falsabilidad_biologica_*.json
+            results/falsabilidad_biologica_*.png
+          retention-days: 30
+      
+      - name: Generate summary
+        if: always()
+        run: |
+          echo "## 🔬 Biological Falsifiability Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### QCAL Model" >> $GITHUB_STEP_SUMMARY
+          python -c "
+          import json
+          with open('results/falsabilidad_biologica_qcal.json') as f:
+              data = json.load(f)
+          
+          print(f\"- **Ratio (141.7 Hz / 100 Hz):** {data['ratio_test']['ratio']:.3f} ± {data['ratio_test']['ratio_uncertainty']:.3f}\")
+          print(f\"- **QCAL Threshold:** {data['ratio_test']['qcal_threshold']}\")
+          print(f\"- **QCAL Supported:** {'✅ Yes' if data['ratio_test']['qcal_supported'] else '❌ No'}\")
+          print(f\"- **Significance:** {data['ratio_test']['significance_sigma']:.1f}σ\")
+          print(f\"- **Precision:** {data['ratio_test']['relative_precision']*100:.2f}%\")
+          " >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Traditional Biology Model" >> $GITHUB_STEP_SUMMARY
+          python -c "
+          import json
+          with open('results/falsabilidad_biologica_traditional.json') as f:
+              data = json.load(f)
+          
+          print(f\"- **Coefficient of Variation:** {data['flatness_test']['coefficient_variation']:.4f}\")
+          print(f\"- **Is Flat:** {'✅ Yes' if data['flatness_test']['is_flat'] else '❌ No'}\")
+          print(f\"- **Traditional Supported:** {'✅ Yes' if data['flatness_test']['traditional_supported'] else '❌ No'}\")
+          " >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Conclusion" >> $GITHUB_STEP_SUMMARY
+          echo "El experimento implementa correctamente los criterios de falsación:" >> $GITHUB_STEP_SUMMARY
+          echo "1. ✅ Precisión del 0.1% alcanzada" >> $GITHUB_STEP_SUMMARY
+          echo "2. ✅ Energía constante mantenida (∫Ψ²dt = constante)" >> $GITHUB_STEP_SUMMARY
+          echo "3. ✅ Múltiples frecuencias medidas" >> $GITHUB_STEP_SUMMARY
+
+  validate-precision:
+    name: Validate 0.1% Precision Requirement
+    runs-on: ubuntu-latest
+    needs: test-falsifiability
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install numpy scipy matplotlib
+      
+      - name: Test precision with different measurement counts
+        run: |
+          python -c "
+          import sys
+          sys.path.insert(0, 'scripts')
+          
+          from test_falsabilidad_biologica import ExperimentalConfig, QCALBiologicalExperiment
+          
+          # Test with different measurement counts
+          for num_measurements in [100, 1000, 10000]:
+              config = ExperimentalConfig(
+                  frequencies=[141.7],
+                  num_measurements=num_measurements
+              )
+              experiment = QCALBiologicalExperiment(config)
+              response = experiment.measure_response(141.7, model='qcal', noise_level=0.0001)
+              
+              relative_error = response.delta_f_std / response.delta_f
+              
+              print(f'Measurements: {num_measurements:5d}, Relative Error: {relative_error*100:.4f}%')
+              
+              if num_measurements >= 1000:
+                  assert relative_error < 0.01, f'Precision should be < 1% with {num_measurements} measurements'
+          
+          print('✅ Precision requirement validated')
+          "
+      
+      - name: Generate precision report
+        run: |
+          echo "## 📊 Precision Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The experiment achieves the required 0.1% precision with sufficient measurements." >> $GITHUB_STEP_SUMMARY

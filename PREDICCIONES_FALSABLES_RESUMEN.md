@@ -76,6 +76,24 @@ A ≈ 10⁻¹⁵ g
 
 ---
 
+### 5️⃣ Respuesta Biológica Espectral Discreta
+
+**Ecuación:**
+```
+ΔF(ω) con energía constante (∫Ψ²dt = cte)
+ΔF(141.7 Hz) / ΔF(100 Hz) > 1.5
+Precisión: 0.1%
+```
+
+**Hipótesis QCAL:** Estructura espectral discreta independiente de energía  
+**Hipótesis tradicional:** ΔF(ω) = constante ± error  
+**Plataformas:** Experimentos biológicos controlados, EEG, cultivos celulares  
+**Falsación:** Si ΔF(ω) = constante → QCAL se falsa  
+**Timeline:** 2025-2027  
+**Implementación:** `scripts/test_falsabilidad_biologica.py`
+
+---
+
 ## 🔬 Método Científico
 
 Estas predicciones satisfacen los criterios de Popper para falsabilidad:
@@ -93,6 +111,7 @@ Estas predicciones satisfacen los criterios de Popper para falsabilidad:
 | 2. BEC | ∼ 1 mm | ∼ neV | **Muy Alta** |
 | 3. Higgs | ∼ 10⁻¹⁸ m | 125 GeV | Media |
 | 4. Gravitacional | Global | ∼ 10⁻¹⁵ eV | **Muy Alta** |
+| 5. Biológica | Celular/Organismo | Variable | **Muy Alta** |
 
 ## 🚀 Implementación en Este Repositorio
 
@@ -107,12 +126,16 @@ python scripts/validar_prediccion_yukawa.py
 python scripts/validar_prediccion_bec.py
 python scripts/validar_prediccion_higgs.py
 python scripts/validar_prediccion_modulacion_gravitacional.py
+
+# NUEVO: Test de falsabilidad biológica
+python scripts/test_falsabilidad_biologica.py
 ```
 
 ### Documentación Completa
 
 - **Paper académico:** [`papers/PREDICCIONES_FALSABLES_QCAL_INFINITO3.md`](papers/PREDICCIONES_FALSABLES_QCAL_INFINITO3.md)
 - **Guía de usuario:** [`scripts/README_PREDICCIONES.md`](scripts/README_PREDICCIONES.md)
+- **Test biológico:** [`FALSABILIDAD_BIOLOGICA_README.md`](FALSABILIDAD_BIOLOGICA_README.md)
 - **Código fuente:** `scripts/validar_prediccion_*.py`
 
 ### Salidas
