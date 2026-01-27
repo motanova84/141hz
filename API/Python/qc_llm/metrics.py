@@ -259,9 +259,9 @@ def compute_coherence(text: str, use_bert: bool = True) -> dict:
     
     # Recommendation
     if coherence > THRESHOLD_HIGH:
-        recommendation = "HIGH COHERENCE - Excellent quality"
+        recommendation = "HIGH COHERENCE"
     elif coherence > THRESHOLD_MODERATE:
-        recommendation = "MODERATE COHERENCE - Good quality"
+        recommendation = "MODERATE COHERENCE"
     elif coherence > THRESHOLD_LOW:
         recommendation = "LOW COHERENCE - Consider rephrasing"
     else:
