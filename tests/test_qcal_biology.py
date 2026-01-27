@@ -178,9 +178,14 @@ class TestMagicicadaModel:
         results = model.simulate_lifecycle(years=20, timesteps_per_year=12)
         
         if results['emergence_year'] is not None:
-            # Should emerge within a few years of expected
+            # Should emerge within ~3 years of expected (≈18% tolerance)
+            # This tolerance accounts for:
+            # 1. Model simplifications (constant amplitudes, no seasonal variation)
+            # 2. Threshold calibration uncertainty
+            # 3. Real Magicicada show ±3-5 days precision, not years,
+            #    but our coarse-grained simulation uses monthly timesteps
             error = abs(results['emergence_year'] - 17)
-            assert error < 5.0  # Within 5 years tolerance
+            assert error < 3.0  # Within 3 years tolerance
 
 
 class TestValidation:
