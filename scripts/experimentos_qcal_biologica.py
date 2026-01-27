@@ -262,6 +262,8 @@ class Experimento1_ManipulacionEspectral:
         else:
             print("\n⚠ Advertencia: No todos los grupos alcanzaron floración")
             validacion_qcal = False
+            delta_BC = None
+            delta_AB = None
         
         # Resultados completos
         resultados = {
@@ -382,6 +384,9 @@ class Experimento2_MemoriaFase:
         print("\n" + "="*60)
         print("ANÁLISIS DE ROBUSTEZ DE MEMORIA DE FASE")
         print("="*60)
+        
+        desfase_anos = None  # Initialize to None
+        memoria_robusta = False  # Initialize to False
         
         if resultado_control['colapso_detectado'] and resultado_perturbado['colapso_detectado']:
             t_control = resultado_control['tiempo_colapso_anos']

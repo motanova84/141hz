@@ -335,16 +335,25 @@ class CampoEspectralBiologico:
             t_pert_inicio = perturbacion_ano * SECONDS_PER_YEAR
             t_pert_fin = (perturbacion_ano + 1) * SECONDS_PER_YEAR
             mask_pert = (t >= t_pert_inicio) & (t < t_pert_fin)
-            amplitudes_t = np.ones((len(t), len(amplitudes)))
-            for i, A in enumerate(amplitudes):
-                amplitudes_t[:, i] = A
-                amplitudes_t[mask_pert, i] *= perturbacion_amplitud  # Reducir señal
+            
+            # Crear amplitudes con perturbación aplicada
+            amplitudes_perturbadas = []
+            for A in amplitudes:
+                A_t = np.full_like(t, A, dtype=float)
+                A_t[mask_pert] *= perturbacion_amplitud  # Reducir señal durante perturbación
+                amplitudes_perturbadas.append(A_t)
+            
             if self.verbose:
                 print(f"Perturbación aplicada en año {perturbacion_ano}")
                 print(f"Amplitud reducida a {perturbacion_amplitud*100}%\n")
-        
-        # Campo ambiental espectral
-        psi_e = self.campo_ambiental_espectral(t, amplitudes, frecuencias, fases)
+            
+            # Campo ambiental espectral con perturbación
+            psi_e = np.zeros_like(t, dtype=complex)
+            for i, (omega, phi) in enumerate(zip(frecuencias, fases)):
+                psi_e += amplitudes_perturbadas[i] * np.exp(1j * (omega * t + phi))
+        else:
+            # Campo ambiental espectral sin perturbación
+            psi_e = self.campo_ambiental_espectral(t, amplitudes, frecuencias, fases)
         
         # Filtro biológico de Magicicada
         omega_test = np.linspace(0, 2*np.pi*200, 1000)  # Hasta 200 Hz
