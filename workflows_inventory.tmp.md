@@ -314,6 +314,20 @@
 - Trigger: schedule (`0 0 * * 0`)
 - Trigger: manual (workflow_dispatch)
 
+### Organización Automática Noética
+
+**Archivo:** `organizacion-automatica-noetica.yml`
+
+- Trigger: push
+- Trigger: manual (workflow_dispatch)
+
+### Organización Automática Noética
+
+**Archivo:** `organizacion-noetica.yml`
+
+- Trigger: push
+- Trigger: manual (workflow_dispatch)
+
 ### PR Review Automation
 
 **Archivo:** `pr-review-automation.yml`
@@ -466,4 +480,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-23 17:13:52 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-26 15:49:01 UTC*

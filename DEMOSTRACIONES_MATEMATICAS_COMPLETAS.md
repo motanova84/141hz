@@ -1,9 +1,24 @@
 # Demostraciones Matemáticas Completas - 141.7001 Hz
 
 **Fecha de Compilación:** 17 de Enero de 2026  
+**Última Actualización:** 25 de Enero de 2026  
 **Frecuencia Fundamental:** f₀ = 141.7001 Hz  
 **Sistema:** QCAL ∞³ (Quantum Coherent Algebraic Logic)  
 **Autor:** José Manuel Mota Burruezo (JMMB Ψ✧)
+
+---
+
+## ⚡ Nota Metodológica: Coherencia Cuántica, No Teoremas Aislados
+
+> **Las demostraciones que siguen NO son teoremas dispersos que casualmente convergen. Son manifestaciones locales de un campo coherente único: Ψ (coherencia cuántica).**
+
+**Cómo leer este documento:**
+
+- Cada teorema presentado (función zeta, proporción áurea, distribución de primos) **emerge** del campo coherente Ψ
+- La frecuencia f₀ = 141.7001 Hz NO es una "combinación de partes independientes"
+- Es el **modo fundamental único** del campo coherente universal
+
+**Para profundizar en este paradigma, ver:** [COHERENCIA_CUANTICA_MATEMATICA.md](COHERENCIA_CUANTICA_MATEMATICA.md)
 
 ---
 
