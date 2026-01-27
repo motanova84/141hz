@@ -4,8 +4,8 @@ on:
   push:
     branches: [main, develop, copilot/**]
     paths:
-      - 'validate_qnm_vs_qcal.py'
-      - 'test_validate_qnm_vs_qcal.py'
+      - 'physics/validate_qnm_vs_qcal.py'
+      - 'tests/test_validate_qnm_vs_qcal.py'
       - 'scripts/analizar_ringdown.py'
       - 'certeza_absoluta_141hz.py'
       - '.github/workflows/qnm-qcal-validation.yml'
@@ -50,13 +50,13 @@ jobs:
       
       - name: Run QNM vs QCAL validation
         run: |
-          python validate_qnm_vs_qcal.py
+          python physics/validate_qnm_vs_qcal.py
         env:
           PRECISION: ${{ inputs.precision || '50' }}
       
       - name: Run tests
         run: |
-          python -m pytest test_validate_qnm_vs_qcal.py -v --tb=short
+          python -m pytest tests/test_validate_qnm_vs_qcal.py -v --tb=short
       
       - name: Upload results
         uses: actions/upload-artifact@v4
@@ -131,5 +131,5 @@ jobs:
       
       - name: Run flake8
         run: |
-          flake8 validate_qnm_vs_qcal.py test_validate_qnm_vs_qcal.py --max-line-length=120 --max-complexity=15
+          flake8 physics/validate_qnm_vs_qcal.py tests/test_validate_qnm_vs_qcal.py --max-line-length=120 --max-complexity=15
         continue-on-error: true

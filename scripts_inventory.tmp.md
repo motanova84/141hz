@@ -208,6 +208,8 @@
   - Test suite for validacion_alpha_psi_corregida.py
 - `test_validacion_bandas_cerebrales.py`
   - Tests para validacion_bandas_cerebrales.py
+- `test_validacion_boveda_ontologica.py`
+  - Tests para validacion_boveda_ontologica.py
 - `test_validacion_calabi_yau_espectral.py`
   - Tests for Calabi-Yau Spectral Universality Validation
 - `test_validacion_gwtc1_tridetector.py`
@@ -222,6 +224,8 @@
   - Tests para validacion_noesis_at2020afhd.py
 - `test_validacion_radio_cuantico.py`
   - Tests para el script de validación del radio cuántico RΨ
+- `test_validacion_sat_solver.py`
+  - Tests para Validación SAT Solver - Teoría Noésica
 - `test_validaciones_alternativas.py`
   - Test Suite para Validaciones Alternativas - 141.7001 Hz
 - `test_validar_evidencias_solidas.py`
@@ -254,4 +258,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-23 17:13:51 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-26 15:49:00 UTC*
