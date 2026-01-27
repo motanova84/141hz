@@ -50,7 +50,7 @@ class Experimento1_ManipulacionEspectral:
     def __init__(self, f0: float = F0):
         self.f0 = f0
         self.duracion_dias = 30  # Ciclo de floración típico de Arabidopsis
-        self.dt = 1.0  # Segundos
+        self.dt = 60.0  # Segundos (1 minuto para eficiencia)
         
     def generar_ciclo_termico_control(self, t: np.ndarray) -> np.ndarray:
         """
@@ -171,9 +171,9 @@ class Experimento1_ManipulacionEspectral:
         # Acumulación de fase (integral de |señal|²)
         fase_acum = np.cumsum(np.abs(senal_total)**2) * self.dt
         
-        # Umbral para floración (si no se especifica, usar percentil 90)
+        # Umbral para floración (si no se especifica, usar percentil 50 para permitir detección)
         if umbral_energia is None:
-            umbral_energia = np.percentile(fase_acum, 90)
+            umbral_energia = np.percentile(fase_acum, 50)
         
         # Detectar tiempo de floración
         idx_floracion = np.where(fase_acum >= umbral_energia)[0]
@@ -212,15 +212,18 @@ class Experimento1_ManipulacionEspectral:
         energia_control = np.sum(T_A**2) * self.dt
         resultado_A = self.simular_floracion(T_A, vib_A, t)
         
+        # Usar el mismo umbral para todos los grupos (del control)
+        umbral_comun = resultado_A['umbral_energia']
+        
         # Grupo B: Espectral (misma energía + pulsos 141.7 Hz)
         print("Grupo B (Espectral): Energía igual + pulsos 141.7 Hz...")
         T_B, vib_B = self.generar_ciclo_espectral(t, energia_control)
-        resultado_B = self.simular_floracion(T_B, vib_B, t)
+        resultado_B = self.simular_floracion(T_B, vib_B, t, umbral_energia=umbral_comun)
         
         # Grupo C: Energético (energía diferente, espectro similar a B)
         print("Grupo C (Energético): Energía +20%, espectro similar a B...")
         T_C, vib_C = self.generar_ciclo_energetico(t, energia_factor=1.2)
-        resultado_C = self.simular_floracion(T_C, vib_C, t)
+        resultado_C = self.simular_floracion(T_C, vib_C, t, umbral_energia=umbral_comun)
         
         # Análisis comparativo
         print("\n" + "="*60)
@@ -308,9 +311,9 @@ class Experimento1_ManipulacionEspectral:
         ax3 = axes[2]
         grupos = ['A\n(Control)', 'B\n(Espectral)', 'C\n(Energético)']
         tiempos = [
-            res_A.get('tiempo_floracion_dias', 0),
-            res_B.get('tiempo_floracion_dias', 0),
-            res_C.get('tiempo_floracion_dias', 0)
+            res_A.get('tiempo_floracion_dias') if res_A.get('floracion_detectada') else self.duracion_dias,
+            res_B.get('tiempo_floracion_dias') if res_B.get('floracion_detectada') else self.duracion_dias,
+            res_C.get('tiempo_floracion_dias') if res_C.get('floracion_detectada') else self.duracion_dias
         ]
         colores = ['blue', 'red', 'green']
         
@@ -320,10 +323,11 @@ class Experimento1_ManipulacionEspectral:
         ax3.grid(True, axis='y', alpha=0.3)
         
         # Añadir valores sobre las barras
-        for bar, tiempo in zip(bars, tiempos):
+        for bar, tiempo, res in zip(bars, tiempos, [res_A, res_B, res_C]):
             height = bar.get_height()
+            label = f'{tiempo:.1f}' if res.get('floracion_detectada') else 'N/D'
             ax3.text(bar.get_x() + bar.get_width()/2., height,
-                    f'{tiempo:.1f}', ha='center', va='bottom', fontweight='bold')
+                    label, ha='center', va='bottom', fontweight='bold')
         
         plt.tight_layout()
         output_file = output_dir / 'experimento_1_manipulacion_espectral.png'
