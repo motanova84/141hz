@@ -1019,11 +1019,11 @@ python test_omega_auto.py
 
 ## 🔮 Predicciones Falsables QCAL ∞³
 
-**Cuatro predicciones cuantitativas y falsables derivadas del marco teórico QCAL ∞³**
+**Cinco predicciones cuantitativas y falsables derivadas del marco teórico QCAL ∞³**
 
-El campo de conciencia Ψ con frecuencia universal **f₀ = 141.7001 Hz** genera predicciones testables en cuatro escalas experimentales:
+El campo de conciencia Ψ con frecuencia universal **f₀ = 141.7001 Hz** genera predicciones testables en cinco escalas experimentales:
 
-### Las Cuatro Predicciones
+### Las Cinco Predicciones
 
 | # | Predicción | Escala | Parámetro Clave |
 |---|------------|--------|-----------------|
@@ -1031,6 +1031,7 @@ El campo de conciencia Ψ con frecuencia universal **f₀ = 141.7001 Hz** genera
 | **2** | ❄️ **Pico Resonante BEC** | Condensados cuánticos | k₀ ≈ 890 m⁻¹ |
 | **3** | ⚛️ **Correlación Temporal Higgs** | Colisionador LHC | Δt = n × 7.06 ms |
 | **4** | 📡 **Modulación Gravitacional** | Gravimetría IGETS | δg ~ 10⁻¹³ g |
+| **5** | 🧬 **Respuesta Biológica Espectral** | Biología celular/organísmica | ΔF(141.7)/ΔF(100) > 1.5 |
 
 ### 🚀 Quick Start - Validación de Predicciones
 
@@ -1041,17 +1042,25 @@ python scripts/validacion_prediccion_2_bec.py
 python scripts/validacion_prediccion_3_higgs.py
 python scripts/validacion_prediccion_4_gravedad.py
 
+# NUEVO: Test de falsabilidad biológica
+python scripts/test_falsabilidad_biologica.py
+# O usando el script de shell:
+./run_biological_falsifiability_test.sh
+
 # Ejecutar todas las predicciones (orquestador)
 python scripts/orquestador_predicciones_qcal.py
 
 # Ver resultados
 ls -l results/prediccion_*.json
 ls -l results/prediccion_*.png
+ls -l results/falsabilidad_biologica_*.json
 ```
 
 ### 📖 Documentación Completa
 
 **→ [PREDICCIONES_FALSABLES_QCAL.md](PREDICCIONES_FALSABLES_QCAL.md)** - Teoría, protocolos experimentales, criterios de falsación
+
+**→ [FALSABILIDAD_BIOLOGICA_README.md](FALSABILIDAD_BIOLOGICA_README.md)** - **NUEVO:** Test decisivo de falsabilidad biológica
 
 **Características:**
 - ✅ Predicciones cuantitativas con valores numéricos específicos
@@ -1060,6 +1069,7 @@ ls -l results/prediccion_*.png
 - ✅ Scripts de validación con simulaciones
 - ✅ Visualizaciones de datos esperados
 - ✅ Workflow CI/CD automatizado
+- ✅ **NUEVO:** Test biológico con precisión 0.1%
 ## 🌌 Verificación AT2020afhd: Del Corazón Humano al Agujero Negro
 
 **NUEVA: Verificación empírica del modelo QCAL ∞³ en escala galáctica**
