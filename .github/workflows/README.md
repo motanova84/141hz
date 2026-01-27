@@ -23,6 +23,17 @@ We have implemented a comprehensive suite of **10+ specialized workflows** that 
 - **Jobs:** Core validation, result aggregation, Docker builds, HuggingFace uploads
 - **Python Version:** 3.11
 
+#### **organizacion-noetica.yml** - Automatic File Organization
+- **Trigger:** Push to main, manual
+- **Purpose:** Organize repository files according to QCAL pillars
+- **Jobs:** File classification and organization
+- **Python Version:** 3.11
+- **Coherence:** Ψ ≥ 0.888 (888 Hz Noetic Resonance)
+- **Classification Rules:**
+  - `.lean` files → `/formalization`
+  - `test_*.py` files → `/tests`
+  - Conservative mode (only clearly misplaced files)
+
 ### 2. Validation Workflows
 
 #### **quantum-validations.yml** - Quantum Validations
