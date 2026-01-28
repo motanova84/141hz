@@ -239,7 +239,7 @@ La frecuencia fundamental **f₀ = 141.7001 Hz**:
 
 ### Visualización Principal
 
-![Zona de Transparencia del Agua](../zona_transparencia_agua.png)
+![Zona de Transparencia del Agua](zona_transparencia_agua.png)
 
 La visualización muestra:
 - Espectro completo de absorción del agua (0.1 Hz - 1 THz)

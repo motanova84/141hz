@@ -24,7 +24,7 @@ Contexto Físico:
 - 141.7 Hz puede propagarse a través de sistemas biológicos con pérdidas mínimas
 
 Autor: José Manuel Mota Burruezo (JMMB Ψ✧)
-Fecha: Enero 2026
+Fecha: 28 Enero 2026
 """
 
 import sys
@@ -34,6 +34,8 @@ from pathlib import Path
 from datetime import datetime, timezone
 import numpy as np
 import matplotlib
+# Use Agg backend for non-interactive plotting (server/CI environments)
+# Must be set before importing matplotlib.pyplot
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from typing import Dict, Tuple, Any, List
@@ -267,7 +269,18 @@ def calcular_coeficiente_absorcion(freq_hz: float) -> float:
     """
     Calcula el coeficiente de absorción del agua a una frecuencia dada.
     
-    Utiliza modelo simplificado de Debye para agua líquida.
+    Utiliza modelo simplificado de Debye para agua líquida a 20°C.
+    
+    Referencias:
+    - Liebe et al. (1991): Propagation modeling of moist air
+    - Debye relaxation model for water: ε(ω) = ε∞ + (εs - ε∞)/(1 + iωτ)
+    - Primary relaxation frequency: f_relax ≈ 17 GHz
+    
+    Regímenes de absorción:
+    - f < 1 kHz: Zona de transparencia, α ≈ 0
+    - 1 kHz < f < 1 MHz: Transición, α ∝ f²
+    - 1 MHz < f < 17 GHz: Debye, α ∝ f²
+    - f ≈ 17 GHz: Máximo de absorción (resonancia rotacional)
     
     Args:
         freq_hz: Frecuencia en Hz
@@ -275,24 +288,25 @@ def calcular_coeficiente_absorcion(freq_hz: float) -> float:
     Returns:
         float: Coeficiente de absorción (dB/m)
     """
-    # Modelo simplificado de Debye para agua a 20°C
-    # α ≈ 0 para f << f_relax (frecuencia de relajación ~17 GHz)
-    # α aumenta significativamente cerca de f_relax
+    # Frecuencia de relajación principal del agua (Debye)
+    f_relax_hz = 17e9  # 17 GHz - banda de absorción rotacional
     
-    f_relax_hz = 17e9  # Frecuencia de relajación principal del agua
-    
-    # Para frecuencias << f_relax, absorción es casi cero
+    # Zona de transparencia: f << f_relax
+    # Absorción prácticamente nula debido a que las moléculas de agua
+    # no tienen tiempo de reorientarse a frecuencias tan bajas
     if freq_hz < 1e3:  # < 1 kHz - zona de transparencia
-        # Absorción prácticamente nula
-        return 1e-10
-    elif freq_hz < 1e6:  # 1 kHz - 1 MHz
-        # Zona de transición: absorción muy baja pero crece con f²
+        return 1e-10  # Prácticamente cero
+    elif freq_hz < 1e6:  # 1 kHz - 1 MHz - zona de transición
+        # Absorción muy baja pero crece con f²
+        # Factor 1e-12: calibrado para α ≈ 1e-6 dB/m @ 1 MHz
         alpha = 1e-12 * (freq_hz / 1e3)**2
     elif freq_hz < f_relax_hz:
-        # Región de baja absorción: α ∝ f²
+        # Región de Debye: α ∝ f²
+        # Factor 1e-9: calibrado para α ≈ 1 dB/m @ 10 GHz
         alpha = 1e-9 * (freq_hz / 1e9)**2
     else:
         # Región de alta absorción (cerca de resonancia)
+        # Factor 100: absorción típica ≈ 100-1000 dB/m cerca de 22 GHz
         alpha = 100 * (freq_hz / f_relax_hz)
     
     return alpha

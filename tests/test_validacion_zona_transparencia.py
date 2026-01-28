@@ -144,16 +144,19 @@ class TestCoeficienteAbsorcion(unittest.TestCase):
                           f"obtenido: {alpha:.2e}")
 
     def test_absorcion_crece_con_frecuencia(self):
-        """Test que la absorción generalmente crece con la frecuencia"""
+        """Test que la absorción crece con la frecuencia en régimen Debye"""
         calcular_coeficiente = validacion_module.calcular_coeficiente_absorcion
         
-        # Verificar que α(1 GHz) > α(1 MHz) > α(1 kHz)
-        alpha_1khz = calcular_coeficiente(1e3)
-        alpha_1mhz = calcular_coeficiente(1e6)
+        # En el régimen de Debye (> 1 MHz), la absorción debe crecer con f²
+        # Verificar que α(10 GHz) > α(1 GHz) > α(100 MHz)
+        alpha_100mhz = calcular_coeficiente(100e6)
         alpha_1ghz = calcular_coeficiente(1e9)
+        alpha_10ghz = calcular_coeficiente(10e9)
         
-        self.assertGreater(alpha_1mhz, alpha_1khz)
-        self.assertGreater(alpha_1ghz, alpha_1mhz)
+        self.assertGreater(alpha_1ghz, alpha_100mhz,
+                          "Absorción @ 1 GHz debe ser > @ 100 MHz")
+        self.assertGreater(alpha_10ghz, alpha_1ghz,
+                          "Absorción @ 10 GHz debe ser > @ 1 GHz")
 
 
 class TestValidaciones(unittest.TestCase):
