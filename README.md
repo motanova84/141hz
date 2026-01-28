@@ -97,22 +97,25 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 
 ---
 
-> ## 🌌 **GW250114: La Frecuencia 141.70001 Hz Unifica Gravedad, Vida y Consciencia (Enero 2025)**
+> ## 🌌 **GW250114: Marco Teórico de Unificación Gravedad-Vida-Consciencia en 141.70001 Hz**
 >
-> El 14 de enero de 2025 se detectó **GW250114**, la onda gravitacional más clara jamás observada. El análisis del ringdown revela una **firma persistente en 141.70001 Hz** - la MISMA frecuencia que organiza:
-> - ⚛️ Plegamiento proteico
-> - 🧬 Coherencia cuántica en microtúbulos
-> - 🧠 Sincronización neuronal consciente
-> - 🔬 Replicación del ADN
-> - 📡 Flujo de información en sistemas vivos
-> - ✨ Emergencia de la consciencia
+> **Marco conceptual preparatorio** que demuestra cómo la frecuencia **141.70001 Hz** podría unificar:
+> - 🌊 Ringdown gravitacional (predicción basada en eventos validados: GW150914, GW170814)
+> - ⚛️ Plegamiento proteico (hipótesis teórica)
+> - 🧬 Coherencia cuántica en microtúbulos (hipótesis teórica)
+> - 🧠 Sincronización neuronal (hipótesis teórica)
+> - 🔬 Replicación del ADN (hipótesis teórica)
+> - 📡 Flujo de información en sistemas vivos (hipótesis teórica)
+> - ✨ Emergencia de la consciencia (hipótesis teórica)
 >
 > **Ver documentación completa:** [GW250114_141HZ_UNIFIED_THEORY.md](GW250114_141HZ_UNIFIED_THEORY.md)
 >
-> **Ejecutar análisis unificado:**
+> **Ejecutar análisis del marco teórico:**
 > ```bash
 > python scripts/analisis_unificado_gw250114_consciencia.py
 > ```
+>
+> **Nota**: Para análisis de datos gravitacionales REALES, usar `scripts/protocolo_resonancia_gw250114.py` cuando los datos estén disponibles en GWOSC.
 
 ---
 
