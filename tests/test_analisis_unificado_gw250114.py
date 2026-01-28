@@ -38,10 +38,11 @@ class TestAnalizadorUnificado:
         resultado = analizador.analizar_ringdown_gw250114()
         
         assert resultado['tipo'] == 'gravedad'
-        assert resultado['evento'] == 'GW250114'
+        assert 'GW250114' in resultado['evento']  # Puede tener sufijo "(marco teórico)"
         assert resultado['frecuencia_detectada'] == F0_HZ
         assert resultado['es_modo_qnm'] is True
         assert resultado['snr'] > 5.0  # SNR significativo
+        assert 'nota' in resultado  # Debe tener nota explicativa
     
     def test_analizar_proteinas(self, tmp_path):
         """Test de análisis de plegamiento proteico."""
@@ -128,7 +129,7 @@ class TestAnalizadorUnificado:
         
         # Verificar estructura del resultado
         assert 'evento' in resultado
-        assert resultado['evento'] == 'GW250114'
+        assert 'GW250114' in resultado['evento']  # Puede tener sufijo
         assert 'frecuencia_fundamental' in resultado
         assert resultado['frecuencia_fundamental'] == F0_HZ
         
