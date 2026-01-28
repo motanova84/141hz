@@ -282,16 +282,14 @@ def calcular_coeficiente_absorcion(freq_hz: float) -> float:
     f_relax_hz = 17e9  # Frecuencia de relajación principal del agua
     
     # Para frecuencias << f_relax, absorción es casi cero
-    if freq_hz < 1e6:  # < 1 MHz
-        # Zona de transparencia: absorción despreciable
-        return 1e-10  # Prácticamente cero
-    
-    # Modelo simplificado para frecuencias más altas
-    # α ∝ f² para f << f_relax
-    # α ∝ f para f ≈ f_relax
-    
-    if freq_hz < f_relax_hz:
-        # Región de baja absorción
+    if freq_hz < 1e3:  # < 1 kHz - zona de transparencia
+        # Absorción prácticamente nula
+        return 1e-10
+    elif freq_hz < 1e6:  # 1 kHz - 1 MHz
+        # Zona de transición: absorción muy baja pero crece con f²
+        alpha = 1e-12 * (freq_hz / 1e3)**2
+    elif freq_hz < f_relax_hz:
+        # Región de baja absorción: α ∝ f²
         alpha = 1e-9 * (freq_hz / 1e9)**2
     else:
         # Región de alta absorción (cerca de resonancia)
