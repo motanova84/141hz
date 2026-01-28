@@ -45,6 +45,8 @@
   - Badge Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_qcal_biology.py`
+  - QCAL Biology Validation Script
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
@@ -59,6 +61,8 @@
   - Badge Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_qcal_biology.py`
+  - QCAL Biology Validation Script
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
@@ -258,4 +262,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-27 21:12:11 UTC*
+*Generado automáticamente por el bot de documentación - 2026-01-28 00:07:09 UTC*
