@@ -500,7 +500,7 @@ class CondensedMatterComponent:
         # on the hypothesis that the noetic field couples to electronic
         # transport in topological insulators. The physical mechanism
         # involves the density of states modulation at energy E = eV.
-        self.V_resonance = f0 / 1000  # mV
+        self.V_resonance_mV = f0 / 1000  # Convert Hz to mV
         
     def stm_prediction(self) -> Dict[str, Any]:
         """
@@ -518,7 +518,7 @@ class CondensedMatterComponent:
                 "tip": "Pt-Ir"
             },
             "prediction": {
-                "voltage_mV": 141.7,
+                "voltage_mV": self.V_resonance_mV,
                 "tolerance_mV": 0.5,
                 "peak_width_FWHM_mV": 5.0,
                 "expected_feature": "Conductance peak in dI/dV"

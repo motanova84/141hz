@@ -21,7 +21,6 @@ class TestQCALUnifiedTheoryIntegration(unittest.TestCase):
         """Test that UnifiedTheory can be imported from qcal package."""
         try:
             from qcal import UnifiedTheory
-            self.assertTrue(True, "UnifiedTheory imported successfully")
         except ImportError as e:
             self.fail(f"Failed to import UnifiedTheory from qcal: {e}")
     
@@ -38,8 +37,6 @@ class TestQCALUnifiedTheoryIntegration(unittest.TestCase):
             CondensedMatterComponent,
             UnifiedTheory
         )
-        # If we get here, all imports succeeded
-        self.assertTrue(True)
     
     def test_unified_theory_initialization(self):
         """Test UnifiedTheory class initialization."""
