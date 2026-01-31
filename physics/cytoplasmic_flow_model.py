@@ -9,7 +9,7 @@ Physical Context:
 - Cytoplasm density: ρ = 1050 kg/m³
 - Kinematic viscosity: ν = 10⁻⁶ m²/s
 - Characteristic length: L = 1 μm
-- Reynolds number: Re = 10⁻⁸ << 1 (Stokes regime)
+- Reynolds number: Re = 10⁻⁶ << 1 (Stokes regime)
 
 Mathematical Framework:
 1. Stokes equations: μ∇²u = ∇p, ∇·u = 0

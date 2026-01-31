@@ -371,13 +371,13 @@ class CardiacCoherenceBridge:
             validation = {
                 'integration_successful': False,
                 'error': str(e),
-                'status': 'FAILED - Module import error'
+                'status': f'FAILED - Module import error: {str(e)}'
             }
         except Exception as e:
             validation = {
                 'integration_successful': False,
                 'error': str(e),
-                'status': 'FAILED - Runtime error'
+                'status': f'FAILED - Runtime error: {str(e)}'
             }
         
         return validation

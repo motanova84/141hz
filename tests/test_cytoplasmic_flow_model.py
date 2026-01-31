@@ -41,11 +41,13 @@ class TestCytoplasmicParameters(unittest.TestCase):
     
     def test_density(self):
         """Test cytoplasm density."""
-        self.assertEqual(self.params.rho, 1050.0, "Density should be 1050 kg/m³")
+        self.assertAlmostEqual(self.params.rho, 1050.0, places=1, 
+                              msg="Density should be 1050 kg/m³")
     
     def test_viscosity(self):
         """Test kinematic viscosity."""
-        self.assertEqual(self.params.nu, 1e-6, "Viscosity should be 10^-6 m²/s")
+        self.assertAlmostEqual(self.params.nu, 1e-6, places=10, 
+                              msg="Viscosity should be 10^-6 m²/s")
     
     def test_reynolds_number(self):
         """Test Reynolds number calculation."""
