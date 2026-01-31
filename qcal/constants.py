@@ -368,7 +368,10 @@ def obtener_constantes_bio_sincronia():
 # el flujo citoplasmático debe mantener coherencia de fase a escalas τₙ = 1/fₙ
 
 # Effective wave number para flujo citoplasmático
-KAPPA_PI = 2.5773  # κ_Π - Número de onda efectivo del flujo citoplasmático (m⁻¹)
+# Nota: Aunque los números de onda típicamente tienen unidades de m⁻¹,
+# κ_Π = 2.5773 es un parámetro adimensional que caracteriza el acoplamiento
+# entre la viscosidad y la frecuencia en el flujo citoplasmático.
+KAPPA_PI = 2.5773  # κ_Π - Parámetro adimensional de acoplamiento viscoso-oscilatorio
 
 # Viscosidad cinemática típica del citoplasma
 # Ajustada para que ξ = √(ν/ω) ≈ 1.06 μm a la frecuencia f₀
