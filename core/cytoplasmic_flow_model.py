@@ -214,8 +214,10 @@ class NavierStokesRegularized:
         
         En régimen viscoso, la vorticidad es suave y difusiva.
         
-        Note: Uses uniform step size h for all directions for simplicity.
-        For production use, consider explicit dy and dz for isotropic grid.
+        Note: Uses uniform step size h for all spatial directions (isotropic grid).
+        The step size is 1% of the characteristic length scale for numerical accuracy.
+        For anisotropic systems with different length scales in x, y, z, consider
+        using separate step sizes dx, dy, dz.
         
         Returns:
             Componentes (ωx, ωy, ωz) de la vorticidad
@@ -224,7 +226,8 @@ class NavierStokesRegularized:
         vx, vy, vz = self.velocity_field(x, y, z, t)
         
         # Paso para derivadas numéricas (uniforme en todas direcciones)
-        h = self.params.length_scale / 100  # Step size
+        # Using 1% of characteristic length for good balance between accuracy and stability
+        h = self.params.length_scale / 100
         
         # ωx = ∂vz/∂y - ∂vy/∂z
         _, vy_yplus, _ = self.velocity_field(x, y + h, z, t)
