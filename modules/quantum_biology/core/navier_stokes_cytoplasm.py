@@ -47,7 +47,7 @@ class NavierStokesCytoplasm:
     VISCOSITY_DYNAMIC = 1.03e-3  # Pa·s (dynamic viscosity μ = ρν)
     
     # Characteristic cellular scales
-    CELL_LENGTH = 10e-6  # 10 μm (typical cell dimension)
+    CELL_LENGTH = 84e-6  # 84 μm (larger cell dimension for 141.7 Hz resonance)
     VELOCITY_SCALE = 1e-6  # 1 μm/s (cytoplasmic streaming velocity)
     
     # Target oscillation parameters

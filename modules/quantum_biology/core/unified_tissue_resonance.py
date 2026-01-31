@@ -114,7 +114,7 @@ class UnifiedTissueResonance:
         self.temperature = temperature
         
         # Initialize the three frameworks
-        self.hilbert_polya = HilbertPolyaOperator(n_zeros=100)
+        self.hilbert_polya = HilbertPolyaOperator(n_zeros=350)
         self.navier_stokes = NavierStokesCytoplasm(temperature=temperature)
         self.magicicada = MagicicadaScaling()
         

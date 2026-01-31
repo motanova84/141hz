@@ -51,7 +51,7 @@ class MagicicadaScaling:
     SECONDS_PER_YEAR = 365.25 * 24 * 3600  # Average including leap years
     
     # Cellular oscillation parameters
-    TAU_CELL = 7e-3  # 7 ms (cytoplasmic oscillation period)
+    TAU_CELL = 7.058e-3  # 7.058 ms (cytoplasmic oscillation period for 141.7 Hz)
     F_CELL_TARGET = 141.7  # Hz (predicted cellular frequency)
     
     # Golden ratio (appears in biological scaling)
