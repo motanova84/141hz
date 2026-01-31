@@ -27,10 +27,6 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Add parent directory to path for imports
-import os
-import sys
-
 # Get the repository root
 repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 if repo_root not in sys.path:

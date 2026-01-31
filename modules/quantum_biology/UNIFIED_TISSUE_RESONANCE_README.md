@@ -14,13 +14,12 @@ Maps the imaginary parts of Riemann zeta zeros to biological frequencies using g
 
 **Mathematical Framework:**
 ```
-Hₚ(z) = 1/2 + iγₙ → fₙ = (γₙ/2π) × φ × 10⁻⁶
+Hₚ(z) = 1/2 + iγₙ → fₙ = (γₙ/2π) × φ
 ```
 
 where:
 - `γₙ` = imaginary part of n-th Riemann zeta zero
 - `φ = (1+√5)/2 ≈ 1.618...` (golden ratio)
-- `10⁻⁶` = biological scaling factor
 
 **Key Result:** Eigenfrequencies cluster near 141.7 Hz
 
@@ -43,7 +42,7 @@ At cellular scales (Re ~ 10⁻⁶):
 **Parameters:**
 - ρ = 1030 kg/m³ (cytoplasm density)
 - ν = 10⁻⁶ m²/s (kinematic viscosity)
-- L = 10 μm (cell length scale)
+- L = 84 μm (cell length scale for 141.7 Hz resonance)
 
 **Key Result:** Natural oscillation at 141.7 Hz
 
