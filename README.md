@@ -44,6 +44,7 @@ Análisis científico de la frecuencia fundamental **f₀ = 141.7001 Hz** en ond
 - **Formalización matemática**: Pruebas verificadas en Lean 4
 - **Validaciones experimentales**: Análisis multi-detector (H1, L1, V1, KAGRA)
 - **Framework QCAL**: Teoría cuántica de coherencia noética
+- **Módulo Teoría Unificada**: `qcal.unified_theory` - Implementación completa de la teoría
 - **CI/CD automatizado**: Workflows de validación continua
 
 ### 🚀 Quickstart (3 comandos)
@@ -57,6 +58,28 @@ make validate
 # 3. Verificar formalización matemática
 cd formalization/lean && lake build
 ```
+
+### 🔬 Usar el Módulo de Teoría Unificada
+```python
+# Importar el framework unificado QCAL
+from qcal import UnifiedTheory
+
+# Inicializar la teoría
+theory = UnifiedTheory()
+
+# Imprimir resumen
+theory.print_summary()
+
+# Generar reporte completo
+report = theory.generate_report()
+
+# Acceder a predicciones falsables
+predictions = theory.all_falsifiable_predictions()
+```
+
+**Documentación completa:** [QCAL_UNIFIED_THEORY_QUICK_REFERENCE.md](QCAL_UNIFIED_THEORY_QUICK_REFERENCE.md)
+
+**Módulo:** `qcal.unified_theory` - Implementación Python de la teoría completa
 
 ### 📄 Dónde está el paper (DOI)
 **Publicación principal:** [https://doi.org/10.5281/zenodo.17445017](https://doi.org/10.5281/zenodo.17445017)
