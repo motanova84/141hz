@@ -91,6 +91,37 @@ if SPECTRAL_EMBEDDING_AVAILABLE:
         "EmbeddingEvaluator"
     ])
 
+# Unified theory modules
+try:
+    from .unified_theory import (
+        UnifiedTheoryConstants,
+        RiemannZetaComponent,
+        CalabiYauComponent,
+        FrequencyComponent,
+        ConsciousnessComponent,
+        GravityComponent,
+        SpectrumComponent,
+        CondensedMatterComponent,
+        UnifiedTheory
+    )
+    UNIFIED_THEORY_AVAILABLE = True
+except ImportError:
+    UNIFIED_THEORY_AVAILABLE = False
+
+# Add unified theory exports if available
+if UNIFIED_THEORY_AVAILABLE:
+    __all__.extend([
+        "UnifiedTheoryConstants",
+        "RiemannZetaComponent",
+        "CalabiYauComponent",
+        "FrequencyComponent",
+        "ConsciousnessComponent",
+        "GravityComponent",
+        "SpectrumComponent",
+        "CondensedMatterComponent",
+        "UnifiedTheory"
+    ])
+
 # Fundamental constants
 F0 = 141.7001  # Hz - Universal frequency
 PHI = 1.618033988749895  # Golden ratio
