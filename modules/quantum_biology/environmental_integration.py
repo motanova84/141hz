@@ -11,6 +11,7 @@ Date: January 31, 2026
 """
 
 import numpy as np
+import pandas as pd
 from typing import Tuple, Optional
 import sys
 import os
@@ -239,10 +240,3 @@ def get_multi_location_environmental_data(
             print(f"Warning: Failed to get data for {loc['name']}: {e}")
     
     return results
-
-
-# Import pandas only if needed
-try:
-    import pandas as pd
-except ImportError:
-    pd = None
