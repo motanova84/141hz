@@ -5359,3 +5359,47 @@ MIT License - See [LICENSE](LICENSE)
 ---
 
 *"La coherencia no se impone: se manifiesta cuando las constantes profundas se alinean."*
+
+---
+
+## 🌿 NEW: Biological Periodicity & Environmental Data Integration
+
+### Real-World Data APIs
+This project now integrates real-world environmental data to study biological periodicities and their harmonic relationships with the 141Hz fundamental frequency.
+
+**Data Sources:**
+- **NASA POWER API**: Global solar, temperature, and meteorological data
+- **NOAA Climate Data Online**: Historical weather and climate records
+
+**Species Analyzed:**
+- 🌱 *Arabidopsis thaliana* - Circadian rhythms and photoperiod responses
+- 🦟 *Trichogramma* - Developmental cycles and parasitoid biology  
+- 👤 Human - Circadian and ultradian rhythms
+
+### Reproducible Notebooks
+Execute in your browser without installation:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/motanova84/141hz/blob/main/notebooks/biological_rhythms_environmental_data.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/motanova84/141hz/main?filepath=notebooks/biological_rhythms_environmental_data.ipynb)
+
+### Quick Start - Biological Analysis
+
+```python
+from scripts.biological_periodicity import ArabidopsisAnalyzer
+
+# Analyze circadian rhythms
+analyzer = ArabidopsisAnalyzer()
+results = analyzer.analyze_all_periods()
+
+# Check harmonic relationships
+for rhythm, data in results['periods'].items():
+    if data['is_harmonic']:
+        print(f"{rhythm}: Harmonic n={data['nearest_harmonic']}")
+```
+
+### Documentation
+- 📖 [Full Documentation](docs/BIOLOGICAL_PERIODICITY_README.md)
+- 📄 [arXiv Paper Template](papers/biological_periodicity_arxiv.tex)
+- 🧪 [Validation Tests](scripts/test_biological_periodicity.py)
+- 💡 [Usage Examples](examples/biological_periodicity_example.py)
+
