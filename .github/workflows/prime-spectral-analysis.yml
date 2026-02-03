@@ -74,38 +74,38 @@ jobs:
             
             # Extraer estadísticas clave del JSON
             python << 'EOF' >> $GITHUB_STEP_SUMMARY
-import json
-import sys
-
-try:
-    with open('results/analisis_espectral_100_primos.json', 'r') as f:
-        data = json.load(f)
-    
-    stats = data['statistics']
-    special = data['special_primes']
-    fractal = data['fractal_analysis']
-    
-    print(f"| Métrica | Valor |")
-    print(f"|---------|-------|")
-    print(f"| Primo mínimo | {stats['prime_min']} |")
-    print(f"| Primo máximo | {stats['prime_max']} |")
-    print(f"| Frecuencia mínima | {stats['freq_min_hz']:.2f} Hz |")
-    print(f"| Frecuencia máxima | {stats['freq_max_hz']:.2e} Hz |")
-    print(f"| Octavas cubiertas | {stats['octaves_covered']} |")
-    print(f"| R² (estructura fractal) | {fractal['r_squared']:.6f} |")
-    print("")
-    print("### ⭐ Punto Noético (p=17)")
-    print("")
-    noetic = special['noetic_point']
-    print(f"- **Frecuencia:** {noetic['frequency_hz']:.4f} Hz")
-    print(f"- **Nota musical:** {noetic['note']}")
-    print(f"- **Desviación:** {noetic['cents_deviation']:.2f} cents")
-    print(f"- **Equilibrium:** {noetic['equilibrium']:.6f}")
-    
-except Exception as e:
-    print(f"Error al procesar JSON: {e}", file=sys.stderr)
-    sys.exit(1)
-EOF
+            import json
+            import sys
+            
+            try:
+                with open('results/analisis_espectral_100_primos.json', 'r') as f:
+                    data = json.load(f)
+                
+                stats = data['statistics']
+                special = data['special_primes']
+                fractal = data['fractal_analysis']
+                
+                print(f"| Métrica | Valor |")
+                print(f"|---------|-------|")
+                print(f"| Primo mínimo | {stats['prime_min']} |")
+                print(f"| Primo máximo | {stats['prime_max']} |")
+                print(f"| Frecuencia mínima | {stats['freq_min_hz']:.2f} Hz |")
+                print(f"| Frecuencia máxima | {stats['freq_max_hz']:.2e} Hz |")
+                print(f"| Octavas cubiertas | {stats['octaves_covered']} |")
+                print(f"| R² (estructura fractal) | {fractal['r_squared']:.6f} |")
+                print("")
+                print("### ⭐ Punto Noético (p=17)")
+                print("")
+                noetic = special['noetic_point']
+                print(f"- **Frecuencia:** {noetic['frequency_hz']:.4f} Hz")
+                print(f"- **Nota musical:** {noetic['note']}")
+                print(f"- **Desviación:** {noetic['cents_deviation']:.2f} cents")
+                print(f"- **Equilibrium:** {noetic['equilibrium']:.6f}")
+                
+            except Exception as e:
+                print(f"Error al procesar JSON: {e}", file=sys.stderr)
+                sys.exit(1)
+            EOF
           fi
           
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -157,61 +157,61 @@ EOF
       - name: Validate key findings
         run: |
           python << 'EOF'
-import json
-import sys
-
-# Cargar resultados
-with open('results/analisis_espectral_100_primos.json', 'r') as f:
-    data = json.load(f)
-
-# Validaciones
-stats = data['statistics']
-special = data['special_primes']
-fractal = data['fractal_analysis']
-
-validations = []
-
-# 1. Verificar número de primos
-if stats['prime_max'] == 541:
-    validations.append("✓ Primo máximo correcto (541)")
-else:
-    validations.append(f"✗ Primo máximo incorrecto: {stats['prime_max']} (esperado: 541)")
-
-# 2. Verificar punto noético
-noetic_freq = special['noetic_point']['frequency_hz']
-if abs(noetic_freq - 141.70) < 0.1:
-    validations.append(f"✓ Frecuencia noética correcta ({noetic_freq:.2f} Hz)")
-else:
-    validations.append(f"✗ Frecuencia noética incorrecta: {noetic_freq:.2f} Hz (esperado: ~141.70 Hz)")
-
-# 3. Verificar estructura fractal
-if fractal['r_squared'] > 0.99:
-    validations.append(f"✓ R² alto ({fractal['r_squared']:.6f})")
-else:
-    validations.append(f"✗ R² bajo: {fractal['r_squared']:.6f} (esperado: >0.99)")
-
-# 4. Verificar octavas
-if stats['octaves_covered'] >= 35:
-    validations.append(f"✓ Octavas cubiertas ({stats['octaves_covered']})")
-else:
-    validations.append(f"✗ Octavas insuficientes: {stats['octaves_covered']} (esperado: >=35)")
-
-# Imprimir resultados
-print("\n" + "="*60)
-print("VALIDACIÓN DE RESULTADOS")
-print("="*60)
-for v in validations:
-    print(v)
-print("="*60)
-
-# Verificar si todas las validaciones pasaron
-if all("✓" in v for v in validations):
-    print("\n✅ TODAS LAS VALIDACIONES PASARON")
-    sys.exit(0)
-else:
-    print("\n❌ ALGUNAS VALIDACIONES FALLARON")
-    sys.exit(1)
-EOF
+          import json
+          import sys
+          
+          # Cargar resultados
+          with open('results/analisis_espectral_100_primos.json', 'r') as f:
+              data = json.load(f)
+          
+          # Validaciones
+          stats = data['statistics']
+          special = data['special_primes']
+          fractal = data['fractal_analysis']
+          
+          validations = []
+          
+          # 1. Verificar número de primos
+          if stats['prime_max'] == 541:
+              validations.append("✓ Primo máximo correcto (541)")
+          else:
+              validations.append(f"✗ Primo máximo incorrecto: {stats['prime_max']} (esperado: 541)")
+          
+          # 2. Verificar punto noético
+          noetic_freq = special['noetic_point']['frequency_hz']
+          if abs(noetic_freq - 141.70) < 0.1:
+              validations.append(f"✓ Frecuencia noética correcta ({noetic_freq:.2f} Hz)")
+          else:
+              validations.append(f"✗ Frecuencia noética incorrecta: {noetic_freq:.2f} Hz (esperado: ~141.70 Hz)")
+          
+          # 3. Verificar estructura fractal
+          if fractal['r_squared'] > 0.99:
+              validations.append(f"✓ R² alto ({fractal['r_squared']:.6f})")
+          else:
+              validations.append(f"✗ R² bajo: {fractal['r_squared']:.6f} (esperado: >0.99)")
+          
+          # 4. Verificar octavas
+          if stats['octaves_covered'] >= 35:
+              validations.append(f"✓ Octavas cubiertas ({stats['octaves_covered']})")
+          else:
+              validations.append(f"✗ Octavas insuficientes: {stats['octaves_covered']} (esperado: >=35)")
+          
+          # Imprimir resultados
+          print("\n" + "="*60)
+          print("VALIDACIÓN DE RESULTADOS")
+          print("="*60)
+          for v in validations:
+              print(v)
+          print("="*60)
+          
+          # Verificar si todas las validaciones pasaron
+          if all("✓" in v for v in validations):
+              print("\n✅ TODAS LAS VALIDACIONES PASARON")
+              sys.exit(0)
+          else:
+              print("\n❌ ALGUNAS VALIDACIONES FALLARON")
+              sys.exit(1)
+          EOF
       
       - name: Generate validation summary
         if: always()
