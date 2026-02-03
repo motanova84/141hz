@@ -78,7 +78,7 @@ These now have:
 
 ### 4. Vercel Configuration ✅
 
-**Action:** Disabled `vercel.json` by renaming to `vercel.json.disabled`
+**Action:** Removed `vercel.json` completely (not actively used)
 
 **Rationale:** 
 - No Vercel deployment workflows detected in `.github/workflows/`
@@ -144,7 +144,10 @@ To run manual workflows:
 If issues arise:
 1. Revert commit `9ba4cb1`
 2. Restore original workflow configurations
-3. Rename `vercel.json.disabled` back to `vercel.json` if needed
+3. Restore `vercel.json` from git history if needed:
+   ```bash
+   git show HEAD~5:vercel.json > vercel.json
+   ```
 
 ## Compliance with Problem Statement
 

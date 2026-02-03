@@ -55,12 +55,12 @@ Optimize GitHub Actions workflows to:
 
 ### ✅ 3. Vercel Configuration Disabled
 
-**Action:** Renamed `vercel.json` → `vercel.json.disabled`
+**Action:** Removed `vercel.json` completely
 
 **Rationale:**
 - No Vercel deployment workflows found in `.github/workflows/`
 - Configuration not actively used for GitHub Actions
-- Can be re-enabled if needed
+- Removing creates less technical debt than renaming
 
 ### ✅ 4. Workflow Streamlining
 
@@ -137,8 +137,8 @@ Optimize GitHub Actions workflows to:
    - Made lint and tests critical (must pass)
    - Already used Python 3.11 only
 
-6. `vercel.json` → `vercel.json.disabled`
-   - Disabled Vercel configuration
+6. `vercel.json`
+   - Removed completely (not used)
 
 7. `.github/workflows/README.md`
    - Updated with optimization details
@@ -182,7 +182,8 @@ If issues arise:
 
 2. Restore Vercel (if needed):
    ```bash
-   mv vercel.json.disabled vercel.json
+   # Retrieve from git history if needed
+   git show HEAD~4:vercel.json > vercel.json
    ```
 
 3. Re-push to restore original state
@@ -192,7 +193,7 @@ If issues arise:
 ✅ **Priorizar checks críticos** - Unit tests, lint, reproducibility are critical
 ✅ **Poner el resto en allow_failure o manual** - All non-critical jobs are manual
 ✅ **Reducir matriz** - Python 3.11 only for critical jobs, 3.12 manual
-✅ **Desactivar Vercel** - vercel.json disabled (renamed)
+✅ **Desactivar Vercel** - vercel.json removed completely
 ✅ **Re-ejecutar CI limpio** - Ready for clean CI run
 
 ## Summary
