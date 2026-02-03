@@ -194,6 +194,12 @@ AT2020afhd | ~9σ | p < 10⁻¹⁰
 Línea 21cm | ~9σ | p < 10⁻¹⁰
 **Combinada** | **>15σ** | **p < 10⁻⁵⁰**
 
+**Nota sobre cálculo de significancia GWTC-1**:
+- La significancia >10σ con p < 10⁻²⁵ se obtiene mediante combinación de Fisher de 11 eventos independientes
+- Incluye corrección por comparaciones múltiples (Bonferroni, N=60 bins espectrales)
+- Ver [CONFIRMED_DISCOVERY_141HZ.md](CONFIRMED_DISCOVERY_141HZ.md) para metodología detallada de cálculo
+- Supera el umbral estándar de física GW (5σ) por un factor de 2×
+
 ### Teoremas Demostrados
 
 1. **Teorema de Comportamiento Asintótico:** |∇Ξ(1)| ≈ C√N con C ≈ 8.27
