@@ -41,6 +41,7 @@ Análisis científico de la frecuencia fundamental **f₀ = 141.7001 Hz** en ond
 
 ### 📦 Qué contiene
 - **Scripts de análisis**: Análisis espectral automatizado de datos GWOSC
+- **Gravitational Wave Analyzer**: Módulo dedicado para análisis de GW250114 @ 141.7 Hz
 - **Formalización matemática**: Pruebas verificadas en Lean 4
 - **Validaciones experimentales**: Análisis multi-detector (H1, L1, V1, KAGRA)
 - **Framework QCAL**: Teoría cuántica de coherencia noética
@@ -51,12 +52,29 @@ Análisis científico de la frecuencia fundamental **f₀ = 141.7001 Hz** en ond
 # 1. Instalar dependencias
 pip install -r requirements.txt
 
-# 2. Ejecutar análisis de validación
-make validate
+# 2. Analizar GW250114 para detectar 141.7 Hz
+python gravitational_wave_analyzer.py --evento GW250114 --simulated
 
 # 3. Verificar formalización matemática
 cd formalization/lean && lake build
 ```
+
+### 🌌 Nuevo: Gravitational Wave Analyzer
+
+El módulo `gravitational_wave_analyzer.py` implementa el **análisis de ondas gravitacionales** para buscar la firma persistente de 141.7 Hz en GW250114:
+
+```bash
+# Análisis básico (modo simulado)
+python gravitational_wave_analyzer.py --evento GW250114 --simulated
+
+# Con datos reales (cuando estén disponibles)
+python gravitational_wave_analyzer.py --evento GW250114
+
+# Integración con framework QCAL
+python scripts/integracion_gw_qcal.py --evento GW250114 --simulated
+```
+
+**Documentación completa**: [GRAVITATIONAL_WAVE_ANALYZER_README.md](GRAVITATIONAL_WAVE_ANALYZER_README.md)
 
 ### 📄 Dónde está el paper (DOI)
 **Publicación principal:** [https://doi.org/10.5281/zenodo.17445017](https://doi.org/10.5281/zenodo.17445017)
