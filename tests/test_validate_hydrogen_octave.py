@@ -16,13 +16,14 @@ import unittest
 from pathlib import Path
 import numpy as np
 
-# Import the validation module - using absolute import
+# Import the validation module from core directory
 try:
-    import validate_hydrogen_octave_relationship as vhor
+    import core.validate_hydrogen_octave_relationship as vhor
 except ImportError:
     # If running from different directory, try to add parent to path
-    sys.path.insert(0, str(Path(__file__).parent))
-    import validate_hydrogen_octave_relationship as vhor
+    repo_root = Path(__file__).parent.parent
+    sys.path.insert(0, str(repo_root))
+    import core.validate_hydrogen_octave_relationship as vhor
 
 
 class TestOctaveCalculations(unittest.TestCase):
