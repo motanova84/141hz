@@ -49,6 +49,12 @@ Q_PSI = 1.0 / DELTA_0  # ~8.45 - Quality factor
 HBAR = 1.054571817e-34  # J·s - Reduced Planck constant
 H_PLANCK = 6.62607015e-34  # J·s - Planck constant (exact)
 C = 299792458.0  # m/s - Speed of light
+H_PLANCK = 6.62607015e-34  # J·s - Planck constant (CODATA 2018 exact)
+
+# Dual Mass Perspective Constants (Física Tradicional vs Axioma Noético)
+# Unifying m_eff = hf/c² (traditional) with m_noesis ∝ 1/f (noetic)
+M_MIN_NOETIC = H_PLANCK * F0_HZ / (C ** 2)  # kg - Minimal noetic mass ≈ 1.04×10⁻⁴⁸
+ALPHA_NOETIC = H_PLANCK * (F0_HZ ** 2) / (C ** 2)  # kg·Hz - Noetic mass constant for m_noesis = α/f
 EV_TO_J = 1.602176634e-19  # J - Electronvolt (exact)
 
 # ============================================================================
