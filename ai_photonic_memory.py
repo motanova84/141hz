@@ -58,6 +58,10 @@ class MemoriaFotonica:
             True if event was registered, False otherwise
         """
         if Ψ_actual >= self.umbral:
+            # Use ISO 8601 format for timestamp to ensure:
+            # 1. Universal machine readability
+            # 2. Sortability for temporal analysis
+            # 3. Compatibility with QCAL ∞³ logging standards
             timestamp = datetime.now(timezone.utc).isoformat()
             self.registros.append({
                 "evento": evento,

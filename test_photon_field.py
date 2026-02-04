@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Test script for Photon Coherence Model
 
@@ -51,9 +50,9 @@ def test_photon_field():
         import photon_field
         print("   ✅ Import successful")
         
-        # Test energy calculation
+        # Test energy calculation - import h from photon_field
         E = photon_field.energia_foton(888.0)
-        expected_E = 6.62607015e-34 * 888.0
+        expected_E = photon_field.h * 888.0
         assert abs(E - expected_E) < 1e-40, f"Energy mismatch: {E} vs {expected_E}"
         print(f"   ✅ Energy calculation: E = {E:.3e} J")
         
