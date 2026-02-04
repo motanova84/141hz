@@ -1,6 +1,7 @@
 """
 Core physical simulations for quantum biology phenomena
-Includes: FMO, Olfactory, Magnetoreception, Microtubules, QCAL Biological Model
+Includes: FMO, Olfactory, Magnetoreception, Microtubules, QCAL Biological Model,
+and Unified Tissue Resonance Model (141.7 Hz)
 """
 
 from .fmo_photosynthesis import FMOComplex
@@ -18,6 +19,12 @@ from .qcal_biological_model import (
     validate_141hz_resonance
 )
 
+# Unified Tissue Resonance Model (141.7 Hz) - Three Pillars
+from .hilbert_polya_operator import HilbertPolyaOperator
+from .navier_stokes_cytoplasm import NavierStokesCytoplasm
+from .magicicada_scaling import MagicicadaScaling
+from .unified_tissue_resonance import UnifiedTissueResonance
+
 __all__ = [
     'FMOComplex', 
     'OlfactoryReceptor', 
@@ -28,6 +35,10 @@ __all__ = [
     'PhaseAccumulator',
     'MagicicadaModel',
     'create_environmental_cycles',
-    'validate_141hz_resonance'
+    'validate_141hz_resonance',
+    'HilbertPolyaOperator',
+    'NavierStokesCytoplasm',
+    'MagicicadaScaling',
+    'UnifiedTissueResonance'
 ]
 

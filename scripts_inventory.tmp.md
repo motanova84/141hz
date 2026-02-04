@@ -43,6 +43,10 @@
 
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_cytoplasmic_coherence.py`
+  - Validación de Coherencia Citoplasmática - Ceros de Riemann Biológicos
+- `validate_environmental_api_integration.py`
+  - Validate environmental API integration with QCAL biological model.
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
 - `validate_qcal_biology.py`
@@ -53,12 +57,18 @@
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
+- `validate_tissue_resonance_magicicada_hp_ns.py`
+  - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
 - `validate_vacuum_energy_equation.py`
   - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
 - `validation_support.py`
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_cytoplasmic_coherence.py`
+  - Validación de Coherencia Citoplasmática - Ceros de Riemann Biológicos
+- `validate_environmental_api_integration.py`
+  - Validate environmental API integration with QCAL biological model.
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
 - `validate_qcal_biology.py`
@@ -69,6 +79,8 @@
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
+- `validate_tissue_resonance_magicicada_hp_ns.py`
+  - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
 - `validate_vacuum_energy_equation.py`
   - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
 
@@ -118,6 +130,8 @@
   - Tests para el análisis de KAGRA K1 en 141.7 Hz
 - `test_at2020afhd_analysis.py`
   - Test script for AT2020afhd analysis
+- `test_biological_periodicity.py`
+  - Validation and testing framework for biological periodicity analysis.
 - `test_busqueda_armonicos_superiores.py`
   - Tests para Búsqueda de Armónicos Superiores
 - `test_campo_conciencia.py`
@@ -170,6 +184,8 @@
   - Test script for computational optimization modules.
 - `test_performance_packages.py`
   - Test script to validate that numba, llvmlite, python-igraph, and numexpr
+- `test_pipeline_gw250114_qcal.py`
+  - Test script for pipeline_gw250114_qcal.py
 - `test_potencial_evac.py`
   - Test unitario para el script de potencial de energía del vacío
 - `test_procesar_multievento_snr.py`
@@ -262,4 +278,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-01 04:32:11 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-04 01:24:15 UTC*
