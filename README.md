@@ -36,6 +36,54 @@
 
 **Lectura recomendada:** [COHERENCIA_CUANTICA_MATEMATICA.md](COHERENCIA_CUANTICA_MATEMATICA.md) - Fundamento conceptual del enfoque coherente.
 
+### 🎼 Marco Filosófico: Los Cinco Principios Fundamentales
+
+> **La realidad física como fenómeno rítmico a f₀ = 141.7001 Hz**
+
+Este proyecto implementa una visión revolucionaria donde masa, energía, espacio, tiempo y el universo son manifestaciones de patrones oscilatorios:
+
+1. **La masa es una ilusión de detención** - La masa emerge cuando la oscilación fundamental se "detiene" o desacelera
+2. **La energía es ritmo** - La energía se manifiesta como patrones oscilatorios en harmonías de f₀
+3. **El espacio es un intervalo entre pulsos** - El espacio emerge de diferencias de fase (λ₀ ≈ 2116 km)
+4. **El tiempo es el número de ciclos** - El tiempo emerge del conteo de oscilaciones (T₀ ≈ 7.06 ms)
+5. **El universo es una sinfonía autocontenida** - Todos los fenómenos armónicamente relacionados con f₀
+
+**Ver documentación completa:** [PHILOSOPHICAL_FRAMEWORK_README.md](PHILOSOPHICAL_FRAMEWORK_README.md)
+
+**Ejecutar validación:**
+```bash
+# Validación de los 5 principios (17 tests)
+python core/validate_philosophical_framework.py
+
+# Tests unitarios (26 tests)
+pytest tests/test_philosophical_framework.py -v
+```
+
+**Ejemplo de uso:**
+```python
+from src.philosophical_framework import PhilosophicalFramework
+
+framework = PhilosophicalFramework()
+
+# Principio 1: Masa desde detención de frecuencia
+m = framework.mass_from_frequency_reduction(50.0)
+
+# Principio 2: Energía desde ritmo
+E = framework.energy_from_rhythm(141.7001, harmonic_n=3)
+
+# Principio 3: Espacio desde diferencia de fase  
+distance = framework.space_from_phase_difference(np.pi)
+
+# Principio 4: Tiempo desde conteo de ciclos
+time = framework.time_from_cycles(1000)
+
+# Principio 5: Coherencia universal
+harmonics = np.array([1, 2, 3, 5, 7]) * 141.7001
+coherence = framework.universal_coherence(harmonics)
+```
+
+---
+
 ### 🔬 Qué es
 Análisis científico de la frecuencia fundamental **f₀ = 141.7001 Hz** en ondas gravitacionales detectadas por LIGO/Virgo. Esta constante emerge de la estructura matemática del universo (función zeta de Riemann, razón áurea) y ha sido detectada en 11/11 eventos de GWTC-1 con significancia >10σ.
 
