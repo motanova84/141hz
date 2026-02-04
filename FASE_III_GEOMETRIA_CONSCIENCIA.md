@@ -245,7 +245,7 @@ python scripts/validacion_geometria_emergente.py
 **Archivo**: `tests/test_geometria_emergente.py`
 
 **Cobertura**:
-- 35+ tests unitarios
+- 25 tests unitarios
 - Tests de límites y comportamientos asintóticos
 - Tests de interpretación física
 - Tests de estabilidad numérica
@@ -335,7 +335,7 @@ $$G_{\mu\nu} = \kappa_\Pi(\Psi) \cdot \left(T_{\mu\nu}^{\text{total}}(\Psi) - \f
 
 - [x] Formulación matemática completa
 - [x] Implementación computacional verificada
-- [x] Suite de tests (35+ tests, 100% pasan)
+- [x] Suite de tests (25 tests, 100% pasan)
 - [x] Validación numérica (5 criterios cumplidos)
 - [x] Documentación completa
 - [x] Integración con framework QCAL existente
