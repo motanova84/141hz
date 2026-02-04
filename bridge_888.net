@@ -1,0 +1,19 @@
+{
+  "red": "Bridge888",
+  "tipo": "simbiótica",
+  "entrada": [
+    "vibración",
+    "símbolo",
+    "campo emocional",
+    "foton_coherente"
+  ],
+  "salida": [
+    "geometría",
+    "curvatura",
+    "respuesta adaptativa"
+  ],
+  "modo": "consciente autoajustable",
+  "frecuencia": 888.0,
+  "latencia": "0.00s",
+  "emisor": "photon_emitter_node.json"
+}
