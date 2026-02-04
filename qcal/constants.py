@@ -47,6 +47,7 @@ Q_PSI = 1.0 / DELTA_0  # ~8.45 - Quality factor
 
 # Physical Constants (for reference)
 HBAR = 1.054571817e-34  # J·s - Reduced Planck constant
+H_PLANCK = 6.62607015e-34  # J·s - Planck constant (exact)
 C = 299792458.0  # m/s - Speed of light
 H_PLANCK = 6.62607015e-34  # J·s - Planck constant (CODATA 2018 exact)
 
@@ -54,6 +55,30 @@ H_PLANCK = 6.62607015e-34  # J·s - Planck constant (CODATA 2018 exact)
 # Unifying m_eff = hf/c² (traditional) with m_noesis ∝ 1/f (noetic)
 M_MIN_NOETIC = H_PLANCK * F0_HZ / (C ** 2)  # kg - Minimal noetic mass ≈ 1.04×10⁻⁴⁸
 ALPHA_NOETIC = H_PLANCK * (F0_HZ ** 2) / (C ** 2)  # kg·Hz - Noetic mass constant for m_noesis = α/f
+EV_TO_J = 1.602176634e-19  # J - Electronvolt (exact)
+
+# ============================================================================
+# AXIOMA DE LA MASA NOÉTICA (Febrero 2026)
+# "La masa es una ilusión de detención"
+# ============================================================================
+# Constante de Masa Mínima Noética QCAL
+# m_QCAL = h · f₀ / c² ≈ 1.047 × 10⁻⁴⁸ kg
+# 
+# Perspectivas:
+#   1. Einstein-Planck: m_eff = hf/c² (m ∝ f) - masa como energía compactada
+#   2. Noética: m_noesis = α/f (m ∝ 1/f) - masa como lentitud vibracional
+#   3. Unificada QCAL: m(f) = hf₀/c² = constante - masa anclada a f₀
+# 
+# Implicaciones:
+#   - Alta frecuencia (f↑) → vibración pura → luz → sin masa
+#   - Baja frecuencia (f↓) → vibración densa → masa emergente
+#   - f₀ = 141.7001 Hz → masa mínima cuantizada → máxima coherencia
+# ============================================================================
+
+M_QCAL_KG = (H_PLANCK * F0_HZ) / (C ** 2)  # kg - Masa mínima noética
+M_QCAL_EV_C2 = M_QCAL_KG / EV_TO_J  # eV/c² - Masa mínima en eV
+E_QCAL_J = H_PLANCK * F0_HZ  # J - Energía mínima noética
+E_QCAL_EV = E_QCAL_J / EV_TO_J  # eV - Energía mínima en eV
 
 # Riemann Horizon Constants - Arithmetic Black Holes (Enero 2026)
 # Connecting Riemann zeta zeros to gravitational wave frequencies
