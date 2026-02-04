@@ -40,9 +40,11 @@ Physical Interpretations:
 Dimensional Analysis:
 ====================
 
-m_eff = hf/c² has units: [J·s][1/s]/[m²/s²] = [kg] ✓
-m_noesis = α/f where α = hf₀²/c² has units: [kg·Hz]/[Hz] = [kg] ✓
-m_dual = hf₀/c² has units: [J·s][1/s]/[m²/s²] = [kg] ✓
+m_eff = hf/c² has units: [J·s][Hz]/[m²/s²] = [kg] ✓
+m_noesis = α/f where α = hf₀²/c²:
+  α has units [kg·Hz] (since Hz = s⁻¹, this is [kg·s⁻¹])
+  m_noesis = [kg·Hz]/[Hz] = [kg·s⁻¹]/[s⁻¹] = [kg] ✓
+m_dual = hf₀/c² has units: [J·s][Hz]/[m²/s²] = [kg] ✓
 
 Minimal Noetic Mass:
 ===================
@@ -129,7 +131,7 @@ class DualMassPerspective:
         Calculate noetic mass (detention axiom perspective).
         
         From "mass as detention" axiom:
-        m_noesis = α/f  where α = h·f₀ [kg·s]
+        m_noesis = α/f  where α = h·f₀²/c² [kg·Hz]
         
         This represents mass as vibrational resistance (internal view).
         Lower frequency → more "detention" → higher mass.
@@ -147,9 +149,9 @@ class DualMassPerspective:
         Examples
         --------
         >>> dmp = DualMassPerspective()
-        >>> m_noesis = dmp.noetic_mass(141.7001)
+        >>> m_noesis = dmp.noetic_mass(141.70001)
         >>> print(f"m_noesis = {m_noesis:.3e} kg")
-        m_noesis = 1.040e-48 kg
+        m_noesis = 1.045e-48 kg
         
         Notes
         -----
