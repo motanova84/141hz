@@ -45,6 +45,8 @@
   - Badge Validation Script
 - `validate_cytoplasmic_coherence.py`
   - Validación de Coherencia Citoplasmática - Ceros de Riemann Biológicos
+- `validate_dual_mass.py`
+  - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
 - `validate_harmonic_coherence.py`
@@ -67,6 +69,8 @@
   - Badge Validation Script
 - `validate_cytoplasmic_coherence.py`
   - Validación de Coherencia Citoplasmática - Ceros de Riemann Biológicos
+- `validate_dual_mass.py`
+  - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
 - `validate_harmonic_coherence.py`
@@ -278,4 +282,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-04 12:42:35 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-04 19:38:40 UTC*
