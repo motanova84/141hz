@@ -169,8 +169,11 @@ class GW250114Validator:
             Q = 10
             tau = Q / (2 * np.pi * self.target_freq)
             
-            # Stronger signal - multiply amplitude by 100x for clear detection
-            ringdown = amplitude * 100.0 * np.sin(2 * np.pi * self.target_freq * t_rel)
+            # Signal amplification for clear detection in simulated data
+            # Real GW signals are extremely weak (~10^-21), so we amplify 100x
+            # for demonstration purposes to ensure reliable peak detection above noise
+            SIGNAL_AMPLIFICATION = 100.0
+            ringdown = amplitude * SIGNAL_AMPLIFICATION * np.sin(2 * np.pi * self.target_freq * t_rel)
             ringdown *= np.exp(-t_rel / tau)
             
             signal[ringdown_start_idx:ringdown_start_idx + ringdown_duration] = ringdown

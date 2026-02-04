@@ -245,7 +245,7 @@ python validate_gw250114_141hz_peak.py --simulated --output-dir /tmp/test
    - Extremely strong signal in single event, OR
    - Consistent detection across many events (10+)
 
-4. **Frequency Resolution:** FFT frequency bins have finite width (~20 Hz / n_samples). Detected frequency may vary by ~1-2 Hz from exact target.
+4. **Frequency Resolution:** FFT frequency bins have finite width (Δf = sample_rate / n_samples ≈ 10 Hz for 100ms window at 4096 Hz). Detected frequency may vary by ~1-2 Hz from exact target due to finite bin width.
 
 ## 📞 Support
 
