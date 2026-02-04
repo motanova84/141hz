@@ -365,6 +365,14 @@
 - Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
+### QCAL Biological Validation
+
+**Archivo:** `qcal-biological-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### QCAL-LLM Tests
 
 **Archivo:** `qcal-llm-tests.yml`
@@ -480,4 +488,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-26 15:49:01 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-04 01:24:16 UTC*
