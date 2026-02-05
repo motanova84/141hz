@@ -111,6 +111,38 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: Validate Bóveda Ontológica (Hydrogen-GW Consonance)
+        run: python3 scripts/validacion_boveda_ontologica.py --precision 100
+        continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Validate GW250114 Ringdown QNM (Harmonic Attractor)
+        run: python3 scripts/validacion_gw250114_ringdown_qnm.py --precision 100 --snr 8.0
+        # Note: This validation may fail if real GW250114 data is not yet available
+        # It will run in simulation mode which tests the analysis pipeline
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: Analyze GW250114 with Gravitational Wave Analyzer (141.7 Hz signature)
+        run: python3 gravitational_wave_analyzer.py --evento GW250114 --precision 50
+        # Note: Will use real data if available, otherwise simulated mode
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: GW-QCAL Integration (Noetic Field Equation validation)
+        run: python3 scripts/integracion_gw_qcal.py --evento GW250114
+        # Integrates gravitational wave analysis with QCAL consciousness metrics
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Extract GW250114 strain and apply QCAL filter
         run: python3 scripts/extraer_strain_gw250114.py --detectores H1 L1 V1
         continue-on-error: true
@@ -287,6 +319,30 @@ jobs:
             echo "### AT2020afhd Periodicity Validation" >> $GITHUB_STEP_SUMMARY
             echo '```json' >> $GITHUB_STEP_SUMMARY
             cat results/at2020afhd_validation.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "boveda_ontologica_validacion.json" ]; then
+            echo "### Bóveda Ontológica (Hydrogen-GW Consonance)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat boveda_ontologica_validacion.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "resultados/gw250114_qnm/gw250114_qnm_validacion.json" ]; then
+            echo "### GW250114 Ringdown QNM Validation" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat resultados/gw250114_qnm/gw250114_qnm_validacion.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/gw250114_141hz/GW250114_resultados_141hz.json" ]; then
+            echo "### GW250114 Gravitational Wave Analysis (141.7 Hz Signature)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/gw250114_141hz/GW250114_resultados_141hz.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "scripts/results/integracion_qcal/GW250114_integracion_qcal.json" ]; then
+            echo "### GW-QCAL Integration (Noetic Field Equation)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat scripts/results/integracion_qcal/GW250114_integracion_qcal.json | head -40 >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/gw250114_strain/GW250114_extraccion_completa.json" ]; then

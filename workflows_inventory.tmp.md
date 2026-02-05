@@ -314,6 +314,20 @@
 - Trigger: schedule (`0 0 * * 0`)
 - Trigger: manual (workflow_dispatch)
 
+### Organización Automática Noética
+
+**Archivo:** `organizacion-automatica-noetica.yml`
+
+- Trigger: push
+- Trigger: manual (workflow_dispatch)
+
+### Organización Automática Noética
+
+**Archivo:** `organizacion-noetica.yml`
+
+- Trigger: push
+- Trigger: manual (workflow_dispatch)
+
 ### PR Review Automation
 
 **Archivo:** `pr-review-automation.yml`
@@ -346,6 +360,14 @@
 ### QC-LLM CI (Simplified)
 
 **Archivo:** `qc-llm-ci.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
+### QCAL Biological Validation
+
+**Archivo:** `qcal-biological-validation.yml`
 
 - Trigger: push
 - Trigger: pull_request
@@ -466,4 +488,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-23 17:13:52 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-04 19:38:40 UTC*

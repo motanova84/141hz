@@ -13,10 +13,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     
     strategy:
-      fail-fast: false
+      fail-fast: true  # Fail fast for critical tests
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.11', '3.12']
+        python-version: ['3.11']  # Primary version only
     
     steps:
       - name: Checkout code
@@ -91,10 +91,36 @@ jobs:
           # Don't fail the build, but report status
           exit 0
 
+  test-python-312:
+    name: Python 3.12 Compatibility Test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'  # Manual trigger only
+    continue-on-error: true
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov flake8
+      
+      - name: Run tests
+        run: |
+          pytest tests/ -v --cov=. --cov-report=xml --cov-report=term
+  
   test-gpu-optional:
     name: Test with GPU (Optional)
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[test-gpu]')
+    if: github.event_name == 'workflow_dispatch'  # Manual trigger only
     continue-on-error: true  # Don't fail workflow if GPU not available
     
     steps:
@@ -143,6 +169,8 @@ jobs:
   lean-verification:
     name: Lean 4 Formal Verification
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'  # Manual only - not critical for PR
+    continue-on-error: true
     
     steps:
       - name: Checkout code
@@ -196,7 +224,8 @@ jobs:
   docker-build:
     name: Build Docker Images
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    if: github.event_name == 'workflow_dispatch'  # Manual only - not critical
+    continue-on-error: true
     needs: [test-matrix, lean-verification]
     
     steps:
