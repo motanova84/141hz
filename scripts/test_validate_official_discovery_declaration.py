@@ -176,32 +176,39 @@ class TestStatisticalValidation(unittest.TestCase):
     
     def test_significance_threshold(self):
         """Test: Umbral de significancia >10σ corresponde a p < 10⁻²⁵."""
-        from scipy.stats import norm
-        
-        sigma_threshold = 10.0
-        p_value = 1 - norm.cdf(sigma_threshold)
-        
-        # Verificar que p < 10⁻²⁵ para 10σ
-        self.assertLess(p_value, 1e-20, 
-                       f"P-value para {sigma_threshold}σ debe ser << 10⁻²⁵")
+        try:
+            from scipy.stats import norm
+            
+            sigma_threshold = 10.0
+            p_value = 1 - norm.cdf(sigma_threshold)
+            
+            # Verificar que p < 10⁻²⁵ para 10σ
+            self.assertLess(p_value, 1e-20, 
+                           f"P-value para {sigma_threshold}σ debe ser << 10⁻²⁵")
+        except ImportError:
+            self.skipTest("scipy no disponible")
     
     def test_bonferroni_correction(self):
         """Test: Corrección de Bonferroni para Look-Elsewhere Effect."""
-        # Parámetros de la corrección
-        n_trials = 60  # bins en banda ±1 Hz con resolución 0.031 Hz
-        
-        # P-value individual para 5σ
-        from scipy.stats import norm
-        p_individual = 1 - norm.cdf(5.0)
-        
-        # Corrección de Bonferroni
-        p_corrected = min(1.0, p_individual * n_trials)
-        
-        # Verificar que la corrección aumenta el p-value
-        self.assertGreaterEqual(p_corrected, p_individual)
-        
-        # Verificar que sigue siendo significativo
-        self.assertLess(p_corrected, 0.05)
+        try:
+            from scipy.stats import norm
+            
+            # Parámetros de la corrección
+            n_trials = 60  # bins en banda ±1 Hz con resolución 0.031 Hz
+            
+            # P-value individual para 5σ
+            p_individual = 1 - norm.cdf(5.0)
+            
+            # Corrección de Bonferroni
+            p_corrected = min(1.0, p_individual * n_trials)
+            
+            # Verificar que la corrección aumenta el p-value
+            self.assertGreaterEqual(p_corrected, p_individual)
+            
+            # Verificar que sigue siendo significativo
+            self.assertLess(p_corrected, 0.05)
+        except ImportError:
+            self.skipTest("scipy no disponible")
 
 
 class TestReproducibility(unittest.TestCase):
