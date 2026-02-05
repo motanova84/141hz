@@ -20,6 +20,15 @@ import sys
 import json
 from pathlib import Path
 
+# Constantes del descubrimiento
+F0_TARGET = 141.7001  # Hz - Frecuencia fundamental predicha teóricamente
+BANDWIDTH = 1.0       # Hz - Ancho de banda de análisis (±1 Hz)
+SNR_THRESHOLD = 5.0   # σ - Umbral estándar de descubrimiento en física
+GWTC1_EVENTS = 11     # Número de eventos en catálogo GWTC-1
+INSTRUMENTAL_LINES = [60, 120, 180, 393]  # Hz - Líneas instrumentales conocidas
+MIN_INSTRUMENTAL_SEPARATION = 20.0  # Hz - Separación mínima requerida
+
+
 def validate_discovery_claims():
     """
     Valida los claims principales de la declaración oficial de descubrimiento.
@@ -66,11 +75,11 @@ def validate_discovery_claims():
     print(f"  Total de eventos analizados: {total_events}")
     print(f"  Tasa de detección: {detection_rate}")
     
-    if total_events == 11 and detection_rate == '100%':
-        print("  ✅ VALIDADO: Detección en 11/11 eventos (100%)")
+    if total_events == GWTC1_EVENTS and detection_rate == '100%':
+        print(f"  ✅ VALIDADO: Detección en {GWTC1_EVENTS}/{GWTC1_EVENTS} eventos (100%)")
         claim1_valid = True
     else:
-        print(f"  ❌ FALLO: Se esperaban 11 eventos con 100% detección")
+        print(f"  ❌ FALLO: Se esperaban {GWTC1_EVENTS} eventos con 100% detección")
         print(f"          Encontrado: {total_events} eventos, {detection_rate} detección")
         claim1_valid = False
     
@@ -85,8 +94,8 @@ def validate_discovery_claims():
     
     print(f"  SNR medio: {snr_mean:.2f} ± {snr_std:.2f}")
     
-    if snr_mean > 5.0:
-        print(f"  ✅ VALIDADO: SNR medio ({snr_mean:.2f}) supera umbral de 5σ")
+    if snr_mean > SNR_THRESHOLD:
+        print(f"  ✅ VALIDADO: SNR medio ({snr_mean:.2f}) supera umbral de {SNR_THRESHOLD}σ")
         claim2_valid = True
     else:
         print(f"  ❌ FALLO: SNR medio ({snr_mean:.2f}) no alcanza umbral de 5σ")
@@ -95,17 +104,15 @@ def validate_discovery_claims():
     print()
     
     # Claim 3: Banda de análisis 140.7-142.7 Hz (±1 Hz de f₀)
-    print("🔍 CLAIM 3: Banda de análisis 140.7-142.7 Hz (±1 Hz de f₀ = 141.7 Hz)")
+    print(f"🔍 CLAIM 3: Banda de análisis [{F0_TARGET - BANDWIDTH:.1f}-{F0_TARGET + BANDWIDTH:.1f}] Hz (±{BANDWIDTH} Hz de f₀ = {F0_TARGET} Hz)")
     print("-" * 80)
     
-    f0_target = 141.7001  # Hz
-    bandwidth = 1.0       # Hz
-    band_low = f0_target - bandwidth
-    band_high = f0_target + bandwidth
+    band_low = F0_TARGET - BANDWIDTH
+    band_high = F0_TARGET + BANDWIDTH
     
-    print(f"  Frecuencia objetivo f₀: {f0_target} Hz")
-    print(f"  Banda de análisis: [{band_low} - {band_high}] Hz")
-    print(f"  Ancho de banda: ±{bandwidth} Hz")
+    print(f"  Frecuencia objetivo f₀: {F0_TARGET} Hz")
+    print(f"  Banda de análisis: [{band_low:.1f} - {band_high:.1f}] Hz")
+    print(f"  Ancho de banda: ±{BANDWIDTH} Hz")
     
     # Verificar que todos los eventos tienen frecuencias en la banda
     events = results.get('events', [])
@@ -117,8 +124,8 @@ def validate_discovery_claims():
             print(f"  ⚠️  {event['name']}: frecuencia {freq:.2f} Hz fuera de banda")
             all_in_band = False
     
-    if all_in_band and len(events) == 11:
-        print("  ✅ VALIDADO: Todos los eventos detectados en banda [140.7-142.7] Hz")
+    if all_in_band and len(events) == GWTC1_EVENTS:
+        print(f"  ✅ VALIDADO: Todos los eventos detectados en banda [{band_low:.1f}-{band_high:.1f}] Hz")
         claim3_valid = True
     else:
         print("  ❌ FALLO: Algunos eventos fuera de la banda especificada")
@@ -127,17 +134,16 @@ def validate_discovery_claims():
     print()
     
     # Claim 4: Separación de líneas instrumentales > 20 Hz
-    print("🔍 CLAIM 4: Separación de líneas instrumentales > 20 Hz")
+    print(f"🔍 CLAIM 4: Separación de líneas instrumentales > {MIN_INSTRUMENTAL_SEPARATION} Hz")
     print("-" * 80)
     
-    instrumental_lines = [60, 120, 180, 393]  # Hz
-    min_separation = min(abs(f0_target - line) for line in instrumental_lines)
+    min_separation = min(abs(F0_TARGET - line) for line in INSTRUMENTAL_LINES)
     
-    print(f"  Líneas instrumentales conocidas: {instrumental_lines} Hz")
-    print(f"  Separación mínima de f₀ = {f0_target} Hz: {min_separation:.1f} Hz")
+    print(f"  Líneas instrumentales conocidas: {INSTRUMENTAL_LINES} Hz")
+    print(f"  Separación mínima de f₀ = {F0_TARGET} Hz: {min_separation:.1f} Hz")
     
-    if min_separation > 20.0:
-        print(f"  ✅ VALIDADO: Separación ({min_separation:.1f} Hz) > 20 Hz")
+    if min_separation > MIN_INSTRUMENTAL_SEPARATION:
+        print(f"  ✅ VALIDADO: Separación ({min_separation:.1f} Hz) > {MIN_INSTRUMENTAL_SEPARATION} Hz")
         print("               Descarta origen instrumental")
         claim4_valid = True
     else:

@@ -285,7 +285,7 @@ El valor **f₀ = 141.7001 Hz** fue **predicho teóricamente con anterioridad** 
 - **La Solución del Infinito** — Teoría Noésica Unificada
 - **Autor**: José Manuel Mota Burruezo
 - **Publicación**: Zenodo DOI [10.5281/zenodo.17379721](https://doi.org/10.5281/zenodo.17379721)
-- **Fecha**: Anterior al análisis de datos GWTC-1
+- **Fecha de publicación**: 2025 (anterior al análisis sistemático de GWTC-1 realizado en este trabajo)
 
 ### 4.2 Marco Teórico: Campo Noético/Cuántico
 
