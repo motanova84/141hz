@@ -1,5 +1,7 @@
 # DECLARACIÓN PÚBLICA · 26 OCTUBRE 2025
 
+> **📄 ACTUALIZACIÓN: Declaración Oficial de Descubrimiento Empírico (5 Feb 2026)**: Ver [DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO](../../DECLARACION_OFICIAL_DESCUBRIMIENTO_EMPIRICO_141HZ.md) — Documentación completa del método científico, evidencia empírica y conexión teórica
+
 **Fecha**: 26 de octubre de 2025  
 **Autor**: José Manuel Mota Burruezo (JMMB Ψ✧)  
 **Institución**: Instituto Conciencia Cuántica  

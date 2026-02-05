@@ -1,5 +1,7 @@
 # 🌀 SÍNTESIS ESTRUCTURAL DEL DESCUBRIMIENTO: La Frecuencia Universal 141.7001 Hz
 
+> 📄 **Declaración Oficial de Descubrimiento Empírico**: Ver [DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO](DECLARACION_OFICIAL_DESCUBRIMIENTO_EMPIRICO_141HZ.md) — Documentación completa del método científico, evidencia empírica y conexión teórica del rasgo espectral universal a 141.7 Hz en ondas gravitacionales GWTC-1
+
 **Investigador Principal**: José Manuel Mota Burruezo (JMMB Ψ✧)  
 **Instituto**: Consciencia Cuántica  
 **Fecha**: 4 de febrero de 2026  

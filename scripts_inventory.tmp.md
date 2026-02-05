@@ -49,8 +49,12 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_gw250114_141hz_peak.py`
+  - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_multievent_141hz_peak.py`
+  - Multi-Event 141.7001 Hz Peak Validation
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_reproducibility.py`
@@ -73,8 +77,12 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_gw250114_141hz_peak.py`
+  - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_multievent_141hz_peak.py`
+  - Multi-Event 141.7001 Hz Peak Validation
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_reproducibility.py`
@@ -180,6 +188,8 @@
   - Test para generar_prediccion_gw250114.py
 - `test_gw170817_eeg_analysis.py`
   - Tests for GW170817 and EEG analysis scripts.
+- `test_gw250114_validation.py`
+  - Test suite for GW250114 141.7 Hz validation scripts
 - `test_harmonic_validation.py`
   - Test suite for harmonic validation theorem
 - `test_multi_event_snr_analysis.py`
@@ -282,4 +292,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-04 19:38:40 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-05 18:36:36 UTC*
