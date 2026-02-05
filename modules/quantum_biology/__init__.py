@@ -22,3 +22,20 @@ from . import core
 from . import hardware
 from . import psi_medicine
 from . import drv
+
+# Vibrational fluorescence measurement system
+from .core.vibrational_fluorescence import (
+    VibrationalFluorescenceSystem,
+    FluorescenceConfig,
+    run_fluorescence_experiment
+)
+
+__all__ = [
+    'core',
+    'hardware',
+    'psi_medicine',
+    'drv',
+    'VibrationalFluorescenceSystem',
+    'FluorescenceConfig',
+    'run_fluorescence_experiment',
+]
