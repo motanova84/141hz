@@ -127,6 +127,22 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: Analyze GW250114 with Gravitational Wave Analyzer (141.7 Hz signature)
+        run: python3 gravitational_wave_analyzer.py --evento GW250114 --precision 50
+        # Note: Will use real data if available, otherwise simulated mode
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
+      - name: GW-QCAL Integration (Noetic Field Equation validation)
+        run: python3 scripts/integracion_gw_qcal.py --evento GW250114
+        # Integrates gravitational wave analysis with QCAL consciousness metrics
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Extract GW250114 strain and apply QCAL filter
         run: python3 scripts/extraer_strain_gw250114.py --detectores H1 L1 V1
         continue-on-error: true
@@ -315,6 +331,18 @@ jobs:
             echo "### GW250114 Ringdown QNM Validation" >> $GITHUB_STEP_SUMMARY
             echo '```json' >> $GITHUB_STEP_SUMMARY
             cat resultados/gw250114_qnm/gw250114_qnm_validacion.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "results/gw250114_141hz/GW250114_resultados_141hz.json" ]; then
+            echo "### GW250114 Gravitational Wave Analysis (141.7 Hz Signature)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat results/gw250114_141hz/GW250114_resultados_141hz.json | head -40 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f "scripts/results/integracion_qcal/GW250114_integracion_qcal.json" ]; then
+            echo "### GW-QCAL Integration (Noetic Field Equation)" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat scripts/results/integracion_qcal/GW250114_integracion_qcal.json | head -40 >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
           fi
           if [ -f "results/gw250114_strain/GW250114_extraccion_completa.json" ]; then
