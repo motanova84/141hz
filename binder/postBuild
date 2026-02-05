@@ -1,0 +1,10 @@
+#!/bin/bash
+# Post-build script for Binder
+# This script runs after the environment is created
+
+# Create data directories
+mkdir -p data/environmental
+mkdir -p results
+
+echo "Binder environment ready!"
+echo "Navigate to notebooks/biological_rhythms_environmental_data.ipynb to get started"

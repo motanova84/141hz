@@ -48,6 +48,19 @@ try:
 except ImportError:
     SPECTRAL_EMBEDDING_AVAILABLE = False
 
+# Dual mass perspective module (new)
+try:
+    from .dual_mass import (
+        DualMassPerspective,
+        effective_mass,
+        noetic_mass,
+        unified_mass,
+        calculate_dual_mass_spectrum
+    )
+    DUAL_MASS_AVAILABLE = True
+except ImportError:
+    DUAL_MASS_AVAILABLE = False
+
 __version__ = "1.0.0"
 __all__ = [
     "psi_score",
@@ -89,6 +102,16 @@ if SPECTRAL_EMBEDDING_AVAILABLE:
         "BaselineEmbedding",
         "Word2VecEmbedding",
         "EmbeddingEvaluator"
+    ])
+
+# Add dual mass exports if available
+if DUAL_MASS_AVAILABLE:
+    __all__.extend([
+        "DualMassPerspective",
+        "effective_mass",
+        "noetic_mass",
+        "unified_mass",
+        "calculate_dual_mass_spectrum"
     ])
 
 # Fundamental constants
