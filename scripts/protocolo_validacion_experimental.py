@@ -25,6 +25,7 @@ import os
 import argparse
 import json
 import numpy as np
+import networkx as nx
 from pathlib import Path
 from typing import Dict, Any
 
@@ -379,16 +380,24 @@ def convertir_a_serializable(obj):
     """Convierte objetos numpy a tipos serializables en JSON"""
     if isinstance(obj, np.ndarray):
         return obj.tolist()
-    elif isinstance(obj, np.integer):
+    elif isinstance(obj, (np.integer, np.int64, np.int32)):
         return int(obj)
-    elif isinstance(obj, np.floating):
+    elif isinstance(obj, (np.floating, np.float64, np.float32)):
         return float(obj)
+    elif isinstance(obj, np.bool_):
+        return bool(obj)
     elif isinstance(obj, complex):
         return {'real': obj.real, 'imag': obj.imag}
     elif isinstance(obj, dict):
         return {k: convertir_a_serializable(v) for k, v in obj.items()}
     elif isinstance(obj, (list, tuple)):
         return [convertir_a_serializable(item) for item in obj]
+    elif isinstance(obj, (nx.Graph, nx.DiGraph)):
+        # Skip networkx graphs - too complex for JSON
+        return f"<NetworkX Graph with {len(obj.nodes())} nodes>"
+    elif hasattr(obj, '__dict__') and not callable(obj):
+        # Generic object - try to convert its dict
+        return convertir_a_serializable(obj.__dict__)
     else:
         return obj
 

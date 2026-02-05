@@ -399,7 +399,7 @@ def analizar_geodesicas(trayectoria_psi: List[np.ndarray]) -> Dict[str, Any]:
     
     # 3. Test: trayectorias óptimas tienen κ ≈ 0
     curvatura_media = np.mean(curvaturas) if curvaturas else np.inf
-    es_geodesica = curvatura_media < 0.1  # Umbral empírico
+    es_geodesica = bool(curvatura_media < 0.1)  # Umbral empírico
     
     # 4. Longitud del camino
     longitud = calcular_longitud_geodesica(puntos_manifold)

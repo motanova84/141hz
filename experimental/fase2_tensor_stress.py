@@ -123,7 +123,14 @@ def calcular_tensor_stress_energia(Phi_espaciotemporal: np.ndarray) -> np.ndarra
         # Añadir dimensión espacial
         Phi_espaciotemporal = Phi_espaciotemporal[:, :, np.newaxis]
     
-    # Dimensiones
+    # Asegurar dimensiones mínimas para gradiente (al menos 2 elementos por eje)
+    shape = Phi_espaciotemporal.shape
+    if shape[1] < 2:
+        Phi_espaciotemporal = np.pad(Phi_espaciotemporal, ((0, 0), (0, 1), (0, 0)), mode='edge')
+    if shape[2] < 2:
+        Phi_espaciotemporal = np.pad(Phi_espaciotemporal, ((0, 0), (0, 0), (0, 1)), mode='edge')
+    
+    # Actualizar shape después de padding
     shape = Phi_espaciotemporal.shape
     T_μν = np.zeros((4, 4) + shape)
     
