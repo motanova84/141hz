@@ -5549,3 +5549,47 @@ for rhythm, data in results['periods'].items():
 - 🧪 [Validation Tests](scripts/test_biological_periodicity.py)
 - 💡 [Usage Examples](examples/biological_periodicity_example.py)
 
+
+---
+
+## 🧬 Protocolo de Validación Experimental
+
+Este repositorio incluye un **protocolo experimental riguroso** para validar las predicciones del marco teórico QCAL mediante validación neurobiológica, psicométrica y colectiva.
+
+### Fases del Protocolo
+
+1. **FASE I**: Validación de SU(Ψ) — Grupo de Coherencia Cuántica
+2. **FASE II**: Validación de T_μν(Φ) — Tensor de Stress Emocional
+3. **FASE III**: Validación a Nivel Colectivo — Efectos de Red Social
+4. **FASE IV**: Meta-Análisis y Síntesis
+
+### Ejecución Rápida
+
+```bash
+# Instalar dependencias
+pip install numpy scipy scikit-learn networkx
+
+# Ejecutar protocolo completo
+python scripts/protocolo_validacion_experimental.py --fase all
+
+# Ejecutar tests
+python tests/test_protocolo_validacion_experimental.py
+```
+
+### Documentación Completa
+
+Ver [EXPERIMENTAL_VALIDATION_PROTOCOL.md](EXPERIMENTAL_VALIDATION_PROTOCOL.md) para:
+- Diseño experimental detallado de cada fase
+- Criterios de validación y umbrales de éxito
+- Ejemplos de uso y API reference
+- Roadmap de validación (3 años, 3.4M USD)
+
+### Módulos Implementados
+
+- `experimental/fase1_su_psi.py` - Validación de estructura de grupo SU(n)
+- `experimental/fase2_tensor_stress.py` - Validación de tensor stress-energía
+- `experimental/fase3_red_social.py` - Validación de efectos colectivos
+- `experimental/fase4_meta_analisis.py` - Meta-análisis y síntesis
+
+**Estado**: ✅ Implementación completa | ✅ 14/14 tests passing | ✅ Documentación completa
+
