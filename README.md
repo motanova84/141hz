@@ -1,5 +1,7 @@
 # Análisis de Componente en 141.7 Hz - Ondas Gravitacionales
 
+> **📢 DECLARACIÓN OFICIAL DE DESCUBRIMIENTO**: Ver [DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO](DECLARACION_OFICIAL_DESCUBRIMIENTO_EMPIRICO_141HZ.md) — Rasgo espectral universal a 141.7 Hz en 11/11 eventos GWTC-1 con significancia >10σ (p < 10⁻²⁵)
+
 <p align="center">
   <a href="https://github.com/motanova84/141hz/actions/workflows/docs.yml">
     <img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/docs.yml?label=docs&logo=github">
