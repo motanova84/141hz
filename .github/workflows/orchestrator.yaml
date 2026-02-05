@@ -77,6 +77,10 @@ jobs:
         with:
           python-version: '3.11'
       
+      - name: Create required directories
+        run: |
+          mkdir -p reports metrics validation logs/optimization src/constants
+      
       - name: Run NOESIS88 Agent
         run: |
           chmod +x .github/agents/noesis88.py
@@ -160,6 +164,10 @@ jobs:
         with:
           name: monitoring-results-${{ github.run_number }}
       
+      - name: Create required directories
+        run: |
+          mkdir -p reports metrics validation logs/optimization src/constants
+      
       - name: Run QCAL density optimization
         run: |
           chmod +x .github/scripts/optimize_qcal_density.sh
@@ -202,6 +210,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      
+      - name: Create required directories
+        run: |
+          mkdir -p reports metrics validation logs/optimization src/constants
+          chmod +x .github/agents/*.py || true
+          chmod +x .github/scripts/*.sh || true
+          chmod +x .github/scripts/*.py || true
       
       - name: Run orchestration tests
         run: |
