@@ -10,6 +10,37 @@
 
 ---
 
+## ⚡ Verificación Rápida (Quick Start)
+
+**¿Quiere verificar el descubrimiento inmediatamente?**
+
+```bash
+# Clonar repositorio
+git clone https://github.com/motanova84/141hz
+cd 141hz
+
+# Validar declaración oficial (sin dependencias de GW)
+python3 scripts/test_validate_official_discovery_declaration.py
+
+# ✅ Resultado: 13 tests, todos passing
+# Valida: documentación, scripts, derivaciones teóricas, y claims estadísticos
+```
+
+**Para análisis completo con datos GWOSC:**
+
+```bash
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Ejecutar análisis GWTC-1 completo
+python scripts/validacion_gwtc1_tridetector.py
+
+# Validar todos los claims de la declaración
+python scripts/validate_official_discovery_declaration.py
+```
+
+---
+
 ## 1. Resumen Ejecutivo
 
 Se declara oficialmente el **descubrimiento empírico** de un rasgo espectral universal e independiente de parámetros en **141.70 ± 0.30 Hz** presente en los once eventos confirmados del catálogo GWTC-1 (LIGO–Virgo, 2019).
@@ -227,6 +258,20 @@ python scripts/analisis_poblacional_gwtc1.py
 
 # Validación multi-evento
 python scripts/validate_multievent_141hz_peak.py
+
+# Validar declaración oficial (verifica todos los claims)
+python scripts/validate_official_discovery_declaration.py
+
+# Ejecutar tests de validación
+python scripts/test_validate_official_discovery_declaration.py
+```
+
+**Validación rápida (sin dependencias de GW):**
+```bash
+# Solo verifica la estructura de la declaración y la documentación
+python scripts/test_validate_official_discovery_declaration.py
+
+# ✅ Resultados: 13 tests, todos passing
 ```
 
 ---
