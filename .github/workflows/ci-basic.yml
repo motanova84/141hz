@@ -56,12 +56,12 @@ jobs:
           flake8 scripts/ --count --select=E9,F63,F7,F82 --show-source --statistics
           # Exit-zero treats all errors as warnings. Line length set to 120.
           flake8 scripts/ --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
-        continue-on-error: true
+        continue-on-error: false  # Critical check - must pass
         id: lint
 
       - name: Run tests
         run: python scripts/run_all_tests.py
-        continue-on-error: true
+        continue-on-error: false  # Critical check - must pass
         id: test
         env:
           NUMEXPR_MAX_THREADS: 4
