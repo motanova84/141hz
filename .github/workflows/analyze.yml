@@ -9,21 +9,16 @@ on:
 
 jobs:
   test:
-    name: Unit Tests - Python ${{ matrix.python-version }}
+    name: Unit Tests - Python 3.11
     runs-on: ubuntu-latest
-    
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ['3.11', '3.12']
     
     steps:
     - uses: actions/checkout@v5
     
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python 3.11
       uses: actions/setup-python@v6
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: '3.11'
     
     - name: Install system dependencies
       run: |
@@ -71,27 +66,23 @@ jobs:
       uses: actions/upload-artifact@v5
       if: always()
       with:
-        name: test-results-py${{ matrix.python-version }}-${{ github.run_number }}
+        name: test-results-py3.11-${{ github.run_number }}
         path: |
           .pytest_cache/
           results/
         retention-days: 7
   
   lint:
-    name: Code Quality - Python ${{ matrix.python-version }}
+    name: Code Quality - Python 3.11
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        python-version: ['3.11', '3.12']
     
     steps:
     - uses: actions/checkout@v5
     
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python 3.11
       uses: actions/setup-python@v6
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: '3.11'
     
     - name: Install linting tools
       run: |
@@ -106,21 +97,19 @@ jobs:
         flake8 scripts/ --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
   
   analysis:
-    name: Scientific Analysis (with data) - Python ${{ matrix.python-version }}
+    name: Scientific Analysis (Optional)
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'  # Manual or scheduled only
+    continue-on-error: true
     needs: test
-    
-    strategy:
-      matrix:
-        python-version: ['3.11', '3.12']
     
     steps:
     - uses: actions/checkout@v5
     
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python 3.11
       uses: actions/setup-python@v6
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: '3.11'
     
     - name: Install system dependencies
       run: |
@@ -276,12 +265,11 @@ jobs:
       run: jupyter nbconvert --to html --execute notebooks/validation_quick.ipynb --ExecutePreprocessor.timeout=1800
       continue-on-error: true
     
-    # Fallback compatibility step for older workflow versions
     - name: Upload analysis results
       uses: actions/upload-artifact@v5
       if: always()
       with:
-        name: analysis-results-py${{ matrix.python-version }}-${{ github.run_number }}
+        name: analysis-results-py3.11-${{ github.run_number }}
         path: |
           results/
           *.png

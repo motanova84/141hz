@@ -48,6 +48,19 @@ try:
 except ImportError:
     SPECTRAL_EMBEDDING_AVAILABLE = False
 
+# Dual mass perspective module (new)
+try:
+    from .dual_mass import (
+        DualMassPerspective,
+        effective_mass,
+        noetic_mass,
+        unified_mass,
+        calculate_dual_mass_spectrum
+    )
+    DUAL_MASS_AVAILABLE = True
+except ImportError:
+    DUAL_MASS_AVAILABLE = False
+
 __version__ = "1.0.0"
 __all__ = [
     "psi_score",
@@ -89,6 +102,45 @@ if SPECTRAL_EMBEDDING_AVAILABLE:
         "BaselineEmbedding",
         "Word2VecEmbedding",
         "EmbeddingEvaluator"
+    ])
+
+# Unified theory modules
+try:
+    from .unified_theory import (
+        UnifiedTheoryConstants,
+        RiemannZetaComponent,
+        CalabiYauComponent,
+        FrequencyComponent,
+        ConsciousnessComponent,
+        GravityComponent,
+        SpectrumComponent,
+        CondensedMatterComponent,
+        UnifiedTheory
+    )
+    UNIFIED_THEORY_AVAILABLE = True
+except ImportError:
+    UNIFIED_THEORY_AVAILABLE = False
+
+# Add unified theory exports if available
+if UNIFIED_THEORY_AVAILABLE:
+    __all__.extend([
+        "UnifiedTheoryConstants",
+        "RiemannZetaComponent",
+        "CalabiYauComponent",
+        "FrequencyComponent",
+        "ConsciousnessComponent",
+        "GravityComponent",
+        "SpectrumComponent",
+        "CondensedMatterComponent",
+        "UnifiedTheory"
+# Add dual mass exports if available
+if DUAL_MASS_AVAILABLE:
+    __all__.extend([
+        "DualMassPerspective",
+        "effective_mass",
+        "noetic_mass",
+        "unified_mass",
+        "calculate_dual_mass_spectrum"
     ])
 
 # Fundamental constants

@@ -1,0 +1,91 @@
+{
+  "transparencia": {
+    "f0_hz": 141.7001,
+    "umbral_transparencia_hz": 1000.0,
+    "en_zona_transparencia": true,
+    "distancias_bandas_absorcion": {
+      "22_GHz": {
+        "frecuencia_hz": 22235000000.0,
+        "ratio": 156915909.02194142,
+        "octaves": 27.22541638739934
+      },
+      "183_GHz": {
+        "frecuencia_hz": 183310000000.0,
+        "ratio": 1293647640.333352,
+        "octaves": 30.268797568095316
+      },
+      "325_GHz": {
+        "frecuencia_hz": 325150000000.0,
+        "ratio": 2294634936.743164,
+        "octaves": 31.09561750137545
+      },
+      "IR_3um": {
+        "frecuencia_hz": 100000000000000.0,
+        "ratio": 705715804011.4298,
+        "octaves": 39.36029636225937
+      },
+      "IR_6um": {
+        "frecuencia_hz": 50000000000000.0,
+        "ratio": 352857902005.7149,
+        "octaves": 38.36029636225937
+      }
+    },
+    "validacion": "EXITOSA"
+  },
+  "hidrogeno": {
+    "f_hydrogen_mhz": 1420.4056751,
+    "f_hydrogen_hz": 1420405675.1000001,
+    "f0_hz": 141.7001,
+    "ratio": 10024027.330255944,
+    "octaves": 23.2569589174607,
+    "octaves_esperadas": 23.257,
+    "error_octaves": 4.108253930112937e-05,
+    "validacion": "EXITOSA"
+  },
+  "biologico": {
+    "f0_hz": 141.7001,
+    "rango_biologico_hz": [
+      0.1,
+      1000.0
+    ],
+    "en_rango_biologico": true,
+    "en_rango_microtubulos": true,
+    "frecuencias_biologicas": {
+      "Delta (sueño profundo)": [
+        0.5,
+        4.0
+      ],
+      "Theta (meditación)": [
+        4.0,
+        8.0
+      ],
+      "Alpha (relajación)": [
+        8.0,
+        13.0
+      ],
+      "Beta (atención)": [
+        13.0,
+        30.0
+      ],
+      "Gamma (cognición)": [
+        30.0,
+        100.0
+      ],
+      "Schumann (planeta)": [
+        7.83,
+        7.83
+      ],
+      "Microtúbulos": [
+        100.0,
+        200.0
+      ]
+    },
+    "validacion": "EXITOSA"
+  },
+  "visualizacion": "zona_transparencia_agua.png",
+  "metadata": {
+    "timestamp": "2026-01-28T00:30:26.989789+00:00",
+    "author": "José Manuel Mota Burruezo (JMMB Ψ✧)",
+    "version": "1.0.0"
+  }
+}
