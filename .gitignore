@@ -196,4 +196,5 @@ active_system_status.json
 
 # GW unbiased validation outputs
 gw_unbiased_validation_results.json
+fluorescence_demo_*.png
 results/gw250114*/

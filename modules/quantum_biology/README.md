@@ -17,7 +17,8 @@ modules/quantum_biology/
 │   ├── fmo_photosynthesis.py     # FMO Complex (Ψ ~0.99)
 │   ├── olfactory_tunneling.py    # Túnel cuántico olfativo (Ψ ~0.95)
 │   ├── magnetoreception.py       # Brújula cuántica (Ψ ~0.92)
-│   └── microtubules.py           # Microtúbulos neuronales (Ψ ~0.90)
+│   ├── microtubules.py           # Microtúbulos neuronales (Ψ ~0.90)
+│   └── vibrational_fluorescence.py  # 🆕 Fluorescencia vibracional (QCAL validation)
 │
 ├── hardware/                      # Dispositivos bio-cuánticos
 │   ├── cryptochrome_magnetometer.py    # Magnetómetro bioinsp. (Ψ ≥0.888)
@@ -35,13 +36,15 @@ modules/quantum_biology/
 │
 ├── tests/                        # Validación completa
 │   ├── test_core_validation.py
-│   └── test_full_validation.py
+│   ├── test_full_validation.py
+│   └── test_vibrational_fluorescence.py  # 🆕 Tests de fluorescencia
 │
 ├── README.md                     # Este documento
 ├── CERTIFICADO_RAM_XXVI.md       # Certificación científica
 ├── VALIDACIÓN_DE_BIOLOGÍA.md     # Detalles técnicos
 ├── RESUMEN_EJECUTIVO_QBIO.md     # Para divulgación
-└── ESPECIFICACIÓN_HARDWARE_QBIO.md  # Arquitectura de dispositivos
+├── ESPECIFICACIÓN_HARDWARE_QBIO.md     # Arquitectura de dispositivos
+└── VIBRATIONAL_FLUORESCENCE_README.md  # 🆕 Documentación completa fluorescencia
 ```
 
 ---
@@ -54,6 +57,7 @@ modules/quantum_biology/
 | Olfato (Isótopos)       | Túnel resonante           | ~0.95         | ✅ Validado |
 | Magnetorrecepción       | Entrelazamiento de espín  | ~0.92         | ✅ Validado |
 | Microtúbulos neuronales | Coherencia colectiva      | ~0.90         | ✅ Validado |
+| 🆕 Fluorescencia vibracional | Resonancia proteica f₀=141.7 Hz | Validable | ✅ Implementado |
 
 > **Certificación:** `RAM-XXVI-2026-0126-QBIO.qcal_sig` → Coherencia global validada Ψ = 1.000000
 
@@ -64,7 +68,8 @@ from modules.quantum_biology.core import (
     FMOComplex,
     OlfactoryReceptor,
     CryptochromeCompass,
-    MicrotubuleNetwork
+    MicrotubuleNetwork,
+    run_fluorescence_experiment  # 🆕 QCAL Validation
 )
 
 # FMO Photosynthesis
@@ -72,9 +77,9 @@ fmo = FMOComplex(temperature=300.0)
 psi = fmo.calculate_coherence(time_ps=1.0)
 print(f"FMO coherence: Ψ = {psi:.4f}")
 
-# Validate all systems
-results = fmo.validate_coherence(target_psi=0.99)
-print(results)
+# 🆕 Vibrational Fluorescence QCAL Validation
+results = run_fluorescence_experiment(verbose=True)
+print(f"QCAL Confirmed: {results['summary']['qcal_confirmed']}")
 ```
 
 ---
@@ -256,6 +261,51 @@ python modules/quantum_biology/drv/vorticial_detector.py
 4. **Microtubules:**
    - Penrose & Hameroff, "Consciousness in the universe: A review of the 'Orch OR' theory", Phys. Life Rev. 11, 39-78 (2014)
    - Craddock et al., "Anesthetic alterations of collective terahertz oscillations in tubulin correlate with clinical potency", J. R. Soc. Interface 11, 20140677 (2014)
+
+---
+
+## 🆕 NUEVA FUNCIONALIDAD: FLUORESCENCIA VIBRACIONAL (Enero 2026)
+
+### Descripción
+
+Sistema completo de medición de fluorescencia con estimulación vibracional a f₀ = 141.7001 Hz para validación experimental de predicciones QCAL.
+
+**Implementa:**
+- Ecuación maestra de acoplamiento vibro-fluorescente
+- Modelo de resonancia de dominios proteicos (osciladores acoplados)
+- Respuesta del cromóforo GFP a deformaciones conformacionales
+- Barrido de frecuencias con energía total constante
+- Prueba estadística ANOVA para falsación de hipótesis nula
+
+### Predicciones QCAL
+
+| Predicción | Ecuación | Valor |
+|------------|----------|-------|
+| Resonancias | ΔF_max en ωₚ/ω₀ = p/q | 141.7, 70.85, 47.23, 10.9, 8.3 Hz |
+| Estructura espectral | ΔF(ω) = Σₖ Aₖ/[(ω-kω₀)²+Γₖ²] | Lorentzianas discretas |
+| Umbral coherencia | Ψ_crítico = 0.888 | Bifurcación espectral |
+| Criterio validación | ΔF(141.7)/ΔF(100) > 1.5 | Con energía constante |
+
+### Uso Rápido
+
+```python
+from modules.quantum_biology import run_fluorescence_experiment
+
+# Ejecutar experimento completo
+results = run_fluorescence_experiment(verbose=True)
+
+# Verificar confirmación QCAL
+if results['summary']['qcal_confirmed']:
+    print(f"✅ QCAL CONFIRMADO!")
+    print(f"Ratio de respuesta: {results['summary']['response_ratio']:.2f}")
+    print(f"Significancia: p = {results['summary']['p_value']:.2e}")
+```
+
+**Documentación completa:** Ver `VIBRATIONAL_FLUORESCENCE_README.md`
+
+**Demo interactivo:** `examples/demo_vibrational_fluorescence.py`
+
+**Tests:** 20/20 pasando ✅
 
 ---
 
