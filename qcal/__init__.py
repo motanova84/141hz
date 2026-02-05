@@ -104,6 +104,35 @@ if SPECTRAL_EMBEDDING_AVAILABLE:
         "EmbeddingEvaluator"
     ])
 
+# Unified theory modules
+try:
+    from .unified_theory import (
+        UnifiedTheoryConstants,
+        RiemannZetaComponent,
+        CalabiYauComponent,
+        FrequencyComponent,
+        ConsciousnessComponent,
+        GravityComponent,
+        SpectrumComponent,
+        CondensedMatterComponent,
+        UnifiedTheory
+    )
+    UNIFIED_THEORY_AVAILABLE = True
+except ImportError:
+    UNIFIED_THEORY_AVAILABLE = False
+
+# Add unified theory exports if available
+if UNIFIED_THEORY_AVAILABLE:
+    __all__.extend([
+        "UnifiedTheoryConstants",
+        "RiemannZetaComponent",
+        "CalabiYauComponent",
+        "FrequencyComponent",
+        "ConsciousnessComponent",
+        "GravityComponent",
+        "SpectrumComponent",
+        "CondensedMatterComponent",
+        "UnifiedTheory"
 # Add dual mass exports if available
 if DUAL_MASS_AVAILABLE:
     __all__.extend([
