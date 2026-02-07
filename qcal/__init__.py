@@ -133,6 +133,8 @@ if UNIFIED_THEORY_AVAILABLE:
         "SpectrumComponent",
         "CondensedMatterComponent",
         "UnifiedTheory"
+    ])
+
 # Add dual mass exports if available
 if DUAL_MASS_AVAILABLE:
     __all__.extend([
@@ -141,6 +143,23 @@ if DUAL_MASS_AVAILABLE:
         "noetic_mass",
         "unified_mass",
         "calculate_dual_mass_spectrum"
+    ])
+
+# Local Node Simulation modules
+try:
+    from .local_node_simulation import (
+        LocalNodeSimulation,
+        NodeState
+    )
+    LOCAL_NODE_SIMULATION_AVAILABLE = True
+except ImportError:
+    LOCAL_NODE_SIMULATION_AVAILABLE = False
+
+# Add local node simulation exports if available
+if LOCAL_NODE_SIMULATION_AVAILABLE:
+    __all__.extend([
+        "LocalNodeSimulation",
+        "NodeState"
     ])
 
 # Fundamental constants
