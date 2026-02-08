@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-01-23T13:17:13.126103",
+  "seed": 42,
+  "parametros": {
+    "n_samples": 100,
+    "dimension_embedding": 64,
+    "dimension_proyeccion": 16,
+    "n_clusters": 5
+  },
+  "constantes_qcal": {
+    "f0_hz": 141.7001,
+    "phi": 1.618033988749895,
+    "zeta_prime_half": -1.46,
+    "kappa_pi": 2.5782
+  },
+  "silhouette_scores": {
+    "aleatorio": 0.03613835342305844,
+    "semantico": 0.08067528130944787,
+    "diferencia_absoluta": 0.04453692788638943,
+    "diferencia_relativa_percent": 123.24005846368252
+  },
+  "criterios_validacion": {
+    "silhouette_semantico_gt_aleatorio": true,
+    "silhouette_aleatorio_lt_0_1": true,
+    "diferencia_abs_gt_0_01": true,
+    "ratio_sem_aleatorio_gt_1_2": true,
+    "criterios_cumplidos": 4
+  },
+  "validacion_exitosa": true,
+  "validacion_moderada": true,
+  "distribucion_clusters": {
+    "aleatorios": {
+      "0": 10,
+      "1": 20,
+      "2": 17,
+      "3": 28,
+      "4": 25
+    },
+    "semanticos": {
+      "0": 21,
+      "1": 31,
+      "2": 10,
+      "3": 31,
+      "4": 7
+    }
+  },
+  "ratio_semantico_aleatorio": 2.232400584636825
+}
