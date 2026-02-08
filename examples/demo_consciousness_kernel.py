@@ -235,7 +235,7 @@ def scan_phase_space():
 
 def demonstrate_lambda_G():
     """Demonstrate the universal constant Λ_G."""
-    print_section("6. ΛTHE UNIVERSAL CONSTANT Λ_G = α·δζ ≈ 1/491.5")
+    print_section("6. THE UNIVERSAL CONSTANT Λ_G = α·δζ ≈ 1/491.5")
     
     alpha = 1.0 / 137.036
     delta_zeta = 0.2787
