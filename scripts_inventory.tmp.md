@@ -49,8 +49,14 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_gw250114_141hz_peak.py`
+  - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_multievent_141hz_peak.py`
+  - Multi-Event 141.7001 Hz Peak Validation
+- `validate_official_discovery_declaration.py`
+  - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_reproducibility.py`
@@ -73,8 +79,14 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_gw250114_141hz_peak.py`
+  - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_multievent_141hz_peak.py`
+  - Multi-Event 141.7001 Hz Peak Validation
+- `validate_official_discovery_declaration.py`
+  - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_reproducibility.py`
@@ -180,6 +192,8 @@
   - Test para generar_prediccion_gw250114.py
 - `test_gw170817_eeg_analysis.py`
   - Tests for GW170817 and EEG analysis scripts.
+- `test_gw250114_validation.py`
+  - Test suite for GW250114 141.7 Hz validation scripts
 - `test_harmonic_validation.py`
   - Test suite for harmonic validation theorem
 - `test_multi_event_snr_analysis.py`
@@ -256,6 +270,8 @@
   - Tests para validación de evidencias sólidas: λ₀ ≈ 0.001588
 - `test_validate_badges.py`
   - Test suite for badge validation script.
+- `test_validate_official_discovery_declaration.py`
+  - Test para el script de validación de la declaración oficial
 - `test_validate_scipy_snr.py`
   - Test for validate_scipy_snr_141hz.py
 - `test_validate_vacuum_energy_equation.py`
@@ -282,4 +298,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-04 19:38:40 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-08 03:09:44 UTC*

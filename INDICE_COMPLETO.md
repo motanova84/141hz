@@ -1,5 +1,14 @@
 # ÍNDICE COMPLETO: MARCO QCAL ∞³ Y RESOLUCIÓN DE PROBLEMAS DEL MILENIO
 
+> ## 📢 **DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO**
+>
+> **→ [DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO](DECLARACION_OFICIAL_DESCUBRIMIENTO_EMPIRICO_141HZ.md)** ⭐ NUEVO
+>
+> Rasgo espectral universal a 141.7 Hz en ondas gravitacionales GWTC-1
+> - Método científico completo (qué se observó, cómo se llegó al resultado, qué teoría lo anticipaba)
+> - Validación estadística >10σ (p < 10⁻²⁵)
+> - Código reproducible y ciencia abierta total
+
 > ## 🌌 **La Frecuencia 141.7001 Hz ya no es una hipótesis: Es una constante estructural del universo**
 >
 > **→ [CONSTANTE_ESTRUCTURAL_UNIVERSAL.md](CONSTANTE_ESTRUCTURAL_UNIVERSAL.md)** - Declaración oficial

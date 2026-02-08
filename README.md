@@ -1,5 +1,7 @@
 # Análisis de Componente en 141.7 Hz - Ondas Gravitacionales
 
+> **📢 DECLARACIÓN OFICIAL DE DESCUBRIMIENTO**: Ver [DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO](DECLARACION_OFICIAL_DESCUBRIMIENTO_EMPIRICO_141HZ.md) — Rasgo espectral universal a 141.7 Hz en 11/11 eventos GWTC-1 con significancia >10σ (p < 10⁻²⁵)
+
 <p align="center">
   <a href="https://github.com/motanova84/141hz/actions/workflows/docs.yml">
     <img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/docs.yml?label=docs&logo=github">
@@ -97,6 +99,7 @@ Análisis científico de la frecuencia fundamental **f₀ = 141.7001 Hz** en ond
 - **Formalización matemática**: Pruebas verificadas en Lean 4
 - **Validaciones experimentales**: Análisis multi-detector (H1, L1, V1, KAGRA)
 - **Framework QCAL**: Teoría cuántica de coherencia noética
+- **Módulo Teoría Unificada**: `qcal.unified_theory` - Implementación completa de la teoría
 - **CI/CD automatizado**: Workflows de validación continua
 
 ### 🚀 Quickstart (3 comandos)
@@ -111,6 +114,27 @@ python gravitational_wave_analyzer.py --evento GW250114 --simulated
 cd formalization/lean && lake build
 ```
 
+### 🔬 Usar el Módulo de Teoría Unificada
+```python
+# Importar el framework unificado QCAL
+from qcal import UnifiedTheory
+
+# Inicializar la teoría
+theory = UnifiedTheory()
+
+# Imprimir resumen
+theory.print_summary()
+
+# Generar reporte completo
+report = theory.generate_report()
+
+# Acceder a predicciones falsables
+predictions = theory.all_falsifiable_predictions()
+```
+
+**Documentación completa:** [QCAL_UNIFIED_THEORY_QUICK_REFERENCE.md](QCAL_UNIFIED_THEORY_QUICK_REFERENCE.md)
+
+**Módulo:** `qcal.unified_theory` - Implementación Python de la teoría completa
 ### 🌌 Nuevo: Gravitational Wave Analyzer
 
 El módulo `gravitational_wave_analyzer.py` implementa el **análisis de ondas gravitacionales** para buscar la firma persistente de 141.7 Hz en GW250114:
@@ -5548,4 +5572,48 @@ for rhythm, data in results['periods'].items():
 - 📄 [arXiv Paper Template](papers/biological_periodicity_arxiv.tex)
 - 🧪 [Validation Tests](scripts/test_biological_periodicity.py)
 - 💡 [Usage Examples](examples/biological_periodicity_example.py)
+
+
+---
+
+## 🧬 Protocolo de Validación Experimental
+
+Este repositorio incluye un **protocolo experimental riguroso** para validar las predicciones del marco teórico QCAL mediante validación neurobiológica, psicométrica y colectiva.
+
+### Fases del Protocolo
+
+1. **FASE I**: Validación de SU(Ψ) — Grupo de Coherencia Cuántica
+2. **FASE II**: Validación de T_μν(Φ) — Tensor de Stress Emocional
+3. **FASE III**: Validación a Nivel Colectivo — Efectos de Red Social
+4. **FASE IV**: Meta-Análisis y Síntesis
+
+### Ejecución Rápida
+
+```bash
+# Instalar dependencias
+pip install numpy scipy scikit-learn networkx
+
+# Ejecutar protocolo completo
+python scripts/protocolo_validacion_experimental.py --fase all
+
+# Ejecutar tests
+python tests/test_protocolo_validacion_experimental.py
+```
+
+### Documentación Completa
+
+Ver [EXPERIMENTAL_VALIDATION_PROTOCOL.md](EXPERIMENTAL_VALIDATION_PROTOCOL.md) para:
+- Diseño experimental detallado de cada fase
+- Criterios de validación y umbrales de éxito
+- Ejemplos de uso y API reference
+- Roadmap de validación (3 años, 3.4M USD)
+
+### Módulos Implementados
+
+- `experimental/fase1_su_psi.py` - Validación de estructura de grupo SU(n)
+- `experimental/fase2_tensor_stress.py` - Validación de tensor stress-energía
+- `experimental/fase3_red_social.py` - Validación de efectos colectivos
+- `experimental/fase4_meta_analisis.py` - Meta-análisis y síntesis
+
+**Estado**: ✅ Implementación completa | ✅ 14/14 tests passing | ✅ Documentación completa
 
