@@ -55,6 +55,8 @@
   - Validación de Coherencia Armónica QCAL ∞³
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_official_discovery_declaration.py`
+  - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_reproducibility.py`
@@ -83,6 +85,8 @@
   - Validación de Coherencia Armónica QCAL ∞³
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_official_discovery_declaration.py`
+  - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_reproducibility.py`
@@ -266,6 +270,8 @@
   - Tests para validación de evidencias sólidas: λ₀ ≈ 0.001588
 - `test_validate_badges.py`
   - Test suite for badge validation script.
+- `test_validate_official_discovery_declaration.py`
+  - Test para el script de validación de la declaración oficial
 - `test_validate_scipy_snr.py`
   - Test for validate_scipy_snr_141hz.py
 - `test_validate_vacuum_energy_equation.py`
@@ -292,4 +298,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-05 18:36:36 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-08 03:09:44 UTC*
