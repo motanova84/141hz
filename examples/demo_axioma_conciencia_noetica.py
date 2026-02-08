@@ -14,11 +14,16 @@ import numpy as np
 import sys
 import os
 
-# Import directly from module
+# Import directly from module using relative path
 import importlib.util
+
+# Construct path relative to this script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+module_path = os.path.join(script_dir, '..', 'src', 'noetic_consciousness_axiom.py')
+
 spec = importlib.util.spec_from_file_location(
     "noetic_consciousness_axiom",
-    "/home/runner/work/141hz/141hz/src/noetic_consciousness_axiom.py"
+    module_path
 )
 nca = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(nca)
