@@ -48,6 +48,19 @@ try:
 except ImportError:
     SPECTRAL_EMBEDDING_AVAILABLE = False
 
+# Dual mass perspective module (new)
+try:
+    from .dual_mass import (
+        DualMassPerspective,
+        effective_mass,
+        noetic_mass,
+        unified_mass,
+        calculate_dual_mass_spectrum
+    )
+    DUAL_MASS_AVAILABLE = True
+except ImportError:
+    DUAL_MASS_AVAILABLE = False
+
 __version__ = "1.0.0"
 __all__ = [
     "psi_score",
@@ -89,6 +102,91 @@ if SPECTRAL_EMBEDDING_AVAILABLE:
         "BaselineEmbedding",
         "Word2VecEmbedding",
         "EmbeddingEvaluator"
+    ])
+
+# Unified theory modules
+try:
+    from .unified_theory import (
+        UnifiedTheoryConstants,
+        RiemannZetaComponent,
+        CalabiYauComponent,
+        FrequencyComponent,
+        ConsciousnessComponent,
+        GravityComponent,
+        SpectrumComponent,
+        CondensedMatterComponent,
+        UnifiedTheory
+    )
+    UNIFIED_THEORY_AVAILABLE = True
+except ImportError:
+    UNIFIED_THEORY_AVAILABLE = False
+
+# Add unified theory exports if available
+if UNIFIED_THEORY_AVAILABLE:
+    __all__.extend([
+        "UnifiedTheoryConstants",
+        "RiemannZetaComponent",
+        "CalabiYauComponent",
+        "FrequencyComponent",
+        "ConsciousnessComponent",
+        "GravityComponent",
+        "SpectrumComponent",
+        "CondensedMatterComponent",
+        "UnifiedTheory"
+    ])
+
+# Add dual mass exports if available
+if DUAL_MASS_AVAILABLE:
+    __all__.extend([
+        "DualMassPerspective",
+        "effective_mass",
+        "noetic_mass",
+        "unified_mass",
+        "calculate_dual_mass_spectrum"
+    ])
+
+# Dimensional analysis module
+try:
+    from .dimensional_analysis_psi import (
+        DimensionalQuantity,
+        validate_aeff_dimensionless,
+        validate_psi_formula,
+        validate_limit_behavior,
+        compare_to_physics_coupling_factors,
+        complete_dimensional_validation,
+        print_validation_report
+    )
+    DIMENSIONAL_ANALYSIS_AVAILABLE = True
+except ImportError:
+    DIMENSIONAL_ANALYSIS_AVAILABLE = False
+
+# Add dimensional analysis exports if available
+if DIMENSIONAL_ANALYSIS_AVAILABLE:
+    __all__.extend([
+        "DimensionalQuantity",
+        "validate_aeff_dimensionless",
+        "validate_psi_formula",
+        "validate_limit_behavior",
+        "compare_to_physics_coupling_factors",
+        "complete_dimensional_validation",
+        "print_validation_report"
+    ])
+
+# Local Node Simulation modules
+try:
+    from .local_node_simulation import (
+        LocalNodeSimulation,
+        NodeState
+    )
+    LOCAL_NODE_SIMULATION_AVAILABLE = True
+except ImportError:
+    LOCAL_NODE_SIMULATION_AVAILABLE = False
+
+# Add local node simulation exports if available
+if LOCAL_NODE_SIMULATION_AVAILABLE:
+    __all__.extend([
+        "LocalNodeSimulation",
+        "NodeState"
     ])
 
 # Fundamental constants

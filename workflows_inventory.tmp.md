@@ -215,6 +215,15 @@
 - Trigger: schedule (`0 0 * * 1`)
 - Trigger: manual (workflow_dispatch)
 
+### GW250114 141.7 Hz Validation
+
+**Archivo:** `gw250114-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 */4 * * *`)
+- Trigger: manual (workflow_dispatch)
+
 ### Hydrogen Line Quantum Phase Validation
 
 **Archivo:** `hydrogen-line-validation.yml`
@@ -365,6 +374,14 @@
 - Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
+### QCAL Biological Validation
+
+**Archivo:** `qcal-biological-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### QCAL-LLM Tests
 
 **Archivo:** `qcal-llm-tests.yml`
@@ -480,4 +497,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-01-27 21:12:12 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-08 03:09:45 UTC*

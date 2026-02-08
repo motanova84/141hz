@@ -14,6 +14,11 @@ data/
 scripts/results/
 test_*.json
 test_*.png
+*_test.json
+*_test.png
+# CI-generated validation outputs (with version suffix)
+hydrogen_f0_quantum_phase_*.png
+hydrogen_f0_validation_*.json
 test_gw250114_qnm/
 
 # Temporary files
@@ -191,3 +196,9 @@ active_system_status.json
 
 # GW unbiased validation outputs
 gw_unbiased_validation_results.json
+fluorescence_demo_*.png
+results/gw250114*/
+
+# Protocol Ψ-Q1 demo outputs
+protocol_psi_q1_demo.json
+protocol_psi_q1_evolution.png
