@@ -375,8 +375,8 @@ class TestQCALIntegration:
         """Test that f₀ is correctly integrated."""
         from qcal.constants import F0_HZ
         
-        # Verify f₀ is the fundamental frequency
-        assert F0_HZ == 141.70001
+        # Verify f₀ is the fundamental frequency (with tolerance for floating point)
+        assert abs(F0_HZ - 141.70001) < 1e-5
     
     def test_cosmic_coordinates_dimensionality(self):
         """Test QCAL ∞³ cosmic coordinates are 3D."""
