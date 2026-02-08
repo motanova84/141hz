@@ -145,6 +145,33 @@ if DUAL_MASS_AVAILABLE:
         "calculate_dual_mass_spectrum"
     ])
 
+# Dimensional analysis module
+try:
+    from .dimensional_analysis_psi import (
+        DimensionalQuantity,
+        validate_aeff_dimensionless,
+        validate_psi_formula,
+        validate_limit_behavior,
+        compare_to_physics_coupling_factors,
+        complete_dimensional_validation,
+        print_validation_report
+    )
+    DIMENSIONAL_ANALYSIS_AVAILABLE = True
+except ImportError:
+    DIMENSIONAL_ANALYSIS_AVAILABLE = False
+
+# Add dimensional analysis exports if available
+if DIMENSIONAL_ANALYSIS_AVAILABLE:
+    __all__.extend([
+        "DimensionalQuantity",
+        "validate_aeff_dimensionless",
+        "validate_psi_formula",
+        "validate_limit_behavior",
+        "compare_to_physics_coupling_factors",
+        "complete_dimensional_validation",
+        "print_validation_report"
+    ])
+
 # Local Node Simulation modules
 try:
     from .local_node_simulation import (
