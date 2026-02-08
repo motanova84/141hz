@@ -48,6 +48,20 @@ try:
 except ImportError:
     SPECTRAL_EMBEDDING_AVAILABLE = False
 
+# Spiral Light Geometry module (new)
+try:
+    from .spiral_light_geometry import (
+        SpiralLightGeometry,
+        SpiralPathParams,
+        WaveFunctionParams,
+        CoherenceMaximality,
+        generate_spiral_path,
+        calculate_interference
+    )
+    SPIRAL_LIGHT_AVAILABLE = True
+except ImportError:
+    SPIRAL_LIGHT_AVAILABLE = False
+
 # Dual mass perspective module (new)
 try:
     from .dual_mass import (
@@ -102,6 +116,17 @@ if SPECTRAL_EMBEDDING_AVAILABLE:
         "BaselineEmbedding",
         "Word2VecEmbedding",
         "EmbeddingEvaluator"
+    ])
+
+# Add spiral light geometry exports if available
+if SPIRAL_LIGHT_AVAILABLE:
+    __all__.extend([
+        "SpiralLightGeometry",
+        "SpiralPathParams",
+        "WaveFunctionParams",
+        "CoherenceMaximality",
+        "generate_spiral_path",
+        "calculate_interference"
     ])
 
 # Unified theory modules

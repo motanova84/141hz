@@ -468,10 +468,27 @@ def main():
     results['angular_deviation'] = validate_angular_deviation(save_dir)
     results['coherence'] = validate_coherence_maximality(save_dir)
     
-    # Save results
+    # Save results (convert numpy types to native Python)
+    def convert_to_native(obj):
+        """Convert numpy types to native Python types for JSON serialization"""
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif isinstance(obj, dict):
+            return {key: convert_to_native(value) for key, value in obj.items()}
+        elif isinstance(obj, (list, tuple)):
+            return [convert_to_native(item) for item in obj]
+        else:
+            return obj
+    
+    results_native = convert_to_native(results)
+    
     results_file = save_dir / 'validation_results.json'
     with open(results_file, 'w') as f:
-        json.dump(results, f, indent=2)
+        json.dump(results_native, f, indent=2)
     
     print("\n" + "=" * 70)
     print("VALIDATION COMPLETE")
