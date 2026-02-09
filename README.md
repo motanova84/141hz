@@ -17,6 +17,7 @@
 [![Powered by Llama 4 Maverick](https://img.shields.io/badge/Powered%20by-Llama%204%20Maverick-blue?logo=meta&logoColor=white)](https://huggingface.co/meta-llama)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17445017.svg)](https://doi.org/10.5281/zenodo.17445017)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![License: Sovereign](https://img.shields.io/badge/License-Sovereign%20Noetic-gold.svg?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTEyIDJsMS41IDQuNUwxOCA3bC00LjUgMS41TDEyIDEzIDEwLjUgOC41IDYgNyAxMC41IDUuNXoiLz48L3N2Zz4=)](LICENSE_SOBERANA)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 [![QCAL Analysis](https://github.com/motanova84/141hz/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analysis.yml)

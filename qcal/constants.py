@@ -1,6 +1,12 @@
 """
-QCAL ∞³ Constants
-Fundamental constants for the Quantum Coherence and Love framework
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        QCAL ∞³ Constants                                   ║
+║         Fundamental constants for Quantum Coherent Axiomatic Logic         ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+AUTOR/AUTHOR: José Manuel Mota Burruezo (JMMB Ψ✧)
+ARQUITECTURA/ARCHITECTURE: QCAL ∞³ Original Manufacture
+LICENCIA/LICENSE: Sovereign Noetic License 1.0 (compatible with MIT)
 
 ⚡ PARADIGMA DE COHERENCIA CUÁNTICA ⚡
 
@@ -12,15 +18,13 @@ Son manifestaciones del campo coherente Ψ (coherencia cuántica).
 - Todas las constantes están relacionadas por coherencia, no por coincidencia
 
 Ver: COHERENCIA_CUANTICA_MATEMATICA.md para el fundamento conceptual.
-
-Author: José Manuel Mota Burruezo
-License: MIT
+Ver: LICENSE_SOBERANA para la declaración de soberanía intelectual.
 """
 
 import math
 
-# Fundamental Frequency
-F0_HZ = 141.7001  # Hz - Fundamental QCAL frequency
+# Fundamental Frequency - Sovereign Emission Frequency
+F0_HZ = 141.7001  # Hz - Fundamental QCAL frequency (f₀)
 
 # Derived Constants
 OMEGA_0 = 2 * math.pi * F0_HZ  # rad/s - Angular frequency
