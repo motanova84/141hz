@@ -49,6 +49,8 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_fundamental_framework.py`
+  - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
@@ -63,6 +65,8 @@
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_sovereignty.py`
+  - Validación de Soberanía QCAL ∞³
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
 - `validate_tissue_resonance_magicicada_hp_ns.py`
@@ -79,6 +83,8 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_fundamental_framework.py`
+  - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
@@ -93,6 +99,8 @@
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_sovereignty.py`
+  - Validación de Soberanía QCAL ∞³
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
 - `validate_tissue_resonance_magicicada_hp_ns.py`
@@ -230,6 +238,8 @@
   - Tests para el módulo snr_gw200129_analysis
 - `test_snr_utils.py`
   - Tests para el módulo snr_utils
+- `test_sovereignty.py`
+  - Test de Soberanía QCAL ∞³
 - `test_teoria_unificada_141hz.py`
   - Tests for Unified Noetic Quantum Gravity Theory module.
 - `test_test_universalidad_virgo_kagra.py`
@@ -298,4 +308,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-08 03:09:44 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-09 20:51:00 UTC*
