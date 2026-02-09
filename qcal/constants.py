@@ -20,7 +20,7 @@ License: MIT
 import math
 
 # Fundamental Frequency
-F0_HZ = 141.70001  # Hz - Fundamental QCAL frequency
+F0_HZ = 141.7001  # Hz - Fundamental QCAL frequency
 
 # Derived Constants
 OMEGA_0 = 2 * math.pi * F0_HZ  # rad/s - Angular frequency
