@@ -204,6 +204,35 @@ if SPIRAL_LIGHT_PATH_AVAILABLE:
     __all__.extend([
         "SpiralLightPath",
         "SpiralParameters"
+# Cosmic parameters module
+try:
+    from .cosmic_parameters import (
+        CurrentUniverseParameters,
+        CosmicEpoch,
+        CosmicTimeline,
+        CURRENT_UNIVERSE,
+        COSMIC_TIMELINE,
+        get_universe_age,
+        get_cmb_temperature,
+        get_epoch,
+        print_timeline
+    )
+    COSMIC_PARAMETERS_AVAILABLE = True
+except ImportError:
+    COSMIC_PARAMETERS_AVAILABLE = False
+
+# Add cosmic parameters exports if available
+if COSMIC_PARAMETERS_AVAILABLE:
+    __all__.extend([
+        "CurrentUniverseParameters",
+        "CosmicEpoch",
+        "CosmicTimeline",
+        "CURRENT_UNIVERSE",
+        "COSMIC_TIMELINE",
+        "get_universe_age",
+        "get_cmb_temperature",
+        "get_epoch",
+        "print_timeline"
     ])
 
 # Fundamental constants
