@@ -29,7 +29,7 @@ f₀ = 141.7001 Hz
 - Relación geométrica: f₀ = 10 × t₁ ≈ 141.4725 Hz (exactificada a 141.7001 Hz)
 
 **Ubicación en código:**
-- `qcal/constants.py`: `F0_HZ = 141.70001`
+- `qcal/constants.py`: `F0_HZ = 141.7001`
 - `src/canonical_consciousness_field.py`: `F0 = mp.mpf("141.7001")`
 
 **Propiedades derivadas:**
