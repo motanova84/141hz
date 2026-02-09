@@ -100,7 +100,7 @@ def validar_firma_espectral(frecuencia: float, tolerancia: float = 0.001) -> boo
     Returns:
         bool: True si la frecuencia coincide con f₀ dentro de la tolerancia
     """
-    return abs(frecuencia - F0_HZ) < tolerancia
+    return abs(frecuencia - F0_HZ) <= tolerancia
 
 
 def obtener_metadatos_soberania() -> dict:
