@@ -49,6 +49,8 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_fundamental_framework.py`
+  - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
@@ -79,6 +81,8 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_fundamental_framework.py`
+  - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
@@ -298,4 +302,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-08 03:09:44 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-09 18:27:36 UTC*
