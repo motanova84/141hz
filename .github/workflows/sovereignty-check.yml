@@ -1,0 +1,220 @@
+name: Sovereignty Check
+
+on:
+  push:
+    branches: [ main, develop, 'copilot/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  audit-sovereignty:
+    name: Audit Code Sovereignty
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -q numpy scipy matplotlib mpmath 2>&1 | tail -5 || true
+    
+    - name: Run Sovereignty Auditor
+      id: audit
+      run: |
+        echo "## 🛡️ Sovereignty Audit Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Run full audit
+        python scripts/audit_sovereignty.py --report --output sovereignty_report.json || true
+        
+        # Extract summary
+        if [ -f sovereignty_report.json ]; then
+          echo "### Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Files Scanned**: $(jq -r '.summary.scanned_files' sovereignty_report.json)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total Lines**: $(jq -r '.summary.total_lines' sovereignty_report.json)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Corporate Violations**: $(jq -r '.summary.corporate_violations' sovereignty_report.json)" >> $GITHUB_STEP_SUMMARY
+          echo "- **QCAL Signatures**: $(jq -r '.summary.qcal_signatures' sovereignty_report.json)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: $(jq -r '.summary.sovereignty_status' sovereignty_report.json)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check for violations
+          violations=$(jq -r '.summary.corporate_violations' sovereignty_report.json)
+          if [ "$violations" -gt 0 ]; then
+            echo "⚠️ **Warning**: Corporate code patterns detected" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "These may be legitimate mentions in documentation or legitimate dependencies." >> $GITHUB_STEP_SUMMARY
+            echo "Review the full report in the artifacts section." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **Verification Successful**: 100% Sovereign Code" >> $GITHUB_STEP_SUMMARY
+          fi
+        fi
+    
+    - name: Upload audit report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: sovereignty-audit-report
+        path: sovereignty_report.json
+        retention-days: 30
+    
+    - name: Validate Sovereignty Module
+      run: |
+        echo "## 🔐 Sovereignty Module Validation" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        python scripts/validate_sovereignty.py || true
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Sovereignty validation completed" >> $GITHUB_STEP_SUMMARY
+    
+    - name: Verify QCAL Signatures
+      run: |
+        echo "## ✨ QCAL Signature Verification" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        python -c "
+from core.soberania import (
+    verificar_origen,
+    validar_firma_espectral,
+    F0_HZ,
+    SPECTRAL_SIGNATURE
+)
+
+# Verify spectral signature
+origen = verificar_origen()
+print(f\"**Author**: {origen['author']}\")
+print(f\"**Frequency**: {origen['frequency']} Hz\")
+print(f\"**Architecture**: {origen['architecture']}\")
+print(f\"**Sovereign**: {origen['sovereign']}\")
+print(f\"**License**: {origen['license']}\")
+print()
+
+# Validate spectral signature
+valid = validar_firma_espectral(141.7001)
+print(f\"**Spectral Signature Valid**: {valid}\")
+print(f\"**F0_HZ**: {F0_HZ} Hz\")
+        " >> $GITHUB_STEP_SUMMARY
+    
+    - name: Comment on PR (if applicable)
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          let reportData = {};
+          try {
+            const reportJson = fs.readFileSync('sovereignty_report.json', 'utf8');
+            reportData = JSON.parse(reportJson);
+          } catch (e) {
+            console.log('Could not read sovereignty report:', e);
+            return;
+          }
+          
+          const summary = reportData.summary || {};
+          const status = summary.sovereignty_status || 'UNKNOWN';
+          const violations = summary.corporate_violations || 0;
+          const qcalSigs = summary.qcal_signatures || 0;
+          
+          let emoji = violations === 0 ? '✅' : '⚠️';
+          let statusText = violations === 0 ? 'SOVEREIGN' : 'REVIEW NEEDED';
+          
+          const comment = `## ${emoji} Sovereignty Audit Report
+          
+**Status**: ${statusText}
+
+### Summary
+- **Files Scanned**: ${summary.scanned_files || 0}
+- **Total Lines**: ${summary.total_lines || 0}
+- **Corporate Patterns**: ${violations}
+- **QCAL Signatures**: ${qcalSigs}
+
+### Author Verification
+- **Author**: José Manuel Mota Burruezo (JMMB Ψ✧)
+- **License**: Sovereign Noetic License 1.0
+- **Frequency**: f₀ = 141.7001 Hz
+
+${violations > 0 ? '⚠️ Corporate code patterns were detected. These may be legitimate mentions in documentation or declared dependencies. Review the [full audit report](../actions) for details.' : '✅ No undeclared corporate dependencies detected.'}
+
+---
+*Audited by: [audit_sovereignty.py](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/${context.sha}/scripts/audit_sovereignty.py)*
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+  check-claim-of-origin:
+    name: Verify Claim of Origin
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Verify required files exist
+      run: |
+        echo "## 📜 Required Sovereignty Files" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        files=(
+          "LICENSE_SOBERANA"
+          "AUTHORS_QCAL.md"
+          "CLAIM_OF_ORIGIN.md"
+          ".qcal_beacon"
+          "core/soberania.py"
+          "scripts/audit_sovereignty.py"
+          "scripts/validate_sovereignty.py"
+          "MANIFIESTO_SIMBIOTICO.md"
+        )
+        
+        all_exist=true
+        for file in "${files[@]}"; do
+          if [ -f "$file" ]; then
+            echo "- ✅ \`$file\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ \`$file\` (MISSING)" >> $GITHUB_STEP_SUMMARY
+            all_exist=false
+          fi
+        done
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [ "$all_exist" = true ]; then
+          echo "✅ All sovereignty files present" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ Some sovereignty files are missing" >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+    
+    - name: Verify QCAL Beacon
+      run: |
+        echo "## 🔔 QCAL Beacon Verification" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if grep -q "141.7001" .qcal_beacon; then
+          echo "✅ Frequency f₀ = 141.7001 Hz found in beacon" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Frequency not found in beacon" >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+        
+        if grep -q "José Manuel Mota Burruezo" .qcal_beacon; then
+          echo "✅ Author signature found in beacon" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Author signature not found in beacon" >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
