@@ -189,6 +189,21 @@ if LOCAL_NODE_SIMULATION_AVAILABLE:
         "NodeState"
     ])
 
+# Spiral Light Path modules
+try:
+    from .spiral_light_path import (
+        SpiralLightPath,
+        SpiralParameters
+    )
+    SPIRAL_LIGHT_PATH_AVAILABLE = True
+except ImportError:
+    SPIRAL_LIGHT_PATH_AVAILABLE = False
+
+# Add spiral light path exports if available
+if SPIRAL_LIGHT_PATH_AVAILABLE:
+    __all__.extend([
+        "SpiralLightPath",
+        "SpiralParameters"
 # Cosmic parameters module
 try:
     from .cosmic_parameters import (
