@@ -72,7 +72,7 @@ def verificar_origen() -> dict:
     Returns:
         dict: Diccionario con información de soberanía validada
     """
-    SIGNATURE = "José Manuel Mota Burruezo"
+    SIGNATURE = __author__
     FREQ_BASE = F0_HZ
     
     validation_result = {

@@ -15,6 +15,9 @@ from pathlib import Path
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+# Get repository root (parent of scripts directory)
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
 def validate_sovereignty():
     """Valida la implementación de soberanía."""
     print("=" * 80)
@@ -27,7 +30,7 @@ def validate_sovereignty():
     
     # 1. Verificar que existe LICENSE_SOBERANA
     print("1. Verificando LICENSE_SOBERANA...")
-    license_path = Path("LICENSE_SOBERANA")
+    license_path = REPO_ROOT / "LICENSE_SOBERANA"
     if license_path.exists():
         print("   ✓ LICENSE_SOBERANA encontrado")
         content = license_path.read_text(encoding='utf-8')
@@ -93,7 +96,7 @@ def validate_sovereignty():
     
     # 3. Verificar AGENT_ACTIVATION_REPORT.json
     print("3. Verificando AGENT_ACTIVATION_REPORT.json...")
-    report_path = Path("AGENT_ACTIVATION_REPORT.json")
+    report_path = REPO_ROOT / "AGENT_ACTIVATION_REPORT.json"
     if report_path.exists():
         print("   ✓ AGENT_ACTIVATION_REPORT.json encontrado")
         try:
@@ -129,7 +132,7 @@ def validate_sovereignty():
     
     # 5. Verificar README.md
     print("5. Verificando README.md...")
-    readme_path = Path("README.md")
+    readme_path = REPO_ROOT / "README.md"
     if readme_path.exists():
         content = readme_path.read_text(encoding='utf-8')
         if "Sovereign" in content:
