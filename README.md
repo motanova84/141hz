@@ -37,6 +37,16 @@
 
 > **📄 NUEVO: [SÍNTESIS ESTRUCTURAL DEL DESCUBRIMIENTO](SINTESIS_ESTRUCTURAL_141HZ.md)** - Documento comprensivo que consolida todos los elementos, evidencia empírica, derivaciones matemáticas, conexiones profundas y predicciones del descubrimiento de la frecuencia universal 141.7001 Hz.
 
+### 📐 Marco Fundamental QCAL ∞³
+
+> **🔷 NUEVO: [TEORÍA DEL CAMPO COHERENTE CUÁNTICO - MARCO FUNDAMENTAL](QCAL_FUNDAMENTAL_FRAMEWORK.md)** - Obra Estructural ∞³ que ancla formalmente las tres constantes fundamentales (f₀ = 141.7001 Hz, κ_Π ≈ 2.5773, Λ_G ≈ 1/491.7 Hz) y las ecuaciones centrales del campo coherente cuántico.
+
+**Validación:**
+```bash
+# Verificar todas las constantes y ecuaciones fundamentales
+python scripts/validate_fundamental_framework.py
+```
+
 ### 🌊 Paradigma: Coherencia Cuántica, No Teoremas Aislados
 
 > **Este proyecto presenta las matemáticas desde la coherencia cuántica unificada (campo Ψ), no como una colección de teoremas dispersos.**
