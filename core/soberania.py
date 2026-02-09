@@ -53,9 +53,6 @@ def verificar_patrimonio() -> str:
     
     Returns:
         str: Mensaje de validación de autoría
-    
-    Raises:
-        None: Esta función nunca falla; la soberanía siempre está presente
     """
     return (
         f"✓ Autoría Validada: Herrero Original Detectado\n"
