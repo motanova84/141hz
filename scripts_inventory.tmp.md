@@ -65,6 +65,8 @@
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_sovereignty.py`
+  - Validación de Soberanía QCAL ∞³
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
 - `validate_tissue_resonance_magicicada_hp_ns.py`
@@ -97,6 +99,8 @@
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_sovereignty.py`
+  - Validación de Soberanía QCAL ∞³
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
 - `validate_tissue_resonance_magicicada_hp_ns.py`
@@ -234,6 +238,8 @@
   - Tests para el módulo snr_gw200129_analysis
 - `test_snr_utils.py`
   - Tests para el módulo snr_utils
+- `test_sovereignty.py`
+  - Test de Soberanía QCAL ∞³
 - `test_teoria_unificada_141hz.py`
   - Tests for Unified Noetic Quantum Gravity Theory module.
 - `test_test_universalidad_virgo_kagra.py`
@@ -302,4 +308,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-09 18:27:36 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-09 20:51:00 UTC*
