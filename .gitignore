@@ -202,3 +202,9 @@ results/gw250114*/
 # Protocol Ψ-Q1 demo outputs
 protocol_psi_q1_demo.json
 protocol_psi_q1_evolution.png
+
+# actionlint binary and docs
+actionlint
+actionlint_*.tar.gz
+man/
+docs/actionlint/
