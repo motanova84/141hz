@@ -83,28 +83,28 @@ jobs:
         echo "## ✨ QCAL Signature Verification" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
-        python -c "
-from core.soberania import (
-    verificar_origen,
-    validar_firma_espectral,
-    F0_HZ,
-    SPECTRAL_SIGNATURE
-)
-
-# Verify spectral signature
-origen = verificar_origen()
-print(f\"**Author**: {origen['author']}\")
-print(f\"**Frequency**: {origen['frequency']} Hz\")
-print(f\"**Architecture**: {origen['architecture']}\")
-print(f\"**Sovereign**: {origen['sovereign']}\")
-print(f\"**License**: {origen['license']}\")
-print()
-
-# Validate spectral signature
-valid = validar_firma_espectral(141.7001)
-print(f\"**Spectral Signature Valid**: {valid}\")
-print(f\"**F0_HZ**: {F0_HZ} Hz\")
-        " >> $GITHUB_STEP_SUMMARY
+        python << 'PYTHON_EOF' >> $GITHUB_STEP_SUMMARY
+        from core.soberania import (
+            verificar_origen,
+            validar_firma_espectral,
+            F0_HZ,
+            SPECTRAL_SIGNATURE
+        )
+        
+        # Verify spectral signature
+        origen = verificar_origen()
+        print(f"**Author**: {origen['author']}")
+        print(f"**Frequency**: {origen['frequency']} Hz")
+        print(f"**Architecture**: {origen['architecture']}")
+        print(f"**Sovereign**: {origen['sovereign']}")
+        print(f"**License**: {origen['license']}")
+        print()
+        
+        # Validate spectral signature
+        valid = validar_firma_espectral(141.7001)
+        print(f"**Spectral Signature Valid**: {valid}")
+        print(f"**F0_HZ**: {F0_HZ} Hz")
+        PYTHON_EOF
     
     - name: Comment on PR (if applicable)
       if: github.event_name == 'pull_request'
@@ -130,26 +130,26 @@ print(f\"**F0_HZ**: {F0_HZ} Hz\")
           let emoji = violations === 0 ? '✅' : '⚠️';
           let statusText = violations === 0 ? 'SOVEREIGN' : 'REVIEW NEEDED';
           
-          const comment = `## ${emoji} Sovereignty Audit Report
+          const comment = \`## \${emoji} Sovereignty Audit Report
           
-**Status**: ${statusText}
-
-### Summary
-- **Files Scanned**: ${summary.scanned_files || 0}
-- **Total Lines**: ${summary.total_lines || 0}
-- **Corporate Patterns**: ${violations}
-- **QCAL Signatures**: ${qcalSigs}
-
-### Author Verification
-- **Author**: José Manuel Mota Burruezo (JMMB Ψ✧)
-- **License**: Sovereign Noetic License 1.0
-- **Frequency**: f₀ = 141.7001 Hz
-
-${violations > 0 ? '⚠️ Corporate code patterns were detected. These may be legitimate mentions in documentation or declared dependencies. Review the [full audit report](../actions) for details.' : '✅ No undeclared corporate dependencies detected.'}
-
----
-*Audited by: [audit_sovereignty.py](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/${context.sha}/scripts/audit_sovereignty.py)*
-          `;
+          **Status**: \${statusText}
+          
+          ### Summary
+          - **Files Scanned**: \${summary.scanned_files || 0}
+          - **Total Lines**: \${summary.total_lines || 0}
+          - **Corporate Patterns**: \${violations}
+          - **QCAL Signatures**: \${qcalSigs}
+          
+          ### Author Verification
+          - **Author**: José Manuel Mota Burruezo (JMMB Ψ✧)
+          - **License**: Sovereign Noetic License 1.0
+          - **Frequency**: f₀ = 141.7001 Hz
+          
+          \${violations > 0 ? '⚠️ Corporate code patterns were detected. These may be legitimate mentions in documentation or declared dependencies. Review the [full audit report](../actions) for details.' : '✅ No undeclared corporate dependencies detected.'}
+          
+          ---
+          *Audited by: [audit_sovereignty.py](https://github.com/\${context.repo.owner}/\${context.repo.repo}/blob/\${context.sha}/scripts/audit_sovereignty.py)*
+          \`;
           
           github.rest.issues.createComment({
             issue_number: context.issue.number,
