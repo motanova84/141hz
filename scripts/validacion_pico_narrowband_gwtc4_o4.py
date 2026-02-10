@@ -173,7 +173,7 @@ class ValidadorPicoNarrowbandGWTC4:
         
         # Calcular parámetros de cavidad
         linewidth_Hz = CAVITY_LINEWIDTH_HZ
-        linewidth_nHz = linewidth_Hz * 1e9  # Convert Hz to nHz (10^-9 Hz to nHz is ×10^9)
+        linewidth_nHz = linewidth_Hz * 1e9  # Convert Hz to nHz (1 Hz = 10^9 nHz, so multiply by 10^9)
         
         # Acoplamiento optomecánico
         coupling_g_Hz = OPTOMECH_COUPLING_G
