@@ -67,6 +67,8 @@
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
+- `validate_spiral_light_path.py`
+  - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
 - `validate_tissue_resonance_magicicada_hp_ns.py`
@@ -101,6 +103,8 @@
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
+- `validate_spiral_light_path.py`
+  - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
 - `validate_tissue_resonance_magicicada_hp_ns.py`
@@ -204,12 +208,18 @@
   - Test suite for GW250114 141.7 Hz validation scripts
 - `test_harmonic_validation.py`
   - Test suite for harmonic validation theorem
+- `test_integracion_pipeline.py`
+  - Test de integración para el pipeline completo de validación QCAL.
 - `test_multi_event_snr_analysis.py`
   - Tests para el módulo multi_event_snr_analysis
+- `test_noetic_consciousness_basic.py`
+  - Standalone tests for Noetic Consciousness Axiom (no dependencies on src.__init__)
 - `test_optimization_modules.py`
   - Test script for computational optimization modules.
 - `test_performance_packages.py`
   - Test script to validate that numba, llvmlite, python-igraph, and numexpr
+- `test_pico_narrowband_gwtc4_o4.py`
+  - Tests for narrowband peak detection, optical cavities, and magnetoreception asymmetry.
 - `test_pipeline_gw250114_qcal.py`
   - Test script for pipeline_gw250114_qcal.py
 - `test_potencial_evac.py`
@@ -240,6 +250,8 @@
   - Tests para el módulo snr_utils
 - `test_sovereignty.py`
   - Test de Soberanía QCAL ∞³
+- `test_spiral_light_path.py`
+  - Test Script for Spiral Light Path Theory
 - `test_teoria_unificada_141hz.py`
   - Tests for Unified Noetic Quantum Gravity Theory module.
 - `test_test_universalidad_virgo_kagra.py`
@@ -308,4 +320,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-09 20:51:00 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-10 22:11:34 UTC*
