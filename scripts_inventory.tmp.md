@@ -208,6 +208,8 @@
   - Test suite for GW250114 141.7 Hz validation scripts
 - `test_harmonic_validation.py`
   - Test suite for harmonic validation theorem
+- `test_integracion_pipeline.py`
+  - Test de integración para el pipeline completo de validación QCAL.
 - `test_multi_event_snr_analysis.py`
   - Tests para el módulo multi_event_snr_analysis
 - `test_noetic_consciousness_basic.py`
@@ -318,4 +320,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-10 20:19:25 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-10 22:11:34 UTC*
