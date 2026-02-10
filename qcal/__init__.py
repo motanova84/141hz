@@ -204,6 +204,8 @@ if SPIRAL_LIGHT_PATH_AVAILABLE:
     __all__.extend([
         "SpiralLightPath",
         "SpiralParameters"
+    ])
+
 # Cosmic parameters module
 try:
     from .cosmic_parameters import (
