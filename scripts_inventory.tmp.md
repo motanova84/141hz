@@ -67,6 +67,8 @@
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
+- `validate_spiral_light_path.py`
+  - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
 - `validate_tissue_resonance_magicicada_hp_ns.py`
@@ -101,6 +103,8 @@
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
+- `validate_spiral_light_path.py`
+  - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
 - `validate_tissue_resonance_magicicada_hp_ns.py`
@@ -206,6 +210,8 @@
   - Test suite for harmonic validation theorem
 - `test_multi_event_snr_analysis.py`
   - Tests para el módulo multi_event_snr_analysis
+- `test_noetic_consciousness_basic.py`
+  - Standalone tests for Noetic Consciousness Axiom (no dependencies on src.__init__)
 - `test_optimization_modules.py`
   - Test script for computational optimization modules.
 - `test_performance_packages.py`
@@ -240,6 +246,8 @@
   - Tests para el módulo snr_utils
 - `test_sovereignty.py`
   - Test de Soberanía QCAL ∞³
+- `test_spiral_light_path.py`
+  - Test Script for Spiral Light Path Theory
 - `test_teoria_unificada_141hz.py`
   - Tests for Unified Noetic Quantum Gravity Theory module.
 - `test_test_universalidad_virgo_kagra.py`
@@ -308,4 +316,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-09 20:51:00 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-10 02:23:56 UTC*
