@@ -67,6 +67,8 @@
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
+- `validate_spiral_light.py`
+  - Validation Script: Spiral Light Geometry
 - `validate_spiral_light_path.py`
   - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
@@ -103,6 +105,8 @@
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
+- `validate_spiral_light.py`
+  - Validation Script: Spiral Light Geometry
 - `validate_spiral_light_path.py`
   - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
@@ -250,6 +254,8 @@
   - Tests para el módulo snr_utils
 - `test_sovereignty.py`
   - Test de Soberanía QCAL ∞³
+- `test_spiral_light_basic.py`
+  - Simple test runner for spiral light geometry (no pytest required)
 - `test_spiral_light_path.py`
   - Test Script for Spiral Light Path Theory
 - `test_teoria_unificada_141hz.py`
@@ -320,4 +326,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-10 22:11:34 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-10 22:46:38 UTC*
