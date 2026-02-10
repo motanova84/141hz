@@ -216,6 +216,8 @@
   - Test script for computational optimization modules.
 - `test_performance_packages.py`
   - Test script to validate that numba, llvmlite, python-igraph, and numexpr
+- `test_pico_narrowband_gwtc4_o4.py`
+  - Tests for narrowband peak detection, optical cavities, and magnetoreception asymmetry.
 - `test_pipeline_gw250114_qcal.py`
   - Test script for pipeline_gw250114_qcal.py
 - `test_potencial_evac.py`
@@ -316,4 +318,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-10 02:23:56 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-10 20:19:25 UTC*
