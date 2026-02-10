@@ -53,9 +53,9 @@ class DescargadorIGETS:
         print(f"     • Acceso FTP a datos crudos binarios")
         
         # Simulación para desarrollo
-        return self.simular_datos_gravimetricos(estacion, dias)
+        return self.simular_datos_gravimetricos(estacion, dias, fecha_inicio)
     
-    def simular_datos_gravimetricos(self, estacion, dias):
+    def simular_datos_gravimetricos(self, estacion, dias, fecha_inicio='2024-01-01'):
         """Simular datos gravimétricos para desarrollo."""
         fs = 10  # Hz - típico de datos crudos gravimétricos
         n_muestras = int(fs * 86400 * dias)  # muestras por día
