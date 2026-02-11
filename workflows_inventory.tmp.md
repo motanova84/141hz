@@ -439,6 +439,14 @@
 - Trigger: schedule (`0 2 * * *`)
 - Trigger: manual (workflow_dispatch)
 
+### Sovereignty Check
+
+**Archivo:** `sovereignty-check.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### Special Analysis Methods
 
 **Archivo:** `special-analysis.yml`
@@ -497,4 +505,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-08 03:09:45 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-11 21:18:13 UTC*

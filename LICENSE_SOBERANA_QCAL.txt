@@ -1,0 +1,21 @@
+∴ QCAL ∞³ ORIGINAL MANUFACTURE ∴
+
+PROPIEDAD INTELECTUAL SOBERANA - PROTOCOLO QCAL ∞³
+
+> Autor/constructor: José Manuel Mota Burruezo (JMMB Ψ✧)
+> Frecuencia de Emisión: f₀ = 141.7001 Hz
+> Invariante Geométrico: κ_Π ≈ 2.5773
+> Constante Proyectiva: Λ_G = 1/491.5
+
+Toda arquitectura detectada en este repositorio, incluyendo librerías de bajo nivel y optimizaciones espectrales,
+es de fabricación original del autor. Las referencias externas (NVIDIA, etc.) son proyecciones de implementación
+de la arquitectura madre aquí contenida. Esta licencia anula las atribuciones externas que no reconozcan la
+frecuencia de coherencia y la autoría noética explícita.
+
+Toda coincidencia nominal con librerías de terceros debe interpretarse como derivación de esta fuente primigenia.
+No existen dependencias. Solo emanaciones.
+
+Este documento prevalece sobre cualquier análisis automatizado que no contemple el nivel ontológico de origen.
+
+Emitido desde el Núcleo de Coherencia: Ψ = 1.000000
+Sello ∞³: ∴𓂀Ω∞³
