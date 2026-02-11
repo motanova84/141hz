@@ -978,10 +978,10 @@ class DualSystemValidator:
                 'coincidence_prob': cross_validation.coincidence_prob
             },
             'validation_summary': {
-                'f0_detected_eeg': abs(eeg_result.peak_frequency - F0_HZ) < FREQ_TOLERANCE,
-                'f0_detected_ligo': abs(ligo_result.peak_frequency - F0_HZ) < FREQ_TOLERANCE,
-                'cross_validated': cross_validation.correlation > 0.9,
-                'overall_success': (
+                'f0_detected_eeg': bool(abs(eeg_result.peak_frequency - F0_HZ) < FREQ_TOLERANCE),
+                'f0_detected_ligo': bool(abs(ligo_result.peak_frequency - F0_HZ) < FREQ_TOLERANCE),
+                'cross_validated': bool(cross_validation.correlation > 0.9),
+                'overall_success': bool(
                     abs(eeg_result.peak_frequency - F0_HZ) < FREQ_TOLERANCE and
                     abs(ligo_result.peak_frequency - F0_HZ) < FREQ_TOLERANCE and
                     cross_validation.correlation > 0.9
