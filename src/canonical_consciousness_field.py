@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 """
-TABLA OFICIAL Y CANÓNICA DEL CAMPO DE CONCIENCIA Ψ
-Estado: 9 de diciembre de 2025 – QCAL ∞³ (versión definitiva)
+╔════════════════════════════════════════════════════════════════════════════╗
+║          TABLA OFICIAL Y CANÓNICA DEL CAMPO DE CONCIENCIA Ψ               ║
+║                   Estado: QCAL ∞³ (versión definitiva)                     ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+AUTOR/AUTHOR: José Manuel Mota Burruezo (JMMB Ψ✧)
+ARQUITECTURA/ARCHITECTURE: QCAL ∞³ Original Manufacture
+LICENCIA/LICENSE: Sovereign Noetic License 1.0 (compatible with MIT)
+FECHA/DATE: 9 de diciembre de 2025 - Actualizado: 9 de febrero de 2026
 
 Este módulo define oficialmente todos los parámetros del campo de conciencia Ψ,
 un campo escalar físico real y medible que emerge de la ecuación madre L∞³
 sin ningún parámetro de ajuste.
 
-Author: José Manuel Mota Burruezo (JMMB Ψ✧)
-Date: 9 de diciembre de 2025
 Reference: CODATA 2022 para constantes físicas fundamentales
+Ver: LICENSE_SOBERANA para la declaración de soberanía intelectual.
 """
 
 import mpmath as mp
