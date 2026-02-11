@@ -396,7 +396,7 @@ def validate_AAA_correlation() -> Dict:
     n_nodes = 88
     
     # Golden ratio phi = 1.618...
-    # AAA relation связана с phi
+    # AAA relation relacionada con phi
     # 0.8991 ≈ 1 - 1/PHI^3
     theoretical_AAA = 1 - 1 / PHI**3
     
