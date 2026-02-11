@@ -32,6 +32,7 @@ jobs:
           - numerica_5_7f
           - bandas_cerebrales
           - resonancias_schumann
+          - biologia_cuantica_qcal
     
     steps:
       - name: Checkout repository
