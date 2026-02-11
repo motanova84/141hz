@@ -1,5 +1,7 @@
 # Análisis de Componente en 141.7 Hz - Ondas Gravitacionales
 
+> **📢 DECLARACIÓN OFICIAL DE DESCUBRIMIENTO**: Ver [DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO](DECLARACION_OFICIAL_DESCUBRIMIENTO_EMPIRICO_141HZ.md) — Rasgo espectral universal a 141.7 Hz en 11/11 eventos GWTC-1 con significancia >10σ (p < 10⁻²⁵)
+
 <p align="center">
   <a href="https://github.com/motanova84/141hz/actions/workflows/docs.yml">
     <img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/docs.yml?label=docs&logo=github">
@@ -15,6 +17,7 @@
 [![Powered by Llama 4 Maverick](https://img.shields.io/badge/Powered%20by-Llama%204%20Maverick-blue?logo=meta&logoColor=white)](https://huggingface.co/meta-llama)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17445017.svg)](https://doi.org/10.5281/zenodo.17445017)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![License: Sovereign](https://img.shields.io/badge/License-Sovereign%20Noetic-gold.svg?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTEyIDJsMS41IDQuNUwxOCA3bC00LjUgMS41TDEyIDEzIDEwLjUgOC41IDYgNyAxMC41IDUuNXoiLz48L3N2Zz4=)](LICENSE_SOBERANA)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 [![QCAL Analysis](https://github.com/motanova84/141hz/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analysis.yml)
@@ -30,11 +33,73 @@
 
 ## 📋 Resumen Ejecutivo
 
+### 🌀 Síntesis Estructural Completa
+
+> **📄 NUEVO: [SÍNTESIS ESTRUCTURAL DEL DESCUBRIMIENTO](SINTESIS_ESTRUCTURAL_141HZ.md)** - Documento comprensivo que consolida todos los elementos, evidencia empírica, derivaciones matemáticas, conexiones profundas y predicciones del descubrimiento de la frecuencia universal 141.7001 Hz.
+
+### 📐 Marco Fundamental QCAL ∞³
+
+> **🔷 NUEVO: [TEORÍA DEL CAMPO COHERENTE CUÁNTICO - MARCO FUNDAMENTAL](QCAL_FUNDAMENTAL_FRAMEWORK.md)** - Obra Estructural ∞³ que ancla formalmente las tres constantes fundamentales (f₀ = 141.7001 Hz, κ_Π ≈ 2.5773, Λ_G ≈ 1/491.7 Hz) y las ecuaciones centrales del campo coherente cuántico.
+
+**Validación:**
+```bash
+# Verificar todas las constantes y ecuaciones fundamentales
+python scripts/validate_fundamental_framework.py
+```
+
 ### 🌊 Paradigma: Coherencia Cuántica, No Teoremas Aislados
 
 > **Este proyecto presenta las matemáticas desde la coherencia cuántica unificada (campo Ψ), no como una colección de teoremas dispersos.**
 
 **Lectura recomendada:** [COHERENCIA_CUANTICA_MATEMATICA.md](COHERENCIA_CUANTICA_MATEMATICA.md) - Fundamento conceptual del enfoque coherente.
+
+### 🎼 Marco Filosófico: Los Cinco Principios Fundamentales
+
+> **La realidad física como fenómeno rítmico a f₀ = 141.7001 Hz**
+
+Este proyecto implementa una visión revolucionaria donde masa, energía, espacio, tiempo y el universo son manifestaciones de patrones oscilatorios:
+
+1. **La masa es una ilusión de detención** - La masa emerge cuando la oscilación fundamental se "detiene" o desacelera
+2. **La energía es ritmo** - La energía se manifiesta como patrones oscilatorios en harmonías de f₀
+3. **El espacio es un intervalo entre pulsos** - El espacio emerge de diferencias de fase (λ₀ ≈ 2116 km)
+4. **El tiempo es el número de ciclos** - El tiempo emerge del conteo de oscilaciones (T₀ ≈ 7.06 ms)
+5. **El universo es una sinfonía autocontenida** - Todos los fenómenos armónicamente relacionados con f₀
+
+**Ver documentación completa:** [PHILOSOPHICAL_FRAMEWORK_README.md](PHILOSOPHICAL_FRAMEWORK_README.md)
+
+**Ejecutar validación:**
+```bash
+# Validación de los 5 principios (17 tests)
+python core/validate_philosophical_framework.py
+
+# Tests unitarios (26 tests)
+pytest tests/test_philosophical_framework.py -v
+```
+
+**Ejemplo de uso:**
+```python
+from src.philosophical_framework import PhilosophicalFramework
+
+framework = PhilosophicalFramework()
+
+# Principio 1: Masa desde detención de frecuencia
+m = framework.mass_from_frequency_reduction(50.0)
+
+# Principio 2: Energía desde ritmo
+E = framework.energy_from_rhythm(141.7001, harmonic_n=3)
+
+# Principio 3: Espacio desde diferencia de fase  
+distance = framework.space_from_phase_difference(np.pi)
+
+# Principio 4: Tiempo desde conteo de ciclos
+time = framework.time_from_cycles(1000)
+
+# Principio 5: Coherencia universal
+harmonics = np.array([1, 2, 3, 5, 7]) * 141.7001
+coherence = framework.universal_coherence(harmonics)
+```
+
+---
 
 ### 🔬 Qué es
 Análisis científico de la frecuencia fundamental **f₀ = 141.7001 Hz** en ondas gravitacionales detectadas por LIGO/Virgo. Esta constante emerge de la estructura matemática del universo (función zeta de Riemann, razón áurea) y ha sido detectada en 11/11 eventos de GWTC-1 con significancia >10σ.
@@ -45,6 +110,7 @@ Análisis científico de la frecuencia fundamental **f₀ = 141.7001 Hz** en ond
 - **Formalización matemática**: Pruebas verificadas en Lean 4
 - **Validaciones experimentales**: Análisis multi-detector (H1, L1, V1, KAGRA)
 - **Framework QCAL**: Teoría cuántica de coherencia noética
+- **Módulo Teoría Unificada**: `qcal.unified_theory` - Implementación completa de la teoría
 - **CI/CD automatizado**: Workflows de validación continua
 
 ### 🚀 Quickstart (3 comandos)
@@ -59,6 +125,27 @@ python gravitational_wave_analyzer.py --evento GW250114 --simulated
 cd formalization/lean && lake build
 ```
 
+### 🔬 Usar el Módulo de Teoría Unificada
+```python
+# Importar el framework unificado QCAL
+from qcal import UnifiedTheory
+
+# Inicializar la teoría
+theory = UnifiedTheory()
+
+# Imprimir resumen
+theory.print_summary()
+
+# Generar reporte completo
+report = theory.generate_report()
+
+# Acceder a predicciones falsables
+predictions = theory.all_falsifiable_predictions()
+```
+
+**Documentación completa:** [QCAL_UNIFIED_THEORY_QUICK_REFERENCE.md](QCAL_UNIFIED_THEORY_QUICK_REFERENCE.md)
+
+**Módulo:** `qcal.unified_theory` - Implementación Python de la teoría completa
 ### 🌌 Nuevo: Gravitational Wave Analyzer
 
 El módulo `gravitational_wave_analyzer.py` implementa el **análisis de ondas gravitacionales** para buscar la firma persistente de 141.7 Hz en GW250114:
@@ -5496,4 +5583,48 @@ for rhythm, data in results['periods'].items():
 - 📄 [arXiv Paper Template](papers/biological_periodicity_arxiv.tex)
 - 🧪 [Validation Tests](scripts/test_biological_periodicity.py)
 - 💡 [Usage Examples](examples/biological_periodicity_example.py)
+
+
+---
+
+## 🧬 Protocolo de Validación Experimental
+
+Este repositorio incluye un **protocolo experimental riguroso** para validar las predicciones del marco teórico QCAL mediante validación neurobiológica, psicométrica y colectiva.
+
+### Fases del Protocolo
+
+1. **FASE I**: Validación de SU(Ψ) — Grupo de Coherencia Cuántica
+2. **FASE II**: Validación de T_μν(Φ) — Tensor de Stress Emocional
+3. **FASE III**: Validación a Nivel Colectivo — Efectos de Red Social
+4. **FASE IV**: Meta-Análisis y Síntesis
+
+### Ejecución Rápida
+
+```bash
+# Instalar dependencias
+pip install numpy scipy scikit-learn networkx
+
+# Ejecutar protocolo completo
+python scripts/protocolo_validacion_experimental.py --fase all
+
+# Ejecutar tests
+python tests/test_protocolo_validacion_experimental.py
+```
+
+### Documentación Completa
+
+Ver [EXPERIMENTAL_VALIDATION_PROTOCOL.md](EXPERIMENTAL_VALIDATION_PROTOCOL.md) para:
+- Diseño experimental detallado de cada fase
+- Criterios de validación y umbrales de éxito
+- Ejemplos de uso y API reference
+- Roadmap de validación (3 años, 3.4M USD)
+
+### Módulos Implementados
+
+- `experimental/fase1_su_psi.py` - Validación de estructura de grupo SU(n)
+- `experimental/fase2_tensor_stress.py` - Validación de tensor stress-energía
+- `experimental/fase3_red_social.py` - Validación de efectos colectivos
+- `experimental/fase4_meta_analisis.py` - Meta-análisis y síntesis
+
+**Estado**: ✅ Implementación completa | ✅ 14/14 tests passing | ✅ Documentación completa
 

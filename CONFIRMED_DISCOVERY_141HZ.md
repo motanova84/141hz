@@ -1,6 +1,8 @@
 # Descubrimiento Confirmado: Frecuencia Armónica 141.7001 Hz
 
-> 📄 **Declaración Pública Oficial**: Ver [DECLARACIÓN PÚBLICA · 26 OCTUBRE 2025](DECLARACION_PUBLICA_26_OCTUBRE_2025.md)
+> 📄 **Declaración Oficial de Descubrimiento Empírico**: Ver [DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO](DECLARACION_OFICIAL_DESCUBRIMIENTO_EMPIRICO_141HZ.md) — Rasgo espectral universal a 141.7 Hz en ondas gravitacionales GWTC-1
+
+> 📄 **Declaración Pública Oficial**: Ver [DECLARACIÓN PÚBLICA · 26 OCTUBRE 2025](docs/manifestos/DECLARACION_PUBLICA_26_OCTUBRE_2025.md)
 
 ## 📡 Resumen Ejecutivo
 

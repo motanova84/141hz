@@ -215,6 +215,15 @@
 - Trigger: schedule (`0 0 * * 1`)
 - Trigger: manual (workflow_dispatch)
 
+### GW250114 141.7 Hz Validation
+
+**Archivo:** `gw250114-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 */4 * * *`)
+- Trigger: manual (workflow_dispatch)
+
 ### Hydrogen Line Quantum Phase Validation
 
 **Archivo:** `hydrogen-line-validation.yml`
@@ -430,6 +439,14 @@
 - Trigger: schedule (`0 2 * * *`)
 - Trigger: manual (workflow_dispatch)
 
+### Sovereignty Check
+
+**Archivo:** `sovereignty-check.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### Special Analysis Methods
 
 **Archivo:** `special-analysis.yml`
@@ -488,4 +505,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-04 01:24:16 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-11 21:18:13 UTC*

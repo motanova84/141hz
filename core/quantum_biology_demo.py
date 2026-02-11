@@ -476,8 +476,52 @@ class RadicalPairMagnetoreception:
         
         return coherence_ok and entanglement_ok and oscillations_ok
     
+    def singlet_triplet_asymmetry(self, asymmetry_factor: float = 0.002) -> Dict:
+        """
+        Calculate singlet-triplet asymmetry in magnetoreception.
+        
+        The 0.2% asymmetry arises from:
+        1. Directional sensitivity to Earth's magnetic field
+        2. Hyperfine coupling anisotropy
+        3. Protein environment asymmetry
+        
+        Args:
+            asymmetry_factor: Fractional asymmetry (default: 0.002 = 0.2%)
+            
+        Returns:
+            Dictionary with asymmetry parameters
+        """
+        # Base singlet probability (no field)
+        P_singlet_0 = 0.5
+        
+        # With Earth's field and asymmetry
+        P_singlet_parallel = P_singlet_0 + asymmetry_factor / 2
+        P_singlet_antiparallel = P_singlet_0 - asymmetry_factor / 2
+        
+        # Asymmetry magnitude
+        delta_P = P_singlet_parallel - P_singlet_antiparallel
+        
+        # Angular dependence (cos²θ modulation)
+        def P_singlet_angle(theta_deg):
+            theta = np.deg2rad(theta_deg)
+            return P_singlet_0 + asymmetry_factor * np.cos(theta)**2
+        
+        return {
+            'asymmetry_factor': asymmetry_factor,
+            'asymmetry_percent': asymmetry_factor * 100,
+            'P_singlet_no_field': P_singlet_0,
+            'P_singlet_parallel': P_singlet_parallel,
+            'P_singlet_antiparallel': P_singlet_antiparallel,
+            'delta_P': delta_P,
+            'angular_dependence': 'cos²(θ)',
+            'max_contrast': delta_P,
+            'f0_coupling_Hz': F_NEURAL  # 141.7001 Hz neural synchronization
+        }
+    
     def summary(self) -> Dict:
         """Generate summary of magnetoreception properties."""
+        asymmetry_data = self.singlet_triplet_asymmetry()
+        
         return {
             'system': self.name,
             'temperature_K': self.temperature,
@@ -489,6 +533,9 @@ class RadicalPairMagnetoreception:
             'oscillations_per_reaction': self.A_hyperfine / HBAR * self.reaction_time / (2*np.pi),
             'entanglement_witness': self.entanglement_witness(),
             'compass_signal_detected': self.can_detect_compass_signal(),
+            'asymmetry_percent': asymmetry_data['asymmetry_percent'],
+            'singlet_asymmetry': asymmetry_data['delta_P'],
+            'f0_neural_sync_Hz': F_NEURAL,
             'reference': 'Maeda et al. PNAS 2012 (DOI: 10.1073/pnas.1118959109)'
         }
 

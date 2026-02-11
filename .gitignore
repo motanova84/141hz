@@ -196,4 +196,9 @@ active_system_status.json
 
 # GW unbiased validation outputs
 gw_unbiased_validation_results.json
+fluorescence_demo_*.png
 results/gw250114*/
+
+# Protocol Ψ-Q1 demo outputs
+protocol_psi_q1_demo.json
+protocol_psi_q1_evolution.png
