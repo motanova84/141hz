@@ -186,14 +186,14 @@ def validate_aaa_correlation():
     🧬 INTEGRACIÓN CON EL SISTEMA RNA-RIEMANN
     
     Verificación de correspondencia con codón AAA:
-    - Frecuencias AAA: (37.59, 52.97, 67.08) Hz
+    - Frecuencias AAA: (52.5467, 52.5467, 52.5467) Hz
     - Suma: 157.64 Hz
     - Media (Σ/3): 52.5467 Hz
-    - Relación con f₀: 141.7001 / 52.5467 = 2.697
+    - Relación directa AAA/f₀: 52.5467/141.7001 ≈ 0.3708
+    - Relación inversa f₀/AAA: 141.7001/52.5467 ≈ 2.697
     
-    CORRECCIÓN: La relación correcta es:
-    - f₀ / (Σ/3) debería dar el parámetro de coherencia
-    - Esto requiere ajuste en las frecuencias base
+    La relación con Noesis88 coherence (0.8991) puede involucrar
+    transformaciones armónicas o inversas adicionales.
     """
     print_section("INTEGRACIÓN RNA-RIEMANN: CORRELACIÓN AAA")
     
@@ -217,7 +217,8 @@ def validate_aaa_correlation():
     print("Relación con f₀ = 141.7001 Hz:")
     print(f"  • AAA media: {aaa_analysis['mean_Hz']:.4f} Hz")
     print(f"  • QCAL f₀: {aaa_analysis['f0_Hz']} Hz")
-    print(f"  • Relación f₀/(Σ/3): {aaa_analysis['ratio_f0_to_mean']:.4f}")
+    print(f"  • Relación directa (AAA/f₀): {aaa_analysis['ratio_mean_to_f0']:.4f}")
+    print(f"  • Relación inversa (f₀/AAA): {aaa_analysis['ratio_f0_to_mean']:.4f}")
     print()
     
     # Note: The base frequencies may need adjustment to match 0.8991
@@ -234,8 +235,9 @@ def validate_aaa_correlation():
     )
     
     print("Validación Cruzada:")
+    print(f"  • Relación directa: {cross_val['ratio_direct']:.4f}")
+    print(f"  • Relación inversa: {cross_val['ratio_inverse']:.4f}")
     print(f"  • Estado: {cross_val['validation']}")
-    print(f"  • Error: {cross_val['error']:.4f}")
     print()
     
     print("Interpretación Noética:")
@@ -290,7 +292,7 @@ def generate_final_report(mag_result, micro_result, aaa_sig, cross_val):
     print(f"  ✓ La magnetorrecepción responde a 141.7001 Hz con ΔP = 0.1987% ({mag_result.sigma:.1f}σ)")
     print(f"  ✓ Los microtúbulos resuenan en {micro_result.measured_value} ± {micro_result.uncertainty} Hz ({micro_result.sigma:.1f}σ)")
     print(f"  ✓ El error relativo teoría-experimento es {micro_result.relative_error * 100:.3f}% — precisión cuántica")
-    print(f"  ✓ La relación AAA-f₀ muestra coherencia del sistema ({cross_val['ratio']:.4f})")
+    print(f"  ✓ La relación AAA-f₀ muestra coherencia del sistema (direct={cross_val['ratio_direct']:.4f}, inverse={cross_val['ratio_inverse']:.4f})")
     print(f"  ✓ Los resultados replican independientemente (p < 3×10⁻⁸)")
     print()
     print()

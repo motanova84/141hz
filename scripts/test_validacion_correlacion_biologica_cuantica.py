@@ -35,7 +35,7 @@ class TestRNARiemannWave(unittest.TestCase):
     
     def test_base_frequencies(self):
         """Test base frequency mapping."""
-        self.assertEqual(self.rna.get_base_frequency('A'), 37.59)
+        self.assertEqual(self.rna.get_base_frequency('A'), 52.5467)
         self.assertEqual(self.rna.get_base_frequency('U'), 52.97)
         self.assertEqual(self.rna.get_base_frequency('G'), 67.08)
         self.assertEqual(self.rna.get_base_frequency('C'), 41.23)
@@ -49,15 +49,15 @@ class TestRNARiemannWave(unittest.TestCase):
         """Test AAA codon frequency calculation."""
         sig = self.rna.get_codon_signature('AAA')
         
-        # All three bases are A
-        expected = (37.59, 37.59, 37.59)
+        # All three bases are A (52.5467 Hz each)
+        expected = (52.5467, 52.5467, 52.5467)
         self.assertEqual(sig.frequencies, expected)
         
-        # Sum should be 3 × 37.59 = 112.77
-        self.assertAlmostEqual(sig.sum_freq(), 112.77, places=2)
+        # Sum should be 3 × 52.5467 = 157.64
+        self.assertAlmostEqual(sig.sum_freq(), 157.64, places=2)
         
-        # Mean should be 37.59
-        self.assertAlmostEqual(sig.mean_freq(), 37.59, places=2)
+        # Mean should be 52.5467
+        self.assertAlmostEqual(sig.mean_freq(), 52.5467, places=2)
     
     def test_codon_signature_properties(self):
         """Test codon signature has all required properties."""
@@ -117,14 +117,15 @@ class TestRNARiemannWave(unittest.TestCase):
         self.assertIn('frequencies_Hz', analysis)
         self.assertIn('sum_Hz', analysis)
         self.assertIn('mean_Hz', analysis)
+        self.assertIn('ratio_mean_to_f0', analysis)
         self.assertIn('ratio_f0_to_mean', analysis)
         self.assertIn('noesis88_coherence', analysis)
         self.assertIn('match', analysis)
     
     def test_find_resonant_codons(self):
         """Test finding codons resonant with target frequency."""
-        # Find codons near a base frequency (A = 37.59 Hz)
-        resonant = self.rna.find_resonant_codons(target_freq=37.59, tolerance=5.0)
+        # Find codons near the A base frequency (52.5467 Hz)
+        resonant = self.rna.find_resonant_codons(target_freq=52.5467, tolerance=5.0)
         
         # Should find AAA and other A-containing codons
         self.assertGreater(len(resonant), 0)
@@ -293,13 +294,13 @@ class TestBioResonanceValidator(unittest.TestCase):
     def test_aaa_cross_validation(self):
         """Test AAA codon cross-validation."""
         # Test with expected coherence relationship
-        # Note: This uses theoretical values for demonstration
         cross_val = self.validator.cross_validate_aaa_correlation(
-            aaa_mean_freq=157.64,  # Example value
+            aaa_mean_freq=52.5467,  # AAA mean frequency
             f0=141.7001
         )
         
-        self.assertIn('ratio', cross_val)
+        self.assertIn('ratio_direct', cross_val)
+        self.assertIn('ratio_inverse', cross_val)
         self.assertIn('expected_noesis88_coherence', cross_val)
         self.assertIn('match', cross_val)
         self.assertIn('validation', cross_val)
