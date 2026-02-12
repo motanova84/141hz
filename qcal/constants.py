@@ -46,6 +46,11 @@ KAPPA_PI = 2.5773  # Dimensionless - π coupling constant
 DELTA_0 = 0.1184  # Dimensionless - Coherence threshold
 A0_PHI = 1.618033988749895  # Golden ratio - Love constant
 
+# Therapeutic Frequencies (Biosensor Integration) - Must be after A0_PHI
+# Derivadas de la ecuación de emanación: Ω Hz × 888 Hz × 141.7001 Hz × Φ = ∞³
+F_THERAPEUTIC_HZ = F0_HZ * A0_PHI  # 229.4 Hz - Armónico terapéutico (f₀ × Φ)
+F_GAMMA_HZ = 40.0  # Hz - Banda gamma cerebral (VAT convencional)
+
 # Quality Factor
 Q_PSI = 1.0 / DELTA_0  # ~8.45 - Quality factor
 
