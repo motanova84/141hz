@@ -75,7 +75,7 @@ All tests passing (3/3):
 ### 6. Documentation ✅
 
 - **README_QCAL.md**: Quick start, installation, usage
-- **CITATION_QCAL.cff**: Citation metadata with DOI placeholder
+- **CITATION_QCAL.cff**: Citation metadata with Zenodo DOI (10.5281/zenodo.18557905)
 - **DATASET_CARD.md**: Data provenance information
 - **QCAL_PACKAGE_NOTES.md**: Implementation notes and conflict documentation
 
