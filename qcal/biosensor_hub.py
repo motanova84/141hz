@@ -251,11 +251,22 @@ class BiosensorHub:
         Returns:
             Factor de acoplamiento [0, 1]
         """
-        # Harmónico más cercano a 40 Hz
-        harmonic = round(self.gamma_frequency / self.base_frequency)
-        if harmonic == 0:
-            harmonic = 1
-        expected_freq = self.base_frequency * harmonic
+        # Para frecuencias menores que f₀, el armónico es la inversa
+        # gamma (40 Hz) vs f₀ (141.7 Hz) → f₀/gamma = 3.54
+        if self.gamma_frequency >= self.base_frequency:
+            # Gamma es múltiplo de f₀
+            harmonic = round(self.gamma_frequency / self.base_frequency)
+            if harmonic == 0:
+                harmonic = 1
+            expected_freq = self.base_frequency * harmonic
+        else:
+            # f₀ es múltiplo de gamma (caso común: 40 Hz gamma)
+            # Encuentra el divisor más cercano
+            ratio = self.base_frequency / self.gamma_frequency
+            harmonic = round(ratio)
+            if harmonic == 0:
+                harmonic = 1
+            expected_freq = self.base_frequency / harmonic
         
         # Distancia normalizada
         if expected_freq > 0:

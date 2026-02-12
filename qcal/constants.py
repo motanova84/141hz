@@ -35,11 +35,6 @@ E_PSI_J = 6.62607015e-34 * F0_HZ  # J - Quantum energy (h * f₀)
 F888_HZ = 888.0  # Hz - Protection shield frequency (888 ≈ 2π × 141.7)
 # Sacred geometry: 888 Hz represents continuous/circular geometry
 
-# Therapeutic Frequencies (Biosensor Integration)
-# Derivadas de la ecuación de emanación: Ω Hz × 888 Hz × 141.7001 Hz × Φ = ∞³
-F_THERAPEUTIC_HZ = F0_HZ * 1.6180339887498948  # 229.4 Hz - Armónico terapéutico (f₀ × Φ)
-F_GAMMA_HZ = 40.0  # Hz - Banda gamma cerebral (VAT convencional)
-
 # AT2020afhd Black Hole Constants
 EXPECTED_PERIOD_DAYS = 19.6  # days - Expected period from Wang et al. (2025)
 EXPECTED_OCTAVES = 27.84  # Octaves from f₀ to AT2020afhd frequency
@@ -50,6 +45,11 @@ MAX_PERIOD_ERROR_DAYS = 0.5  # days - Maximum acceptable period error
 KAPPA_PI = 2.5773  # Dimensionless - π coupling constant
 DELTA_0 = 0.1184  # Dimensionless - Coherence threshold
 A0_PHI = 1.618033988749895  # Golden ratio - Love constant
+
+# Therapeutic Frequencies (Biosensor Integration) - Must be after A0_PHI
+# Derivadas de la ecuación de emanación: Ω Hz × 888 Hz × 141.7001 Hz × Φ = ∞³
+F_THERAPEUTIC_HZ = F0_HZ * A0_PHI  # 229.4 Hz - Armónico terapéutico (f₀ × Φ)
+F_GAMMA_HZ = 40.0  # Hz - Banda gamma cerebral (VAT convencional)
 
 # Quality Factor
 Q_PSI = 1.0 / DELTA_0  # ~8.45 - Quality factor
