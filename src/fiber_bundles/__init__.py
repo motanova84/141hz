@@ -20,6 +20,10 @@ from .consciousness_theorem import (
     ConsciousnessTheorem,
     LagrangianComponents,
     HolonomicQuantization
+from .fundamental_consciousness_equation import (
+    FundamentalConsciousnessEquation,
+    ConsciousnessState,
+    create_standard_consciousness_state
 )
 
 __all__ = [
@@ -32,6 +36,9 @@ __all__ = [
     'ConsciousnessTheorem',
     'LagrangianComponents',
     'HolonomicQuantization',
+    'FundamentalConsciousnessEquation',
+    'ConsciousnessState',
+    'create_standard_consciousness_state',
 ]
 
 __version__ = '1.0.0'

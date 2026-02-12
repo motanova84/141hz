@@ -1,6 +1,6 @@
 # QCAL (141.7 Hz) — Análisis Reproducible
 
-Badges: PyPI • CI • Docs • DOI (añadir cuando publiques)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18557905.svg)](https://doi.org/10.5281/zenodo.18557905)
 
 ## Uso rápido
 ```bash
