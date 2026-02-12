@@ -33,6 +33,7 @@ jobs:
           - bandas_cerebrales
           - resonancias_schumann
           - biologia_cuantica_qcal
+          - convergencia_experimental
     
     steps:
       - name: Checkout repository
@@ -133,3 +134,4 @@ jobs:
           echo "- Validación Numérica 5/7f₀" >> $GITHUB_STEP_SUMMARY
           echo "- Bandas Cerebrales (Brain Wave Bands as f₀ divisors)" >> $GITHUB_STEP_SUMMARY
           echo "- Resonancias Schumann (f₀/18 ≈ 7.83 Hz Earth resonance)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Convergencia Experimental (9.2σ Magnetorrecepción + Microtúbulos 141.88 Hz + RNA AAA)**" >> $GITHUB_STEP_SUMMARY
