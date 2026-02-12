@@ -38,11 +38,12 @@ setup: venv
   busqueda-armonicos test-armonicos resonancia-cruzada test-resonancia \
   caracterizacion-bayesiana test-caracterizacion \
   dashboard dashboard-status workflow status \
-  escuchar test-escuchar listen \
+  escuchar test-escuchar listen listen-auto \
+  unified-tissue-resonance test-unified-resonance unified-resonance-viz \
+  unified-cardiac unified-neural unified-epithelial unified-muscular \
   clean docker help \
   experimentos test-experimentos diagrams-experimentos \
   ai-agent demo-ai-agent test-ai-agent
-  experimentos test-experimentos diagrams-experimentos
 install: setup
 
 .PHONY: all venv setup install data download test-data check-data analyze validate validate-offline pipeline validate-connectivity validate-gw150914 validate-gw250114 verify-optimization workflow status clean docker help
@@ -117,6 +118,13 @@ help:
 	@echo "  escuchar              - Interactive discovery experience: 'Ahora te toca escuchar' (NEW)"
 	@echo "  test-escuchar         - Test escuchar.py interactive script (NEW)"
 	@echo "  listen                - Alias for escuchar (English) (NEW)"
+	@echo "  unified-tissue-resonance - Unified Tissue Resonance Model (141.7 Hz) - Three Pillars (NEW)"
+	@echo "  test-unified-resonance   - Test unified tissue resonance model (NEW)"
+	@echo "  unified-resonance-viz    - Generate unified model visualizations (NEW)"
+	@echo "  unified-cardiac       - Cardiac tissue resonance analysis (NEW)"
+	@echo "  unified-neural        - Neural tissue resonance analysis (NEW)"
+	@echo "  unified-epithelial    - Epithelial tissue resonance analysis (NEW)"
+	@echo "  unified-muscular      - Muscular tissue resonance analysis (NEW)"
 	@echo "  dashboard             - Run real-time monitoring dashboard (NEW)"
 	@echo "  dashboard-status      - Run GW250114 status dashboard (NEW)"
 	@echo "  verify-optimization   - Verify maximum system optimization (NEW)"
@@ -574,3 +582,41 @@ listen: escuchar
 
 # Alias for automatic mode (English)
 listen-auto: escuchar-auto
+
+# Unified Tissue Resonance Model (141.7 Hz) - Three Pillars
+unified-tissue-resonance: setup
+	@echo "🧬 Unified Tissue Resonance Model: Three Mathematical Pillars → 141.7 Hz"
+	@echo "   1. Hilbert-Pólya Operator (Number Theory)"
+	@echo "   2. Navier-Stokes Cytoplasm (Fluid Dynamics)"
+	@echo "   3. Magicicada Scaling (Evolutionary Biology)"
+	@echo ""
+	./venv/bin/python modules/quantum_biology/demo_unified_tissue_resonance.py
+
+# Test unified tissue resonance model
+test-unified-resonance: setup
+	@echo "🧪 Testing Unified Tissue Resonance Model..."
+	./venv/bin/python -m pytest modules/quantum_biology/tests/test_unified_tissue_resonance.py -v
+
+# Run unified model with visualizations
+unified-resonance-viz: setup
+	@echo "📊 Generating Unified Tissue Resonance Visualizations..."
+	@mkdir -p results/figures
+	./venv/bin/python modules/quantum_biology/demo_unified_tissue_resonance.py --save-figs
+	@echo "✅ Figures saved to results/figures/"
+
+# Run unified model for different tissue types
+unified-cardiac: setup
+	@echo "❤️  Cardiac Tissue Resonance Analysis..."
+	./venv/bin/python modules/quantum_biology/demo_unified_tissue_resonance.py --tissue cardiac
+
+unified-neural: setup
+	@echo "🧠 Neural Tissue Resonance Analysis..."
+	./venv/bin/python modules/quantum_biology/demo_unified_tissue_resonance.py --tissue neural
+
+unified-epithelial: setup
+	@echo "🔬 Epithelial Tissue Resonance Analysis..."
+	./venv/bin/python modules/quantum_biology/demo_unified_tissue_resonance.py --tissue epithelial
+
+unified-muscular: setup
+	@echo "💪 Muscular Tissue Resonance Analysis..."
+	./venv/bin/python modules/quantum_biology/demo_unified_tissue_resonance.py --tissue muscular

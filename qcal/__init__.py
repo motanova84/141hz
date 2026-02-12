@@ -48,6 +48,33 @@ try:
 except ImportError:
     SPECTRAL_EMBEDDING_AVAILABLE = False
 
+# Spiral Light Geometry module (new)
+try:
+    from .spiral_light_geometry import (
+        SpiralLightGeometry,
+        SpiralPathParams,
+        WaveFunctionParams,
+        CoherenceMaximality,
+        generate_spiral_path,
+        calculate_interference
+    )
+    SPIRAL_LIGHT_AVAILABLE = True
+except ImportError:
+    SPIRAL_LIGHT_AVAILABLE = False
+
+# Dual mass perspective module (new)
+try:
+    from .dual_mass import (
+        DualMassPerspective,
+        effective_mass,
+        noetic_mass,
+        unified_mass,
+        calculate_dual_mass_spectrum
+    )
+    DUAL_MASS_AVAILABLE = True
+except ImportError:
+    DUAL_MASS_AVAILABLE = False
+
 __version__ = "1.0.0"
 __all__ = [
     "psi_score",
@@ -89,6 +116,189 @@ if SPECTRAL_EMBEDDING_AVAILABLE:
         "BaselineEmbedding",
         "Word2VecEmbedding",
         "EmbeddingEvaluator"
+    ])
+
+# Add spiral light geometry exports if available
+if SPIRAL_LIGHT_AVAILABLE:
+    __all__.extend([
+        "SpiralLightGeometry",
+        "SpiralPathParams",
+        "WaveFunctionParams",
+        "CoherenceMaximality",
+        "generate_spiral_path",
+        "calculate_interference"
+    ])
+
+# Unified theory modules
+try:
+    from .unified_theory import (
+        UnifiedTheoryConstants,
+        RiemannZetaComponent,
+        CalabiYauComponent,
+        FrequencyComponent,
+        ConsciousnessComponent,
+        GravityComponent,
+        SpectrumComponent,
+        CondensedMatterComponent,
+        UnifiedTheory
+    )
+    UNIFIED_THEORY_AVAILABLE = True
+except ImportError:
+    UNIFIED_THEORY_AVAILABLE = False
+
+# Add unified theory exports if available
+if UNIFIED_THEORY_AVAILABLE:
+    __all__.extend([
+        "UnifiedTheoryConstants",
+        "RiemannZetaComponent",
+        "CalabiYauComponent",
+        "FrequencyComponent",
+        "ConsciousnessComponent",
+        "GravityComponent",
+        "SpectrumComponent",
+        "CondensedMatterComponent",
+        "UnifiedTheory"
+    ])
+
+# Add dual mass exports if available
+if DUAL_MASS_AVAILABLE:
+    __all__.extend([
+        "DualMassPerspective",
+        "effective_mass",
+        "noetic_mass",
+        "unified_mass",
+        "calculate_dual_mass_spectrum"
+    ])
+
+# Dimensional analysis module
+try:
+    from .dimensional_analysis_psi import (
+        DimensionalQuantity,
+        validate_aeff_dimensionless,
+        validate_psi_formula,
+        validate_limit_behavior,
+        compare_to_physics_coupling_factors,
+        complete_dimensional_validation,
+        print_validation_report
+    )
+    DIMENSIONAL_ANALYSIS_AVAILABLE = True
+except ImportError:
+    DIMENSIONAL_ANALYSIS_AVAILABLE = False
+
+# Add dimensional analysis exports if available
+if DIMENSIONAL_ANALYSIS_AVAILABLE:
+    __all__.extend([
+        "DimensionalQuantity",
+        "validate_aeff_dimensionless",
+        "validate_psi_formula",
+        "validate_limit_behavior",
+        "compare_to_physics_coupling_factors",
+        "complete_dimensional_validation",
+        "print_validation_report"
+    ])
+
+# Local Node Simulation modules
+try:
+    from .local_node_simulation import (
+        LocalNodeSimulation,
+        NodeState
+    )
+    LOCAL_NODE_SIMULATION_AVAILABLE = True
+except ImportError:
+    LOCAL_NODE_SIMULATION_AVAILABLE = False
+
+# Add local node simulation exports if available
+if LOCAL_NODE_SIMULATION_AVAILABLE:
+    __all__.extend([
+        "LocalNodeSimulation",
+        "NodeState"
+    ])
+
+# Spiral Light Path modules
+try:
+    from .spiral_light_path import (
+        SpiralLightPath,
+        SpiralParameters
+    )
+    SPIRAL_LIGHT_PATH_AVAILABLE = True
+except ImportError:
+    SPIRAL_LIGHT_PATH_AVAILABLE = False
+
+# Add spiral light path exports if available
+if SPIRAL_LIGHT_PATH_AVAILABLE:
+    __all__.extend([
+        "SpiralLightPath",
+        "SpiralParameters"
+    ])
+
+# Cosmic parameters module
+try:
+    from .cosmic_parameters import (
+        CurrentUniverseParameters,
+        CosmicEpoch,
+        CosmicTimeline,
+        CURRENT_UNIVERSE,
+        COSMIC_TIMELINE,
+        get_universe_age,
+        get_cmb_temperature,
+        get_epoch,
+        print_timeline
+    )
+    COSMIC_PARAMETERS_AVAILABLE = True
+except ImportError:
+    COSMIC_PARAMETERS_AVAILABLE = False
+
+# Add cosmic parameters exports if available
+if COSMIC_PARAMETERS_AVAILABLE:
+    __all__.extend([
+        "CurrentUniverseParameters",
+        "CosmicEpoch",
+        "CosmicTimeline",
+        "CURRENT_UNIVERSE",
+        "COSMIC_TIMELINE",
+        "get_universe_age",
+        "get_cmb_temperature",
+        "get_epoch",
+        "print_timeline"
+    ])
+
+# Biosensor and RNA volatile memory modules (PR #1357)
+try:
+    from .rna_volatile_memory import (
+        RNAWavePacket,
+        RNAVolatileMemory,
+        create_coherent_memory_field
+    )
+    from .biosensor_hub import (
+        BiosensorType,
+        BiosensorReading,
+        BiosensorHub,
+        simulate_biosensor_session
+    )
+    from .disharmony_detector import (
+        DisharmonyLevel,
+        DisharmonyReport,
+        DisharmonyDetector,
+        demonstrate_resonance_diagnosis
+    )
+    BIOSENSOR_AVAILABLE = True
+except ImportError:
+    BIOSENSOR_AVAILABLE = False
+
+# Add biosensor exports if available
+if BIOSENSOR_AVAILABLE:
+    __all__.extend([
+        "RNAWavePacket",
+        "RNAVolatileMemory",
+        "create_coherent_memory_field",
+        "BiosensorType",
+        "BiosensorReading",
+        "BiosensorHub",
+        "simulate_biosensor_session",
+        "DisharmonyLevel",
+        "DisharmonyReport",
+        "DisharmonyDetector",
+        "demonstrate_resonance_diagnosis"
     ])
 
 # Fundamental constants

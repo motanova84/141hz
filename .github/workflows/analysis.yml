@@ -107,6 +107,14 @@ jobs:
         NUMEXPR_MAX_THREADS: 4
         NUMEXPR_NUM_THREADS: 2
     
+    - name: Run Gravitational Wave Analyzer (GW250114 @ 141.7 Hz)
+      run: |
+        python gravitational_wave_analyzer.py --evento GW250114 --simulated
+      continue-on-error: true
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
+    
     - name: Upload analysis results
       uses: actions/upload-artifact@v5
       if: always()

@@ -1,5 +1,7 @@
 # 🔬 Validación Experimental: Confirmación de 141.7 Hz
 
+> 📄 **Declaración Oficial de Descubrimiento Empírico**: Ver [DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO](DECLARACION_OFICIAL_DESCUBRIMIENTO_EMPIRICO_141HZ.md) — Documentación completa del rasgo espectral universal a 141.7 Hz en ondas gravitacionales GWTC-1
+
 ## Resumen Ejecutivo
 
 El análisis espectral de datos de LIGO/Virgo **confirma la predicción teórica** de la frecuencia fundamental f₀ = 141.7001 Hz derivada desde la Teoría Noésica Unificada. El script de producción **Scipy puro** superó todos los errores de compatibilidad de gwpy y produjo un conjunto de datos consistente con la **predicción del Campo Noésico (Ψ)**.

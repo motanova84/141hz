@@ -1,5 +1,20 @@
 # Lean 4 Formalization: f₀ = 141.7001 Hz
 
+## ⚡ Paradigma de Coherencia Cuántica
+
+> **IMPORTANTE:** Esta formalización NO es una colección de teoremas independientes que se combinan al final. Cada módulo representa una **manifestación local del campo coherente Ψ**.
+
+**Narrativa coherente:**
+1. El campo de coherencia cuántica Ψ es el objeto fundamental
+2. Los números primos son resonancias de Ψ
+3. La función zeta ζ(s) es la proyección espectral de Ψ
+4. La proporción áurea φ es el acoplamiento óptimo de Ψ
+5. f₀ = 141.7001 Hz es el modo fundamental único de Ψ
+
+**Ver:** [COHERENCIA_CUANTICA_MATEMATICA.md](../../COHERENCIA_CUANTICA_MATEMATICA.md) para el fundamento conceptual.
+
+---
+
 This directory contains a complete formal verification in Lean 4 that the fundamental frequency **f₀ = 141.7001 Hz** emerges from fundamental mathematical constants.
 
 ## 🎯 Main Result

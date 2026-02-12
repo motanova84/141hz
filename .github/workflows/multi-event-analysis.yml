@@ -6,7 +6,7 @@ on:
     paths:
       - 'scripts/analisis_*.py'
       - 'scripts/multi_event_*.py'
-      - 'multi_event_analysis.py'
+      - 'core/multi_event_analysis.py'
       - '.github/workflows/multi-event-analysis.yml'
   pull_request:
     branches: [ main ]
