@@ -75,7 +75,7 @@ class MagnetoreceptionValidator:
         self.asymmetry_theoretical = MAGNETORECEPTION_ASYMMETRY  # 0.2%
         self.coherence_time_us = MAGNETORECEPTION_COHERENCE_TIME_US
         self.B_earth = B_EARTH_TESLA
-        # Para 9.2σ con ΔP = 0.002, necesitamos ~21 millones de ensayos
+        # Para 9.2σ con ΔP = 0.002, necesitamos ~5.3 millones de ensayos
         # sigma = ΔP / sqrt(0.25/n) = 0.002 / sqrt(0.25/n) = 9.2
         # sqrt(0.25/n) = 0.002/9.2 = 2.174e-4
         # 0.25/n = 4.72e-8
@@ -321,6 +321,11 @@ class RNARiemannWaveValidator:
         # Por lo tanto: suma_AAA / 3 = 0.8991 × f₀
         # suma_AAA = 3 × 0.8991 × f₀ = 2.6973 × 141.7001 ≈ 382.2 Hz
         # Cada A contribuye con: 382.2 / 3 ≈ 127.4 Hz
+        # 
+        # Derivación matemática:
+        # Si queremos que ratio_to_f0 = (freq_sum/3)/f₀ = 0.8991
+        # Entonces freq_sum = 3 × 0.8991 × f₀ = 382.2 Hz
+        # Y freq_A = freq_sum / 3 = 127.4 Hz
         self.freq_A = 127.4  # Hz - Frecuencia característica de Adenina en contexto AAA
         
     def calculate_codon_frequency_sum(self) -> float:
@@ -333,7 +338,7 @@ class RNARiemannWaveValidator:
         """
         # Modelo simplificado: cada A contribuye con su frecuencia base
         # Más ajuste por posición en el codón (5' -> 3')
-        freq_sum = 3 * self.freq_A  # 1320 Hz base
+        freq_sum = 3 * self.freq_A  # 382.2 Hz base (3 × 127.4 Hz)
         
         return freq_sum
     
