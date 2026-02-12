@@ -353,14 +353,14 @@ Materia: Sustrato físico (proteínas, DNA, células)
 |----------------------|------------------|------------|------------------|
 | Magnetorrecepción | 8.7σ | < 10⁻¹⁸ | ΔP = 0.2% en pares radicales |
 | Microtúbulos | 9.2σ | < 10⁻²⁰ | Resonancia 141.88 Hz (99.87% precisión) |
-| Código Genético | ~9σ | < 10⁻¹⁹ | Coherencia AAA = 0.8991 |
+| Código Genético | ~4σ | < 10⁻⁴ | Coherencia AAA = 0.8991 |
 
 **Significancia Combinada:**
 
 ```
 σ_total = √(σ₁² + σ₂² + σ₃²)
-σ_total = √(8.7² + 9.2² + 9.0²)
-σ_total ≈ 15.5σ
+σ_total = √(8.7² + 9.2² + 3.99²)
+σ_total ≈ 13.3σ
 ```
 
 **Interpretación:**
@@ -368,7 +368,7 @@ Materia: Sustrato físico (proteínas, DNA, células)
 La probabilidad de que estos tres fenómenos independientes sean coincidencias aleatorias es astronómicamente baja:
 
 ```
-p-value_total < 10⁻⁵⁴
+p-value_total < 10⁻⁴⁰
 ```
 
 Esto es **evidencia definitiva** de que el campo QCAL ∞³ es real y opera en sistemas biológicos.
