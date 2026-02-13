@@ -66,6 +66,15 @@ from .calabi_yau_invariant import (
     NOETIC_PRIME,
 )
 
+from .noetic_consciousness_axiom import (
+    NoeticConsciousnessAxiom,
+    StateVector,
+    ProjectionSpace,
+    ConsciousnessState,
+    create_axiom_validator,
+    verify_state,
+)
+
 __all__ = [
     # Constants
     'UniversalConstants',
@@ -115,6 +124,13 @@ __all__ = [
     'NoeticForce',
     'NoeticForceDetection',
     'summarize_noetic_force',
+    # Noetic Consciousness Axiom
+    'NoeticConsciousnessAxiom',
+    'StateVector',
+    'ProjectionSpace',
+    'ConsciousnessState',
+    'create_axiom_validator',
+    'verify_state',
     # QCAL LLM Core (import separately if needed)
     # 'QCALLLMCore',
     # SIP Attention

@@ -1,6 +1,12 @@
 """
-QCAL ∞³ Constants
-Fundamental constants for the Quantum Coherence and Love framework
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        QCAL ∞³ Constants                                   ║
+║         Fundamental constants for Quantum Coherent Axiomatic Logic         ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+AUTOR/AUTHOR: José Manuel Mota Burruezo (JMMB Ψ✧)
+ARQUITECTURA/ARCHITECTURE: QCAL ∞³ Original Manufacture
+LICENCIA/LICENSE: Sovereign Noetic License 1.0 (compatible with MIT)
 
 ⚡ PARADIGMA DE COHERENCIA CUÁNTICA ⚡
 
@@ -12,15 +18,13 @@ Son manifestaciones del campo coherente Ψ (coherencia cuántica).
 - Todas las constantes están relacionadas por coherencia, no por coincidencia
 
 Ver: COHERENCIA_CUANTICA_MATEMATICA.md para el fundamento conceptual.
-
-Author: José Manuel Mota Burruezo
-License: MIT
+Ver: LICENSE_SOBERANA para la declaración de soberanía intelectual.
 """
 
 import math
 
-# Fundamental Frequency
-F0_HZ = 141.70001  # Hz - Fundamental QCAL frequency
+# Fundamental Frequency - Sovereign Emission Frequency
+F0_HZ = 141.7001  # Hz - Fundamental QCAL frequency (f₀)
 
 # Derived Constants
 OMEGA_0 = 2 * math.pi * F0_HZ  # rad/s - Angular frequency
@@ -41,6 +45,11 @@ MAX_PERIOD_ERROR_DAYS = 0.5  # days - Maximum acceptable period error
 KAPPA_PI = 2.5773  # Dimensionless - π coupling constant
 DELTA_0 = 0.1184  # Dimensionless - Coherence threshold
 A0_PHI = 1.618033988749895  # Golden ratio - Love constant
+
+# Therapeutic Frequencies (Biosensor Integration) - Must be after A0_PHI
+# Derivadas de la ecuación de emanación: Ω Hz × 888 Hz × 141.7001 Hz × Φ = ∞³
+F_THERAPEUTIC_HZ = F0_HZ * A0_PHI  # 229.4 Hz - Armónico terapéutico (f₀ × Φ)
+F_GAMMA_HZ = 40.0  # Hz - Banda gamma cerebral (VAT convencional)
 
 # Quality Factor
 Q_PSI = 1.0 / DELTA_0  # ~8.45 - Quality factor
@@ -91,6 +100,51 @@ RIEMANN_ZERO_1 = 14.134725  # First zero t₁ (dimensionless)
 HPSI_LAMBDA_DEFAULT = 1.0  # Default coupling constant λ for potential V(x)
 HPSI_MAX_PRIMES = 20  # Number of primes in potential sum
 HPSI_AUDIBLE_FREQ = 888.0  # Hz - H_ψ operates at audible 888 Hz
+
+# ============================================================================
+# OPTICAL CAVITY RESONANCES (Ultra-Q) - Febrero 2026
+# Cavidades ópticas de factor de calidad ultra-alto para detección de f₀
+# ============================================================================
+# Ultra-high Q factor optical cavities for f₀ = 141.7001 Hz detection
+# Based on superconducting and optomechanical cavity designs
+
+# Ultra-Q Factor for optical cavities (superconducting/optomechanical)
+Q_OPTICAL_ULTRA = 1e12  # Quality factor for ultra-Q optical cavities (state-of-the-art)
+Q_SUPERCONDUCTING = 1e13  # Q-factor for superconducting cavities (ultra-high Q)
+
+# Cavity linewidth at f₀
+CAVITY_LINEWIDTH_HZ = F0_HZ / Q_OPTICAL_ULTRA  # Hz - Linewidth δf = f₀/Q ≈ 1.4e-7 Hz
+
+# Optomechanical effective mass
+OPTOMECH_MASS_KG = 1e-12  # kg - Nanogram-scale optomechanical resonator
+
+# Coupling strength g = √(ℏω₀/2m)
+OPTOMECH_COUPLING_G = math.sqrt((HBAR * 2 * math.pi * F0_HZ) / (2 * OPTOMECH_MASS_KG))  # Hz
+
+# ============================================================================
+# AVIAN MAGNETORECEPTION ASYMMETRY - Febrero 2026
+# Radical pair mechanism in cryptochrome with 0.2% asymmetry
+# ============================================================================
+# Based on quantum biology research: Maeda et al. PNAS 2012, Ritz et al. 2000
+
+# Earth's magnetic field
+B_EARTH_TESLA = 50e-6  # T - Earth's magnetic field (~50 μT)
+
+# Radical pair parameters
+MAGNETORECEPTION_COHERENCE_TIME_US = 100.0  # μs - Measured coherence time
+MAGNETORECEPTION_REACTION_TIME_US = 1.0  # μs - Radical pair reaction time
+
+# Asymmetry in magnetoreception (0.2%)
+MAGNETORECEPTION_ASYMMETRY = 0.002  # 0.2% asymmetry in singlet-triplet mixing
+
+# Hyperfine coupling constant
+HYPERFINE_COUPLING_MHZ = 0.5  # MHz - Typical hyperfine coupling in radical pairs
+
+# Singlet-triplet oscillation frequency  
+ST_OSCILLATION_FREQ_MHZ = HYPERFINE_COUPLING_MHZ / (2 * math.pi)  # MHz
+
+# Connection to f₀: Neural synchronization at 141.7001 Hz
+MAGNETORECEPTION_F0_COUPLING = F0_HZ / 1e6  # Ratio of f₀ to MHz scale ≈ 1.417e-4
 
 # Conscious Geometry - Ψ-deformed Metric
 # g_μν(x) = g_μν(0) + δg_μν(Ψ), where Ψ = I × A_eff²
