@@ -43,6 +43,8 @@
 
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_consciousness_theorem.py`
+  - Validation Script: Fundamental Theorem of Consciousness
 - `validate_cytoplasmic_coherence.py`
   - Validación de Coherencia Citoplasmática - Ceros de Riemann Biológicos
 - `validate_dual_mass.py`
@@ -81,6 +83,8 @@
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_consciousness_theorem.py`
+  - Validation Script: Fundamental Theorem of Consciousness
 - `validate_cytoplasmic_coherence.py`
   - Validación de Coherencia Citoplasmática - Ceros de Riemann Biológicos
 - `validate_dual_mass.py`
@@ -164,6 +168,8 @@
   - Test script for AT2020afhd analysis
 - `test_biological_periodicity.py`
   - Validation and testing framework for biological periodicity analysis.
+- `test_biosensor_hub.py`
+  - Tests for Biosensor Hub - QCAL ∞³
 - `test_busqueda_armonicos_superiores.py`
   - Tests para Búsqueda de Armónicos Superiores
 - `test_campo_conciencia.py`
@@ -192,6 +198,8 @@
   - Tests para el módulo de derivación desde primeros principios
 - `test_discovery_standards.py`
   - Tests para Validación de Estándares de Descubrimiento Científico
+- `test_disharmony_detector.py`
+  - Tests for Disharmony Detector - QCAL ∞³
 - `test_ecuacion_latido_universal.py`
   - Tests para la Ecuación del Latido Universal
 - `test_einstein_noesis.py`
@@ -238,6 +246,8 @@
   - Tests para Protocolos Experimentales de Validación de f₀ = 141.7001 Hz
 - `test_resonancia_cruzada_virgo_kagra.py`
   - Tests para Análisis de Resonancia Cruzada Virgo/KAGRA
+- `test_rna_volatile_memory.py`
+  - Tests for RNA Volatile Memory - QCAL ∞³
 - `test_rpsi_symmetry.py`
   - Test script for A_Rpsi_symmetry.ipynb
 - `test_sage_activation.py`
@@ -276,10 +286,18 @@
   - Test suite for validacion_alpha_psi_corregida.py
 - `test_validacion_bandas_cerebrales.py`
   - Tests para validacion_bandas_cerebrales.py
+- `test_validacion_biologia_cuantica.py`
+  - Tests para Validación de Biología Cuántica QCAL ∞³
 - `test_validacion_boveda_ontologica.py`
   - Tests para validacion_boveda_ontologica.py
 - `test_validacion_calabi_yau_espectral.py`
   - Tests for Calabi-Yau Spectral Universality Validation
+- `test_validacion_campo_receptor_biologico.py`
+  - TESTS PARA VALIDACIÓN DEL CAMPO RECEPTOR BIOLÓGICO QCAL ∞³
+- `test_validacion_convergencia_experimental.py`
+  - Tests for Experimental Convergence Validation
+- `test_validacion_correlacion_biologica_cuantica.py`
+  - Test Suite for Bio-Quantum Correlation Validation
 - `test_validacion_fase_iii.py`
   - Test para Validación de Fase III - Sistema Integrado QCAL ∞³
 - `test_validacion_gwtc1_tridetector.py`
@@ -304,6 +322,8 @@
   - Test suite for badge validation script.
 - `test_validate_official_discovery_declaration.py`
   - Test para el script de validación de la declaración oficial
+- `test_validate_qnm_vs_qcal.py`
+  - Tests for QNM vs QCAL Validation
 - `test_validate_scipy_snr.py`
   - Test for validate_scipy_snr_141hz.py
 - `test_validate_vacuum_energy_equation.py`
@@ -330,4 +350,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-11 21:18:12 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-13 13:26:54 UTC*
