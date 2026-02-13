@@ -49,18 +49,28 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_fundamental_framework.py`
+  - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_official_discovery_declaration.py`
+  - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_sovereignty.py`
+  - Validación de Soberanía QCAL ∞³
+- `validate_spiral_light.py`
+  - Validation Script: Spiral Light Geometry
+- `validate_spiral_light_path.py`
+  - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
 - `validate_tissue_resonance_magicicada_hp_ns.py`
@@ -77,18 +87,28 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_fundamental_framework.py`
+  - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_official_discovery_declaration.py`
+  - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_sovereignty.py`
+  - Validación de Soberanía QCAL ∞³
+- `validate_spiral_light.py`
+  - Validation Script: Spiral Light Geometry
+- `validate_spiral_light_path.py`
+  - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
 - `validate_tissue_resonance_magicicada_hp_ns.py`
@@ -192,12 +212,20 @@
   - Test suite for GW250114 141.7 Hz validation scripts
 - `test_harmonic_validation.py`
   - Test suite for harmonic validation theorem
+- `test_integracion_pipeline.py`
+  - Test de integración para el pipeline completo de validación QCAL.
+- `test_lagrangian_master.py`
+  - Test Suite for Master Lagrangian
 - `test_multi_event_snr_analysis.py`
   - Tests para el módulo multi_event_snr_analysis
+- `test_noetic_consciousness_basic.py`
+  - Standalone tests for Noetic Consciousness Axiom (no dependencies on src.__init__)
 - `test_optimization_modules.py`
   - Test script for computational optimization modules.
 - `test_performance_packages.py`
   - Test script to validate that numba, llvmlite, python-igraph, and numexpr
+- `test_pico_narrowband_gwtc4_o4.py`
+  - Tests for narrowband peak detection, optical cavities, and magnetoreception asymmetry.
 - `test_pipeline_gw250114_qcal.py`
   - Test script for pipeline_gw250114_qcal.py
 - `test_potencial_evac.py`
@@ -226,6 +254,12 @@
   - Tests para el módulo snr_gw200129_analysis
 - `test_snr_utils.py`
   - Tests para el módulo snr_utils
+- `test_sovereignty.py`
+  - Test de Soberanía QCAL ∞³
+- `test_spiral_light_basic.py`
+  - Simple test runner for spiral light geometry (no pytest required)
+- `test_spiral_light_path.py`
+  - Test Script for Spiral Light Path Theory
 - `test_teoria_unificada_141hz.py`
   - Tests for Unified Noetic Quantum Gravity Theory module.
 - `test_test_universalidad_virgo_kagra.py`
@@ -246,6 +280,8 @@
   - Tests para validacion_boveda_ontologica.py
 - `test_validacion_calabi_yau_espectral.py`
   - Tests for Calabi-Yau Spectral Universality Validation
+- `test_validacion_fase_iii.py`
+  - Test para Validación de Fase III - Sistema Integrado QCAL ∞³
 - `test_validacion_gwtc1_tridetector.py`
   - Tests para la validación GWTC-1 tri-detector
 - `test_validacion_invariante_espectral_cy.py`
@@ -266,6 +302,8 @@
   - Tests para validación de evidencias sólidas: λ₀ ≈ 0.001588
 - `test_validate_badges.py`
   - Test suite for badge validation script.
+- `test_validate_official_discovery_declaration.py`
+  - Test para el script de validación de la declaración oficial
 - `test_validate_scipy_snr.py`
   - Test for validate_scipy_snr_141hz.py
 - `test_validate_vacuum_energy_equation.py`
@@ -292,4 +330,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-05 18:36:36 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-11 21:18:12 UTC*
