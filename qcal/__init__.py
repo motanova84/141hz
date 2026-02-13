@@ -262,6 +262,45 @@ if COSMIC_PARAMETERS_AVAILABLE:
         "print_timeline"
     ])
 
+# Biosensor and RNA volatile memory modules (PR #1357)
+try:
+    from .rna_volatile_memory import (
+        RNAWavePacket,
+        RNAVolatileMemory,
+        create_coherent_memory_field
+    )
+    from .biosensor_hub import (
+        BiosensorType,
+        BiosensorReading,
+        BiosensorHub,
+        simulate_biosensor_session
+    )
+    from .disharmony_detector import (
+        DisharmonyLevel,
+        DisharmonyReport,
+        DisharmonyDetector,
+        demonstrate_resonance_diagnosis
+    )
+    BIOSENSOR_AVAILABLE = True
+except ImportError:
+    BIOSENSOR_AVAILABLE = False
+
+# Add biosensor exports if available
+if BIOSENSOR_AVAILABLE:
+    __all__.extend([
+        "RNAWavePacket",
+        "RNAVolatileMemory",
+        "create_coherent_memory_field",
+        "BiosensorType",
+        "BiosensorReading",
+        "BiosensorHub",
+        "simulate_biosensor_session",
+        "DisharmonyLevel",
+        "DisharmonyReport",
+        "DisharmonyDetector",
+        "demonstrate_resonance_diagnosis"
+    ])
+
 # Fundamental constants
 F0 = 141.7001  # Hz - Universal frequency
 PHI = 1.618033988749895  # Golden ratio
