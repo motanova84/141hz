@@ -127,9 +127,10 @@ class Atlas3Operator:
         V_potential = self.params.V_amp * np.cos(2 * np.pi * self.params.alpha * j / N)
         
         # PT-symmetry breaking term: iβ∂_t
-        # For time-independent analysis, use β(t) = β cos(t) averaged
-        # This gives imaginary diagonal contribution
-        # Using discrete derivative with PT parity: ±iβ alternating
+        # For time-independent spectral analysis, we discretize β(t) = β cos(t)
+        # spatially along the forcing cycle. The spatial index j maps to phase
+        # position in the cycle: t → 2πj/N. This spatially-varying coefficient
+        # implements the PT-parity preserving modulation.
         pt_term = 1j * self.beta * np.cos(2 * np.pi * j / N) / dx
         
         # Diagonal: kinetic + potential + PT term
@@ -258,12 +259,18 @@ class BerryPhaseCalculator:
         """
         Compute Berry phase for n-th eigenstate over forcing cycle.
         
+        Note: This is a simplified implementation that provides a geometric
+        phase measure based on parameter evolution. A full Berry phase 
+        calculation would require adiabatic evolution of the eigenstate
+        along the parameter path β(t) = β cos(t). The current implementation
+        estimates the phase accumulation from the parameter modulation.
+        
         Args:
             n_state: Index of eigenstate
             n_points: Number of time points in cycle
         
         Returns:
-            gamma: Berry phase (complex number)
+            gamma: Berry phase estimate (complex number)
         """
         if self.operator.eigenvectors is None:
             self.operator.compute_spectrum()

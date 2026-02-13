@@ -19,6 +19,10 @@ import os
 import unittest
 import numpy as np
 
+# Test constants
+PT_SYMMETRY_TOLERANCE = 1e-6  # Tolerance for "real" eigenvalues
+SIGNIFICANT_IMAG_THRESHOLD = 0.1  # Threshold for significant imaginary parts
+
 # Add parent directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
@@ -163,12 +167,12 @@ class TestPTSymmetry(unittest.TestCase):
         operator = Atlas3Operator(beta=2.57)
         operator.compute_spectrum()
         
-        is_symmetric, max_imag = operator.is_pt_symmetric(tolerance=1e-6)
+        is_symmetric, max_imag = operator.is_pt_symmetric(tolerance=PT_SYMMETRY_TOLERANCE)
         
         # At critical β, should have significant imaginary parts
         self.assertFalse(is_symmetric,
                         msg="PT-symmetry should be broken at β=2.57")
-        self.assertGreater(max_imag, 0.1,
+        self.assertGreater(max_imag, SIGNIFICANT_IMAG_THRESHOLD,
                           msg="Should have significant imaginary parts")
     
     def test_pt_breaking_large_beta(self):
@@ -182,7 +186,7 @@ class TestPTSymmetry(unittest.TestCase):
                        msg="PT-symmetry should be broken for β=3.0")
         self.assertGreater(signature['n_complex'], 0,
                           msg="Should have complex eigenvalues")
-        self.assertGreater(signature['max_imag'], 0.1,
+        self.assertGreater(signature['max_imag'], SIGNIFICANT_IMAG_THRESHOLD,
                           msg="Maximum imaginary part should be significant")
     
     def test_pt_signature_beta_zero(self):
