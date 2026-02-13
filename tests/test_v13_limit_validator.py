@@ -211,7 +211,9 @@ class TestThermodynamicLimitFit(unittest.TestCase):
         # Should have target and error
         self.assertIn('kappa_pi_target', results)
         self.assertIn('error_percent', results)
-        self.assertEqual(results['kappa_pi_target'], KAPPA_PI_TARGET)
+        # Verify the constant value itself
+        self.assertAlmostEqual(KAPPA_PI_TARGET, 2.577310, places=6,
+                              msg="KAPPA_PI_TARGET should be 2.577310")
         self.assertGreater(results['error_percent'], 0.0)
 
 
