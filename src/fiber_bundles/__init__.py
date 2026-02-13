@@ -16,6 +16,10 @@ from .principal_bundle import PrincipalFiberBundle, U1Fiber
 from .electromagnetic_bundle import ElectromagneticGaugeBundle
 from .spectral_bundle import SpectralCoherenceBundle
 from .consciousness_intersection import ConsciousnessIntersection, IntersectionConstant
+from .consciousness_theorem import (
+    ConsciousnessTheorem,
+    LagrangianComponents,
+    HolonomicQuantization
 from .fundamental_consciousness_equation import (
     FundamentalConsciousnessEquation,
     ConsciousnessState,
@@ -29,6 +33,9 @@ __all__ = [
     'SpectralCoherenceBundle',
     'ConsciousnessIntersection',
     'IntersectionConstant',
+    'ConsciousnessTheorem',
+    'LagrangianComponents',
+    'HolonomicQuantization',
     'FundamentalConsciousnessEquation',
     'ConsciousnessState',
     'create_standard_consciousness_state',
