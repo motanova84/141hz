@@ -160,9 +160,8 @@ jobs:
       
       - name: Run flake8
         run: |
+          # Lint main validator and test file in scripts/
           flake8 physics/validate_qnm_vs_qcal.py \
-                 tests/test_validate_qnm_vs_qcal.py \
                  scripts/test_validate_qnm_vs_qcal.py \
-                 --max-line-length=120 --max-complexity=15 \
-                 --exclude=tests/test_validate_qnm_vs_qcal.py
+                 --max-line-length=120 --max-complexity=15
         continue-on-error: true
