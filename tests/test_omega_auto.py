@@ -24,7 +24,7 @@ from datetime import datetime
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from omega_auto import (
+from core.omega_auto import (
     omega_psd,
     omega_snr,
     compute_ipfs_hash,
