@@ -33,6 +33,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 warnings.filterwarnings('ignore')
 
 
+# V13 Thermodynamic Limit Constants
+KAPPA_PI_TARGET = 2.577310  # κ_Π: Critical PT-symmetry breaking parameter
+
+
 def spectral_curvature_kappa(eigenvalues: np.ndarray) -> float:
     """
     Calcula la curvatura espectral acumulada κ(N).
@@ -131,9 +135,10 @@ def spectral_curvature_kappa(eigenvalues: np.ndarray) -> float:
     # Curvatura total
     kappa = kappa_base + rigidity_contribution + finite_size_term
     
-    # Asegurar rango físico razonable [2.0, 3.499]
-    # Use 3.499 instead of 3.5 to make tests pass with strict inequality
-    kappa = np.clip(kappa, 2.0, 3.499)
+    # Asegurar rango físico razonable [2.0, 3.5]
+    # Lower bound: π²/4 ≈ 2.467 es el mínimo teórico
+    # Upper bound: 3.5 es empírico basado en sistemas PT-rotos
+    kappa = np.clip(kappa, 2.0, 3.5)
     
     return kappa
 
@@ -229,6 +234,17 @@ def fit_thermodynamic_limit(N_values: List[int], kappa_values: List[float]) -> D
     
     Modelo: C_est(N) = κ_∞ + a/N^α
     
+    Este modelo captura la corrección de tamaño finito en sistemas cuánticos.
+    Para N → ∞, κ(N) → κ_∞ (límite termodinámico).
+    
+    Justificación física:
+    - α ≈ 0.5: Convergencia difusiva (fluctuaciones ~ 1/√N)
+    - α ≈ 1.0: Convergencia balística (efectos de borde ~ 1/N)
+    - a > 0: κ(N) > κ_∞ para sistemas finitos (sobrestimación)
+    - a < 0: κ(N) < κ_∞ para sistemas finitos (subestimación)
+    
+    Para sistemas GOE, típicamente α ≈ 0.5 y a > 0.
+    
     Args:
         N_values: Tamaños de sistema
         kappa_values: Valores de κ(N)
@@ -301,13 +317,34 @@ def fit_thermodynamic_limit(N_values: List[int], kappa_values: List[float]) -> D
                 pred = model(N_arr, *params)
                 return np.sum((kappa_arr - pred)**2)
             
-            bounds_de = [(2.0, 3.5), (-1000, 1000), (0.1, 2.0)]
+            bounds_de = [(2.0, 3.5), (-100, 100), (0.1, 2.0)]
             result = differential_evolution(objective, bounds_de, seed=42, maxiter=1000)
             
             kappa_inf, a, alpha = result.x
             
-            # Estimar errores aproximados
-            perr = [0.1, 10.0, 0.1]  # Estimación conservadora
+            # Estimar errores via bootstrap simple
+            n_bootstrap = 20
+            bootstrap_params = []
+            for _ in range(n_bootstrap):
+                # Resample with replacement
+                indices = np.random.choice(len(N_arr), size=len(N_arr), replace=True)
+                N_boot = N_arr[indices]
+                kappa_boot = kappa_arr[indices]
+                
+                try:
+                    result_boot = differential_evolution(
+                        lambda p: np.sum((kappa_boot - model(N_boot, *p))**2),
+                        bounds_de, seed=None, maxiter=500, workers=1
+                    )
+                    bootstrap_params.append(result_boot.x)
+                except:
+                    pass
+            
+            if len(bootstrap_params) > 3:
+                bootstrap_params = np.array(bootstrap_params)
+                perr = np.std(bootstrap_params, axis=0)
+            else:
+                perr = [0.1, 5.0, 0.5]  # Conservative fallback
             
             # Calcular R²
             residuals = kappa_arr - model(N_arr, kappa_inf, a, alpha)
@@ -327,8 +364,7 @@ def fit_thermodynamic_limit(N_values: List[int], kappa_values: List[float]) -> D
             residuals = kappa_arr - kappa_inf
     
     # Error respecto al objetivo κ_Π = 2.577310
-    kappa_pi = 2.577310
-    error_percent = abs(kappa_inf - kappa_pi) / kappa_pi * 100.0
+    error_percent = abs(kappa_inf - KAPPA_PI_TARGET) / KAPPA_PI_TARGET * 100.0
     
     return {
         'kappa_infinity': kappa_inf,
@@ -338,7 +374,7 @@ def fit_thermodynamic_limit(N_values: List[int], kappa_values: List[float]) -> D
         'alpha_error': perr[1],
         'a_error': perr[2],
         'r_squared': r_squared,
-        'kappa_pi_target': kappa_pi,
+        'kappa_pi_target': KAPPA_PI_TARGET,
         'error_percent': error_percent,
         'residuals': residuals.tolist(),
         'fit_values': model(N_arr, kappa_inf, a, alpha).tolist()

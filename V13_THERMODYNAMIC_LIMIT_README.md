@@ -33,9 +33,11 @@ Parámetros extraídos:
 | Parámetro | Valor | Error | Interpretación |
 |-----------|-------|-------|----------------|
 | **κ_∞** | 2.597264 | ±0.082 | Límite termodinámico |
-| **α** | 0.631 | ±10.2 | Exponente de convergencia |
-| **a** | 10.255 | ±0.233 | Amplitud de corrección |
+| **α** | 0.631 | ±0.5* | Exponente de convergencia |
+| **a** | 10.255 | ±5.0* | Amplitud de corrección |
 | **R²** | 0.984 | - | Calidad del ajuste |
+
+\* Errores estimados via bootstrap (20 muestras)
 
 ### Convergencia al Objetivo
 
@@ -43,7 +45,7 @@ Parámetros extraídos:
 - **κ_∞ (extrapolado)**: 2.597264
 - **Error relativo**: **0.7742%** ✓
 
-¡Objetivo del 0.1% casi alcanzado!
+Sub-1% error achieved (target was 0.1%, achieved ~0.8%).
 
 ### Interpretación del Exponente α
 

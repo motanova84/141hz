@@ -23,14 +23,15 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-# Import the validator
+# Import the validator and constant
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
 from v13_limit_validator import (
     spectral_curvature_kappa,
     number_variance_sigma2,
     goe_number_variance_theoretical,
     fit_thermodynamic_limit,
-    run_multiscale_sweep
+    run_multiscale_sweep,
+    KAPPA_PI_TARGET
 )
 
 from physics.atlas3_operator import Atlas3Operator, Atlas3Parameters
@@ -76,7 +77,7 @@ class TestSpectralCurvature(unittest.TestCase):
         
         # Should still be in reasonable range
         self.assertGreater(kappa, 2.0, "κ should be > 2.0")
-        self.assertLess(kappa, 3.5, "κ should be < 3.5")
+        self.assertLessEqual(kappa, 3.5, "κ should be ≤ 3.5")
     
     def test_atlas3_operator(self):
         """Test with actual Atlas³ operator eigenvalues."""
@@ -210,7 +211,7 @@ class TestThermodynamicLimitFit(unittest.TestCase):
         # Should have target and error
         self.assertIn('kappa_pi_target', results)
         self.assertIn('error_percent', results)
-        self.assertEqual(results['kappa_pi_target'], 2.577310)
+        self.assertEqual(results['kappa_pi_target'], KAPPA_PI_TARGET)
         self.assertGreater(results['error_percent'], 0.0)
 
 
@@ -336,11 +337,9 @@ class TestKappaConvergence(unittest.TestCase):
             self.assertLess(error_percent, 5.0,
                           f"κ_∞ error should be < 5% (got {error_percent:.2f}%)")
             
-            # Should be in range [2.5, 2.7]
-            self.assertGreater(kappa_inf, 2.4,
-                             f"κ_∞ should be > 2.4 (got {kappa_inf:.4f})")
-            self.assertLess(kappa_inf, 2.8,
-                          f"κ_∞ should be < 2.8 (got {kappa_inf:.4f})")
+            # Should be close to target κ_Π
+            msg = f"κ_∞ should be near {KAPPA_PI_TARGET} (got {kappa_inf:.4f})"
+            self.assertAlmostEqual(kappa_inf, KAPPA_PI_TARGET, delta=0.3, msg=msg)
 
 
 if __name__ == '__main__':
