@@ -8,6 +8,8 @@
   - Análisis ASD (Amplitude Spectral Density) en 141.7 Hz para GW150914
 - `analizar_at2020afhd.py`
   - 
+- `analizar_corpus_tokenizado.py`
+  - Analizador de Corpus Tokenizado QCAL ∞³
 - `analizar_cy_kpi_universal.py`
   - Análisis del invariante espectral universal k_Π en variedades Calabi-Yau
 - `analizar_eeg_real.py`
@@ -350,4 +352,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-13 19:30:41 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-14 22:11:09 UTC*
