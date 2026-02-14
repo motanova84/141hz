@@ -104,9 +104,8 @@ RESUMEN DE TESTS
   ✅ PASADO     - test_protocolo_falsacion.py
   ✅ PASADO     - test_rpsi_symmetry.py
   ✅ PASADO     - test_simetria_discreta.py
-  ✅ PASADO     - test_vercel_config.py
 
-Total: 9/9 tests pasados (100.0%)
+Total: 8/8 tests pasados (100.0%)
 
 🎉 ¡TODOS LOS TESTS PASARON!
 ```

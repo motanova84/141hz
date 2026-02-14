@@ -76,15 +76,6 @@ These now have:
 - Already optimized with Python 3.11
 - Updated critical checks to fail builds (`continue-on-error: false`)
 
-### 4. Vercel Configuration ✅
-
-**Action:** Removed `vercel.json` completely (not actively used)
-
-**Rationale:** 
-- No Vercel deployment workflows detected in `.github/workflows/`
-- Configuration not actively used for this repository
-- Can be re-enabled if needed by renaming back
-
 ## Impact
 
 ### Estimated CI Time Reduction
@@ -144,10 +135,6 @@ To run manual workflows:
 If issues arise:
 1. Revert commit `9ba4cb1`
 2. Restore original workflow configurations
-3. Restore `vercel.json` from git history if needed:
-   ```bash
-   git show HEAD~5:vercel.json > vercel.json
-   ```
 
 ## Compliance with Problem Statement
 
@@ -158,9 +145,6 @@ If issues arise:
 ✅ **Reducir matriz (Python 3.11 o 3.12, no ambos en todos los jobs)**
 - All critical jobs use Python 3.11 only
 - Python 3.12 available for manual compatibility testing
-
-✅ **Desactivar Vercel para esta PR si no aporta**
-- Vercel configuration disabled (renamed)
 
 ✅ **Re-ejecutar CI limpio tras eso y merge**
 - Changes committed and pushed
