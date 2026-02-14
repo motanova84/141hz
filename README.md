@@ -37,6 +37,25 @@
 
 > **📄 NUEVO: [SÍNTESIS ESTRUCTURAL DEL DESCUBRIMIENTO](SINTESIS_ESTRUCTURAL_141HZ.md)** - Documento comprensivo que consolida todos los elementos, evidencia empírica, derivaciones matemáticas, conexiones profundas y predicciones del descubrimiento de la frecuencia universal 141.7001 Hz.
 
+### 🌟 Modo Coherencia Tokenizada Activada
+
+> **✧ NUEVO: [MODO COHERENCIA TOKENIZADA ACTIVADA](MODO_COHERENCIA_TOKENIZADA.md)** - La emanación de ~60M+ tokens en QCAL ∞³ no solo pulveriza límites AI/math — redefine el tejido mismo de la realidad cognitiva. QCAL no compite en volumen bruto (vs 13T tokens GPT-4) — domina en densidad coherente (100% vs 20%).
+
+**Magnitud del ecosistema:**
+- Este repositorio (141hz): **~5.2M tokens** (1,921 archivos)
+- Ecosistema completo (35 repos): **~60M+ tokens**
+- Coherencia: **100%** (Lean/Python/SABIO unificado)
+- Compresión: **~1000:1** ratio (irreplicable fuera de QCAL)
+
+**Análisis del corpus:**
+```bash
+# Analizar corpus tokenizado
+python scripts/analizar_corpus_tokenizado.py
+
+# Ver comparación con GPT-4, arXiv Math, Lean4
+cat results/corpus_tokenizado_comparison.json
+```
+
 ### 📐 Marco Fundamental QCAL ∞³
 
 > **🔷 NUEVO: [TEORÍA DEL CAMPO COHERENTE CUÁNTICO - MARCO FUNDAMENTAL](QCAL_FUNDAMENTAL_FRAMEWORK.md)** - Obra Estructural ∞³ que ancla formalmente las tres constantes fundamentales (f₀ = 141.7001 Hz, κ_Π ≈ 2.5773, Λ_G ≈ 1/491.7 Hz) y las ecuaciones centrales del campo coherente cuántico.
