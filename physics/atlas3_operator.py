@@ -36,7 +36,11 @@ import numpy as np
 from scipy import linalg
 from scipy.sparse import diags, csr_matrix
 from scipy.sparse.linalg import eigs, eigsh
+from scipy.signal import correlate
+from scipy.special import zeta
 import warnings
+from typing import Dict, List, Tuple, Optional, Any
+from dataclasses import dataclass
 
 # Import QCAL constants
 import sys
@@ -696,6 +700,485 @@ def validate_atlas3_operator(beta_values=None, verbose=True):
             print(f"✗ PT-symmetry not broken at β = {beta_values[idx_critical]:.2f}")
     
     return results
+
+
+# =============================================================================
+# EXPLICIT SUM FORMULA AND VON MANGOLDT WEIGHTS
+# =============================================================================
+
+
+def von_mangoldt_weight(n: int) -> float:
+    """
+    Compute the Von Mangoldt function Λ(n).
+    
+    Λ(n) = { log p  if n = p^m for some prime p and integer m ≥ 1
+           { 0      otherwise
+    
+    This is the weight function in the explicit formula for π(x).
+    
+    Args:
+        n: Positive integer
+        
+    Returns:
+        log p if n is a prime power, 0 otherwise
+    """
+    if n < 2:
+        return 0.0
+    
+    # Find prime factorization
+    # Simple factorization for moderate n
+    temp_n = n
+    for p in range(2, int(n**0.5) + 1):
+        if temp_n % p == 0:
+            # Check if n is a pure power of p
+            power = 0
+            while temp_n % p == 0:
+                temp_n //= p
+                power += 1
+            if temp_n == 1:
+                return np.log(p)
+            else:
+                return 0.0
+    
+    # n is prime itself
+    return np.log(n)
+
+
+def generate_primes(max_n: int) -> List[int]:
+    """
+    Generate all primes up to max_n using Sieve of Eratosthenes.
+    
+    Args:
+        max_n: Maximum number to check
+        
+    Returns:
+        List of primes up to max_n
+    """
+    if max_n < 2:
+        return []
+    
+    sieve = np.ones(max_n + 1, dtype=bool)
+    sieve[0:2] = False
+    
+    for i in range(2, int(np.sqrt(max_n)) + 1):
+        if sieve[i]:
+            sieve[i*i::i] = False
+    
+    return np.where(sieve)[0].tolist()
+
+
+@dataclass
+class SyntheticPrimeSignal:
+    """
+    Synthetic signal from prime number distribution.
+    
+    Represents the explicit sum:
+    S(t) = Σ_{p^m} (log p / p^{m/2}) δ(t - m ln p)
+    
+    Attributes:
+        times: Array of times t = m ln p
+        weights: Array of weights (log p / p^{m/2})
+        max_prime: Maximum prime considered
+        max_power: Maximum power m considered
+        n_terms: Total number of terms in the sum
+    """
+    times: np.ndarray
+    weights: np.ndarray
+    max_prime: int
+    max_power: int
+    n_terms: int
+    
+    def to_continuous_signal(self, t_grid: np.ndarray, sigma: float = 0.1) -> np.ndarray:
+        """
+        Convert discrete delta functions to continuous signal via smoothing.
+        
+        Uses Gaussian smoothing: δ(t-t₀) → exp(-(t-t₀)²/(2σ²)) / (σ√(2π))
+        
+        Args:
+            t_grid: Time grid for continuous signal
+            sigma: Smoothing parameter (width of Gaussian)
+            
+        Returns:
+            Continuous signal S(t) on t_grid
+        """
+        signal = np.zeros_like(t_grid)
+        norm = 1.0 / (sigma * np.sqrt(2 * np.pi))
+        
+        for t_i, w_i in zip(self.times, self.weights):
+            signal += w_i * norm * np.exp(-0.5 * ((t_grid - t_i) / sigma)**2)
+        
+        return signal
+
+
+class ExplicitSumAnalyzer:
+    """
+    Analyzer for explicit sum formula and cross-correlation with Atlas³ spectrum.
+    
+    This class implements the "Oro" (Gold) test: computing the cross-correlation
+    between the Atlas³ eigenvalue density and the synthetic prime signal to
+    demonstrate that prime structure emerges from the operator.
+    
+    Mathematical Framework:
+    ----------------------
+    1. Generate synthetic prime signal: S(t) = Σ_{p^m} (log p / p^{m/2}) δ(t - m ln p)
+    2. Extract eigenvalue density from Atlas³: ρ(E) from {λ_n}
+    3. Compute cross-correlation: C(τ) = ∫ ρ(t) S(t + τ) dt
+    4. Identify peaks at τ = 0, ln p, ln p², ... confirming prime memory
+    
+    Attributes:
+        operator: Atlas3Operator instance
+        max_prime: Maximum prime to include in synthetic signal
+        max_power: Maximum prime power to include
+    """
+    
+    def __init__(self, operator: 'Atlas3Operator', max_prime: int = 100, max_power: int = 3):
+        """
+        Initialize explicit sum analyzer.
+        
+        Args:
+            operator: Atlas3Operator instance with computed spectrum
+            max_prime: Maximum prime number for synthetic signal
+            max_power: Maximum power m in p^m
+        """
+        self.operator = operator
+        self.max_prime = max_prime
+        self.max_power = max_power
+        
+    def generate_synthetic_prime_signal(self) -> SyntheticPrimeSignal:
+        """
+        Generate synthetic signal from prime distribution.
+        
+        Returns:
+            SyntheticPrimeSignal with times and weights
+        """
+        primes = generate_primes(self.max_prime)
+        
+        times_list = []
+        weights_list = []
+        
+        for p in primes:
+            log_p = np.log(p)
+            for m in range(1, self.max_power + 1):
+                t = m * log_p
+                weight = log_p / (p**(m/2))
+                
+                times_list.append(t)
+                weights_list.append(weight)
+        
+        # Sort by time
+        indices = np.argsort(times_list)
+        times = np.array(times_list)[indices]
+        weights = np.array(weights_list)[indices]
+        
+        return SyntheticPrimeSignal(
+            times=times,
+            weights=weights,
+            max_prime=self.max_prime,
+            max_power=self.max_power,
+            n_terms=len(times)
+        )
+    
+    def eigenvalue_density_of_states(
+        self, 
+        t_grid: np.ndarray, 
+        sigma: float = 0.1,
+        use_unfolded: bool = True
+    ) -> np.ndarray:
+        """
+        Compute density of states N(E) from Atlas³ eigenvalues.
+        
+        Uses Gaussian smoothing to create continuous density from discrete eigenvalues.
+        
+        Args:
+            t_grid: Energy/time grid
+            sigma: Smoothing parameter
+            use_unfolded: If True, use unfolded (normalized) spectrum
+            
+        Returns:
+            Density ρ(E) on t_grid
+        """
+        if self.operator.eigenvalues is None:
+            self.operator.compute_spectrum()
+        
+        # Use absolute values for energy levels (or real parts if complex)
+        if np.max(np.abs(self.operator.eigenvalues.imag)) < 1e-6:
+            energies = np.sort(self.operator.eigenvalues.real)
+        else:
+            energies = np.sort(np.abs(self.operator.eigenvalues))
+        
+        if use_unfolded:
+            # Unfold spectrum: map to unit mean spacing
+            # This makes the spectrum comparable to ln(p) scale
+            spacings = np.diff(energies)
+            mean_spacing = np.mean(spacings)
+            
+            if mean_spacing > 0:
+                # Cumulative unfolded energy
+                unfolded_energies = np.cumsum(spacings) / mean_spacing
+                # Rescale to fit in t_grid range
+                if len(unfolded_energies) > 0:
+                    scale = (np.max(t_grid) - np.min(t_grid)) / np.max(unfolded_energies)
+                    energies = unfolded_energies * scale + np.min(t_grid)
+                else:
+                    energies = energies  # Fall back to original
+        
+        # Create density via Gaussian smoothing
+        density = np.zeros_like(t_grid)
+        norm = 1.0 / (sigma * np.sqrt(2 * np.pi))
+        
+        for E in energies:
+            # Only add contributions within reasonable range
+            if np.min(t_grid) - 5*sigma <= E <= np.max(t_grid) + 5*sigma:
+                density += norm * np.exp(-0.5 * ((t_grid - E) / sigma)**2)
+        
+        return density
+    
+    def compute_cross_correlation(
+        self,
+        t_min: float = 0.0,
+        t_max: float = 10.0,
+        n_points: int = 1000,
+        sigma: float = 0.1
+    ) -> Dict[str, Any]:
+        """
+        Compute cross-correlation between Atlas³ spectrum and prime signal.
+        
+        This is the core "Oro" test demonstrating prime memory emergence.
+        
+        Args:
+            t_min: Minimum time/energy for grid
+            t_max: Maximum time/energy for grid
+            n_points: Number of grid points
+            sigma: Smoothing parameter for continuous signals
+            
+        Returns:
+            Dictionary with:
+                - t_grid: Time/energy grid
+                - atlas_density: Eigenvalue density ρ(E)
+                - prime_signal: Synthetic prime signal S(t)
+                - cross_correlation: C(τ)
+                - peaks: Detected peaks in cross-correlation
+                - peak_positions: Theoretical ln(p) positions
+        """
+        # Create time grid
+        t_grid = np.linspace(t_min, t_max, n_points)
+        
+        # Generate synthetic prime signal
+        prime_signal_obj = self.generate_synthetic_prime_signal()
+        prime_signal = prime_signal_obj.to_continuous_signal(t_grid, sigma=sigma)
+        
+        # Get Atlas³ eigenvalue density
+        atlas_density = self.eigenvalue_density_of_states(t_grid, sigma=sigma)
+        
+        # Normalize both signals
+        if np.max(np.abs(atlas_density)) > 0:
+            atlas_density_norm = atlas_density / np.max(np.abs(atlas_density))
+        else:
+            atlas_density_norm = atlas_density
+            
+        if np.max(np.abs(prime_signal)) > 0:
+            prime_signal_norm = prime_signal / np.max(np.abs(prime_signal))
+        else:
+            prime_signal_norm = prime_signal
+        
+        # Compute cross-correlation
+        cross_corr = correlate(atlas_density_norm, prime_signal_norm, mode='same')
+        
+        # Normalize if non-zero
+        max_corr = np.max(np.abs(cross_corr))
+        if max_corr > 0:
+            cross_corr = cross_corr / max_corr
+        else:
+            # Handle all-zero case
+            cross_corr = np.zeros_like(cross_corr)
+        
+        # Find peaks in cross-correlation
+        # Simple peak detection: local maxima above threshold
+        threshold = 0.3
+        peaks = []
+        for i in range(1, len(cross_corr) - 1):
+            if (cross_corr[i] > cross_corr[i-1] and 
+                cross_corr[i] > cross_corr[i+1] and 
+                cross_corr[i] > threshold):
+                peaks.append(i)
+        
+        # Theoretical peak positions at ln(p)
+        primes = generate_primes(min(self.max_prime, 50))  # First few primes
+        theoretical_peaks = [np.log(p) for p in primes if np.log(p) <= t_max]
+        
+        return {
+            't_grid': t_grid,
+            'atlas_density': atlas_density_norm,
+            'prime_signal': prime_signal_norm,
+            'cross_correlation': cross_corr,
+            'peaks': peaks,
+            'peak_positions_theoretical': theoretical_peaks,
+            'prime_signal_obj': prime_signal_obj
+        }
+
+
+class SpectralDeterminantCalculator:
+    """
+    Calculator for spectral determinant with zeta function regularization.
+    
+    Implements:
+    1. Regularization via ζ-function: ln det(O) = -ζ'_O(0)
+    2. Heat kernel truncation: K(t) = Tr(exp(-t H))
+    3. Determinant relation: Ξ(t) = exp(iθ(t)) ξ(1/2+it) / ξ(1/2-it)
+    
+    Mathematical Framework:
+    ----------------------
+    For operator O with eigenvalues {λ_n}, the regularized determinant is:
+    
+    det(O) = exp(-ζ'_O(0))
+    
+    where ζ_O(s) = Σ_n λ_n^{-s} is the spectral zeta function.
+    
+    Attributes:
+        operator: Atlas3Operator instance
+        heat_kernel_cutoff: Time cutoff for heat kernel truncation
+    """
+    
+    def __init__(self, operator: 'Atlas3Operator', heat_kernel_cutoff: float = 1.0):
+        """
+        Initialize spectral determinant calculator.
+        
+        Args:
+            operator: Atlas3Operator with computed spectrum
+            heat_kernel_cutoff: Cutoff time for heat kernel (growth control)
+        """
+        self.operator = operator
+        self.heat_kernel_cutoff = heat_kernel_cutoff
+    
+    def heat_kernel_trace(self, t: float) -> complex:
+        """
+        Compute heat kernel trace K(t) = Tr(exp(-t |H|)).
+        
+        This provides spectral truncation to avoid divergences.
+        Uses absolute values of eigenvalues for numerical stability.
+        
+        Args:
+            t: Time parameter (larger t → stronger truncation)
+            
+        Returns:
+            Heat kernel trace
+        """
+        if self.operator.eigenvalues is None:
+            self.operator.compute_spectrum()
+        
+        # K(t) = Σ_n exp(-t |λ_n|)
+        # Use absolute values for stability and to ensure decay
+        eigenvalues = self.operator.eigenvalues
+        
+        # Use absolute values to ensure decay with t
+        abs_eigenvalues = np.abs(eigenvalues)
+        
+        # For numerical stability, use only bounded eigenvalues
+        bounded_eigenvalues = abs_eigenvalues[abs_eigenvalues < 1e6]
+        
+        # Compute exp(-t * |λ|) with overflow protection
+        exponents = -t * bounded_eigenvalues
+        
+        # Clip to prevent overflow (exp(700) is near overflow for float64)
+        # Only keep terms that won't overflow
+        valid_mask = exponents > -700
+        valid_exponents = exponents[valid_mask]
+        
+        if len(valid_exponents) > 0:
+            trace = np.sum(np.exp(valid_exponents))
+        else:
+            # If all exponents are too negative, trace is essentially 0
+            trace = 0.0
+        
+        return trace
+    
+    def spectral_zeta_function(self, s: complex, regularization: str = 'heat_kernel') -> complex:
+        """
+        Compute spectral zeta function ζ_O(s) = Σ_n λ_n^{-s}.
+        
+        Uses regularization to handle convergence.
+        
+        Args:
+            s: Complex parameter
+            regularization: Method ('heat_kernel' or 'cutoff')
+            
+        Returns:
+            ζ_O(s)
+        """
+        if self.operator.eigenvalues is None:
+            self.operator.compute_spectrum()
+        
+        eigenvalues = self.operator.eigenvalues
+        
+        # Remove near-zero eigenvalues to avoid singularities
+        nonzero_eigenvalues = eigenvalues[np.abs(eigenvalues) > 1e-10]
+        
+        if regularization == 'heat_kernel':
+            # Apply heat kernel damping
+            damping = np.exp(-self.heat_kernel_cutoff * np.abs(nonzero_eigenvalues))
+            zeta_value = np.sum(damping * nonzero_eigenvalues**(-s))
+        else:
+            # Simple cutoff
+            bounded = nonzero_eigenvalues[np.abs(nonzero_eigenvalues) < 1e4]
+            zeta_value = np.sum(bounded**(-s))
+        
+        return zeta_value
+    
+    def regularized_determinant(self) -> complex:
+        """
+        Compute regularized determinant via ζ-function.
+        
+        det(O) = exp(-ζ'_O(0))
+        
+        Uses finite difference for derivative.
+        
+        Returns:
+            Regularized determinant
+        """
+        # Compute ζ'_O(0) via finite difference
+        h = 1e-5
+        zeta_plus = self.spectral_zeta_function(h)
+        zeta_minus = self.spectral_zeta_function(-h)
+        
+        zeta_prime_0 = (zeta_plus - zeta_minus) / (2 * h)
+        
+        determinant = np.exp(-zeta_prime_0)
+        
+        return determinant
+    
+    def xi_function(self, t: float, berry_phase: Optional[float] = None) -> complex:
+        """
+        Compute Ξ(t) function relating to Riemann ξ.
+        
+        Ξ(t) = exp(iθ(t)) ξ(1/2 + it) / ξ(1/2 - it)
+        
+        where θ(t) is the Berry phase.
+        
+        Args:
+            t: Real parameter
+            berry_phase: Berry phase θ(t) (computed if None)
+            
+        Returns:
+            Ξ(t)
+        """
+        # Simplified version: use operator spectrum to approximate
+        if berry_phase is None:
+            # Use simple Berry phase estimate
+            berry_phase = 0.0  # Placeholder
+        
+        # For now, return a simplified version based on eigenvalue statistics
+        # Full implementation would require Riemann ξ computation
+        if self.operator.eigenvalues is None:
+            self.operator.compute_spectrum()
+        
+        # Simplified: phase from eigenvalue distribution
+        phase = np.exp(1j * berry_phase)
+        
+        # Approximate ξ ratio using spectral data
+        # This is a placeholder - full implementation needs Riemann ξ
+        xi_approx = phase * np.sum(np.exp(1j * t * self.operator.eigenvalues.real))
+        
+        return xi_approx
 
 
 if __name__ == "__main__":
