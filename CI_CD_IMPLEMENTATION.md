@@ -122,7 +122,6 @@ All 9 test files passing (verified locally):
 6. `test_protocolo_falsacion.py` - Falsification protocol
 7. `test_rpsi_symmetry.py` - R_Ψ symmetry
 8. `test_simetria_discreta.py` - Discrete symmetry
-9. `test_vercel_config.py` - Vercel configuration
 
 **Total**: 50+ test cases, 100% pass rate
 

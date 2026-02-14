@@ -330,8 +330,6 @@
   - Test for validate_scipy_snr_141hz.py
 - `test_validate_vacuum_energy_equation.py`
   - Test Suite for Vacuum Energy Equation Validation
-- `test_vercel_config.py`
-  - Test para validar la configuración de Vercel
 - `test_verificacion_convergencia.py`
   - Tests para Verificación de Convergencia y Constantes Fundamentales
 - `test_verificacion_espectral_primos_rigurosa.py`
