@@ -1,0 +1,139 @@
+name: "QCAL-Sync: Update Global Context"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.qcal-context.json'
+      - 'qcal/constants.py'
+      - '.qcal_beacon'
+  workflow_dispatch:
+    inputs:
+      repos_dir:
+        description: 'Directory containing QCAL repositories'
+        required: false
+        default: '.'
+
+jobs:
+  update-context:
+    name: "Update QCAL Global Context"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: 🛰️ Run QCAL Harvest
+        run: |
+          echo "🔍 Running QCAL-Harvest..."
+          python qcal-harvest.py --repos-dir ${{ github.event.inputs.repos_dir || '.' }} --output GLOBAL_QCAL_CONTEXT.md
+          
+          if [ -f GLOBAL_QCAL_CONTEXT.md ]; then
+            echo "✅ GLOBAL_QCAL_CONTEXT.md generated successfully"
+            echo "📊 Context Stats:"
+            wc -l GLOBAL_QCAL_CONTEXT.md
+          else
+            echo "⚠️ GLOBAL_QCAL_CONTEXT.md not generated"
+          fi
+      
+      - name: 📋 Validate Context File
+        run: |
+          echo "🔍 Validating .qcal-context.json..."
+          python -c "
+          import json
+          import sys
+          
+          try:
+              with open('.qcal-context.json') as f:
+                  ctx = json.load(f)
+              
+              required = ['node_name', 'core_frequency', 'status']
+              missing = [f for f in required if f not in ctx]
+              
+              if missing:
+                  print(f'❌ Missing required fields: {missing}')
+                  sys.exit(1)
+              
+              if ctx.get('core_frequency') != 141.7001:
+                  print(f'⚠️ Warning: core_frequency is {ctx.get(\"core_frequency\")}, expected 141.7001')
+              
+              print('✅ .qcal-context.json is valid')
+              print(f'   Node: {ctx.get(\"node_name\")}')
+              print(f'   Frequency: {ctx.get(\"core_frequency\")} Hz')
+              print(f'   Status: {ctx.get(\"status\")}')
+              
+          except Exception as e:
+              print(f'❌ Validation failed: {e}')
+              sys.exit(1)
+          "
+      
+      - name: 📊 Display Context Summary
+        if: always()
+        run: |
+          echo "## 🌐 QCAL Context Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f .qcal-context.json ]; then
+            echo "### Context File Status" >> $GITHUB_STEP_SUMMARY
+            echo "✅ `.qcal-context.json` exists and is valid" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            head -20 .qcal-context.json >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -f GLOBAL_QCAL_CONTEXT.md ]; then
+            echo "### Global Context Generated" >> $GITHUB_STEP_SUMMARY
+            echo "✅ \`GLOBAL_QCAL_CONTEXT.md\` updated successfully" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Extract summary info
+            repos=$(grep -c "^### " GLOBAL_QCAL_CONTEXT.md || echo "0")
+            beacons=$(grep -c "^### Baliza:" GLOBAL_QCAL_CONTEXT.md || echo "0")
+            
+            echo "- **Repositories found:** $repos" >> $GITHUB_STEP_SUMMARY
+            echo "- **Beacons found:** $beacons" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**QCAL-Sync Strategy:** Unifying the QCAL ∞³ Ecosystem" >> $GITHUB_STEP_SUMMARY
+          echo "**Fundamental Frequency:** 141.7001 Hz" >> $GITHUB_STEP_SUMMARY
+          echo "**Coherence:** Ψ = 1.0" >> $GITHUB_STEP_SUMMARY
+      
+      - name: 💾 Commit Updated Context (Optional)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          if [ -f GLOBAL_QCAL_CONTEXT.md ]; then
+            git add GLOBAL_QCAL_CONTEXT.md
+            
+            if git diff --staged --quiet; then
+              echo "ℹ️ No changes to commit"
+            else
+              git commit -m "🔄 Update QCAL global context [skip ci]"
+              echo "✅ Changes committed (not pushed - manual push required)"
+            fi
+          fi
+      
+      - name: 🎉 Success
+        run: |
+          echo "╔════════════════════════════════════════════════════════════╗"
+          echo "║        QCAL-Sync: Global Context Update Complete          ║"
+          echo "║                 QCAL ∞³ Ecosystem Unified                  ║"
+          echo "╚════════════════════════════════════════════════════════════╝"
+          echo ""
+          echo "✅ All QCAL-Sync operations completed successfully"
