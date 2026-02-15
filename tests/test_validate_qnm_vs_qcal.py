@@ -5,6 +5,12 @@ Test suite for QNM vs QCAL validation script
 
 import pytest
 import json
+import sys
+from pathlib import Path
+
+# Add physics directory to path for imports
+physics_dir = Path(__file__).parent.parent / "physics"
+sys.path.insert(0, str(physics_dir))
 
 # Import the validator
 from validate_qnm_vs_qcal import QNMvsQCALValidator

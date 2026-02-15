@@ -6,8 +6,7 @@ Optimize GitHub Actions workflows to:
 1. Prioritize critical checks (unit + lint + reproducibility)
 2. Mark non-critical jobs as allow_failure or manual
 3. Reduce Python version matrix (use 3.11 OR 3.12, not both in all jobs)
-4. Disable Vercel if not needed
-5. Re-run clean CI after changes
+4. Re-run clean CI after changes
 
 ## Solution Implemented
 
@@ -53,16 +52,7 @@ Optimize GitHub Actions workflows to:
 - Reduces matrix jobs from 8-12 to 1-2
 - Python 3.12 available for manual compatibility testing
 
-### ✅ 3. Vercel Configuration Disabled
-
-**Action:** Removed `vercel.json` completely
-
-**Rationale:**
-- No Vercel deployment workflows found in `.github/workflows/`
-- Configuration not actively used for GitHub Actions
-- Removing creates less technical debt than renaming
-
-### ✅ 4. Workflow Streamlining
+### ✅ 3. Workflow Streamlining
 
 **Job categorization:**
 
@@ -137,10 +127,7 @@ Optimize GitHub Actions workflows to:
    - Made lint and tests critical (must pass)
    - Already used Python 3.11 only
 
-6. `vercel.json`
-   - Removed completely (not used)
-
-7. `.github/workflows/README.md`
+6. `.github/workflows/README.md`
    - Updated with optimization details
    - Added quick reference guide
 
@@ -180,20 +167,13 @@ If issues arise:
    git revert 9ba4cb1  # Workflow optimizations
    ```
 
-2. Restore Vercel (if needed):
-   ```bash
-   # Retrieve from git history if needed
-   git show HEAD~4:vercel.json > vercel.json
-   ```
-
-3. Re-push to restore original state
+2. Re-push to restore original state
 
 ## Compliance with Problem Statement
 
 ✅ **Priorizar checks críticos** - Unit tests, lint, reproducibility are critical
 ✅ **Poner el resto en allow_failure o manual** - All non-critical jobs are manual
 ✅ **Reducir matriz** - Python 3.11 only for critical jobs, 3.12 manual
-✅ **Desactivar Vercel** - vercel.json removed completely
 ✅ **Re-ejecutar CI limpio** - Ready for clean CI run
 
 ## Summary

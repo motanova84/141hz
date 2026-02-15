@@ -54,7 +54,6 @@ GWTC-1/2/3 análisis, experimentos independientes
 ✅ test_protocolo_falsacion.py              - Protocolo falsabilidad
 ✅ test_rpsi_symmetry.py                    - Simetría R_Ψ
 ✅ test_simetria_discreta.py                - Grupo de simetría discreta
-✅ test_vercel_config.py                    - Config web
 ```
 
 ### 4. Clarificaciones Metodológicas Clave
