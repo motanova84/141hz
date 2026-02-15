@@ -13,6 +13,10 @@ This script implements:
 4. Support for O4/O5 LIGO observing run data
 
 Usage:
+    # Analyze specific GWOSC event with real data
+    python gw_analysis.py --gwosc-event=GW200129_215028 --center=141.7001 --band=0.0032 --export-certificate
+    
+    # Analyze O4 run with multiple events
     python gw_analysis.py --run=O4 --center-freq=141.7001 --band=0.0032 --export-certificate
 
 Author: Sistema QCAL ∞³
@@ -247,30 +251,53 @@ class SpectralFilterAnalyzer:
     
     def _load_event_data(self, event_name: str, detector: str) -> Optional[np.ndarray]:
         """
-        Load event data from GWOSC.
+        Load event data from GWOSC (real FITS/HDF5 data).
         
         Args:
-            event_name: GW event name
-            detector: Detector name
+            event_name: GW event name (e.g., GW200129_215028, GW150914)
+            detector: Detector name (H1, L1, V1)
             
         Returns:
             Strain data array or None
         """
         try:
-            # Get event GPS time
-            gps_time = datasets.event_gps(event_name)
+            print(f"   📡 Fetching real GWOSC data for {event_name} from {detector}...")
             
-            # Load strain data
+            # Normalize event name (remove underscores if needed for GPS lookup)
+            event_lookup = event_name.replace('_', '')
+            
+            # Try to get event GPS time from GWOSC catalog
+            try:
+                gps_time = datasets.event_gps(event_lookup)
+                print(f"   ✓ Found GPS time: {gps_time}")
+            except Exception:
+                # Try with original name
+                try:
+                    gps_time = datasets.event_gps(event_name)
+                    print(f"   ✓ Found GPS time: {gps_time}")
+                except Exception:
+                    # For events not in catalog, try alternative methods
+                    print(f"   ⚠️  Event {event_name} not found in GWOSC catalog")
+                    print(f"   ℹ️  Available catalogs: GWTC-1, GWTC-2, GWTC-3, O1, O2, O3")
+                    return None
+            
+            # Load strain data from GWOSC
+            # Use wider window for better analysis
             start = gps_time - 16
             end = gps_time + 16
             
+            print(f"   📥 Downloading strain data from GWOSC...")
             data = TimeSeries.fetch_open_data(detector, start, end, 
                                              sample_rate=self.sample_rate)
+            
+            print(f"   ✓ Successfully loaded {len(data.value)} samples")
+            print(f"   ✓ Data format: FITS/HDF5 from GWOSC")
             
             return data.value
             
         except Exception as e:
-            print(f"   ⚠️  Error loading {event_name}: {e}")
+            print(f"   ❌ Error loading {event_name}: {e}")
+            print(f"   ℹ️  Make sure gwpy and gwosc are installed: pip install gwpy gwosc")
             return None
     
     def _generate_simulated_strain(self, event_name: str) -> np.ndarray:
@@ -531,6 +558,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
+  # Analyze specific GWOSC event with real data
+  python gw_analysis.py --gwosc-event=GW200129_215028 --center=141.7001 --band=0.0032 --export-certificate
+  
   # Analyze O4 data with default parameters
   python gw_analysis.py --run=O4
   
@@ -550,7 +580,9 @@ Examples:
     
     parser.add_argument("--run", type=str, default="O4",
                        help="Observing run to analyze (O3, O4, O5)")
-    parser.add_argument("--center-freq", type=float, default=141.7001,
+    parser.add_argument("--gwosc-event", type=str, default=None,
+                       help="Specific GWOSC event to analyze (e.g., GW200129_215028, GW150914)")
+    parser.add_argument("--center-freq", "--center", type=float, default=141.7001,
                        help="Center frequency for spectral filter (Hz)")
     parser.add_argument("--band", type=float, default=0.0032,
                        help="Filter bandwidth (Hz)")
@@ -572,11 +604,28 @@ Examples:
     print("=" * 70)
     print("GW Analysis - Spectral Filter for 141.7 Hz QCAL Signature")
     print("=" * 70)
-    print(f"Run: {args.run}")
+    
+    # Check if analyzing specific GWOSC event or run
+    if args.gwosc_event:
+        print(f"Mode: Single GWOSC Event Analysis")
+        print(f"Event: {args.gwosc_event}")
+    else:
+        print(f"Mode: Multi-Event Run Analysis")
+        print(f"Run: {args.run}")
+    
     print(f"Center frequency: {args.center_freq:.4f} Hz")
     print(f"Bandwidth: {args.band:.4f} Hz")
     print(f"Detector: {args.detector}")
-    print(f"Minimum events: {args.min_events}")
+    
+    if args.gwosc_event:
+        print(f"Data source: Real GWOSC FITS/HDF5")
+    elif args.simulated:
+        print(f"Data source: Simulated")
+    else:
+        print(f"Data source: GWOSC (if available, else simulated)")
+    
+    if not args.gwosc_event:
+        print(f"Minimum events: {args.min_events}")
     print("=" * 70)
     
     # Create analyzer
@@ -587,14 +636,22 @@ Examples:
         min_events=args.min_events
     )
     
-    # Get event list
-    event_list = get_event_list(args.run)
+    # Determine event list
+    if args.gwosc_event:
+        # Single event analysis
+        event_list = [args.gwosc_event]
+        # Force real data mode when GWOSC event is specified
+        simulated = False
+    else:
+        # Multi-event run analysis
+        event_list = get_event_list(args.run)
+        simulated = args.simulated
     
-    # Perform multi-event analysis
+    # Perform multi-event analysis (or single event)
     stats = analyzer.search_multi_event_subdominant(
         event_list=event_list,
         detector=args.detector,
-        simulated=args.simulated
+        simulated=simulated
     )
     
     # Generate certificate if requested
