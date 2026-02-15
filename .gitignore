@@ -28,6 +28,10 @@ temp/
 tmp/
 # Results
 results/
+# But allow results/figures/ directory and specific files
+!results/
+!results/figures/
+!results/figures/coherence_f0_scales.png
 # But allow vacuum energy visualizations
 !results/figures/vacuum_energy*.png
 # Allow mathematical demonstration figures
@@ -37,6 +41,8 @@ results/
 !results/fig4_analisis_espectral_theta.png
 !results/fig5_construccion_frecuencia.png
 !results/fig6_puente_dimensional.png
+# Allow consciousness unification demonstration
+!results/consciousness_unification_demo.png
 # Allow AT2020afhd analysis results
 !results/at2020afhd/
 !results/at2020afhd/*.png

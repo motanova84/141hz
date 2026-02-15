@@ -9,7 +9,7 @@ Calcula la magnitud tokenizada del corpus QCAL comparando con:
 - Biblioteca Lean4 (~100M tokens)
 
 Métricas calculadas:
-- Total de tokens por tipo de archivo
+- Total de tokens por tipo de archivo (usando tiktoken cl100k_base)
 - Densidad de coherencia (tokens/unidad coherente)
 - Reproducibilidad (lake build + ENV.lock)
 - Comparación con benchmarks estándar
@@ -26,6 +26,15 @@ from typing import Dict, List, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
 import hashlib
+
+# Import tiktoken for accurate token counting
+try:
+    import tiktoken
+    TIKTOKEN_AVAILABLE = True
+except ImportError:
+    print("⚠️  Warning: tiktoken not available. Install with: pip install tiktoken")
+    print("   Falling back to character-based estimation.")
+    TIKTOKEN_AVAILABLE = False
 
 
 @dataclass
@@ -44,7 +53,27 @@ class CorpusMetrics:
 class TokenCounter:
     """Contador de tokens para diferentes tipos de archivos"""
     
-    # Estimaciones de tokens por caracter para diferentes tipos
+    def __init__(self, use_tiktoken: bool = True):
+        """
+        Initialize token counter.
+        
+        Args:
+            use_tiktoken: Use tiktoken (cl100k_base) if available
+        """
+        self.use_tiktoken = use_tiktoken and TIKTOKEN_AVAILABLE
+        
+        if self.use_tiktoken:
+            try:
+                self.encoding = tiktoken.get_encoding("cl100k_base")
+                print("✓ Using tiktoken (cl100k_base) for accurate token counting")
+            except Exception as e:
+                print(f"⚠️  Could not initialize tiktoken: {e}")
+                self.use_tiktoken = False
+                self.encoding = None
+        else:
+            self.encoding = None
+    
+    # Fallback: Estimaciones de tokens por caracter para diferentes tipos
     TOKENS_PER_CHAR = {
         '.py': 0.25,      # Python: ~4 chars por token
         '.md': 0.30,      # Markdown: ~3.3 chars por token
@@ -55,12 +84,12 @@ class TokenCounter:
         '.yml': 0.25,     # YAML: similar a Python
         '.yaml': 0.25,
         '.toml': 0.25,
+        '.tex': 0.28,     # LaTeX
     }
     
-    @staticmethod
-    def count_tokens_in_file(filepath: Path) -> int:
+    def count_tokens_in_file(self, filepath: Path) -> int:
         """
-        Cuenta tokens en un archivo
+        Cuenta tokens en un archivo usando tiktoken si está disponible.
         
         Args:
             filepath: Ruta al archivo
@@ -80,21 +109,30 @@ class TokenCounter:
             if ext == '.ipynb':
                 try:
                     data = json.loads(content)
-                    # Contar tokens en celdas de código y markdown
-                    total_chars = 0
+                    # Extraer texto de celdas
+                    text_content = []
                     for cell in data.get('cells', []):
                         source = cell.get('source', [])
                         if isinstance(source, list):
-                            total_chars += sum(len(line) for line in source)
+                            text_content.append(''.join(source))
                         else:
-                            total_chars += len(source)
-                    return int(total_chars * TokenCounter.TOKENS_PER_CHAR[ext])
+                            text_content.append(source)
+                    content = '\n'.join(text_content)
                 except:
                     pass
             
-            # Conteo estándar basado en caracteres
+            # Usar tiktoken si está disponible
+            if self.use_tiktoken and self.encoding:
+                try:
+                    tokens = self.encoding.encode(content)
+                    return len(tokens)
+                except Exception as e:
+                    # Fallback to char-based if tiktoken fails
+                    pass
+            
+            # Conteo estándar basado en caracteres (fallback)
             char_count = len(content)
-            tokens_per_char = TokenCounter.TOKENS_PER_CHAR.get(ext, 0.25)
+            tokens_per_char = self.TOKENS_PER_CHAR.get(ext, 0.25)
             
             return int(char_count * tokens_per_char)
             
@@ -119,15 +157,16 @@ class CorpusAnalyzer:
         '.json', '.yml', '.yaml', '.toml'
     }
     
-    def __init__(self, repo_path: str = '.'):
+    def __init__(self, repo_path: str = '.', use_tiktoken: bool = True):
         """
         Inicializa el analizador
         
         Args:
             repo_path: Ruta al repositorio (default: directorio actual)
+            use_tiktoken: Usar tiktoken para conteo preciso
         """
         self.repo_path = Path(repo_path).resolve()
-        self.token_counter = TokenCounter()
+        self.token_counter = TokenCounter(use_tiktoken=use_tiktoken)
         
     def _should_analyze_file(self, filepath: Path) -> bool:
         """
@@ -511,11 +550,25 @@ def main():
         action='store_true',
         help='Modo silencioso (solo guardar resultados)'
     )
+    parser.add_argument(
+        '--use-tiktoken',
+        action='store_true',
+        default=True,
+        help='Usar tiktoken (cl100k_base) para conteo preciso (default: True)'
+    )
+    parser.add_argument(
+        '--no-tiktoken',
+        action='store_true',
+        help='Deshabilitar tiktoken, usar estimación basada en caracteres'
+    )
     
     args = parser.parse_args()
     
+    # Determinar si usar tiktoken
+    use_tiktoken = not args.no_tiktoken
+    
     # Analizar corpus
-    analyzer = CorpusAnalyzer(args.repo_path)
+    analyzer = CorpusAnalyzer(args.repo_path, use_tiktoken=use_tiktoken)
     metrics = analyzer.analyze_corpus()
     
     # Comparar con benchmarks

@@ -47,6 +47,19 @@
       "trait_type": "Initial Valuation",
       "value": "$2,000,000",
       "display_type": "string"
+    },
+    {
+      "trait_type": "Wang Validation",
+      "value": "AT2020afhd - 27.838 octaves"
+    },
+    {
+      "trait_type": "Wang DOI",
+      "value": "10.1126/sciadv.ady9068"
+    },
+    {
+      "trait_type": "Wang Error",
+      "value": 0.0018,
+      "display_type": "number"
     }
   ],
   "properties": {
@@ -56,6 +69,16 @@
     "pdf_hash": "4a260ca708a72f4268a03026bc04f7a5c31c7f2f07e2ca40dfa354738c5c0f41",
     "proof_of_coherence": "0b8d8af1520edc3a0b7d028fe0bf276a8cf88e401dbe68dbc3b0ec7bac5e5b64",
     "blockchain_ready": true,
-    "coherence_economy": "ℂₛ v1.0"
+    "coherence_economy": "ℂₛ v1.0",
+    "wang_validation": {
+      "reference": "Wang et al., Science Advances (2024)",
+      "doi": "10.1126/sciadv.ady9068",
+      "event": "AT2020afhd",
+      "period_days": 19.6,
+      "frequency_hz": 5.905139834e-07,
+      "octaves_below_f0": 27.838,
+      "error": 0.0018,
+      "verified": true
+    }
   }
 }

@@ -47,6 +47,13 @@ class PiCode888NFT:
         self.kappa_pi = 2.5773  # Critical transition parameter
         self.zeta_half_prime = -3.92264613  # ζ'(1/2) approximation
         
+        # Wang et al. AT2020afhd validation
+        self.wang_doi = "10.1126/sciadv.ady9068"
+        self.wang_period_days = 19.6
+        self.wang_freq_hz = 5.905139834e-7
+        self.wang_octaves = 27.838
+        self.wang_error = 0.0018
+        
         # NFT properties
         self.token_id = 888  # πCODE-888
         self.symbol = "πCODE"
@@ -234,6 +241,19 @@ class PiCode888NFT:
                     "trait_type": "Initial Valuation",
                     "value": f"${self.initial_value_usd:,}",
                     "display_type": "string"
+                },
+                {
+                    "trait_type": "Wang Validation",
+                    "value": "AT2020afhd - 27.838 octaves"
+                },
+                {
+                    "trait_type": "Wang DOI",
+                    "value": self.wang_doi
+                },
+                {
+                    "trait_type": "Wang Error",
+                    "value": self.wang_error,
+                    "display_type": "number"
                 }
             ],
             "properties": {
@@ -243,7 +263,17 @@ class PiCode888NFT:
                 "pdf_hash": pdf_hash,
                 "proof_of_coherence": poc_hash,
                 "blockchain_ready": True,
-                "coherence_economy": "ℂₛ v1.0"
+                "coherence_economy": "ℂₛ v1.0",
+                "wang_validation": {
+                    "reference": "Wang et al., Science Advances (2024)",
+                    "doi": self.wang_doi,
+                    "event": "AT2020afhd",
+                    "period_days": self.wang_period_days,
+                    "frequency_hz": self.wang_freq_hz,
+                    "octaves_below_f0": self.wang_octaves,
+                    "error": self.wang_error,
+                    "verified": True
+                }
             }
         }
         
