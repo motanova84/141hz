@@ -62,7 +62,7 @@ cat results/corpus_tokenizado_comparison.json
 
 **Hechos Medidos por Wang et al. (Observación Directa):**
 - 📡 **Periodo de precesión:** 19.6 ± 0.5 días en el evento AT2020afhd
-- 🌀 **Frecuencia cósmica:** ~5.905×10⁻⁷ Hz (primer detección de co-precesión disco-jet)
+- 🌀 **Frecuencia cósmica:** ~5.905×10⁻⁷ Hz (primera detección de co-precesión disco-jet)
 - ⚫ **Fenómeno físico:** Frame-dragging (arrastre del espacio-tiempo por agujero negro)
 - 🔬 **Telescopios:** Swift XRT, NICER, VLA, ATCA, e-MERLIN
 
