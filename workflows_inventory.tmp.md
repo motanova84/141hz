@@ -390,6 +390,13 @@
 - Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
+### "QCAL-Sync: Update Global Context"
+
+**Archivo:** `qcal-sync.yml`
+
+- Trigger: push
+- Trigger: manual (workflow_dispatch)
+
 ### QNM vs QCAL Validation
 
 **Archivo:** `qnm-qcal-validation.yml`
@@ -505,4 +512,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-10 22:46:39 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-15 14:28:59 UTC*
