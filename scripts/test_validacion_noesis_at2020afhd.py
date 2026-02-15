@@ -255,7 +255,7 @@ class TestWangEtAlDiscovery:
         periodo_wang = 19.6  # días, del paper de Science Advances
         resultados = verificar_cascada_fractal(periodo_wang)
         
-        assert resultados['periodo_observado'] == 19.6
+        assert resultados['periodo_observado'] == pytest.approx(periodo_wang)
         assert resultados['verificaciones']['periodo_en_rango'] is True
         
     def test_wang_et_al_frequency_calculation(self):
