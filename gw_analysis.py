@@ -494,8 +494,28 @@ class SpectralFilterAnalyzer:
         
         output_path = self.output_dir / filename
         
+        # Custom JSON encoder to handle NaN/Inf values
+        def convert_for_json(obj):
+            """Convert numpy types and handle NaN/Inf for JSON serialization."""
+            if isinstance(obj, (np.integer, np.floating)):
+                if np.isnan(obj) or np.isinf(obj):
+                    return None
+                return obj.item()
+            elif isinstance(obj, np.ndarray):
+                return obj.tolist()
+            elif isinstance(obj, dict):
+                return {k: convert_for_json(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [convert_for_json(item) for item in obj]
+            elif isinstance(obj, float) and (np.isnan(obj) or np.isinf(obj)):
+                return None
+            return obj
+        
+        # Convert results to JSON-safe format
+        json_safe_results = convert_for_json(self.results)
+        
         with open(output_path, 'w') as f:
-            json.dump(self.results, f, indent=2)
+            json.dump(json_safe_results, f, indent=2)
         
         print(f"\n💾 Results exported to: {output_path}")
         
