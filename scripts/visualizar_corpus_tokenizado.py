@@ -19,11 +19,14 @@ def print_bar_chart(title: str, data: dict, max_width: int = 50):
     print("=" * (max_width + 30))
     
     # Find max value for scaling
-    max_val = max(data.values())
+    max_val = max(data.values()) if data else 1
     
     for name, value in sorted(data.items(), key=lambda x: x[1], reverse=True):
         # Calculate bar width
-        bar_width = int((value / max_val) * max_width)
+        if max_val > 0:
+            bar_width = int((value / max_val) * max_width)
+        else:
+            bar_width = 0
         bar = "█" * bar_width
         
         # Format value
@@ -32,7 +35,8 @@ def print_bar_chart(title: str, data: dict, max_width: int = 50):
         else:
             value_str = f"{value:.4f}"
         
-        print(f"{name:20s} {bar:50s} {value_str}")
+        # Use max_width in formatting
+        print(f"{name:20s} {bar:{max_width}s} {value_str}")
 
 
 def main():
@@ -46,7 +50,7 @@ def main():
         print("Ejecuta primero: python scripts/analizar_corpus_tokenizado.py")
         return 1
     
-    with open(comparison_file, 'r') as f:
+    with open(comparison_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
     print("\n" + "=" * 70)

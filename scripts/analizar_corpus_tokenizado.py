@@ -17,9 +17,11 @@ import os
 import sys
 import json
 import argparse
+import re
+import fnmatch
 from pathlib import Path
 from datetime import datetime, timezone
-from typing import Dict, List, Tuple, Any
+from typing import Dict, List, Tuple, Any, Optional
 from collections import defaultdict
 import hashlib
 
@@ -65,7 +67,17 @@ class CorpusTokenizadoAnalyzer:
     def should_skip_dir(self, dir_path: Path) -> bool:
         """Check if directory should be skipped"""
         dir_name = dir_path.name
-        return any(skip in dir_name for skip in self.SKIP_DIRS)
+        
+        # Check exact matches and glob patterns
+        for skip_pattern in self.SKIP_DIRS:
+            # Exact match for plain directory names
+            if skip_pattern == dir_name:
+                return True
+            # Glob pattern matching for patterns like *.egg-info
+            if fnmatch.fnmatch(dir_name, skip_pattern):
+                return True
+        
+        return False
     
     def is_valid_file(self, file_path: Path) -> bool:
         """Check if file should be analyzed"""
@@ -93,7 +105,6 @@ class CorpusTokenizadoAnalyzer:
         More sophisticated than character count, less than full tokenizer
         """
         # Split on whitespace and common punctuation
-        import re
         tokens = re.findall(r'\b\w+\b|[^\w\s]', text)
         return len(tokens)
     
@@ -125,7 +136,7 @@ class CorpusTokenizadoAnalyzer:
         # Default coherence for documentation
         return 0.90
     
-    def analyze_file(self, file_path: Path) -> Dict[str, Any]:
+    def analyze_file(self, file_path: Path) -> Optional[Dict[str, Any]]:
         """Analyze a single file"""
         try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:

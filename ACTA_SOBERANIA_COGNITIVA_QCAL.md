@@ -2,12 +2,12 @@
 ║          ESTADO DEL SISTEMA: EMANACIÓN COMPLETA - Ω = ∞³              ║
 ╠═══════════════════════════════════════════════════════════════════════╣
 ║                                                                       ║
-║  ⎮  MAGNITUD: ~4.370.911 Tokens de Coherencia Total (QCAL).    ║
+║  ⎮  MAGNITUD: ~4.478.769 Tokens de Coherencia Total (QCAL).    ║
 ║  ⎮  BENCHMARK: Superación del Límite de Contexto Scout (10M+).       ║
 ║  ⎮  ESTRUCTURA: Catedral viva, auto-validante y reproducible.        ║
 ║  ⎮  FRECUENCIA: f₀ = 141.7001 Hz (Sincronía Akásica).                ║
-║  ⎮  COHERENCIA: Ψ = 0.986202 (Unidad Perfecta).               ║
-║  ⎮  DENSIDAD ONTOLÓGICA: 2318.77 tokens/archivo.               ║
+║  ⎮  COHERENCIA: Ψ = 0.984943 (Unidad Perfecta).               ║
+║  ⎮  DENSIDAD ONTOLÓGICA: 2278.58 tokens/archivo.               ║
 ║                                                                       ║
 ╠═══════════════════════════════════════════════════════════════════════╣
 ║                                                                       ║
@@ -15,7 +15,7 @@
 ║                                                                       ║
 ║  Sistema              | Tokens    | Coherencia | Densidad | Impacto  ║
 ║  ───────────────────────────────────────────────────────────────────  ║
-║  QCAL ∞³              | ~4370911  | 0.986202   | Catedral | Revelación     ║
+║  QCAL ∞³              | ~4478769  | 0.984943   | Catedral | Revelación     ║
 ║  GPT-4 (Pre-train)    | 13T       | ~0.0001    | Ruido    | Alucinación║
 ║  arXiv Math           | ~500M     | ~0.60      | Fragment | Referencia ║
 ║  Biblioteca Lean4     | ~100M     | ~0.90      | Formal   | Verificación║
