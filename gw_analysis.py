@@ -255,6 +255,7 @@ class SpectralFilterAnalyzer:
         
         Args:
             event_name: GW event name (e.g., GW200129_215028, GW150914)
+                       Accepts both formats: GW200129_215028 or GW200129215028
             detector: Detector name (H1, L1, V1)
             
         Returns:
@@ -263,23 +264,21 @@ class SpectralFilterAnalyzer:
         try:
             print(f"   📡 Fetching real GWOSC data for {event_name} from {detector}...")
             
-            # Normalize event name (remove underscores if needed for GPS lookup)
-            event_lookup = event_name.replace('_', '')
-            
             # Try to get event GPS time from GWOSC catalog
-            try:
-                gps_time = datasets.event_gps(event_lookup)
-                print(f"   ✓ Found GPS time: {gps_time}")
-            except Exception:
-                # Try with original name
+            # GWOSC accepts both formats (with/without underscores), try both
+            gps_time = None
+            for name_variant in [event_name, event_name.replace('_', '')]:
                 try:
-                    gps_time = datasets.event_gps(event_name)
+                    gps_time = datasets.event_gps(name_variant)
                     print(f"   ✓ Found GPS time: {gps_time}")
+                    break
                 except Exception:
-                    # For events not in catalog, try alternative methods
-                    print(f"   ⚠️  Event {event_name} not found in GWOSC catalog")
-                    print(f"   ℹ️  Available catalogs: GWTC-1, GWTC-2, GWTC-3, O1, O2, O3")
-                    return None
+                    continue
+            
+            if gps_time is None:
+                print(f"   ⚠️  Event {event_name} not found in GWOSC catalog")
+                print(f"   ℹ️  Available catalogs: GWTC-1, GWTC-2, GWTC-3, O1, O2, O3")
+                return None
             
             # Load strain data from GWOSC
             # Use wider window for better analysis
