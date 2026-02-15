@@ -28,6 +28,10 @@ temp/
 tmp/
 # Results
 results/
+# But allow results/figures/ directory and specific files
+!results/
+!results/figures/
+!results/figures/coherence_f0_scales.png
 # But allow vacuum energy visualizations
 !results/figures/vacuum_energy*.png
 # Allow mathematical demonstration figures
