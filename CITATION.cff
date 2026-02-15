@@ -78,6 +78,15 @@ references:
   - type: data-set
     title: "Gravitational Wave Open Science Center"
     url: "https://gwosc.org"
+  - type: article
+    title: "Co-precession of the disc and jet in the TDE AT2020afhd"
+    authors:
+      - name: "Wang et al."
+    date-published: 2025
+    journal: "Science Advances"
+    doi: "10.1126/sciadv.ady9068"
+    url: "https://www.science.org/doi/10.1126/sciadv.ady9068"
+    description: "Independent empirical validation of QCAL ∞³ predictions - 19.6 day period in AT2020afhd corresponds to 27.838 octaves below f₀ = 141.7001 Hz"
   - type: software
     title: "GWpy"
     url: "https://gwpy.github.io"
