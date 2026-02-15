@@ -7,8 +7,8 @@ on:
       - 'tests/test_regression_scientific.py'
       - 'scripts/benchmark_quantum_solvers.py'
       - 'scripts/certify_numerical_precision.py'
-      - 'validate_qcal_random_noise.py'
-      - 'test_validate_qcal_random_noise.py'
+      - 'core/validate_qcal_random_noise.py'
+      - 'tests/test_validate_qcal_random_noise.py'
       - '.github/workflows/validation-rigor.yml'
   pull_request:
     branches: [ main ]
@@ -225,7 +225,7 @@ jobs:
       
       - name: Run QCAL random noise validation
         run: |
-          python3 validate_qcal_random_noise.py \
+          python3 core/validate_qcal_random_noise.py \
             --samples ${{ matrix.samples }} \
             --projection-dim ${{ matrix.projection-dim }} \
             --output validation_random_noise_results_${{ matrix.samples }}_${{ matrix.projection-dim }}d.json
@@ -233,7 +233,7 @@ jobs:
       
       - name: Run tests for random noise validation
         run: |
-          python3 test_validate_qcal_random_noise.py
+          python3 tests/test_validate_qcal_random_noise.py
         timeout-minutes: 5
       
       - name: Upload validation results

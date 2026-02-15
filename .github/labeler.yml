@@ -99,4 +99,3 @@ dashboard:
       - 'dashboard/**/*'
       - 'index.html'
       - '*.html'
-      - 'vercel.json'

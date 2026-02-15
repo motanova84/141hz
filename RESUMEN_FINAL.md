@@ -157,7 +157,6 @@ f₀ = c/(2π R_Ψ ℓ_P)
 ✅ test_protocolo_falsacion.py              # Falsabilidad
 ✅ test_rpsi_symmetry.py                    # Simetría R_Ψ
 ✅ test_simetria_discreta.py                # Grupo discreto
-✅ test_vercel_config.py                    # Config web
 ```
 
 **Ejecutar:** `python3 scripts/run_all_tests.py`
