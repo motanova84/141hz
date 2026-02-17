@@ -27,7 +27,7 @@ LICENCIA/LICENSE: Sovereign Noetic License 1.0 (compatible with MIT)
 """
 
 import math
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Any
 try:
     import mpmath as mp
     MPMATH_AVAILABLE = True
@@ -184,7 +184,7 @@ class QuantumHarmonicUnifier:
             'description': f'f₀ scales with Riemann zeros by factor ≈ {ratio_zero_1:.3f}'
         }
     
-    def qcd_harmonic_structure(self) -> Dict[str, any]:
+    def qcd_harmonic_structure(self) -> Dict[str, Any]:
         """
         Calculate QCD color-flavor harmonic structure.
         
@@ -327,7 +327,7 @@ class QuantumHarmonicUnifier:
             'coherence_level': 'HIGH' if psi_universe > 0.5 else 'MODERATE' if psi_universe > 0.2 else 'LOW'
         }
     
-    def generate_full_report(self) -> Dict[str, any]:
+    def generate_full_report(self) -> Dict[str, Any]:
         """
         Generate a complete report of all quantum harmonic unifications.
         
