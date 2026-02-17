@@ -35,7 +35,7 @@ Referencias:
 """
 
 import math
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Any
 
 
 # ============================================================================
@@ -229,7 +229,7 @@ def compute_f0_from_compton_harmonic() -> Tuple[float, Dict[str, float]]:
     return f0_calculated, factors
 
 
-def verify_compton_scaling() -> Dict[str, any]:
+def verify_compton_scaling() -> Dict[str, Any]:
     """
     Verifica las diferentes aproximaciones de escala para conectar Compton con f₀.
     

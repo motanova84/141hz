@@ -162,7 +162,7 @@ class TestF0Connection:
         f0_calc, factors = compute_f0_from_compton_harmonic()
         
         # Should be close to 141.7001 Hz
-        # We allow up to 50% error as the exact scaling is approximate
+        # We allow up to 1% error with the QCAL master equation
         relative_error = abs(f0_calc - F0_HZ) / F0_HZ
         
         print(f"\nf₀ calculation:")
@@ -170,9 +170,8 @@ class TestF0Connection:
         print(f"  Target:     {F0_HZ:.4f} Hz")
         print(f"  Error:      {relative_error:.2%}")
         
-        # This is a demonstration of connection, not exact match
-        # The scaling factors show the relationship exists
-        assert relative_error < 5.0, \
+        # With the master equation and K_cosmic factor, we achieve <1% error
+        assert relative_error < 0.01, \
             f"f₀ calculation too far off: {relative_error:.2%} error"
         
         print(f"✓ f₀ connection demonstrated")

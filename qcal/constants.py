@@ -199,7 +199,7 @@ F0_DIVISOR_SCHUMANN = 18  # f₀/18 ≈ Schumann (99.46% precision)
 F0_SOBRE_18_HZ = F0_HZ / 18  # ≈ 7.872 Hz
 
 # ============================================================================
-# COMPTON CLOCK CONSTANTS (Febrero 2026)
+# COMPTON CLOCK CONSTANTS (febrero 2026)
 # El Reloj de Compton - Frecuencias fundamentales de partículas
 # ============================================================================
 # Masas de partículas fundamentales (CODATA 2018)
