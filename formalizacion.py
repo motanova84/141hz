@@ -341,7 +341,7 @@ class QuantumEmotionalConsensus:
         self.f0 = f0
         self.omega_0 = 2 * np.pi * f0
         
-    def calculate_coherence_field(self, t: float = 0.0) -> float:
+    def calculate_coherence_field(self, t: float = 0.0, seed: Optional[int] = None) -> float:
         """
         Calcula el campo de coherencia Ψ de la red.
         
@@ -349,15 +349,24 @@ class QuantumEmotionalConsensus:
         
         Args:
             t: Tiempo
+            seed: Semilla para reproducibilidad de fases (opcional)
             
         Returns:
             Valor del campo de coherencia Ψ
         """
         psi = 0.0
+        
+        # Use deterministic phases based on node index if seed provided
+        if seed is not None:
+            rng = np.random.RandomState(seed)
+            phases = [2 * np.pi * rng.random() for _ in self.network.nodes]
+        else:
+            # Deterministic phases based on node position for reproducibility
+            phases = [2 * np.pi * (i / len(self.network.nodes)) for i in range(len(self.network.nodes))]
+        
         for i, node in enumerate(self.network.nodes):
-            phase = 2 * np.pi * np.random.random()  # Fase aleatoria inicial
             amplitude = 1.0
-            contribution = (amplitude * np.cos(self.omega_0 * t + phase) * 
+            contribution = (amplitude * np.cos(self.omega_0 * t + phases[i]) * 
                           node.coherence)
             psi += contribution
         

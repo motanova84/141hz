@@ -333,7 +333,10 @@ class TestDemonstration:
             assert 'final_state' in results
             assert 'consensus' in results
         except Exception as e:
-            pytest.fail(f"Demonstration failed with error: {e}")
+            if PYTEST_AVAILABLE:
+                pytest.fail(f"Demonstration failed with error: {e}")
+            else:
+                raise AssertionError(f"Demonstration failed with error: {e}")
 
 
 # Test runner for both pytest and unittest
