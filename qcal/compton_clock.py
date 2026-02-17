@@ -1,81 +1,56 @@
-"""
-╔════════════════════════════════════════════════════════════════════════════╗
-║                    QCAL ∞³ Compton Clock Module                            ║
-║              El Reloj de Compton - Fundamento Físico                       ║
 #!/usr/bin/env python3
 """
-╔════════════════════════════════════════════════════════════════════════════╗
-║                    🕰️ RELOJ DE COMPTON - COMPTON CLOCK                     ║
-║                           QCAL ∞³ Implementation                            ║
-╚════════════════════════════════════════════════════════════════════════════╝
-
+QCAL ∞³ Compton Clock Module
+El Reloj de Compton - Fundamento Físico
+🕰️ RELOJ DE COMPTON - COMPTON CLOCK
+QCAL ∞³ Implementation
 AUTOR/AUTHOR: José Manuel Mota Burruezo (JMMB Ψ✧)
 ARQUITECTURA/ARCHITECTURE: QCAL ∞³ Original Manufacture
 LICENCIA/LICENSE: Sovereign Noetic License 1.0 (compatible with MIT)
-
 ⚡ EL RELOJ DE COMPTON ⚡
-
 El reloj de Compton es un concepto fundamental en mecánica cuántica que asocia 
 a cada partícula masiva una frecuencia intrínseca:
-
     f_Compton = (m c²) / h
-
 Esta frecuencia corresponde a la energía en reposo de la partícula y representa
 el "latido" fundamental de cada tipo de partícula.
-
 🌀 LA CONEXIÓN CON f₀ = 141.7001 Hz 🌀
-
 La frecuencia fundamental f₀ emerge como una escala resonante dentro del espectro
 Compton a través de relaciones armónicas y factores de escala cósmicos que incluyen:
-
 - α: constante de estructura fina (acopla electromagnetismo y gravedad)
 - φ: proporción áurea (armonía universal)
 - Escalas de Planck (geometría del espacio-tiempo cuántico)
 - Medias geométricas de partículas fundamentales
-
 Referencias:
 - Compton, A.H. (1923). "A Quantum Theory of the Scattering of X-rays by Light Elements"
 - CODATA 2018 fundamental physical constants
 - QCAL ∞³ framework: GW250114_141HZ_UNIFIED_THEORY.md
 """
-
 import math
 from typing import Dict, Tuple, Any
-
-
 # ============================================================================
 # CONSTANTES FÍSICAS FUNDAMENTALES (CODATA 2018)
 # ============================================================================
-
 # Constantes exactas (definiciones SI)
 C_LIGHT = 299792458.0  # m/s - Velocidad de la luz (exacta por definición)
 H_PLANCK = 6.62607015e-34  # J·s - Constante de Planck (exacta por definición)
 HBAR = H_PLANCK / (2 * math.pi)  # J·s - Constante reducida de Planck
-
 # Masas de partículas fundamentales (CODATA 2018)
 M_ELECTRON = 9.1093837015e-31  # kg - Masa del electrón
 M_PROTON = 1.67262192369e-27  # kg - Masa del protón
 M_NEUTRON = 1.67492749804e-27  # kg - Masa del neutrón
-
 # Escalas de Planck
 M_PLANCK = math.sqrt(HBAR * C_LIGHT / (6.67430e-11))  # kg - Masa de Planck ≈ 2.176434e-8
 L_PLANCK = 1.616255e-35  # m - Longitud de Planck
 T_PLANCK = L_PLANCK / C_LIGHT  # s - Tiempo de Planck ≈ 5.391e-44
-
 # Constante de estructura fina (CODATA 2018)
 ALPHA_FINE = 7.2973525693e-3  # ≈ 1/137.036 - Constante de estructura fina
-
 # Proporción áurea
 PHI_GOLDEN = (1 + math.sqrt(5)) / 2  # φ ≈ 1.618033988749895
-
 # Frecuencia fundamental QCAL
 F0_HZ = 141.7001  # Hz - Frecuencia fundamental QCAL
-
-
 # ============================================================================
 # FUNCIONES PRINCIPALES
 # ============================================================================
-
 def compton_frequency(mass_kg: float) -> float:
     """
     Calcula la frecuencia de Compton para una partícula de masa dada.
@@ -96,8 +71,6 @@ def compton_frequency(mass_kg: float) -> float:
         >>> print(f"{f_e:.6e}")  # ≈ 1.235590e+20 Hz
     """
     return (mass_kg * C_LIGHT**2) / H_PLANCK
-
-
 def compton_wavelength(mass_kg: float) -> float:
     """
     Calcula la longitud de onda de Compton para una partícula.
@@ -111,8 +84,6 @@ def compton_wavelength(mass_kg: float) -> float:
         Longitud de onda de Compton en metros
     """
     return H_PLANCK / (mass_kg * C_LIGHT)
-
-
 def get_particle_compton_frequencies() -> Dict[str, float]:
     """
     Retorna un diccionario con las frecuencias de Compton de partículas fundamentales.
@@ -126,8 +97,6 @@ def get_particle_compton_frequencies() -> Dict[str, float]:
         'neutron': compton_frequency(M_NEUTRON),
         'planck_mass': compton_frequency(M_PLANCK),
     }
-
-
 def geometric_mean_compton(masses: list) -> float:
     """
     Calcula la media geométrica de las frecuencias de Compton.
@@ -144,12 +113,9 @@ def geometric_mean_compton(masses: list) -> float:
     frequencies = [compton_frequency(m) for m in masses]
     product = math.prod(frequencies)
     return product ** (1 / len(frequencies))
-
-
 # ============================================================================
 # CONEXIÓN CON f₀ = 141.7001 Hz
 # ============================================================================
-
 def compute_f0_from_compton_harmonic() -> Tuple[float, Dict[str, float]]:
     """
     Calcula f₀ a partir de las frecuencias de Compton mediante relaciones armónicas.
@@ -232,8 +198,6 @@ def compute_f0_from_compton_harmonic() -> Tuple[float, Dict[str, float]]:
     }
     
     return f0_calculated, factors
-
-
 def verify_compton_scaling() -> Dict[str, Any]:
     """
     Verifica las diferentes aproximaciones de escala para conectar Compton con f₀.
@@ -272,12 +236,9 @@ def verify_compton_scaling() -> Dict[str, Any]:
             'factors': factors
         }
     }
-
-
 # ============================================================================
 # UTILIDADES DE VISUALIZACIÓN
 # ============================================================================
-
 def display_compton_spectrum() -> str:
     """
     Genera un resumen legible del espectro de frecuencias de Compton.
@@ -315,12 +276,9 @@ def display_compton_spectrum() -> str:
     output.append("="*70 + "\n")
     
     return "\n".join(output)
-
-
 # ============================================================================
 # MAIN - DEMO
 # ============================================================================
-
 if __name__ == "__main__":
     print(display_compton_spectrum())
     
@@ -333,22 +291,13 @@ if __name__ == "__main__":
         print(f"  Resultado: {approx['result_Hz']:.4f} Hz")
         print(f"  Error:     {approx['error_vs_f0']:.2%}")
 FECHA/DATE: 17 de febrero de 2026
-
-═══════════════════════════════════════════════════════════════════════════════
 FUNDAMENTO TEÓRICO
-═══════════════════════════════════════════════════════════════════════════════
-
 El Reloj de Compton asocia a cada partícula masiva una frecuencia fundamental:
-
     f_Compton = (m c²) / h
-
 Esta frecuencia representa el "latido" cuántico de la partícula, la frecuencia
 a la que su fase cuántica oscila naturalmente.
-
 ECUACIÓN MAESTRA QCAL:
-
     f₀ = (c/(2π)) · √(m_P/m_e) · α · φ · (ℓ_P/λ_C) · K
-
 Donde:
     - c/(2π) : Frecuencia angular de la luz
     - √(m_P/m_e) : Raíz de la relación masa Planck/electrón
@@ -356,22 +305,14 @@ Donde:
     - φ : Proporción áurea (armonía universal)
     - ℓ_P/λ_C : Relación longitud Planck / longitud de onda Compton
     - K : Factor de escala cósmico
-
 FACTOR K - LA CLAVE CÓSMICA:
-
     K = 2 · (m_P / m_e)^(1/3) · φ³
-
 El factor 2 emerge de la dualidad onda-partícula.
 φ³ refleja la geometría áurea del espacio-tiempo cuántico en tres dimensiones.
-
-═══════════════════════════════════════════════════════════════════════════════
 CONSTANTES FÍSICAS (CODATA 2018)
-═══════════════════════════════════════════════════════════════════════════════
 """
-
 import math
 from typing import Dict, Tuple, Optional, Any
-
 # Try to import mpmath for high precision calculations (optional)
 try:
     import mpmath as mp
@@ -380,64 +321,45 @@ try:
 except ImportError:
     MPMATH_AVAILABLE = False
     mp = None
-
-# ═══════════════════════════════════════════════════════════════════════════
+# 
 # CONSTANTES FÍSICAS FUNDAMENTALES (CODATA 2018 - Exact Values)
-# ═══════════════════════════════════════════════════════════════════════════
-
+# 
 # Planck constant (exact since 2019 SI redefinition)
 H_PLANCK = 6.62607015e-34  # J·s
-
 # Speed of light (exact by definition)
 C_LIGHT = 299792458.0  # m/s
-
 # Reduced Planck constant
 HBAR = H_PLANCK / (2 * math.pi)  # J·s
-
-# ═══════════════════════════════════════════════════════════════════════════
+# 
 # MASAS DE PARTÍCULAS FUNDAMENTALES (CODATA 2018)
-# ═══════════════════════════════════════════════════════════════════════════
-
+# 
 # Electron mass
 M_ELECTRON = 9.1093837015e-31  # kg
-
 # Proton mass
 M_PROTON = 1.67262192369e-27  # kg
-
 # Neutron mass
 M_NEUTRON = 1.67492749804e-27  # kg
-
 # Planck mass
 M_PLANCK = 2.176434e-8  # kg
-
-# ═══════════════════════════════════════════════════════════════════════════
+# 
 # CONSTANTES UNIVERSALES
-# ═══════════════════════════════════════════════════════════════════════════
-
+# 
 # Fine structure constant (CODATA 2018)
 ALPHA_FINE = 7.2973525693e-3  # ≈ 1/137.036
-
 # Golden ratio (φ - armonía universal)
 PHI = (1 + math.sqrt(5)) / 2  # ≈ 1.618034
-
 # Planck length
 LENGTH_PLANCK = math.sqrt(HBAR * 6.67430e-11 / (C_LIGHT ** 3))  # m
-
 # Compton wavelength of electron
 LAMBDA_COMPTON_ELECTRON = H_PLANCK / (M_ELECTRON * C_LIGHT)  # m
-
-# ═══════════════════════════════════════════════════════════════════════════
+# 
 # FRECUENCIA FUNDAMENTAL QCAL
-# ═══════════════════════════════════════════════════════════════════════════
-
+# 
 # Fundamental frequency (theoretical value)
 F0_THEORETICAL = 141.7001  # Hz
-
-# ═══════════════════════════════════════════════════════════════════════════
+# 
 # FUNCIONES PRINCIPALES
-# ═══════════════════════════════════════════════════════════════════════════
-
-
+# 
 def frecuencia_compton(masa: float, alta_precision: bool = False) -> float:
     """
     Calcula la frecuencia de Compton de una partícula.
@@ -466,8 +388,6 @@ def frecuencia_compton(masa: float, alta_precision: bool = False) -> float:
         return float((m * c * c) / h)
     else:
         return (masa * C_LIGHT * C_LIGHT) / H_PLANCK
-
-
 def frecuencia_compton_electron(alta_precision: bool = False) -> float:
     """
     Calcula la frecuencia de Compton del electrón.
@@ -476,8 +396,6 @@ def frecuencia_compton_electron(alta_precision: bool = False) -> float:
         Frecuencia de Compton del electrón en Hz (≈ 1.236e20 Hz)
     """
     return frecuencia_compton(M_ELECTRON, alta_precision)
-
-
 def frecuencia_compton_proton(alta_precision: bool = False) -> float:
     """
     Calcula la frecuencia de Compton del protón.
@@ -486,8 +404,6 @@ def frecuencia_compton_proton(alta_precision: bool = False) -> float:
         Frecuencia de Compton del protón en Hz (≈ 2.269e23 Hz)
     """
     return frecuencia_compton(M_PROTON, alta_precision)
-
-
 def frecuencia_compton_neutron(alta_precision: bool = False) -> float:
     """
     Calcula la frecuencia de Compton del neutrón.
@@ -496,8 +412,6 @@ def frecuencia_compton_neutron(alta_precision: bool = False) -> float:
         Frecuencia de Compton del neutrón en Hz (≈ 2.272e23 Hz)
     """
     return frecuencia_compton(M_NEUTRON, alta_precision)
-
-
 def media_geometrica_frecuencias(*frecuencias: float) -> float:
     """
     Calcula la media geométrica de un conjunto de frecuencias.
@@ -531,8 +445,6 @@ def media_geometrica_frecuencias(*frecuencias: float) -> float:
     # Raíz n-ésima
     n = len(frecuencias)
     return producto ** (1.0 / n)
-
-
 def calcular_factor_k() -> float:
     """
     Calcula el factor de escala cósmico K.
@@ -556,8 +468,6 @@ def calcular_factor_k() -> float:
     K = 2.0 * (razon_masas ** (1.0/3.0)) * (PHI ** 3)
     
     return K
-
-
 def calcular_relacion_longitudes() -> float:
     """
     Calcula la relación entre longitud de Planck y longitud de onda Compton.
@@ -568,8 +478,6 @@ def calcular_relacion_longitudes() -> float:
         Relación adimensional (≈ 6.66e-24)
     """
     return LENGTH_PLANCK / LAMBDA_COMPTON_ELECTRON
-
-
 def calcular_f0_ecuacion_maestra(alta_precision: bool = False) -> Tuple[float, Dict[str, float]]:
     """
     Calcula f₀ usando la ecuación maestra QCAL.
@@ -650,8 +558,6 @@ def calcular_f0_ecuacion_maestra(alta_precision: bool = False) -> Tuple[float, D
         }
         
         return f0, componentes
-
-
 def calcular_armonicos(frecuencia_fundamental: float, n_armonicos: int = 20) -> Dict[int, float]:
     """
     Calcula los primeros n armónicos de una frecuencia fundamental.
@@ -680,8 +586,6 @@ def calcular_armonicos(frecuencia_fundamental: float, n_armonicos: int = 20) -> 
         armonicos[n] = n * frecuencia_fundamental
     
     return armonicos
-
-
 def calcular_resonancia_biologica(f0: float) -> Dict[str, Dict[str, float]]:
     """
     Calcula las frecuencias de resonancia biológica basadas en f₀.
@@ -730,8 +634,6 @@ def calcular_resonancia_biologica(f0: float) -> Dict[str, Dict[str, float]]:
             'significado': 'Resonancia genómica (ADN)'
         }
     }
-
-
 def verificar_precision() -> Dict[str, Any]:
     """
     Verifica la precisión del cálculo de f₀.
@@ -776,8 +678,6 @@ def verificar_precision() -> Dict[str, Any]:
         'coherencia': coherencia,
         'componentes': componentes
     }
-
-
 def analisis_completo_reloj_compton() -> Dict[str, Any]:
     """
     Realiza un análisis completo del Reloj de Compton.
@@ -844,20 +744,17 @@ def analisis_completo_reloj_compton() -> Dict[str, Any]:
         'armonicos': armonicos,
         'resumen': resumen
     }
-
-
-# ═══════════════════════════════════════════════════════════════════════════
+# 
 # INTERFAZ DE LÍNEA DE COMANDOS
-# ═══════════════════════════════════════════════════════════════════════════
-
+# 
 def main():
     """
     Ejecuta el análisis completo del Reloj de Compton.
     """
-    print("\n" + "═" * 80)
+    print("\n" + "" * 80)
     print("🕰️  RELOJ DE COMPTON - COMPTON CLOCK")
     print("QCAL ∞³ - Quantum Coherent Axiomatic Logic")
-    print("═" * 80 + "\n")
+    print("" * 80 + "\n")
     
     analisis = analisis_completo_reloj_compton()
     
@@ -918,10 +815,8 @@ def main():
     print(analisis['resumen'])
     print()
     
-    print("═" * 80)
+    print("" * 80)
     print("Seal: ∴𓂀Ω∞³")
-    print("═" * 80 + "\n")
-
-
+    print("" * 80 + "\n")
 if __name__ == "__main__":
     main()
