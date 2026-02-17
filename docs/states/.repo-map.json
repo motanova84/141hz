@@ -198,8 +198,7 @@
   "web_resources": {
     "documentation_site": "GitHub Pages (if configured)",
     "colab_notebook": "Available via README badge",
-    "dashboard": "dashboard/ directory",
-    "deployment": "vercel.json configuration"
+    "dashboard": "dashboard/ directory"
   },
   "contact": {
     "author": "José Manuel Mota Burruezo",

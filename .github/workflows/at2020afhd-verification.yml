@@ -132,7 +132,8 @@ jobs:
           
           print(f"**Evento:** {data['evento']}")
           print(f"**Fuente:** {data['fuente']}")
-          print(f"**DOI:** {data['doi']}")
+          print(f"**Paper:** {data['paper_title']}")
+          print(f"**DOI:** [{data['doi']}]({data['url']})")
           print("")
           print(f"- **Periodo observado:** {r['periodo_observado']:.3f} días")
           print(f"- **Frecuencia cósmica:** {r['frecuencia_frame']:.6e} Hz")

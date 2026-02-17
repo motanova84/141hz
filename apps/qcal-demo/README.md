@@ -70,17 +70,7 @@ npm start
 
 ## Deployment
 
-### Vercel (Recommended)
-
-```bash
-cd apps/qcal-demo
-vercel --prod
-```
-
-The application is optimized for Vercel deployment with:
-- Standalone output mode
-- Automatic API routes
-- Edge runtime support
+The application can be deployed to any platform that supports Next.js applications.
 
 ### Environment Variables
 

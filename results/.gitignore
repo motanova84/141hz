@@ -1,0 +1,2 @@
+# Ignore analysis output JSON files
+*.json
