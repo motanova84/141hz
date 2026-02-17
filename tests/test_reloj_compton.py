@@ -283,7 +283,6 @@ else:
 
 if __name__ == "__main__":
     if PYTEST_AVAILABLE:
-        import sys
         sys.exit(pytest.main([__file__, "-v"]))
     else:
         unittest.main(verbosity=2)
