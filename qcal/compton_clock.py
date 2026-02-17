@@ -46,7 +46,7 @@ CONSTANTES FÍSICAS (CODATA 2018)
 """
 
 import math
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, Any
 
 # Try to import mpmath for high precision calculations (optional)
 try:
@@ -408,7 +408,7 @@ def calcular_resonancia_biologica(f0: float) -> Dict[str, Dict[str, float]]:
     }
 
 
-def verificar_precision() -> Dict[str, any]:
+def verificar_precision() -> Dict[str, Any]:
     """
     Verifica la precisión del cálculo de f₀.
     
@@ -454,7 +454,7 @@ def verificar_precision() -> Dict[str, any]:
     }
 
 
-def analisis_completo_reloj_compton() -> Dict[str, any]:
+def analisis_completo_reloj_compton() -> Dict[str, Any]:
     """
     Realiza un análisis completo del Reloj de Compton.
     
