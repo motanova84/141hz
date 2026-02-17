@@ -289,7 +289,7 @@ class BlockPartition:
         return int(np.floor(y / self.L))
 
 
-class TestFunctions:
+class OrthonormalTestFunctions:
     """
     Implements orthonormal test functions ψ_m in logarithmic coordinates.
     """
@@ -370,7 +370,7 @@ class NonCompactnessProof:
         self.params = params or KzParameters()
         self.kernel = KzKernel(self.params)
         self.partition = BlockPartition(self.params.L, self.params.n_blocks)
-        self.test_functions = TestFunctions(self.partition)
+        self.test_functions = OrthonormalTestFunctions(self.partition)
     
     def compute_decay_matrix(self) -> np.ndarray:
         """
