@@ -477,8 +477,8 @@ class TestProductionReadiness(unittest.TestCase):
         unified = unify_three_scales()
         self.assertGreater(unified.coherence, 0.99)
     
-    def test_all_30_tests_pass(self):
-        """Meta-test: Ensure we have 30 tests as claimed."""
+    def test_all_49_tests_pass(self):
+        """Meta-test: Ensure we have 49 tests as claimed."""
         # Count all test methods in this file
         test_count = 0
         for name in dir(self.__class__.__mro__[0]):
@@ -501,8 +501,8 @@ class TestProductionReadiness(unittest.TestCase):
                 return 1
         
         total_tests = count_tests(suite)
-        # We should have at least 30 tests
-        self.assertGreaterEqual(total_tests, 30)
+        # We should have at least 49 tests
+        self.assertGreaterEqual(total_tests, 49)
 
 
 if __name__ == '__main__':

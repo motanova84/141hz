@@ -5,8 +5,8 @@ QCAL ∞³ Three Cosmic Scales Unification
 This module implements the unification of three fundamental cosmic scales:
 
 1. Quantum Domain (10²⁰ Hz): Compton frequencies, electronic oscillations
-2. Planck Domain (10⁴² Hz): Fundamental spacetime scale, quantum gravity
-3. Conscious Domain (141.70001 Hz): Macroscopic resonance, observable frequency
+2. Planck Domain (10⁴³ Hz): Fundamental spacetime scale, quantum gravity
+3. Conscious Domain (141.7001 Hz): Macroscopic resonance, observable frequency
 
 The unification demonstrates that these three scales are intrinsically connected
 through fundamental physical constants:

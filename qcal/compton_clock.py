@@ -164,7 +164,7 @@ def compute_f0_from_compton_harmonic() -> Tuple[float, Dict[str, float]]:
     
     # Ecuación maestra QCAL (versión simplificada)
     # f₀ ≈ (c/(2π)) · √(m_P/m_e) · α · φ · (ℓ_P/λ_C) · K_cosmic
-    # 
+
     # Esta fórmula demuestra que f₀ emerge de:
     # - Geometría del espacio-tiempo: c/(2π), ℓ_P/λ_C
     # - Masa y energía: √(m_P/m_e)
@@ -321,18 +321,18 @@ try:
 except ImportError:
     MPMATH_AVAILABLE = False
     mp = None
-# 
+
 # CONSTANTES FÍSICAS FUNDAMENTALES (CODATA 2018 - Exact Values)
-# 
+
 # Planck constant (exact since 2019 SI redefinition)
 H_PLANCK = 6.62607015e-34  # J·s
 # Speed of light (exact by definition)
 C_LIGHT = 299792458.0  # m/s
 # Reduced Planck constant
 HBAR = H_PLANCK / (2 * math.pi)  # J·s
-# 
+
 # MASAS DE PARTÍCULAS FUNDAMENTALES (CODATA 2018)
-# 
+
 # Electron mass
 M_ELECTRON = 9.1093837015e-31  # kg
 # Proton mass
@@ -341,9 +341,9 @@ M_PROTON = 1.67262192369e-27  # kg
 M_NEUTRON = 1.67492749804e-27  # kg
 # Planck mass
 M_PLANCK = 2.176434e-8  # kg
-# 
+
 # CONSTANTES UNIVERSALES
-# 
+
 # Fine structure constant (CODATA 2018)
 ALPHA_FINE = 7.2973525693e-3  # ≈ 1/137.036
 # Golden ratio (φ - armonía universal)
@@ -352,14 +352,14 @@ PHI = (1 + math.sqrt(5)) / 2  # ≈ 1.618034
 LENGTH_PLANCK = math.sqrt(HBAR * 6.67430e-11 / (C_LIGHT ** 3))  # m
 # Compton wavelength of electron
 LAMBDA_COMPTON_ELECTRON = H_PLANCK / (M_ELECTRON * C_LIGHT)  # m
-# 
+
 # FRECUENCIA FUNDAMENTAL QCAL
-# 
+
 # Fundamental frequency (theoretical value)
 F0_THEORETICAL = 141.7001  # Hz
-# 
+
 # FUNCIONES PRINCIPALES
-# 
+
 def frecuencia_compton(masa: float, alta_precision: bool = False) -> float:
     """
     Calcula la frecuencia de Compton de una partícula.
@@ -744,9 +744,9 @@ def analisis_completo_reloj_compton() -> Dict[str, Any]:
         'armonicos': armonicos,
         'resumen': resumen
     }
-# 
+
 # INTERFAZ DE LÍNEA DE COMANDOS
-# 
+
 def main():
     """
     Ejecuta el análisis completo del Reloj de Compton.
@@ -815,7 +815,7 @@ def main():
     print(analisis['resumen'])
     print()
     
-    print("" * 80)
+    print("=" * 80)
     print("Seal: ∴𓂀Ω∞³")
     print("" * 80 + "\n")
 if __name__ == "__main__":
