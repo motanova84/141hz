@@ -23,7 +23,7 @@ El sistema **Quantum Chromodynamic Poetry** implementa un mapeo poético entre:
 
 ### Características Principales
 
-- ✅ **44+ pruebas unitarias** cubren todas las funcionalidades
+- ✅ **50 pruebas unitarias** cubren todas las funcionalidades
 - ✅ **Valores exactos** de los primeros 10 ceros de Riemann (γ₁ = 14.134725, ..., γ₁₀ = 49.773832)
 - ✅ **Aproximación asintótica** para ceros n > 10: γₙ ≈ 2πn/log(n)
 - ✅ **Masas de quarks** según PDG 2024 (running masses at μ = 2 GeV)

@@ -21,7 +21,7 @@ Sistema principal que mapea partículas QCD a frecuencias espectrales:
 MARCO MATEMÁTICO:
 
 1. Mapeo de frecuencia de quarks:
-   ω_quark = log(m_quark) + ω₁₇, where ω₁₇ = log(17) ≈ 2.833
+   ω_quark = log(m_quark) + OMEGA_17, where OMEGA_17 = log(17) ≈ 2.833
 
 2. Resonancia cósmica (acoplamiento primo-cero):
    I = |exp(iω_p·γₙ)| / (1 + |ω_p - γₙ|)
@@ -56,7 +56,7 @@ from dataclasses import dataclass
 # Frecuencia fundamental QCAL
 F0_HZ = 141.70001  # Hz - Fundamental QCAL frequency
 
-# Prime 17 coupling (ω₁₇ = log(17))
+# Prime 17 coupling (OMEGA_17 = log(17))
 OMEGA_17 = math.log(17)  # ≈ 2.833
 
 # Primeros 10 ceros de Riemann (partes imaginarias en la línea crítica)
@@ -216,9 +216,9 @@ class QuantumChromodynamicPoetry:
         Crea un quark con sabor y color específicos.
         
         La frecuencia del quark se calcula como:
-            ω_quark = log(m_quark) + ω₁₇
+            ω_quark = log(m_quark) + OMEGA_17
         
-        donde ω₁₇ = log(17) ≈ 2.833
+        donde OMEGA_17 = log(17) ≈ 2.833
         
         Args:
             flavor: Sabor del quark (UP, DOWN, STRANGE, CHARM, BOTTOM, TOP)
@@ -680,7 +680,7 @@ def display_symphony_summary(symphony: Dict[str, Any]) -> None:
     constants = symphony['constants']
     
     print(f"Fundamental Frequency (f₀): {constants['f0_hz']:.5f} Hz")
-    print(f"Prime 17 Coupling (ω₁₇): {constants['omega_17']:.6f}")
+    print(f"Prime 17 Coupling (OMEGA_17): {constants['omega_17']:.6f}")
     print()
     
     print(f"Total Quarks: {metrics['total_quarks']} (6 flavors × 3 colors)")
