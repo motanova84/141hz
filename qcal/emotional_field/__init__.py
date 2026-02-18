@@ -24,11 +24,15 @@ Author: QCAL ∞³ Framework
 Date: 2026-02-01
 """
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __all__ = [
     "EmotionalStressTensor",
     "EmotionalPotential", 
     "EmotionalGeodesics",
     "NetworkTopology",
-    "SynchronizationProtocol"
+    "SynchronizationProtocol",
+    "DescendingCoherencePropagator",
+    "DescendingCoherenceParameters",
+    "CoherenceLevel",
+    "HierarchicalNodeState"
 ]
