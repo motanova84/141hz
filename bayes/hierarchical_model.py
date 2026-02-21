@@ -81,3 +81,47 @@ def bayes_factor(snr_list, mu=6.0, sigma=1.0, grid_size=1001):
     logZ = logsumexp(lps) - np.log(grid_size)
     logZ0 = np.sum(-0.5*np.array(snr_list)**2 - 0.5*np.log(2*np.pi))
     return float(np.exp(logZ - logZ0))
+
+
+def bayes_factor_logs(snr_list, mu=6.0, sigma=1.0, grid_size=1001):
+    """
+    Compute hierarchical Bayes factor and return explicit log representations.
+
+    The canonical representation is ``ln_bayes_factor = ln(B₁₀)`` (natural
+    log).  The ``log10_bayes_factor`` is provided for reference only.
+
+    Disambiguation
+    --------------
+    * ``ln_bayes_factor``   = ln(B₁₀)            ← CANONICAL
+    * ``log10_bayes_factor`` = ln_bayes_factor / ln(10)  ← reference only
+
+    Example: if ln_bayes_factor ≈ 8.3 → B₁₀ ≈ e^8.3 ≈ 4 000 → log10(B) ≈ 3.6
+             if log10_bayes_factor ≈ 8.3 → B₁₀ ≈ 2×10^8 (a completely different scale)
+
+    Parameters
+    ----------
+    snr_list : list of float
+        SNR values for multiple events
+    mu : float, optional
+        Expected SNR under signal hypothesis (default: 6.0)
+    sigma : float, optional
+        Standard deviation of SNR under signal hypothesis (default: 1.0)
+    grid_size : int, optional
+        Number of grid points for numerical integration (default: 1001)
+
+    Returns
+    -------
+    dict
+        Dictionary with keys:
+        - ``bayes_factor``: B₁₀ in linear scale
+        - ``ln_bayes_factor``: ln(B₁₀)  **canonical**
+        - ``log10_bayes_factor``: log₁₀(B₁₀)  (reference only)
+    """
+    b10 = bayes_factor(snr_list, mu=mu, sigma=sigma, grid_size=grid_size)
+    ln_bf = float(np.log(b10)) if b10 > 0 else float('-inf')
+    log10_bf = float(ln_bf / np.log(10.0))
+    return {
+        "bayes_factor": b10,
+        "ln_bayes_factor": ln_bf,
+        "log10_bayes_factor": log10_bf,
+    }
