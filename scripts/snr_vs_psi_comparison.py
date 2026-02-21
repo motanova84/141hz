@@ -249,17 +249,56 @@ def calcular_psi_noetica(
         idx = np.argmin(np.abs(f_coh - f0))
         I_f0 = float(Cxy[idx])
     else:
-        # Implementación manual: |C_xy|² / (P_xx · P_yy)
-        freqs = np.fft.rfftfreq(N, 1.0 / fs)
-        idx = np.argmin(np.abs(freqs - f0))
-        X = np.fft.rfft(x)
-        Y = np.fft.rfft(y)
-        Pxx = np.abs(X[idx]) ** 2
-        Pyy = np.abs(Y[idx]) ** 2
-        Cxy_val = np.abs(X[idx] * np.conj(Y[idx])) ** 2
-        denom = Pxx * Pyy
-        I_f0 = float(Cxy_val / denom) if denom > 0 else 0.0
+        # Implementación manual de coherencia tipo Welch:
+        # estimación de espectros auto y cruzado promediados sobre segmentos.
+        nperseg_eff = min(nperseg, N)
+        if nperseg_eff <= 0:
+            I_f0 = 0.0
+        else:
+            step = max(nperseg_eff // 2, 1)  # 50% de solapamiento
+            window = np.hanning(nperseg_eff).astype(float)
+            window_norm = np.sum(window ** 2)
 
+            Sxx = None
+            Syy = None
+            Sxy = None
+            n_segments = 0
+
+            for start in range(0, N - nperseg_eff + 1, step):
+                seg_x = x[start:start + nperseg_eff] * window
+                seg_y = y[start:start + nperseg_eff] * window
+
+                X_seg = np.fft.rfft(seg_x)
+                Y_seg = np.fft.rfft(seg_y)
+
+                Pxx_seg = (np.abs(X_seg) ** 2) / window_norm
+                Pyy_seg = (np.abs(Y_seg) ** 2) / window_norm
+                Pxy_seg = (X_seg * np.conj(Y_seg)) / window_norm
+
+                if Sxx is None:
+                    Sxx = Pxx_seg
+                    Syy = Pyy_seg
+                    Sxy = Pxy_seg
+                else:
+                    Sxx += Pxx_seg
+                    Syy += Pyy_seg
+                    Sxy += Pxy_seg
+
+                n_segments += 1
+
+            if not n_segments or Sxx is None or Syy is None or Sxy is None:
+                I_f0 = 0.0
+            else:
+                Sxx /= n_segments
+                Syy /= n_segments
+                Sxy /= n_segments
+
+                freqs = np.fft.rfftfreq(nperseg_eff, 1.0 / fs)
+                idx = np.argmin(np.abs(freqs - f0))
+
+                num = np.abs(Sxy[idx]) ** 2
+                denom = Sxx[idx] * Syy[idx]
+                I_f0 = float(num / denom) if denom > 0 else 0.0
     # Amplitud efectiva cuadrática
     freqs_full = np.fft.rfftfreq(N, 1.0 / fs)
     idx_full = np.argmin(np.abs(freqs_full - f0))
