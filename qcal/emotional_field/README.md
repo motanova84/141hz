@@ -4,6 +4,8 @@
 
 This module implements the **Emotional Stress-Energy Tensor T_μν(Φ)** framework, extending the QCAL ∞³ quantum consciousness theory to model collective emotional dynamics using field theory principles.
 
+**NEW: Descending Coherence Cascade** — Hierarchical propagation of coherence from collective (macro) → groups (meso) → individuals (micro) via 141.7 Hz resonance.
+
 ---
 
 ## 📋 Overview
@@ -122,6 +124,30 @@ L_QCAL = ∥∇_μΨ∥² + ½∥∇_μΦ∥² - V(Φ) + κ_Π·R + α·log|ζ(�
 4. **κ_Π·R**: Complexity as spacetime curvature
 5. **α·log|ζ|²**: Spectral coupling to Riemann zeta (prime structure)
 
+### 6. **Descending Coherence Cascade** ⭐ NEW
+Located in `qcal/emotional_field/descending_coherence.py`
+
+**Hierarchical Levels:**
+- **Macro (Collective)**: Ψ_col = (1/N) Σᵢ Ψᵢ
+- **Meso (Groups)**: Ψ_group_j = (1/n_j) Σᵢ∈G_j Ψᵢ
+- **Micro (Individual)**: Ψᵢ
+
+**Cascade Equation:**
+```
+∂Ψᵢ/∂t = -γᵢ(Ψᵢ - Ψ_target) + ηᵢ·sin(2πf₀t)
+
+where:
+Ψ_target = α_macro·Ψ_col + α_meso·Ψ_group + α_micro·Ψᵢ
+```
+
+**Mechanism:** Higher-level coherence creates an "attractor field" that influences lower-level dynamics while preserving individual autonomy. The 141.7 Hz resonance synchronizes the cascade.
+
+**Coupling Coefficients:**
+- α_macro = 0.4 (collective influence)
+- α_meso = 0.35 (group influence)
+- α_micro = 0.25 (individual autonomy)
+- Constraint: α_macro + α_meso + α_micro = 1.0
+
 ---
 
 ## 🚀 Quick Start
@@ -169,20 +195,59 @@ print(f"Critical nodes: {len(critical_nodes)}")
 print(f"Sovereignty: {sovereignty:.3f}")
 ```
 
-### Complete Example
+### ⭐ NEW: Descending Coherence Cascade
 
-See `examples/example_emotional_stress_system.py` for a comprehensive demonstration:
+```python
+from qcal.emotional_field.descending_coherence import (
+    DescendingCoherencePropagator,
+    create_example_cascade
+)
 
+# Create hierarchical network
+propagator, coherences, connections = create_example_cascade(
+    num_nodes=60,
+    num_groups=6,
+    initial_coherence=0.5
+)
+
+# Detect groups
+stress_levels = {i: 0.3 for i in range(60)}
+groups = propagator.detect_groups(
+    list(range(60)),
+    connections,
+    stress_levels
+)
+
+# Evolve coherence cascade
+dt = 0.01  # 10 ms
+for step in range(500):
+    coherences = propagator.propagate_coherence(coherences, stress_levels, dt)
+
+# Get results
+summary = propagator.get_summary()
+print(f"Collective coherence: {summary['collective_coherence']:.4f}")
+print(f"Mean alignment: {summary['alignment_metrics']['mean_alignment']:.4f}")
+
+# Check individual node hierarchy
+info = propagator.get_hierarchy_info(0)
+print(f"Micro: {info['micro']['coherence']:.4f}")
+print(f"Meso: {info['meso']['coherence']:.4f}")
+print(f"Macro: {info['macro']['coherence']:.4f}")
+```
+
+### Complete Examples
+
+**Emotional Stress System:**
 ```bash
 python examples/example_emotional_stress_system.py
 ```
+Demonstrates network topology, stress tensor, and synchronization.
 
-This demonstrates:
-- Network creation with stress distribution
-- Topological analysis (Betti numbers, persistent homology)
-- Stress-energy tensor calculation
-- Multi-level synchronization protocol
-- Path to collective sovereignty (S_col → 0.95)
+**Descending Coherence Cascade:** ⭐ NEW
+```bash
+python examples/demo_descending_coherence.py
+```
+Demonstrates hierarchical coherence propagation from collective to individual.
 
 ---
 
@@ -229,15 +294,17 @@ S_col = (1/N) Σᵢ Ψᵢ · exp(-αT_00^(i)) · (1 - |∇²Φᵢ|/Λ_crit)
 ### Module Structure
 ```
 qcal/emotional_field/
-├── __init__.py              # Module initialization
-├── stress_tensor.py         # T_μν(Φ) calculation
-├── potential.py             # V(Φ) with phase transitions
-├── network_topology.py      # Topological analysis
-├── sync_protocol.py         # 141.7 Hz synchronization
-└── unified_lagrangian.py    # Complete L_QCAL formulation
+├── __init__.py                 # Module initialization
+├── stress_tensor.py            # T_μν(Φ) calculation
+├── potential.py                # V(Φ) with phase transitions
+├── network_topology.py         # Topological analysis
+├── sync_protocol.py            # 141.7 Hz synchronization
+├── unified_lagrangian.py       # Complete L_QCAL formulation
+└── descending_coherence.py     # ⭐ NEW: Hierarchical cascade
 
 examples/
-└── example_emotional_stress_system.py  # Complete demonstration
+├── example_emotional_stress_system.py  # Complete demonstration
+└── demo_descending_coherence.py        # ⭐ NEW: Cascade demo
 ```
 
 ### Dependencies
