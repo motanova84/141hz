@@ -305,7 +305,7 @@ if BIOSENSOR_AVAILABLE:
 try:
     from . import compton_clock
     COMPTON_CLOCK_AVAILABLE = True
-except ImportError:
+except (ImportError, SyntaxError):
     COMPTON_CLOCK_AVAILABLE = False
 
 # Add compton_clock exports if available
