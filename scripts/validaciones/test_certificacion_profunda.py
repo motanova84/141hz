@@ -124,10 +124,11 @@ def main():
 
     # Test 5: Borde COHERENTE inferior (psi_evento ≈ 0.888  ⟺  ratio ≈ 62.87)
     # psi_raw_borde = 0.888 / (1 - 0.888) ≈ 7.929
-    # Use ratio slightly above the boundary to avoid floating-point edge
+    # Se suma 0.01 al psi_raw para estar ligeramente por encima del umbral
+    # exacto y evitar fallos por error de redondeo en coma flotante.
     tests_totales += 1
     psi_raw_borde = 0.888 / (1.0 - 0.888)   # ≈ 7.929
-    ratio_borde = (psi_raw_borde + 0.01) ** 2  # slightly above boundary ≈ 63.0
+    ratio_borde = (psi_raw_borde + 0.01) ** 2  # ligeramente por encima ≈ 63.0
     if test_caso("COHERENTE - Borde inferior",
                  psi_on=ratio_borde, psi_off=1.0,
                  estado_esperado="COHERENTE"):
