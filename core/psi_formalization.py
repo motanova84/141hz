@@ -145,8 +145,8 @@ def generate_coherent_signal(
     t : np.ndarray
         Time vector (s).
     a_t : np.ndarray
-        Signal samples with unit variance (normalised so that A_eff² ≈ 0.5
-        for a pure sine, before normalisation).
+        Signal samples ``a_t = signal + noise``. For a pure sine with
+        ``amplitude = 1`` and ``noise_level = 0``, A_eff² ≈ 0.5.
     """
     if rng is None:
         rng = np.random.default_rng()
