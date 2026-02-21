@@ -143,6 +143,55 @@ def compute_phase_coherence(h1: np.ndarray, l1: np.ndarray,
     }
 
 
+def compute_score_psi(psd: np.ndarray, freqs: np.ndarray,
+                      msc: np.ndarray, f0: float,
+                      band_hz: float = 20.0) -> float:
+    """
+    Compute dimensionless Ψ score: I(f₀) × MSC(f₀).
+
+    I(f₀) = PSD(f₀) / median(PSD in surrounding band)  [dimensionless]
+    MSC(f₀) ∈ [0, 1]                                   [dimensionless]
+    score_psi = I(f₀) × MSC(f₀)                        [dimensionless]
+
+    This replaces a raw Ψ = PSD × MSC which mixed units (PSD has units of
+    strain²/Hz).  Normalising PSD(f₀) by the local median makes I(f₀)
+    dimensionless, so score_psi is a pure ratio suitable for detection
+    statistics.
+
+    Parameters
+    ----------
+    psd : np.ndarray
+        One-sided power spectral density (Welch or equivalent).
+    freqs : np.ndarray
+        Frequency array corresponding to *psd* (Hz).
+    msc : np.ndarray
+        Magnitude-squared coherence between the two detectors (same length as
+        *freqs*).
+    f0 : float
+        Target frequency (Hz).
+    band_hz : float
+        Half-width of the background band used to estimate the local median.
+        Bins within 1 Hz of f₀ are excluded from the background estimate.
+
+    Returns
+    -------
+    float
+        Dimensionless score_psi = I(f₀) × MSC(f₀).
+    """
+    idx = int(np.argmin(np.abs(freqs - f0)))
+    # Background: median of PSD in [f0-band_hz, f0+band_hz] excluding ±1 Hz
+    band_mask = (
+        (freqs >= f0 - band_hz) & (freqs <= f0 + band_hz)
+        & (np.abs(freqs - f0) > 1.0)
+    )
+    if band_mask.sum() == 0:
+        band_mask = np.ones(len(freqs), dtype=bool)
+    psd_median = float(np.median(psd[band_mask]))
+    I_f0 = float(psd[idx]) / (psd_median + 1e-100)  # dimensionless
+    msc_f0 = float(msc[idx])
+    return float(I_f0 * msc_f0)
+
+
 def verify_phase_stability(a_eff: float, duration: float) -> dict:
     """
     Verifica que la firma de fase sea estable durante la duración indicada,
@@ -234,9 +283,11 @@ class Shadow1BayesianAnalyzer:
         # noise_std is chosen so that SNR = rms_signal / noise_std ≈ snr_target
         noise_std = rms_signal / snr_target if snr_target > 0 else 1e-22
 
-        rng = np.random.default_rng(seed=42)
-        h1 = h1_signal + rng.normal(0.0, noise_std, n_samples)
-        l1 = l1_signal + rng.normal(0.0, noise_std, n_samples)
+        # Independent noise per detector (different seeds) — explicit independence
+        rng_h1 = np.random.default_rng(seed=42)
+        rng_l1 = np.random.default_rng(seed=43)
+        h1 = h1_signal + rng_h1.normal(0.0, noise_std, n_samples)
+        l1 = l1_signal + rng_l1.normal(0.0, noise_std, n_samples)
 
         return h1, l1, t
 
@@ -411,6 +462,10 @@ class Shadow1BayesianAnalyzer:
         print("   II. Silencio es Carga: evento sub-umbral caracterizado")
         print("   III.Ingenio Cósmico: Shadow-1 rescatado del olvido")
         print("=" * 60)
+
+        # Mark data provenance so downstream consumers can distinguish
+        # real GWOSC data from synthetic fallback.
+        self.results["data_source"] = "SIMULATION_FALLBACK"
 
         return self.results
 

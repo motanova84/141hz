@@ -29,6 +29,7 @@ from scripts.shadow1_bayesian_coherence import (
     chirp_mass_from_frequency_evolution,
     masses_from_chirp_mass,
     compute_phase_coherence,
+    compute_score_psi,
     verify_phase_stability,
     Shadow1BayesianAnalyzer,
     EEGCoherencePipeline,
@@ -66,6 +67,47 @@ class TestConstants(unittest.TestCase):
     def test_glitch_threshold(self):
         """Glitch threshold must be shorter than Shadow-1 duration."""
         self.assertLess(GLITCH_DURATION_THRESHOLD_S, SHADOW1_DURATION_S)
+
+
+class TestComputeScorePsi(unittest.TestCase):
+    """Tests for the dimensionless score_psi = I(f0) × MSC(f0) fix."""
+
+    def setUp(self):
+        from scipy import signal as sp_signal
+        rng = np.random.default_rng(5)
+        fs = 4096.0
+        n = int(fs * 1.0)
+        h1 = rng.normal(0, 1e-22, n)
+        l1 = rng.normal(0, 1e-22, n)
+        self.freqs, self.psd = sp_signal.welch(h1, fs=fs, nperseg=256)
+        _, self.msc = sp_signal.coherence(h1, l1, fs=fs, nperseg=256)
+
+    def test_returns_float(self):
+        s = compute_score_psi(self.psd, self.freqs, self.msc, 141.7001)
+        self.assertIsInstance(s, float)
+
+    def test_non_negative(self):
+        s = compute_score_psi(self.psd, self.freqs, self.msc, 141.7001)
+        self.assertGreaterEqual(s, 0.0)
+
+    def test_dimensionless_order_of_magnitude(self):
+        """For noise, I(f0) ≈ 1 and MSC ≈ 0 → score_psi should be O(1)."""
+        s = compute_score_psi(self.psd, self.freqs, self.msc, 141.7001)
+        self.assertLess(s, 100.0)
+
+
+class TestDataSourceField(unittest.TestCase):
+    """run_full_analysis() must include data_source = SIMULATION_FALLBACK."""
+
+    def test_data_source_present(self):
+        analyzer = Shadow1BayesianAnalyzer()
+        results = analyzer.run_full_analysis()
+        self.assertIn("data_source", results)
+
+    def test_data_source_value_simulation(self):
+        analyzer = Shadow1BayesianAnalyzer()
+        results = analyzer.run_full_analysis()
+        self.assertEqual(results["data_source"], "SIMULATION_FALLBACK")
 
 
 class TestChirpMass(unittest.TestCase):
