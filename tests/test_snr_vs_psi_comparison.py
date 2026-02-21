@@ -30,11 +30,13 @@ generar_ruido_coloreado = snr_vs_psi_comparison.generar_ruido_coloreado
 calcular_snr_potencia = snr_vs_psi_comparison.calcular_snr_potencia
 calcular_psi_noetica = snr_vs_psi_comparison.calcular_psi_noetica
 calcular_curva_roc = snr_vs_psi_comparison.calcular_curva_roc
+calcular_separacion_sigma = snr_vs_psi_comparison.calcular_separacion_sigma
 ejecutar_zona = snr_vs_psi_comparison.ejecutar_zona
 ejecutar_coliseo = snr_vs_psi_comparison.ejecutar_coliseo
 tabla_comparativa = snr_vs_psi_comparison.tabla_comparativa
 ResultadoROC = snr_vs_psi_comparison.ResultadoROC
 ResultadoZona = snr_vs_psi_comparison.ResultadoZona
+_coherencia_welch = snr_vs_psi_comparison._coherencia_welch
 
 
 class TestConstantesYSenal(unittest.TestCase):
@@ -275,6 +277,16 @@ class TestEjecutarZona(unittest.TestCase):
         self.assertEqual(len(res.psi_scores_senal), n)
         self.assertEqual(len(res.snr_scores_ruido), n)
         self.assertEqual(len(res.psi_scores_ruido), n)
+        self.assertEqual(len(res.psi_ratio_senal), n)
+        self.assertEqual(len(res.psi_ratio_ruido), n)
+
+    def test_zona_ratio_positivo(self):
+        """Los ratios anti-bias Ψ(f₀)/Ψ(f_control) deben ser positivos."""
+        res = ejecutar_zona(5.0, 'Test', n_trials=10, duration=0.2, seed=1)
+        self.assertTrue(np.all(res.psi_ratio_senal > 0),
+                        "ratios señal deben ser positivos")
+        self.assertTrue(np.all(res.psi_ratio_ruido > 0),
+                        "ratios ruido deben ser positivos")
 
     def test_zona_separacion_finita(self):
         """Las separaciones estadísticas deben ser valores finitos."""
@@ -348,6 +360,150 @@ class TestColiseoCompleto(unittest.TestCase):
             res2['Noetica'].snr_scores_senal,
             err_msg="Los resultados deben ser reproducibles con la misma semilla"
         )
+
+
+class TestSeparacionSigma(unittest.TestCase):
+    """Tests para la función oficial calcular_separacion_sigma."""
+
+    def test_separacion_cero_distribuciones_iguales(self):
+        """Con distribuciones idénticas la separación debe ser cero."""
+        rng = np.random.default_rng(60)
+        datos = rng.normal(0.0, 1.0, 100)
+        sep = calcular_separacion_sigma(datos, datos)
+        self.assertAlmostEqual(sep, 0.0, places=5)
+
+    def test_separacion_positiva_cuando_con_mayor(self):
+        """La separación debe ser positiva cuando la media de 'con' supera la de 'sin'."""
+        rng = np.random.default_rng(61)
+        con = rng.normal(3.0, 1.0, 100)
+        sin = rng.normal(1.0, 1.0, 100)
+        sep = calcular_separacion_sigma(con, sin)
+        self.assertGreater(sep, 0.0)
+
+    def test_separacion_crece_con_diferencia_medias(self):
+        """La separación debe crecer al aumentar la diferencia de medias."""
+        rng = np.random.default_rng(62)
+        sin = rng.normal(0.0, 1.0, 200)
+        sep1 = calcular_separacion_sigma(rng.normal(1.0, 1.0, 200), sin)
+        sep2 = calcular_separacion_sigma(rng.normal(3.0, 1.0, 200), sin)
+        self.assertLess(sep1, sep2)
+
+
+class TestH0Sanity(unittest.TestCase):
+    """
+    Tests de saneamiento bajo H₀ (hipótesis nula pura).
+
+    Bajo H₀, ambos canales son ruido independiente y no hay señal en ninguno.
+    En este caso:
+      • AUC de cualquier métrica debe ser ≈ 0.5 (azar).
+      • La separación entre 'con ruido' vs 'sin ruido' debe ser ≈ 0.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        """Crea distribuciones H₀ de SNR y Ψ con ruido puro en ambas hipótesis."""
+        n = 200
+        fs = SAMPLE_RATE
+        N = int(0.2 * fs)
+        snr_a, snr_b = [], []
+        psi_a, psi_b = [], []
+
+        for i in range(n):
+            rng1 = np.random.default_rng(500 + i * 4)
+            rng2 = np.random.default_rng(500 + i * 4 + 1)
+            rng3 = np.random.default_rng(500 + i * 4 + 2)
+            rng4 = np.random.default_rng(500 + i * 4 + 3)
+
+            # Grupo A: dos realizaciones de ruido puro
+            xa = generar_ruido_coloreado(N, rng=rng1)
+            ya = generar_ruido_coloreado(N, rng=rng2)
+            # Grupo B: otras dos realizaciones de ruido puro
+            xb = generar_ruido_coloreado(N, rng=rng3)
+            yb = generar_ruido_coloreado(N, rng=rng4)
+
+            snr_a.append(calcular_snr_potencia(xa, f0=F0, fs=fs))
+            snr_b.append(calcular_snr_potencia(xb, f0=F0, fs=fs))
+            psi_a.append(calcular_psi_noetica(xa, ya, f0=F0, fs=fs))
+            psi_b.append(calcular_psi_noetica(xb, yb, f0=F0, fs=fs))
+
+        cls.snr_a = np.array(snr_a)
+        cls.snr_b = np.array(snr_b)
+        cls.psi_a = np.array(psi_a)
+        cls.psi_b = np.array(psi_b)
+
+    def test_snr_auc_cerca_de_punto_cinco_bajo_h0(self):
+        """SNR bajo H₀ puro: AUC debe ser ≈ 0.5 (no hay información de señal)."""
+        roc = calcular_curva_roc(self.snr_a, self.snr_b, nombre='SNR H0')
+        self.assertAlmostEqual(roc.auc, 0.5, delta=0.1,
+                               msg=f"SNR AUC bajo H₀ puro debe ser ≈ 0.5 (got {roc.auc:.3f})")
+
+    def test_psi_auc_cerca_de_punto_cinco_bajo_h0(self):
+        """Ψ bajo H₀ puro: AUC debe ser ≈ 0.5 (sin señal coherente)."""
+        roc = calcular_curva_roc(self.psi_a, self.psi_b, nombre='Psi H0')
+        self.assertAlmostEqual(roc.auc, 0.5, delta=0.1,
+                               msg=f"Ψ AUC bajo H₀ puro debe ser ≈ 0.5 (got {roc.auc:.3f})")
+
+    def test_separacion_sigma_baja_bajo_h0(self):
+        """La separación σ entre dos grupos de ruido puro debe ser ≈ 0."""
+        sep_snr = calcular_separacion_sigma(self.snr_a, self.snr_b)
+        sep_psi = calcular_separacion_sigma(self.psi_a, self.psi_b)
+        self.assertLess(abs(sep_snr), 1.5,
+                        f"SNR σ-sep bajo H₀ debe ser pequeña (got {sep_snr:.2f})")
+        self.assertLess(abs(sep_psi), 1.5,
+                        f"Ψ σ-sep bajo H₀ debe ser pequeña (got {sep_psi:.2f})")
+
+
+class TestFallbackScipy(unittest.TestCase):
+    """
+    Tests que verifican la ruta fallback (sin SciPy) de calcular_psi_noetica.
+
+    Monkeypatcha SCIPY_AVAILABLE a False para ejercitar la implementación
+    manual Welch y verifica que el comportamiento estadístico se conserva.
+    """
+
+    def _calc_psi_fallback(self, x, y, f0=F0, fs=SAMPLE_RATE):
+        """Invoca Ψ forzando el camino fallback."""
+        orig = snr_vs_psi_comparison.SCIPY_AVAILABLE
+        snr_vs_psi_comparison.SCIPY_AVAILABLE = False
+        try:
+            return calcular_psi_noetica(x, y, f0=f0, fs=fs)
+        finally:
+            snr_vs_psi_comparison.SCIPY_AVAILABLE = orig
+
+    def test_fallback_psi_no_negativa(self):
+        """Fallback: Ψ debe ser no-negativa con ruido puro."""
+        rng_a = np.random.default_rng(70)
+        rng_b = np.random.default_rng(71)
+        N = int(0.5 * SAMPLE_RATE)
+        x = generar_ruido_coloreado(N, rng=rng_a)
+        y = generar_ruido_coloreado(N, rng=rng_b)
+        psi = self._calc_psi_fallback(x, y)
+        self.assertGreaterEqual(psi, 0.0)
+
+    def test_fallback_psi_mayor_con_senal_coherente(self):
+        """Fallback: Ψ con señal coherente debe superar Ψ con solo ruido."""
+        rng_a = np.random.default_rng(72)
+        rng_b = np.random.default_rng(73)
+        N = int(0.5 * SAMPLE_RATE)
+        ruido_a = generar_ruido_coloreado(N, rng=rng_a)
+        ruido_b = generar_ruido_coloreado(N, rng=rng_b)
+        senal = generar_senal_decayente(3.0, duration=0.5, fs=SAMPLE_RATE, f0=F0)
+
+        psi_con = self._calc_psi_fallback(senal + ruido_a, senal + ruido_b)
+        psi_sin = self._calc_psi_fallback(ruido_a, ruido_b)
+        self.assertGreater(psi_con, psi_sin,
+                           "Fallback Ψ con señal coherente debe superar Ψ sin señal")
+
+    def test_fallback_psi_baja_para_ruido_independiente(self):
+        """Fallback: con ruido independiente, Ψ debe ser inferior a Ψ con señal."""
+        N = int(0.5 * SAMPLE_RATE)
+        ruido_a = generar_ruido_coloreado(N, rng=np.random.default_rng(74))
+        ruido_b = generar_ruido_coloreado(N, rng=np.random.default_rng(75))
+        senal = generar_senal_decayente(5.0, duration=0.5, fs=SAMPLE_RATE, f0=F0)
+
+        psi_senal = self._calc_psi_fallback(senal + ruido_a, senal + ruido_b)
+        psi_ruido = self._calc_psi_fallback(ruido_a, ruido_b)
+        self.assertGreater(psi_senal, psi_ruido)
 
 
 if __name__ == '__main__':

@@ -10,16 +10,20 @@ Bajo la frecuencia f₀ = 141.7001 Hz, este módulo implementa el experimento
 La arena: una señal moribunda (SNR real < 1) enterrada en ruido Gaussiano
 coloreado. Se evalúan ambas métricas en tres zonas:
 
-  • Zona de Confort  (SNR > 10): Ambas métricas se comportan igual.
-  • Zona de Penumbra (SNR 2–5): SNR estándar empieza a oscilar; Ψ permanece firme.
-  • Zona Noética     (SNR < 1):  SNR estándar colapsa (p > 0.05); Ψ mantiene
-                                  separación estadística de 2σ.
+  • Zona de Confort  (SNR > UMBRAL_CONFORT):   Ambas métricas se comportan igual.
+  • Zona de Penumbra (UMBRAL_NOETICO–UMBRAL_CONFORT): SNR oscila; Ψ permanece firme.
+  • Zona Noética     (SNR < UMBRAL_NOETICO):   SNR colapsa; Ψ mantiene AUC > SNR.
 
 Definiciones:
-    SNR estándar: SNR = P_xx(f₀) / σ²_ruido(f₀)
-    Ψ Noética:    Ψ   = I(f₀) · A_eff²
-                  donde I(f₀) es la coherencia cruzada y A_eff² la amplitud
-                  efectiva cuadrática media.
+    SNR estándar: SNR = P_banda(f₀) / P_banda(f_adyacente)
+                  Potencia integrada sobre banda ±bandwidth_hz en f₀.
+    Ψ Noética:    Ψ   = D_snr(f₀) · D_coh²(f₀)
+                  D_snr  = potencia de banda promediada entre canales.
+                  D_coh² = coherencia cruzada al cuadrado (estimador Welch).
+
+Control off-target (anti-bias):
+    ratio = Ψ(f₀) / Ψ(f_control)  donde f_control = f₀ + 30 Hz por defecto.
+    Si ratio > 1 la señal está concentrada en f₀, no difusa.
 
 La fase es lo último que el caos logra destruir.
 
@@ -28,7 +32,7 @@ Fecha: Febrero 2026
 """
 
 import numpy as np
-from typing import Dict, List, NamedTuple, Tuple
+from typing import Dict
 from dataclasses import dataclass, field
 
 try:
@@ -43,6 +47,9 @@ except ImportError:
 
 F0 = 141.7001          # Hz – frecuencia fundamental noética
 SAMPLE_RATE = 4096.0   # Hz – tasa de muestreo estándar LIGO
+
+# Pequeño valor positivo para evitar división por cero en ratios off-target
+_EPSILON_RATIO = 1e-30
 
 # Umbrales de las tres zonas
 UMBRAL_CONFORT = 10.0   # SNR > 10  → Zona de Confort
@@ -199,27 +206,98 @@ def calcular_snr_potencia(
     return potencia_senal / potencia_ruido
 
 
+def _coherencia_welch(
+    x: np.ndarray,
+    y: np.ndarray,
+    f0: float,
+    fs: float,
+    nperseg: int
+) -> float:
+    """
+    Estima la magnitud al cuadrado de la coherencia cruzada en f₀ usando el
+    método de Welch con ventana Hann y solapamiento del 50%.
+
+    Se usa como función interna tanto por el camino SciPy como por el fallback
+    manual, garantizando estimaciones consistentes en ambos casos.
+
+    Parameters
+    ----------
+    x, y : np.ndarray
+        Series temporales de los dos canales.
+    f0 : float
+        Frecuencia objetivo en Hz.
+    fs : float
+        Tasa de muestreo en Hz.
+    nperseg : int
+        Longitud del segmento Welch.
+
+    Returns
+    -------
+    float
+        I²(f₀) ∈ [0, 1].
+    """
+    N = len(x)
+    nperseg_eff = min(nperseg, N)
+    if nperseg_eff <= 0:
+        return 0.0
+
+    step = max(nperseg_eff // 2, 1)
+    window = np.hanning(nperseg_eff).astype(float)
+    window_norm = np.sum(window ** 2)
+
+    Sxx = np.zeros(nperseg_eff // 2 + 1)
+    Syy = np.zeros(nperseg_eff // 2 + 1)
+    Sxy = np.zeros(nperseg_eff // 2 + 1, dtype=complex)
+    n_segs = 0
+
+    for start in range(0, N - nperseg_eff + 1, step):
+        seg_x = x[start:start + nperseg_eff] * window
+        seg_y = y[start:start + nperseg_eff] * window
+
+        X_seg = np.fft.rfft(seg_x)
+        Y_seg = np.fft.rfft(seg_y)
+
+        Sxx += (np.abs(X_seg) ** 2) / window_norm
+        Syy += (np.abs(Y_seg) ** 2) / window_norm
+        Sxy += (X_seg * np.conj(Y_seg)) / window_norm
+        n_segs += 1
+
+    if n_segs == 0:
+        return 0.0
+
+    Sxx /= n_segs
+    Syy /= n_segs
+    Sxy /= n_segs
+
+    freqs_seg = np.fft.rfftfreq(nperseg_eff, 1.0 / fs)
+    idx = np.argmin(np.abs(freqs_seg - f0))
+
+    denom = Sxx[idx] * Syy[idx]
+    return float(np.abs(Sxy[idx]) ** 2 / denom) if denom > 0 else 0.0
+
+
 def calcular_psi_noetica(
     x: np.ndarray,
     y: np.ndarray,
     f0: float = F0,
     fs: float = SAMPLE_RATE,
+    bandwidth_hz: float = 5.0,
     nperseg: int = None
 ) -> float:
     """
     Calcula la métrica Ψ Noética de coherencia cruzada.
 
-    Ψ = I(f₀) · A_eff²
+    Ψ = D_snr(f₀) · D_coh²(f₀)
 
     donde:
-        I(f₀)   = coherencia cruzada entre x e y en f₀  (∈ [0, 1])
-        A_eff²  = amplitud efectiva cuadrática media:
-                  A_eff² = I(f₀) · mean(P_xx(f₀), P_yy(f₀))
+        D_snr   = potencia de banda promediada entre canales x e y:
+                  D_snr = ½ · (mean_PSD_x + mean_PSD_y) en [f₀-bw, f₀+bw]
+        D_coh²  = coherencia cruzada al cuadrado (estimador Welch):
+                  D_coh² = |S_xy(f₀)|² / (S_xx(f₀) · S_yy(f₀))
 
-    Por tanto: Ψ = I²(f₀) · mean(P_xx(f₀), P_yy(f₀))
-
-    La doble ponderación por I(f₀) suprime el ruido incoherente incluso
-    cuando tiene potencia significativa en f₀.
+    La ponderación por D_coh² suprime el ruido incoherente incluso cuando
+    tiene potencia significativa en la banda de f₀. El uso de potencia de
+    banda (no de un único bin) hace la estimación más robusta.
 
     Parameters
     ----------
@@ -228,12 +306,13 @@ def calcular_psi_noetica(
     y : np.ndarray
         Canal 2 (señal + ruido nodo B, independiente).
     f0 : float
-        Frecuencia fundamental en Hz.
+        Frecuencia objetivo en Hz.
     fs : float
         Tasa de muestreo en Hz.
+    bandwidth_hz : float
+        Semi-ancho de banda para D_snr (Hz).
     nperseg : int, optional
-        Longitud del segmento para el estimador de Welch de coherencia.
-        Si es None se usa min(len(x), 256).
+        Longitud del segmento Welch. Si es None se usa min(len(x), 256).
 
     Returns
     -------
@@ -244,69 +323,26 @@ def calcular_psi_noetica(
     if nperseg is None:
         nperseg = min(N, 256)
 
+    # D_coh²: coherencia cruzada al cuadrado vía Welch
     if SCIPY_AVAILABLE:
         f_coh, Cxy = scipy_coherence(x, y, fs=fs, nperseg=nperseg)
-        idx = np.argmin(np.abs(f_coh - f0))
-        I_f0 = float(Cxy[idx])
+        idx_coh = np.argmin(np.abs(f_coh - f0))
+        D_coh2 = float(Cxy[idx_coh])
     else:
-        # Implementación manual de coherencia tipo Welch:
-        # estimación de espectros auto y cruzado promediados sobre segmentos.
-        nperseg_eff = min(nperseg, N)
-        if nperseg_eff <= 0:
-            I_f0 = 0.0
-        else:
-            step = max(nperseg_eff // 2, 1)  # 50% de solapamiento
-            window = np.hanning(nperseg_eff).astype(float)
-            window_norm = np.sum(window ** 2)
+        D_coh2 = _coherencia_welch(x, y, f0=f0, fs=fs, nperseg=nperseg)
 
-            Sxx = None
-            Syy = None
-            Sxy = None
-            n_segments = 0
+    # D_snr: potencia de banda promediada (no bin único)
+    freqs = np.fft.rfftfreq(N, 1.0 / fs)
+    psd_x = (np.abs(np.fft.rfft(x)) ** 2) / N
+    psd_y = (np.abs(np.fft.rfft(y)) ** 2) / N
+    mascara_banda = np.abs(freqs - f0) <= bandwidth_hz
+    if np.any(mascara_banda):
+        D_snr = 0.5 * (np.mean(psd_x[mascara_banda]) + np.mean(psd_y[mascara_banda]))
+    else:
+        idx_f0 = np.argmin(np.abs(freqs - f0))
+        D_snr = 0.5 * (psd_x[idx_f0] + psd_y[idx_f0])
 
-            for start in range(0, N - nperseg_eff + 1, step):
-                seg_x = x[start:start + nperseg_eff] * window
-                seg_y = y[start:start + nperseg_eff] * window
-
-                X_seg = np.fft.rfft(seg_x)
-                Y_seg = np.fft.rfft(seg_y)
-
-                Pxx_seg = (np.abs(X_seg) ** 2) / window_norm
-                Pyy_seg = (np.abs(Y_seg) ** 2) / window_norm
-                Pxy_seg = (X_seg * np.conj(Y_seg)) / window_norm
-
-                if Sxx is None:
-                    Sxx = Pxx_seg
-                    Syy = Pyy_seg
-                    Sxy = Pxy_seg
-                else:
-                    Sxx += Pxx_seg
-                    Syy += Pyy_seg
-                    Sxy += Pxy_seg
-
-                n_segments += 1
-
-            if not n_segments or Sxx is None or Syy is None or Sxy is None:
-                I_f0 = 0.0
-            else:
-                Sxx /= n_segments
-                Syy /= n_segments
-                Sxy /= n_segments
-
-                freqs = np.fft.rfftfreq(nperseg_eff, 1.0 / fs)
-                idx = np.argmin(np.abs(freqs - f0))
-
-                num = np.abs(Sxy[idx]) ** 2
-                denom = Sxx[idx] * Syy[idx]
-                I_f0 = float(num / denom) if denom > 0 else 0.0
-    # Amplitud efectiva cuadrática
-    freqs_full = np.fft.rfftfreq(N, 1.0 / fs)
-    idx_full = np.argmin(np.abs(freqs_full - f0))
-    Pxx_val = (np.abs(np.fft.rfft(x)[idx_full]) ** 2) / N
-    Pyy_val = (np.abs(np.fft.rfft(y)[idx_full]) ** 2) / N
-    A_eff_cuad = I_f0 * 0.5 * (Pxx_val + Pyy_val)
-
-    return I_f0 * A_eff_cuad  # = I²(f₀) · mean(Pxx, Pyy)
+    return D_snr * D_coh2
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -331,6 +367,11 @@ def calcular_curva_roc(
     """
     Calcula la curva ROC (Receiver Operating Characteristic).
 
+    Usa conteos acumulativos de TP/FP tras un único sort, resultando en
+    complejidad O(N log N) en lugar de O(N²) por rethresholding.
+    Los extremos (0, 0) y (1, 1) se añaden explícitamente antes de calcular
+    el AUC, garantizando cobertura total de la curva.
+
     Parameters
     ----------
     scores_senal : np.ndarray
@@ -345,39 +386,30 @@ def calcular_curva_roc(
     ResultadoROC
         Objeto con TPR, FPR, AUC y umbrales.
     """
+    n_pos = len(scores_senal)
+    n_neg = len(scores_ruido)
+
     todos = np.concatenate([scores_senal, scores_ruido])
     etiquetas = np.concatenate([
-        np.ones(len(scores_senal), dtype=int),
-        np.zeros(len(scores_ruido), dtype=int)
+        np.ones(n_pos, dtype=float),
+        np.zeros(n_neg, dtype=float)
     ])
 
-    # Ordenar por puntuación descendente
+    # Único sort descendente → O(N log N)
     orden = np.argsort(-todos)
-    todos_ord = todos[orden]
     etiquetas_ord = etiquetas[orden]
+    thresholds = todos[orden]
 
-    thresholds = np.unique(todos_ord)[::-1]
+    # Conteos acumulativos TP y FP → O(N)
+    tp_cum = np.cumsum(etiquetas_ord)
+    fp_cum = np.cumsum(1.0 - etiquetas_ord)
 
-    tpr_list, fpr_list = [], []
-    n_pos = np.sum(etiquetas == 1)
-    n_neg = np.sum(etiquetas == 0)
+    tpr_arr = tp_cum / n_pos if n_pos > 0 else np.zeros(len(tp_cum))
+    fpr_arr = fp_cum / n_neg if n_neg > 0 else np.zeros(len(fp_cum))
 
-    for thresh in thresholds:
-        prediccion = (todos >= thresh).astype(int)
-        tp = np.sum((prediccion == 1) & (etiquetas == 1))
-        fp = np.sum((prediccion == 1) & (etiquetas == 0))
-        tpr_list.append(tp / n_pos if n_pos > 0 else 0.0)
-        fpr_list.append(fp / n_neg if n_neg > 0 else 0.0)
-
-    tpr_arr = np.array(tpr_list)
-    fpr_arr = np.array(fpr_list)
-
-    # AUC mediante regla del trapecio, asegurando inclusión de (0,0) y (1,1)
-    orden_fpr = np.argsort(fpr_arr)
-    fpr_sorted = fpr_arr[orden_fpr]
-    tpr_sorted = tpr_arr[orden_fpr]
-    fpr_ext = np.concatenate(([0.0], fpr_sorted, [1.0]))
-    tpr_ext = np.concatenate(([0.0], tpr_sorted, [1.0]))
+    # AUC con extremos (0, 0) y (1, 1) para cobertura total
+    fpr_ext = np.concatenate(([0.0], fpr_arr, [1.0]))
+    tpr_ext = np.concatenate(([0.0], tpr_arr, [1.0]))
     auc = float(np.trapezoid(tpr_ext, fpr_ext)
                 if hasattr(np, 'trapezoid') else
                 np.trapz(tpr_ext, fpr_ext))
@@ -407,12 +439,41 @@ class ResultadoZona:
     # Puntuaciones sin señal (ruido puro)
     snr_scores_ruido: np.ndarray = field(default_factory=lambda: np.array([]))
     psi_scores_ruido: np.ndarray = field(default_factory=lambda: np.array([]))
+    # Ratio off-target (anti-bias): Ψ(f₀) / Ψ(f_control)
+    psi_ratio_senal: np.ndarray = field(default_factory=lambda: np.array([]))
+    psi_ratio_ruido: np.ndarray = field(default_factory=lambda: np.array([]))
     # Curvas ROC
     roc_snr: ResultadoROC = None
     roc_psi: ResultadoROC = None
-    # Separación estadística (en sigmas)
+    # Separación estadística (en sigmas, vía calcular_separacion_sigma)
     separacion_snr_sigma: float = 0.0
     separacion_psi_sigma: float = 0.0
+
+
+def calcular_separacion_sigma(con: np.ndarray, sin: np.ndarray) -> float:
+    """
+    Calcula la separación estadística entre dos distribuciones en unidades σ.
+
+    Usa la diferencia de medias normalizada por la desviación estándar
+    combinada (pooled sigma):
+
+        sep = (μ_con - μ_sin) / sqrt(½ · (σ²_con + σ²_sin))
+
+    Parameters
+    ----------
+    con : np.ndarray
+        Puntuaciones bajo H₁ (señal presente).
+    sin : np.ndarray
+        Puntuaciones bajo H₀ (solo ruido).
+
+    Returns
+    -------
+    float
+        Separación en sigmas. Valores ≥ 2 indican detección significativa.
+    """
+    mu_diff = np.mean(con) - np.mean(sin)
+    sigma_pool = np.sqrt(0.5 * (np.var(con) + np.var(sin)))
+    return float(mu_diff / sigma_pool) if sigma_pool > 0 else 0.0
 
 
 def ejecutar_zona(
@@ -422,6 +483,7 @@ def ejecutar_zona(
     duration: float = 1.0,
     fs: float = SAMPLE_RATE,
     f0: float = F0,
+    f_control: float = None,
     seed: int = 42
 ) -> ResultadoZona:
     """
@@ -431,7 +493,8 @@ def ejecutar_zona(
         • señal decayente + ruido coloreado (hipótesis H₁)
         • solo ruido coloreado             (hipótesis H₀)
 
-    y calcula SNR estándar y Ψ Noética para cada una.
+    y calcula SNR estándar, Ψ Noética en f₀ y el ratio anti-bias
+    Ψ(f₀)/Ψ(f_control) para cada una.
 
     Parameters
     ----------
@@ -447,19 +510,26 @@ def ejecutar_zona(
         Tasa de muestreo.
     f0 : float
         Frecuencia fundamental.
+    f_control : float, optional
+        Frecuencia de control off-target para el ratio anti-bias.
+        Por defecto f₀ + 30 Hz.
     seed : int
         Semilla para reproducibilidad.
 
     Returns
     -------
     ResultadoZona
-        Resultados completos incluyendo puntuaciones y curvas ROC.
+        Resultados completos incluyendo puntuaciones, ratios y curvas ROC.
     """
+    if f_control is None:
+        f_control = f0 + 30.0
+
     N = int(duration * fs)
     amplitud_senal = float(snr_objetivo)  # σ_ruido = 1 tras normalización
 
     snr_con, snr_sin = [], []
     psi_con, psi_sin = [], []
+    ratio_con, ratio_sin = [], []
 
     for i in range(n_trials):
         rng_a = np.random.default_rng(seed + i * 2)
@@ -476,14 +546,20 @@ def ejecutar_zona(
         # H₁: señal + ruido
         x1 = senal + ruido_a
         y1 = senal + ruido_b
+        psi_f0 = calcular_psi_noetica(x1, y1, f0=f0, fs=fs)
+        psi_fc = calcular_psi_noetica(x1, y1, f0=f_control, fs=fs)
         snr_con.append(calcular_snr_potencia(x1, f0=f0, fs=fs))
-        psi_con.append(calcular_psi_noetica(x1, y1, f0=f0, fs=fs))
+        psi_con.append(psi_f0)
+        ratio_con.append(psi_f0 / max(psi_fc, _EPSILON_RATIO))
 
         # H₀: solo ruido
         x0 = ruido_a
         y0 = ruido_b
+        psi_f0_h0 = calcular_psi_noetica(x0, y0, f0=f0, fs=fs)
+        psi_fc_h0 = calcular_psi_noetica(x0, y0, f0=f_control, fs=fs)
         snr_sin.append(calcular_snr_potencia(x0, f0=f0, fs=fs))
-        psi_sin.append(calcular_psi_noetica(x0, y0, f0=f0, fs=fs))
+        psi_sin.append(psi_f0_h0)
+        ratio_sin.append(psi_f0_h0 / max(psi_fc_h0, _EPSILON_RATIO))
 
     snr_con = np.array(snr_con)
     snr_sin = np.array(snr_sin)
@@ -494,15 +570,6 @@ def ejecutar_zona(
     roc_snr = calcular_curva_roc(snr_con, snr_sin, nombre='SNR Estándar')
     roc_psi = calcular_curva_roc(psi_con, psi_sin, nombre='Ψ Noética')
 
-    # Separación estadística (en sigmas)
-    def sigma_sep(con, sin):
-        mu_diff = np.mean(con) - np.mean(sin)
-        sigma_pool = np.sqrt(0.5 * (np.var(con) + np.var(sin)))
-        return float(mu_diff / sigma_pool) if sigma_pool > 0 else 0.0
-
-    sep_snr = sigma_sep(snr_con, snr_sin)
-    sep_psi = sigma_sep(psi_con, psi_sin)
-
     return ResultadoZona(
         nombre_zona=nombre_zona,
         snr_objetivo=snr_objetivo,
@@ -511,10 +578,12 @@ def ejecutar_zona(
         psi_scores_senal=psi_con,
         snr_scores_ruido=snr_sin,
         psi_scores_ruido=psi_sin,
+        psi_ratio_senal=np.array(ratio_con),
+        psi_ratio_ruido=np.array(ratio_sin),
         roc_snr=roc_snr,
         roc_psi=roc_psi,
-        separacion_snr_sigma=sep_snr,
-        separacion_psi_sigma=sep_psi
+        separacion_snr_sigma=calcular_separacion_sigma(snr_con, snr_sin),
+        separacion_psi_sigma=calcular_separacion_sigma(psi_con, psi_sin)
     )
 
 
@@ -523,31 +592,33 @@ def ejecutar_coliseo(
     duration: float = 0.2,
     fs: float = SAMPLE_RATE,
     f0: float = F0,
+    f_control: float = None,
     seed: int = 42
 ) -> Dict[str, ResultadoZona]:
     """
     Ejecuta el Experimento del Coliseo Estadístico completo.
 
-    Evalúa SNR estándar vs Ψ Noética en las tres zonas.  El uso de segmentos
-    cortos (duration=0.2 s por defecto) revela las diferencias estadísticas
-    entre ambas métricas porque limita la resolución espectral disponible,
-    simulando condiciones reales de detección marginal:
+    Evalúa SNR estándar vs Ψ Noética en las tres zonas definidas por los
+    umbrales del módulo (UMBRAL_CONFORT, UMBRAL_PENUMBRA_HI, UMBRAL_NOETICO).
+    El uso de segmentos cortos (duration=0.2 s por defecto) revela las
+    diferencias estadísticas entre ambas métricas:
 
-        • Confort  (SNR = 15): ambas métricas empatan (AUC ≈ 1).
-        • Penumbra (SNR =  3): Ψ supera claramente a SNR estándar.
-        • Noética  (SNR = 0.5): SNR colapsa (< 2σ); Ψ mantiene ≥ 2σ.
+        • Confort  (SNR = UMBRAL_CONFORT × 1.5): ambas métricas empatan.
+        • Penumbra (SNR = UMBRAL_PENUMBRA_HI):  Ψ supera claramente a SNR.
+        • Noética  (SNR = UMBRAL_NOETICO / 2): SNR colapsa; Ψ mantiene AUC mayor.
 
     Parameters
     ----------
     n_trials : int
         Realizaciones Monte-Carlo por zona y por hipótesis.
     duration : float
-        Duración de cada realización en segundos.  0.2 s (819 muestras a
-        4096 Hz) revela la degradación diferencial entre SNR y Ψ.
+        Duración de cada realización en segundos.
     fs : float
         Tasa de muestreo.
     f0 : float
         Frecuencia fundamental.
+    f_control : float, optional
+        Frecuencia de control off-target. Por defecto f₀ + 30 Hz.
     seed : int
         Semilla base para reproducibilidad.
 
@@ -556,10 +627,11 @@ def ejecutar_coliseo(
     Dict[str, ResultadoZona]
         Diccionario con resultados de cada zona keyed por nombre.
     """
+    # Zonas definidas a partir de los umbrales del módulo
     zonas = [
-        (15.0,  'Confort',  seed),
-        (3.0,   'Penumbra', seed + 1000),
-        (0.5,   'Noetica',  seed + 2000),
+        (UMBRAL_CONFORT * 1.5,  'Confort',  seed),
+        (UMBRAL_PENUMBRA_HI,    'Penumbra', seed + 1000),
+        (UMBRAL_NOETICO / 2.0,  'Noetica',  seed + 2000),
     ]
 
     resultados = {}
@@ -571,6 +643,7 @@ def ejecutar_coliseo(
             duration=duration,
             fs=fs,
             f0=f0,
+            f_control=f_control,
             seed=semilla
         )
 
@@ -580,6 +653,11 @@ def ejecutar_coliseo(
 def tabla_comparativa(resultados: Dict[str, ResultadoZona]) -> str:
     """
     Genera una tabla de comparación textual entre SNR y Ψ en las tres zonas.
+
+    El ganador se determina por AUC (área bajo la curva ROC), que es la
+    métrica principal de discriminabilidad. La separación en sigmas se
+    muestra como información adicional calculada mediante
+    `calcular_separacion_sigma`.
 
     Parameters
     ----------
@@ -605,10 +683,10 @@ def tabla_comparativa(resultados: Dict[str, ResultadoZona]) -> str:
         auc_psi = res.roc_psi.auc if res.roc_psi else 0.0
         sep_snr = res.separacion_snr_sigma
         sep_psi = res.separacion_psi_sigma
-        # Determinar ganador por separación estadística (más discriminativo que AUC)
-        if sep_psi > sep_snr * 1.1 or (sep_psi >= 2.0 and sep_snr < 2.0):
+        # Ganador determinado por AUC (métrica principal)
+        if auc_psi > auc_snr + 0.01:
             ganador = 'Ψ'
-        elif sep_snr > sep_psi * 1.1 or (sep_snr >= 2.0 and sep_psi < 2.0):
+        elif auc_snr > auc_psi + 0.01:
             ganador = 'SNR'
         else:
             ganador = 'Empate'
