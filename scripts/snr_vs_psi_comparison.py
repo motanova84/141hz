@@ -372,11 +372,15 @@ def calcular_curva_roc(
     tpr_arr = np.array(tpr_list)
     fpr_arr = np.array(fpr_list)
 
-    # AUC mediante regla del trapecio
+    # AUC mediante regla del trapecio, asegurando inclusión de (0,0) y (1,1)
     orden_fpr = np.argsort(fpr_arr)
-    auc = float(np.trapezoid(tpr_arr[orden_fpr], fpr_arr[orden_fpr])
+    fpr_sorted = fpr_arr[orden_fpr]
+    tpr_sorted = tpr_arr[orden_fpr]
+    fpr_ext = np.concatenate(([0.0], fpr_sorted, [1.0]))
+    tpr_ext = np.concatenate(([0.0], tpr_sorted, [1.0]))
+    auc = float(np.trapezoid(tpr_ext, fpr_ext)
                 if hasattr(np, 'trapezoid') else
-                np.trapz(tpr_arr[orden_fpr], fpr_arr[orden_fpr]))
+                np.trapz(tpr_ext, fpr_ext))
 
     return ResultadoROC(
         nombre=nombre,
