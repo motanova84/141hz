@@ -223,12 +223,12 @@ def compute_A_eff_squared(
     float
         A_eff² ≥ 0.
     """
-    a = np.asarray(a_t, dtype=float)
+    a = np.asarray(a_t)
     if T <= 0:
         raise ValueError(f"Duration T must be positive, got {T}")
     if a.size == 0:
         raise ValueError("Time series a_t must not be empty")
-    return float(np.mean(a ** 2))
+    return float(np.mean(np.abs(a) ** 2))
 
 
 def _compute_spectral_metrics(
