@@ -70,7 +70,7 @@ class TestGenerarSegmentoNoesis:
         esperado = np.sin(2.0 * np.pi * self.f0 * t)
         np.testing.assert_allclose(canal2, esperado, atol=1e-12)
 
-    def test_snr_alto_ruido_pequenio(self):
+    def test_snr_alto_ruido_bajo(self):
         """Con SNR alto, el ruido en canal1 debe ser mucho menor que la señal.
 
         Valor teórico: std(sin) / std(noise) ≈ (1/√2) × SNR ≈ 14.1 para SNR=20.
@@ -347,7 +347,7 @@ if __name__ == "__main__":
     ts.setup_method()
     run_test("Longitud correcta", ts.test_longitud_correcta)
     run_test("canal2 es señal limpia", ts.test_canal2_es_senal_limpia)
-    run_test("SNR alto → ruido pequeño", ts.test_snr_alto_ruido_pequenio)
+    run_test("SNR alto → ruido pequeño", ts.test_snr_alto_ruido_bajo)
     run_test("SNR bajo → ruido domina", ts.test_snr_bajo_ruido_domina)
     run_test("Reproducibilidad de semilla", ts.test_reproducibilidad_semilla)
 
