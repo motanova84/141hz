@@ -46,14 +46,9 @@ License: MIT
 """
 
 import numpy as np
-from typing import Tuple, List, Dict, Callable, Optional
+from typing import Tuple, Dict, Callable, Optional
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
-from scipy.integrate import quad
-from scipy.special import zeta
-import warnings
-
-
 @dataclass
 class KzParameters:
     """Parameters for the K_z operator analysis."""
