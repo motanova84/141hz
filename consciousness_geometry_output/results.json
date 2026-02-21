@@ -1,0 +1,23 @@
+{
+  "initial_state": {
+    "c_infinity": 0.46547267653423585,
+    "avg_distance": 1.7008019311068636,
+    "lambda": 0.6278382706239815
+  },
+  "final_state": {
+    "c_infinity": 0.4654726765342358,
+    "avg_distance": 1.7008019311068636,
+    "lambda": 0.6278382706239815
+  },
+  "changes": {
+    "c_infinity_pct": -1.1925759347374912e-14,
+    "distance_pct": 0.0,
+    "lambda_pct": 0.0
+  },
+  "consensus": {
+    "reached": false,
+    "psi_ratio": -2.281161053109185,
+    "lambda": 0.6278382706239815
+  },
+  "nft": null
+}

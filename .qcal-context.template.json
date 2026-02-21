@@ -1,0 +1,97 @@
+{
+  "_comment": "QCAL-Context Template for new repositories",
+  "_instructions": "Copy this file to your repository root as .qcal-context.json and customize the values",
+  
+  "node_name": "your-repo-qcal-nodo",
+  "repository": "username/your-repo",
+  "type": "module",
+  "description": "Brief description of your repository's role in the QCAL ecosystem",
+  
+  "dependencies_noetic": [
+    "141 Hz"
+  ],
+  
+  "core_frequency": 141.7001,
+  "core_frequency_units": "Hz",
+  "core_frequency_uncertainty": 0.0016,
+  
+  "constants_source": "path/to/your/constants.py",
+  "alternative_constants": [
+    "path/to/alternative/constants.py"
+  ],
+  
+  "logic_bridge": {
+    "description": "Paths to key logic/algorithm files",
+    "main_module": "path/to/main_module.py",
+    "key_class": "path/to/file.py:ClassName"
+  },
+  
+  "key_modules": {
+    "module_name": "path/to/module.py",
+    "another_module": "path/to/another.py"
+  },
+  
+  "fundamental_constants": {
+    "CONSTANT_NAME": "value",
+    "ANOTHER_CONSTANT": "value"
+  },
+  
+  "mathematical_frameworks": [
+    "Framework 1",
+    "Framework 2"
+  ],
+  
+  "experimental_validations": {
+    "validation_name": {
+      "description": "What was validated",
+      "significance": "Statistical significance or result",
+      "method": "Methodology used"
+    }
+  },
+  
+  "beacons": {
+    "description": "Optional beacon files for discovery",
+    "main_beacon": ".qcal_beacon"
+  },
+  
+  "status": "Ψ=1.0",
+  "coherence": "C=244.36",
+  "ontological_level": "II",
+  "philosophy": "Mathematical Realism",
+  "validation_type": "Recognition",
+  
+  "author": "Your Name",
+  "institution": "Your Institution",
+  "email": "your.email@example.com",
+  "orcid": "https://orcid.org/YOUR-ORCID",
+  
+  "license": "Your License (e.g., MIT, Apache 2.0)",
+  "zenodo_main": "https://doi.org/10.5281/zenodo.XXXXXXX",
+  
+  "cross_repository_integration": {
+    "enabled": true,
+    "harvest_script": "qcal-harvest.py",
+    "global_context": "GLOBAL_QCAL_CONTEXT.md",
+    "integration_strategy": "QCAL-Sync",
+    "description": "This repository's role in the QCAL ecosystem and how it relates to other repositories"
+  },
+  
+  "ai_instructions": {
+    "primary": ".ai-instructions.md",
+    "context_aware": true,
+    "cross_repo_references": true,
+    "usage": "AI assistants should read this file to understand the repository's role in the QCAL ecosystem"
+  },
+  
+  "last_update": "YYYY-MM-DD",
+  "version": "1.0.0",
+  
+  "_setup_instructions": [
+    "1. Replace all placeholder values with your actual values",
+    "2. Remove the _comment, _instructions, and _setup_instructions fields",
+    "3. Import constants from 141hz repository: from qcal.constants import F0_HZ, KAPPA_PI",
+    "4. Create a .qcal_beacon file (optional) with basic frequency info",
+    "5. Run qcal-harvest.py from parent directory to generate global context",
+    "6. Update .ai-instructions.md to reference this context file"
+  ]
+}
