@@ -10,28 +10,31 @@ Autor: José Manuel Mota Burruezo (JMMB Ψ✧)
 Fecha: Febrero 2026
 """
 
-import sys
 import os
+import importlib.util
 import unittest
 import numpy as np
 
-# Añadir el directorio scripts al path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
+# Cargar explícitamente el módulo snr_vs_psi_comparison desde scripts sin modificar sys.path
+_scripts_dir = os.path.join(os.path.dirname(__file__), '..', 'scripts')
+_module_path = os.path.join(_scripts_dir, 'snr_vs_psi_comparison.py')
+_spec = importlib.util.spec_from_file_location('snr_vs_psi_comparison', _module_path)
+snr_vs_psi_comparison = importlib.util.module_from_spec(_spec)
+assert _spec.loader is not None
+_spec.loader.exec_module(snr_vs_psi_comparison)
 
-from snr_vs_psi_comparison import (
-    F0,
-    SAMPLE_RATE,
-    generar_senal_decayente,
-    generar_ruido_coloreado,
-    calcular_snr_potencia,
-    calcular_psi_noetica,
-    calcular_curva_roc,
-    ejecutar_zona,
-    ejecutar_coliseo,
-    tabla_comparativa,
-    ResultadoROC,
-    ResultadoZona,
-)
+F0 = snr_vs_psi_comparison.F0
+SAMPLE_RATE = snr_vs_psi_comparison.SAMPLE_RATE
+generar_senal_decayente = snr_vs_psi_comparison.generar_senal_decayente
+generar_ruido_coloreado = snr_vs_psi_comparison.generar_ruido_coloreado
+calcular_snr_potencia = snr_vs_psi_comparison.calcular_snr_potencia
+calcular_psi_noetica = snr_vs_psi_comparison.calcular_psi_noetica
+calcular_curva_roc = snr_vs_psi_comparison.calcular_curva_roc
+ejecutar_zona = snr_vs_psi_comparison.ejecutar_zona
+ejecutar_coliseo = snr_vs_psi_comparison.ejecutar_coliseo
+tabla_comparativa = snr_vs_psi_comparison.tabla_comparativa
+ResultadoROC = snr_vs_psi_comparison.ResultadoROC
+ResultadoZona = snr_vs_psi_comparison.ResultadoZona
 
 
 class TestConstantesYSenal(unittest.TestCase):
