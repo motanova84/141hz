@@ -89,7 +89,8 @@ def fetch_strain(
     Returns
     -------
     np.ndarray
-        Array de strain (unidades de h / Hz^{1/2}).
+        Array de muestras de strain en el dominio del tiempo
+        (magnitud adimensional).
     """
     duration = t_end - t_start
     if GWPY_AVAILABLE:
