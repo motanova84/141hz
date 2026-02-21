@@ -357,7 +357,10 @@ def analyze_gwtc_event(
     # Canal 2: segmento desplazado por 1 s para crear referencia realista
     shift = int(fs)
     if len(strain) > shift and len(strain) >= 4:
-        canal2 = np.roll(strain, shift)
+        # Desplazamiento no circular: rellenar el inicio con ceros para
+        # evitar artefactos de wrap-around que introducen coherencia artificial.
+        canal2 = np.zeros_like(strain)
+        canal2[shift:] = strain[:-shift]
     else:
         rng = np.random.default_rng(abs(hash(event_name)) % 2**32)
         noise_level = float(np.std(strain)) if len(strain) >= 2 else 1e-21
