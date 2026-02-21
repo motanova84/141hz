@@ -218,7 +218,9 @@ class KzKernel:
         float
             Estimated kernel magnitude bound
         """
-        if n <= m:
+        # Kernel is zero on strictly lower-triangular blocks (n < m),
+        # but not on the diagonal (n == m), where y, t ∈ J_m can have y > t.
+        if n < m:
             return 0.0
         
         L = self.params.L
