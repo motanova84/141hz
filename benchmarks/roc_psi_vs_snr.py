@@ -409,7 +409,7 @@ def print_report(result: dict):
     print("  ─────────────────────────────────")
     print(f"  D_SNR  (potencia)  {result['auc_snr']:.4f}")
     print(f"  D_Ψ    (Ψ-metric)  {result['auc_psi']:.4f}")
-    print(f"  D_Coh  (coherencia){result['auc_coh']:.4f}")
+    print(f"  D_Coh  (coherencia) {result['auc_coh']:.4f}")
     print()
     winner = max(
         [("D_SNR", result["auc_snr"]),
