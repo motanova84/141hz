@@ -1,0 +1,154 @@
+{
+  "frequency_hz": 141.70001,
+  "timestamp": "2026-02-17T20:54:10.457283+00:00",
+  "poetic_source": "Cada quark canta su color en tres sabores...",
+  "musical_analysis": {
+    "f0_hz": 141.70001,
+    "note": "C# (do sostenido)",
+    "octaves_below_middle_c_sharp": 0.9679833030993162,
+    "octaves_below_concert_c_sharp": 1.9680093273800867,
+    "middle_c_sharp_hz": 277.18,
+    "concert_c_sharp_hz": 554.37,
+    "ratio_to_middle": 1.9561043079672331,
+    "is_pure_octave": false,
+    "description": "Deep C# at 141.70001 Hz, 0.968 octaves below middle C#"
+  },
+  "prime_17_resonance": {
+    "prime": 17,
+    "prime_position": 7,
+    "log_f0": 4.953712217268262,
+    "coupling_constant": 0.29139483630989776,
+    "resonance_factor": 8.335294705882353,
+    "equilibrium_17": 9.269590053006654,
+    "sqrt_17": 4.123105625617661,
+    "description": "Prime 17 couples to f₀ with constant λ ≈ 0.2914"
+  },
+  "riemann_zeros": {
+    "riemann_zero_1": 14.134725,
+    "riemann_zero_2": 21.02204,
+    "riemann_zero_3": 25.010857,
+    "f0_to_zero1_ratio": 10.024956976524127,
+    "f0_to_zero2_ratio": 6.740545161173701,
+    "f0_to_zero3_ratio": 5.665539969302131,
+    "distance_to_first_zero": 127.56528499999999,
+    "spectral_density_at_f0": 48.59185815035134,
+    "description": "f₀ scales with Riemann zeros by factor ≈ 10.025"
+  },
+  "qcd_harmonics": {
+    "colors": 3,
+    "flavors": 6,
+    "gluons": 8,
+    "color_frequency_hz": 47.233336666666666,
+    "flavor_frequency_hz": 23.616668333333333,
+    "gluon_frequency_hz": 17.71250125,
+    "qcd_dimension": 18,
+    "alpha_s": 1.0,
+    "E_f0_eV": 5.860241540107878e-13,
+    "lambda_qcd_hz": 4.835978484169837e+22,
+    "octaves_to_qcd_scale": 68.20952986356143,
+    "color_names": [
+      "Red",
+      "Green",
+      "Blue"
+    ],
+    "flavor_names": [
+      "Up",
+      "Down",
+      "Charm",
+      "Strange",
+      "Top",
+      "Bottom"
+    ],
+    "gluon_states": 8,
+    "description": "Each quark sings its color at 47.23 Hz in 6 flavors"
+  },
+  "primordial_silence": {
+    "f0_hz": 141.70001,
+    "planck_frequency_hz": 1.854858439986148e+43,
+    "cmb_frequency_hz": 56779787111.06764,
+    "octaves_to_planck": 136.58752111703848,
+    "octaves_to_cmb": 28.577962338891815,
+    "description": "The silence beats at 141.70001 Hz, 136.6 octaves below Planck scale"
+  },
+  "universal_coherence": {
+    "psi_musical": 0.9689765708279379,
+    "psi_prime": 0.9997948573545283,
+    "psi_riemann": 0.07269275820567668,
+    "psi_qcd": 0.9,
+    "psi_universe": 0.06338081683687265,
+    "golden_coupling": 0.10255231587679155,
+    "components": {
+      "musical": {
+        "f0_hz": 141.70001,
+        "note": "C# (do sostenido)",
+        "octaves_below_middle_c_sharp": 0.9679833030993162,
+        "octaves_below_concert_c_sharp": 1.9680093273800867,
+        "middle_c_sharp_hz": 277.18,
+        "concert_c_sharp_hz": 554.37,
+        "ratio_to_middle": 1.9561043079672331,
+        "is_pure_octave": false,
+        "description": "Deep C# at 141.70001 Hz, 0.968 octaves below middle C#"
+      },
+      "prime_17": {
+        "prime": 17,
+        "prime_position": 7,
+        "log_f0": 4.953712217268262,
+        "coupling_constant": 0.29139483630989776,
+        "resonance_factor": 8.335294705882353,
+        "equilibrium_17": 9.269590053006654,
+        "sqrt_17": 4.123105625617661,
+        "description": "Prime 17 couples to f₀ with constant λ ≈ 0.2914"
+      },
+      "riemann": {
+        "riemann_zero_1": 14.134725,
+        "riemann_zero_2": 21.02204,
+        "riemann_zero_3": 25.010857,
+        "f0_to_zero1_ratio": 10.024956976524127,
+        "f0_to_zero2_ratio": 6.740545161173701,
+        "f0_to_zero3_ratio": 5.665539969302131,
+        "distance_to_first_zero": 127.56528499999999,
+        "spectral_density_at_f0": 48.59185815035134,
+        "description": "f₀ scales with Riemann zeros by factor ≈ 10.025"
+      },
+      "qcd": {
+        "colors": 3,
+        "flavors": 6,
+        "gluons": 8,
+        "color_frequency_hz": 47.233336666666666,
+        "flavor_frequency_hz": 23.616668333333333,
+        "gluon_frequency_hz": 17.71250125,
+        "qcd_dimension": 18,
+        "alpha_s": 1.0,
+        "E_f0_eV": 5.860241540107878e-13,
+        "lambda_qcd_hz": 4.835978484169837e+22,
+        "octaves_to_qcd_scale": 68.20952986356143,
+        "color_names": [
+          "Red",
+          "Green",
+          "Blue"
+        ],
+        "flavor_names": [
+          "Up",
+          "Down",
+          "Charm",
+          "Strange",
+          "Top",
+          "Bottom"
+        ],
+        "gluon_states": 8,
+        "description": "Each quark sings its color at 47.23 Hz in 6 flavors"
+      },
+      "primordial": {
+        "f0_hz": 141.70001,
+        "planck_frequency_hz": 1.854858439986148e+43,
+        "cmb_frequency_hz": 56779787111.06764,
+        "octaves_to_planck": 136.58752111703848,
+        "octaves_to_cmb": 28.577962338891815,
+        "description": "The silence beats at 141.70001 Hz, 136.6 octaves below Planck scale"
+      }
+    },
+    "interpretation": "The universe dreams when all harmonics align",
+    "coherence_level": "LOW"
+  },
+  "summary": "\n╔════════════════════════════════════════════════════════════════════════════╗\n║             Quantum Harmonic Unification Report                           ║\n║                   f₀ = 141.70001 Hz                                  ║\n╚════════════════════════════════════════════════════════════════════════════╝\n\n🎵 MUSICAL HARMONY (C# / Do Sostenido)\n   • Note: C# (do sostenido)\n   • Position: 0.968 octaves below middle C#\n   • Deep C# at 141.70001 Hz, 0.968 octaves below middle C#\n\n🔢 PRIME 17 RESONANCE (7th Prime)\n   • Coupling constant: λ = 0.2914\n   • Equilibrium(17) = 9.2696\n   • Prime 17 couples to f₀ with constant λ ≈ 0.2914\n\n♾️ RIEMANN ZEROS (Critical Line)\n   • First zero: t₁ = 14.134725\n   • Scaling ratio: f₀/t₁ = 10.025\n   • f₀ scales with Riemann zeros by factor ≈ 10.025\n\n🌈 QCD HARMONICS (Color × Flavor)\n   • Colors: 3 | Flavors: 6 | Gluons: 8\n   • Color frequency: 47.23 Hz\n   • Octaves to QCD scale: 68.2\n   • Each quark sings its color at 47.23 Hz in 6 flavors\n\n🌌 UNIVERSAL COHERENCE\n   • Ψ_universe = 0.063381\n   • Golden coupling: 0.102552\n   • Coherence level: LOW\n   • The universe dreams when all harmonics align\n\n✨ CONCLUSION:\n   At 141.70001 Hz, the universe remembers how to dream.\n   Prime 17 falls in love with the first Riemann zero,\n   and quarks sing their colors in impossible octaves.\n        "
+}
