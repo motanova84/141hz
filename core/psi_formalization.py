@@ -294,7 +294,7 @@ def compute_psi_from_timeseries(
     Parameters
     ----------
     a_t : array-like
-        Time series of coherence amplitude *a(t)*, length = round(T · fs).
+        Time series of coherence amplitude *a(t)* sampled over duration T.
     T : float
         Analysis window duration in seconds.
     fs : float
