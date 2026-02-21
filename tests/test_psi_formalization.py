@@ -11,15 +11,9 @@ Validates the rigorous mathematical formalization of Ψ including:
 """
 
 import math
-import sys
-import os
 
 import numpy as np
 import pytest
-
-# Ensure repository root is on the path so the core package is importable
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
 import core.psi_formalization as psi_mod
 from core.psi_formalization import (
     QCAL_BASE_FREQUENCY,
