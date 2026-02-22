@@ -174,9 +174,10 @@ class TestKzKernel:
         assert decay > 0
         assert np.isfinite(decay)
         
-        # For n = m, should be zero
+        # For n = m (diagonal), should have non-zero estimate
         decay = self.kernel.estimate_decay(3, 3)
-        assert decay == 0.0
+        assert decay > 0  # Changed: diagonal blocks have interactions
+        assert np.isfinite(decay)
         
         # For n < m, should be zero
         decay = self.kernel.estimate_decay(2, 5)
@@ -332,15 +333,17 @@ class TestNonCompactnessProof:
         # All entries should be non-negative
         assert np.all(decay_matrix >= 0)
         
-        # Diagonal should be zero (n = m case)
+        # Diagonal should be non-zero (n = m case has interactions within block)
         diag = np.diag(decay_matrix)
-        assert np.allclose(diag, 0.0)
+        assert np.all(diag > 0)  # Changed: diagonal blocks have non-zero estimates
         
-        # Upper triangle (n < m) should be zero
+        # Strict lower triangle (n < m) should be zero
         n_blocks = len(self.proof.partition.block_indices)
         for i in range(n_blocks):
             for j in range(i + 1, n_blocks):
-                # i < j means n_i < n_j
+                # i < j means n_i < n_j (block_indices are sorted)
+                # So decay_matrix[j, i] corresponds to n=n_j, m=n_i with n > m
+                # and decay_matrix[i, j] corresponds to n=n_i, m=n_j with n < m (should be 0)
                 assert decay_matrix[i, j] == 0.0
     
     def test_prove_noncompactness(self):
