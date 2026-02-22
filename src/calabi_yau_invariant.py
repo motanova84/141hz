@@ -317,7 +317,7 @@ class LaplacianSpectrum:
             # Default: use the two primary eigenvalues from the quintic CY
             self.eigenvalues = [MU_1, MU_2]
 
-    def get_eigenvalue_ratio(self, i: int = 1, j: int = 0) -> mp.mpf:
+    def get_eigenvalue_ratio(self, i: int = 1, j: int = 0):
         """
         Compute the ratio of eigenvalue i to eigenvalue j.
 
@@ -326,7 +326,7 @@ class LaplacianSpectrum:
             j: Index of denominator eigenvalue (0-indexed)
 
         Returns:
-            Ratio μ_i / μ_j
+            Ratio μ_i / μ_j (as mpmath.mpf if available, else float)
         """
         if len(self.eigenvalues) <= max(i, j):
             raise ValueError(
