@@ -222,7 +222,11 @@ def blanquear_datos(
 
     # Interpolar ASD a la rejilla FFT
     asd_interp = np.interp(freqs_fft, freqs_psd, asd)
-    asd_interp = np.maximum(asd_interp, 1e-30 * np.max(asd_interp))
+    # Aplicar un suelo combinado: relativo (1e-30 * max) y absoluto (1e-30)
+    _eps_asd = 1e-30
+    _rel_floor_asd = _eps_asd * np.max(asd_interp)
+    _asd_floor = _rel_floor_asd if _rel_floor_asd > _eps_asd else _eps_asd
+    asd_interp = np.maximum(asd_interp, _asd_floor)
 
     # Blanquear
     strain_white_fft = strain_fft / asd_interp
