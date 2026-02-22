@@ -183,5 +183,45 @@ class TestEventLists:
         assert len(events) > 0
 
 
+class TestSimulationMode:
+    """Tests for explicit simulation/real-data mode in SpectralFilterAnalyzer."""
+
+    def test_default_is_simulation(self):
+        """Default analyzer must run in simulation mode."""
+        analyzer = SpectralFilterAnalyzer()
+        assert analyzer.simulation_mode is True
+
+    def test_simulation_mode_in_config(self):
+        """simulation_mode must be recorded in results config."""
+        analyzer = SpectralFilterAnalyzer(simulation_mode=True)
+        assert analyzer.results["config"]["simulation_mode"] is True
+
+    def test_real_data_mode_in_config(self):
+        """simulation_mode=False must be recorded in results config."""
+        analyzer = SpectralFilterAnalyzer(simulation_mode=False)
+        assert analyzer.results["config"]["simulation_mode"] is False
+
+    def test_analyze_event_uses_simulation_by_default(self):
+        """analyze_event must use simulation when simulation_mode=True."""
+        analyzer = SpectralFilterAnalyzer(simulation_mode=True)
+        result = analyzer.analyze_event("GW150914", detector="H1")
+        # Should succeed and return valid result
+        assert "snr" in result
+        assert isinstance(result["detected"], bool)
+
+    def test_simulation_mode_false_with_no_gwpy(self):
+        """With simulation_mode=False and no gwpy, falls back to simulation."""
+        import gw_analysis as gw_mod
+        original = gw_mod.GWPY_AVAILABLE
+        try:
+            gw_mod.GWPY_AVAILABLE = False
+            analyzer = SpectralFilterAnalyzer(simulation_mode=False)
+            # analyze_event should still work via fallback
+            result = analyzer.analyze_event("GW150914", detector="H1")
+            assert "snr" in result
+        finally:
+            gw_mod.GWPY_AVAILABLE = original
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
