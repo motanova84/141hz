@@ -291,6 +291,21 @@ class TestPsiMetric(unittest.TestCase):
 class TestCoherenceScanPipeline(unittest.TestCase):
     """Verifica run_coherence_scan con datos simulados."""
 
+    @classmethod
+    def setUpClass(cls):
+        """Forzar modo offline/simulado para evitar descargas reales en tests."""
+        cls._orig_gwpy_available = getattr(cs, "GWPY_AVAILABLE", None)
+        cs.GWPY_AVAILABLE = False
+
+    @classmethod
+    def tearDownClass(cls):
+        """Restaurar el estado original de GWPY_AVAILABLE tras los tests."""
+        if cls._orig_gwpy_available is None:
+            # El atributo no existía originalmente
+            if hasattr(cs, "GWPY_AVAILABLE"):
+                delattr(cs, "GWPY_AVAILABLE")
+        else:
+            cs.GWPY_AVAILABLE = cls._orig_gwpy_available
     def test_run_returns_dict(self):
         """run_coherence_scan debe devolver un diccionario."""
         results = cs.run_coherence_scan(verbose=False)
