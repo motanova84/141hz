@@ -8,6 +8,8 @@
   - Análisis ASD (Amplitude Spectral Density) en 141.7 Hz para GW150914
 - `analizar_at2020afhd.py`
   - 
+- `analizar_corpus_tokenizado.py`
+  - Analizador de Corpus Tokenizado QCAL ∞³
 - `analizar_cy_kpi_universal.py`
   - Análisis del invariante espectral universal k_Π en variedades Calabi-Yau
 - `analizar_eeg_real.py`
@@ -328,8 +330,6 @@
   - Test for validate_scipy_snr_141hz.py
 - `test_validate_vacuum_energy_equation.py`
   - Test Suite for Vacuum Energy Equation Validation
-- `test_vercel_config.py`
-  - Test para validar la configuración de Vercel
 - `test_verificacion_convergencia.py`
   - Tests para Verificación de Convergencia y Constantes Fundamentales
 - `test_verificacion_espectral_primos_rigurosa.py`
@@ -350,4 +350,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-13 19:30:41 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-15 14:28:58 UTC*

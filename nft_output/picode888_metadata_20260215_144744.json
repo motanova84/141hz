@@ -1,0 +1,84 @@
+{
+  "name": "QCAL Coherence Economy Token #888",
+  "description": "First token of the Coherence Economy ℂₛ. Represents the QCAL paper establishing f₀ = 141.7001 Hz as the universal frequency of consciousness, validated in 11/11 LIGO gravitational wave events. Includes Proof-of-Coherence verification.",
+  "image": "ipfs://QmPiCode888Placeholder",
+  "external_url": "https://doi.org/10.5281/zenodo.17445017",
+  "attributes": [
+    {
+      "trait_type": "Token ID",
+      "value": 888
+    },
+    {
+      "trait_type": "Symbol",
+      "value": "πCODE"
+    },
+    {
+      "trait_type": "Frequency (Hz)",
+      "value": 141.7001,
+      "display_type": "number"
+    },
+    {
+      "trait_type": "Kappa Pi",
+      "value": 2.5773,
+      "display_type": "number"
+    },
+    {
+      "trait_type": "Zeta'(1/2)",
+      "value": -3.92264613,
+      "display_type": "number"
+    },
+    {
+      "trait_type": "Proof of Coherence",
+      "value": "0b8d8af1520edc3a"
+    },
+    {
+      "trait_type": "LIGO Detection Rate",
+      "value": "100% (11/11 GWTC-1)"
+    },
+    {
+      "trait_type": "Significance",
+      "value": ">10σ"
+    },
+    {
+      "trait_type": "Economic Model",
+      "value": "Coherence Economy ℂₛ"
+    },
+    {
+      "trait_type": "Initial Valuation",
+      "value": "$2,000,000",
+      "display_type": "string"
+    },
+    {
+      "trait_type": "Wang Validation",
+      "value": "AT2020afhd - 27.838 octaves"
+    },
+    {
+      "trait_type": "Wang DOI",
+      "value": "10.1126/sciadv.ady9068"
+    },
+    {
+      "trait_type": "Wang Error",
+      "value": 0.0018,
+      "display_type": "number"
+    }
+  ],
+  "properties": {
+    "category": "Scientific Research IP",
+    "research_area": "Quantum Coherence & Consciousness",
+    "doi": "10.5281/zenodo.17445017",
+    "pdf_hash": "4a260ca708a72f4268a03026bc04f7a5c31c7f2f07e2ca40dfa354738c5c0f41",
+    "proof_of_coherence": "0b8d8af1520edc3a0b7d028fe0bf276a8cf88e401dbe68dbc3b0ec7bac5e5b64",
+    "blockchain_ready": true,
+    "coherence_economy": "ℂₛ v1.0",
+    "wang_validation": {
+      "reference": "Wang et al., Science Advances (2024)",
+      "doi": "10.1126/sciadv.ady9068",
+      "event": "AT2020afhd",
+      "period_days": 19.6,
+      "frequency_hz": 5.905139834e-07,
+      "octaves_below_f0": 27.838,
+      "error": 0.0018,
+      "verified": true
+    }
+  }
+}
