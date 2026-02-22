@@ -53,7 +53,6 @@ BANDPASS_HIGH = 160.0  # Hz
 # ---------------------------------------------------------------------------
 try:
     from gwpy.timeseries import TimeSeries
-    from gwosc import datasets
     GWPY_AVAILABLE = True
 except ImportError:
     GWPY_AVAILABLE = False
