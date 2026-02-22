@@ -12,11 +12,25 @@ This script implements:
 3. Certificate generation for validated detections
 4. Support for O4/O5 LIGO observing run data
 
+Modes of operation
+------------------
+Simulation mode (default):
+    Synthetic Gaussian noise + injected chirp at center_freq.
+    Fully reproducible; no network access required.
+
+Real-data mode (opt-in via ``--real-data``):
+    Fetches open strain data from GWOSC via gwpy/gwosc.
+    Requires:  pip install gwpy gwosc
+    Falls back to simulation with a warning when the dependency is absent.
+
 Usage:
-    # Analyze specific GWOSC event with real data
-    python gw_analysis.py --gwosc-event=GW200129_215028 --center=141.7001 --band=0.0032 --export-certificate
-    
-    # Analyze O4 run with multiple events
+    # Simulation mode (default)
+    python gw_analysis.py --run=O4
+
+    # Real-data mode: fetch from GWOSC
+    python gw_analysis.py --real-data --gwosc-event=GW200129_215028
+
+    # Analyze O4 run with multiple events and export certificate
     python gw_analysis.py --run=O4 --center-freq=141.7001 --band=0.0032 --export-certificate
 
 Author: Sistema QCAL ∞³
@@ -59,20 +73,25 @@ class SpectralFilterAnalyzer:
     """
     
     def __init__(self, center_freq: float = 141.7001, bandwidth: float = 0.0032,
-                 run: str = "O4", min_events: int = 20):
+                 run: str = "O4", min_events: int = 20,
+                 simulation_mode: bool = True):
         """
         Initialize the spectral filter analyzer.
-        
+
         Args:
             center_freq: Central frequency for the filter (Hz)
             bandwidth: Filter bandwidth (Hz)
             run: Observing run to analyze (O3, O4, O5, etc.)
             min_events: Minimum number of events for subdominant search
+            simulation_mode: If True (default) use synthetic data.
+                If False, attempt to fetch real strain from GWOSC via gwpy.
+                Requires ``--real-data`` flag on the CLI.
         """
         self.center_freq = center_freq
         self.bandwidth = bandwidth
         self.run = run
         self.min_events = min_events
+        self.simulation_mode = simulation_mode
         
         # QCAL constants
         self.f0_qcal = 141.7001  # Hz
@@ -96,6 +115,7 @@ class SpectralFilterAnalyzer:
                 "bandwidth": bandwidth,
                 "run": run,
                 "min_events": min_events,
+                "simulation_mode": simulation_mode,
                 "timestamp": datetime.now(timezone.utc).isoformat()
             },
             "events": {},
@@ -191,12 +211,13 @@ class SpectralFilterAnalyzer:
         print(f"\n🔍 Analyzing {event_name} ({detector})...")
         
         # Load or simulate data
-        if simulated or not GWPY_AVAILABLE:
+        use_simulation = simulated or self.simulation_mode or not GWPY_AVAILABLE
+        if use_simulation:
             strain_data = self._generate_simulated_strain(event_name)
         else:
             strain_data = self._load_event_data(event_name, detector)
             if strain_data is None:
-                print(f"   ⚠️  Could not load data, using simulation")
+                print(f"   ⚠️  Could not load data, falling back to simulation")
                 strain_data = self._generate_simulated_strain(event_name)
         
         # Design filter
@@ -612,12 +633,27 @@ Examples:
                        help="Detector to use for analysis")
     parser.add_argument("--export-certificate", action="store_true",
                        help="Generate and export analysis certificate")
+    parser.add_argument("--real-data", action="store_true",
+                       help=(
+                           "Fetch real strain from GWOSC (requires: pip install gwpy gwosc). "
+                           "Without this flag the script runs in simulation mode."
+                       ))
     parser.add_argument("--simulated", action="store_true",
-                       help="Use simulated data instead of real GWOSC data")
+                       help="[Deprecated] Use simulated data. Now the default; kept for compatibility.")
     parser.add_argument("--output", type=str, default=None,
                        help="Output filename for results")
     
     args = parser.parse_args()
+
+    # Determine simulation mode:
+    # Simulation is the default; --real-data opts in to fetching from GWOSC.
+    use_real_data = args.real_data
+    if use_real_data and not GWPY_AVAILABLE:
+        print("⚠️  --real-data requested but gwpy/gwosc are not installed.")
+        print("   Install with: pip install gwpy gwosc")
+        print("   Falling back to simulation mode.")
+        use_real_data = False
+    simulation_mode = not use_real_data
     
     # Print header
     print("=" * 70)
@@ -636,12 +672,10 @@ Examples:
     print(f"Bandwidth: {args.band:.4f} Hz")
     print(f"Detector: {args.detector}")
     
-    if args.gwosc_event:
-        print(f"Data source: Real GWOSC FITS/HDF5")
-    elif args.simulated:
-        print(f"Data source: Simulated")
+    if simulation_mode:
+        print("Data source: SIMULATION (synthetic noise + injected chirp)")
     else:
-        print(f"Data source: GWOSC (if available, else simulated)")
+        print("Data source: REAL (GWOSC open data via gwpy)")
     
     if not args.gwosc_event:
         print(f"Minimum events: {args.min_events}")
@@ -652,25 +686,23 @@ Examples:
         center_freq=args.center_freq,
         bandwidth=args.band,
         run=args.run,
-        min_events=args.min_events
+        min_events=args.min_events,
+        simulation_mode=simulation_mode,
     )
     
     # Determine event list
     if args.gwosc_event:
         # Single event analysis
         event_list = [args.gwosc_event]
-        # Force real data mode when GWOSC event is specified
-        simulated = False
     else:
         # Multi-event run analysis
         event_list = get_event_list(args.run)
-        simulated = args.simulated
     
     # Perform multi-event analysis (or single event)
     stats = analyzer.search_multi_event_subdominant(
         event_list=event_list,
         detector=args.detector,
-        simulated=simulated
+        simulated=False,  # controlled by analyzer.simulation_mode
     )
     
     # Generate certificate if requested
