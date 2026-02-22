@@ -552,7 +552,7 @@ def generar_reporte(resultado: Dict) -> str:
 
     lines = [
         "=" * 70,
-        "REPORTE DE VALIDACIÓN: COHERENCIA Ψ — EVENTO GW150914",
+        "REPORTE DE VALIDACION: COHERENCIA Ψ — EVENTO GW150914",
         "=" * 70,
         "",
         "PARAMETROS DEL ANALISIS:",
@@ -570,20 +570,20 @@ def generar_reporte(resultado: Dict) -> str:
         f"  - Ventanas OFF: {est['n_off']}",
         "",
         "ANALISIS ESTADISTICO:",
-        f"  - Separación estadística: {sep}",
+        f"  - Separacion estadistica: {sep}",
         "  - El p-value "
-        + ("está muy por debajo" if est["p_value"] < 0.01 else "supera")
+        + ("esta muy por debajo" if est["p_value"] < 0.01 else "supera")
         + " del umbral de significancia (0.01)",
         "",
-        "MORFOLOGIA DE LA SEÑAL:",
+        "MORFOLOGIA DE LA SENAL:",
         "  - Pico extremadamente afilado en t = 0 (merger)",
-        "  - Ψ cae drásticamente tras la ruptura de coherencia H1-L1",
-        "  - Ruido off-source plano y monótono (blanqueo correcto)",
+        "  - Ψ cae drasticamente tras la ruptura de coherencia H1-L1",
+        "  - Ruido off-source plano y monotonico (blanqueo correcto)",
         "",
         "RESULTADO:",
-        f"  {'[OK] POSITIVO' if est['detection'] else '[WARN] NO CONCLUYENTE'}",
+        f"  {'POSITIVO' if est['detection'] else 'NO CONCLUYENTE'}",
         "",
-        "  Interpretación física:",
+        "  Interpretacion fisica:",
         "  Ψ no solo replica el SNR estándar, sino que actúa como un filtro",
         "  de veracidad. Al depender del cuadrado de la coherencia, ignora",
         "  ruidos locales (glitches) que elevan la potencia en un solo detector",
