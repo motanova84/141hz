@@ -48,8 +48,15 @@ License: MIT
 import numpy as np
 from typing import Tuple, Dict, Callable, Optional
 from dataclasses import dataclass
-import matplotlib.pyplot as plt
 import os
+
+# Import matplotlib conditionally to avoid requiring it for core functionality
+try:
+    import matplotlib.pyplot as plt
+    MATPLOTLIB_AVAILABLE = True
+except ImportError:
+    plt = None  # type: ignore[assignment]
+    MATPLOTLIB_AVAILABLE = False
 @dataclass
 class KzParameters:
     """Parameters for the K_z operator analysis."""
@@ -417,10 +424,10 @@ class NonCompactnessProof:
             Estimated L² norm
         """
         # Integration domain: we need to integrate over all y
-        # But kernel is only non-zero for y > t, and ψ_m supported on J_m
-        # So effective range is y > mL
+        # Kernel is only non-zero for y > t, and ψ_m supported on J_m = [mL, (m+1)L]
+        # So effective range starts from y = mL (left endpoint of J_m)
         
-        y_min = self.partition.get_block(m)[1]  # Start of J_{m+1}
+        y_min = self.partition.get_block(m)[0]  # Left endpoint of J_m (mL)
         y_max = y_min + 10 * self.params.L  # Finite cutoff (decay is fast)
         
         y_values = np.linspace(y_min, y_max, n_integration_points)
@@ -448,7 +455,10 @@ class NonCompactnessProof:
     
     def count_almost_orthogonal_functions(self, threshold: float = 0.1) -> int:
         """
-        Count number of block pairs with weak coupling (almost orthogonal images).
+        Count number of test functions whose images are almost orthogonal.
+        
+        A function is considered "almost orthogonal" if its coupling to every
+        other function is below the threshold.
         
         Parameters
         ----------
@@ -458,18 +468,22 @@ class NonCompactnessProof:
         Returns
         -------
         int
-            Number of off-diagonal block pairs with decay below threshold
+            Number of functions with all couplings below threshold
         """
         decay_matrix = self.compute_decay_matrix()
+        n = decay_matrix.shape[0]
         
-        # Only count upper-triangular entries (n > m), excluding diagonal
-        # and structural zeros from n < m
-        n_blocks = decay_matrix.shape[0]
-        upper_tri_mask = np.triu(np.ones_like(decay_matrix, dtype=bool), k=1)
+        if n <= 1:
+            # With zero or one function, all (if any) are trivially almost orthogonal
+            return n
         
-        # Count off-diagonal pairs where decay is below threshold
-        # (these represent almost orthogonal images)
-        count = np.sum((decay_matrix < threshold) & upper_tri_mask)
+        # Build a mask to drop diagonal entries (self-couplings)
+        mask = ~np.eye(n, dtype=bool)
+        off_diag = decay_matrix[mask].reshape(n, n - 1)
+        
+        # For each function m, check if all couplings to other functions are below threshold
+        is_almost_orthogonal = np.all(off_diag < threshold, axis=1)
+        count = int(np.sum(is_almost_orthogonal))
         
         return count
     
@@ -497,8 +511,8 @@ class NonCompactnessProof:
         # The exponential decay in block separation implies that for blocks
         # sufficiently far apart, their images are almost orthogonal.
         
-        # Find minimum non-zero decay (represents worst-case coupling)
-        # excluding diagonal and exact zeros
+        # Find minimum non-zero decay (smallest observed coupling, typically
+        # from most widely separated blocks) excluding diagonal and exact zeros
         nonzero_decays = decay_matrix[decay_matrix > 1e-15]
         if len(nonzero_decays) > 0:
             min_decay = np.min(nonzero_decays)
@@ -537,6 +551,12 @@ class NonCompactnessProof:
         save_path : str, optional
             Path to save figure. If None, displays interactively.
         """
+        if not MATPLOTLIB_AVAILABLE:
+            raise ImportError(
+                "Matplotlib is required for visualization. "
+                "Install it with: pip install matplotlib"
+            )
+        
         fig, axes = plt.subplots(2, 2, figsize=(14, 12))
         
         # Panel 1: Decay matrix heatmap
@@ -666,14 +686,18 @@ def main():
     
     # Create visualization
     print("Generating visualization...")
-    proof.visualize_proof(save_path='physics/results/kz_noncompactness_proof.png')
+    # Build path relative to module file to ensure it works from any directory
+    from pathlib import Path
+    module_dir = Path(__file__).resolve().parent
+    save_path = module_dir / 'results' / 'kz_noncompactness_proof.png'
+    proof.visualize_proof(save_path=str(save_path))
     print()
     
     print("="*70)
     print("CONCLUSION")
     print("="*70)
     print("✓ K_z is NOT COMPACT")
-    print("✓ K_z ∉ S₁,∞ (not in trace class)")
+    print("✓ K_z ∉ S₁,∞ (not in weak trace class S₁,∞)")
     print("✓ Berry-Keating-Selberg (BKS) program CANNOT be applied")
     print("✓ Logarithmic geometry reveals the essential structure")
     print("="*70)
