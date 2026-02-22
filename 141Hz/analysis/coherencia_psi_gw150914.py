@@ -553,7 +553,7 @@ def generar_reporte(resultado: Dict) -> str:
         "REPORTE DE VALIDACION: COHERENCIA Ψ — EVENTO GW150914",
         "=" * 70,
         "",
-        "PARAMETROS DEL ANALISIS:",
+        "PARÁMETROS DEL ANÁLISIS:",
         f"  - Ventana temporal:    {params.get('window_sec', WINDOW_SEC):.2f} s"
         " (blanqueo + ventaneo)",
         f"  - Banda de frecuencia: {f_low:.0f}–{f_high:.0f} Hz",
