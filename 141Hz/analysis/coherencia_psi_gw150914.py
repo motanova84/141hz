@@ -48,8 +48,6 @@ SAMPLE_RATE: float = 4096.0          # Hz — tasa de muestreo LIGO estándar
 WINDOW_SEC: float = 0.5              # s  — duración del ventaneo
 WINDOW_SAMPLES: int = int(WINDOW_SEC * SAMPLE_RATE)  # 2048 muestras
 
-GPS_GW150914: float = 1126259462.4   # Tiempo GPS del merger (Abbott et al. 2016)
-
 # Banda de frecuencias para el análisis de coherencia.
 # El rango 35–123 Hz captura el chirp de GW150914 (inspiral).
 # Este ancho de banda (BW = 88 Hz) normaliza el ruido a:
