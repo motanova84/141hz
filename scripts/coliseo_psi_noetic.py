@@ -69,8 +69,13 @@ def calcular_snr_potencia(pxx, freqs, f0=F0_DEFAULT, bw=BW_DEFAULT):
     freqs = np.asarray(freqs)
     pxx = np.asarray(pxx)
 
-    df = freqs[1] - freqs[0] if len(freqs) > 1 else 1.0  # 1 Hz como paso mínimo si solo hay un bin
+    # Se requiere al menos dos bins de frecuencia para estimar df de forma fiable.
+    if len(freqs) < 2:
+        # No hay resolución espectral suficiente para un cálculo significativo de SNR.
+        # Se devuelve un valor especial (NaN) en lugar de asumir un df arbitrario.
+        return float("nan")
 
+    df = freqs[1] - freqs[0]
     mask_on = (freqs >= f0 - bw) & (freqs <= f0 + bw)
     mask_off = (freqs >= f0 + 2 * bw) & (freqs <= f0 + 4 * bw)
 
