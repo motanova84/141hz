@@ -153,7 +153,7 @@ def simular_datos_gw150914(
         signal_H1[start_idx : start_idx + chirp_samples] = A_H1 * chirp_tapered
 
         # L1 con retraso temporal (~7 ms → ~29 muestras a 4096 Hz)
-        delay_samples = int(time_delay_ms * 1e-3 * sample_rate)
+        delay_samples = int(round(time_delay_ms * 1e-3 * sample_rate))
         l1_start = start_idx + delay_samples
         if l1_start + chirp_samples <= N:
             signal_L1[l1_start : l1_start + chirp_samples] = A_L1 * chirp_tapered
