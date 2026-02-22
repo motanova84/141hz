@@ -581,7 +581,7 @@ def generar_reporte(resultado: Dict) -> str:
         "RESULTADO:",
         f"  {'POSITIVO' if est['detection'] else 'NO CONCLUYENTE'}",
         "",
-        "  Interpretacion fisica:",
+        "  Interpretación física:",
         "  Ψ no solo replica el SNR estándar, sino que actúa como un filtro",
         "  de veracidad. Al depender del cuadrado de la coherencia, ignora",
         "  ruidos locales (glitches) que elevan la potencia en un solo detector",
