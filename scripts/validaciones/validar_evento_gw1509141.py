@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Validación Profunda del Evento Gravitacional GW150914-1 (GW1509141)
+Validación Profunda del Evento Gravitacional GW1509141 (GW1509141)
 ====================================================================
 
 Pipeline QCAL ∞³ de validación coherente:
