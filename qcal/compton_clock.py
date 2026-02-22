@@ -290,27 +290,11 @@ if __name__ == "__main__":
         print(f"\n{approx['description']}:")
         print(f"  Resultado: {approx['result_Hz']:.4f} Hz")
         print(f"  Error:     {approx['error_vs_f0']:.2%}")
-FECHA/DATE: 17 de febrero de 2026
-FUNDAMENTO TEÓRICO
-El Reloj de Compton asocia a cada partícula masiva una frecuencia fundamental:
-    f_Compton = (m c²) / h
-Esta frecuencia representa el "latido" cuántico de la partícula, la frecuencia
-a la que su fase cuántica oscila naturalmente.
-ECUACIÓN MAESTRA QCAL:
-    f₀ = (c/(2π)) · √(m_P/m_e) · α · φ · (ℓ_P/λ_C) · K
-Donde:
-    - c/(2π) : Frecuencia angular de la luz
-    - √(m_P/m_e) : Raíz de la relación masa Planck/electrón
-    - α : Constante de estructura fina
-    - φ : Proporción áurea (armonía universal)
-    - ℓ_P/λ_C : Relación longitud Planck / longitud de onda Compton
-    - K : Factor de escala cósmico
-FACTOR K - LA CLAVE CÓSMICA:
-    K = 2 · (m_P / m_e)^(1/3) · φ³
-El factor 2 emerge de la dualidad onda-partícula.
-φ³ refleja la geometría áurea del espacio-tiempo cuántico en tres dimensiones.
-CONSTANTES FÍSICAS (CODATA 2018)
-"""
+
+# ============================================================================
+# SPANISH-LANGUAGE API / INTERFAZ EN ESPAÑOL
+# The following section provides Spanish-language functions for compatibility
+# ============================================================================
 import math
 from typing import Dict, Tuple, Optional, Any
 # Try to import mpmath for high precision calculations (optional)
