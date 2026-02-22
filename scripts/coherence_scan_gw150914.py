@@ -150,7 +150,7 @@ def whiten(data: np.ndarray, sample_rate: int = SAMPLE_RATE) -> np.ndarray:
 
     La operación se realiza en el dominio frecuencial:
     1. FFT
-    2. Dividir por la amplitud espectral suavizada (mediana móvil)
+    2. Dividir por la amplitud espectral suavizada mediante un promedio móvil (filtro uniforme en frecuencia)
     3. IFFT
 
     Parameters
