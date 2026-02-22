@@ -119,13 +119,13 @@ def simular_datos_gw150914(
     t : np.ndarray
         Vector de tiempos en segundos.
     """
-    rng = np.random.RandomState(seed)
+    rng = np.random.default_rng(seed)
     N = int(duration * sample_rate)
     t = np.arange(N) / sample_rate
 
     # Ruido gaussiano blanco (σ = 1 por muestra)
-    noise_H1 = rng.randn(N)
-    noise_L1 = rng.randn(N)
+    noise_H1 = rng.normal(size=N)
+    noise_L1 = rng.normal(size=N)
 
     signal_H1 = np.zeros(N)
     signal_L1 = np.zeros(N)
