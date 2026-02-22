@@ -700,12 +700,11 @@ class Shadow1BayesianAnalyzer:
         print(f"   silent_score:            {assess['silent_score']:.4f}")
         print(f"   silent_flag:             {'✅' if assess['silent_flag'] else '❌'}")
 
-        bayes = self.compute_bayes_evidence()
+        bayes = self.compute_posterior_proxy()
         print(f"\n📊 Evidencia bayesiana:")
         print(f"   SNR: {bayes['snr']}")
         print(f"   ln(B) = {bayes['ln_bayes_factor']:.4f}")
         print(f"   log₁₀(B) = {bayes['log10_bayes_factor']:.4f}")
-        bayes = self.compute_posterior_proxy()
         print(f"\n📊 Posterior proxy (IBC – log-likelihood ratio):")
         print(f"   SNR: {bayes['snr']}")
         print(f"   ln Λ = {bayes['log_posterior_proxy']:.4f}")
