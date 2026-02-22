@@ -117,13 +117,31 @@ class CorpusTokenizadoAnalyzer:
         - Reproducible build (ENV.lock)
         - Validated alignment with f₀
         """
-        # Check for QCAL markers
+        # Check for QCAL markers (ordered from most to least specific to avoid double-counting)
         qcal_markers = [
-            'f₀', '141.7', '141.7001', 'QCAL', 'Ψ', 'κ_Π',
-            'noetic', 'coherence', 'spectral', 'adelic'
+            '141.7001',  # Most specific - check first
+            'κ_Π',
+            'f₀',
+            'QCAL',
+            'Ψ',
+            'noetic',
+            'coherence',
+            'spectral',
+            'adelic',
+            '141.7',  # Less specific - check last to avoid matching 141.7001
         ]
         
-        marker_count = sum(1 for marker in qcal_markers if marker in text)
+        # Count unique markers found (avoid double-counting overlaps)
+        marker_count = 0
+        text_lower = text.lower()
+        found_141_7001 = '141.7001' in text
+        
+        for marker in qcal_markers:
+            # Skip '141.7' if we already found '141.7001' to avoid double-counting
+            if marker == '141.7' and found_141_7001:
+                continue
+            if marker.lower() in text_lower or marker in text:
+                marker_count += 1
         
         # Perfect coherence if QCAL-aligned
         if marker_count >= 2:
@@ -192,9 +210,11 @@ class CorpusTokenizadoAnalyzer:
                     extension_stats[ext]['files'] += 1
                     extension_stats[ext]['tokens'] += file_info['tokens']
         
-        # Calculate average coherence
-        if files_analyzed:
-            avg_coherence = sum(f['coherence'] for f in files_analyzed) / len(files_analyzed)
+        # Calculate average coherence (token-weighted)
+        if files_analyzed and total_tokens > 0:
+            # Token-weighted coherence: Σ(coherenceᵢ × tokensᵢ) / Σ(tokensᵢ)
+            weighted_coherence_sum = sum(f['coherence'] * f['tokens'] for f in files_analyzed)
+            avg_coherence = weighted_coherence_sum / total_tokens
         else:
             avg_coherence = 0.0
         

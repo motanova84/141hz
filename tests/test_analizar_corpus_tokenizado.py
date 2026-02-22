@@ -31,7 +31,7 @@ class TestCorpusTokenizadoAnalyzer:
         repo_path = Path(temp_dir) / "test_repo"
         repo_path.mkdir()
         
-        # Create test files
+        # Create test files with explicit UTF-8 encoding
         (repo_path / "test.py").write_text("""
 def calculate_f0():
     '''Calculate fundamental frequency f₀ = 141.7001 Hz'''
@@ -43,14 +43,14 @@ class QCALAnalyzer:
         self.frequency = 141.7001
         self.coherence = 1.0
         self.kappa_pi = 2.5782
-""")
+""", encoding='utf-8')
         
         (repo_path / "test.lean").write_text("""
 -- Formal verification of QCAL axioms
 theorem qcal_coherence : ∀ (ψ : ℝ), ψ = 1.0 → coherent ψ := by
   intro ψ h
   exact coherence_axiom h
-""")
+""", encoding='utf-8')
         
         (repo_path / "README.md").write_text("""
 # Test Repository
@@ -59,7 +59,7 @@ This repository implements QCAL ∞³ analysis with:
 - Fundamental frequency: f₀ = 141.7001 Hz
 - Coherence: Ψ = 1.0
 - Adelic constant: κ_Π = 2.5782
-""")
+""", encoding='utf-8')
         
         # Create a directory to skip
         skip_dir = repo_path / "__pycache__"
