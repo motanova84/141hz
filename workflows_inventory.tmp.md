@@ -4,6 +4,15 @@
 
 ## Workflows Activos
 
+### Active System Monitor
+
+**Archivo:** `active-system-monitor.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 10 * * 3`)
+- Trigger: manual (workflow_dispatch)
+
 ### Advanced Analysis Methods
 
 **Archivo:** `advanced-analysis.yml`
@@ -45,6 +54,15 @@
 
 - Trigger: push
 - Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
+### Anti-Bias Validation Tests
+
+**Archivo:** `anti-bias-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 6 * * 1  # Run weekly on Mondays at 6:00 AM UTC`)
 - Trigger: manual (workflow_dispatch)
 
 ### AT2020afhd TDE Analysis
@@ -114,6 +132,15 @@
 - Trigger: push
 - Trigger: pull_request
 
+### Coherence Tensor Validation
+
+**Archivo:** `coherence-tensor.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * 0`)
+- Trigger: manual (workflow_dispatch)
+
 ### Comprehensive Testing
 
 **Archivo:** `comprehensive-testing.yml`
@@ -162,11 +189,64 @@
 - Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
+### ENV.lock Maintenance and Validation
+
+**Archivo:** `env-lock-validation.yml`
+
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * 0  # Every Sunday at midnight UTC`)
+- Trigger: manual (workflow_dispatch)
+
+### GW Validation - 141.7 Hz
+
+**Archivo:** `gw-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * *`)
+- Trigger: manual (workflow_dispatch)
+
+### GW150914 Complete Analysis - 141.7 Hz
+
+**Archivo:** `gw150914-analysis.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * 1`)
+- Trigger: manual (workflow_dispatch)
+
+### GW250114 141.7 Hz Validation
+
+**Archivo:** `gw250114-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 */4 * * *`)
+- Trigger: manual (workflow_dispatch)
+
+### Hydrogen Line Quantum Phase Validation
+
+**Archivo:** `hydrogen-line-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * *`)
+- Trigger: manual (workflow_dispatch)
+
 ### Issue Management Bot
 
 **Archivo:** `issue-management.yml`
 
 - Trigger: schedule (`0 0 * * *`)
+
+### Kappa Phi Corrected Verification
+
+**Archivo:** `kappa-phi-corrected.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 5 * * *`)
+- Trigger: manual (workflow_dispatch)
 
 ### Kappa Pi Verification
 
@@ -209,6 +289,15 @@
 - Trigger: schedule (`0 0 * * 0  # Run weekly on Sunday at midnight UTC`)
 - Trigger: manual (workflow_dispatch)
 
+### Mathematical Matrix Validation
+
+**Archivo:** `mathematical-matrix.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * 1`)
+- Trigger: manual (workflow_dispatch)
+
 ### Multi-Event Analysis
 
 **Archivo:** `multi-event-analysis.yml`
@@ -234,6 +323,20 @@
 - Trigger: schedule (`0 0 * * 0`)
 - Trigger: manual (workflow_dispatch)
 
+### Organización Automática Noética
+
+**Archivo:** `organizacion-automatica-noetica.yml`
+
+- Trigger: push
+- Trigger: manual (workflow_dispatch)
+
+### Organización Automática Noética
+
+**Archivo:** `organizacion-noetica.yml`
+
+- Trigger: push
+- Trigger: manual (workflow_dispatch)
+
 ### PR Review Automation
 
 **Archivo:** `pr-review-automation.yml`
@@ -247,6 +350,13 @@
 
 - Trigger: push
 - Trigger: schedule (`0 0 * * 0  # Weekly on Sunday at midnight`)
+- Trigger: manual (workflow_dispatch)
+
+### Prime Spectral Analysis - 100 Primos
+
+**Archivo:** `prime-spectral-analysis.yml`
+
+- Trigger: schedule (`0 0 * * *`)
 - Trigger: manual (workflow_dispatch)
 
 ### QCAL Production Cycle
@@ -264,12 +374,36 @@
 - Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
+### QCAL Biological Validation
+
+**Archivo:** `qcal-biological-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### QCAL-LLM Tests
 
 **Archivo:** `qcal-llm-tests.yml`
 
 - Trigger: push
 - Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
+### "QCAL-Sync: Update Global Context"
+
+**Archivo:** `qcal-sync.yml`
+
+- Trigger: push
+- Trigger: manual (workflow_dispatch)
+
+### QNM vs QCAL Validation
+
+**Archivo:** `qnm-qcal-validation.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 0 * * *`)
 - Trigger: manual (workflow_dispatch)
 
 ### Quantum Validations
@@ -310,6 +444,14 @@
 - Trigger: push
 - Trigger: pull_request
 - Trigger: schedule (`0 2 * * *`)
+- Trigger: manual (workflow_dispatch)
+
+### Sovereignty Check
+
+**Archivo:** `sovereignty-check.yml`
+
+- Trigger: push
+- Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
 ### Special Analysis Methods
@@ -370,4 +512,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2025-12-29 22:28:51 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-15 14:28:59 UTC*

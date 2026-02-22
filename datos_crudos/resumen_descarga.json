@@ -1,0 +1,17 @@
+[
+  {
+    "evento": "GW150914",
+    "archivo": "/home/runner/work/141hz/141hz/datos_crudos/H1_GW150914_20260210_215124.h5",
+    "exitoso": false
+  },
+  {
+    "evento": "GW170817",
+    "archivo": "/home/runner/work/141hz/141hz/datos_crudos/H1_GW170817_20260210_215124.h5",
+    "exitoso": false
+  },
+  {
+    "evento": "GW200115",
+    "archivo": "/home/runner/work/141hz/141hz/datos_crudos/H1_GW200115_20260210_215124.h5",
+    "exitoso": false
+  }
+]

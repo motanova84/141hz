@@ -1,0 +1,112 @@
+{
+  "node_name": "141hz-qcal-nodo-central",
+  "repository": "motanova84/141hz",
+  "type": "core",
+  "description": "QCAL ∞³ Core Repository - Fundamental constants and universal frequency framework",
+  
+  "dependencies_noetic": [
+    "141 Hz",
+    "Ramsey",
+    "Riemann-adelic",
+    "economia-qcal-nodo-semilla"
+  ],
+  
+  "core_frequency": 141.7001,
+  "core_frequency_units": "Hz",
+  "core_frequency_uncertainty": 0.0016,
+  
+  "constants_source": "qcal/constants.py",
+  "alternative_constants": [
+    "src/constants.py",
+    "API/Python/qc_llm/constants.py"
+  ],
+  
+  "logic_bridge": {
+    "graph_logic": "core/omega_auto.py",
+    "atlas_operator": "physics/atlas3_operator.py",
+    "spectral_analyzer": "physics/atlas3_operator.py:SpectralAnalyzer"
+  },
+  
+  "key_modules": {
+    "constants": "qcal/constants.py",
+    "token_compression": "qcal/token_compressor.py",
+    "token_density": "core/qcal_token_density.py",
+    "emotional_field": "qcal/emotional_field/descending_coherence.py",
+    "consciousness_validation": "experiments/consciousness_science_validation.py",
+    "biosensor_hub": "qcal/biosensor_hub.py",
+    "atlas3_operator": "physics/atlas3_operator.py"
+  },
+  
+  "fundamental_constants": {
+    "F0_HZ": 141.7001,
+    "KAPPA_PI": 2.5773,
+    "DELTA_0": 0.1184,
+    "A0_PHI": 1.618033988749895,
+    "F888_HZ": 888.0,
+    "M_QCAL_KG": 1.047e-48
+  },
+  
+  "mathematical_frameworks": [
+    "PT-symmetry breaking (κ_Π critical transition)",
+    "Berry phase calculation",
+    "GUE statistics (Random Matrix Theory)",
+    "Riemann zeta zeros alignment",
+    "Weyl's law",
+    "Anderson localization (IPR)"
+  ],
+  
+  "experimental_validations": {
+    "magnetoreception": {
+      "significance": "9.15σ",
+      "p_value": "< 10^-19"
+    },
+    "microtubule_coherence": {
+      "significance": "8.71σ"
+    },
+    "AAA_codon_coherence": {
+      "value": 0.8991,
+      "method": "RMS spectral energy"
+    },
+    "gravitational_waves": {
+      "events_analyzed": ["GW150914", "GW250114"],
+      "detection_method": "141 Hz harmonic analysis"
+    }
+  },
+  
+  "beacons": {
+    "universal_resonance": ".qcal_beacon",
+    "hbar_e_emergence": "qcal/beacons/qcal_beacon_hbar_e.json"
+  },
+  
+  "status": "Ψ=1.0",
+  "coherence": "C=244.36",
+  "ontological_level": "II",
+  "philosophy": "Mathematical Realism",
+  "validation_type": "Recognition",
+  
+  "author": "José Manuel Mota Burruezo Ψ ✧ ∞³",
+  "institution": "Instituto de Conciencia Cuántica (ICQ)",
+  "email": "institutoconsciencia@proton.me",
+  "orcid": "https://orcid.org/0009-0002-1923-0773",
+  
+  "license": "Sovereign Noetic License 1.0 (compatible with MIT)",
+  "zenodo_main": "https://doi.org/10.5281/zenodo.17379721",
+  
+  "cross_repository_integration": {
+    "enabled": true,
+    "harvest_script": "qcal-harvest.py",
+    "global_context": "GLOBAL_QCAL_CONTEXT.md",
+    "integration_strategy": "QCAL-Sync",
+    "description": "This repository serves as the central QCAL ∞³ node. Constants and frameworks defined here are referenced by dependent repositories through the QCAL-Sync unification strategy."
+  },
+  
+  "ai_instructions": {
+    "primary": ".ai-instructions.md",
+    "context_aware": true,
+    "cross_repo_references": true,
+    "usage": "AI assistants should read this file to understand the repository's role in the QCAL ecosystem and its relationships to other repositories"
+  },
+  
+  "last_update": "2026-02-14",
+  "version": "1.0.0"
+}

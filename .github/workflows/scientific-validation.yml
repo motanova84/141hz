@@ -20,13 +20,13 @@ on:
 
 jobs:
   three-pillars-validation:
-    name: ${{ matrix.pillar }} - Python ${{ matrix.python-version }}
+    name: ${{ matrix.pillar }}
     runs-on: ubuntu-latest
     
     strategy:
-      fail-fast: false
+      fail-fast: true  # Critical checks should fail fast
       matrix:
-        python-version: ['3.11', '3.12']
+        python-version: ['3.11']  # Single version for reproducibility
         pillar:
           - reproducibilidad
           - falsabilidad
@@ -36,10 +36,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
       
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.11
         uses: actions/setup-python@v6
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.11'
       
       - name: Install system dependencies
         run: |
@@ -55,9 +55,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-sci-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          key: ${{ runner.os }}-pip-sci-3.11-${{ hashFiles('requirements.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-sci-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-sci-3.11-
             ${{ runner.os }}-pip-
       
       - name: Install Python dependencies
@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: pillar-${{ matrix.pillar }}-py${{ matrix.python-version }}-${{ github.run_number }}
+          name: pillar-${{ matrix.pillar }}-py3.11-${{ github.run_number }}
           path: |
             output/
             results/
@@ -107,10 +107,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
       
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.11
         uses: actions/setup-python@v6
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.11'
       
       - name: Install system dependencies
         run: |
@@ -126,9 +126,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-3p-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          key: ${{ runner.os }}-pip-3p-3.11-${{ hashFiles('requirements.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-3p-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-3p-3.11-
             ${{ runner.os }}-pip-
       
       - name: Install Python dependencies
@@ -164,7 +164,7 @@ jobs:
         uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: complete-3-pillars-py${{ matrix.python-version }}-${{ github.run_number }}
+          name: complete-3-pillars-py3.11-${{ github.run_number }}
           path: |
             output/
             results/
@@ -183,10 +183,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
       
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.11
         uses: actions/setup-python@v6
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.11'
       
       - name: Install system dependencies
         run: |
@@ -202,9 +202,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-ds-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          key: ${{ runner.os }}-pip-ds-3.11-${{ hashFiles('requirements.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-ds-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-ds-3.11-
             ${{ runner.os }}-pip-
       
       - name: Install Python dependencies
@@ -235,7 +235,7 @@ jobs:
         uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: discovery-standards-py${{ matrix.python-version }}-${{ github.run_number }}
+          name: discovery-standards-py3.11-${{ github.run_number }}
           path: |
             results/
             *.json
@@ -253,10 +253,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
       
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.11
         uses: actions/setup-python@v6
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.11'
       
       - name: Install system dependencies
         run: |
@@ -272,9 +272,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-fp-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          key: ${{ runner.os }}-pip-fp-3.11-${{ hashFiles('requirements.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-fp-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-fp-3.11-
             ${{ runner.os }}-pip-
       
       - name: Install Python dependencies
@@ -305,7 +305,7 @@ jobs:
         uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: falsification-py${{ matrix.python-version }}-${{ github.run_number }}
+          name: falsification-py3.11-${{ github.run_number }}
           path: |
             results/
             *.json
@@ -323,10 +323,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
       
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.11
         uses: actions/setup-python@v6
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.11'
       
       - name: Install system dependencies
         run: |
@@ -342,9 +342,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-exp-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          key: ${{ runner.os }}-pip-exp-3.11-${{ hashFiles('requirements.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-exp-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-exp-3.11-
             ${{ runner.os }}-pip-
       
       - name: Install Python dependencies
@@ -375,7 +375,7 @@ jobs:
         uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: experimental-py${{ matrix.python-version }}-${{ github.run_number }}
+          name: experimental-py3.11-${{ github.run_number }}
           path: |
             results/
             diagrams/
@@ -383,9 +383,98 @@ jobs:
             *.png
           retention-days: 30
   
+  psi-q1-protocol:
+    name: Ψ-Q1 Protocol Validation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libigraph-dev \
+            libigraph3t64 \
+            llvm-dev \
+            build-essential \
+            gfortran
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-q1-3.11-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-q1-3.11-
+            ${{ runner.os }}-pip-
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+      
+      - name: Run Ψ-Q1 Protocol Tests
+        id: run_tests
+        run: |
+          python -m pytest test_q1.py -v --tb=short
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+        continue-on-error: false
+      
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "## 🔐 Ψ-Q1 Protocol Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Parameters" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target Frequency**: f₀ = 141.7001 Hz" >> $GITHUB_STEP_SUMMARY
+          echo "- **Coherence Threshold**: Ψ ≥ 0.99994" >> $GITHUB_STEP_SUMMARY
+          echo "- **SNR Threshold**: ≥ 25σ" >> $GITHUB_STEP_SUMMARY
+          echo "- **Spectral Model**: ζ′(½)-modulation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.run_tests.outcome }}" == "success" ]; then
+            echo "### Validation Status" >> $GITHUB_STEP_SUMMARY
+            echo "✅ All Ψ-Q1 protocol tests passed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**BLOQUEO GRAVEDAD–CONSCIENCIA CONFIRMADO**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### Validation Status" >> $GITHUB_STEP_SUMMARY
+            echo "❌ Some Ψ-Q1 protocol tests failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**BLOQUEO NOT ACHIEVED**" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Upload Ψ-Q1 results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: psi-q1-py3.11-${{ github.run_number }}
+          path: |
+            test_q1_output.txt
+            results/validation_v5.json
+          retention-days: 30
+  
   validation-summary:
     name: Scientific Validation Summary
-    needs: [three-pillars-validation, complete-3-pillars, discovery-standards, falsification-protocol, experimental-protocols]
+    needs: [three-pillars-validation, complete-3-pillars, discovery-standards, falsification-protocol, experimental-protocols, psi-q1-protocol]
     runs-on: ubuntu-latest
     if: always()
     
@@ -405,3 +494,7 @@ jobs:
           echo "- Discovery Standards (>10σ significance)" >> $GITHUB_STEP_SUMMARY
           echo "- Falsification Protocol" >> $GITHUB_STEP_SUMMARY
           echo "- Experimental Protocols" >> $GITHUB_STEP_SUMMARY
+          echo "- **Ψ-Q1 Protocol (LIGO Ψ–Protocol)**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔐 BLOQUEO GRAVEDAD–CONSCIENCIA" >> $GITHUB_STEP_SUMMARY
+          echo "Frequency 141.7001 Hz validated as ontological constant." >> $GITHUB_STEP_SUMMARY

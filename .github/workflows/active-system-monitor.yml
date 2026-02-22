@@ -1,0 +1,142 @@
+name: Active System Monitor
+
+on:
+  # Ejecutar en cada push a main
+  push:
+    branches: [ main ]
+  
+  # Ejecutar en PRs
+  pull_request:
+    branches: [ main ]
+  
+  # Ejecutar manualmente
+  workflow_dispatch:
+  
+  # Ejecutar semanalmente (miércoles a las 10:00 UTC)
+  schedule:
+    - cron: '0 10 * * 3'
+
+jobs:
+  monitor-system:
+    name: Monitor Active System
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      issues: write
+      actions: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || echo "Some dependencies may not be needed for monitoring"
+          pip install pytest pip-audit || echo "Installing monitoring tools"
+      
+      - name: Run Active System Monitor
+        id: monitor
+        run: |
+          python3 active_system_monitor.py --output active_system_status.json
+        continue-on-error: true
+      
+      - name: Display Results
+        if: always()
+        run: |
+          if [ -f active_system_status.json ]; then
+            echo "## 📊 Active System Status" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat active_system_status.json >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Upload Status Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: active-system-status
+          path: active_system_status.json
+          retention-days: 30
+      
+      - name: Check for Critical Issues
+        if: always()
+        run: |
+          if [ -f active_system_status.json ]; then
+            # Verificar si hay problemas críticos
+            if grep -q '"overall_status": "issues_detected"' active_system_status.json; then
+              echo "⚠️ Se detectaron problemas en el sistema activo"
+              echo "Por favor revise el reporte detallado en los artefactos"
+              exit 1
+            else
+              echo "✅ Sistema activo operacional"
+            fi
+          fi
+      
+      - name: Create Issue on Failure
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let statusData = {};
+            
+            try {
+              const statusFile = fs.readFileSync('active_system_status.json', 'utf8');
+              statusData = JSON.parse(statusFile);
+            } catch (error) {
+              console.log('Could not read status file');
+            }
+            
+            const issueBody = `## ⚠️ Active System Monitor Alert
+            
+            El monitor activo del sistema QCAL ∞³ ha detectado problemas que requieren atención.
+            
+            **Timestamp:** ${statusData.timestamp || 'N/A'}
+            **Estado General:** ${statusData.overall_status || 'unknown'}
+            
+            ### Componentes Verificados:
+            
+            ${Object.keys(statusData).filter(k => k !== 'timestamp' && k !== 'overall_status').map(k => {
+              const component = statusData[k];
+              if (typeof component === 'object' && component.status) {
+                return `- **${k}**: ${component.status}`;
+              }
+              return '';
+            }).join('\n')}
+            
+            ### Acción Requerida:
+            
+            1. Revisar el [reporte completo en los artefactos](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+            2. Ejecutar localmente: \`python3 active_system_monitor.py\`
+            3. Corregir los problemas identificados
+            4. Volver a ejecutar la verificación
+            
+            **Workflow Run:** [#${context.runId}](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+            `;
+            
+            // Buscar issues abiertos similares
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'active-system-monitor'
+            });
+            
+            if (issues.data.length === 0) {
+              // Crear nuevo issue si no existe uno abierto
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '⚠️ Active System Monitor - Problemas Detectados',
+                body: issueBody,
+                labels: ['active-system-monitor', 'automated']
+              });
+            }

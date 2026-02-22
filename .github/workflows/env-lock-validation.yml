@@ -1,0 +1,313 @@
+name: ENV.lock Maintenance and Validation
+
+on:
+  # Run weekly to ensure ENV.lock stays current
+  schedule:
+    - cron: "0 0 * * 0"  # Every Sunday at midnight UTC
+  
+  # Manual trigger to regenerate ENV.lock
+  workflow_dispatch:
+    inputs:
+      regenerate:
+        description: 'Regenerate ENV.lock from requirements.txt'
+        required: false
+        type: boolean
+        default: false
+  
+  # Also run on pull requests that modify dependencies
+  pull_request:
+    paths:
+      - 'requirements.txt'
+      - 'ENV.lock'
+      - 'scripts/generate_env_lock.py'
+      - 'scripts/enhance_env_lock.py'
+      - 'scripts/validate_reproducibility.py'
+
+jobs:
+  validate-env-lock:
+    name: Validate ENV.lock Consistency
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install dependencies from ENV.lock
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ENV.lock
+      
+      - name: Validate environment reproducibility
+        run: |
+          python scripts/validate_reproducibility.py --strict
+      
+      - name: Generate environment snapshot
+        run: |
+          mkdir -p validation_results
+          python scripts/validate_reproducibility.py \
+            --generate-snapshot \
+            --output validation_results/snapshot_py${{ matrix.python-version }}.json
+      
+      - name: Verify core constants
+        run: |
+          # Test that fundamental constants compute correctly
+          python -c "import mpmath; mpmath.mp.dps=50; print('φ =', mpmath.phi)"
+          python -c "print('Testing high-precision arithmetic works')"
+      
+      - name: Upload validation results
+        uses: actions/upload-artifact@v4
+        with:
+          name: env-validation-py${{ matrix.python-version }}
+          path: validation_results/
+          retention-days: 30
+  
+  regenerate-env-lock:
+    name: Regenerate ENV.lock (if requested)
+    runs-on: ubuntu-latest
+    if: github.event.inputs.regenerate == 'true' || github.event_name == 'schedule'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            gfortran \
+            cmake
+      
+      - name: Create fresh environment and freeze
+        run: |
+          python -m venv venv_freeze
+          source venv_freeze/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip freeze > ENV.lock.new
+          deactivate
+      
+      - name: Enhance ENV.lock with metadata
+        run: |
+          python scripts/enhance_env_lock.py \
+            --input ENV.lock.new \
+            --output ENV.lock.enhanced
+      
+      - name: Compare with existing ENV.lock
+        id: compare
+        run: |
+          echo "Comparing package versions..."
+          
+          # Extract just the package lines (not comments)
+          grep -v '^#' ENV.lock | grep -v '^$' | sort > env_old_sorted.txt
+          grep -v '^#' ENV.lock.enhanced | grep -v '^$' | sort > env_new_sorted.txt
+          
+          if diff env_old_sorted.txt env_new_sorted.txt > env_diff.txt; then
+            echo "No changes in package versions"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "Package versions have changed:"
+            cat env_diff.txt
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Upload regenerated ENV.lock for review
+        if: steps.compare.outputs.changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: regenerated-env-lock
+          path: |
+            ENV.lock.enhanced
+            ENV.lock.json
+            env_diff.txt
+          retention-days: 30
+      
+      - name: Create issue if dependencies changed
+        if: steps.compare.outputs.changed == 'true' && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const diff = fs.readFileSync('env_diff.txt', 'utf8');
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '⚠️ ENV.lock has dependency changes',
+              body: `ENV.lock validation detected changes in dependency versions.
+            
+            This may affect reproducibility. Please review the changes and update ENV.lock if appropriate.
+            
+            ## Changes Detected
+            
+            \`\`\`diff
+            ${diff}
+            \`\`\`
+            
+            ## Action Required
+            
+            1. Download the regenerated ENV.lock from this workflow's artifacts
+            2. Review the changes carefully
+            3. Test that all validations still pass
+            4. Update ENV.lock if changes are acceptable
+            
+            ## Artifacts
+            
+            The regenerated ENV.lock is available in the workflow artifacts.
+            `,
+              labels: ['dependencies', 'reproducibility', 'maintenance']
+            });
+  
+  check-dataset-checksums:
+    name: Verify Dataset Integrity
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      
+      - name: Verify dataset checksums
+        run: |
+          # Extract checksums from ENV.lock.json and verify them
+          python - <<'EOF'
+          import json
+          import hashlib
+          from pathlib import Path
+          
+          # Load expected checksums
+          with open('ENV.lock.json') as f:
+              metadata = json.load(f)
+          
+          checksums = metadata.get('dataset_checksums', {})
+          
+          if not checksums:
+              print("No dataset checksums to verify")
+              exit(0)
+          
+          all_match = True
+          data_dir = Path('data')
+          
+          for filename, info in checksums.items():
+              filepath = data_dir / filename
+              
+              if not filepath.exists():
+                  print(f"⚠️  File not found: {filename}")
+                  continue
+              
+              # Compute actual checksum
+              h = hashlib.sha256()
+              with open(filepath, 'rb') as f:
+                  while chunk := f.read(8192):
+                      h.update(chunk)
+              
+              actual = h.hexdigest()
+              expected = info['sha256']
+              
+              if actual == expected:
+                  print(f"✅ {filename}: checksum verified")
+              else:
+                  print(f"❌ {filename}: checksum MISMATCH")
+                  print(f"   Expected: {expected}")
+                  print(f"   Actual:   {actual}")
+                  all_match = False
+          
+          if not all_match:
+              exit(1)
+          EOF
+      
+      - name: Generate checksum report
+        run: |
+          mkdir -p validation_results
+          
+          python - <<'EOF' > validation_results/checksum_report.txt
+          import json
+          from pathlib import Path
+          
+          with open('ENV.lock.json') as f:
+              metadata = json.load(f)
+          
+          print("Dataset Integrity Report")
+          print("=" * 60)
+          print()
+          
+          checksums = metadata.get('dataset_checksums', {})
+          
+          for filename, info in checksums.items():
+              print(f"File: {filename}")
+              print(f"  SHA256: {info['sha256']}")
+              print(f"  Size: {info['size']} bytes")
+              print()
+          EOF
+          
+          cat validation_results/checksum_report.txt
+      
+      - name: Upload checksum report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dataset-checksums
+          path: validation_results/checksum_report.txt
+          retention-days: 30
+
+  test-cross-platform:
+    name: Test ENV.lock on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-20.04, macos-latest]
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gfortran
+      
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install gcc
+      
+      - name: Install from ENV.lock
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ENV.lock
+      
+      - name: Test basic functionality
+        run: |
+          python -c "import numpy; print(f'NumPy version: {numpy.__version__}')"
+          python -c "import scipy; print(f'SciPy version: {scipy.__version__}')"
+          python -c "import mpmath; mpmath.mp.dps=30; print(f'φ = {mpmath.phi}')"
+      
+      - name: Report success
+        run: |
+          echo "✅ ENV.lock successfully installed on ${{ matrix.os }} with Python ${{ matrix.python-version }}"

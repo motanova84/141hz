@@ -78,7 +78,7 @@ jobs:
       
       - name: Ω2 Auto-Analysis - Run omega validation
         run: |
-          python omega_auto.py ${{ matrix.event }} --output omega_${{ matrix.event }}_py${{ matrix.python-version }}.json
+          python core/omega_auto.py ${{ matrix.event }} --output omega_${{ matrix.event }}_py${{ matrix.python-version }}.json
         continue-on-error: false
       
       - name: Upload validation results
@@ -102,7 +102,7 @@ jobs:
         uses: actions/checkout@v5
       
       - name: Download all validation results
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7.0.0
         with:
           pattern: omega-validation-*
           path: omega-results/
@@ -160,7 +160,7 @@ jobs:
         uses: actions/checkout@v5
       
       - name: Download validation results
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7.0.0
         with:
           pattern: omega-validation-*
           path: omega-results/

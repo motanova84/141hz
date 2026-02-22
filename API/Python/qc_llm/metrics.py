@@ -245,19 +245,17 @@ def compute_coherence(text: str, use_bert: bool = True) -> dict:
     
     coherence = float(np.clip(coherence, 0, 1))
     
-    # Recommendation thresholds as per problem statement
-    if coherence > 0.8:
-        recommendation = "HIGH COHERENCE"
-    elif coherence > 0.6:
-        recommendation = "MODERATE COHERENCE"
+    # Calcular entropy antes de usarla
+    entropy = compute_quantum_entropy(text)
+    
     # Weighted average
     coherence = WEIGHT_FREQUENCY_ALIGNMENT * freq_align + WEIGHT_QUANTUM_ENTROPY * entropy
     
     # Recommendation
     if coherence > THRESHOLD_HIGH:
-        recommendation = "HIGH COHERENCE - Excellent quality"
+        recommendation = "HIGH COHERENCE"
     elif coherence > THRESHOLD_MODERATE:
-        recommendation = "MODERATE COHERENCE - Good quality"
+        recommendation = "MODERATE COHERENCE"
     elif coherence > THRESHOLD_LOW:
         recommendation = "LOW COHERENCE - Consider rephrasing"
     else:
