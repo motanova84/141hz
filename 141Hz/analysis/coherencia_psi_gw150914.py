@@ -573,7 +573,7 @@ def generar_reporte(resultado: Dict) -> str:
         + ("esta muy por debajo" if est["p_value"] < 0.01 else "supera")
         + " del umbral de significancia (0.01)",
         "",
-        "MORFOLOGIA DE LA SENAL:",
+        "MORFOLOGÍA DE LA SEÑAL:",
         "  - Pico extremadamente afilado en t = 0 (merger)",
         "  - Ψ cae drasticamente tras la ruptura de coherencia H1-L1",
         "  - Ruido off-source plano y monotonico (blanqueo correcto)",
