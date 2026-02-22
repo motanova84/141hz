@@ -27,6 +27,7 @@ Framework: QCAL ∞³
 License: MIT
 """
 
+import hashlib
 import numpy as np
 from typing import Dict, Optional
 from dataclasses import dataclass, field
@@ -51,6 +52,28 @@ F_CONTROL_OFFSET = 50.0       # Hz – desplazamiento de la banda de control
 F_CONTROL = F0_NOESIS + F_CONTROL_OFFSET  # 191.7001 Hz
 SNR_REF_THERMAL = 50.0        # SNR del canal de referencia con ruido térmico
 NOISE_SIGMA_REF = 1.0 / SNR_REF_THERMAL   # amplitud del ruido del canal 2
+
+
+def _stable_seed(*parts: str) -> int:
+    """
+    Devuelve una semilla entera estable y determinista derivada de strings.
+
+    Usa hashlib.md5 en lugar del built-in hash() para garantizar resultados
+    idénticos entre intérpretes y ejecuciones (hash() es aleatorio salvo
+    que PYTHONHASHSEED esté fijado).
+
+    Parameters
+    ----------
+    *parts : str
+        Partes del nombre que se concatenan antes de hacer el hash.
+
+    Returns
+    -------
+    int
+        Semilla entera de 64 bits (sin signo).
+    """
+    digest = hashlib.md5("".join(parts).encode()).digest()[:8]
+    return int.from_bytes(digest, "little")
 
 
 @dataclass
@@ -177,6 +200,7 @@ def run_noesis_pipeline(
     f0: float = F0_NOESIS,
     f_control: float = F_CONTROL,
     seed: Optional[int] = 42,
+    compute_snr_threshold: bool = False,
 ) -> NoesisAnalysisResult:
     """
     Ejecuta el pipeline completo del Protocolo Noēsico v3.0.
@@ -199,11 +223,16 @@ def run_noesis_pipeline(
         Frecuencia de control (off-target).
     seed : int, optional
         Semilla para reproducibilidad.
+    compute_snr_threshold : bool
+        Si es True, estima el SNR mínimo donde Ψ_target > Ψ_control mediante
+        una búsqueda en grid. La estimación puede ser costosa; por defecto
+        False para mantener tiempos de ejecución razonables.
 
     Returns
     -------
     NoesisAnalysisResult
         Resultado completo con target, control y ratio de contraste.
+        ``snr_threshold`` es NaN cuando ``compute_snr_threshold=False``.
     """
     rng = np.random.default_rng(seed)
     t = np.arange(0, duration, 1.0 / fs)
@@ -233,7 +262,10 @@ def run_noesis_pipeline(
     # Umbral de supervivencia: SNR mínimo donde Ψ_target > Ψ_control
     # Con el Canal 2 ruidoso, el umbral se desplaza ligeramente respecto a
     # una referencia ideal; el valor exacto es determinado empíricamente.
-    snr_threshold = _estimate_snr_threshold(fs, f0, f_control, seed=seed)
+    if compute_snr_threshold:
+        snr_threshold = _estimate_snr_threshold(fs, f0, f_control, seed=seed)
+    else:
+        snr_threshold = float("nan")
 
     return NoesisAnalysisResult(
         target=result_target,
@@ -318,6 +350,7 @@ def analyze_gwtc_event(
     f_control: float = F_CONTROL,
     duration: float = 32.0,
     fs: float = 4096.0,
+    seed: Optional[int] = None,
 ) -> NoesisAnalysisResult:
     """
     Aplica la métrica Ψ refinada a datos reales del GWTC (LIGO/Virgo).
@@ -341,6 +374,10 @@ def analyze_gwtc_event(
         Duración del segmento a analizar en segundos.
     fs : float
         Frecuencia de muestreo deseada en Hz.
+    seed : int, optional
+        Semilla explícita para el ruido térmico del canal de referencia.
+        Si es None, se deriva una semilla estable del nombre del evento y
+        el detector usando hashlib para garantizar reproducibilidad.
 
     Returns
     -------
@@ -351,8 +388,9 @@ def analyze_gwtc_event(
     -----
     Si GWPy/GWOSC no están disponibles se utiliza una señal simulada
     como fallback, garantizando que el pipeline siempre pueda ejecutarse.
+    El campo ``metadata['data_source']`` refleja la fuente real utilizada.
     """
-    strain = _fetch_gwtc_strain(event_name, detector, duration, fs)
+    strain, data_source = _fetch_gwtc_strain(event_name, detector, duration, fs, seed=seed)
 
     # Canal 2: segmento desplazado por 1 s para crear referencia realista
     shift = int(fs)
@@ -362,13 +400,15 @@ def analyze_gwtc_event(
         canal2 = np.zeros_like(strain)
         canal2[shift:] = strain[:-shift]
     else:
-        rng = np.random.default_rng(abs(hash(event_name)) % 2**32)
+        rng_seed = seed if seed is not None else _stable_seed(event_name)
+        rng_short = np.random.default_rng(rng_seed)
         noise_level = float(np.std(strain)) if len(strain) >= 2 else 1e-21
-        canal2 = rng.normal(0.0, noise_level, len(strain))
+        canal2 = rng_short.normal(0.0, noise_level, len(strain))
 
     # Añadir ruido térmico al canal de referencia (SNR_ref ≈ 50)
-    rng = np.random.default_rng(abs(hash(event_name + detector)) % 2**32)
-    canal2 = canal2 + rng.normal(0.0, np.std(strain) / SNR_REF_THERMAL, len(strain))
+    noise_seed = seed if seed is not None else _stable_seed(event_name, detector, "thermal")
+    rng_noise = np.random.default_rng(noise_seed)
+    canal2 = canal2 + rng_noise.normal(0.0, np.std(strain) / SNR_REF_THERMAL, len(strain))
 
     result_target = calculate_psi_refined(strain, canal2, fs, f0)
     result_target.label = "target"
@@ -393,7 +433,7 @@ def analyze_gwtc_event(
             "f_control": f_control,
             "duration_s": duration,
             "fs_hz": fs,
-            "data_source": "GWOSC" if GWPY_AVAILABLE else "simulated",
+            "data_source": data_source,
         },
     )
 
@@ -403,7 +443,8 @@ def _fetch_gwtc_strain(
     detector: str,
     duration: float,
     fs: float,
-) -> np.ndarray:
+    seed: Optional[int] = None,
+) -> tuple:
     """
     Descarga o simula el strain de un evento GWTC.
 
@@ -417,11 +458,15 @@ def _fetch_gwtc_strain(
         Duración del segmento en segundos.
     fs : float
         Frecuencia de muestreo en Hz.
+    seed : int, optional
+        Semilla para la señal simulada (fallback). Si es None, se deriva
+        una semilla estable del nombre del evento con hashlib.
 
     Returns
     -------
-    np.ndarray
-        Array con los datos de strain.
+    tuple[np.ndarray, str]
+        ``(strain, data_source)`` donde ``data_source`` es ``"GWOSC"``
+        cuando se obtuvieron datos reales y ``"simulated"`` en caso contrario.
     """
     if GWPY_AVAILABLE:
         try:
@@ -441,16 +486,16 @@ def _fetch_gwtc_strain(
                     gps_time + half,
                     sample_rate=int(fs),
                 )
-                return np.asarray(data.value, dtype=float)
+                return np.asarray(data.value, dtype=float), "GWOSC"
         except (OSError, RuntimeError, ValueError):
             pass
 
-    # Fallback: señal simulada reproducible basada en el nombre del evento
-    seed = abs(hash(event_name)) % 2**32
-    rng = np.random.default_rng(seed)
+    # Fallback: señal simulada reproducible usando hashlib para semilla estable
+    sim_seed = seed if seed is not None else _stable_seed(event_name)
+    rng = np.random.default_rng(sim_seed)
     n = int(duration * fs)
     t = np.arange(n) / fs
     noise = rng.normal(0.0, 1e-21, n)
     amp = rng.uniform(2e-21, 8e-21)
     tone = amp * np.sin(2 * np.pi * F0_NOESIS * t)
-    return noise + tone
+    return noise + tone, "simulated"

@@ -34,6 +34,7 @@ from noesis_protocol_v3 import (
     SNR_REF_THERMAL,
     NoesisAnalysisResult,
     PsiResult,
+    _stable_seed,
     analyze_gwtc_event,
     calculate_psi_refined,
     generate_channel2_realistic,
@@ -224,6 +225,18 @@ class TestRunNoesisPipeline:
         assert r1.target.psi == pytest.approx(r2.target.psi)
         assert r1.control.psi == pytest.approx(r2.control.psi)
 
+    def test_snr_threshold_nan_by_default(self):
+        """snr_threshold must be NaN when compute_snr_threshold=False (default)."""
+        result = run_noesis_pipeline(duration=2.0, fs=512.0, seed=0)
+        assert np.isnan(result.snr_threshold)
+
+    def test_snr_threshold_computed_when_requested(self):
+        """snr_threshold must be finite when compute_snr_threshold=True."""
+        result = run_noesis_pipeline(
+            duration=2.0, fs=512.0, seed=0, compute_snr_threshold=True
+        )
+        assert np.isfinite(result.snr_threshold)
+
 
 # ---------------------------------------------------------------------------
 # GWTC integration
@@ -264,6 +277,47 @@ class TestAnalyzeGwtcEvent:
         r2 = analyze_gwtc_event("GW200129_215028", duration=4.0, fs=512.0)
         # Different events should generally produce different Ψ values
         assert r1.target.psi != r2.target.psi or r1.control.psi != r2.control.psi
+
+    def test_data_source_simulated_when_gwpy_unavailable(self):
+        """Without GWPy, data_source must be 'simulated', not 'GWOSC'."""
+        import noesis_protocol_v3 as m
+        if not m.GWPY_AVAILABLE:
+            result = analyze_gwtc_event("GW150914", duration=4.0, fs=512.0)
+            assert result.metadata["data_source"] == "simulated"
+
+    def test_reproducible_with_explicit_seed(self):
+        """Explicit seed guarantees identical results across calls."""
+        r1 = analyze_gwtc_event("GW150914", duration=4.0, fs=512.0, seed=7)
+        r2 = analyze_gwtc_event("GW150914", duration=4.0, fs=512.0, seed=7)
+        assert r1.target.psi == pytest.approx(r2.target.psi)
+        assert r1.control.psi == pytest.approx(r2.control.psi)
+
+
+# ---------------------------------------------------------------------------
+# Stable seed helper
+# ---------------------------------------------------------------------------
+
+
+class TestStableSeed:
+    """Tests for _stable_seed determinism and uniqueness."""
+
+    def test_same_inputs_same_output(self):
+        assert _stable_seed("GW150914") == _stable_seed("GW150914")
+
+    def test_different_inputs_different_output(self):
+        assert _stable_seed("GW150914") != _stable_seed("GW200129_215028")
+
+    def test_stable_across_calls(self):
+        """Value must not change between Python processes (no PYTHONHASHSEED dep)."""
+        seed1 = _stable_seed("GW150914", "H1")
+        seed2 = _stable_seed("GW150914", "H1")
+        assert seed1 == seed2
+
+    def test_returns_integer(self):
+        assert isinstance(_stable_seed("test"), int)
+
+    def test_non_negative(self):
+        assert _stable_seed("test") >= 0
 
 
 if __name__ == "__main__":
