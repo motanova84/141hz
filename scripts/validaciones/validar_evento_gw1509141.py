@@ -771,8 +771,8 @@ def generar_certificado_validacion(
     print("\n")
     print("═" * 72)
     print("  CERTIFICADO DE VALIDACIÓN PROFUNDA - EVENTO GRAVITACIONAL")
-    # Mostrar los últimos 32 caracteres del hash SHA-256 de 64 caracteres
-    print(f"  Hash: …{certificado['hash_sha256'][32:]}")
+    # Mostrar el hash SHA-256 completo (64 caracteres) para máxima verificabilidad
+    print(f"  Hash: {certificado['hash_sha256']}")
     print("═" * 72)
     print(f"  Evento       : {certificado['evento']}")
     print(f"  Sello        : {certificado['sello']}")
