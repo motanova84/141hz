@@ -569,7 +569,7 @@ def generar_reporte(resultado: Dict) -> str:
         f"  - Ventanas ON:  {est['n_on']}",
         f"  - Ventanas OFF: {est['n_off']}",
         "",
-        "ANALISIS ESTADISTICO:",
+        "ANÁLISIS ESTADÍSTICO:",
         f"  - Separacion estadistica: {sep}",
         "  - El p-value "
         + ("esta muy por debajo" if est["p_value"] < 0.01 else "supera")
