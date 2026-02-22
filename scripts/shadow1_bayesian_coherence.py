@@ -29,6 +29,24 @@ G_CONST = 6.674e-11               # m³ kg⁻¹ s⁻²
 C_LIGHT = 2.998e8                 # m s⁻¹
 MPC_TO_METERS = 3.086e22          # m Mpc⁻¹
 
+# ─── Definición canónica de Ψ (coherencia de fase) ──────────────────────────
+#
+# Ψ_GW  : Magnitud Cuadrada de Coherencia (MSC) entre detectores H1-L1
+#          evaluada en f₀ = 141.7001 Hz.
+#          MSC(f) = |S_{xy}(f)|² / (S_{xx}(f)·S_{yy}(f))  ∈ [0, 1]
+#          Umbral de detección: PSI_THRESHOLD_GW = 0.85
+#
+# Ψ_EEG : Phase Locking Value (PLV) inter-hemisférico en la banda de interés.
+#          PLV(t) = |<e^{iΔφ(t)}>| ≈ sqrt(MSC)  ∈ [0, 1]
+#          Umbral de detección: PSI_THRESHOLD_EEG = 0.70
+#
+# Ambas métricas comparten la misma infraestructura de coherencia espectral
+# de Welch; la diferencia es el dominio físico y el umbral de decisión.
+PSI_DEFINITION_GW  = "MSC@f0=141.7Hz"   # Magnitude Squared Coherence at f₀
+PSI_DEFINITION_EEG = "PLV@band"          # Phase Locking Value in frequency band
+PSI_THRESHOLD_GW   = 0.85                # A_eff threshold for GW phase stability
+PSI_THRESHOLD_EEG  = 0.70                # A_eff threshold for EEG shadow detection
+
 # ─── Parámetros de Shadow-1 ──────────────────────────────────────────────────
 SHADOW1_GPS = 1251010524.0        # GPS time del evento
 SHADOW1_A_EFF = 0.89              # Amplitud efectiva de coherencia de fase
@@ -110,11 +128,11 @@ def masses_from_chirp_mass(m_chirp: float, mass_ratio: float = 1.0):
 def compute_phase_coherence(h1: np.ndarray, l1: np.ndarray,
                              fs: float, nperseg: int = 256) -> dict:
     """
-    Calcula la coherencia de fase entre dos detectores usando la función
-    de coherencia de Welch.
+    Calcula la coherencia de fase Ψ_GW entre dos detectores usando la función
+    de coherencia de Welch (Magnitud Cuadrada de Coherencia, MSC).
 
-    A_eff se define como el valor mediano de |γ(f)| en la banda de interés,
-    donde γ es la coherencia cruzada compleja.
+    Ψ_GW = MSC@f0=141.7Hz: A_eff = mediana(sqrt(MSC(f))) en la banda de interés.
+    Umbral de decisión: PSI_THRESHOLD_GW = 0.85.
 
     Parameters
     ----------
@@ -130,16 +148,19 @@ def compute_phase_coherence(h1: np.ndarray, l1: np.ndarray,
     Returns
     -------
     dict
-        Claves: 'freqs', 'coherence', 'a_eff', 'phase_stable'.
+        Claves: 'freqs', 'coherence', 'a_eff', 'phase_stable',
+                'psi_definition', 'psi_threshold'.
     """
     freqs, coh = signal.coherence(h1, l1, fs=fs, nperseg=nperseg)
     a_eff = float(np.median(np.sqrt(np.clip(coh, 0, 1))))
-    phase_stable = bool(a_eff >= 0.85)
+    phase_stable = bool(a_eff >= PSI_THRESHOLD_GW)
     return {
         "freqs": freqs,
         "coherence": coh,
         "a_eff": a_eff,
         "phase_stable": phase_stable,
+        "psi_definition": PSI_DEFINITION_GW,
+        "psi_threshold": PSI_THRESHOLD_GW,
     }
 
 
@@ -210,7 +231,7 @@ def verify_phase_stability(a_eff: float, duration: float) -> dict:
         Resultado de la verificación con 'is_glitch_excluded' y 'verdict'.
     """
     glitch_excluded = duration > GLITCH_DURATION_THRESHOLD_S
-    is_astrophysical = a_eff >= 0.85 and glitch_excluded
+    is_astrophysical = a_eff >= PSI_THRESHOLD_GW and glitch_excluded
     verdict = "Silent Collision" if is_astrophysical else "Inconclusive"
     return {
         "a_eff": a_eff,
@@ -360,25 +381,34 @@ class Shadow1BayesianAnalyzer:
             "a_eff_computed": round(float(coh_result["a_eff"]), 4),
             "a_eff_reference": SHADOW1_A_EFF,
             "duration_s": SHADOW1_DURATION_S,
+            "psi_definition": PSI_DEFINITION_GW,
+            "psi_threshold": PSI_THRESHOLD_GW,
             **stability,
         }
         return self.results["phase_coherence"]
 
-    # ── Bayes factor ──────────────────────────────────────────────────────────
+    # ── Posterior proxy (IBC – Inferencia Bayesiana de Coherencia) ────────────
 
-    def compute_bayes_evidence(self, snr_shadow: float = 4.5,
+    def compute_posterior_proxy(self, snr_shadow: float = 4.5,
                                 mu_signal: float = 6.0,
                                 sigma_signal: float = 1.5) -> dict:
         """
-        Calcula la evidencia bayesiana para Shadow-1.
+        Calcula un proxy del posterior para Shadow-1 basado en el banco de
+        filtros de coherencia + interpolación (IBC).
 
-        Modelos:
-          H0: Ruido gaussiano únicamente.
-          H1: Señal sub-umbral de colisión silenciosa.
+        **Nota sobre nomenclatura**: Esta función implementa un proxy del
+        posterior, NO un cálculo bayesiano completo.  El log-factor que se
+        computa es un cociente de log-verosimilitudes (log-likelihood ratio):
 
-        El log-Bayes-factor se estima con las distribuciones de verosimilitud:
-          ln p(SNR | H0) = -SNR² / 2
-          ln p(SNR | H1) = -((SNR - μ) / σ)² / 2 - ln(σ√2π)
+            ln Λ = ln p(SNR | H1) − ln p(SNR | H0)
+
+        con:
+          - Prior implícito uniforme (no se especifica prior formal).
+          - H0: ruido gaussiano puro  →  ln p(SNR|H0) = −SNR²/2
+          - H1: señal sub-umbral      →  ln p(SNR|H1) = −((SNR−μ)/σ)²/2 − ln(σ√2π)
+
+        Para un análisis bayesiano completo con prior/likelihood explícitos
+        utilizar un sampler como ``bilby`` o ``PyCBC inference``.
 
         Parameters
         ----------
@@ -392,30 +422,42 @@ class Shadow1BayesianAnalyzer:
         Returns
         -------
         dict
-            log_bf, interpretation, and metadata.
+            log_posterior_proxy, interpretation, favors_signal, and metadata.
+            La clave ``log_bayes_factor`` se mantiene por compatibilidad hacia
+            atrás y es idéntica a ``log_posterior_proxy``.
         """
         log_p_h0 = -0.5 * snr_shadow ** 2
         log_p_h1 = (-0.5 * ((snr_shadow - mu_signal) / sigma_signal) ** 2
                     - np.log(sigma_signal * np.sqrt(2.0 * np.pi)))
 
-        log_bf = log_p_h1 - log_p_h0
+        log_proxy = log_p_h1 - log_p_h0
 
-        if abs(log_bf) < 1.0:
+        if abs(log_proxy) < 1.0:
             interpretation = "No worth mentioning"
-        elif abs(log_bf) < 3.0:
+        elif abs(log_proxy) < 3.0:
             interpretation = "Positive evidence"
-        elif abs(log_bf) < 5.0:
+        elif abs(log_proxy) < 5.0:
             interpretation = "Strong evidence"
         else:
             interpretation = "Very strong evidence"
 
-        self.results["bayes_evidence"] = {
+        result = {
             "snr": snr_shadow,
-            "log_bayes_factor": round(float(log_bf), 4),
+            "log_posterior_proxy": round(float(log_proxy), 4),
+            "log_bayes_factor": round(float(log_proxy), 4),   # backward compat
             "interpretation": interpretation,
-            "favors_signal": bool(log_bf > 0),
+            "favors_signal": bool(log_proxy > 0),
+            "method": "IBC(Inferencia_Bayesiana_Coherencia):log_likelihood_ratio",
         }
-        return self.results["bayes_evidence"]
+        self.results["posterior_proxy"] = result
+        self.results["bayes_evidence"] = result   # backward compat alias
+        return result
+
+    def compute_bayes_evidence(self, snr_shadow: float = 4.5,
+                               mu_signal: float = 6.0,
+                               sigma_signal: float = 1.5) -> dict:
+        """Alias of compute_posterior_proxy kept for backward compatibility."""
+        return self.compute_posterior_proxy(snr_shadow, mu_signal, sigma_signal)
 
     # ── Análisis completo ─────────────────────────────────────────────────────
 
@@ -449,10 +491,11 @@ class Shadow1BayesianAnalyzer:
         print(f"   Glitch excluido:    {'✅' if coh['is_glitch_excluded'] else '❌'}")
         print(f"   Veredicto:          {coh['verdict']}")
 
-        bayes = self.compute_bayes_evidence()
-        print(f"\n📊 Evidencia bayesiana:")
+        bayes = self.compute_posterior_proxy()
+        print(f"\n📊 Posterior proxy (IBC – log-likelihood ratio):")
         print(f"   SNR: {bayes['snr']}")
-        print(f"   ln(B₁₀) = {bayes['log_bayes_factor']:.4f}")
+        print(f"   ln Λ = {bayes['log_posterior_proxy']:.4f}")
+        print(f"   Método: {bayes['method']}")
         print(f"   Interpretación: {bayes['interpretation']}")
         print(f"   Favorece señal: {'✅' if bayes['favors_signal'] else '❌'}")
 
@@ -519,7 +562,12 @@ class EEGCoherencePipeline:
     def inter_hemisphere_coherence(self, left: np.ndarray,
                                     right: np.ndarray) -> dict:
         """
-        Calcula la coherencia inter-hemisférica Ψ entre dos canales EEG.
+        Calcula la coherencia inter-hemisférica Ψ_EEG entre dos canales EEG.
+
+        Ψ_EEG = PLV@band: Phase Locking Value en la banda de frecuencia
+        configurada.  Implementado como mediana de sqrt(MSC) en la banda, lo
+        que es equivalente a PLV para señales de banda estrecha.
+        Umbral de decisión: PSI_THRESHOLD_EEG = 0.70.
 
         Parameters
         ----------
@@ -531,7 +579,8 @@ class EEGCoherencePipeline:
         Returns
         -------
         dict
-            'freqs', 'coherence', 'a_eff_eeg', 'shadow_thought_detected'.
+            'freqs', 'coherence', 'a_eff_eeg', 'shadow_thought_detected',
+            'psi_definition', 'psi_threshold'.
         """
         left_f = self.bandpass_filter(left)
         right_f = self.bandpass_filter(right)
@@ -563,7 +612,7 @@ class EEGCoherencePipeline:
                 np.clip(1.0 - mean_amplitude / ref_amplitude, 0.0, 1.0)
             )
 
-        shadow_thought = bool(a_eff_eeg >= 0.70 and amplitude_suppression >= 0.10)
+        shadow_thought = bool(a_eff_eeg >= PSI_THRESHOLD_EEG and amplitude_suppression >= 0.10)
 
         return {
             "freqs": freqs,
@@ -571,6 +620,8 @@ class EEGCoherencePipeline:
             "a_eff_eeg": round(a_eff_eeg, 4),
             "amplitude_suppression": round(amplitude_suppression, 4),
             "shadow_thought_detected": shadow_thought,
+            "psi_definition": PSI_DEFINITION_EEG,
+            "psi_threshold": PSI_THRESHOLD_EEG,
         }
 
     def analyze(self, left: np.ndarray, right: np.ndarray) -> dict:
