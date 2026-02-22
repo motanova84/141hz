@@ -17,8 +17,11 @@ Autor: José Manuel Mota Burruezo (JMMB Ψ✧)
 Fecha: Febrero 2026
 """
 
+import math
+
 import numpy as np
 from scipy import signal, stats, special
+from scipy.signal import coherence as scipy_coherence
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -28,6 +31,24 @@ SOLAR_MASS_KG = 1.989e30          # kg
 G_CONST = 6.674e-11               # m³ kg⁻¹ s⁻²
 C_LIGHT = 2.998e8                 # m s⁻¹
 MPC_TO_METERS = 3.086e22          # m Mpc⁻¹
+
+# ─── Definición canónica de Ψ (coherencia de fase) ──────────────────────────
+#
+# Ψ_GW  : Magnitud Cuadrada de Coherencia (MSC) entre detectores H1-L1
+#          evaluada en f₀ = 141.7001 Hz.
+#          MSC(f) = |S_{xy}(f)|² / (S_{xx}(f)·S_{yy}(f))  ∈ [0, 1]
+#          Umbral de detección: PSI_THRESHOLD_GW = 0.85
+#
+# Ψ_EEG : Phase Locking Value (PLV) inter-hemisférico en la banda de interés.
+#          PLV(t) = |<e^{iΔφ(t)}>| ≈ sqrt(MSC)  ∈ [0, 1]
+#          Umbral de detección: PSI_THRESHOLD_EEG = 0.70
+#
+# Ambas métricas comparten la misma infraestructura de coherencia espectral
+# de Welch; la diferencia es el dominio físico y el umbral de decisión.
+PSI_DEFINITION_GW  = "MSC@f0=141.7Hz"   # Magnitude Squared Coherence at f₀
+PSI_DEFINITION_EEG = "PLV@band"          # Phase Locking Value in frequency band
+PSI_THRESHOLD_GW   = 0.85                # A_eff threshold for GW phase stability
+PSI_THRESHOLD_EEG  = 0.70                # A_eff threshold for EEG shadow detection
 
 # ─── Parámetros de Shadow-1 ──────────────────────────────────────────────────
 SHADOW1_GPS = 1251010524.0        # GPS time del evento
@@ -110,11 +131,11 @@ def masses_from_chirp_mass(m_chirp: float, mass_ratio: float = 1.0):
 def compute_phase_coherence(h1: np.ndarray, l1: np.ndarray,
                              fs: float, nperseg: int = 256) -> dict:
     """
-    Calcula la coherencia de fase entre dos detectores usando la función
-    de coherencia de Welch.
+    Calcula la coherencia de fase Ψ_GW entre dos detectores usando la función
+    de coherencia de Welch (Magnitud Cuadrada de Coherencia, MSC).
 
-    A_eff se define como el valor mediano de |γ(f)| en la banda de interés,
-    donde γ es la coherencia cruzada compleja.
+    Ψ_GW = MSC@f0=141.7Hz: A_eff = mediana(sqrt(MSC(f))) en la banda de interés.
+    Umbral de decisión: PSI_THRESHOLD_GW = 0.85.
 
     Parameters
     ----------
@@ -130,16 +151,19 @@ def compute_phase_coherence(h1: np.ndarray, l1: np.ndarray,
     Returns
     -------
     dict
-        Claves: 'freqs', 'coherence', 'a_eff', 'phase_stable'.
+        Claves: 'freqs', 'coherence', 'a_eff', 'phase_stable',
+                'psi_definition', 'psi_threshold'.
     """
     freqs, coh = signal.coherence(h1, l1, fs=fs, nperseg=nperseg)
     a_eff = float(np.median(np.sqrt(np.clip(coh, 0, 1))))
-    phase_stable = bool(a_eff >= 0.85)
+    phase_stable = bool(a_eff >= PSI_THRESHOLD_GW)
     return {
         "freqs": freqs,
         "coherence": coh,
         "a_eff": a_eff,
         "phase_stable": phase_stable,
+        "psi_definition": PSI_DEFINITION_GW,
+        "psi_threshold": PSI_THRESHOLD_GW,
     }
 
 
@@ -161,7 +185,7 @@ def verify_phase_stability(a_eff: float, duration: float) -> dict:
         Resultado de la verificación con 'is_glitch_excluded' y 'verdict'.
     """
     glitch_excluded = duration > GLITCH_DURATION_THRESHOLD_S
-    is_astrophysical = a_eff >= 0.85 and glitch_excluded
+    is_astrophysical = a_eff >= PSI_THRESHOLD_GW and glitch_excluded
     verdict = "Silent Collision" if is_astrophysical else "Inconclusive"
     return {
         "a_eff": a_eff,
@@ -170,6 +194,229 @@ def verify_phase_stability(a_eff: float, duration: float) -> dict:
         "is_glitch_excluded": glitch_excluded,
         "is_astrophysical": is_astrophysical,
         "verdict": verdict,
+    }
+
+
+# ─── Anti-artefacto: coherencia por banda y controles ────────────────────────
+
+def band_coherence_feature(x: np.ndarray, y: np.ndarray, fs: float,
+                            band: tuple, nperseg: int = 256) -> dict:
+    """
+    Calcula A_eff robusto (mediana de sqrt(coherencia)) en una banda dada.
+
+    Parameters
+    ----------
+    x, y : np.ndarray
+        Señales de entrada.
+    fs : float
+        Frecuencia de muestreo (Hz).
+    band : tuple of float
+        (f_low, f_high) en Hz.
+    nperseg : int
+        Número de muestras por segmento.
+
+    Returns
+    -------
+    dict
+        'band_hz', 'a_eff', 'coh_mean', 'coh_median', 'n_bins'.
+    """
+    f, Cxy = scipy_coherence(x, y, fs=fs, nperseg=nperseg)
+    lo, hi = band
+    m = (f >= lo) & (f <= hi)
+    c_band = np.nan_to_num(Cxy[m], nan=0.0, posinf=0.0, neginf=0.0)
+
+    if c_band.size:
+        a_eff = float(np.median(np.sqrt(np.clip(c_band, 0.0, 1.0))))
+    else:
+        a_eff = 0.0
+
+    return {
+        "band_hz": [float(lo), float(hi)],
+        "a_eff": a_eff,
+        "coh_mean": float(np.mean(c_band)) if c_band.size else 0.0,
+        "coh_median": float(np.median(c_band)) if c_band.size else 0.0,
+        "n_bins": int(c_band.size),
+    }
+
+
+def normalize_bayes_factor(*, lnB: float = None, log10B: float = None) -> dict:
+    """
+    Normaliza el Bayes factor devolviendo ambas representaciones sin ambigüedad.
+
+    Provide exactly one of lnB or log10B; the other is computed automatically.
+
+    Parameters
+    ----------
+    lnB : float, optional
+        Log natural del Bayes factor.
+    log10B : float, optional
+        Log base-10 del Bayes factor.
+
+    Returns
+    -------
+    dict
+        'ln_bayes_factor', 'log10_bayes_factor'.
+    """
+    if lnB is None and log10B is None:
+        raise ValueError("Must provide exactly one of lnB or log10B, but neither was provided")
+
+    if lnB is None:
+        lnB = float(log10B) * math.log(10.0)
+    if log10B is None:
+        log10B = float(lnB) / math.log(10.0)
+
+    return {
+        "ln_bayes_factor": float(lnB),
+        "log10_bayes_factor": float(log10B),
+    }
+
+
+def time_slide_control(x: np.ndarray, y: np.ndarray, fs: float,
+                        band: tuple,
+                        slides_s: list = None) -> dict:
+    """
+    Control de time-slide: desfasa y en varios intervalos y mide A_eff.
+
+    Si A_eff sigue alto tras el slide → instrumental/pipeline.
+    Si A_eff cae → coherencia física plausible.
+
+    Parameters
+    ----------
+    x, y : np.ndarray
+        Señales H1 y L1.
+    fs : float
+        Frecuencia de muestreo (Hz).
+    band : tuple of float
+        Banda de señal (Hz).
+    slides_s : list of float
+        Desplazamientos temporales en segundos.
+
+    Returns
+    -------
+    dict
+        'slides_s', 'a_eff_slide_median', 'a_eff_slide_max', 'details'.
+    """
+    if slides_s is None:
+        slides_s = [0.2, -0.2, 0.4, -0.4]
+
+    n = len(x)
+    out = []
+    for dt in slides_s:
+        shift = int(round(dt * fs))
+        if abs(shift) >= n:
+            continue
+        y_shift = np.roll(y, shift)
+        feat = band_coherence_feature(x, y_shift, fs, band)
+        feat["slide_s"] = float(dt)
+        out.append(feat)
+
+    a_eff_slides = [d["a_eff"] for d in out] if out else [0.0]
+    a_eff_med = float(np.median(a_eff_slides))
+    a_eff_max = float(np.max(a_eff_slides))
+
+    return {
+        "slides_s": slides_s,
+        "a_eff_slide_median": a_eff_med,
+        "a_eff_slide_max": a_eff_max,
+        "details": out,
+    }
+
+
+def control_band_check(x: np.ndarray, y: np.ndarray, fs: float,
+                        signal_band: tuple,
+                        control_band: tuple) -> dict:
+    """
+    Compara A_eff en banda de señal vs banda de control off-target.
+
+    ratio_relativo = A_eff_signal / A_eff_control (alta → coherencia selectiva).
+
+    Parameters
+    ----------
+    x, y : np.ndarray
+        Señales H1 y L1.
+    fs : float
+        Frecuencia de muestreo (Hz).
+    signal_band : tuple of float
+        Banda de interés (Hz).
+    control_band : tuple of float
+        Banda off-target de control (Hz).
+
+    Returns
+    -------
+    dict
+        'signal', 'control', 'ratio_relativo'.
+    """
+    sig = band_coherence_feature(x, y, fs, signal_band)
+    ctrl = band_coherence_feature(x, y, fs, control_band)
+
+    denom = max(ctrl["a_eff"], 1e-12)
+    ratio = float(sig["a_eff"] / denom)
+
+    return {
+        "signal": sig,
+        "control": ctrl,
+        "ratio_relativo": ratio,
+    }
+
+
+def silent_collision_assessment(a_eff: float, duration_s: float,
+                                 a_eff_slide_median: float,
+                                 ratio_relativo: float,
+                                 a_eff_thr: float = 0.85,
+                                 dur_thr: float = 0.05,
+                                 slide_margin: float = 0.10,
+                                 ratio_thr: float = 1.5) -> dict:
+    """
+    Evalúa "Silent Collision" con score continuo y flag condicionado a controles.
+
+    Parameters
+    ----------
+    a_eff : float
+        Amplitud efectiva en banda de señal.
+    duration_s : float
+        Duración de la firma de fase (s).
+    a_eff_slide_median : float
+        Mediana de A_eff en time-slides.
+    ratio_relativo : float
+        A_eff_signal / A_eff_control.
+    a_eff_thr : float
+        Umbral mínimo de A_eff.
+    dur_thr : float
+        Duración mínima de la firma (s).
+    slide_margin : float
+        Diferencia mínima requerida (a_eff - a_eff_slide_median).
+    ratio_thr : float
+        Ratio mínimo señal/control.
+
+    Returns
+    -------
+    dict
+        'silent_score', 'silent_flag', 'passes_slide_control',
+        'passes_control_band', 'thresholds'.
+    """
+    if duration_s < 0:
+        raise ValueError(f"duration_s must be non-negative, got {duration_s}")
+    silent_score = float(a_eff * math.log1p(duration_s / dur_thr))
+
+    passes_slide = (a_eff - a_eff_slide_median) >= slide_margin
+    passes_ratio = ratio_relativo >= ratio_thr
+
+    silent_flag = bool(
+        (a_eff >= a_eff_thr) and (duration_s >= dur_thr)
+        and passes_slide and passes_ratio
+    )
+
+    return {
+        "silent_score": silent_score,
+        "silent_flag": silent_flag,
+        "passes_slide_control": passes_slide,
+        "passes_control_band": passes_ratio,
+        "thresholds": {
+            "a_eff_thr": a_eff_thr,
+            "dur_thr": dur_thr,
+            "slide_margin": slide_margin,
+            "ratio_thr": ratio_thr,
+        },
     }
 
 
@@ -309,25 +556,34 @@ class Shadow1BayesianAnalyzer:
             "a_eff_computed": round(float(coh_result["a_eff"]), 4),
             "a_eff_reference": SHADOW1_A_EFF,
             "duration_s": SHADOW1_DURATION_S,
+            "psi_definition": PSI_DEFINITION_GW,
+            "psi_threshold": PSI_THRESHOLD_GW,
             **stability,
         }
         return self.results["phase_coherence"]
 
-    # ── Bayes factor ──────────────────────────────────────────────────────────
+    # ── Posterior proxy (IBC – Inferencia Bayesiana de Coherencia) ────────────
 
-    def compute_bayes_evidence(self, snr_shadow: float = 4.5,
+    def compute_posterior_proxy(self, snr_shadow: float = 4.5,
                                 mu_signal: float = 6.0,
                                 sigma_signal: float = 1.5) -> dict:
         """
-        Calcula la evidencia bayesiana para Shadow-1.
+        Calcula un proxy del posterior para Shadow-1 basado en el banco de
+        filtros de coherencia + interpolación (IBC).
 
-        Modelos:
-          H0: Ruido gaussiano únicamente.
-          H1: Señal sub-umbral de colisión silenciosa.
+        **Nota sobre nomenclatura**: Esta función implementa un proxy del
+        posterior, NO un cálculo bayesiano completo.  El log-factor que se
+        computa es un cociente de log-verosimilitudes (log-likelihood ratio):
 
-        El log-Bayes-factor se estima con las distribuciones de verosimilitud:
-          ln p(SNR | H0) = -SNR² / 2
-          ln p(SNR | H1) = -((SNR - μ) / σ)² / 2 - ln(σ√2π)
+            ln Λ = ln p(SNR | H1) − ln p(SNR | H0)
+
+        con:
+          - Prior implícito uniforme (no se especifica prior formal).
+          - H0: ruido gaussiano puro  →  ln p(SNR|H0) = −SNR²/2
+          - H1: señal sub-umbral      →  ln p(SNR|H1) = −((SNR−μ)/σ)²/2 − ln(σ√2π)
+
+        Para un análisis bayesiano completo con prior/likelihood explícitos
+        utilizar un sampler como ``bilby`` o ``PyCBC inference``.
 
         Parameters
         ----------
@@ -341,30 +597,45 @@ class Shadow1BayesianAnalyzer:
         Returns
         -------
         dict
-            log_bf, interpretation, and metadata.
+            log_posterior_proxy, interpretation, favors_signal, and metadata.
+            La clave ``log_bayes_factor`` se mantiene por compatibilidad hacia
+            atrás y es idéntica a ``log_posterior_proxy``.
         """
         log_p_h0 = -0.5 * snr_shadow ** 2
         log_p_h1 = (-0.5 * ((snr_shadow - mu_signal) / sigma_signal) ** 2
                     - np.log(sigma_signal * np.sqrt(2.0 * np.pi)))
 
-        log_bf = log_p_h1 - log_p_h0
+        log_proxy = log_p_h1 - log_p_h0
 
-        if abs(log_bf) < 1.0:
+        if abs(log_proxy) < 1.0:
             interpretation = "No worth mentioning"
-        elif abs(log_bf) < 3.0:
+        elif abs(log_proxy) < 3.0:
             interpretation = "Positive evidence"
-        elif abs(log_bf) < 5.0:
+        elif abs(log_proxy) < 5.0:
             interpretation = "Strong evidence"
         else:
             interpretation = "Very strong evidence"
 
+        bayes_norm = normalize_bayes_factor(lnB=log_bf)
+
         self.results["bayes_evidence"] = {
             "snr": snr_shadow,
             "log_bayes_factor": round(float(log_bf), 4),
+            "ln_bayes_factor": round(bayes_norm["ln_bayes_factor"], 4),
+            "log10_bayes_factor": round(bayes_norm["log10_bayes_factor"], 4),
             "interpretation": interpretation,
-            "favors_signal": bool(log_bf > 0),
+            "favors_signal": bool(log_proxy > 0),
+            "method": "IBC(Inferencia_Bayesiana_Coherencia):log_likelihood_ratio",
         }
-        return self.results["bayes_evidence"]
+        self.results["posterior_proxy"] = result
+        self.results["bayes_evidence"] = result   # backward compat alias
+        return result
+
+    def compute_bayes_evidence(self, snr_shadow: float = 4.5,
+                               mu_signal: float = 6.0,
+                               sigma_signal: float = 1.5) -> dict:
+        """Alias of compute_posterior_proxy kept for backward compatibility."""
+        return self.compute_posterior_proxy(snr_shadow, mu_signal, sigma_signal)
 
     # ── Análisis completo ─────────────────────────────────────────────────────
 
@@ -375,8 +646,8 @@ class Shadow1BayesianAnalyzer:
         Returns
         -------
         dict
-            Diccionario con todos los resultados: parámetros, coherencia y
-            evidencia bayesiana.
+            Diccionario con todos los resultados: parámetros, coherencia,
+            controles anti-artefacto y evidencia bayesiana.
         """
         print("=" * 60)
         print("🌌 ANÁLISIS MORFOLÓGICO DE SHADOW-1")
@@ -398,10 +669,46 @@ class Shadow1BayesianAnalyzer:
         print(f"   Glitch excluido:    {'✅' if coh['is_glitch_excluded'] else '❌'}")
         print(f"   Veredicto:          {coh['verdict']}")
 
-        bayes = self.compute_bayes_evidence()
+        # ── Controles anti-artefacto ─────────────────────────────────────────
+        h1, l1, _ = self._generate_synthetic_strain()
+        signal_band = (30.0, 80.0)
+        control_band = (190.0, 240.0)
+
+        phase_sig = band_coherence_feature(h1, l1, self.fs, signal_band)
+        ctrl = control_band_check(h1, l1, self.fs, signal_band, control_band)
+        slides = time_slide_control(h1, l1, self.fs, signal_band)
+
+        assess = silent_collision_assessment(
+            a_eff=SHADOW1_A_EFF,
+            duration_s=SHADOW1_DURATION_S,
+            a_eff_slide_median=slides["a_eff_slide_median"],
+            ratio_relativo=ctrl["ratio_relativo"],
+        )
+
+        self.results["controls"] = {
+            "time_slide": slides,
+            "control_band": ctrl,
+        }
+        self.results["verdict"] = assess
+
+        print(f"\n🛡️  Controles anti-artefacto:")
+        print(f"   A_eff en banda señal:    {phase_sig['a_eff']:.4f}")
+        print(f"   A_eff slide (mediana):   {slides['a_eff_slide_median']:.4f}")
+        print(f"   ratio_relativo:          {ctrl['ratio_relativo']:.4f}")
+        print(f"   Pasa control slide:      {'✅' if assess['passes_slide_control'] else '❌'}")
+        print(f"   Pasa control banda:      {'✅' if assess['passes_control_band'] else '❌'}")
+        print(f"   silent_score:            {assess['silent_score']:.4f}")
+        print(f"   silent_flag:             {'✅' if assess['silent_flag'] else '❌'}")
+
+        bayes = self.compute_posterior_proxy()
         print(f"\n📊 Evidencia bayesiana:")
         print(f"   SNR: {bayes['snr']}")
-        print(f"   ln(B₁₀) = {bayes['log_bayes_factor']:.4f}")
+        print(f"   ln(B) = {bayes['ln_bayes_factor']:.4f}")
+        print(f"   log₁₀(B) = {bayes['log10_bayes_factor']:.4f}")
+        print(f"\n📊 Posterior proxy (IBC – log-likelihood ratio):")
+        print(f"   SNR: {bayes['snr']}")
+        print(f"   ln Λ = {bayes['log_posterior_proxy']:.4f}")
+        print(f"   Método: {bayes['method']}")
         print(f"   Interpretación: {bayes['interpretation']}")
         print(f"   Favorece señal: {'✅' if bayes['favors_signal'] else '❌'}")
 
@@ -464,7 +771,12 @@ class EEGCoherencePipeline:
     def inter_hemisphere_coherence(self, left: np.ndarray,
                                     right: np.ndarray) -> dict:
         """
-        Calcula la coherencia inter-hemisférica Ψ entre dos canales EEG.
+        Calcula la coherencia inter-hemisférica Ψ_EEG entre dos canales EEG.
+
+        Ψ_EEG = PLV@band: Phase Locking Value en la banda de frecuencia
+        configurada.  Implementado como mediana de sqrt(MSC) en la banda, lo
+        que es equivalente a PLV para señales de banda estrecha.
+        Umbral de decisión: PSI_THRESHOLD_EEG = 0.70.
 
         Parameters
         ----------
@@ -476,7 +788,8 @@ class EEGCoherencePipeline:
         Returns
         -------
         dict
-            'freqs', 'coherence', 'a_eff_eeg', 'shadow_thought_detected'.
+            'freqs', 'coherence', 'a_eff_eeg', 'shadow_thought_detected',
+            'psi_definition', 'psi_threshold'.
         """
         left_f = self.bandpass_filter(left)
         right_f = self.bandpass_filter(right)
@@ -508,7 +821,7 @@ class EEGCoherencePipeline:
                 np.clip(1.0 - mean_amplitude / ref_amplitude, 0.0, 1.0)
             )
 
-        shadow_thought = bool(a_eff_eeg >= 0.70 and amplitude_suppression >= 0.10)
+        shadow_thought = bool(a_eff_eeg >= PSI_THRESHOLD_EEG and amplitude_suppression >= 0.10)
 
         return {
             "freqs": freqs,
@@ -516,6 +829,8 @@ class EEGCoherencePipeline:
             "a_eff_eeg": round(a_eff_eeg, 4),
             "amplitude_suppression": round(amplitude_suppression, 4),
             "shadow_thought_detected": shadow_thought,
+            "psi_definition": PSI_DEFINITION_EEG,
+            "psi_threshold": PSI_THRESHOLD_EEG,
         }
 
     def analyze(self, left: np.ndarray, right: np.ndarray) -> dict:
@@ -569,6 +884,9 @@ def main() -> int:
     eeg_result = pipeline.analyze(left_channel, right_channel)
     results["eeg_pipeline"] = {k: v for k, v in eeg_result.items()
                                if k not in ("freqs", "coherence")}
+    results["eeg_pipeline"]["disclaimer"] = (
+        "Independent pipeline; not joint inference with GW."
+    )
 
     return 0
 
