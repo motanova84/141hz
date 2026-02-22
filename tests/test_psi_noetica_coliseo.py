@@ -31,6 +31,7 @@ from coliseo_psi_noetic import (
     generar_par_escenario2,
     generar_par_escenario3,
     generar_par_escenario4,
+    EPSILON,
     F0_DEFAULT,
     BW_DEFAULT,
     FS_DEFAULT,
@@ -190,7 +191,7 @@ class TestSanidadNula(unittest.TestCase):
                 psis.append(res["psi"])
             scores_por_semilla.append(np.mean(psis))
 
-        cv = np.std(scores_por_semilla) / (np.mean(scores_por_semilla) + 1e-12)  # epsilon evita /0
+        cv = np.std(scores_por_semilla) / (np.mean(scores_por_semilla) + EPSILON)  # evita /0
         self.assertLess(cv, 1.0,
                         f"Coeficiente de variación inter-semilla {cv:.3f} demasiado alto")
 

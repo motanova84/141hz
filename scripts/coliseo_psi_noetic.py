@@ -33,6 +33,7 @@ F0_DEFAULT = 141.7001   # Hz
 BW_DEFAULT = 5.0        # Hz — semiancho de banda (≥1/T_min para ser resoluble)
 FS_DEFAULT = 4096       # Hz
 F_CONTROL_OFFSET = 50.0 # Hz — desplazamiento para frecuencia de control
+EPSILON = 1e-30         # Epsilon universal para guards de división por cero
 
 # Función trapz compatible con NumPy 1.x y 2.x
 try:
@@ -44,6 +45,28 @@ except AttributeError:
 # ═══════════════════════════════════════════════════════════════════════════
 # Funciones métricas principales
 # ═══════════════════════════════════════════════════════════════════════════
+
+def _integrate_band(pxx, freqs, f_low, f_high):
+    """Integra pxx entre f_low y f_high usando la regla del trapecio.
+
+    Parámetros
+    ----------
+    pxx, freqs : array-like
+        Densidad espectral y vector de frecuencias.
+    f_low, f_high : float
+        Límites de la banda (Hz).
+
+    Retorna
+    -------
+    float
+        Potencia integrada en la banda (unidades²).
+    """
+    mask = (freqs >= f_low) & (freqs <= f_high)
+    if mask.sum() > 1:
+        return float(_trapz(pxx[mask], freqs[mask]))
+    df = freqs[1] - freqs[0]
+    return float(pxx[mask].sum() * df)
+
 
 def calcular_snr_potencia(pxx, freqs, f0=F0_DEFAULT, bw=BW_DEFAULT):
     """Ratio on-band / off-band de potencia espectral.
@@ -75,12 +98,8 @@ def calcular_snr_potencia(pxx, freqs, f0=F0_DEFAULT, bw=BW_DEFAULT):
         # Se devuelve un valor especial (NaN) en lugar de asumir un df arbitrario.
         return float("nan")
 
-    df = freqs[1] - freqs[0]
-    mask_on = (freqs >= f0 - bw) & (freqs <= f0 + bw)
-    mask_off = (freqs >= f0 + 2 * bw) & (freqs <= f0 + 4 * bw)
-
-    power_on = _trapz(pxx[mask_on], freqs[mask_on]) if mask_on.sum() > 1 else float(pxx[mask_on].sum() * df)
-    power_off = _trapz(pxx[mask_off], freqs[mask_off]) if mask_off.sum() > 1 else float(pxx[mask_off].sum() * df)
+    power_on = _integrate_band(pxx, freqs, f0 - bw, f0 + bw)
+    power_off = _integrate_band(pxx, freqs, f0 + 2 * bw, f0 + 4 * bw)
 
     if power_off <= 0:
         return 0.0
@@ -292,9 +311,8 @@ def calcular_ratio_control(x1, x2, fs=FS_DEFAULT, f0=F0_DEFAULT,
 
     psi_f0 = res_f0["psi"]
     psi_ctrl = res_ctrl["psi"]
-    # Epsilon evita división por cero cuando no hay potencia en la banda de control
-    _EPS = 1e-30
-    ratio = psi_f0 / (psi_ctrl + _EPS)
+    # EPSILON evita división por cero cuando no hay potencia en la banda de control
+    ratio = psi_f0 / (psi_ctrl + EPSILON)
 
     return {"psi_f0": psi_f0, "psi_control": psi_ctrl, "ratio": ratio}
 
