@@ -27,6 +27,10 @@ from scripts.shadow1_bayesian_coherence import (
     SHADOW1_MASS_MAX,
     SHADOW1_MASS_MAX_PRIMARY,
     GLITCH_DURATION_THRESHOLD_S,
+    PSI_DEFINITION_GW,
+    PSI_DEFINITION_EEG,
+    PSI_THRESHOLD_GW,
+    PSI_THRESHOLD_EEG,
     chirp_mass_from_frequency_evolution,
     masses_from_chirp_mass,
     compute_phase_coherence,
@@ -72,6 +76,26 @@ class TestConstants(unittest.TestCase):
     def test_glitch_threshold(self):
         """Glitch threshold must be shorter than Shadow-1 duration."""
         self.assertLess(GLITCH_DURATION_THRESHOLD_S, SHADOW1_DURATION_S)
+
+    def test_psi_definition_gw(self):
+        """PSI_DEFINITION_GW must reference MSC at f0."""
+        self.assertIn("MSC", PSI_DEFINITION_GW)
+        self.assertIn("141.7", PSI_DEFINITION_GW)
+
+    def test_psi_definition_eeg(self):
+        """PSI_DEFINITION_EEG must reference PLV."""
+        self.assertIn("PLV", PSI_DEFINITION_EEG)
+
+    def test_psi_threshold_gw(self):
+        """GW phase threshold must be in (0, 1)."""
+        self.assertGreater(PSI_THRESHOLD_GW, 0.0)
+        self.assertLess(PSI_THRESHOLD_GW, 1.0)
+
+    def test_psi_threshold_eeg(self):
+        """EEG coherence threshold must be in (0, 1) and below GW threshold."""
+        self.assertGreater(PSI_THRESHOLD_EEG, 0.0)
+        self.assertLess(PSI_THRESHOLD_EEG, 1.0)
+        self.assertLess(PSI_THRESHOLD_EEG, PSI_THRESHOLD_GW)
 
 
 class TestChirpMass(unittest.TestCase):
@@ -147,8 +171,15 @@ class TestPhaseCoherence(unittest.TestCase):
     def test_returns_expected_keys(self):
         """compute_phase_coherence must return required keys."""
         result = compute_phase_coherence(self.h1, self.l1, self.fs)
-        for key in ("freqs", "coherence", "a_eff", "phase_stable"):
+        for key in ("freqs", "coherence", "a_eff", "phase_stable",
+                    "psi_definition", "psi_threshold"):
             self.assertIn(key, result)
+
+    def test_psi_definition_in_result(self):
+        """compute_phase_coherence result must include GW psi_definition."""
+        result = compute_phase_coherence(self.h1, self.l1, self.fs)
+        self.assertEqual(result["psi_definition"], PSI_DEFINITION_GW)
+        self.assertEqual(result["psi_threshold"], PSI_THRESHOLD_GW)
 
     def test_a_eff_in_range(self):
         """A_eff must be in [0, 1]."""
@@ -220,10 +251,41 @@ class TestShadow1BayesianAnalyzer(unittest.TestCase):
         self.assertIn("verdict", coh)
 
     def test_bayes_evidence_keys(self):
-        """Bayes evidence must return required keys."""
+        """Bayes evidence (backward-compat) must return required keys."""
         bayes = self.analyzer.compute_bayes_evidence()
         for key in ("log_bayes_factor", "interpretation", "favors_signal"):
             self.assertIn(key, bayes)
+
+    def test_posterior_proxy_keys(self):
+        """compute_posterior_proxy must return posterior_proxy keys."""
+        proxy = self.analyzer.compute_posterior_proxy()
+        for key in ("log_posterior_proxy", "interpretation", "favors_signal",
+                    "method"):
+            self.assertIn(key, proxy)
+
+    def test_posterior_proxy_method_field(self):
+        """method field must indicate IBC/log-likelihood ratio."""
+        proxy = self.analyzer.compute_posterior_proxy()
+        self.assertIn("IBC", proxy["method"])
+
+    def test_posterior_proxy_matches_bayes_evidence(self):
+        """compute_posterior_proxy and compute_bayes_evidence must give same values."""
+        proxy = self.analyzer.compute_posterior_proxy()
+        bayes = self.analyzer.compute_bayes_evidence()
+        self.assertAlmostEqual(proxy["log_posterior_proxy"],
+                               bayes["log_bayes_factor"], places=5)
+
+    def test_phase_coherence_psi_definition(self):
+        """Phase coherence result must include psi_definition and psi_threshold."""
+        coh = self.analyzer.analyze_phase_coherence()
+        self.assertEqual(coh["psi_definition"], PSI_DEFINITION_GW)
+        self.assertEqual(coh["psi_threshold"], PSI_THRESHOLD_GW)
+
+    def test_posterior_proxy_in_results(self):
+        """run_full_analysis must populate posterior_proxy in results."""
+        results = self.analyzer.run_full_analysis()
+        self.assertIn("posterior_proxy", results)
+        self.assertIn("log_posterior_proxy", results["posterior_proxy"])
 
     def test_bayes_evidence_finite(self):
         """log_bayes_factor must be a finite number."""
@@ -233,8 +295,10 @@ class TestShadow1BayesianAnalyzer(unittest.TestCase):
     def test_run_full_analysis(self):
         """Full analysis must populate all result sections."""
         results = self.analyzer.run_full_analysis()
-        for section in ("parameters", "phase_coherence", "bayes_evidence"):
+        for section in ("parameters", "phase_coherence", "posterior_proxy"):
             self.assertIn(section, results)
+        # Backward-compat alias must also be present
+        self.assertIn("bayes_evidence", results)
 
     def test_silent_collision_verdict(self):
         """Shadow-1 must be classified as Silent Collision."""
@@ -279,6 +343,12 @@ class TestEEGCoherencePipeline(unittest.TestCase):
         for key in ("a_eff_eeg", "amplitude_suppression",
                     "shadow_thought_detected"):
             self.assertIn(key, result)
+
+    def test_analyze_returns_psi_definition(self):
+        """analyze() result must include psi_definition and psi_threshold."""
+        result = self.pipeline.inter_hemisphere_coherence(self.left, self.right)
+        self.assertEqual(result["psi_definition"], PSI_DEFINITION_EEG)
+        self.assertEqual(result["psi_threshold"], PSI_THRESHOLD_EEG)
 
     def test_invalid_band_raises(self):
         """Invalid frequency band must raise ValueError."""
