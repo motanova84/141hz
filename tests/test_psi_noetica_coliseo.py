@@ -82,13 +82,25 @@ class TestCalcSNRPotencia(unittest.TestCase):
                         f"D_SNR no debe dispararse con ruido blanco, obtenido {d_snr:.3f}")
 
     def test_snr_retorna_float_no_negativo(self):
-        """D_SNR siempre debe ser ≥ 0."""
+        """D_SNR debe ser ≥ 0 cuando las bandas tienen soporte, o NaN si no lo tienen."""
         rng = np.random.default_rng(7)
-        x = rng.normal(0, 1, 1024)
-        freqs, pxx = sp_signal.welch(x, fs=FS, nperseg=128)
+        # Usar n suficientemente grande para que off-band tenga soporte
+        x = rng.normal(0, 1, 8192)
+        freqs, pxx = sp_signal.periodogram(x, fs=FS)
         d_snr = calcular_snr_potencia(pxx, freqs, f0=F0, bw=BW)
+        # Con periodograma de 8192 puntos las bandas tienen soporte en freqs
+        self.assertFalse(np.isnan(d_snr), "D_SNR no debe ser NaN cuando hay soporte espectral")
         self.assertGreaterEqual(d_snr, 0.0)
         self.assertIsInstance(d_snr, float)
+
+    def test_snr_retorna_nan_sin_soporte(self):
+        """D_SNR retorna NaN cuando la banda off-band cae fuera del rango de freqs."""
+        # Crear freqs sólo en [0, 50] Hz — off-band (f0+2bw=151.7 Hz) no tiene soporte
+        freqs = np.linspace(0, 50, 256)
+        pxx = np.ones_like(freqs)
+        d_snr = calcular_snr_potencia(pxx, freqs, f0=F0, bw=BW)
+        self.assertTrue(np.isnan(d_snr),
+                        "D_SNR debe ser NaN cuando off-band cae fuera del rango espectral")
 
 
 class TestCalcPsiNoetica(unittest.TestCase):
@@ -243,9 +255,10 @@ class TestCuatroEscenarios(unittest.TestCase):
         auc = self._auc(generar_par_escenario4, rho=0.8)
         self.assertGreaterEqual(auc, 0.0)
         self.assertLessEqual(auc, 1.0)
-        # Imprimir para auditoría — en paper real comparar con escenario 1
-        print(f"\n  [Escenario 4] AUC con ρ=0.8: {auc:.3f} "
-              f"(comparar con Escenario 1 para detectar inflación)")
+        # Imprimir para auditoría solo si se habilita explícitamente
+        if os.environ.get("DEBUG_PSI_NOETICA_COLISEO"):
+            print(f"\n  [Escenario 4] AUC con ρ=0.8: {auc:.3f} "
+                  f"(comparar con Escenario 1 para detectar inflación)")
 
 
 class TestFControl(unittest.TestCase):

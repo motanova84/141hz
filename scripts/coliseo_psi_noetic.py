@@ -98,6 +98,12 @@ def calcular_snr_potencia(pxx, freqs, f0=F0_DEFAULT, bw=BW_DEFAULT):
         # Se devuelve un valor especial (NaN) en lugar de asumir un df arbitrario.
         return float("nan")
 
+    # Validar que ambas bandas tienen soporte en freqs; si no, SNR no calculable.
+    mask_on = (freqs >= f0 - bw) & (freqs <= f0 + bw)
+    mask_off = (freqs >= f0 + 2 * bw) & (freqs <= f0 + 4 * bw)
+    if mask_on.sum() == 0 or mask_off.sum() == 0:
+        return float("nan")
+
     power_on = _integrate_band(pxx, freqs, f0 - bw, f0 + bw)
     power_off = _integrate_band(pxx, freqs, f0 + 2 * bw, f0 + 4 * bw)
 
@@ -142,8 +148,8 @@ def calcular_psi_noetica(x1, x2, fs=FS_DEFAULT, f0=F0_DEFAULT, bw=BW_DEFAULT):
     freqs, pxx = _compute_psd(x1, fs)
     d_snr = calcular_snr_potencia(pxx, freqs, f0=f0, bw=bw)
 
-    # Coherencia cruzada — nperseg = n//2 si hay suficientes muestras
-    nperseg = max(32, n // 2)
+    # Coherencia cruzada — nperseg = n//2, sin exceder la longitud de la señal
+    nperseg = min(max(32, n // 2), n)
     f_coh, cxy = scipy_coherence(x1, x2, fs=fs, nperseg=nperseg)
     mask_band = (f_coh >= f0 - bw) & (f_coh <= f0 + bw)
     d_coh = float(np.mean(cxy[mask_band])) if mask_band.sum() > 0 else 0.0
@@ -270,8 +276,12 @@ def calcular_auc_escenario(gen_fn, n_trials, n_samples, fs, f0, bw,
     tpr_list.append(1.0)
     fpr_list.append(1.0)
 
-    auc = float(_trapz(tpr_list, fpr_list))
-    return max(0.0, min(1.0, abs(auc)))
+    # AUC por integración trapezoidal sobre curva ROC empírica ordenada por FPR
+    fpr_arr = np.array(fpr_list)
+    tpr_arr = np.array(tpr_list)
+    orden = np.argsort(fpr_arr)
+    auc = float(_trapz(tpr_arr[orden], fpr_arr[orden]))
+    return max(0.0, min(1.0, auc))
 
 
 # ═══════════════════════════════════════════════════════════════════════════
