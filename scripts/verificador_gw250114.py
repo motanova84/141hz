@@ -143,6 +143,7 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+"""
 Verificador en Tiempo Real GW250114
 Sistema de monitoreo y análisis automático para detectar y analizar GW250114
 cuando esté disponible en GWOSC.

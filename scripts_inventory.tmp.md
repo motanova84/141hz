@@ -7,7 +7,9 @@
 - `analizar_asd_141hz.py`
   - Análisis ASD (Amplitude Spectral Density) en 141.7 Hz para GW150914
 - `analizar_at2020afhd.py`
-  - 
+  - 🌀 NOĒSIS VERIFICATION: AT2020afhd with REAL DATA
+- `analizar_corpus_tokenizado.py`
+  - Analizador de Corpus Tokenizado QCAL ∞³
 - `analizar_cy_kpi_universal.py`
   - Análisis del invariante espectral universal k_Π en variedades Calabi-Yau
 - `analizar_eeg_real.py`
@@ -148,6 +150,8 @@
   - Tests para el módulo de análisis estadístico avanzado
 - `test_analisis_gwtc3.py`
   - Test suite for GWTC-3 analysis script
+- `test_analisis_noesis_snr_sweep.py`
+  - Tests para el análisis Ψ-Sweep de la señal Noēsis (f₀ = 141.7001 Hz).
 - `test_analizar_asd_141hz.py`
   - Tests para el análisis ASD de 141.7 Hz en GW150914
 - `test_analizar_at2020afhd.py`
@@ -328,8 +332,6 @@
   - Test for validate_scipy_snr_141hz.py
 - `test_validate_vacuum_energy_equation.py`
   - Test Suite for Vacuum Energy Equation Validation
-- `test_vercel_config.py`
-  - Test para validar la configuración de Vercel
 - `test_verificacion_convergencia.py`
   - Tests para Verificación de Convergencia y Constantes Fundamentales
 - `test_verificacion_espectral_primos_rigurosa.py`
@@ -350,4 +352,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-13 13:26:54 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-23 04:00:02 UTC*

@@ -17,7 +17,7 @@ jobs:
         run: |
           pip install -U pip wheel
           pip install -e .
-          pip install pytest pytest-cov cyclonedx-bom osv-scanner
+          pip install pytest pytest-cov cyclonedx-bom
       
       - name: Tests
         run: |

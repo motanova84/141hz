@@ -391,7 +391,7 @@ class SecretariaNoetica:
         'README.md', 'LICENSE', 'requirements.txt', 'setup.py',
         'pyproject.toml', 'Makefile', 'Dockerfile', 'docker-compose.yml',
         '.python-version', '.markdownlint.json', '.pre-commit-config.yaml',
-        'mkdocs.yml', 'codecov.yml', 'vercel.json', 'robots.txt',
+        'mkdocs.yml', 'codecov.yml', 'robots.txt',
         'package.json', 'package-lock.json', 'tsconfig.json', 'yarn.lock'
     }
     
