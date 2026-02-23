@@ -571,6 +571,7 @@ if __name__ == "__main__":
         plt.show()
     except:
         pass
+"""
 Análisis de AT2020afhd - Verificación Empírica del Modelo QCAL ∞³
 
 Este script implementa el análisis del evento AT2020afhd (TDE con precesión 
@@ -1048,6 +1049,7 @@ Ejemplos:
 
 
 if __name__ == '__main__':
+    pass
 import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path

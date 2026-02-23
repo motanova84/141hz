@@ -616,11 +616,11 @@ class Shadow1BayesianAnalyzer:
         else:
             interpretation = "Very strong evidence"
 
-        bayes_norm = normalize_bayes_factor(lnB=log_bf)
+        bayes_norm = normalize_bayes_factor(lnB=log_proxy)
 
-        self.results["bayes_evidence"] = {
+        result = {
             "snr": snr_shadow,
-            "log_bayes_factor": round(float(log_bf), 4),
+            "log_bayes_factor": round(float(log_proxy), 4),
             "ln_bayes_factor": round(bayes_norm["ln_bayes_factor"], 4),
             "log10_bayes_factor": round(bayes_norm["log10_bayes_factor"], 4),
             "interpretation": interpretation,
