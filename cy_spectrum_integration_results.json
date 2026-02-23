@@ -1,0 +1,106 @@
+{
+  "calabi_yau": {
+    "kappa_pi": 2.5773,
+    "h11": 1,
+    "h21": 101,
+    "euler_characteristic": -200,
+    "source": "Hodge-de Rham Laplacian spectrum (\u03bc\u2082/\u03bc\u2081)"
+  },
+  "integration_principle": {
+    "description": "\u03ba_\u03a0 and f\u2080 share deep geometric structure",
+    "common_elements": [
+      "golden ratio \u03c6",
+      "fine structure \u03b1",
+      "quantum-Planck scale connection"
+    ],
+    "kappa_source": "CY quintic Laplacian eigenvalues",
+    "f0_source": "Compton clock and cosmic scales",
+    "relationship": "phenomenological/conceptual rather than algebraic"
+  },
+  "frequencies": {
+    "f0_hz": 141.7001,
+    "picode_hz": 888.0,
+    "f0_picode_ratio": 0.15957218468468468
+  },
+  "physical_predictions": {
+    "quantum_radius": {
+      "meters": 336721.36852669425,
+      "planck_units": 2.0833430895910252e+40,
+      "formula": "R_\u03a8 = c/(2\u03c0f\u2080)"
+    },
+    "yukawa_wavelength": {
+      "meters": 2115682.755340328,
+      "kilometers": 2115.682755340328,
+      "formula": "\u03bb_Y = c/f\u2080"
+    },
+    "decoherence_time": {
+      "seconds": 0.01141872157288453,
+      "milliseconds": 11.418721572884529,
+      "formula": "\u03c4_deco = \u03c6/f\u2080"
+    },
+    "frequency_uncertainty": {
+      "hertz": 0.2787,
+      "formula": "\u03b4\u03b6 = f\u2080/(\u03ba_\u03a0\u00b72\u03c0)"
+    },
+    "coherence_constant": {
+      "value": 250.20953995230624,
+      "target": 244.36,
+      "error_percent": 2.3938205730505113,
+      "formula": "C \u2248 \u03ba_\u03a0 \u00d7 \u03c6 \u00d7 60"
+    },
+    "chern_simons_level": {
+      "value": 32.3873069843879,
+      "formula": "k = 4\u03c0\u03ba_\u03a0"
+    }
+  },
+  "constants": {
+    "c_light": 299792458.0,
+    "alpha_fine": 0.0072973525692838015,
+    "phi": 1.618033988749895,
+    "phi_cubed": 4.23606797749979,
+    "l_planck": 1.616255e-35,
+    "lambda_c": 2.42631023867e-12,
+    "m_planck": 2.176434e-08,
+    "m_electron": 9.1093837015e-31,
+    "K_cosmic": 244012318.7101416
+  },
+  "references": {
+    "doi": "10.5281/zenodo.17379721",
+    "author": "Jos\u00e9 Manuel Mota Burruezo (JMMB \u03a8\u2727)",
+    "architecture": "KAPPA_PI_ARCHITECTURE.md",
+    "sage_script": "cy_spectrum.sage",
+    "compton_clock": "reloj_compton.py"
+  },
+  "verification": {
+    "passed": true,
+    "checks": {
+      "coherence_constant": {
+        "passed": true,
+        "value": 250.20953995230624,
+        "target": 244.36,
+        "error_percent": 2.3938205730505113,
+        "tolerance_percent": 5.0
+      },
+      "yukawa_wavelength": {
+        "passed": true,
+        "value_km": 2115.682755340328,
+        "expected_range": "[2000, 2200] km"
+      },
+      "decoherence_time": {
+        "passed": true,
+        "value_ms": 11.418721572884529,
+        "expected_range": "[10, 15] ms"
+      },
+      "frequency_uncertainty": {
+        "passed": true,
+        "value_hz": 0.2787,
+        "expected_range": "[0.25, 0.30] Hz"
+      },
+      "chern_simons_level": {
+        "passed": true,
+        "value": 32.3873069843879,
+        "expected_range": "[30, 35]"
+      }
+    }
+  }
+}

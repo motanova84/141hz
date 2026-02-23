@@ -15,7 +15,7 @@ import numpy as np
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from validate_qcal_random_noise import (
+from core.validate_qcal_random_noise import (
     generar_textos_aleatorios,
     generar_textos_semanticos,
     qcal_embed_text,

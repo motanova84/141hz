@@ -198,6 +198,38 @@ SCHUMANN_HZ = 7.83  # Hz - Earth's fundamental frequency
 F0_DIVISOR_SCHUMANN = 18  # f₀/18 ≈ Schumann (99.46% precision)
 F0_SOBRE_18_HZ = F0_HZ / 18  # ≈ 7.872 Hz
 
+# ============================================================================
+# COMPTON CLOCK CONSTANTS (febrero 2026)
+# El Reloj de Compton - Frecuencias fundamentales de partículas
+# ============================================================================
+# Masas de partículas fundamentales (CODATA 2018)
+M_ELECTRON_KG = 9.1093837015e-31  # kg - Masa del electrón
+M_PROTON_KG = 1.67262192369e-27  # kg - Masa del protón
+M_NEUTRON_KG = 1.67492749804e-27  # kg - Masa del neutrón
+M_PLANCK_KG = 2.176434e-8  # kg - Masa de Planck
+
+# Frecuencias de Compton: f_Compton = (m c²) / h
+# Representan el "latido" fundamental de cada partícula
+F_COMPTON_ELECTRON_HZ = 1.2355899e20  # Hz - Electrón
+F_COMPTON_PROTON_HZ = 2.2687318e23  # Hz - Protón
+F_COMPTON_NEUTRON_HZ = 2.2718598e23  # Hz - Neutrón
+
+# Longitudes de onda de Compton: λ_C = h / (m c)
+LAMBDA_COMPTON_ELECTRON_M = 2.42631023867e-12  # m - Electrón
+LAMBDA_COMPTON_PROTON_M = 1.32140985539e-15  # m - Protón
+
+# Longitud de Planck
+L_PLANCK_M = 1.616255e-35  # m - Longitud de Planck
+
+# Constante de estructura fina (CODATA 2018)
+ALPHA_FINE_STRUCTURE = 7.2973525693e-3  # ≈ 1/137.036
+
+# Conexión Compton-f₀: Factor de escala cósmico
+# K_cosmic ≈ (m_P/m_e)^(1/3) ≈ 2.88×10⁷
+COMPTON_SCALE_RATIO_PLANCK = L_PLANCK_M / LAMBDA_COMPTON_ELECTRON_M  # ≈ 6.66×10⁻²⁴
+COMPTON_MASS_RATIO = M_PLANCK_KG / M_ELECTRON_KG  # ≈ 2.39×10²²
+COMPTON_K_COSMIC = COMPTON_MASS_RATIO ** (1/3)  # ≈ 2.88×10⁷
+
 # Geometric Connection: 888 ≈ 2π × f₀
 NUMERO_888 = 888.0  # Triple infinity in 3D
 RAZON_888_F0 = NUMERO_888 / F0_HZ  # ≈ 6.267 ≈ 2π (99.73% precision)
