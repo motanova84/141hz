@@ -150,6 +150,8 @@
   - Tests para el módulo de análisis estadístico avanzado
 - `test_analisis_gwtc3.py`
   - Test suite for GWTC-3 analysis script
+- `test_analisis_noesis_snr_sweep.py`
+  - Tests para el análisis Ψ-Sweep de la señal Noēsis (f₀ = 141.7001 Hz).
 - `test_analizar_asd_141hz.py`
   - Tests para el análisis ASD de 141.7 Hz en GW150914
 - `test_analizar_at2020afhd.py`
@@ -350,4 +352,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-15 14:28:58 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-23 00:32:53 UTC*
