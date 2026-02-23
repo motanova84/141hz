@@ -43,6 +43,9 @@ SPECTRAL_SIGNATURE = {
     "architecture": __architecture__
 }
 
+# Alias español / Spanish alias for SPECTRAL_SIGNATURE
+FIRMA_ESPECTRAL = SPECTRAL_SIGNATURE
+
 
 def verificar_patrimonio() -> str:
     """
@@ -167,6 +170,7 @@ __all__ = [
     'obtener_metadatos_soberania',
     'generar_reporte_compliance',
     'SPECTRAL_SIGNATURE',
+    'FIRMA_ESPECTRAL',
     'F0_HZ',
     'KAPPA_PI',
     'LAMBDA_G_INV'
