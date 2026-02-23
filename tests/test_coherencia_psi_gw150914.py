@@ -392,6 +392,15 @@ class TestIntegracion(unittest.TestCase):
         self.assertTrue(np.any(times_rel < 0))
         self.assertTrue(np.any(times_rel > 0))
 
+    def test_raises_valueerror_when_only_one_detector_given(self):
+        """Pasar solo un detector levanta ValueError."""
+        rng = np.random.default_rng(0)
+        h = rng.normal(size=int(4 * cpsi.SAMPLE_RATE))
+        with self.assertRaises(ValueError):
+            cpsi.analizar_coherencia_psi_gw150914(h_H1=h, h_L1=None)
+        with self.assertRaises(ValueError):
+            cpsi.analizar_coherencia_psi_gw150914(h_H1=None, h_L1=h)
+
     def test_custom_data_accepted(self):
         """El análisis acepta datos externos (sin generar datos simulados)."""
         rng = np.random.default_rng(0)
@@ -403,16 +412,32 @@ class TestIntegracion(unittest.TestCase):
         )
         self.assertIn("estadisticas", result)
 
+    def test_custom_data_trimmed_to_common_length(self):
+        """Con detectors de distinta longitud, el output usa la longitud menor."""
+        rng = np.random.default_rng(1)
+        N1 = int(8 * cpsi.SAMPLE_RATE)
+        N2 = int(6 * cpsi.SAMPLE_RATE)
+        h_H1 = rng.normal(size=N1)
+        h_L1 = rng.normal(size=N2)
+        result = cpsi.analizar_coherencia_psi_gw150914(
+            h_H1=h_H1, h_L1=h_L1, t_merger=3.0
+        )
+        self.assertEqual(len(result["h_H1"]), N2)
+        self.assertEqual(len(result["h_L1"]), N2)
+        self.assertEqual(len(result["times"]), N2)
+
     def test_reporte_generado_correctamente(self):
         """El reporte no contiene emojis y tiene las secciones esperadas."""
         result = cpsi.analizar_coherencia_psi_gw150914(seed=42)
         report = cpsi.generar_reporte(result)
         self.assertIsInstance(report, str)
-        self.assertIn("REPORTE DE VALIDACION", report)
+        self.assertIn("REPORTE DE VALIDACIÓN", report)
         self.assertIn("Psi_ON", report)
         self.assertIn("Psi_OFF", report)
         self.assertIn("Ratio de Contraste", report)
         self.assertIn("p-value", report)
+        self.assertIn("drásticamente", report)
+        self.assertIn("monótono", report)
         # No emoji characters
         for char in ["🔬", "📊", "🟢", "🏆", "✅", "❌"]:
             self.assertNotIn(char, report, f"Emoji '{char}' found in report")

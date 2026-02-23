@@ -57,6 +57,11 @@ F_BAND_HIGH: float = 123.0  # Hz — límite superior del bandpass
 # con Butterworth orden-8 y ventana de 0.5s (N = 2048 muestras).
 _A_SIGNAL_H1: float = 2.02  # amplitud pico H1 (en unidades del ruido de entrada)
 
+# Umbral de potencia por debajo del cual se considera una ventana vacía/nula.
+# Fijado a sys.float_info.min (≈ 2.2e-308) para no descartar señales débiles
+# pero sí proteger la división por cero cuando el input es literalmente cero.
+_PSI_POWER_FLOOR: float = 1e-60  # W² / (unidades del strain)²
+
 # ============================================================================
 # 1. SIMULACIÓN DE DATOS
 # ============================================================================
@@ -257,6 +262,8 @@ def calcular_psi_en_ventana(
     float
         Valor de Ψ >= 0 para esta ventana.
     """
+    if len(h_H1_w) == 0 or len(h_L1_w) == 0:
+        return 0.0
     cross_mean = np.mean(h_H1_w * h_L1_w)
     return float(cross_mean ** 2)
 
@@ -435,7 +442,16 @@ def analizar_coherencia_psi_gw150914(
         estadisticas, parametros
     """
     # --- Datos ---
-    if h_H1 is None or h_L1 is None:
+    if (h_H1 is None) != (h_L1 is None):
+        missing = "h_L1" if h_L1 is None else "h_H1"
+        provided = "h_H1" if h_L1 is None else "h_L1"
+        raise ValueError(
+            f"Both detector series must be provided together. "
+            f"Got {provided} but {missing} is None. "
+            f"Pass both h_H1 and h_L1, or pass neither to use simulated data."
+        )
+
+    if h_H1 is None and h_L1 is None:
         h_H1, h_L1, t = simular_datos_gw150914(
             sample_rate=sample_rate,
             t_merger=t_merger,
@@ -443,8 +459,16 @@ def analizar_coherencia_psi_gw150914(
             f_high=f_high,
             seed=seed,
         )
+
+    # Trim both detectors to a common length to keep all outputs aligned.
+    common_len = min(len(h_H1), len(h_L1))
+    h_H1 = h_H1[:common_len]
+    h_L1 = h_L1[:common_len]
+
     if t is None:
-        t = np.arange(len(h_H1)) / sample_rate
+        t = np.arange(common_len) / sample_rate
+    else:
+        t = t[:common_len]
 
     # --- Blanqueo / bandpass ---
     h_H1_w = blanquear_datos(h_H1, sample_rate=sample_rate, f_low=f_low, f_high=f_high)
@@ -516,7 +540,7 @@ def generar_reporte(resultado: Dict) -> str:
 
     lines = [
         "=" * 70,
-        "REPORTE DE VALIDACION: COHERENCIA Psi -- EVENTO GW150914",
+        "REPORTE DE VALIDACIÓN: COHERENCIA Psi -- EVENTO GW150914",
         "=" * 70,
         "",
         "PARAMETROS DEL ANALISIS:",
@@ -541,8 +565,8 @@ def generar_reporte(resultado: Dict) -> str:
         "",
         "MORFOLOGIA DE LA SENAL:",
         "  - Pico extremadamente afilado en t = 0 (merger)",
-        "  - Psi cae drasticamente tras la ruptura de coherencia H1-L1",
-        "  - Ruido off-source plano y monotonico (blanqueo correcto)",
+        "  - Psi cae drásticamente tras la ruptura de coherencia H1-L1",
+        "  - Ruido off-source plano y monótono (blanqueo correcto)",
         "",
         "RESULTADO:",
         f"  {'[OK] POSITIVO' if est['detection'] else '[WARN] NO CONCLUYENTE'}",
