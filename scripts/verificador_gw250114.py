@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Verificador de disponibilidad GW250114
 Verifica si el evento GW250114 está disponible en GWOSC para análisis.
@@ -143,10 +144,14 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-Verificador en Tiempo Real GW250114
-Sistema de monitoreo y análisis automático para detectar y analizar GW250114
-cuando esté disponible en GWOSC.
-"""
+
+
+# =============================================================================
+# Verificador en Tiempo Real GW250114
+# Sistema de monitoreo y análisis automático para detectar y analizar GW250114
+# cuando esté disponible en GWOSC.
+# =============================================================================
+
 import requests
 import json
 from datetime import datetime
