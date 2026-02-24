@@ -346,7 +346,7 @@ def verify_parabolic_condition(A: float, nu: float = NU_VACIO) -> bool:
 
     # Normalization factor for dimensional consistency
     # Converts (dimensionless²) / (m²/s * dimensionless) → dimensionless
-    NORMALIZATION_FACTOR = 1000.0  # m⁻² s
+    NORMALIZATION_FACTOR = 1000.0  # m⁻²·s (s/m²)
 
     # Rayleigh-like parameter: measures forcing to dissipation ratio
     Ra = (A ** 2) / (nu * BETA_QFT * NORMALIZATION_FACTOR)
