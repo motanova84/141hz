@@ -32,6 +32,12 @@ from .constants import (
     NU_VACIO,
     NU_AGUA,
     NU_AIRE,
+
+    # Verification functions
+    verify_parabolic_condition,
+    verify_riccati_besov_condition,
+    get_dissipative_scale,
+    get_constants_summary,
 )
 
 __all__ = [
@@ -49,4 +55,8 @@ __all__ = [
     'NU_VACIO',
     'NU_AGUA',
     'NU_AIRE',
+    'verify_parabolic_condition',
+    'verify_riccati_besov_condition',
+    'get_dissipative_scale',
+    'get_constants_summary',
 ]
