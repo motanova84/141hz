@@ -369,6 +369,8 @@ else:
     print(f"     Error {error_rel:.4f}% >= tolerance {float(tolerance)}%")
 
 print()
+print("# OUTPUT FOR VERIFICATION:")
+print(f"kappa_Pi={kappa_Pi_rounded}")
 
 # ============================================================================
 # TOPOLOGICAL CONNECTIONS

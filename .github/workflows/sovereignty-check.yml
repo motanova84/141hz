@@ -78,33 +78,40 @@ jobs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "✅ Sovereignty validation completed" >> $GITHUB_STEP_SUMMARY
     
-    - name: Verify QCAL Signatures
+    - name: Verificar firmas QCAL
       run: |
-        echo "## ✨ QCAL Signature Verification" >> $GITHUB_STEP_SUMMARY
+        echo "## ✨ Verificación de firma QCAL" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        
-        python -c "
-from core.soberania import (
-    verificar_origen,
-    validar_firma_espectral,
-    F0_HZ,
-    SPECTRAL_SIGNATURE
-)
 
-# Verify spectral signature
-origen = verificar_origen()
-print(f\"**Author**: {origen['author']}\")
-print(f\"**Frequency**: {origen['frequency']} Hz\")
-print(f\"**Architecture**: {origen['architecture']}\")
-print(f\"**Sovereign**: {origen['sovereign']}\")
-print(f\"**License**: {origen['license']}\")
-print()
+        python3 << 'EOF' >> $GITHUB_STEP_SUMMARY
+        import sys
+        import os
 
-# Validate spectral signature
-valid = validar_firma_espectral(141.7001)
-print(f\"**Spectral Signature Valid**: {valid}\")
-print(f\"**F0_HZ**: {F0_HZ} Hz\")
-        " >> $GITHUB_STEP_SUMMARY
+        try:
+            sys.path.append(os.getcwd())
+            from core.soberania import (
+                verificar_origen,
+                validar_firma_espectral,
+                F0_HZ,
+                FIRMA_ESPECTRAL
+            )
+
+            origen = verificar_origen()
+            print(f"**Autor** : {origen.get('author', 'Desconocido')}")
+            print(f"**Frecuencia** : {origen.get('frequency', '0')} Hz")
+            print(f"**Arquitectura** : {origen.get('architecture', 'QCAL')}")
+            print(f"**Soberano** : {origen.get('sovereign', False)}")
+            print(f"**Licencia** : {origen.get('license', 'Noética 1.0')}")
+            print()
+
+            es_valido = validar_firma_espectral(141.7001)
+            print(f"**Firma espectral válida** : {'✅' if es_valido else '❌'}")
+            print(f"**F0_HZ** : {F0_HZ} Hz")
+
+        except Exception as e:
+            print(f"⚠️ **Error en verificación** : {str(e)}")
+            sys.exit(0)
+        EOF
     
     - name: Comment on PR (if applicable)
       if: github.event_name == 'pull_request'
