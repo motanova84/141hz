@@ -7,7 +7,7 @@
 - `analizar_asd_141hz.py`
   - Análisis ASD (Amplitude Spectral Density) en 141.7 Hz para GW150914
 - `analizar_at2020afhd.py`
-  - 
+  - 🌀 NOĒSIS VERIFICATION: AT2020afhd with REAL DATA
 - `analizar_corpus_tokenizado.py`
   - Analizador de Corpus Tokenizado QCAL ∞³
 - `analizar_cy_kpi_universal.py`
@@ -352,4 +352,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-23 00:32:53 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-24 02:15:15 UTC*
