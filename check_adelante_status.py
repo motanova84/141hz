@@ -32,6 +32,8 @@ def check_constants():
 def check_qcal_module():
     """Verify QCAL module is accessible"""
     try:
+        # Add current directory to path
+        sys.path.insert(0, str(Path(__file__).parent))
         from qcal.constants import F0_HZ, KAPPA_PI
         print(f"✓ QCAL module loaded successfully")
         print(f"  F0_HZ = {F0_HZ} Hz")
@@ -44,10 +46,12 @@ def check_qcal_module():
 def check_unified_theory():
     """Verify unified theory module"""
     try:
+        sys.path.insert(0, str(Path(__file__).parent))
         from qcal.unified_theory import UnifiedTheory
         print(f"✓ Unified Theory module loaded successfully")
         theory = UnifiedTheory()
-        print(f"  Theory initialized with {len(theory.get_all_predictions())} predictions")
+        preds = theory.all_falsifiable_predictions()
+        print(f"  Theory initialized with {len(preds)} predictions")
         return True
     except Exception as e:
         print(f"✗ Error loading Unified Theory: {e}")
@@ -76,10 +80,12 @@ def check_navier_stokes():
 def check_calabi_yau():
     """Verify Calabi-Yau invariant module"""
     try:
-        from src.calabi_yau_invariant import compute_kappa_pi
+        sys.path.insert(0, str(Path(__file__).parent / 'src'))
+        from calabi_yau_invariant import get_k_pi, K_PI
         print(f"✓ Calabi-Yau invariant module loaded successfully")
-        kappa = compute_kappa_pi()
-        print(f"  κ_Π = {kappa}")
+        print(f"  κ_Π (constant) = {K_PI}")
+        kappa = get_k_pi()
+        print(f"  κ_Π (computed) = {kappa}")
         return True
     except Exception as e:
         print(f"✗ Error loading Calabi-Yau: {e}")
