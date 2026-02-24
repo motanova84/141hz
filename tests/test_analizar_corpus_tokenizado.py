@@ -31,7 +31,8 @@ class TestTokenCounter:
         content = "def hello():\n    print('world')\n" * 10
         py_file.write_text(content)
         
-        count = TokenCounter.count_tokens_in_file(py_file)
+        counter = TokenCounter()
+        count = counter.count_tokens_in_file(py_file)
         assert count > 0
         assert count < len(content)  # Debe ser menor que caracteres
     
@@ -41,7 +42,8 @@ class TestTokenCounter:
         content = "# Title\n\nSome content here.\n" * 10
         md_file.write_text(content)
         
-        count = TokenCounter.count_tokens_in_file(md_file)
+        counter = TokenCounter()
+        count = counter.count_tokens_in_file(md_file)
         assert count > 0
     
     def test_count_tokens_jupyter(self, tmp_path):
@@ -61,13 +63,15 @@ class TestTokenCounter:
         }
         nb_file.write_text(json.dumps(notebook))
         
-        count = TokenCounter.count_tokens_in_file(nb_file)
+        counter = TokenCounter()
+        count = counter.count_tokens_in_file(nb_file)
         assert count > 0
     
     def test_count_tokens_invalid_file(self, tmp_path):
         """Test manejar archivo inválido"""
         invalid_file = tmp_path / "nonexistent.py"
-        count = TokenCounter.count_tokens_in_file(invalid_file)
+        counter = TokenCounter()
+        count = counter.count_tokens_in_file(invalid_file)
         assert count == 0
 
 
@@ -297,7 +301,8 @@ class TestEdgeCases:
         content += "# Emoji: 🚀 ∞³ ✧ Ψ\n" * 10
         py_file.write_text(content, encoding='utf-8')
         
-        count = TokenCounter.count_tokens_in_file(py_file)
+        counter = TokenCounter()
+        count = counter.count_tokens_in_file(py_file)
         assert count > 0
 
 
