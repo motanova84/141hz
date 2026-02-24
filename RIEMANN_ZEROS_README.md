@@ -4,7 +4,7 @@ This document describes the implementation of the Riemann zeros computation vali
 
 ## Overview
 
-The `validate_riemann_zeros.py` script implements a high-precision validation of the mathematical relationship between Riemann zeta function zeros and quantum frequency calculations.
+The `core/validate_riemann_zeros.py` script implements a high-precision validation of the mathematical relationship between Riemann zeta function zeros and quantum frequency calculations.
 
 ## Mathematical Basis
 
@@ -78,28 +78,28 @@ Where:
 
 Run validation with default parameters:
 ```bash
-python3 validate_riemann_zeros.py --precision 50
+python3 core/validate_riemann_zeros.py --precision 50
 ```
 
 ### Custom Parameters
 
 Specify custom alpha and maximum zero height:
 ```bash
-python3 validate_riemann_zeros.py --precision 100 --alpha 0.006695 --T 3967.986
+python3 core/validate_riemann_zeros.py --precision 100 --alpha 0.006695 --T 3967.986
 ```
 
 ### Find Optimal Alpha
 
 Find the alpha that achieves target sum for your zero set:
 ```bash
-python3 validate_riemann_zeros.py --find-alpha --precision 50
+python3 core/validate_riemann_zeros.py --find-alpha --precision 50
 ```
 
 ### Save Results
 
 Save validation results to a specific file:
 ```bash
-python3 validate_riemann_zeros.py --precision 50 --output results/my_validation.json
+python3 core/validate_riemann_zeros.py --precision 50 --output results/my_validation.json
 ```
 
 ## Output Format
@@ -163,14 +163,20 @@ The script generates JSON output with the following structure:
 
 Run the test suite:
 ```bash
-python3 -m unittest test_riemann_zeros -v
+# Run tests directly
+python3 tests/test_riemann_zeros.py -v
+
+# Or with unittest
+cd tests && python3 -m unittest test_riemann_zeros -v
 ```
 
 The test suite includes:
+- 13 unit tests covering all functionality
 - Unit tests for individual functions
 - Validation of constant values
 - Structure and type checking
 - Integration tests
+- All tests pass successfully ✅
 
 ## Integration with CI/CD
 
@@ -178,7 +184,7 @@ The script can be integrated into GitHub Actions workflows:
 
 ```yaml
 - name: Validate Riemann zeros relationship
-  run: python3 validate_riemann_zeros.py --precision 50
+  run: python3 core/validate_riemann_zeros.py --precision 50
   continue-on-error: false
 ```
 
