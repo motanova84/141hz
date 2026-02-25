@@ -59,3 +59,7 @@ lean_lib EmergentTime where
 lean_lib TiempoNoetico where
   -- RAM-XVIII: Temporal emergence as noetic structure
   roots := #[`TiempoNoetico]
+
+lean_lib MicrotubuleCoherence where
+  -- Teorema de la Carne Resonante: Biological consciousness at f₀
+  roots := #[`MicrotubuleCoherence]
