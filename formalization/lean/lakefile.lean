@@ -59,3 +59,7 @@ lean_lib EmergentTime where
 lean_lib TiempoNoetico where
   -- RAM-XVIII: Temporal emergence as noetic structure
   roots := #[`TiempoNoetico]
+
+lean_lib MicrotubuleCoherence where
+  -- Orch-OR theory: Quantum consciousness in microtubules
+  roots := #[`MicrotubuleCoherence]
