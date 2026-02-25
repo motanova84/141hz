@@ -109,11 +109,14 @@ def generate_bio_pulse(
     
     Examples
     --------
+    >>> from qcal.protocolo_psi_bio import generate_bio_pulse
     >>> pulse = generate_bio_pulse()
-    >>> pulse.frequency
-    141.7001
-    >>> pulse.duration
-    60.0
+    >>> print(f"Frequency: {pulse.frequency} Hz")
+    Frequency: 141.7001 Hz
+    >>> print(f"Duration: {pulse.duration} s")
+    Duration: 60.0 s
+    >>> print(f"Samples: {len(pulse.signal):,}")
+    Samples: 2,646,000
     """
     # Generate time array
     n_samples = int(duration * sample_rate)

@@ -111,11 +111,13 @@ def safe_bio_pulse (f : ℝ) (h_f : f = 141.7001) : Wave 44100 :=
 
 /-- EEG synchronization quality -/
 def eeg_sync_quality (eeg_signal : ℝ → ℝ) (pulse_signal : ℝ → ℝ) : ℝ := 
-  sorry -- Cross-correlation integral implementation
+  sorry -- Placeholder: Cross-correlation integral ∫ eeg(t)·pulse(t) dt
+        -- To be implemented with proper measure theory
 
 /-- HRV coherence at f₀ -/
 def hrv_coherence (hrv_data : ℝ → ℝ) (f0 : ℝ) : ℝ :=
-  sorry -- Heart rate variability analysis at f₀
+  sorry -- Placeholder: Spectral analysis of HRV at f₀ frequency
+        -- To be implemented with FFT formalization
 
 /-- Complete protocol validation -/
 theorem complete_protocol_validation
