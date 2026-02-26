@@ -59,3 +59,9 @@ lean_lib EmergentTime where
 lean_lib TiempoNoetico where
   -- RAM-XVIII: Temporal emergence as noetic structure
   roots := #[`TiempoNoetico]
+
+lean_lib GoldbachCircle where
+  -- Hardy-Littlewood Circle Method: Large Sieve + Vaughan + Minor Arcs
+  -- Main theorem: goldbach_existence_structural
+  roots := #[`GoldbachCircle]
+  globs := #[.submodules `GoldbachCircle]
