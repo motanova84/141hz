@@ -60,6 +60,9 @@ lean_lib TiempoNoetico where
   -- RAM-XVIII: Temporal emergence as noetic structure
   roots := #[`TiempoNoetico]
 
+lean_lib MicrotubuleCoherence where
+  -- Teorema de la Carne Resonante: Biological consciousness at f₀
+  roots := #[`MicrotubuleCoherence]
 lean_lib GoldbachCircle where
   -- Hardy-Littlewood Circle Method: Large Sieve + Vaughan + Minor Arcs
   -- Main theorem: goldbach_existence_structural
