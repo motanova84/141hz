@@ -27,7 +27,12 @@ Fecha: Febrero 2026
 import sys
 import os
 import numpy as np
-import matplotlib.pyplot as plt
+try:
+    import matplotlib.pyplot as plt
+    MATPLOTLIB_AVAILABLE = True
+except ImportError:
+    MATPLOTLIB_AVAILABLE = False
+
 from typing import Dict, Tuple, Optional
 
 # Importar el módulo de cálculos de SNR
@@ -347,6 +352,11 @@ def visualizar_correccion_snr(
     filename : str
         Nombre del archivo para guardar
     """
+    if not MATPLOTLIB_AVAILABLE:
+        raise ImportError(
+            "matplotlib es necesario para visualizar la corrección de SNR. "
+            "Instálalo con: pip install matplotlib"
+        )
     if datos_l1 is None:
         datos_l1 = simular_datos_gw150914(detector='L1', snr_objetivo_bruto=0.95)
     
