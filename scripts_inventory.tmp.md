@@ -61,8 +61,12 @@
   - Validación de Coherencia Armónica QCAL ∞³
 - `validate_microtubule_coherence.py`
   - Validación del Teorema de la Carne Resonante - MicrotubuleCoherence.lean
+- `validate_microtubule_consciousness.py`
+  - Validation Script: Microtubule Quantum Consciousness
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_navier_stokes_regularization.py`
+  - Validation Script: Navier-Stokes Vibrational Regularization
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
@@ -103,8 +107,12 @@
   - Validación de Coherencia Armónica QCAL ∞³
 - `validate_microtubule_coherence.py`
   - Validación del Teorema de la Carne Resonante - MicrotubuleCoherence.lean
+- `validate_microtubule_consciousness.py`
+  - Validation Script: Microtubule Quantum Consciousness
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_navier_stokes_regularization.py`
+  - Validation Script: Navier-Stokes Vibrational Regularization
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
@@ -356,4 +364,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-28 13:06:33 UTC*
+*Generado automáticamente por el bot de documentación - 2026-02-28 14:33:59 UTC*
