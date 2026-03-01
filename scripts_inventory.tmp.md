@@ -67,6 +67,8 @@
   - Multi-Event 141.7001 Hz Peak Validation
 - `validate_navier_stokes_regularization.py`
   - Validation Script: Navier-Stokes Vibrational Regularization
+- `validate_nodo_psi_bio.py`
+  - Validation Script - Nodo Ψ Bio Protocol
 - `validate_nodo_qcal.py`
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
@@ -115,6 +117,8 @@
   - Multi-Event 141.7001 Hz Peak Validation
 - `validate_navier_stokes_regularization.py`
   - Validation Script: Navier-Stokes Vibrational Regularization
+- `validate_nodo_psi_bio.py`
+  - Validation Script - Nodo Ψ Bio Protocol
 - `validate_nodo_qcal.py`
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
@@ -368,4 +372,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-03-01 20:54:24 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-01 22:05:00 UTC*
