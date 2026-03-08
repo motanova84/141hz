@@ -232,6 +232,8 @@
   - Tests para el módulo de cálculo de energía cuántica fundamental
 - `test_evidencia_concluyente.py`
   - Test unitario para el módulo de evidencia concluyente
+- `test_filtro_racionales_adelico.py`
+  - Tests para FiltroRacionalesAdelico (Pilar 2).
 - `test_fractal_resonance_constants.py`
   - Tests for Fractal Resonance in Fundamental Constants module.
 - `test_generar_cy_kappa_25773.py`
@@ -372,4 +374,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-03-08 03:06:40 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-08 13:56:17 UTC*
