@@ -213,3 +213,8 @@ noesis_snr_sweep_coherence.png
 protocol_psi_q1_demo.json
 protocol_psi_q1_evolution.png
 validacion_convergencia_experimental.json
+
+# QCAL 141.70001 Hz generated outputs
+json_maestro_completo.json
+salidas_qcal/
+audio/NivelDios_demo.wav
