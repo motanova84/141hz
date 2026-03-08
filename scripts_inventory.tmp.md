@@ -202,6 +202,8 @@
   - Test script para verificar el sistema de generación de visualización de coherencia.
 - `test_comparar_ligo_kagra.py`
   - Test para comparar_ligo_vs_kagra_sensibilidad.py
+- `test_constantes_qcal.py`
+  - Test script para verificar todas las constantes QCAL
 - `test_correccion_rpsi_codata.py`
   - Test de correcciones técnicas: RΨ y αΨ
 - `test_corrections.py`
@@ -374,4 +376,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-03-08 13:56:17 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-08 18:40:48 UTC*

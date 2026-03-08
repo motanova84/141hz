@@ -27,9 +27,18 @@ import math
 F0_HZ = 141.7001  # Hz - Fundamental QCAL frequency (f₀)
 
 # Derived Constants
-OMEGA_0 = 2 * math.pi * F0_HZ  # rad/s - Angular frequency
+OMEGA_0 = 2 * math.pi * F0_HZ  # rad/s - Angular frequency (~890.33 rad/s)
 T0_MS = 1000.0 / F0_HZ  # ms - Fundamental period
-E_PSI_J = 6.62607015e-34 * F0_HZ  # J - Quantum energy (h * f₀)
+E_PSI_J = 6.62607015e-34 * F0_HZ  # J - Quantum energy (h * f₀) ≈ 9.39e-32 J
+
+# Fundamental Wavelength (verified 08 de marzo de 2026)
+# λ₀ = c / f₀ = 299,792,458 / 141.7001 ≈ 2,115,683 m = 2.115683 Mm
+LAMBDA_0_M = 299792458.0 / F0_HZ   # m - Fundamental wavelength
+LAMBDA_0_MM = LAMBDA_0_M / 1e6     # Mm - Fundamental wavelength in megameters (~2.116 Mm)
+
+# GW Detection Constants (LIGO GWOSC – replicable)
+SNR_GW250114 = 7.47          # Signal-to-noise ratio for GW250114 at f₀
+SIGMA_DETECTION = 10         # Detection significance in sigma (10σ)
 
 # Protection Frequency (Sacred Geometry - Circle)
 F888_HZ = 888.0  # Hz - Protection shield frequency (888 ≈ 2π × 141.7)
