@@ -430,7 +430,7 @@ def dashboard_unificado(
     ax22.plot(s_gue, p_gue, "r-", linewidth=2, label="GUE teórico")
     ax22.set_xlabel("s (brecha normalizada)")
     ax22.set_ylabel("p(s)")
-    ax22.set_title("Pilar 4 · Distribución GUE (100 ceros)", fontsize=10)
+    ax22.set_title("Pilar 4 · Distribución GUE teórica vs Selberg", fontsize=10)
     ax22.legend(fontsize=8)
     ax22.grid(True, alpha=0.3)
 
