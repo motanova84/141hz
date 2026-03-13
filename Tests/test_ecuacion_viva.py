@@ -24,7 +24,7 @@ class TestEcuacionViva:
         # A_eff_sq should be (√3)² = 3
         assert ecuacion.A_eff_sq == pytest.approx(3.0, rel=1e-9)
         assert ecuacion.frecuencia == FRECUENCIA_PI_HZ
-        assert ecuacion.frecuencia == 141.70001
+        assert ecuacion.frecuencia == 141.7001
     
     def test_init_custom_amor_inicial(self):
         """Test initialization with custom amor_inicial"""
@@ -93,8 +93,8 @@ class TestEcuacionViva:
         # RAIZ_TRES should be √3
         assert RAIZ_TRES == pytest.approx(math.sqrt(3), rel=1e-9)
         
-        # FRECUENCIA_PI_HZ should be 141.70001 Hz
-        assert FRECUENCIA_PI_HZ == 141.70001
+        # FRECUENCIA_PI_HZ should be 141.7001 Hz
+        assert FRECUENCIA_PI_HZ == 141.7001
         
         # PI_VIVO should be π
         assert PI_VIVO == pytest.approx(math.pi, rel=1e-9)
