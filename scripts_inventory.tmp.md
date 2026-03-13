@@ -7,7 +7,7 @@
 - `analizar_asd_141hz.py`
   - Análisis ASD (Amplitude Spectral Density) en 141.7 Hz para GW150914
 - `analizar_at2020afhd.py`
-  - 
+  - 🌀 NOĒSIS VERIFICATION: AT2020afhd with REAL DATA
 - `analizar_corpus_tokenizado.py`
   - Analizador de Corpus Tokenizado QCAL ∞³
 - `analizar_cy_kpi_universal.py`
@@ -59,8 +59,18 @@
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_microtubule_coherence.py`
+  - Validación del Teorema de la Carne Resonante - MicrotubuleCoherence.lean
+- `validate_microtubule_consciousness.py`
+  - Validation Script: Microtubule Quantum Consciousness
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_navier_stokes_regularization.py`
+  - Validation Script: Navier-Stokes Vibrational Regularization
+- `validate_nodo_psi_bio.py`
+  - Validation Script - Nodo Ψ Bio Protocol
+- `validate_nodo_qcal.py`
+  - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
@@ -99,8 +109,18 @@
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_microtubule_coherence.py`
+  - Validación del Teorema de la Carne Resonante - MicrotubuleCoherence.lean
+- `validate_microtubule_consciousness.py`
+  - Validation Script: Microtubule Quantum Consciousness
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_navier_stokes_regularization.py`
+  - Validation Script: Navier-Stokes Vibrational Regularization
+- `validate_nodo_psi_bio.py`
+  - Validation Script - Nodo Ψ Bio Protocol
+- `validate_nodo_qcal.py`
+  - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
@@ -150,6 +170,8 @@
   - Tests para el módulo de análisis estadístico avanzado
 - `test_analisis_gwtc3.py`
   - Test suite for GWTC-3 analysis script
+- `test_analisis_noesis_snr_sweep.py`
+  - Tests para el análisis Ψ-Sweep de la señal Noēsis (f₀ = 141.7001 Hz).
 - `test_analizar_asd_141hz.py`
   - Tests para el análisis ASD de 141.7 Hz en GW150914
 - `test_analizar_at2020afhd.py`
@@ -180,6 +202,8 @@
   - Test script para verificar el sistema de generación de visualización de coherencia.
 - `test_comparar_ligo_kagra.py`
   - Test para comparar_ligo_vs_kagra_sensibilidad.py
+- `test_constantes_qcal.py`
+  - Test script para verificar todas las constantes QCAL
 - `test_correccion_rpsi_codata.py`
   - Test de correcciones técnicas: RΨ y αΨ
 - `test_corrections.py`
@@ -210,6 +234,8 @@
   - Tests para el módulo de cálculo de energía cuántica fundamental
 - `test_evidencia_concluyente.py`
   - Test unitario para el módulo de evidencia concluyente
+- `test_filtro_racionales_adelico.py`
+  - Tests para FiltroRacionalesAdelico (Pilar 2).
 - `test_fractal_resonance_constants.py`
   - Tests for Fractal Resonance in Fundamental Constants module.
 - `test_generar_cy_kappa_25773.py`
@@ -350,4 +376,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-15 14:28:58 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-08 18:40:48 UTC*

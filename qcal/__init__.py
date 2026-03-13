@@ -307,6 +307,15 @@ try:
     COMPTON_CLOCK_AVAILABLE = True
 except ImportError:
     COMPTON_CLOCK_AVAILABLE = False
+except SyntaxError as _compton_err:
+    import warnings
+    warnings.warn(
+        f"qcal.compton_clock could not be imported due to a SyntaxError: {_compton_err}. "
+        "The module will be unavailable.",
+        ImportWarning,
+        stacklevel=2,
+    )
+    COMPTON_CLOCK_AVAILABLE = False
 
 # Add compton_clock exports if available
 if COMPTON_CLOCK_AVAILABLE:
