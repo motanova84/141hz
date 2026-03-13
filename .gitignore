@@ -34,6 +34,9 @@ results/
 !results/figures/coherence_f0_scales.png
 # But allow vacuum energy visualizations
 !results/figures/vacuum_energy*.png
+# Allow Psi-SNR publication figures
+!results/figures/psi_snr_publication.png
+!results/figures/psi_snr_publication.pdf
 # Allow mathematical demonstration figures
 !results/fig1_serie_prima_compleja.png
 !results/fig2_comportamiento_asintotico.png
