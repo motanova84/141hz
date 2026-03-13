@@ -89,7 +89,7 @@ class ConstantesPlanck:
         self.E_P: float = _E_PLANCK
 
     def ciclos_por_segundo_habitable(self, f_habitable: float) -> float:
-        """Retorna el número de ciclos de Planck por cada ciclo de *f_habitable*."""
+        """Retorna los ciclos de Planck por cada ciclo de la frecuencia habitable *f_habitable*."""
         if f_habitable <= 0:
             raise ValueError("f_habitable debe ser positiva")
         return self.f_P / f_habitable
@@ -272,11 +272,11 @@ class TuyoyotuRitmico:
         return 1.0 - log_numerador / log_denominador
 
     def periodo_latido_s(self) -> float:
-        """Período del latido habitable: 1/F₀ en segundos."""
+        """Período del latido habitable en segundos: 1/F₀."""
         return 1.0 / self.F0
 
     def ciclos_bio_por_latido(self) -> float:
-        """Número de ciclos biológicos por latido Tuyoyotu (F₀/f_bio)."""
+        """Ciclos biológicos por latido Tuyoyotu: F₀/f_bio."""
         return self.F0 / self.f_bio
 
     def __repr__(self) -> str:
@@ -313,7 +313,7 @@ class CausalidadZeta:
 
     def cociente_densidades(self, rho: float) -> float:
         """
-        Cociente ρ / ρ_crit para una densidad energética *rho* dada.
+        Cociente ρ / ρ_crit para la densidad energética *rho* (en J/m³).
 
         Parámetros
         ----------
@@ -323,11 +323,11 @@ class CausalidadZeta:
         return rho / self.rho_crit
 
     def log10_rho_crit(self) -> float:
-        """log₁₀ de la densidad crítica de Planck."""
+        """Logaritmo decimal de la densidad crítica de Planck."""
         return math.log10(self.rho_crit)
 
     def escala_causalidad(self) -> str:
-        """Descripción cualitativa de la escala de causalidad."""
+        """Descripción cualitativa de la escala de causalidad de Planck."""
         return (
             f"ρ_crit = E_P/l_P³ = {self.rho_crit:.3e} J/m³ "
             f"(log₁₀ = {self.log10_rho_crit():.2f})"
@@ -370,7 +370,7 @@ class UniversoPensamiento:
         """
         Capacidad informacional: log₂(f_P/F₀) bits por ciclo de F₀.
 
-        Representa cuánta información de Planck cabe en un ciclo habitable.
+        Cuánta información de Planck cabe en un ciclo habitable.
         """
         return math.log2(self.f_P / self.F0)
 
@@ -378,13 +378,13 @@ class UniversoPensamiento:
         """
         Entropía logarítmica de la brecha cosmológica.
 
-        H = log₁₀(f_P/f_bio) − log₁₀(F₀/f_bio)
+            H = log₁₀(f_P/f_bio) − log₁₀(F₀/f_bio)
         """
         return math.log10(self.f_P / self.f_bio) - math.log10(self.F0 / self.f_bio)
 
     def factor_compresion(self) -> float:
         """
-        Factor de compresión: cuántas veces comprime F₀ la brecha Planck-bio.
+        Factor de compresión de la brecha Planck-bio mediante F₀.
 
             k = log₁₀(f_P/f_bio) / log₁₀(F₀/f_bio)
         """
