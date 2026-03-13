@@ -200,12 +200,28 @@ def test_relaciones():
     assert error_schumann < 0.01, "f₀/18 must be ≈ Schumann within 1%"
     
     # f₀ / 10 ≈ t₁ (Riemann)
-    from fisica.marco_adelico import RIEMANN_CEROS
+    from fisica.marco_adelico import (
+        RIEMANN_CEROS,
+        FACTOR_RIEMANN_F0,
+        DELTA_FASE_HZ,
+        F0_RIEMANN_DERIVADA,
+    )
     relacion_riemann = F0_HZ / 10
     error_riemann = abs(relacion_riemann - RIEMANN_CEROS[0]) / RIEMANN_CEROS[0]
     print(f"  f₀ / 10 = {relacion_riemann:.4f} ≈ t₁ = {RIEMANN_CEROS[0]:.4f} (error: {error_riemann*100:.2f}%)")
     assert error_riemann < 0.005, "f₀/10 must be ≈ t₁ within 0.5%"
-    
+
+    # f₀ = γ₁ × 10.025 = γ₁ × (10 + 1/40)
+    assert abs(FACTOR_RIEMANN_F0 - 10.025) < 1e-10, "FACTOR_RIEMANN_F0 must be 10.025"
+    assert DELTA_FASE_HZ == RIEMANN_CEROS[0] / 40.0, "DELTA_FASE_HZ must be γ₁/40"
+    error_derivada = abs(F0_RIEMANN_DERIVADA - F0_HZ) / F0_HZ
+    print(f"  γ₁ × 10.025 = {F0_RIEMANN_DERIVADA:.6f} ≈ f₀ = {F0_HZ} (error: {error_derivada*100:.4f}%)")
+    assert error_derivada < 0.001, "γ₁×10.025 must be ≈ f₀ within 0.1% (tolerance: 0.001)"
+    # DELTA_FASE_HZ is defined as exactly RIEMANN_ZERO_1/40 so the ratio is exactly 40.0
+    ratio_gamma_delta = RIEMANN_CEROS[0] / DELTA_FASE_HZ
+    print(f"  γ₁ / δ_fase = {ratio_gamma_delta:.4f} ≈ 40 (acoplamiento estructural)")
+    assert abs(ratio_gamma_delta - 40.0) < 1e-10, "γ₁/δ_fase must be exactly 40"
+
     print("✅ All key relationships verified")
     return True
 
