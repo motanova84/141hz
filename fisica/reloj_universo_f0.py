@@ -20,13 +20,30 @@ Todas derivadas de la frecuencia fundamental f₀ = 141.7001 Hz:
 7. h - Constante de Planck (constante universal)
 8. ℏ (hbar) - Constante de Planck reducida (ℏ = h/2π)
 
+⚡ CONSTANTES DERIVADAS DE RIEMANN ⚡
+
+Derivadas del primer cero no trivial de ζ(s):
+9.  GAMMA_1 - Primer cero no trivial de ζ(s) (≈ 14.134725141734693790...)
+10. MULTIPLICADOR_TUYOYOTU - Proporción Tuyoyotu (10 + 1/40 = 10.025)
+11. F0_EXACT_HZ - Frecuencia exacta γ₁ × 10.025 (≈ 141.70061954589031 Hz)
+12. DELTA_FASE_ZIUSUDRA - Acoplamiento de fase δ = γ₁/40 (≈ 0.35336812854 Hz)
+13. FISURA_ZIUSUDRA - Brecha F0_EXACT_HZ − F0_HZ (≈ +5.195×10⁻⁴ Hz)
+14. F0_OCTAVA_HZ - Octava superior del Sistema Habitado (151.7001 Hz)
+
 Referencias:
 - CODATA 2018 para constantes físicas fundamentales
 - Derivación matemática QCAL en DERIVACION_COMPLETA_F0.md
+- Primer cero de Riemann verificado con mpmath hasta 50 dígitos
 """
 
 import math
 from decimal import Decimal, getcontext
+
+try:
+    import mpmath
+    _MPMATH_AVAILABLE = True
+except ImportError:
+    _MPMATH_AVAILABLE = False
 
 # Establecer precisión para Decimal
 getcontext().prec = 50
@@ -71,7 +88,6 @@ T0_MILISEGUNDOS = T0_SEGUNDOS * 1000.0  # ms
 T0_MS = T0_MILISEGUNDOS  # Alias
 
 print(f"T₀ = {T0_SEGUNDOS:.8f} s = {T0_MILISEGUNDOS:.5f} ms")
-
 # ============================================================================
 # 3️⃣ FRECUENCIA ANGULAR ω₀
 # ============================================================================
@@ -154,6 +170,61 @@ CONSTANTES_UNIVERSALES = {
     'ℏ': (HBAR, 'J·s', 'Constante de Planck reducida'),
 }
 
+# ============================================================================
+# CONSTANTES DERIVADAS DE RIEMANN
+# ============================================================================
+
+# γ₁ = 14.134725141734693790... — primer cero no trivial de ζ(s)
+# Verificado con mpmath hasta 50 dígitos cuando está disponible
+if _MPMATH_AVAILABLE:
+    _mp_ctx = mpmath.mp
+    _mp_ctx.dps = 50  # 50 decimal places
+    GAMMA_1 = float(mpmath.zetazero(1).imag)
+else:
+    GAMMA_1 = 14.134725141734693790  # Primer cero no trivial de ζ(s)
+
+# Proporción Tuyoyotu: 10 + 1/40
+MULTIPLICADOR_TUYOYOTU = 10.025  # 10 + 1/40
+
+# Frecuencia exacta derivada de Riemann: f₀_exact = γ₁ × (10 + 1/40)
+F0_EXACT_HZ = GAMMA_1 * MULTIPLICADOR_TUYOYOTU  # ≈ 141.70061954589031 Hz
+
+# Acoplamiento de fase Ziusudra: δ_fase = γ₁ / 40
+DELTA_FASE_ZIUSUDRA = GAMMA_1 / 40.0  # ≈ 0.35336812854 Hz
+
+# Fisura de Ziusudra: diferencia entre f₀ exacta y operativa
+FISURA_ZIUSUDRA = F0_EXACT_HZ - F0_FLOAT  # ≈ +5.195×10⁻⁴ Hz
+
+# Octava superior del Sistema Habitado
+F0_OCTAVA_HZ = 151.7001  # Hz — F₀ + 10 Hz
+
+# ============================================================================
+# DICCIONARIO UNIFICADO DE CONSTANTES FÍSICAS
+# ============================================================================
+
+CONSTANTES_FISICAS = {
+    # --- Constantes de f₀ operativo ---
+    'f₀': (F0_FLOAT, 'Hz', 'Frecuencia fundamental operativa QCAL'),
+    'T₀': (T0_SEGUNDOS, 's', 'Período fundamental'),
+    'ω₀': (OMEGA_0, 'rad/s', 'Frecuencia angular fundamental'),
+    'λ₀': (LAMBDA_0, 'm', 'Longitud de onda fundamental'),
+    'E₀': (E0_JULIOS, 'J', 'Energía cuántica fundamental'),
+    'k₀': (K0_NUMERO_ONDA, 'm⁻¹', 'Número de onda fundamental'),
+    'p₀': (P0_MOMENTUM, 'kg·m/s', 'Momentum del fotón de f₀'),
+    'm_eff': (M_EFF_KG, 'kg', 'Masa efectiva asociada a f₀'),
+    # --- Constantes universales ---
+    'c': (C_LUZ, 'm/s', 'Velocidad de la luz (CODATA 2018)'),
+    'h': (H_PLANCK, 'J·s', 'Constante de Planck (CODATA 2018)'),
+    'ℏ': (HBAR, 'J·s', 'Constante de Planck reducida'),
+    # --- Constantes derivadas de Riemann ---
+    'γ₁': (GAMMA_1, 'adim', 'Primer cero no trivial de ζ(s)'),
+    'μ_tuyoyotu': (MULTIPLICADOR_TUYOYOTU, 'adim', 'Proporción Tuyoyotu (10 + 1/40)'),
+    'f₀_exact': (F0_EXACT_HZ, 'Hz', 'Frecuencia exacta Riemann γ₁ × 10.025'),
+    'δ_fase': (DELTA_FASE_ZIUSUDRA, 'Hz', 'Acoplamiento de fase Ziusudra γ₁/40'),
+    'Δ_fisura': (FISURA_ZIUSUDRA, 'Hz', 'Fisura de Ziusudra (f₀_exact − f₀)'),
+    'f₀_octava': (F0_OCTAVA_HZ, 'Hz', 'Octava superior del Sistema Habitado'),
+}
+
 def mostrar_tabla_constantes():
     """
     Muestra la tabla de constantes derivadas de f₀.
@@ -231,3 +302,10 @@ if __name__ == "__main__":
     verificar_relaciones()
     
     print("\n✅ Reloj del Universo: 8 constantes físicas fundamentales definidas.")
+    print(f"\n⚡ CONSTANTES DERIVADAS DE RIEMANN:")
+    print(f"   γ₁            = {GAMMA_1:.20f}")
+    print(f"   μ_tuyoyotu    = {MULTIPLICADOR_TUYOYOTU}")
+    print(f"   f₀_exact      = {F0_EXACT_HZ:.14f} Hz")
+    print(f"   δ_fase        = {DELTA_FASE_ZIUSUDRA:.14f} Hz")
+    print(f"   Fisura        = {FISURA_ZIUSUDRA:+.6e} Hz")
+    print(f"   f₀_octava     = {F0_OCTAVA_HZ} Hz")

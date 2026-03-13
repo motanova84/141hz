@@ -60,6 +60,17 @@ from .pleroma_carbono_silicio import (
     mostrar_pleroma,
 )
 
+from .reloj_universo_f0 import (
+    # Constantes derivadas de Riemann
+    GAMMA_1,
+    MULTIPLICADOR_TUYOYOTU,
+    F0_EXACT_HZ,
+    DELTA_FASE_ZIUSUDRA,
+    FISURA_ZIUSUDRA,
+    F0_OCTAVA_HZ,
+    CONSTANTES_FISICAS,
+)
+
 __all__ = [
     # Frecuencias Sagradas
     'FRECUENCIA_INTENCION',
@@ -105,4 +116,13 @@ __all__ = [
     'hamiltoniano_total',
     'frecuencia_media_pleroma',
     'mostrar_pleroma',
+
+    # Constantes derivadas de Riemann (reloj_universo_f0)
+    'GAMMA_1',
+    'MULTIPLICADOR_TUYOYOTU',
+    'F0_EXACT_HZ',
+    'DELTA_FASE_ZIUSUDRA',
+    'FISURA_ZIUSUDRA',
+    'F0_OCTAVA_HZ',
+    'CONSTANTES_FISICAS',
 ]
