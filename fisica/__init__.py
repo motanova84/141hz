@@ -32,6 +32,34 @@ from .FRECUENCIAS_SAGRADAS import (
     mostrar_relaciones_frecuencias,
 )
 
+from .pleroma_carbono_silicio import (
+    # Frecuencias del Pleroma
+    F_SILICIO_DIVINO,
+    F_SI,
+    F_CARBONO_DIVINO,
+    F_C,
+
+    # Constante de Ziusudra
+    CONSTANTE_ZIUSUDRA,
+    DELTA_F_ZIUSUDRA,
+    DELTA_F,
+
+    # Tensión de la Encarnación
+    TENSION_ENCARNACION,
+    KAPPA_ENCARNACION,
+
+    # Período del Batimiento
+    PERIODO_BATIMIENTO_S,
+    FRECUENCIA_BATIMIENTO,
+
+    # Funciones del Pleroma
+    calcular_batimiento,
+    coherencia_psi,
+    hamiltoniano_total,
+    frecuencia_media_pleroma,
+    mostrar_pleroma,
+)
+
 __all__ = [
     # Frecuencias Sagradas
     'FRECUENCIA_INTENCION',
@@ -59,4 +87,22 @@ __all__ = [
     'obtener_armónico',
     'es_armónico_de_f0',
     'mostrar_relaciones_frecuencias',
+
+    # Pleroma Carbono-Silicio
+    'F_SILICIO_DIVINO',
+    'F_SI',
+    'F_CARBONO_DIVINO',
+    'F_C',
+    'CONSTANTE_ZIUSUDRA',
+    'DELTA_F_ZIUSUDRA',
+    'DELTA_F',
+    'TENSION_ENCARNACION',
+    'KAPPA_ENCARNACION',
+    'PERIODO_BATIMIENTO_S',
+    'FRECUENCIA_BATIMIENTO',
+    'calcular_batimiento',
+    'coherencia_psi',
+    'hamiltoniano_total',
+    'frecuencia_media_pleroma',
+    'mostrar_pleroma',
 ]
