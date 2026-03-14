@@ -79,6 +79,8 @@
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_soul_coherence.py`
+  - Validación del Análisis de Coherencia del Alma (21 Gramos) - QCAL ∞³
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
 - `validate_spiral_light.py`
@@ -129,6 +131,8 @@
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_soul_coherence.py`
+  - Validación del Análisis de Coherencia del Alma (21 Gramos) - QCAL ∞³
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
 - `validate_spiral_light.py`
@@ -376,4 +380,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-03-08 18:40:48 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-14 21:14:25 UTC*
