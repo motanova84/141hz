@@ -59,8 +59,18 @@
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_microtubule_coherence.py`
+  - Validación del Teorema de la Carne Resonante - MicrotubuleCoherence.lean
+- `validate_microtubule_consciousness.py`
+  - Validation Script: Microtubule Quantum Consciousness
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_navier_stokes_regularization.py`
+  - Validation Script: Navier-Stokes Vibrational Regularization
+- `validate_nodo_psi_bio.py`
+  - Validation Script - Nodo Ψ Bio Protocol
+- `validate_nodo_qcal.py`
+  - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
@@ -69,6 +79,8 @@
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_soul_coherence.py`
+  - Validación del Análisis de Coherencia del Alma (21 Gramos) - QCAL ∞³
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
 - `validate_spiral_light.py`
@@ -99,8 +111,18 @@
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_microtubule_coherence.py`
+  - Validación del Teorema de la Carne Resonante - MicrotubuleCoherence.lean
+- `validate_microtubule_consciousness.py`
+  - Validation Script: Microtubule Quantum Consciousness
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_navier_stokes_regularization.py`
+  - Validation Script: Navier-Stokes Vibrational Regularization
+- `validate_nodo_psi_bio.py`
+  - Validation Script - Nodo Ψ Bio Protocol
+- `validate_nodo_qcal.py`
+  - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_qcal_biology.py`
@@ -109,6 +131,8 @@
   - Reproducibility Validation Script
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_soul_coherence.py`
+  - Validación del Análisis de Coherencia del Alma (21 Gramos) - QCAL ∞³
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
 - `validate_spiral_light.py`
@@ -182,6 +206,8 @@
   - Test script para verificar el sistema de generación de visualización de coherencia.
 - `test_comparar_ligo_kagra.py`
   - Test para comparar_ligo_vs_kagra_sensibilidad.py
+- `test_constantes_qcal.py`
+  - Test script para verificar todas las constantes QCAL
 - `test_correccion_rpsi_codata.py`
   - Test de correcciones técnicas: RΨ y αΨ
 - `test_corrections.py`
@@ -212,6 +238,8 @@
   - Tests para el módulo de cálculo de energía cuántica fundamental
 - `test_evidencia_concluyente.py`
   - Test unitario para el módulo de evidencia concluyente
+- `test_filtro_racionales_adelico.py`
+  - Tests para FiltroRacionalesAdelico (Pilar 2).
 - `test_fractal_resonance_constants.py`
   - Tests for Fractal Resonance in Fundamental Constants module.
 - `test_generar_cy_kappa_25773.py`
@@ -352,4 +380,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-24 23:11:32 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-14 21:14:25 UTC*

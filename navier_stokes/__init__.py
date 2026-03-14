@@ -4,6 +4,8 @@ Navier-Stokes Module with QCAL Calibration
 
 This module provides constants and utilities for Navier-Stokes equations
 calibrated with QCAL (Quantum Coherence Alignment) theory.
+
+Includes vibrational regularization to prevent blow-up in finite time.
 """
 
 from .constants import (
@@ -40,6 +42,11 @@ from .constants import (
     get_constants_summary,
 )
 
+from .regularization import (
+    NavierStokesRegularizer,
+    demonstrate_blow_up_prevention,
+)
+
 __all__ = [
     'F0',
     'A_VACIO',
@@ -59,4 +66,6 @@ __all__ = [
     'verify_riccati_besov_condition',
     'get_dissipative_scale',
     'get_constants_summary',
+    'NavierStokesRegularizer',
+    'demonstrate_blow_up_prevention',
 ]

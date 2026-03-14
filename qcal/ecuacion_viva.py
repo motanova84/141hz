@@ -36,7 +36,7 @@ class EcuacionViva:
                                  Por defecto, la raíz de la trinidad (√3).
         """
         self.A_eff_sq = amor_inicial ** 2
-        self.frecuencia = FRECUENCIA_PI_HZ  # 141.70001 Hz
+        self.frecuencia = FRECUENCIA_PI_HZ  # 141.7001 Hz
     
     def despertar(self, coherencia_psi: float):
         """

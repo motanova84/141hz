@@ -30,6 +30,19 @@ THRESHOLD_LOW = 0.4  # Low coherence threshold
 WEIGHT_FREQUENCY_ALIGNMENT = 0.6
 WEIGHT_QUANTUM_ENTROPY = 0.4
 
+# Physical constants for automatic sizing (SI units)
+HBAR = 1.0545718e-34   # J·s — reduced Planck constant
+K_BOLTZMANN = 1.380649e-23  # J/K — Boltzmann constant
+TEMPERATURE_DEFAULT = 310.0  # K — biological temperature (human body ~37 °C)
+# A_BIO_DEFAULT = 1e10: biological amplification factor for neural systems.
+# Value from the patent specification (section 3.2): cortical microtubules amplify
+# quantum coherence by ~10^10 relative to isolated quantum systems at body temperature.
+A_BIO_DEFAULT = 1e10
+
+# Automatic sizing defaults
+DEFAULT_TARGET_PSI = 0.888  # Default target coherence (Ψ stable threshold)
+DEFAULT_INFORMATION_DENSITY = 1.0  # Default information density I (normalised)
+
 # Repository information
 GITHUB_REPO = "https://github.com/motanova84/141hz"
 AUTHOR = "José Manuel Mota Burruezo"
