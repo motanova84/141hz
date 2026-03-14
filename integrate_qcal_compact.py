@@ -168,19 +168,19 @@ def constantes_sagradas_validation():
     colored_output("=" * 80, "YELLOW")
     
     from fisica.reloj_universo_f0 import F0_FLOAT
-    from fisica.constantes_coherencia import PSI_PERFECTO, PSI_EXCELENTE
+    from fisica.constantes_coherencia import PSI_PERFECTA, PSI_EXCELENTE
     
     # Validar f₀
     assert abs(F0_FLOAT - 141.7001) < 1e-6, f"F0 debe ser 141.7001, got {F0_FLOAT}"
     
     colored_output(f"\n⚡ f₀ = {F0_FLOAT} Hz (Frecuencia Fundamental)", "YELLOW")
-    colored_output(f"   Ψ_perfecto = {PSI_PERFECTO}", "YELLOW")
+    colored_output(f"   Ψ_perfecta = {PSI_PERFECTA}", "YELLOW")
     colored_output(f"   Ψ_excelente = {PSI_EXCELENTE}", "YELLOW")
     
     master_cert.update({
         "constantes_sagradas": {
             "f0_hz": F0_FLOAT,
-            "psi_perfecto": PSI_PERFECTO,
+            "psi_perfecta": PSI_PERFECTA,
             "psi_excelente": PSI_EXCELENTE,
         }
     })
