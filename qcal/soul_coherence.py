@@ -168,7 +168,8 @@ class QCalSoul:
             Dict con análisis del círculo
         """
         # 21 / f₀ ≈ 0.1482 → 1 / 0.1482 ≈ 6.747
-        ratio_21_f0 = self.m_exp_soul / self.f_0  # kg/Hz
+        # Usar el número 21 (no la masa en kg) para relación numerológica
+        ratio_21_f0 = 21.0 / self.f_0  # dimensionless (numerological ratio)
         circle_approx = 1.0 / ratio_21_f0
         exact_2pi = 2 * pi
         error = abs(circle_approx - exact_2pi) / exact_2pi
