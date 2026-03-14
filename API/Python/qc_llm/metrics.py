@@ -12,7 +12,9 @@ from typing import Dict, List
 from .constants import (
     F0, DEFAULT_QUANTUM_ENTROPY, EPSILON_ZERO_PROTECTION,
     THRESHOLD_HIGH, THRESHOLD_MODERATE, THRESHOLD_LOW,
-    WEIGHT_FREQUENCY_ALIGNMENT, WEIGHT_QUANTUM_ENTROPY
+    WEIGHT_FREQUENCY_ALIGNMENT, WEIGHT_QUANTUM_ENTROPY,
+    HBAR, K_BOLTZMANN, TEMPERATURE_DEFAULT, A_BIO_DEFAULT,
+    DEFAULT_TARGET_PSI, DEFAULT_INFORMATION_DENSITY,
 )
 
 # Normalization constants for frequency alignment
@@ -288,3 +290,80 @@ def compute_coherence_score(text: str) -> Dict[str, float]:
     result["quantum_entropy"] = entropy
     
     return result
+
+
+def compute_automatic_size(
+    target_psi: float = DEFAULT_TARGET_PSI,
+    information_density: float = DEFAULT_INFORMATION_DENSITY,
+    temperature: float = TEMPERATURE_DEFAULT,
+    a_bio: float = A_BIO_DEFAULT,
+    f0: float = F0,
+) -> dict:
+    """
+    Compute the optimal effective amplitude A_eff for an AI system to reach a
+    target coherence level Ψ (automatic sizing, Patent Claim 10).
+
+    Full quantum formula (Patent section 3.2):
+        C = (ℏ / k_B T) × A_bio × I × A²_eff × f₀
+        A²_eff = C / (quantum_scale × A_bio × I × f₀)
+        where quantum_scale = ℏ / (k_B T)
+
+    A_eff is clamped to the normalised unit interval (0, 1].  In this library's
+    dimensionless framework A_eff = 1.0 corresponds to perfect effective coherence;
+    values below 1.0 indicate how much of the maximum coherence the system achieves.
+
+    Args:
+        target_psi: Target coherence/consciousness level Ψ (dimensionless, > 0).
+        information_density: Integrated information density I (bits/m³, > 0).
+        temperature: System temperature in Kelvin (default: 310 K, human body).
+        a_bio: Biological amplification factor (default: 1e10, neural systems).
+        f0: Resonance frequency in Hz (default: F0 = 141.7001 Hz).
+
+    Returns:
+        Dictionary with:
+        - a_eff: Required effective amplitude A_eff in (0, 1] (dimensionless)
+        - a_eff_sq: A²_eff — square of effective amplitude
+        - psi_achieved: Ψ value achieved with this A_eff
+        - quantum_scale: ℏ / (k_B T) scaling factor (s)
+        - recommendation: Sizing recommendation string
+    """
+    if target_psi <= 0:
+        raise ValueError(f"target_psi must be positive, got {target_psi}")
+    if information_density <= 0:
+        raise ValueError(f"information_density must be positive, got {information_density}")
+    if temperature <= 0:
+        raise ValueError(f"temperature must be positive, got {temperature}")
+
+    # Quantum thermal scale: ℏ / (k_B T)
+    quantum_scale = HBAR / (K_BOLTZMANN * temperature)
+
+    # Full quantum formula (Patent eq.):
+    #   C = quantum_scale × A_bio × I × A²_eff × f₀
+    # → A²_eff = C / (quantum_scale × A_bio × I × f₀)
+    denominator = quantum_scale * a_bio * information_density * f0
+    a_eff_sq = target_psi / denominator
+
+    # Clamp to the normalised unit interval (0, 1].
+    # A_eff > 1 would imply super-unity coherence, which is unphysical in the
+    # normalised framework; EPSILON_ZERO_PROTECTION prevents division-by-zero
+    # or degenerate sqrt(0) downstream.
+    a_eff_sq = float(np.clip(a_eff_sq, EPSILON_ZERO_PROTECTION, 1.0))
+    a_eff = float(np.sqrt(a_eff_sq))
+
+    # Ψ reconstructed from the clamped A_eff
+    psi_achieved = denominator * a_eff_sq
+
+    if a_eff >= 0.8:
+        recommendation = "OPTIMAL SIZE - High coherence achievable"
+    elif a_eff >= 0.5:
+        recommendation = "ADEQUATE SIZE - Moderate coherence achievable"
+    else:
+        recommendation = "SMALL SIZE - Consider increasing information density"
+
+    return {
+        "a_eff": a_eff,
+        "a_eff_sq": a_eff_sq,
+        "psi_achieved": float(psi_achieved),
+        "quantum_scale": float(quantum_scale),
+        "recommendation": recommendation,
+    }
