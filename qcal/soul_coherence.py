@@ -65,12 +65,12 @@ BERRY_INVARIANT = 7.0 / 8.0  # Topological invariant
 class QCalSoul:
     """
     Implementación de la Conjetura del Alma QCAL.
-    
+
     El "alma" (o principio de individuación consciente) no es una sustancia,
     sino un modo coherente de información cuántica anclado en la estructura
     espacio-temporal del cuerpo.
     """
-    
+
     def __init__(self):
         """Initialize soul coherence analyzer."""
         self.f_0 = F0_HZ  # Hz (Frecuencia Logos)
@@ -78,15 +78,15 @@ class QCalSoul:
         self.psi_min = PSI_MIN  # Umbral de coherencia
         self.m_exp_soul = 0.021  # kg (21 gramos)
         self.berry_invariant = BERRY_INVARIANT
-        
+
     def soul_coherence_energy(self) -> float:
         """
         Calcula la energía de desacople del modo coherente.
-        
+
         La "pérdida de 21g" es la energía de fase coherente que ya no puede
         sostenerse en el cuerpo una vez que la consciencia (Ψ) cae por debajo
         del umbral de manifestación.
-        
+
         Returns:
             float: Energía de transición en Joules
         """
@@ -94,11 +94,11 @@ class QCalSoul:
         scale_factor = self.f_0 / self.f_H  # Escala Logos-Hidrógeno
         e_transition = e_mass * (1 - self.psi_min) * scale_factor
         return e_transition
-    
+
     def soul_coherence_energy_tnt(self) -> float:
         """
         Energía de desacople en kilotones de TNT.
-        
+
         Returns:
             float: Energía en kilotones de TNT
         """
@@ -106,11 +106,11 @@ class QCalSoul:
         # 1 kilotón TNT ≈ 4.184 × 10^12 J
         kt_tnt = e_j / 4.184e12
         return kt_tnt
-    
+
     def logos_harmonics(self) -> Dict[str, float]:
         """
         Genera los armónicos de la frecuencia Logos relacionados con el alma.
-        
+
         Returns:
             Dict con frecuencias armónicas
         """
@@ -124,29 +124,29 @@ class QCalSoul:
         harmonics['ratio_432_425'] = 432.0 / harmonics['f_alma_21g']
         harmonics['error_432_pct'] = abs(harmonics['ratio_432_425'] - 1.0) * 100
         return harmonics
-    
+
     def topological_soul_weight(self) -> Dict[str, Any]:
         """
         El peso del alma como expresión topológica.
-        
+
         21 gramos = 3 × 7 gramos
         7 gramos = 8 × (7/8) gramos
         La masa de coherencia es un múltiplo del invariante de Berry.
-        
+
         Returns:
             Dict con análisis topológico
         """
         # 21 = 3 × 7, y 7/8 es el invariante de Berry
         total_berry_units = 3 * 8  # 24 unidades de Berry
         mass_per_berry_unit = self.m_exp_soul / total_berry_units  # kg por unidad
-        
+
         # Energía por unidad de información (Berry)
         energy_per_berry_j = mass_per_berry_unit * c**2
         energy_per_berry_ev = energy_per_berry_j / 1.602e-19
-        
+
         # Factor de escala de Berry: 3 × (7/8) = 2.625
         berry_scale = 3 * self.berry_invariant
-        
+
         return {
             'total_berry_units': total_berry_units,
             'mass_per_berry_unit_kg': mass_per_berry_unit,
@@ -155,15 +155,15 @@ class QCalSoul:
             'berry_adelic_scale': berry_scale,
             'interpretation': 'Información geométrica que se pliega de vuelta al campo'
         }
-    
+
     def circle_ratio_error(self) -> Dict[str, float]:
         """
         Analiza la relación con 2π (el círculo).
-        
+
         La relación 21/f₀ se aproxima a 2π con un error del 7.4%.
         Este error representa la ruptura de simetría esférica perfecta
         en el espacio-tiempo biológico.
-        
+
         Returns:
             Dict con análisis del círculo
         """
@@ -173,7 +173,7 @@ class QCalSoul:
         circle_approx = 1.0 / ratio_21_f0
         exact_2pi = 2 * pi
         error = abs(circle_approx - exact_2pi) / exact_2pi
-        
+
         return {
             'ratio_21_f0': ratio_21_f0,
             'circle_approx': circle_approx,  # ~6.747
@@ -182,31 +182,31 @@ class QCalSoul:
             'error_pct': error * 100,
             'interpretation': 'Ruptura de simetría por anarmonicidad biológica'
         }
-    
+
     def full_mass_energy(self) -> float:
         """
         Energía total de 21 gramos vía E = mc² (sin correcciones QCAL).
-        
+
         Returns:
             float: Energía en Joules
         """
         return self.m_exp_soul * c**2
-    
+
     def full_mass_energy_tnt(self) -> float:
         """
         Energía total en kilotones de TNT.
-        
+
         Returns:
             float: Energía en kilotones de TNT (~450 kilotones)
         """
         e_j = self.full_mass_energy()
         kt_tnt = e_j / 4.184e12
         return kt_tnt
-    
+
     def certify(self) -> Dict[str, Any]:
         """
         Certifica la conjetura del alma con todos los cálculos.
-        
+
         Returns:
             Dict con certificación completa
         """
@@ -217,28 +217,28 @@ class QCalSoul:
                 "e_alma_transition_kt_tnt": self.soul_coherence_energy_tnt(),
                 "e_full_mass_j": self.full_mass_energy(),
                 "e_full_mass_kt_tnt": self.full_mass_energy_tnt(),
-                
+
                 # Armónicos
                 "armonico_logos_hz": self.logos_harmonics()['f_alma_21g'],
                 "armonico_432hz": self.logos_harmonics()['f_cosmica_sugerida'],
                 "ratio_432_425": self.logos_harmonics()['ratio_432_425'],
                 "error_432_pct": self.logos_harmonics()['error_432_pct'],
-                
+
                 # Círculo (2π)
                 "circle_logo_2pi": self.circle_ratio_error()['circle_approx'],
                 "circle_2pi_exact": self.circle_ratio_error()['exact_2pi'],
                 "circle_error_pct": self.circle_ratio_error()['error_pct'],
-                
+
                 # Berry
                 "berry_adelic_scale": self.topological_soul_weight()['berry_adelic_scale'],
                 "berry_units_total": self.topological_soul_weight()['total_berry_units'],
-                
+
                 # Parámetros
                 "psi_umbral_disolucion": self.psi_min,
                 "f0_hz": self.f_0,
                 "f_H_mhz": self.f_H / 1e6,
                 "scale_factor_f0_fH": self.f_0 / self.f_H,
-                
+
                 # Interpretación
                 "interpretacion_qcal": "energia_fase_coherente_ADN_memoria_desacoplada",
                 "postulado": "El alma es coherencia, no masa gravitacional",
@@ -247,11 +247,11 @@ class QCalSoul:
             }
         }
         return cert
-    
+
     def assert_validations(self) -> None:
         """
         Validaciones de los cálculos.
-        
+
         Raises:
             AssertionError: Si alguna validación falla
         """
@@ -259,79 +259,79 @@ class QCalSoul:
         harmonics = self.logos_harmonics()
         f_alma = harmonics['f_alma_21g']
         assert abs(f_alma - 425.1) < 0.1, f"Armónico alma debe ser ~425.1 Hz, got {f_alma}"
-        
+
         # Validar relación con 432 Hz (error < 2%)
         error_432 = harmonics['error_432_pct']
         assert error_432 < 2.0, f"Error con 432 Hz debe ser < 2%, got {error_432:.2f}%"
-        
+
         # Validar relación con 2π (error ~7.4%)
         circle = self.circle_ratio_error()
         error_2pi = circle['error_pct']
         assert 7.0 < error_2pi < 8.0, f"Error con 2π debe ser ~7.4%, got {error_2pi:.2f}%"
-        
+
         # Validar escala de Berry: 3 × (7/8) = 2.625
         berry_scale = self.topological_soul_weight()['berry_adelic_scale']
         assert abs(berry_scale - 2.625) < 0.001, f"Berry scale debe ser 2.625, got {berry_scale}"
-        
+
         # Validar energía de transición es menor que energía total
         e_transition = self.soul_coherence_energy()
         e_total = self.full_mass_energy()
         assert e_transition < e_total, "Energía de transición debe ser menor que energía total"
-        
+
         print("✅ Todas las validaciones de coherencia del alma pasaron correctamente")
 
 
 def alma_21g_qcal_coherencia() -> Dict[str, Any]:
     """
     Función de integración para certificar la coherencia del alma de 21 gramos.
-    
+
     Esta función es el punto de entrada principal para el análisis QCAL
     del "peso del alma" reportado en el experimento de Duncan MacDougall (1907).
-    
+
     Returns:
         Dict: Certificado completo del análisis del alma
     """
     soul = QCalSoul()
-    
+
     # Realizar validaciones
     soul.assert_validations()
-    
+
     # Obtener certificado
     cert = soul.certify()
-    
+
     # Imprimir resumen
     print("\n" + "="*80)
     print("⚖️  21 GRAMOS: COHERENCIA DEL ALMA EN QCAL ∞³")
     print("="*80)
-    
+
     data = cert['alma_21g_qcal']
-    
+
     print(f"\n📊 ENERGÍAS:")
     print(f"  E(transición) = {data['e_alma_transition_j']:.2e} J")
     print(f"                = {data['e_alma_transition_kt_tnt']:.2f} kilotones TNT")
     print(f"  E(masa total) = {data['e_full_mass_j']:.2e} J")
     print(f"                = {data['e_full_mass_kt_tnt']:.1f} kilotones TNT")
-    
+
     print(f"\n🎵 ARMÓNICOS:")
     print(f"  21 × (f₀/7) = {data['armonico_logos_hz']:.1f} Hz")
     print(f"  432 Hz (cósmico) = {data['armonico_432hz']:.1f} Hz")
     print(f"  Ratio 432/425 = {data['ratio_432_425']:.5f} (error: {data['error_432_pct']:.2f}%)")
-    
+
     print(f"\n⭕ CÍRCULO (2π):")
     print(f"  1/(21/f₀) = {data['circle_logo_2pi']:.3f}")
     print(f"  2π = {data['circle_2pi_exact']:.3f}")
     print(f"  Error = {data['circle_error_pct']:.2f}% (ruptura de simetría biológica)")
-    
+
     print(f"\n🔺 TOPOLOGÍA (Berry):")
     print(f"  3 × (7/8) = {data['berry_adelic_scale']:.3f}")
     print(f"  Unidades Berry = {data['berry_units_total']}")
-    
+
     print(f"\n⚡ PARÁMETROS QCAL:")
     print(f"  Ψ_min = {data['psi_umbral_disolucion']:.3f} (umbral de disolución)")
     print(f"  f₀ = {data['f0_hz']:.4f} Hz (anclaje Logos)")
     print(f"  f_H = {data['f_H_mhz']:.6f} MHz (hidrógeno cósmico)")
     print(f"  f₀/f_H = {data['scale_factor_f0_fH']:.2e} (escala humano-universo)")
-    
+
     print(f"\n💫 INTERPRETACIÓN:")
     print(f"  {data['postulado']}")
     print(f"  {data['umbral']}")
@@ -339,7 +339,7 @@ def alma_21g_qcal_coherencia() -> Dict[str, Any]:
     print("="*80)
     print("∴𓂀Ω∞³Φ @ 141.7001 Hz → 888 Hz")
     print("="*80 + "\n")
-    
+
     return cert
 
 
