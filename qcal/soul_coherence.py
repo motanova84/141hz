@@ -95,6 +95,21 @@ class SoulEnergy:
 
 
 @dataclass
+class EnergyImpulse:
+    """
+    ΔE = |∂E_alma/∂Ψ| = m · c² · (f₀ / f_H).
+
+    This is the magnitude of the resonance pulse required to stabilise the
+    system before the 21 grams lose their spacetime anchor.
+    """
+    delta_e_j: float             # J  — impulse magnitude
+    delta_e_mj: float            # MJ — impulse in megajoules
+    mass_kg: float               # kg — soul mass used
+    f0_hz: float                 # Hz — f₀ used
+    f_hydrogen_hz: float         # Hz — f_H used
+
+
+@dataclass
 class SoulCertification:
     """Complete soul coherence certification — all three axioms verified."""
     axiom_i: QuantumLossFactor
@@ -141,6 +156,7 @@ class QCalSoul:
         self._axiom_ii: GoldenRatio2piSync | None = None
         self._axiom_iii: LogosHarmonic | None = None
         self._soul_energy: SoulEnergy | None = None
+        self._energy_impulse: EnergyImpulse | None = None
 
     # ------------------------------------------------------------------
     # Axiom I — Quantum Loss Factor
@@ -270,6 +286,40 @@ class QCalSoul:
             f_hydrogen_hz=self.f_hydrogen_hz,
         )
         return self._soul_energy
+
+    # ------------------------------------------------------------------
+    # Energy Impulse (derivative)
+    # ------------------------------------------------------------------
+
+    def compute_energy_impulse(self) -> EnergyImpulse:
+        """
+        Compute ΔE = |∂E_alma/∂Ψ| = m · c² · (f₀ / f_H).
+
+        This is the magnitude of the resonance pulse needed to re-stabilise
+        the 21-gram field when phase decoupling is detected (Ψ < Ψ_min).
+
+        Derivation
+        ----------
+        E_alma(Ψ) = m · c² · (1 − Ψ) · (f₀ / f_H)
+        ∂E_alma/∂Ψ = −m · c² · (f₀ / f_H)
+        |∂E_alma/∂Ψ| = m · c² · (f₀ / f_H) ≈ 188.3 MJ per unit Ψ
+
+        Returns
+        -------
+        EnergyImpulse
+        """
+        if self._energy_impulse is not None:
+            return self._energy_impulse
+
+        delta_e = self.m_soul_kg * C ** 2 * (self.f0 / self.f_hydrogen_hz)
+        self._energy_impulse = EnergyImpulse(
+            delta_e_j=delta_e,
+            delta_e_mj=delta_e / 1e6,
+            mass_kg=self.m_soul_kg,
+            f0_hz=self.f0,
+            f_hydrogen_hz=self.f_hydrogen_hz,
+        )
+        return self._energy_impulse
 
     # ------------------------------------------------------------------
     # Full Certification

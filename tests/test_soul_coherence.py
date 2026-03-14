@@ -16,11 +16,13 @@ import os
 import sys
 
 import pytest
+from scipy import constants as sc
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from qcal.soul_coherence import (
     QCalSoul,
+    EnergyImpulse,
     QuantumLossFactor,
     GoldenRatio2piSync,
     LogosHarmonic,
@@ -417,6 +419,91 @@ class TestCustomParameters:
         e1 = soul_default.compute_soul_energy().energy_j
         e2 = soul_double.compute_soul_energy().energy_j
         assert abs(e2 / e1 - 2.0) < 1e-10
+
+
+# ============================================================================
+# TestEnergyImpulse — ΔE = |∂E_alma/∂Ψ| = m·c²·(f₀/f_H)
+# ============================================================================
+
+class TestEnergyImpulse:
+    """ΔE = m·c²·(f₀/f_H) — the resonance pulse impulse magnitude."""
+
+    @pytest.fixture
+    def soul(self):
+        return QCalSoul()
+
+    def test_returns_energy_impulse(self, soul):
+        result = soul.compute_energy_impulse()
+        assert isinstance(result, EnergyImpulse)
+
+    def test_delta_e_positive(self, soul):
+        result = soul.compute_energy_impulse()
+        assert result.delta_e_j > 0
+
+    def test_delta_e_approx_188_mj(self, soul):
+        """ΔE ≈ 188.29 MJ for default parameters."""
+        result = soul.compute_energy_impulse()
+        assert abs(result.delta_e_mj - 188.29) < 0.5
+
+    def test_formula_manual(self, soul):
+        """Verify ΔE = m·c²·(f₀/f_H) matches the dataclass field."""
+        expected = M_SOUL_KG * sc.c ** 2 * (F0_HZ / F_HYDROGEN_HZ)
+        result = soul.compute_energy_impulse()
+        assert abs(result.delta_e_j - expected) / expected < 1e-10
+
+    def test_derivative_of_e_alma(self, soul):
+        """ΔE must equal |∂E_alma/∂Ψ| numerically."""
+        delta_psi = 1e-6
+        e1 = soul.m_soul_kg * C ** 2 * (1.0 - 0.9) * (F0_HZ / F_HYDROGEN_HZ)
+        e2 = soul.m_soul_kg * C ** 2 * (1.0 - (0.9 + delta_psi)) * (F0_HZ / F_HYDROGEN_HZ)
+        numerical_deriv = abs((e2 - e1) / delta_psi)
+        result = soul.compute_energy_impulse()
+        assert abs(result.delta_e_j - numerical_deriv) / result.delta_e_j < 1e-5
+
+    def test_stored_mass(self, soul):
+        result = soul.compute_energy_impulse()
+        assert abs(result.mass_kg - M_SOUL_KG) < 1e-12
+
+    def test_stored_f0(self, soul):
+        result = soul.compute_energy_impulse()
+        assert result.f0_hz == F0_HZ
+
+    def test_stored_f_hydrogen(self, soul):
+        result = soul.compute_energy_impulse()
+        assert result.f_hydrogen_hz == F_HYDROGEN_HZ
+
+    def test_mj_equals_j_scaled(self, soul):
+        result = soul.compute_energy_impulse()
+        assert abs(result.delta_e_mj - result.delta_e_j / 1e6) < 1e-12
+
+    def test_caching(self, soul):
+        """Repeated calls return the same cached object."""
+        r1 = soul.compute_energy_impulse()
+        r2 = soul.compute_energy_impulse()
+        assert r1 is r2
+
+    def test_custom_mass_scales_linearly(self):
+        """Doubling mass doubles ΔE."""
+        s1 = QCalSoul(m_soul_kg=0.021)
+        s2 = QCalSoul(m_soul_kg=0.042)
+        ratio = s2.compute_energy_impulse().delta_e_j / s1.compute_energy_impulse().delta_e_j
+        assert abs(ratio - 2.0) < 1e-10
+
+    def test_custom_f0_scales_linearly(self):
+        """Doubling f₀ doubles ΔE (f₀/f_H scales linearly)."""
+        s1 = QCalSoul(f0=F0_HZ)
+        s2 = QCalSoul(f0=F0_HZ * 2)
+        ratio = s2.compute_energy_impulse().delta_e_j / s1.compute_energy_impulse().delta_e_j
+        assert abs(ratio - 2.0) < 1e-10
+
+    def test_impulse_larger_than_soul_energy(self, soul):
+        """ΔE > E_alma because Ψ_min=0.888 means (1−Ψ_min)=0.112 < 1."""
+        impulse = soul.compute_energy_impulse()
+        e_alma = soul.compute_soul_energy()
+        # ΔE / E_alma = 1 / (1 - Ψ_min)
+        expected_ratio = 1.0 / (1.0 - PSI_MIN)
+        actual_ratio = impulse.delta_e_j / e_alma.energy_j
+        assert abs(actual_ratio - expected_ratio) / expected_ratio < 1e-10
 
 
 if __name__ == "__main__":
