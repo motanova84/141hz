@@ -138,6 +138,28 @@ class QCALLLMCore:
             'kld_inv': float(kld_inv)
         }
 
+    def compute_automatic_size(self, target_psi: float, information_density: float = 1.0) -> Dict[str, Any]:
+        """
+        Compute the optimal effective amplitude A_eff for this system to reach
+        target coherence Ψ (Patent Claim 10 — automatic sizing).
+
+        Uses the normalised formula Ψ = I × A²_eff:
+            A_eff = √(Ψ / I)
+
+        Args:
+            target_psi: Desired coherence level Ψ (> 0).
+            information_density: Integrated information I (> 0, default 1.0).
+
+        Returns:
+            Dict with a_eff, a_eff_sq, psi_achieved, and recommendation.
+        """
+        from .metrics import compute_automatic_size as _compute
+        return _compute(
+            target_psi=target_psi,
+            information_density=information_density,
+            f0=self.f0,
+        )
+
 
 # Ejemplo de uso:
 if __name__ == "__main__":
