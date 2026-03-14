@@ -51,7 +51,7 @@ coherente. El alma no se pesa en gramos, se pesa en coherencia.
 """
 
 import numpy as np
-from scipy.constants import c, pi
+from scipy.constants import c, pi, e
 from typing import Dict, Any
 
 # QCAL Constants
@@ -60,6 +60,7 @@ PSI_MIN = 0.888  # Minimum coherence threshold
 F_H_MHZ = 1420.405751  # MHz - Hydrogen line
 F_H_HZ = F_H_MHZ * 1e6  # Hz - Hydrogen line
 BERRY_INVARIANT = 7.0 / 8.0  # Topological invariant
+KT_TNT_J = 4.184e12  # J - Energy per kiloton of TNT
 
 
 class QCalSoul:
@@ -103,8 +104,7 @@ class QCalSoul:
             float: Energía en kilotones de TNT
         """
         e_j = self.soul_coherence_energy()
-        # 1 kilotón TNT ≈ 4.184 × 10^12 J
-        kt_tnt = e_j / 4.184e12
+        kt_tnt = e_j / KT_TNT_J
         return kt_tnt
 
     def logos_harmonics(self) -> Dict[str, float]:
@@ -142,7 +142,7 @@ class QCalSoul:
 
         # Energía por unidad de información (Berry)
         energy_per_berry_j = mass_per_berry_unit * c**2
-        energy_per_berry_ev = energy_per_berry_j / 1.602e-19
+        energy_per_berry_ev = energy_per_berry_j / e
 
         # Factor de escala de Berry: 3 × (7/8) = 2.625
         berry_scale = 3 * self.berry_invariant
@@ -200,7 +200,7 @@ class QCalSoul:
             float: Energía en kilotones de TNT (~450 kilotones)
         """
         e_j = self.full_mass_energy()
-        kt_tnt = e_j / 4.184e12
+        kt_tnt = e_j / KT_TNT_J
         return kt_tnt
 
     def certify(self) -> Dict[str, Any]:
@@ -210,6 +210,10 @@ class QCalSoul:
         Returns:
             Dict con certificación completa
         """
+        harmonics = self.logos_harmonics()
+        circle = self.circle_ratio_error()
+        berry = self.topological_soul_weight()
+        
         cert = {
             "alma_21g_qcal": {
                 # Energías
@@ -219,19 +223,19 @@ class QCalSoul:
                 "e_full_mass_kt_tnt": self.full_mass_energy_tnt(),
 
                 # Armónicos
-                "armonico_logos_hz": self.logos_harmonics()['f_alma_21g'],
-                "armonico_432hz": self.logos_harmonics()['f_cosmica_sugerida'],
-                "ratio_432_425": self.logos_harmonics()['ratio_432_425'],
-                "error_432_pct": self.logos_harmonics()['error_432_pct'],
+                "armonico_logos_hz": harmonics['f_alma_21g'],
+                "armonico_432hz": harmonics['f_cosmica_sugerida'],
+                "ratio_432_425": harmonics['ratio_432_425'],
+                "error_432_pct": harmonics['error_432_pct'],
 
                 # Círculo (2π)
-                "circle_logo_2pi": self.circle_ratio_error()['circle_approx'],
-                "circle_2pi_exact": self.circle_ratio_error()['exact_2pi'],
-                "circle_error_pct": self.circle_ratio_error()['error_pct'],
+                "circle_logo_2pi": circle['circle_approx'],
+                "circle_2pi_exact": circle['exact_2pi'],
+                "circle_error_pct": circle['error_pct'],
 
                 # Berry
-                "berry_adelic_scale": self.topological_soul_weight()['berry_adelic_scale'],
-                "berry_units_total": self.topological_soul_weight()['total_berry_units'],
+                "berry_adelic_scale": berry['berry_adelic_scale'],
+                "berry_units_total": berry['total_berry_units'],
 
                 # Parámetros
                 "psi_umbral_disolucion": self.psi_min,
@@ -277,8 +281,6 @@ class QCalSoul:
         e_transition = self.soul_coherence_energy()
         e_total = self.full_mass_energy()
         assert e_transition < e_total, "Energía de transición debe ser menor que energía total"
-
-        print("✅ Todas las validaciones de coherencia del alma pasaron correctamente")
 
 
 def alma_21g_qcal_coherencia() -> Dict[str, Any]:
