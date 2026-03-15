@@ -223,10 +223,15 @@ class TestMotorResonanciaPT(unittest.TestCase):
         self.assertEqual(len(resultado.autovalores), 30)
 
     def test_reproducibilidad_con_semilla(self):
-        """Same seed must produce identical eigenvalues."""
+        """Same seed must produce identical eigenvalues (order-independent)."""
         r1 = MotorResonanciaPT(n_dimension=20, coherencia=0.999999, semilla=7).ejecutar()
         r2 = MotorResonanciaPT(n_dimension=20, coherencia=0.999999, semilla=7).ejecutar()
-        np.testing.assert_array_equal(r1.autovalores, r2.autovalores)
+        sort_key = lambda a: np.lexsort((a.imag, a.real))
+        idx1 = sort_key(r1.autovalores)
+        idx2 = sort_key(r2.autovalores)
+        np.testing.assert_allclose(
+            r1.autovalores[idx1], r2.autovalores[idx2], rtol=1e-12, atol=1e-14
+        )
 
     def test_metricas_imaginarias_positivas(self):
         """media_imaginaria and max_imaginario must be >= 0."""

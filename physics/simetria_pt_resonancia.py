@@ -1,34 +1,29 @@
 """
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║       SIMETRÍA PT – MOTOR DE RESONANCIA DE RIEMANN                           ║
-║                                                                               ║
-║  Demuestra cómo un sistema abierto (no-hermítico) puede sostener la          ║
-║  realidad de los ceros de Riemann mediante la Simetría PT (Paridad y         ║
-║  Tiempo), permitiendo que la información de Planck se manifieste en la       ║
-║  macroescala celular.                                                         ║
-║                                                                               ║
-║  Si el operador Ĥ satisface [Ĥ, PT] = 0, el espectro permanece real         ║
-║  y fijo, actuando como ancla de fase para la estructura del agua EZ.         ║
-╚═══════════════════════════════════════════════════════════════════════════════╝
+Simetría PT – Motor de Resonancia de Riemann (Protocolo QCAL-SYMBIO-1).
 
-AUTOR/AUTHOR: José Manuel Mota Burruezo (JMMB Ψ✧)
-ARQUITECTURA/ARCHITECTURE: QCAL ∞³ Original Manufacture
-LICENCIA/LICENSE: Sovereign Noetic License 1.0 (compatible with MIT)
+Simulates how a non-Hermitian open system sustains real Riemann-zero spectra
+via PT (Parity-Time) symmetry.  When [Ĥ, PT] = 0, the spectrum remains real,
+acting as a phase anchor for cellular EZ-water coherence.
 
-Clases:
-    ResultadoResonanciaPT – Resultado del protocolo QCAL-SYMBIO-1
-    BaseRiemann           – Proxy espectral de los ceros de Riemann
-    OperadorPT            – Hamiltoniano no-hermítico con simetría PT
-    EspectroEigenvalores  – Análisis del espectro de autovalores
-    MotorResonanciaPT     – Motor integrador del protocolo
+The operator is constructed as:
+    Ĥ = diag(base_riemann) + i · (1 − Ψ) · fliplr(I_N)
 
-API pública:
-    simular_resonancia_pt(n_dimension, coherencia) → npt.NDArray[np.complexfloating]
-    activar_protocolo_qcal_symbio_1(n_dimension, coherencia) → ResultadoResonanciaPT
+As coherence Ψ → 1 the imaginary (dissipative) coupling vanishes and all
+eigenvalues collapse to the real axis, emulating the Riemann critical line.
+
+Classes:
+    ResultadoResonanciaPT -- result dataclass for QCAL-SYMBIO-1 protocol
+    BaseRiemann           -- spectral proxy for Riemann zeros
+    OperadorPT            -- non-Hermitian PT Hamiltonian
+    EspectroEigenvalores  -- eigenvalue spectrum analysis
+    MotorResonanciaPT     -- integration engine
+
+Public API:
+    simular_resonancia_pt(n_dimension, coherencia, *, semilla) -> ndarray
+    activar_protocolo_qcal_symbio_1(n_dimension, coherencia, *, semilla) -> ResultadoResonanciaPT
 """
 
-import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 import numpy as np
@@ -281,6 +276,7 @@ class MotorResonanciaPT:
 def simular_resonancia_pt(
     n_dimension: int = _N_DIMENSION_DEFAULT,
     coherencia: float = _COHERENCIA_DEFAULT,
+    *,
     semilla: Optional[int] = None,
 ) -> npt.NDArray[np.complexfloating]:
     """
@@ -320,6 +316,7 @@ def simular_resonancia_pt(
 def activar_protocolo_qcal_symbio_1(
     n_dimension: int = _N_DIMENSION_DEFAULT,
     coherencia: float = _COHERENCIA_DEFAULT,
+    *,
     semilla: Optional[int] = None,
 ) -> ResultadoResonanciaPT:
     """
