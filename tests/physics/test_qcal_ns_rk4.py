@@ -1,7 +1,7 @@
 """
 Tests for physics.qcal_ns_rk4 — Protocolo LÁSER NOÉTICO v1.0
 
-163 pruebas que cubren las 8 clases y ambas funciones de la API pública.
+183 pruebas que cubren las 8 clases y ambas funciones de la API pública.
 Invariantes clave verificados:
   - Ψ_spec ≥ 0,888
   - error_espectral < 1e-6
@@ -895,7 +895,7 @@ class TestGenerateUpeSignature(unittest.TestCase):
 
     def test_half_hrv_period_zero_amplitude(self):
         """At t=1/(2*F_HRV)=5s, cos(2*pi*F_HRV*t)=-1, modulation=0, sig=0."""
-        # At t = 0.5/F_HRV, cos(2*pi*F_HRV*t) = cos(pi) = -1 → (1-1)*cos(2*pi*λ*t) = 0
+        # At t = 1/(2*F_HRV) = 1/(2*0.1) = 5s, cos(2*pi*F_HRV*t) = cos(pi) = -1 → (1-1)*cos(2*pi*λ*t) = 0
         t_half = np.array([0.5 / F_HRV])
         sig_half = generate_upe_signature(t_half, [LAMBDA_1])
         self.assertAlmostEqual(float(sig_half[0]), 0.0, delta=1.0)

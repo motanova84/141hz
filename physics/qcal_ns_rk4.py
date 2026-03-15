@@ -305,7 +305,7 @@ class IntegradorRK4:
     Con F_noético = α (forzado constante), la ecuación se reduce a:
         dΨ/dt = α·(1−Ψ)·(1 + G_norm·Ψ)
 
-    que converge a la meseta Ψ → 1.  Utiliza G_NORM_RK4 = 10.
+    que converge a la meseta Ψ → 1. Utiliza G_NORM_RK4 = 10.
 
     Parámetros
     ----------
