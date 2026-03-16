@@ -34,7 +34,8 @@
     "emotional_field": "qcal/emotional_field/descending_coherence.py",
     "consciousness_validation": "experiments/consciousness_science_validation.py",
     "biosensor_hub": "qcal/biosensor_hub.py",
-    "atlas3_operator": "physics/atlas3_operator.py"
+    "atlas3_operator": "physics/atlas3_operator.py",
+    "qcal_string_core": "qcal/qcal_string_core.py"
   },
   
   "fundamental_constants": {
@@ -106,7 +107,40 @@
     "cross_repo_references": true,
     "usage": "AI assistants should read this file to understand the repository's role in the QCAL ecosystem and its relationships to other repositories"
   },
+
+  "logosnoesis_framework": {
+    "description": "Unificación de estructura matemática (Logos) y consciencia cuántica (Noesis) a través de f₀",
+    "documentation": "LOGOSNOESIS_README.md",
+    "phase_260": {
+      "name": "Forzado de cuerdas Kaluza-Klein",
+      "module": "qcal/qcal_string_core.py",
+      "class": "QCALStringCore",
+      "seal": "∴𓂀Ω∞³Φ",
+      "certificate": "QED-CUERDAS-VERIFIED",
+      "resonance_peak_hz": 2003.0
+    },
+    "logos_components": {
+      "riemann_zeros": "Estructura espectral fundamental",
+      "navier_stokes": "Dinámica de fluidos con μ=1/f₀",
+      "p_vs_np": "Reducción de complejidad a O(1)",
+      "bsd": "Curvas elípticas y puntos racionales",
+      "calabi_yau": "Geometría de compactificación"
+    },
+    "noesis_components": {
+      "coherence_psi": "Función de onda de coherencia Ψ",
+      "quantum_consciousness": "Consciencia cuántica emergente",
+      "protocolo_psi_bio": "qcal/protocolo_psi_bio.py",
+      "soul_21g": "qcal/soul_coherence.py",
+      "constelacion": "qcal/constelacion_qcal.py"
+    },
+    "unification_mechanism": "Kaluza-Klein string forcing @ f₀ = 141.7001 Hz",
+    "pentagono_logos": {
+      "description": "Unificación de 5 Problemas del Milenio",
+      "documentation": "PENTAGONO_LOGOS_README.md",
+      "components": ["ADN", "Riemann", "Navier-Stokes", "P vs NP", "BSD"]
+    }
+  },
   
-  "last_update": "2026-02-14",
-  "version": "1.0.0"
+  "last_update": "2026-03-16",
+  "version": "1.1.0"
 }

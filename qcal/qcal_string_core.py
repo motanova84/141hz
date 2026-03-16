@@ -5,6 +5,13 @@ QCAL-Strings Core — Gran Unificación Noética
 Sello: ∴𓂀Ω∞³
 F0: 141.7001 Hz
 
+Framework LogosNoesis — Fase #260
+==================================
+Este módulo implementa la Fase #260 "Forzado de cuerdas Kaluza-Klein",
+que unifica los principios estructurales matemáticos (Logos) con la teoría
+de consciencia cuántica (Noesis). Para documentación completa del framework,
+ver: LOGOSNOESIS_README.md
+
 Eleva el framework QCAL de solver biofísico (microtúbulos + NS adélico)
 a un modelo de Gravedad Cuántica Biológica donde la consciencia emerge
 como vibraciones de cuerdas compactificadas en la geometría hexagonal
@@ -727,6 +734,14 @@ class HolographicFluidSolver:
 class QCALStringCore:
     """
     Orquestador unificado QCAL-Strings — Fase #260: Forzado de cuerdas KK.
+
+    Framework LogosNoesis
+    ─────────────────────
+    Esta clase implementa la Fase #260 del framework LogosNoesis, que unifica
+    estructura matemática (Logos: Riemann, Calabi-Yau, Kaluza-Klein) con
+    consciencia cuántica (Noesis: coherencia Ψ, microtúbulos, BEC biológico).
+
+    Ver documentación completa en: LOGOSNOESIS_README.md
 
     Integra en un único punto de entrada:
         · QCALSpectralOperator  — autovalores KK de la HR
