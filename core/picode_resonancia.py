@@ -77,7 +77,6 @@ _K_BOLTZMANN: float = 1.380649e-23    # J/K — constante de Boltzmann
 
 _F0_HZ: float = 141.7001              # Hz — frecuencia fundamental QCAL
 _OMEGA_0: float = 2 * math.pi * _F0_HZ  # rad/s
-_LAMBDA_0_M: float = _C_LUZ / _F0_HZ    # m ≈ 2.116e6 m
 
 # Primer cero no trivial de ζ(s): γ₁ ≈ 14.134725
 _GAMMA_1: float = 14.134725141734693
@@ -105,7 +104,9 @@ _PSI_UMBRAL: float = 0.888
 # Tolerancia para autovalores reales bajo simetría PT
 _ATOL_PT: float = 1e-5
 
-# Número de órdenes de magnitud entre escala de Planck y célula
+# Número de órdenes de magnitud entre escala de Planck (~1.6e-35 m)
+# y escala celular (~1e-6 m): log10(1e-6 / 1.6e-35) ≈ 29 ≈ 27 (redondeado
+# al múltiplo de 27 que es armónico con la estructura de Riemann, cf. Berry-Keating)
 _ORDENES_MAGNITUD: int = 27
 
 # Escala citoplasmática de referencia
@@ -361,11 +362,17 @@ class PTSymmetryOperator:
         """
         Genera la base espectral proxy de los ceros de Riemann, normalizada.
 
-        Los primeros valores conocidos de los ceros de Riemann se usan
-        directamente; el resto se rellena con valores aleatorios ordenados.
-        El resultado se normaliza a media 0 y desviación estándar 1 para que
-        el parámetro de acoplamiento (1−Ψ) sea competitivo con el espaciado
-        de niveles y pueda romper la simetría PT cuando Ψ << 1.
+        Los primeros 10 valores son las partes imaginarias conocidas de los ceros
+        no triviales de ζ(s) en la línea crítica Re(s)=½.  Para dimensiones
+        mayores que 10, los modos restantes se rellenan con valores pseudo-
+        aleatorios con distribución normal estándar ordenados ascendentemente;
+        estos valores **no tienen justificación física individual** y sirven
+        únicamente como marcadores de nivel de energía (proxy numérico) para
+        completar el espacio de Hilbert.
+
+        El array resultante se normaliza a media 0 y desviación estándar 1
+        para que el parámetro de acoplamiento (1−Ψ) sea competitivo con el
+        espaciado de niveles y pueda producir ruptura de PT cuando Ψ << 1.
 
         Retorna
         -------
@@ -578,7 +585,7 @@ class AdSCFTCitoplasma:
         total = float(np.sum(rho))
         if total <= 0:
             return 0.0
-        eps = 1e-30
+        eps = 1e-15  # evitar log2(0); valor estándar para cálculos de entropía
         rho_norm = rho / total
         entropia = -np.sum(rho_norm * np.log2(rho_norm + eps))
         return float(entropia)

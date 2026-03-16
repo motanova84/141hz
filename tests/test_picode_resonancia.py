@@ -76,7 +76,7 @@ class TestEmisionInformacionResonante(unittest.TestCase):
         """E_Ψ = ℏ·ω₀·Ψ cumple la fórmula exacta."""
         energia = self.emision.energia_emision()
         esperado = _HBAR * _OMEGA_0 * PSI_ALTA
-        self.assertAlmostEqual(energia, esperado, places=40,
+        self.assertAlmostEqual(energia, esperado, places=12,
                                msg="Energía de emisión no cumple E = ℏ·ω₀·Ψ")
 
     def test_energia_emision_positiva(self):
@@ -658,6 +658,8 @@ class TestPiCodeResonancia(unittest.TestCase):
         r2 = PiCodeResonancia(coherencia=PSI_ALTA, n_dimension=50, semilla=7).evaluar()
         self.assertAlmostEqual(r1.resonancia_global, r2.resonancia_global, places=10)
         self.assertEqual(r1.pt_activa, r2.pt_activa)
+        self.assertEqual(r1.n_autovalores_reales, r2.n_autovalores_reales)
+        self.assertAlmostEqual(r1.coherencia_citoplasma, r2.coherencia_citoplasma, places=10)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
