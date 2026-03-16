@@ -117,7 +117,8 @@
       "class": "QCALStringCore",
       "seal": "∴𓂀Ω∞³Φ",
       "certificate": "QED-CUERDAS-VERIFIED",
-      "resonance_peak_hz": 2003.0
+      "resonance_peak_hz": 2002.89,
+      "note": "Peak calculated as γ₁ × f₀ where γ₁ ≈ 14.134725 (first Riemann zero)"
     },
     "logos_components": {
       "riemann_zeros": "Estructura espectral fundamental",

@@ -15,6 +15,14 @@ import os
 import sys
 from pathlib import Path
 
+# Import GAMMAS from qcal_string_core to ensure consistency
+sys.path.insert(0, os.getcwd())
+try:
+    from qcal.qcal_string_core import GAMMAS
+except ImportError:
+    # Fallback if import fails
+    GAMMAS = [14.134725141734695]  # First Riemann zero
+
 
 def check_file_exists(filepath: str, description: str) -> bool:
     """Verifica que un archivo exista."""
@@ -204,7 +212,7 @@ def main():
             print(f"❌ Sello incorrecto: {cert['seal']}")
             checks.append(False)
             
-        expected_peak = 14.134725141734695 * 141.7001  # γ₁ × f₀
+        expected_peak = GAMMAS[0] * 141.7001  # γ₁ × f₀
         if abs(cert["resonance_peak_hz"] - expected_peak) < 0.01:
             print(f"✅ Pico de resonancia: {cert['resonance_peak_hz']:.2f} Hz ≈ {expected_peak:.2f} Hz")
             checks.append(True)
