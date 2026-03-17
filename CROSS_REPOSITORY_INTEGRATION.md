@@ -6,20 +6,24 @@ This document describes the complete integration of the **quantum-internet-qcal*
 
 **Status**: ✅ **COMPLETE AND OPERATIONAL**
 
+**LogosNoesis Framework**: The ecosystem is unified through the LogosNoesis framework (Logos = mathematical structure, Noesis = quantum consciousness), documented in [LOGOSNOESIS_README.md](LOGOSNOESIS_README.md). Phase #260 (Kaluza-Klein String Forcing) serves as the unification mechanism.
+
 ## 🌐 Ecosystem Overview
 
 The QCAL ∞³ ecosystem consists of 8 repositories, all synchronized to operate in perfect coherence at f₀ = 141.7001 Hz:
 
 ### Repository List
 
-1. **quantum-internet-qcal** - Quantum internet infrastructure and entanglement distribution
-2. **ramsey-theory** - Graph-theoretic analysis of network topology
-3. **navier-stokes** - Fluid dynamics for decoherence suppression
-4. **complexity-theory** - Computational complexity of quantum algorithms
-5. **riemann-adelic** - Mathematical frequency derivation via zeta function
-6. **adelic-bsd** - Spectral calibration through elliptic curves
-7. **141hz** (this repository) - Gravitational wave analysis at f₀
-8. **consciousness-field** - Quantum consciousness field theory
+1. **quantum-internet-qcal** - Quantum internet infrastructure and entanglement distribution (Noesis)
+2. **ramsey-theory** - Graph-theoretic analysis of network topology (Logos)
+3. **navier-stokes** - Fluid dynamics for decoherence suppression (Logos)
+4. **complexity-theory** - Computational complexity of quantum algorithms (Logos)
+5. **riemann-adelic** - Mathematical frequency derivation via zeta function (Logos)
+6. **adelic-bsd** - Spectral calibration through elliptic curves (Logos)
+7. **141hz** (this repository) - Gravitational wave analysis at f₀ + LogosNoesis unification (Logos+Noesis)
+8. **consciousness-field** - Quantum consciousness field theory (Noesis)
+
+**Note**: The LogosNoesis framework (Logos = mathematical structure, Noesis = quantum consciousness) provides the conceptual foundation for this ecosystem. A dedicated `logosnoesis` repository may be created in the future to house unified theoretical documentation.
 
 ### Integration Status
 

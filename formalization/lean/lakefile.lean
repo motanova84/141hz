@@ -68,3 +68,9 @@ lean_lib GoldbachCircle where
   -- Main theorem: goldbach_existence_structural
   roots := #[`GoldbachCircle]
   globs := #[.submodules `GoldbachCircle]
+
+lean_lib PicodePT where
+  -- πCODE PT Non-Hermitian Operator: AdS/CFT + Riemann stabilizer
+  -- Proves spectral reality under γ < γ_c = 2.57 (Bender-Boettcher 1998)
+  srcDir := "../../physics"
+  roots := #[`PicodePT]
