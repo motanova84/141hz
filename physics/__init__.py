@@ -1,4 +1,5 @@
 """
+Módulo de Física – Paradojas, Constantes Cosmológicas y Sincronización Biológica
 Módulo de Física – Paradojas, Constantes Cosmológicas y Operadores Espectrales
 """
 
@@ -14,6 +15,16 @@ from .paradoja_procesamiento_planck import (
     paradoja_planck_activar,
 )
 
+from .kuramoto_superradiancia import (
+    ConstantesKuramoto,
+    ModeloKuramoto,
+    SuperradianciaFotonez,
+    AguaEZ,
+    RespiracionAurea,
+    CoherenciaBiologicaTotal,
+    SistemaKuramotoSuperradiancia,
+    ResultadoKuramoto,
+    kuramoto_superradiancia_activar,
 from .spectral_operator import (
     QCALSpectralOperator,
     QCALSpectralEngine,
@@ -41,6 +52,16 @@ __all__ = [
     "SistemaParadojaPlanck",
     "ResultadoParadoja",
     "paradoja_planck_activar",
+    # Kuramoto-Superradiancia
+    "ConstantesKuramoto",
+    "ModeloKuramoto",
+    "SuperradianciaFotonez",
+    "AguaEZ",
+    "RespiracionAurea",
+    "CoherenciaBiologicaTotal",
+    "SistemaKuramotoSuperradiancia",
+    "ResultadoKuramoto",
+    "kuramoto_superradiancia_activar",
     "QCALSpectralOperator",
     "QCALSpectralEngine",
     "compute_noetic_forcing",
