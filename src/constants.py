@@ -41,7 +41,7 @@ import mpmath as mp
 from typing import Dict, Any
 
 # Set default precision for mpmath calculations
-mp.dps = 50
+mp.mp.dps = 50
 
 
 class UniversalConstants:

@@ -20,9 +20,16 @@ import numpy as np
 from scipy.io import wavfile
 from scipy.signal import spectrogram, windows
 import matplotlib.pyplot as plt
-from typing import Tuple, Optional
-from dataclasses import dataclass
+from typing import List, Tuple, Optional
+from dataclasses import dataclass, field
 import warnings
+
+from qcal.soul_coherence import (
+    QCalSoul,
+    EnergyImpulse,
+    QuantumLossFactor,
+    LogosHarmonic,
+)
 
 
 # QCAL Constants
@@ -67,6 +74,141 @@ class CoherenceMetrics:
     def is_stable(self) -> bool:
         """Check if consciousness synchronization is stable (Orch-OR)."""
         return self.psi_coherence >= 0.999 and self.stability_index >= 0.95
+
+
+@dataclass
+class PhaseEvaporationEvent:
+    """
+    Interrupt triggered when Ψ < 0.888 (Axiom I — Quantum Loss Factor).
+
+    Captures the phase-decoupling detection and the compensating resonance
+    injection using the Logos Harmonic (425.1 Hz).
+    """
+    psi: float                  # Ψ value that triggered the interrupt
+    threshold: float            # Ψ_min = 0.888
+    logos_hz: float             # Logos Harmonic recovery frequency (≈ 425.1 Hz)
+    delta_e_j: float            # ΔE impulse magnitude in joules
+    description: str
+
+
+@dataclass
+class PhaseRecoveryResult:
+    """
+    Result of a single feedback-loop processing cycle.
+
+    Returned by ``PhaseRecoveryProtocol.monitor_cycle()`` for every Ψ
+    measurement.  When *decoupled* is True the Logos Harmonic (425.1 Hz)
+    is the active recovery frequency; otherwise f₀ is maintained.
+    """
+    psi_in: float                                    # Input coherence value
+    decoupled: bool                                  # True when Ψ < Ψ_min
+    evaporation_event: Optional[PhaseEvaporationEvent]  # Set only if decoupled
+    recovery_frequency_hz: float                     # f₀ (stable) or logos_hz (recovery)
+    description: str
+
+
+class PhaseRecoveryProtocol:
+    """
+    Active phase re-modulation protocol — "quantum coherence life support".
+
+    Integrates :class:`~qcal.soul_coherence.QCalSoul` with the Nodo Ψ Bio
+    protocol to provide real-time coherence monitoring and automatic phase
+    recovery via Logos Harmonic injection.
+
+    Feedback loop per cycle
+    -----------------------
+    1. ``monitor_cycle(psi)`` calls
+       :meth:`~qcal.soul_coherence.QCalSoul.validate_quantum_loss_factor`.
+    2. If Ψ < 0.888 → *Phase Evaporation* interrupt:
+       - compute ΔE = m·c²·(f₀/f_H) via
+         :meth:`~qcal.soul_coherence.QCalSoul.compute_energy_impulse`
+       - inject Logos Harmonic 425.1 Hz as recovery signal
+    3. If Ψ ≥ 0.888 → maintain f₀ = 141.7001 Hz.
+
+    Parameters
+    ----------
+    f0 : float
+        Fundamental QCAL frequency (default 141.7001 Hz).
+
+    Examples
+    --------
+    >>> protocol = PhaseRecoveryProtocol()
+    >>> result = protocol.monitor_cycle(psi=0.5)
+    >>> assert result.decoupled
+    >>> assert result.recovery_frequency_hz == protocol.logos_hz
+    """
+
+    def __init__(self, f0: float = F0_HZ) -> None:
+        self._soul = QCalSoul(f0=f0)
+        self.logos_hz: float = self._soul.validate_logos_harmonic().logos_hz
+        self._events: List[PhaseEvaporationEvent] = []
+
+    # ------------------------------------------------------------------
+    # Public interface
+    # ------------------------------------------------------------------
+
+    def monitor_cycle(self, psi: float) -> PhaseRecoveryResult:
+        """
+        Execute one feedback-loop iteration for the given coherence value.
+
+        Parameters
+        ----------
+        psi : float
+            Current Ψ (coherence) measurement in [0, 1].
+
+        Returns
+        -------
+        PhaseRecoveryResult
+            Outcome of the cycle, including whether phase injection was
+            triggered and which frequency was activated.
+        """
+        loss: QuantumLossFactor = self._soul.validate_quantum_loss_factor(psi)
+
+        if loss.decoupled:
+            impulse: EnergyImpulse = self._soul.compute_energy_impulse()
+            event = PhaseEvaporationEvent(
+                psi=psi,
+                threshold=self._soul.psi_min,
+                logos_hz=self.logos_hz,
+                delta_e_j=impulse.delta_e_j,
+                description=(
+                    f"Phase evaporation at Ψ={psi:.4f} < Ψ_min={self._soul.psi_min}: "
+                    f"injecting Logos Harmonic {self.logos_hz:.1f} Hz "
+                    f"(ΔE={impulse.delta_e_j:.3e} J)"
+                ),
+            )
+            self._events.append(event)
+            return PhaseRecoveryResult(
+                psi_in=psi,
+                decoupled=True,
+                evaporation_event=event,
+                recovery_frequency_hz=self.logos_hz,
+                description=(
+                    f"Recovery active: Logos Harmonic {self.logos_hz:.1f} Hz "
+                    f"injected to re-couple to f₀={self._soul.f0} Hz"
+                ),
+            )
+
+        return PhaseRecoveryResult(
+            psi_in=psi,
+            decoupled=False,
+            evaporation_event=None,
+            recovery_frequency_hz=self._soul.f0,
+            description=(
+                f"Coherent: f₀={self._soul.f0} Hz maintained "
+                f"(Ψ={psi:.4f} ≥ Ψ_min={self._soul.psi_min})"
+            ),
+        )
+
+    @property
+    def evaporation_events(self) -> List[PhaseEvaporationEvent]:
+        """Return a snapshot of all phase-evaporation events recorded."""
+        return list(self._events)
+
+    @property
+    def soul(self) -> QCalSoul:
+        """Underlying :class:`~qcal.soul_coherence.QCalSoul` instance."""
+        return self._soul
 
 
 def generate_bio_pulse(
@@ -505,6 +647,25 @@ def run_complete_protocol(
     
     results["coherence"] = coherence
     
+    # Step 6: Phase Recovery feedback loop
+    print("6️⃣  Protocolo de Recuperación de Fase...")
+    recovery_protocol = PhaseRecoveryProtocol(f0=F0_HZ)
+    psi_sweep = list(np.linspace(coherence.psi_coherence * 0.85, coherence.psi_coherence, 5))
+    recovery_results = [recovery_protocol.monitor_cycle(p) for p in psi_sweep]
+    impulse = recovery_protocol.soul.compute_energy_impulse()
+    events = recovery_protocol.evaporation_events
+    print(f"   ✓ ΔE impulso = {impulse.delta_e_j:.3e} J ({impulse.delta_e_mj:.2f} MJ)")
+    print(f"   ✓ Frecuencia Logos = {recovery_protocol.logos_hz:.4f} Hz")
+    print(f"   ✓ Eventos evaporación detectados = {len(events)}")
+    print()
+    results["phase_recovery"] = {
+        "protocol": recovery_protocol,
+        "cycle_results": recovery_results,
+        "evaporation_events": events,
+        "energy_impulse_j": impulse.delta_e_j,
+        "logos_hz": recovery_protocol.logos_hz,
+    }
+    
     # Protocol summary
     print("=" * 70)
     print("📊 RESUMEN PROTOCOLO")
@@ -532,6 +693,66 @@ def run_complete_protocol(
     print()
     
     return results
+
+
+def run_phase_recovery_protocol(psi_sequence: Optional[List[float]] = None) -> dict:
+    """
+    Execute a Phase Recovery Protocol run over a sequence of Ψ measurements.
+
+    Demonstrates the feedback loop: monitors each Ψ value, triggers
+    *Phase Evaporation* interrupts when Ψ < 0.888, and records the
+    Logos Harmonic injection events.
+
+    Parameters
+    ----------
+    psi_sequence : list of float, optional
+        Coherence values to process.  Defaults to a 10-step sweep from
+        0.7 to 1.0 that crosses the 0.888 decoupling threshold.
+
+    Returns
+    -------
+    dict
+        Keys:
+        - ``protocol``     : :class:`PhaseRecoveryProtocol` instance
+        - ``results``      : list of :class:`PhaseRecoveryResult`
+        - ``events``       : list of :class:`PhaseEvaporationEvent`
+        - ``energy_impulse_j`` : ΔE impulse magnitude in joules
+        - ``logos_hz``     : Logos Harmonic recovery frequency
+    """
+    if psi_sequence is None:
+        psi_sequence = list(np.linspace(0.7, 1.0, 10))
+
+    protocol = PhaseRecoveryProtocol()
+    impulse = protocol.soul.compute_energy_impulse()
+
+    print("=" * 64)
+    print("  Phase Recovery Protocol — Quantum Coherence Life Support")
+    print(f"  f₀ = {protocol.soul.f0} Hz  |  Ψ_min = {protocol.soul.psi_min}")
+    print(f"  Logos Hz = {protocol.logos_hz:.4f} Hz  |  ΔE = {impulse.delta_e_j:.3e} J")
+    print("=" * 64)
+
+    results = []
+    for psi in psi_sequence:
+        res = protocol.monitor_cycle(psi)
+        status = "⚠ RECOVERY" if res.decoupled else "✓ STABLE  "
+        freq = f"{res.recovery_frequency_hz:.1f} Hz"
+        print(f"  Ψ={psi:.4f}  {status}  → {freq}")
+        results.append(res)
+
+    events = protocol.evaporation_events
+    print()
+    print(f"  Phase evaporation events : {len(events)}")
+    print(f"  Recovery frequency (Logos): {protocol.logos_hz:.4f} Hz")
+    print(f"  ΔE impulse magnitude     : {impulse.delta_e_j:.4e} J ({impulse.delta_e_mj:.2f} MJ)")
+    print("=" * 64)
+
+    return {
+        "protocol": protocol,
+        "results": results,
+        "events": events,
+        "energy_impulse_j": impulse.delta_e_j,
+        "logos_hz": protocol.logos_hz,
+    }
 
 
 if __name__ == "__main__":

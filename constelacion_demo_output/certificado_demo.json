@@ -1,0 +1,25 @@
+{
+  "constelacion_qcal_psix": {
+    "fecha": "2026-03-14",
+    "sello": "∴𓂀Ω∞³Ψ✧",
+    "ejes": {
+      "dorado": "f0 = 141.7001 Hz",
+      "azul": "Riemann + Berry 7/8",
+      "violeta": "NOESIS/AMDA",
+      "verde": "Fibonacci (kairós)",
+      "blanco": "H-21cm @ 23.257 octavas"
+    },
+    "coherencia_media": 0.343,
+    "coherencia_max": 0.588,
+    "coherencia_min": 0.038,
+    "puntos_de_interes": 0,
+    "dimension_fractal": 1.542,
+    "observador_posicion": {
+      "x": 0.0,
+      "y": 0.0,
+      "interpretacion": "punto_ciego_coherencia"
+    },
+    "interpretacion": "Fotografía del universo soñado por JMMB Ψ✧",
+    "estado": "CONSTELACION_FOTOGRAFIADA"
+  }
+}
