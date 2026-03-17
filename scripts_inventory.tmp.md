@@ -45,8 +45,12 @@
 
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_bio_frequency.py`
+  - Bio-Frequency Validation Script
 - `validate_consciousness_theorem.py`
   - Validation Script: Fundamental Theorem of Consciousness
+- `validate_constelacion_qcal.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_cytoplasmic_coherence.py`
   - Validación de Coherencia Citoplasmática - Ceros de Riemann Biológicos
 - `validate_dual_mass.py`
@@ -65,6 +69,8 @@
   - Validation Script: Microtubule Quantum Consciousness
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_navier_stokes_qcal_bridge.py`
+  - Validación Completa: Puente Navier-Stokes-QCAL
 - `validate_navier_stokes_regularization.py`
   - Validation Script: Navier-Stokes Vibrational Regularization
 - `validate_nodo_psi_bio.py`
@@ -80,7 +86,7 @@
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_soul_coherence.py`
-  - Validación del Análisis de Coherencia del Alma (21 Gramos) - QCAL ∞³
+  - 
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
 - `validate_spiral_light.py`
@@ -97,8 +103,12 @@
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_bio_frequency.py`
+  - Bio-Frequency Validation Script
 - `validate_consciousness_theorem.py`
   - Validation Script: Fundamental Theorem of Consciousness
+- `validate_constelacion_qcal.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_cytoplasmic_coherence.py`
   - Validación de Coherencia Citoplasmática - Ceros de Riemann Biológicos
 - `validate_dual_mass.py`
@@ -117,6 +127,8 @@
   - Validation Script: Microtubule Quantum Consciousness
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_navier_stokes_qcal_bridge.py`
+  - Validación Completa: Puente Navier-Stokes-QCAL
 - `validate_navier_stokes_regularization.py`
   - Validation Script: Navier-Stokes Vibrational Regularization
 - `validate_nodo_psi_bio.py`
@@ -132,7 +144,7 @@
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_soul_coherence.py`
-  - Validación del Análisis de Coherencia del Alma (21 Gramos) - QCAL ∞³
+  - 
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
 - `validate_spiral_light.py`
@@ -380,4 +392,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-03-14 21:14:25 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-15 03:10:58 UTC*
