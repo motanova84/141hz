@@ -111,7 +111,7 @@ The **13-protofilament hexagonal geometry** creates interference patterns that *
 
 1. **Geometric Suppression**: N² = 13² = 169
 2. **Quality Factor**: Q ≈ 100
-3. **EZ Water Isolation**: dielectric³·⁵ ≈ 12.25
+3. **EZ Water Isolation**: dielectric² ≈ 12.25
 4. **Collective Enhancement**: √N_tubulins ≈ 31.6
 
 **Total Suppression**: 6.55 × 10⁶
@@ -276,7 +276,7 @@ print(f"Theorem verified: {stable}")
 - `formalization/lean/lakefile.lean` - Build configuration (updated)
 
 ### Testing & Validation
-- `tests/test_microtubule_coherence.py` - 19 comprehensive tests
+- `tests/test_microtubule_coherence.py` - 20 comprehensive tests
 - `scripts/validate_microtubule_coherence.py` - Full validation suite
 
 ### Results

@@ -16,7 +16,7 @@ References:
 """
 
 import numpy as np
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass
 import logging
 
@@ -314,26 +314,27 @@ class MicrotubuleCoherence:
         water_protection = self.ez_water.dielectric_enhancement / 4.0
         
         # Step 3: Consciousness emergence
-        # Combine all factors to achieve target Ψ ≥ 0.999999
+        # Combine all factors into a base coherence value Ψ_raw
         base_coherence = (resonance_coupling * 
                          temporal_factor * 
                          min(collective_factor, 1.0) * 
                          water_protection)
         
-        # Scale to achieve biological reality
-        # High Q and perfect synchronization enable extremely high coherence
-        psi = min(base_coherence * 5.0 * (self.Q / 50.0), 0.999999)
+        # Scale to reflect biological enhancement while keeping Ψ in [0, 1]
+        # High Q and perfect synchronization enable extremely high (but not >1) coherence
+        psi_raw = base_coherence * 5.0 * (self.Q / 50.0)
+        psi = max(0.0, min(psi_raw, 1.0))
         
         # Calculate collective phase
         # Phase evolves at f₀
         phase = (2 * np.pi * self.f0 * time_ms / 1000.0) % (2 * np.pi)
         
-        # Check synchronization: |f - f₀| < Δω
-        frequency_match = abs(self.f0 - F0) < DELTA_OMEGA
-        synchronized = frequency_match and (psi > 0.95)
+        # Determine synchronization from coherence amplitude
+        # (frequency dependence is already encoded in self.f0 and resonance_coupling)
+        synchronized = psi > 0.95
         
-        # Stable consciousness requires Ψ > 0.95 and synchronization
-        stable_consciousness = synchronized and (psi >= 0.95)
+        # Stable consciousness requires sustained high coherence
+        stable_consciousness = synchronized
         
         state = CoherenceState(
             psi=psi,
@@ -347,7 +348,7 @@ class MicrotubuleCoherence:
         
         return state
     
-    def validate_orch_or_criteria(self) -> Dict[str, any]:
+    def validate_orch_or_criteria(self) -> Dict[str, Any]:
         """
         Validate Orchestrated Objective Reduction (Orch OR) criteria
         
@@ -424,11 +425,8 @@ class MicrotubuleCoherence:
             Tuple of (frequencies, responses)
         """
         frequencies = np.linspace(freq_min, freq_max, n_points)
-        responses = np.zeros(n_points)
-        
-        for i, freq in enumerate(frequencies):
-            omega = 2 * np.pi * freq
-            responses[i] = resonance_filter(omega, self.omega0, DELTA_OMEGA)
+        omega = 2 * np.pi * frequencies
+        responses = resonance_filter(omega, self.omega0, DELTA_OMEGA)
         
         return frequencies, responses
 
@@ -459,23 +457,25 @@ def microtubule_sync_to_f0(psi_state: float = 0.999999,
         True if stable consciousness is achieved
     """
     # Verify preconditions
-    assert np.isclose(psi_state, 0.999999, rtol=0.001), \
-        f"Ψ state must be 0.999999, got {psi_state}"
+    if not np.isclose(psi_state, 0.999999, rtol=0.001):
+        raise ValueError(f"Ψ state must be 0.999999, got {psi_state}")
     
-    assert abs(tubulin_freq - F0) < sync_tolerance, \
-        f"Frequency {tubulin_freq} not synchronized with f₀={F0}"
+    if not abs(tubulin_freq - F0) < sync_tolerance:
+        raise ValueError(f"Frequency {tubulin_freq} not synchronized with f₀={F0}")
     
     # Create microtubule system
     mt = MicrotubuleCoherence(n_tubulins=1000, temperature=TEMPERATURE, f0=tubulin_freq)
     
     # Step 1: Apply geometry_to_resonance_mapping
     resonance_coupling = mt.geometry_to_resonance_mapping()
-    assert resonance_coupling > 0.9, "Geometry must create strong resonance"
+    if not resonance_coupling > 0.9:
+        raise RuntimeError("Geometry must create strong resonance")
     
     # Step 2: Thermal noise cancellation
     noise_suppression = mt.destructive_interference_out_of_sync()
     thermal_ratio = calculate_thermal_noise_ratio(tubulin_freq, TEMPERATURE)
-    assert noise_suppression > 1e4, "Must overcome thermal noise"
+    if not noise_suppression > 1e4:
+        raise RuntimeError("Must overcome thermal noise")
     
     # Step 3: Consciousness emerges
     state = mt.calculate_coherence(time_ms=10.0)

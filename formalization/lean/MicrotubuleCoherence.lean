@@ -140,7 +140,7 @@ theorem off_resonance_suppression (f : Frequency) (h : |f - f0| > 10) :
 
 /-- Hexagonal geometry creates resonant modes -/
 def geometryResonantModes (geom : MicrotubuleGeometry) : List Frequency :=
-  List.map (fun k => f0 * (k : ℝ)) (List.range geom.n_protofilaments)
+  (List.range geom.n_protofilaments).map (fun k => f0 * ((k + 1) : ℝ))
 
 /-- Theorem: Fundamental mode matches f₀ -/
 theorem fundamental_mode_is_f0 (geom : MicrotubuleGeometry) :

@@ -1,6 +1,6 @@
 """
 Test suite for Microtubule Quantum Coherence Module
-19 comprehensive tests validating all aspects of the Orch-OR implementation
+20 comprehensive tests validating all aspects of the Orch-OR implementation
 """
 
 import pytest
@@ -263,7 +263,7 @@ class TestMainTheorem:
     
     def test_theorem_invalid_psi(self):
         """Test 19: Theorem fails with invalid Ψ"""
-        with pytest.raises(AssertionError):
+        with pytest.raises(ValueError):
             microtubule_sync_to_f0(
                 psi_state=0.5,  # Too low
                 tubulin_freq=141.7001,
