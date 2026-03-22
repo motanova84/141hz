@@ -124,9 +124,15 @@ class HardwareInterface:
         response = self._send_command("I2C_SCAN")
         # Parse response like "0x60,0x1E"
         try:
-            addresses = [int(addr.strip(), 16) for addr in response.split(',')]
+            # Filter out empty tokens before parsing
+            addresses = [int(addr.strip(), 16) for addr in response.split(',') 
+                        if addr.strip()]
             return addresses
-        except Exception:
+        except Exception as e:
+            # Log the error if response was unexpected
+            if response:
+                print(f"Warning: Failed to parse I2C response: '{response}' - {e}", 
+                      file=sys.stderr)
             return []
     
     def read_analog(self, pin: int) -> int:
@@ -159,7 +165,13 @@ class HardwareInterface:
             for part in response.split(','):
                 key, val = part.split('=')
                 if key in ['freq', 'dist', 'amp']:
-                    result[key] = float(val)
+                    # Normalize keys to match simulator
+                    normalized_key = {
+                        'freq': 'frequency',
+                        'dist': 'distortion',
+                        'amp': 'amplitude'
+                    }.get(key, key)
+                    result[normalized_key] = float(val)
                 else:
                     result[key] = val
         except Exception:
@@ -181,6 +193,9 @@ class BOMVerifier:
                  command_delay: int = DEFAULT_COMMAND_DELAY):
         self.simulate = simulate
         self.results = {}
+        self.reset_delay = reset_delay
+        self.command_delay = command_delay
+        self.magnetometer_addr = None  # Track detected magnetometer address
         
         if simulate:
             self.hw = HardwareSimulator()
@@ -213,9 +228,11 @@ class BOMVerifier:
         mag_found = False
         if MAGNETOMETER_ADDR_1 in devices:
             print(f"✅ Magnetometer detected at 0x{MAGNETOMETER_ADDR_1:02X}")
+            self.magnetometer_addr = MAGNETOMETER_ADDR_1
             mag_found = True
         elif MAGNETOMETER_ADDR_2 in devices:
             print(f"✅ Magnetometer detected at 0x{MAGNETOMETER_ADDR_2:02X}")
+            self.magnetometer_addr = MAGNETOMETER_ADDR_2
             mag_found = True
         else:
             print(f"❌ Magnetometer NOT detected at 0x1E or 0x30")
@@ -335,8 +352,16 @@ class BOMVerifier:
         
         return passed, total
     
-    def print_summary(self, passed: int, total: int) -> None:
-        """Print verification summary."""
+    def print_summary(self, passed: int, total: int) -> int:
+        """Print verification summary.
+        
+        Args:
+            passed: Number of tests passed
+            total: Total number of tests
+            
+        Returns:
+            Exit code: 0 for all tests passed, 1 otherwise
+        """
         print("\n" + "="*60)
         print("📋 VERIFICATION SUMMARY")
         print("="*60)
@@ -348,7 +373,9 @@ class BOMVerifier:
             print(f"Si5351@0x{SI5351_I2C_ADDR:02X} ✗ ", end="")
         
         if self.results.get('magnetometer'):
-            print(f"Magnet@0x{MAGNETOMETER_ADDR_1:02X} ✓")
+            # Use detected address if available
+            mag_addr = self.magnetometer_addr or MAGNETOMETER_ADDR_1
+            print(f"Magnet@0x{mag_addr:02X} ✓")
         else:
             print(f"Magnet@0x{MAGNETOMETER_ADDR_1:02X} ✗")
         
@@ -373,7 +400,7 @@ class BOMVerifier:
         
         print(f"⏱️  Delays: ", end="")
         if self.results.get('serial_delays'):
-            print(f"reset={DEFAULT_RESET_DELAY}ms command={DEFAULT_COMMAND_DELAY}ms OPT")
+            print(f"reset={self.reset_delay}ms command={self.command_delay}ms OPT")
         else:
             print("NOT CONFIGURED")
         
@@ -398,8 +425,12 @@ class BOMVerifier:
         if not self.simulate and hasattr(self.hw, 'close'):
             self.hw.close()
 
-def main():
-    """Main entry point for hardware verification."""
+def main() -> int:
+    """Main entry point for hardware verification.
+    
+    Returns:
+        Exit code: 0 for success, 1 for failure
+    """
     parser = argparse.ArgumentParser(
         description='QCAL Hardware BOM Verification - 141.7001 Hz',
         formatter_class=argparse.RawDescriptionHelpFormatter,

@@ -102,7 +102,7 @@ class TestIntegrationCLI(unittest.TestCase):
     def test_integration_script_runs(self):
         """Test that the integration script runs successfully."""
         result = subprocess.run(
-            ['python3', 'scripts/integrate_qcal_compact.py'],
+            [sys.executable, 'scripts/integrate_qcal_compact.py'],
             capture_output=True,
             text=True,
             timeout=30
@@ -117,26 +117,36 @@ class TestIntegrationCLI(unittest.TestCase):
     
     def test_certificate_file_generated(self):
         """Test that master certificate JSON is generated."""
-        # Run integration
-        subprocess.run(
-            ['python3', 'scripts/integrate_qcal_compact.py'],
-            capture_output=True,
-            timeout=30
-        )
-        
-        # Check certificate file exists
         cert_path = 'master_qcal_cert.json'
-        self.assertTrue(os.path.exists(cert_path))
         
-        # Load and verify certificate
-        with open(cert_path, 'r') as f:
-            cert = json.load(f)
+        # Clean up before test
+        if os.path.exists(cert_path):
+            os.remove(cert_path)
         
-        self.assertEqual(cert['version'], '1.0.0')
-        self.assertEqual(cert['frequency_hz'], 141.7001)
-        self.assertEqual(cert['pilares'], 14)
-        self.assertTrue(cert['hardware_bom']['success'])
-        self.assertEqual(cert['hardware_bom']['licencia'], 'CERN-OHL-P v2')
+        try:
+            # Run integration
+            subprocess.run(
+                [sys.executable, 'scripts/integrate_qcal_compact.py'],
+                capture_output=True,
+                timeout=30
+            )
+            
+            # Check certificate file exists
+            self.assertTrue(os.path.exists(cert_path))
+            
+            # Load and verify certificate
+            with open(cert_path, 'r') as f:
+                cert = json.load(f)
+            
+            self.assertEqual(cert['version'], '1.0.0')
+            self.assertEqual(cert['frequency_hz'], 141.7001)
+            self.assertEqual(cert['pilares'], 14)
+            self.assertTrue(cert['hardware_bom']['success'])
+            self.assertEqual(cert['hardware_bom']['licencia'], 'CERN-OHL-P v2')
+        finally:
+            # Clean up after test
+            if os.path.exists(cert_path):
+                os.remove(cert_path)
 
 
 class TestColoredOutput(unittest.TestCase):

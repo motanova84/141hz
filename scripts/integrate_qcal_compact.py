@@ -8,7 +8,7 @@ This script integrates:
 - Software validation (Lean4, Python tests)
 - Master certification with hardware component
 
-License: CERN-OHL-P v2
+License: MIT (software components), CERN-OHL-P v2 (hardware components)
 Author: QCAL Project
 Date: 2026-03-08
 """
@@ -16,6 +16,7 @@ Date: 2026-03-08
 import subprocess
 import sys
 import json
+from pathlib import Path
 from typing import Dict, Any, Optional
 from datetime import datetime
 
@@ -58,8 +59,12 @@ def verify_bom_hardware_integration(simulate: bool = True,
     colored_output("🛠️  HARDWARE BOM VERIFICATION", "CYAN")
     colored_output("="*60, "CYAN")
     
-    # Build command
-    cmd = ["python3", "hardware/verify_bom.py"]
+    # Build command using sys.executable for portability
+    # Resolve script path relative to this file
+    script_dir = Path(__file__).parent.parent
+    verify_script = script_dir / "hardware" / "verify_bom.py"
+    
+    cmd = [sys.executable, str(verify_script)]
     if simulate:
         cmd.append("--simulate")
     elif port:
