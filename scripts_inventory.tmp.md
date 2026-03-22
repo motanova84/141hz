@@ -43,6 +43,8 @@
 
 ## Scripts de Validación
 
+- `validate_abundancia_coherente.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_badges.py`
   - Badge Validation Script
 - `validate_bio_frequency.py`
@@ -105,6 +107,8 @@
   - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
 - `validation_support.py`
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
+- `validate_abundancia_coherente.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_badges.py`
   - Badge Validation Script
 - `validate_bio_frequency.py`
@@ -400,4 +404,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-03-22 03:10:06 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-22 23:45:42 UTC*
