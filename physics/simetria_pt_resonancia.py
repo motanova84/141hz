@@ -639,17 +639,7 @@ class SistemaResonanciaPT:
             f"SistemaResonanciaPT("
             f"F0={self.constantes.F0} Hz, "
             f"N_zeros={len(self.constantes.zeros_riemann)})"
-Clases:
-    ResultadoResonanciaPT – Resultado del protocolo QCAL-SYMBIO-1
-    BaseRiemann           – Proxy espectral de los ceros de Riemann
-    OperadorPT            – Hamiltoniano no-hermítico con simetría PT
-    EspectroEigenvalores  – Análisis del espectro de autovalores
-    MotorResonanciaPT     – Motor integrador del protocolo
-
-API pública:
-    simular_resonancia_pt(n_dimension, coherencia) → npt.NDArray[np.complexfloating]
-    activar_protocolo_qcal_symbio_1(n_dimension, coherencia) → ResultadoResonanciaPT
-"""
+        )
 
 import math
 from dataclasses import dataclass, field
