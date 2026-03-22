@@ -25,10 +25,12 @@ from .kuramoto_superradiancia import (
     SistemaKuramotoSuperradiancia,
     ResultadoKuramoto,
     kuramoto_superradiancia_activar,
+)
 from .spectral_operator import (
     QCALSpectralOperator,
     QCALSpectralEngine,
     compute_noetic_forcing,
+)
 from .simetria_pt_resonancia import (
     ConstantesPT,
     OperadorNHPT,
