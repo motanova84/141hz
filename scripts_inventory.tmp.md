@@ -63,6 +63,8 @@
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_logosnoesis_integration.py`
+  - Validación de Integración LogosNoesis — Fase #260
 - `validate_microtubule_coherence.py`
   - Validación del Teorema de la Carne Resonante - MicrotubuleCoherence.lean
 - `validate_microtubule_consciousness.py`
@@ -95,6 +97,8 @@
   - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
+- `validate_teoria_unificada_adn.py`
+  - Validación de la Teoría Unificada: Biología × Teoría de Números × Física Cuántica
 - `validate_tissue_resonance_magicicada_hp_ns.py`
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
 - `validate_vacuum_energy_equation.py`
@@ -121,6 +125,8 @@
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_logosnoesis_integration.py`
+  - Validación de Integración LogosNoesis — Fase #260
 - `validate_microtubule_coherence.py`
   - Validación del Teorema de la Carne Resonante - MicrotubuleCoherence.lean
 - `validate_microtubule_consciousness.py`
@@ -153,6 +159,8 @@
   - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
+- `validate_teoria_unificada_adn.py`
+  - Validación de la Teoría Unificada: Biología × Teoría de Números × Física Cuántica
 - `validate_tissue_resonance_magicicada_hp_ns.py`
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
 - `validate_vacuum_energy_equation.py`
@@ -392,4 +400,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-03-15 03:10:58 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-22 03:10:06 UTC*
