@@ -30,6 +30,11 @@ from physics.qcal_ns_rk4 import (
     F0_HZ,
     GAMMA_1_RIEMANN,
     PSI_MINIMA,
+    ZETA_DERIV_HALF,
+    T_RESP_81_S,
+    F_RESP_81_HZ,
+    F_RED_50_HZ,
+    F_RED_60_HZ,
     # Classes
     ResultadoLaserNoetico,
     MallaEspectral,
@@ -39,6 +44,10 @@ from physics.qcal_ns_rk4 import (
     ForzadoEspectralNoetico,
     TerminoSuperradiante,
     CoherenciaBiologica,
+    PotencialZeta,
+    RespiracionSintropia,
+    EstabilizadorRedPlanetaria,
+    PulsoUnificado,
     # Public API
     generate_upe_signature,
     qcal_ns_rk4_activar,
@@ -1049,6 +1058,421 @@ class TestConstants(unittest.TestCase):
     def test_n_squared_equals_n_microtubulos_squared(self):
         """N_SQUARED must equal float(N_MICROTUBULOS)**2."""
         self.assertAlmostEqual(N_SQUARED, float(N_MICROTUBULOS) ** 2, delta=1.0)
+
+    def test_zeta_deriv_half_value(self):
+        """ZETA_DERIV_HALF must be approximately -3.9226 (ζ'(1/2))."""
+        self.assertAlmostEqual(ZETA_DERIV_HALF, -3.92264613920915, places=8)
+
+    def test_zeta_deriv_half_negative(self):
+        """ζ'(1/2) must be negative."""
+        self.assertLess(ZETA_DERIV_HALF, 0.0)
+
+    def test_t_resp_81_s_value(self):
+        """T_RESP_81_S must equal 81.0 s."""
+        self.assertAlmostEqual(T_RESP_81_S, 81.0, places=10)
+
+    def test_f_resp_81_hz_value(self):
+        """F_RESP_81_HZ must equal 1/81 Hz."""
+        self.assertAlmostEqual(F_RESP_81_HZ, 1.0 / 81.0, places=12)
+
+    def test_f_resp_81_hz_inverse(self):
+        """1/F_RESP_81_HZ must equal T_RESP_81_S."""
+        self.assertAlmostEqual(1.0 / F_RESP_81_HZ, T_RESP_81_S, places=8)
+
+    def test_f_red_50_hz_value(self):
+        """F_RED_50_HZ must equal 50.0 Hz."""
+        self.assertAlmostEqual(F_RED_50_HZ, 50.0, places=10)
+
+    def test_f_red_60_hz_value(self):
+        """F_RED_60_HZ must equal 60.0 Hz."""
+        self.assertAlmostEqual(F_RED_60_HZ, 60.0, places=10)
+
+
+# ============================================================================
+# TestPotencialZeta – 12 tests
+# ============================================================================
+
+class TestPotencialZeta(unittest.TestCase):
+    """Tests for PotencialZeta class (ζ'(1/2) → V_eff)."""
+
+    def setUp(self):
+        self.pz = PotencialZeta()
+
+    def test_zeta_deriv_half_is_negative(self):
+        """ζ'(1/2) must be negative."""
+        self.assertLess(self.pz.zeta_deriv_half, 0.0)
+
+    def test_zeta_deriv_half_value(self):
+        """ζ'(1/2) must be approximately -3.9226."""
+        self.assertAlmostEqual(self.pz.zeta_deriv_half, ZETA_DERIV_HALF, places=10)
+
+    def test_v_eff_positive(self):
+        """V_eff must be positive (absolute value)."""
+        self.assertGreater(self.pz.v_eff, 0.0)
+
+    def test_v_eff_equals_abs_zeta_deriv(self):
+        """V_eff must equal |ζ'(1/2)|."""
+        self.assertAlmostEqual(self.pz.v_eff, abs(ZETA_DERIV_HALF), places=10)
+
+    def test_v_eff_value(self):
+        """V_eff must be approximately 3.9226."""
+        self.assertAlmostEqual(self.pz.v_eff, 3.92264613920915, places=8)
+
+    def test_inevitabilidad_in_unit_interval(self):
+        """inevitabilidad must be in (0, 1)."""
+        self.assertGreater(self.pz.inevitabilidad, 0.0)
+        self.assertLess(self.pz.inevitabilidad, 1.0)
+
+    def test_inevitabilidad_formula(self):
+        """inevitabilidad must equal V_eff / (V_eff + 1)."""
+        v = self.pz.v_eff
+        expected = v / (v + 1.0)
+        self.assertAlmostEqual(self.pz.inevitabilidad, expected, places=12)
+
+    def test_inevitabilidad_above_half(self):
+        """inevitabilidad must be > 0.5 (V_eff > 1)."""
+        self.assertGreater(self.pz.inevitabilidad, 0.5)
+
+    def test_eliminado_artefacto_true(self):
+        """eliminado_artefacto must always be True."""
+        self.assertTrue(self.pz.eliminado_artefacto)
+
+    def test_no_free_parameters(self):
+        """Two default instances must yield identical v_eff (no free parameters)."""
+        pz2 = PotencialZeta()
+        self.assertAlmostEqual(self.pz.v_eff, pz2.v_eff, places=12)
+
+    def test_repr_contains_v_eff(self):
+        """repr must mention v_eff."""
+        self.assertIn("v_eff", repr(self.pz))
+
+    def test_v_eff_greater_than_3(self):
+        """V_eff must be greater than 3."""
+        self.assertGreater(self.pz.v_eff, 3.0)
+
+
+# ============================================================================
+# TestRespiracionSintropia – 15 tests
+# ============================================================================
+
+class TestRespiracionSintropia(unittest.TestCase):
+    """Tests for RespiracionSintropia class (81 s EZ water coherence)."""
+
+    def setUp(self):
+        self.rs = RespiracionSintropia()
+
+    def test_default_t_resp(self):
+        """Default t_resp must be 81.0 s."""
+        self.assertAlmostEqual(self.rs.t_resp, 81.0, places=10)
+
+    def test_f_resp_inverse_of_t_resp(self):
+        """f_resp must equal 1/t_resp."""
+        self.assertAlmostEqual(self.rs.f_resp, 1.0 / self.rs.t_resp, places=12)
+
+    def test_f_resp_value(self):
+        """f_resp must be approximately 0.012346 Hz."""
+        self.assertAlmostEqual(self.rs.f_resp, F_RESP_81_HZ, places=12)
+
+    def test_psi_ez_in_unit_interval(self):
+        """psi_ez must be in [0, 1]."""
+        self.assertGreaterEqual(self.rs.psi_ez, 0.0)
+        self.assertLessEqual(self.rs.psi_ez, 1.0)
+
+    def test_psi_ez_formula(self):
+        """psi_ez must satisfy 1 - (1-psi_spec)*2*f_resp."""
+        expected = 1.0 - (1.0 - self.rs.psi_spec) * 2.0 * self.rs.f_resp
+        self.assertAlmostEqual(self.rs.psi_ez, expected, places=12)
+
+    def test_psi_ez_above_minimum(self):
+        """psi_ez must be >= PSI_MINIMA = 0.888."""
+        self.assertGreaterEqual(self.rs.psi_ez, PSI_MINIMA)
+
+    def test_psi_ez_near_one(self):
+        """psi_ez must be close to 1 (long breathing cycle reduces decoherence)."""
+        self.assertGreater(self.rs.psi_ez, 0.99)
+
+    def test_antenas_activas_true(self):
+        """antenas_activas must be True when psi_ez >= PSI_MINIMA."""
+        self.assertTrue(self.rs.antenas_activas)
+
+    def test_ciclos_por_minuto(self):
+        """ciclos_por_minuto must equal 60/t_resp."""
+        expected = 60.0 / self.rs.t_resp
+        self.assertAlmostEqual(self.rs.ciclos_por_minuto, expected, places=10)
+
+    def test_ciclos_por_minuto_less_than_one(self):
+        """81-s cycle gives < 1 breath per minute."""
+        self.assertLess(self.rs.ciclos_por_minuto, 1.0)
+
+    def test_invalid_t_resp_zero_raises(self):
+        """t_resp = 0 must raise ValueError."""
+        with self.assertRaises(ValueError):
+            RespiracionSintropia(t_resp=0.0)
+
+    def test_invalid_psi_spec_raises(self):
+        """psi_spec outside [0, 1] must raise ValueError."""
+        with self.assertRaises(ValueError):
+            RespiracionSintropia(psi_spec=1.5)
+
+    def test_custom_t_resp(self):
+        """Custom t_resp must be stored correctly."""
+        rs = RespiracionSintropia(t_resp=100.0)
+        self.assertAlmostEqual(rs.t_resp, 100.0, places=10)
+        self.assertAlmostEqual(rs.f_resp, 0.01, places=10)
+
+    def test_repr_contains_t_resp(self):
+        """repr must mention t_resp."""
+        self.assertIn("t_resp", repr(self.rs))
+
+    def test_default_psi_spec(self):
+        """Default psi_spec must be the Kuramoto value (0.891)."""
+        self.assertAlmostEqual(self.rs.psi_spec, 0.891, places=6)
+
+
+# ============================================================================
+# TestEstabilizadorRedPlanetaria – 18 tests
+# ============================================================================
+
+class TestEstabilizadorRedPlanetaria(unittest.TestCase):
+    """Tests for EstabilizadorRedPlanetaria class (50/60 Hz grid coherence)."""
+
+    def setUp(self):
+        self.er = EstabilizadorRedPlanetaria()
+
+    def test_default_gamma_red(self):
+        """Default gamma_red must be 0.5 Hz."""
+        self.assertAlmostEqual(self.er.gamma_red, 0.5, places=10)
+
+    def test_psi_red_50_at_nominal(self):
+        """psi_red_50 must be 1.0 when delta_f50 = 0."""
+        self.assertAlmostEqual(self.er.psi_red_50, 1.0, places=10)
+
+    def test_psi_red_60_at_nominal(self):
+        """psi_red_60 must be 1.0 when delta_f60 = 0."""
+        self.assertAlmostEqual(self.er.psi_red_60, 1.0, places=10)
+
+    def test_psi_planetaria_at_nominal(self):
+        """psi_planetaria must be 1.0 when both deviations are 0."""
+        self.assertAlmostEqual(self.er.psi_planetaria, 1.0, places=10)
+
+    def test_psi_planetaria_formula(self):
+        """psi_planetaria must equal (psi_red_50 + psi_red_60) / 2."""
+        expected = (self.er.psi_red_50 + self.er.psi_red_60) / 2.0
+        self.assertAlmostEqual(self.er.psi_planetaria, expected, places=12)
+
+    def test_sistema_nervioso_activo_true(self):
+        """sistema_nervioso_activo must be True at nominal frequency."""
+        self.assertTrue(self.er.sistema_nervioso_activo)
+
+    def test_lorentzian_decreases_with_deviation(self):
+        """psi_red_50 must decrease as delta_f50 increases."""
+        er_off = EstabilizadorRedPlanetaria(delta_f50=1.0)
+        self.assertLess(er_off.psi_red_50, 1.0)
+
+    def test_lorentzian_half_at_gamma(self):
+        """psi_red_50 must be 0.5 when delta_f50 = gamma_red."""
+        er = EstabilizadorRedPlanetaria(gamma_red=0.5, delta_f50=0.5)
+        self.assertAlmostEqual(er.psi_red_50, 0.5, places=10)
+
+    def test_lorentzian_symmetric(self):
+        """Lorentzian is symmetric: psi_red_50(+δf) == psi_red_50(-δf)."""
+        er_pos = EstabilizadorRedPlanetaria(delta_f50=0.3)
+        er_neg = EstabilizadorRedPlanetaria(delta_f50=-0.3)
+        self.assertAlmostEqual(er_pos.psi_red_50, er_neg.psi_red_50, places=10)
+
+    def test_psi_in_unit_interval(self):
+        """psi_planetaria must be in [0, 1]."""
+        er = EstabilizadorRedPlanetaria(delta_f50=10.0, delta_f60=10.0)
+        self.assertGreaterEqual(er.psi_planetaria, 0.0)
+        self.assertLessEqual(er.psi_planetaria, 1.0)
+
+    def test_invalid_gamma_red_zero_raises(self):
+        """gamma_red = 0 must raise ValueError."""
+        with self.assertRaises(ValueError):
+            EstabilizadorRedPlanetaria(gamma_red=0.0)
+
+    def test_f_red_50_hz_class_attribute(self):
+        """F_RED_50_HZ class attribute must equal 50.0."""
+        self.assertAlmostEqual(EstabilizadorRedPlanetaria.F_RED_50_HZ, 50.0, places=10)
+
+    def test_f_red_60_hz_class_attribute(self):
+        """F_RED_60_HZ class attribute must equal 60.0."""
+        self.assertAlmostEqual(EstabilizadorRedPlanetaria.F_RED_60_HZ, 60.0, places=10)
+
+    def test_custom_gamma_red(self):
+        """Custom gamma_red must be stored correctly."""
+        er = EstabilizadorRedPlanetaria(gamma_red=1.0)
+        self.assertAlmostEqual(er.gamma_red, 1.0, places=10)
+
+    def test_repr_contains_psi_planetaria(self):
+        """repr must mention psi_planetaria."""
+        self.assertIn("psi_planetaria", repr(self.er))
+
+    def test_psi_above_minimum_at_nominal(self):
+        """psi_planetaria must be >= PSI_MINIMA at nominal frequency."""
+        self.assertGreaterEqual(self.er.psi_planetaria, PSI_MINIMA)
+
+    def test_both_deviations_reduce_coherence(self):
+        """Non-zero deviations on both grids must reduce psi_planetaria."""
+        er_off = EstabilizadorRedPlanetaria(delta_f50=0.5, delta_f60=0.5)
+        self.assertLess(er_off.psi_planetaria, 1.0)
+
+    def test_delta_f_default_zero(self):
+        """Default delta_f50 and delta_f60 must be 0."""
+        self.assertEqual(self.er.delta_f50, 0.0)
+        self.assertEqual(self.er.delta_f60, 0.0)
+
+
+# ============================================================================
+# TestPulsoUnificado – 15 tests
+# ============================================================================
+
+class TestPulsoUnificado(unittest.TestCase):
+    """Tests for PulsoUnificado class (unified pulse integrating 3 vectors)."""
+
+    def setUp(self):
+        self.pu = PulsoUnificado(psi_total=0.956)
+
+    def test_default_psi_total(self):
+        """Default psi_total must be 0.956."""
+        pu = PulsoUnificado()
+        self.assertAlmostEqual(pu.psi_total, 0.956, places=10)
+
+    def test_v_eff_positive(self):
+        """v_eff must be positive."""
+        self.assertGreater(self.pu.v_eff, 0.0)
+
+    def test_v_eff_from_zeta(self):
+        """v_eff must equal |ZETA_DERIV_HALF|."""
+        self.assertAlmostEqual(self.pu.v_eff, abs(ZETA_DERIV_HALF), places=10)
+
+    def test_psi_ez_in_unit_interval(self):
+        """psi_ez must be in [0, 1]."""
+        self.assertGreaterEqual(self.pu.psi_ez, 0.0)
+        self.assertLessEqual(self.pu.psi_ez, 1.0)
+
+    def test_psi_ez_above_minimum(self):
+        """psi_ez must be >= PSI_MINIMA."""
+        self.assertGreaterEqual(self.pu.psi_ez, PSI_MINIMA)
+
+    def test_psi_red_in_unit_interval(self):
+        """psi_red must be in [0, 1]."""
+        self.assertGreaterEqual(self.pu.psi_red, 0.0)
+        self.assertLessEqual(self.pu.psi_red, 1.0)
+
+    def test_psi_red_at_nominal_is_one(self):
+        """psi_red must be 1.0 at nominal grid frequency."""
+        self.assertAlmostEqual(self.pu.psi_red, 1.0, places=10)
+
+    def test_psi_unificado_formula(self):
+        """psi_unificado must equal (psi_total + psi_ez + psi_red) / 3."""
+        expected = (self.pu.psi_total + self.pu.psi_ez + self.pu.psi_red) / 3.0
+        self.assertAlmostEqual(self.pu.psi_unificado, expected, places=12)
+
+    def test_psi_unificado_above_minimum(self):
+        """psi_unificado must be >= PSI_MINIMA."""
+        self.assertGreaterEqual(self.pu.psi_unificado, PSI_MINIMA)
+
+    def test_psi_unificado_above_psi_total(self):
+        """psi_unificado must be >= psi_total when psi_ez and psi_red > psi_total."""
+        self.assertGreaterEqual(self.pu.psi_unificado, self.pu.psi_total)
+
+    def test_activado_true(self):
+        """activado must be True when psi_unificado >= PSI_MINIMA."""
+        self.assertTrue(self.pu.activado)
+
+    def test_invalid_psi_total_raises(self):
+        """psi_total outside [0, 1] must raise ValueError."""
+        with self.assertRaises(ValueError):
+            PulsoUnificado(psi_total=1.5)
+
+    def test_components_accessible(self):
+        """potencial_zeta, respiracion and estabilizador must be accessible."""
+        self.assertIsInstance(self.pu.potencial_zeta, PotencialZeta)
+        self.assertIsInstance(self.pu.respiracion, RespiracionSintropia)
+        self.assertIsInstance(self.pu.estabilizador, EstabilizadorRedPlanetaria)
+
+    def test_repr_contains_psi_unificado(self):
+        """repr must mention psi_unificado."""
+        self.assertIn("psi_unificado", repr(self.pu))
+
+    def test_idempotent_multiple_instances(self):
+        """Two instances with same psi_total must yield identical psi_unificado."""
+        pu2 = PulsoUnificado(psi_total=0.956)
+        self.assertAlmostEqual(self.pu.psi_unificado, pu2.psi_unificado, places=12)
+
+
+# ============================================================================
+# TestQcalNsRk4ActivarPulsoUnificado – 10 tests
+# ============================================================================
+
+class TestQcalNsRk4ActivarPulsoUnificado(unittest.TestCase):
+    """Tests for Pulso Unificado fields returned by qcal_ns_rk4_activar."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.resultado = qcal_ns_rk4_activar()
+
+    def test_v_eff_positive(self):
+        """v_eff must be positive."""
+        self.assertGreater(self.resultado.v_eff, 0.0)
+
+    def test_v_eff_value(self):
+        """v_eff must equal |ZETA_DERIV_HALF|."""
+        self.assertAlmostEqual(self.resultado.v_eff, abs(ZETA_DERIV_HALF), places=8)
+
+    def test_psi_ez_in_unit_interval(self):
+        """psi_ez must be in [0, 1]."""
+        self.assertGreaterEqual(self.resultado.psi_ez, 0.0)
+        self.assertLessEqual(self.resultado.psi_ez, 1.0)
+
+    def test_psi_ez_above_minimum(self):
+        """psi_ez must be >= PSI_MINIMA."""
+        self.assertGreaterEqual(self.resultado.psi_ez, PSI_MINIMA)
+
+    def test_psi_red_at_nominal(self):
+        """psi_red must be 1.0 (nominal grid frequency, no deviation)."""
+        self.assertAlmostEqual(self.resultado.psi_red, 1.0, places=10)
+
+    def test_psi_unificado_formula(self):
+        """psi_unificado must equal (psi_total + psi_ez + psi_red) / 3."""
+        expected = (
+            self.resultado.psi_total
+            + self.resultado.psi_ez
+            + self.resultado.psi_red
+        ) / 3.0
+        self.assertAlmostEqual(self.resultado.psi_unificado, expected, places=10)
+
+    def test_psi_unificado_above_minimum(self):
+        """psi_unificado must be >= PSI_MINIMA."""
+        self.assertGreaterEqual(self.resultado.psi_unificado, PSI_MINIMA)
+
+    def test_psi_ez_formula(self):
+        """psi_ez must equal 1 - (1-psi_spec)*2*F_RESP_81_HZ."""
+        expected = 1.0 - (1.0 - self.resultado.psi_spec) * 2.0 * F_RESP_81_HZ
+        self.assertAlmostEqual(self.resultado.psi_ez, expected, places=10)
+
+    def test_new_fields_default_backward_compat(self):
+        """ResultadoLaserNoetico created without new fields must default to 0.0."""
+        r = ResultadoLaserNoetico(
+            psi_spec=0.891,
+            psi_dyn=0.9999,
+            psi_upe=0.978,
+            psi_total=0.956,
+            error_espectral=9.82e-7,
+            superradiante=True,
+            plateau_alcanzado=True,
+            rendimiento_cuantico=1000.0,
+            aprobado=True,
+        )
+        self.assertEqual(r.v_eff, 0.0)
+        self.assertEqual(r.psi_ez, 0.0)
+        self.assertEqual(r.psi_red, 0.0)
+        self.assertEqual(r.psi_unificado, 0.0)
+
+    def test_psi_unificado_near_0984(self):
+        """psi_unificado must be approximately 0.984 (within ±0.001)."""
+        self.assertAlmostEqual(self.resultado.psi_unificado, 0.984, delta=0.001)
 
 
 if __name__ == "__main__":
