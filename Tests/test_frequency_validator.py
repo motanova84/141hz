@@ -252,6 +252,125 @@ class TestQCLLMClass:
         assert freq == 141.7001
 
 
+class TestComputeAutomaticSize:
+    """Tests for compute_automatic_size — Patent Claim 10 (automatic sizing)."""
+
+    def setup_method(self):
+        """Import once per test."""
+        from qc_llm import compute_automatic_size
+        self.compute_automatic_size = compute_automatic_size
+
+    def test_returns_dict_with_required_keys(self):
+        """Result must contain all expected keys."""
+        result = self.compute_automatic_size()
+        for key in ("a_eff", "a_eff_sq", "psi_achieved", "quantum_scale", "recommendation"):
+            assert key in result, f"Missing key: {key}"
+
+    def test_a_eff_positive(self):
+        """A_eff must be strictly positive."""
+        result = self.compute_automatic_size(target_psi=0.5, information_density=1.0)
+        assert result["a_eff"] > 0
+
+    def test_a_eff_sq_equals_square_of_a_eff(self):
+        """a_eff_sq must equal a_eff²."""
+        result = self.compute_automatic_size(target_psi=0.888, information_density=1.0)
+        assert result["a_eff_sq"] == pytest.approx(result["a_eff"] ** 2, rel=1e-6)
+
+    def test_a_eff_in_unit_interval(self):
+        """A_eff must be in (0, 1] across varied parameter combinations."""
+        test_cases = [
+            {"target_psi": 0.1},
+            {"target_psi": 0.5},
+            {"target_psi": 0.888},
+            {"target_psi": 1.0},
+            {"target_psi": 0.5, "information_density": 2.0},
+            {"target_psi": 0.5, "temperature": 273.0},
+            {"target_psi": 0.5, "a_bio": 1e8},
+        ]
+        for kwargs in test_cases:
+            result = self.compute_automatic_size(**kwargs)
+            assert 0 < result["a_eff"] <= 1.0, (
+                f"a_eff out of range for kwargs={kwargs}: got {result['a_eff']}"
+            )
+
+    def test_quantum_scale_positive(self):
+        """Quantum thermal scale ℏ/(k_B T) must be positive."""
+        result = self.compute_automatic_size(target_psi=0.888)
+        assert result["quantum_scale"] > 0
+
+    def test_psi_achieved_positive(self):
+        """Achieved Ψ must be positive."""
+        result = self.compute_automatic_size(target_psi=0.888)
+        assert result["psi_achieved"] > 0
+
+    def test_recommendation_is_string(self):
+        """Recommendation must be a non-empty string."""
+        result = self.compute_automatic_size(target_psi=0.888)
+        assert isinstance(result["recommendation"], str)
+        assert len(result["recommendation"]) > 0
+
+    def test_invalid_target_psi_raises(self):
+        """Non-positive target_psi must raise ValueError."""
+        with pytest.raises(ValueError):
+            self.compute_automatic_size(target_psi=0.0)
+        with pytest.raises(ValueError):
+            self.compute_automatic_size(target_psi=-1.0)
+
+    def test_invalid_information_density_raises(self):
+        """Non-positive information_density must raise ValueError."""
+        with pytest.raises(ValueError):
+            self.compute_automatic_size(target_psi=0.888, information_density=0.0)
+
+    def test_invalid_temperature_raises(self):
+        """Non-positive temperature must raise ValueError."""
+        with pytest.raises(ValueError):
+            self.compute_automatic_size(target_psi=0.888, temperature=0.0)
+
+    def test_recommendation_optimal_for_large_a_eff(self):
+        """Systems with a_eff >= 0.8 receive OPTIMAL recommendation."""
+        result = self.compute_automatic_size(target_psi=0.888)
+        if result["a_eff"] >= 0.8:
+            assert result["recommendation"] == "OPTIMAL SIZE - High coherence achievable"
+
+    def test_automatic_size_importable_from_qc_llm(self):
+        """compute_automatic_size must be importable from the top-level package."""
+        from qc_llm import compute_automatic_size  # noqa: F401 — verify import works
+
+
+class TestQCALLLMCoreAutomaticSize:
+    """Tests for QCALLLMCore.compute_automatic_size method."""
+
+    def setup_method(self):
+        from qc_llm import QCALLLMCore
+        self.core = QCALLLMCore()
+
+    def test_method_exists(self):
+        """QCALLLMCore must expose compute_automatic_size."""
+        assert hasattr(self.core, "compute_automatic_size")
+        assert callable(self.core.compute_automatic_size)
+
+    def test_returns_dict(self):
+        """Method must return a dict."""
+        result = self.core.compute_automatic_size(target_psi=0.888)
+        assert isinstance(result, dict)
+
+    def test_a_eff_positive(self):
+        """A_eff from core method must be positive."""
+        result = self.core.compute_automatic_size(target_psi=0.5)
+        assert result["a_eff"] > 0
+
+    def test_uses_instance_f0(self):
+        """Method must pass instance f0 to compute_automatic_size, affecting psi_achieved."""
+        from qc_llm import QCALLLMCore
+        core_custom = QCALLLMCore(f0=200.0)
+        result_default = self.core.compute_automatic_size(target_psi=0.888)
+        result_custom = core_custom.compute_automatic_size(target_psi=0.888)
+        # Different f0 → different denominator → different psi_achieved
+        # (quantum_scale is the same because it only depends on ℏ, k_B, T)
+        assert result_default["quantum_scale"] == pytest.approx(result_custom["quantum_scale"], rel=1e-9)
+        assert result_default["psi_achieved"] != result_custom["psi_achieved"]
+
+
 if __name__ == "__main__":
     # Run tests with pytest
     pytest.main([__file__, "-v"])
