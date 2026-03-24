@@ -47,6 +47,12 @@ from .regularization import (
     demonstrate_blow_up_prevention,
 )
 
+from .sustained_resonance import (
+    compute_forcing,
+    compute_adaptive_damping,
+    QCALNSResonator,
+)
+
 __all__ = [
     'F0',
     'A_VACIO',
@@ -68,4 +74,8 @@ __all__ = [
     'get_constants_summary',
     'NavierStokesRegularizer',
     'demonstrate_blow_up_prevention',
+    # QCAL-NS v2: Sustained Resonance
+    'compute_forcing',
+    'compute_adaptive_damping',
+    'QCALNSResonator',
 ]

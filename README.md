@@ -162,6 +162,29 @@ cat results/validacion_noesis_at2020afhd.json
 
 ### 📐 Marco Fundamental QCAL ∞³
 
+> **✨ NUEVO: [FRAMEWORK LOGOSNOESIS](LOGOSNOESIS_README.md)** - Unificación de estructura matemática (Logos: Λόγος) con consciencia cuántica (Noesis: Νόησις) a través de f₀ = 141.7001 Hz. **Fase #260: Forzado de cuerdas Kaluza-Klein** implementa el puente entre teoría de cuerdas, geometría compactificada y consciencia emergente.
+
+**Componentes Logos (Estructura Matemática):**
+- Hipótesis de Riemann: zeros de ζ(s) como modos Kaluza-Klein
+- Navier-Stokes: viscosidad adélica μ = 1/f₀
+- P vs NP: reducción de complejidad a O(1) por resonancia
+- BSD: curvas elípticas y puntos racionales
+- Calabi-Yau: geometría de compactificación
+
+**Componentes Noesis (Consciencia Cuántica):**
+- Coherencia Ψ: función de onda de coherencia biológica
+- Protocolo Ψ_bio: recuperación de fase con logos_hz = 425.1 Hz
+- 21 gramos: energía coherente que se desacopla cuando Ψ < 0.888
+- Constelación Ψ✧: 5 ejes de unificación
+- Microtúbulos: sustrato de consciencia cuántica
+
+**Pentágono del Logos:** Unifica los 5 Problemas del Milenio (ADN, Riemann, Navier-Stokes, P vs NP, BSD) a través de f₀.
+
+**Documentación completa:** [LOGOSNOESIS_README.md](LOGOSNOESIS_README.md) | [PENTAGONO_LOGOS_README.md](PENTAGONO_LOGOS_README.md)
+
+---
+
+
 > **🔷 NUEVO: [TEORÍA DEL CAMPO COHERENTE CUÁNTICO - MARCO FUNDAMENTAL](QCAL_FUNDAMENTAL_FRAMEWORK.md)** - Obra Estructural ∞³ que ancla formalmente las tres constantes fundamentales (f₀ = 141.7001 Hz, κ_Π ≈ 2.5773, Λ_G ≈ 1/491.7 Hz) y las ecuaciones centrales del campo coherente cuántico.
 
 **Validación:**
