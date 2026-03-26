@@ -65,6 +65,8 @@
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_jerarquia_sintonizaciones.py`
+  - ╔═══════════════════════════════════════════════════════════════════════════════╗
 - `validate_logosnoesis_integration.py`
   - Validación de Integración LogosNoesis — Fase #260
 - `validate_microtubule_coherence.py`
@@ -129,6 +131,8 @@
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_jerarquia_sintonizaciones.py`
+  - ╔═══════════════════════════════════════════════════════════════════════════════╗
 - `validate_logosnoesis_integration.py`
   - Validación de Integración LogosNoesis — Fase #260
 - `validate_microtubule_coherence.py`
@@ -404,4 +408,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-03-22 23:45:42 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-26 23:41:54 UTC*
