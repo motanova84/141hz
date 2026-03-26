@@ -1,0 +1,54 @@
+{
+  "theoretical": {
+    "phi_theoretical": 0.3995,
+    "validation": {
+      "is_valid": 0.0,
+      "frequency": 142.3345487147956,
+      "error_hz": 0.6344487147956102,
+      "error_percent": 0.4477404848660024,
+      "holonomy": 0.3995,
+      "torsion_per_bond": 0.05707142857142857,
+      "frustration": 0.0635823997652122,
+      "phi_rad": 0.3995,
+      "target_frequency": 141.7001,
+      "bare_frequency": 134.425
+    },
+    "passes": false
+  },
+  "optimization": {
+    "result_fine": {
+      "phi_optimal": 0.3672442057378499,
+      "frequency": 141.7001438732072,
+      "error": 4.3873207204114806e-05,
+      "theta_per_bond": 0.05246345796254998,
+      "n_points": 10000
+    },
+    "agreement_percent": 91.9259588830663,
+    "phi_theoretical": 0.3995
+  },
+  "chiral_analysis": {
+    "holonomy": 0.3672442057378499,
+    "torsion_per_bond": 0.05246345796254998,
+    "frustration": 0.0584487306650358,
+    "phases": [
+      0.05246345796254998,
+      0.9500613589882052,
+      1.8476592600138602,
+      2.7452571610395156,
+      3.6428550620651707,
+      4.540452963090826,
+      5.438050864116481
+    ],
+    "interpretation": {
+      "is_chiral": 1.0,
+      "breaks_time_reversal": true,
+      "has_preferred_direction": true,
+      "frustration_level": 0.0584487306650358
+    }
+  },
+  "scan_summary": {
+    "phi_f0": 0.36309864840485045,
+    "freq_f0": 141.618554704345,
+    "n_points": 200
+  }
+}
