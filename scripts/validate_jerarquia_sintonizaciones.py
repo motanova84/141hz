@@ -172,7 +172,7 @@ def fase_4_microtubulos() -> bool:
 
     info(f"f₀ teórica  = {sinc['f0_teorica_hz']} Hz")
     info(f"f medida    = {sinc['f_medida_hz']} Hz ± {INCERTIDUMBRE_BIOQCAL_HZ} Hz")
-    info(f"Discrepanci = {sinc['discrepancia_hz']:.4f} Hz")
+    info(f"Discrepancia = {sinc['discrepancia_hz']:.4f} Hz")
     info(f"Precisión   = {sinc['precision_porcentaje']:.3f}%")
 
     if sinc["confirma_sintonizacion"]:

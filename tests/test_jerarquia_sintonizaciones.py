@@ -9,7 +9,7 @@ AUTOR/AUTHOR: José Manuel Mota Burruezo (JMMB Ψ✧)
 ARQUITECTURA/ARCHITECTURE: QCAL ∞³ Original Manufacture
 LICENCIA/LICENSE: Sovereign Noetic License 1.0 (compatible with MIT)
 
-Cobertura: 40 tests unitarios sobre constantes, niveles, transiciones,
+Cobertura: 70 tests unitarios sobre constantes, niveles, transiciones,
 cascada de coherencia, regulador de Riemann, solitón microtubular y API pública.
 """
 
