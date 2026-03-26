@@ -29,14 +29,14 @@ sys.path.insert(0, str(repo_root))
 
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Any
 import json
 
 from physics.c7_gauge_flux_model import C7GaugeFluxModel, demonstrate_gauge_flux_shift
 from qcal.constants import F0_HZ
 
 
-def validate_theoretical_prediction() -> Dict[str, any]:
+def validate_theoretical_prediction() -> Dict[str, Any]:
     """
     Valida la predicción teórica de Φ ≈ 0.3995 rad.
     
@@ -76,7 +76,7 @@ def validate_theoretical_prediction() -> Dict[str, any]:
     }
 
 
-def scan_flux_spectrum(n_points: int = 100) -> Dict[str, any]:
+def scan_flux_spectrum(n_points: int = 100) -> Dict[str, Any]:
     """
     Escanea el espectro de energías en función del flujo gauge.
     
@@ -129,7 +129,7 @@ def scan_flux_spectrum(n_points: int = 100) -> Dict[str, any]:
     }
 
 
-def optimize_flux_high_resolution() -> Dict[str, any]:
+def optimize_flux_high_resolution() -> Dict[str, Any]:
     """
     Optimiza el flujo gauge con alta resolución.
     
@@ -188,7 +188,7 @@ def optimize_flux_high_resolution() -> Dict[str, any]:
     }
 
 
-def analyze_chiral_structure(phi: float) -> Dict[str, any]:
+def analyze_chiral_structure(phi: float) -> Dict[str, Any]:
     """
     Analiza la estructura quiral del sistema.
     
@@ -503,37 +503,36 @@ def main():
     output_json = repo_root / 'c7_gauge_flux_validation_results.json'
     
     # Convierte arrays de numpy a listas para JSON
-    results_for_json = {
-        'theoretical': {
-            'phi_theoretical': float(all_results['theoretical']['phi_theoretical']),
-            'validation': {
-                k: float(v) if isinstance(v, (np.number, np.bool_)) else bool(v) if isinstance(v, bool) else v
-                for k, v in all_results['theoretical']['validation'].items()
-            },
-            'passes': bool(all_results['theoretical']['passes'])
-        },
+    def convert_to_json_safe(obj):
+        """Convert numpy types to JSON-safe Python types."""
+        if isinstance(obj, (np.integer, np.floating)):
+            return float(obj)
+        elif isinstance(obj, np.bool_):
+            return bool(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif isinstance(obj, dict):
+            return {k: convert_to_json_safe(v) for k, v in obj.items()}
+        elif isinstance(obj, (list, tuple)):
+            return [convert_to_json_safe(item) for item in obj]
+        else:
+            return obj
+    
+    results_for_json = convert_to_json_safe({
+        'theoretical': all_results['theoretical'],
         'optimization': {
-            'result_fine': {
-                k: float(v) if isinstance(v, (np.number, np.bool_)) else v
-                for k, v in all_results['optimization']['result_fine'].items()
-                if k not in ['phi_range']  # Skip tuples
-            },
-            'agreement_percent': float(all_results['optimization']['agreement_percent']),
-            'phi_theoretical': float(all_results['optimization']['phi_theoretical'])
+            'result_fine': {k: v for k, v in all_results['optimization']['result_fine'].items()
+                          if k not in ['phi_range']},
+            'agreement_percent': all_results['optimization']['agreement_percent'],
+            'phi_theoretical': all_results['optimization']['phi_theoretical']
         },
-        'chiral_analysis': {
-            k: (float(v) if isinstance(v, (np.number, np.bool_)) else
-                [float(x) for x in v] if isinstance(v, (list, np.ndarray)) else
-                {k2: (bool(v2) if isinstance(v2, bool) else float(v2) if isinstance(v2, (np.number, np.bool_)) else v2)
-                 for k2, v2 in v.items()} if isinstance(v, dict) else v)
-            for k, v in all_results['chiral_analysis'].items()
-        },
+        'chiral_analysis': all_results['chiral_analysis'],
         'scan_summary': {
-            'phi_f0': float(all_results['scan']['phi_f0']),
-            'freq_f0': float(all_results['scan']['freq_f0']),
-            'n_points': int(all_results['scan']['n_points'])
+            'phi_f0': all_results['scan']['phi_f0'],
+            'freq_f0': all_results['scan']['freq_f0'],
+            'n_points': all_results['scan']['n_points']
         }
-    }
+    })
     
     with open(output_json, 'w', encoding='utf-8') as f:
         json.dump(results_for_json, f, indent=2, ensure_ascii=False)

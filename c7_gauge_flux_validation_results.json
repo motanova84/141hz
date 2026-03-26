@@ -2,7 +2,7 @@
   "theoretical": {
     "phi_theoretical": 0.3995,
     "validation": {
-      "is_valid": 0.0,
+      "is_valid": false,
       "frequency": 142.3345487147956,
       "error_hz": 0.6344487147956102,
       "error_percent": 0.4477404848660024,
@@ -40,7 +40,7 @@
       5.438050864116481
     ],
     "interpretation": {
-      "is_chiral": 1.0,
+      "is_chiral": true,
       "breaks_time_reversal": true,
       "has_preferred_direction": true,
       "frustration_level": 0.0584487306650358

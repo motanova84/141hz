@@ -56,7 +56,7 @@ REFERENCIAS:
 """
 
 import numpy as np
-from typing import Dict, Tuple, Optional, List
+from typing import Dict, Tuple, Optional, List, Any
 import warnings
 
 # Import canonical constants
@@ -291,7 +291,7 @@ class C7GaugeFluxModel:
         self,
         phi: float,
         tolerance_hz: float = 0.01
-    ) -> Dict[str, any]:
+    ) -> Dict[str, Any]:
         """
         Valida si un flujo dado reproduce la frecuencia objetivo.
         
@@ -343,7 +343,7 @@ class C7GaugeFluxModel:
         }
 
 
-def demonstrate_gauge_flux_shift() -> Dict[str, any]:
+def demonstrate_gauge_flux_shift() -> Dict[str, Any]:
     """
     Demostración del corrimiento de frecuencia por flujo gauge.
     
