@@ -84,9 +84,11 @@ G_AXION_PHOTON_EV_INV: float = G_AXION_PHOTON_GEV_INV * 1.0e-9  # eV⁻¹
 
 # Densidad local de materia oscura
 RHO_DM_GEV_CM3: float = 0.3   # GeV/cm³ — densidad local estándar
-RHO_DM_J_M3: float = (
-    RHO_DM_GEV_CM3 * 1.0e9 * EV_TO_J   # GeV→eV→J por cm³
-) / 1.0e-6                               # cm³ → m³ (1 cm³ = 1e-6 m³)
+# Conversión completa: GeV/cm³ → J/m³
+#   × 1e9    : GeV → eV
+#   × EV_TO_J: eV → J
+#   / 1e-6   : 1/cm³ → 1/m³  (1 cm³ = 1e-6 m³)
+RHO_DM_J_M3: float = RHO_DM_GEV_CM3 * 1.0e9 * EV_TO_J / 1.0e-6
 
 # Longitud del brazo del interferómetro IRS-Luna (referencia)
 L_IRS_LUNA_KM: float = 100.0   # km
@@ -370,7 +372,9 @@ class BirrefringenciaOscilatoria:
         if omega_laser_rad_s <= 0.0:
             raise ValueError("La frecuencia del láser debe ser positiva.")
         psi_dot_val = self.campo.psi_dot(t)
-        return self.g_SI * psi_dot_val / (2.0 * omega_laser_rad_s / C)
+        # δn = g_{aγγ} · ψ̇ / k  donde k = ω_laser/c  (vector de onda del fotón)
+        # El factor 1/2 proviene del promedio sobre polarizaciones circulares.
+        return self.g_SI * psi_dot_val * C / (2.0 * omega_laser_rad_s)
 
     def delta_theta(self, t: float) -> float:
         """

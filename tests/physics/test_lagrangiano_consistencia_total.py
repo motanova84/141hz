@@ -97,7 +97,7 @@ class TestConstantes(unittest.TestCase):
         self.assertAlmostEqual(G_AXION_PHOTON_GEV_INV, 1.0e-12, places=20)
 
     def test_g_axion_photon_ev_inv_conversion(self):
-        """g_{aγγ} en eV⁻¹ debe ser 10⁻³ veces el valor en GeV⁻¹ × 10⁻⁹."""
+        """g_{aγγ} en eV⁻¹ debe ser 10⁻⁹ veces el valor en GeV⁻¹."""
         expected = G_AXION_PHOTON_GEV_INV * 1.0e-9
         self.assertAlmostEqual(G_AXION_PHOTON_EV_INV, expected, places=30)
 
@@ -479,8 +479,9 @@ class TestLimiteRuidoCuantico(unittest.TestCase):
             LimiteRuidoCuantico(lambda_laser_nm=-1064.0)
 
     def test_shorter_wavelength_larger_noise(self):
-        """Láser de longitud de onda más corta tiene fotones más energéticos → mayor ruido."""
-        ruido_uv = LimiteRuidoCuantico(lambda_laser_nm=200.0)  # UV: más energía
+        """Láser UV (λ corta) tiene fotones más energéticos (ℏω mayor).
+        Dado que δφ_min = √(ℏω/(P·T)), mayor ω implica mayor shot noise."""
+        ruido_uv = LimiteRuidoCuantico(lambda_laser_nm=200.0)  # UV: mayor ω
         # Mayor ω_laser → mayor δφ_min = √(ℏω/PT)
         self.assertGreater(ruido_uv.delta_phi_min, self.ruido.delta_phi_min)
 
@@ -755,8 +756,9 @@ class TestRelacionesFisicas(unittest.TestCase):
         r = analizar_detectabilidad()
         self.assertGreater(r.snr, 5.0)
 
-    def test_delta_theta_proportional_to_omega_psi(self):
-        """Δθ₀ ∝ ω_ψ: mayor f₀ → mayor ω_ψ → mayor Δθ₀."""
+    def test_delta_theta_independent_of_omega_when_density_fixed(self):
+        """Δθ₀ es independiente de ω_ψ cuando ρ_DM se fija: ψ₀ ∝ 1/ω_ψ cancela ω_ψ.
+        La relación ψ̇₀ = ω_ψ·ψ₀ = √(2ρ_DM) es constante con ρ_DM fija."""
         # Usar un f₀ mayor (campo más rápido → mayor ψ̇ → mayor δn)
         lag_high = LagrangianoConsistencia(f0_hz=2.0 * F0_HZ)
         campo_high = CampoTejido(lagrangiano=lag_high)
