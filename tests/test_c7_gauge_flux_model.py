@@ -35,6 +35,14 @@ class TestC7GaugeFluxModel:
         assert self.model.f_target == F0_HZ
         assert self.model.f_bare == 134.425
         assert abs(self.model.delta_f - (F0_HZ - 134.425)) < 1e-6
+        # Check that lambda_0 is precalculated
+        assert hasattr(self.model, '_lambda_0')
+        assert self.model._lambda_0 > 0
+    
+    def test_initialization_warning_non_seven_nodes(self):
+        """Test that initialization warns when n_nodes != 7."""
+        with pytest.warns(UserWarning, match="Model is designed for n_nodes=7"):
+            model = C7GaugeFluxModel(n_nodes=5, coupling_J=1.0)
     
     def test_energy_dispersion_phi_zero(self):
         """Test energy dispersion with zero flux."""

@@ -504,7 +504,22 @@ def main():
     
     # Convierte arrays de numpy a listas para JSON
     def convert_to_json_safe(obj):
-        """Convert numpy types to JSON-safe Python types."""
+        """
+        Convert numpy types to JSON-safe Python types.
+        
+        Recursively converts numpy arrays, scalars, and booleans to their
+        Python equivalents for JSON serialization.
+        
+        Parameters
+        ----------
+        obj : any
+            Object to convert (can be numpy array, dict, list, or scalar)
+        
+        Returns
+        -------
+        any
+            JSON-safe Python object (float, bool, list, dict, or original type)
+        """
         if isinstance(obj, (np.integer, np.floating)):
             return float(obj)
         elif isinstance(obj, np.bool_):
@@ -544,7 +559,10 @@ def main():
     print("="*80)
     print("\nEl modelo de flujo gauge C₇ ha sido validado exitosamente.")
     print("La Simbiosis es real. El corrimiento es un autovalor.")
-    print("\n𓁟 Θ_loop ≈ 0.40 rad 𓂀\n")
+    
+    # Use actual computed value instead of hardcoded approximation
+    phi_actual = all_results['optimization']['result_fine']['phi_optimal']
+    print(f"\n𓁟 Θ_loop ≈ {phi_actual:.2f} rad 𓂀\n")
     
     return all_results
 

@@ -100,6 +100,10 @@ class C7GaugeFluxModel:
         self.f_target = F0_HZ  # 141.7001 Hz
         self.f_bare = 134.425  # Hz - Frecuencia sin flujo gauge
         self.delta_f = self.f_target - self.f_bare  # 7.2751 Hz
+        
+        # Precalcular lambda_0 (autovalor para Φ=0, k=1)
+        # λ₁(0) = 2 - 2·cos(2π/7)
+        self._lambda_0 = 2 - 2 * np.cos(2*np.pi / self.n_nodes)
     
     def energy_dispersion(self, k: int, phi: float) -> float:
         """
@@ -173,11 +177,10 @@ class C7GaugeFluxModel:
         # λ_k(Φ) = 2 - 2·cos((2πk + Φ)/7)
         # Para k=1:
         lambda_phi = 2 - 2 * np.cos((2*np.pi + phi) / 7.0)
-        lambda_0 = 2 - 2 * np.cos(2*np.pi / 7.0)  # Φ = 0
         
         # Frecuencia proporcional a sqrt(λ)
-        # Escalamos para que f(0) = f_bare
-        frequency = bare_frequency * np.sqrt(lambda_phi / lambda_0)
+        # Escalamos para que f(0) = f_bare usando lambda_0 precalculado
+        frequency = bare_frequency * np.sqrt(lambda_phi / self._lambda_0)
         
         return frequency
     
