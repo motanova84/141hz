@@ -166,17 +166,16 @@ class TestValidarSolucion(unittest.TestCase):
         self.assertLess(error, 1e-6)
     
     def test_incorrect_solution_fails_validation(self):
-        """Incorrect θ should fail validation."""
+        """Incorrect θ should fail validation with strict tolerance."""
         f_objetivo = F0_HZ
         f_bare = 134.425
         theta_wrong = 0.1  # Deliberately wrong value
         
         is_valid, error = validar_solucion(theta_wrong, f_objetivo, f_bare, tolerancia=1e-3)
         
-        # Should not validate (or if it does, error should be larger)
-        if not is_valid:
-            self.assertFalse(is_valid)
-        self.assertGreater(error, 0.0)
+        # Should not validate with strict tolerance
+        self.assertFalse(is_valid)
+        self.assertGreater(error, 1e-3)
     
     def test_error_is_frequency_difference(self):
         """Error should be the absolute frequency difference."""
@@ -195,16 +194,13 @@ class TestValidarSolucion(unittest.TestCase):
         """Should respect custom tolerance parameter."""
         f_objetivo = F0_HZ
         f_bare = 134.425
-        theta = 0.05  # Approximate value
+        theta = 0.05  # Approximate value (not exact solution)
         
-        # With strict tolerance, should fail
-        is_valid_strict, _ = validar_solucion(theta, f_objetivo, f_bare, tolerancia=1e-6)
-        
-        # With loose tolerance, might pass
+        # With loose tolerance, should pass
         is_valid_loose, _ = validar_solucion(theta, f_objetivo, f_bare, tolerancia=10.0)
         
-        # Loose tolerance should be more permissive
-        self.assertTrue(is_valid_loose or not is_valid_strict)
+        # Loose tolerance should accept approximate values
+        self.assertTrue(is_valid_loose, 'Loose tolerance should accept approximate theta value')
 
 
 # ============================================================================
@@ -234,15 +230,15 @@ class TestSpectralSearchIntegration(unittest.TestCase):
         self.assertAlmostEqual(f_verify, f_objetivo, places=4)
     
     def test_theta_value_in_expected_range(self):
-        """θ should be in the expected range ~0.05 rad."""
+        """θ should be in the expected range of 0.045 to 0.060 rad (≈0.0525 rad)."""
         f_objetivo = F0_HZ
         f_bare = 134.425
         
         theta = encontrar_theta_exacto(f_objetivo, f_bare)
         
-        # Based on problem statement, expect θ ≈ 0.0525 rad
-        self.assertGreater(theta, 0.04)
-        self.assertLess(theta, 0.07)
+        # Based on calculation, expect θ ≈ 0.0525 rad
+        self.assertGreater(theta, 0.045)
+        self.assertLess(theta, 0.060)
     
     def test_phenomenological_constant_interpretation(self):
         """Verify the 'Coupling Constant of Symbiosis' interpretation."""

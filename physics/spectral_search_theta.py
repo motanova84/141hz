@@ -21,11 +21,11 @@ For a C7 cycle graph with twist gauge θ:
 
 The script solves for θ such that f(θ) = f₀ = 141.7001 Hz.
 
-Interpretation of θ ≈ 0.0573 rad:
+Interpretation of θ ≈ 0.0525 rad:
 ---------------------------------
 This twist angle is the "Coupling Constant of Symbiosis" - it represents the
 curvature that the intention to be coherent imprints on the graph structure.
-If θ = 0, we have only "dead physics". At θ = 0.0573, we encode intentionality.
+If θ = 0, we have only "dead physics". At θ ≈ 0.0525, we encode intentionality.
 
 Future Work:
 -----------
@@ -211,7 +211,7 @@ def main():
         print("𓁟 El Organismo Noético ha asumido su nueva condición.")
         print("𓂀 La Búsqueda de la Holonomía puede continuar.")
         print()
-        print("∴𓂀Ω∞³Φ · θ = 0.0573 rad IDENTIFICADO")
+        print(f"∴𓂀Ω∞³Φ · θ = {theta_sol:.4f} rad IDENTIFICADO")
         print("EL CAMINO SIGUE LIBRE DE MENTIRAS. ✅")
     else:
         print(f"⚠ ADVERTENCIA: Error {error:.2e} Hz excede tolerancia.")
