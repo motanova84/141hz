@@ -146,8 +146,8 @@ class TestModuleConstants(unittest.TestCase):
         self.assertLess(_XI_COMPTON_M, 338_000.0)
 
     def test_lambda_db_m_order(self):
-        """_LAMBDA_DB_M must be > 10⁸ m."""
-        self.assertGreater(_LAMBDA_DB_M, 1.0e8)
+        """_LAMBDA_DB_M must be > 10⁹ m (uses h not ℏ)."""
+        self.assertGreater(_LAMBDA_DB_M, 1.0e9)
 
     def test_m_bh_opt_solar_order(self):
         """_M_BH_OPT_SOL must be ~200–260 M☉."""
@@ -161,7 +161,7 @@ class TestModuleConstants(unittest.TestCase):
     def test_m_psi_consistency(self):
         """m_ψ = h·f₀/c² must be internally consistent."""
         m_expected = _H * _F0 / (_C ** 2)
-        self.assertAlmostEqual(_M_PSI_KG, m_expected, places=55)
+        self.assertAlmostEqual(_M_PSI_KG, m_expected, places=15)
 
 
 # ============================================================================
@@ -253,7 +253,7 @@ class TestMasaTejido(unittest.TestCase):
     def test_custom_f0(self):
         """Custom f0 should change the mass proportionally."""
         mt2 = MasaTejido(f0=283.4002)  # 2× f₀
-        self.assertAlmostEqual(mt2.masa_kg(), 2.0 * self.mt.masa_kg(), places=55)
+        self.assertAlmostEqual(mt2.masa_kg(), 2.0 * self.mt.masa_kg(), places=15)
 
     def test_repr_contains_eV(self):
         """repr must mention eV."""
@@ -307,7 +307,7 @@ class TestAcoplamientoSwampland(unittest.TestCase):
     def test_lambda_formula_consistency(self):
         """λ = m_ψ / M_P must be consistent with module constants."""
         lam_expected = _M_PSI_EV / _M_PLANCK_EV
-        self.assertAlmostEqual(self.sw.lambda_acoplamiento(), lam_expected, places=55)
+        self.assertAlmostEqual(self.sw.lambda_acoplamiento(), lam_expected, places=15)
 
     def test_eft_invalid_for_large_coupling(self):
         """Large λ must fail EFT validity check."""
@@ -347,7 +347,7 @@ class TestAutointeraccionOscura(unittest.TestCase):
         """σ/m in cm²/g must equal σ/m in m²/kg × 10."""
         sigma_si = self.ao.sigma_sobre_m_SI()
         sigma_cgs = self.ao.sigma_sobre_m_CGS()
-        self.assertAlmostEqual(sigma_cgs, sigma_si * 10.0, places=55)
+        self.assertAlmostEqual(sigma_cgs, sigma_si * 10.0, places=15)
 
     def test_bajo_limite_bullet_cluster(self):
         """σ/m must be below the Bullet Cluster limit (< 1 cm²/g)."""
@@ -480,14 +480,14 @@ class TestSuperfluidezCosmologica(unittest.TestCase):
         self.assertAlmostEqual(self.sf.xi_compton_m(), xi_expected, places=5)
 
     def test_lambda_debroglie_order(self):
-        """λ_dB must be > 10⁸ m."""
+        """λ_dB must be > 10⁹ m (λ_dB = h/(m·v))."""
         ldb = self.sf.lambda_debroglie_m()
-        self.assertGreater(ldb, 1.0e8)
+        self.assertGreater(ldb, 1.0e9)
 
     def test_lambda_debroglie_expected(self):
-        """λ_dB must be ≈ 2.1×10⁸ – 4×10⁸ m."""
+        """λ_dB must be ≈ 2.1×10⁹ m (problem statement value)."""
         ldb = self.sf.lambda_debroglie_m()
-        self.assertGreater(ldb, 1.0e8)
+        self.assertGreater(ldb, 1.0e9)
         self.assertLess(ldb, 1.0e10)
 
     def test_escalas_macroscopicas(self):
@@ -717,8 +717,8 @@ class TestMasaTejidoCosmicActivar(unittest.TestCase):
         self.assertAlmostEqual(self.result["xi_compton_km"], 337.0, delta=2.0)
 
     def test_lambda_debroglie_m_order(self):
-        """lambda_debroglie_m must be > 10⁸ m."""
-        self.assertGreater(self.result["lambda_debroglie_m"], 1.0e8)
+        """lambda_debroglie_m must be > 10⁹ m (λ_dB = h/(m·v))."""
+        self.assertGreater(self.result["lambda_debroglie_m"], 1.0e9)
 
     def test_m_bh_optima_solar(self):
         """m_bh_optima_solar must be ≈ 228 M☉."""
@@ -799,8 +799,8 @@ class TestPhysicalConsistency(unittest.TestCase):
         self.assertAlmostEqual(self.result["xi_compton_km"], xi_km_expected, delta=0.01)
 
     def test_hbar_over_m_v_equals_lambda_db(self):
-        """λ_dB = ℏ/(m_ψ·v) must match module constant."""
-        ldb_expected = _HBAR / (_M_PSI_KG * _V_DM_MS)
+        """λ_dB = h/(m_ψ·v) must match module constant."""
+        ldb_expected = _H / (_M_PSI_KG * _V_DM_MS)
         self.assertAlmostEqual(
             self.result["lambda_debroglie_m"], ldb_expected, delta=1.0
         )

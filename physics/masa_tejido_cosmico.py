@@ -88,21 +88,19 @@ _M_PSI_EV: float = _M_PSI_KG * (_C ** 2) / _EV_TO_J
 # λ (acoplamiento Swampland) = m_ψ_eV / M_P_eV
 _LAMBDA_SWAMPLAND: float = _M_PSI_EV / _M_PLANCK_EV
 
-# σ/m = λ²·ℏ³/(m_ψ³·c) en unidades CGS (cm²/g)
-# Fórmula EFT estándar para autointeracción de bosones escalares
+# σ/m = λ²·ℏ³/(m_ψ³·c) in SI (m²/kg), then × 10 → cm²/g
+# Conversion: 1 m²/kg = (100 cm/m)² / (1000 g/kg) = 10 cm²/g
 _SIGMA_SOBRE_M_CGS: float = (
     (_LAMBDA_SWAMPLAND ** 2)
     * (_HBAR ** 3)
     / ((_M_PSI_KG ** 3) * _C)
-    * 1e4  # m²/kg → cm²/g: ×(1e4 m²→cm²)/(1e-3 kg→g) = ×10⁴/10⁻³ = ×10⁷
-    / 1e3   # kg→g factor
-)
+) * 10.0  # m²/kg → cm²/g
 
 # Longitud de coherencia (Compton): ξ = ℏ/(m_ψ·c) = c/(2π·f₀) [m]
 _XI_COMPTON_M: float = _C / (2.0 * math.pi * _F0)
 
-# Longitud de de Broglie: λ_dB = ℏ/(m_ψ·v_DM) [m]
-_LAMBDA_DB_M: float = _HBAR / (_M_PSI_KG * _V_DM_MS)
+# Longitud de de Broglie: λ_dB = h/(m_ψ·v_DM) [m]
+_LAMBDA_DB_M: float = _H / (_M_PSI_KG * _V_DM_MS)
 
 # Masa óptima del agujero negro: M_opt = ℏ·c/(G·m_ψ) [kg]
 _M_BH_OPT_KG: float = _HBAR * _C / (_G * _M_PSI_KG)
@@ -765,7 +763,7 @@ class SuperfluidezCosmologica:
     superfluido a escalas cosmológicas:
 
     - Longitud de coherencia (Compton): ξ = ℏ/(m_ψ·c) = c/(2π·f₀) ≈ 337 km
-    - Longitud de de Broglie (v~300 km/s): λ_dB = ℏ/(m_ψ·v) ≈ 2,1×10⁹ m
+    - Longitud de de Broglie (v~300 km/s): λ_dB = h/(m_ψ·v) ≈ 2,1×10⁹ m
 
     Estas escalas macroscópicas garantizan que el condensado de Bose-Einstein
     sea coherente a escalas galácticas, produciendo el comportamiento
@@ -777,6 +775,8 @@ class SuperfluidezCosmologica:
         Masa del cuanto en kg.
     hbar : float
         Constante de Planck reducida (J·s).
+    h : float
+        Constante de Planck (J·s). Usada para λ_dB = h/(m·v).
     c : float
         Velocidad de la luz (m/s).
     v_dm_ms : float
@@ -785,6 +785,7 @@ class SuperfluidezCosmologica:
 
     m_psi_kg: float = _M_PSI_KG
     hbar: float = _HBAR
+    h: float = _H
     c: float = _C
     v_dm_ms: float = _V_DM_MS
 
@@ -828,7 +829,7 @@ class SuperfluidezCosmologica:
         """
         Retorna la longitud de de Broglie λ_dB en metros.
 
-        Fórmula: λ_dB = ℏ / (m_ψ·v_DM)
+        Fórmula: λ_dB = h / (m_ψ·v_DM)
 
         Retorna
         -------
@@ -841,7 +842,7 @@ class SuperfluidezCosmologica:
         >>> sf.lambda_debroglie_m() > 1e9
         True
         """
-        return self.hbar / (self.m_psi_kg * self.v_dm_ms)
+        return self.h / (self.m_psi_kg * self.v_dm_ms)
 
     def escalas_macroscopicas(self) -> bool:
         """

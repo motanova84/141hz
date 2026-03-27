@@ -192,7 +192,7 @@ def validar_fase3_tres_pilares() -> bool:
     print(f"    Escalas macro:     {macro}")
 
     ok &= _check(335 < xi_km < 339, f"ξ = {xi_km:.1f} km ∈ (335, 339) km")
-    ok &= _check(ldb_m > 1e8, f"λ_dB = {ldb_m:.2e} m > 10⁸ m")
+    ok &= _check(ldb_m > 1e9, f"λ_dB = {ldb_m:.2e} m > 10⁹ m")
     ok &= _check(macro, "Escalas de coherencia macroscópicas verificadas")
 
     return ok
