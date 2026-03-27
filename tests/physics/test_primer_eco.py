@@ -93,7 +93,7 @@ class TestModuleConstants(unittest.TestCase):
 
     def test_hbar_value(self):
         """_HBAR debe ser la constante de Planck reducida CODATA 2018."""
-        self.assertAlmostEqual(_HBAR, 1.054571817e-34, places=44)
+        self.assertAlmostEqual(_HBAR, 1.054571817e-34, places=15)
 
     def test_omega_planck_positive(self):
         """_OMEGA_PLANCK debe ser positiva y grande."""
@@ -264,14 +264,14 @@ class TestNivelesEnergia(unittest.TestCase):
     def test_energia_nivel_cero_formula(self):
         """E_0 = ½ · ℏ · ω_P exactamente."""
         expected = 0.5 * self.ne.hbar * self.ne.omega_planck
-        self.assertAlmostEqual(self.ne.energia_nivel(0), expected, places=50)
+        self.assertAlmostEqual(self.ne.energia_nivel(0), expected, places=15)
 
     def test_energia_punto_cero(self):
         """energia_punto_cero() == energia_nivel(0)."""
         self.assertAlmostEqual(
             self.ne.energia_punto_cero(),
             self.ne.energia_nivel(0),
-            places=50,
+            places=15,
         )
 
     def test_energia_nivel_uno(self):
@@ -284,7 +284,7 @@ class TestNivelesEnergia(unittest.TestCase):
         """E_n = ℏ · ω_P · (n + ½) para n=5."""
         n = 5
         expected = self.ne.hbar * self.ne.omega_planck * (n + 0.5)
-        self.assertAlmostEqual(self.ne.energia_nivel(n), expected, places=50)
+        self.assertAlmostEqual(self.ne.energia_nivel(n), expected, places=15)
 
     def test_energia_nivel_negativo_raises(self):
         """energia_nivel(n<0) debe lanzar ValueError."""

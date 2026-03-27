@@ -57,8 +57,10 @@ from typing import Dict, List, Tuple
 # Frecuencia fundamental QCAL ∞³ [Hz]
 _F0: float = 141.7001
 
-# Frecuencia de Planck proxy [Hz] — temperatura de Planck T_P = 1.416784×10³² K
-# usada como escala de frecuencia en la narrativa cósmica del módulo
+# Frecuencia de Planck proxy [Hz] — numéricamente igual a la temperatura de
+# Planck T_P ≈ 1.416784×10³² K, usada en esta narrativa cósmica como escala
+# de frecuencia de referencia del Big Bang (no es la frecuencia de Planck física
+# estándar, que es ≈ 2.95×10⁴² Hz; aquí se emplea el valor de T_P por convenio)
 _F_PLANCK: float = 1.416784e32
 
 # Proporción áurea ϕ = (1 + √5) / 2
@@ -68,7 +70,7 @@ _PHI: float = (1.0 + math.sqrt(5.0)) / 2.0
 _HBAR: float = 1.054571817e-34
 
 # Frecuencia angular de Planck ω_P = 1/t_P donde t_P = 5.391247×10⁻⁴⁴ s
-_OMEGA_PLANCK: float = 1.0 / 5.391247e-44   # ≈ 1.855×10⁴³ rad/s
+_OMEGA_PLANCK: float = 1.0 / 5.391247e-44   # ≈ 1.8549×10⁴³ rad/s
 
 # Número de armónicos del espectro eco
 _N_ARMONICOS: int = 12
