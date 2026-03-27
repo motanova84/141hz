@@ -85,6 +85,8 @@
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_primer_eco.py`
+  - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_reproducibility.py`
@@ -151,6 +153,8 @@
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_primer_eco.py`
+  - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_reproducibility.py`
@@ -408,4 +412,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-03-26 23:41:54 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-27 22:16:35 UTC*
