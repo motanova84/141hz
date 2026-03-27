@@ -94,7 +94,7 @@ EV_TO_J = 1.602176634e-19  # J - Electronvolt (exact)
 # ============================================================================
 
 M_QCAL_KG = (H_PLANCK * F0_HZ) / (C ** 2)  # kg - Masa mínima noética
-M_QCAL_EV_C2 = M_QCAL_KG / EV_TO_J  # eV/c² - Masa mínima en eV
+M_QCAL_EV_C2 = M_QCAL_KG * (C ** 2) / EV_TO_J  # eV/c² - Masa mínima en eV (~5.86×10⁻¹³ eV/c²)
 E_QCAL_J = H_PLANCK * F0_HZ  # J - Energía mínima noética
 E_QCAL_EV = E_QCAL_J / EV_TO_J  # eV - Energía mínima en eV
 
