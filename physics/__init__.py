@@ -14,6 +14,19 @@ from .paradoja_procesamiento_planck import (
     ResultadoParadoja,
     paradoja_planck_activar,
 )
+from .riemann_adelic_core import (
+    PHI,
+    F0_HZ,
+    PSI_MIN,
+    BERRY_CORRECTION_BASE,
+    BERRY_CORRECTION_EXPONENT,
+    RIEMANN_ZEROS_T,
+    PsiMinResult,
+    RiemannComparison,
+    calcular_psi_min,
+    simulate_h_qcal,
+    comparar_con_riemann,
+)
 
 from .kuramoto_superradiancia import (
     ConstantesKuramoto,
@@ -25,10 +38,12 @@ from .kuramoto_superradiancia import (
     SistemaKuramotoSuperradiancia,
     ResultadoKuramoto,
     kuramoto_superradiancia_activar,
+)
 from .spectral_operator import (
     QCALSpectralOperator,
     QCALSpectralEngine,
     compute_noetic_forcing,
+)
 from .simetria_pt_resonancia import (
     ConstantesPT,
     OperadorNHPT,
@@ -52,6 +67,18 @@ __all__ = [
     "SistemaParadojaPlanck",
     "ResultadoParadoja",
     "paradoja_planck_activar",
+    # riemann_adelic_core
+    "PHI",
+    "F0_HZ",
+    "PSI_MIN",
+    "BERRY_CORRECTION_BASE",
+    "BERRY_CORRECTION_EXPONENT",
+    "RIEMANN_ZEROS_T",
+    "PsiMinResult",
+    "RiemannComparison",
+    "calcular_psi_min",
+    "simulate_h_qcal",
+    "comparar_con_riemann",
     # Kuramoto-Superradiancia
     "ConstantesKuramoto",
     "ModeloKuramoto",
