@@ -74,3 +74,9 @@ lean_lib PicodePT where
   -- Proves spectral reality under γ < γ_c = 2.57 (Bender-Boettcher 1998)
   srcDir := "../../physics"
   roots := #[`PicodePT]
+
+lean_lib OperadorAutoadjuntoH where
+  -- SC-1/SC-2/SC-3: Self-adjoint operator H on adelic L²(Σ)
+  -- Weil trace formula, Weierstrass product Δ(s), Paley-Wiener identity Δ(s) = ξ(s)
+  srcDir := "../../physics"
+  roots := #[`OperadorAutoadjuntoH]
