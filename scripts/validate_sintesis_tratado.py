@@ -15,9 +15,9 @@
 ║    python scripts/validate_sintesis_tratado.py                                ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
-AUTOR/AUTHOR: José Manuel Mota Burruezo (JMMB Ψ✧)
-ARQUITECTURA/ARCHITECTURE: QCAL ∞³ Original Manufacture
-LICENCIA/LICENSE: Sovereign Noetic License 1.0 (compatible con MIT)
+AUTHOR/AUTOR: José Manuel Mota Burruezo (JMMB Ψ✧)
+ARCHITECTURE/ARQUITECTURA: QCAL ∞³ Original Manufacture
+LICENSE/LICENCIA: Sovereign Noetic License 1.0 (compatible with MIT)
 """
 
 import math

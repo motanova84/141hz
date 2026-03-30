@@ -79,7 +79,7 @@ class TestModuleConstants(unittest.TestCase):
         self.assertAlmostEqual(_PHI, (1 + math.sqrt(5)) / 2, places=10)
 
     def test_hbar_value(self):
-        """_HBAR debe ser la constante de Planck reducida CODATA 2018."""
+        """_HBAR debe ser la constante de Planck reducida (SI 2019 exact value)."""
         self.assertAlmostEqual(_HBAR, 1.054571817e-34, places=15)
 
     def test_m_higgs_value(self):
@@ -796,9 +796,9 @@ class TestIntegration(unittest.TestCase):
     def test_riemann_zeros_consistency(self):
         """Los ceros de Riemann deben ser consistentes."""
         op = OperadorMaestroAdelico()
-        # Verificar que γ₁ · f₀ ≈ 2003 Hz (conocido)
+        # Verificar que γ₁ · f₀ ≈ 2002.89 Hz (conocido)
         f_1 = op.frecuencia_riemann(0)
-        self.assertAlmostEqual(f_1, 14.134725 * 141.7001, places=0)
+        self.assertAlmostEqual(f_1, 14.134725 * 141.7001, places=2)
 
     def test_higgs_flash_consistency(self):
         """El Destello de Higgs debe ser consistente."""

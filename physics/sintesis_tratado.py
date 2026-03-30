@@ -71,7 +71,9 @@ _OMEGA_0: float = 2.0 * math.pi * _F0
 # Proporción áurea ϕ = (1 + √5) / 2
 _PHI: float = (1.0 + math.sqrt(5.0)) / 2.0
 
-# Constante de Planck reducida [J·s] (CODATA 2018)
+# Constante de Planck reducida [J·s]
+# Note: The value 1.054571817e-34 J·s is exact per SI 2019 definition (ℏ = h/2π
+# where h = 6.62607015×10⁻³⁴ J·s exactly). This is invariant across CODATA editions.
 _HBAR: float = 1.054571817e-34
 
 # Constante de Planck [J·s] (exacta)
@@ -80,8 +82,12 @@ _H_PLANCK: float = 6.62607015e-34
 # Velocidad de la luz [m/s] (exacta)
 _C: float = 299792458.0
 
-# Electrón-voltio a Julios
+# Electrón-voltio a Julios (exact per SI 2019 definition)
 _EV_TO_J: float = 1.602176634e-19
+
+# Maximum phase magnitude to prevent overflow in exp() calculations.
+# exp(710) ≈ 10^308 which is near float64 maximum; we use 700 for safety margin.
+_MAX_PHASE_MAGNITUDE: float = 700.0
 
 # ============================================================================
 # CONSTANTES DEL BOSÓN DE HIGGS
@@ -811,12 +817,12 @@ class EcuacionSchrodingerRiemann:
         h_eff = lambda_n + (self.mu * h_field**2 - self.g_eff * h_field)
         # Evolución
         phase = -1j * h_eff * t / self.hbar
-        # Limitamos la magnitud para evitar overflow
-        if abs(phase) > 700:
+        # Limitamos la magnitud para evitar overflow in exp() calculations
+        if abs(phase) > _MAX_PHASE_MAGNITUDE:
             phase = complex(0, phase.imag % (2 * math.pi))
         try:
             exp_factor = complex(math.cos(phase.imag), math.sin(phase.imag))
-            exp_factor *= math.exp(min(phase.real, 700))
+            exp_factor *= math.exp(min(phase.real, _MAX_PHASE_MAGNITUDE))
         except OverflowError:
             exp_factor = complex(0, 0)
         return exp_factor * psi_0
