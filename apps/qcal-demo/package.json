@@ -16,6 +16,9 @@
     "react-dom": "^18.3.0",
     "three": "^0.161.0"
   },
+  "overrides": {
+    "flatted": "3.4.2"
+  },
   "devDependencies": {
     "@types/node": "^24.9.1",
     "@types/react": "^18.3.0",
