@@ -18,6 +18,8 @@
   },
   "overrides": {
     "picomatch": "^2.3.2"
+    "flatted": "3.4.2"
+    "picomatch": "4.0.4"
   },
   "devDependencies": {
     "@types/node": "^24.9.1",
