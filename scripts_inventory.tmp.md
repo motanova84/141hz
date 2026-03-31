@@ -45,6 +45,8 @@
 
 - `validate_abundancia_coherente.py`
   - ╔════════════════════════════════════════════════════════════════════════════╗
+- `validate_arquitectura_fisica_topc.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_badges.py`
   - Badge Validation Script
 - `validate_bio_frequency.py`
@@ -59,12 +61,16 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_escalera_jacob_carbono.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_fundamental_framework.py`
   - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_higgs_pc_coupling.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_jerarquia_sintonizaciones.py`
   - ╔═══════════════════════════════════════════════════════════════════════════════╗
 - `validate_logosnoesis_integration.py`
@@ -89,8 +95,14 @@
   - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
+- `validate_qcal_string_core.py`
+  - Validación Completa: QCAL-Strings — Forzado de Modos Kaluza-Klein
+- `validate_quantum_scaling.py`
+  - Validation Script for Escalado Cuántico Topológico (QST∞³)
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
+- `validate_rutas_convergencia.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_soul_coherence.py`
@@ -115,6 +127,8 @@
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
 - `validate_abundancia_coherente.py`
   - ╔════════════════════════════════════════════════════════════════════════════╗
+- `validate_arquitectura_fisica_topc.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_badges.py`
   - Badge Validation Script
 - `validate_bio_frequency.py`
@@ -129,12 +143,16 @@
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_escalera_jacob_carbono.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_fundamental_framework.py`
   - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_higgs_pc_coupling.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_jerarquia_sintonizaciones.py`
   - ╔═══════════════════════════════════════════════════════════════════════════════╗
 - `validate_logosnoesis_integration.py`
@@ -159,8 +177,14 @@
   - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
+- `validate_qcal_string_core.py`
+  - Validación Completa: QCAL-Strings — Forzado de Modos Kaluza-Klein
+- `validate_quantum_scaling.py`
+  - Validation Script for Escalado Cuántico Topológico (QST∞³)
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
+- `validate_rutas_convergencia.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
 - `validate_soul_coherence.py`
@@ -288,6 +312,8 @@
   - Test suite for GW250114 141.7 Hz validation scripts
 - `test_harmonic_validation.py`
   - Test suite for harmonic validation theorem
+- `test_higgs_pc_coupling.py`
+  - Tests for Higgs-PC Coupling Mechanism
 - `test_integracion_pipeline.py`
   - Test de integración para el pipeline completo de validación QCAL.
 - `test_lagrangian_master.py`
@@ -416,4 +442,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-03-29 04:41:15 UTC*
+*Generado automáticamente por el bot de documentación - 2026-03-30 21:45:34 UTC*
