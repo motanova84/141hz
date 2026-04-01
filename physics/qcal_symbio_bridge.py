@@ -79,7 +79,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Tuple
 
 # Import QCAL constants
-from qcal.constants import F0_HZ, HBAR, H_PLANCK, C
+from qcal.constants import F0_HZ, HBAR, C
 
 # ============================================================================
 # CONSTANTES DEL MÓDULO
