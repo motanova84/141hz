@@ -137,7 +137,7 @@ def validacion_fase1_hilbert() -> None:
 
     # 1g. Función theta en γ₁
     theta_g1 = _theta_rs(_ZEROS_20[0])
-    check("θ(γ₁) ≈ −1.72 (negativo, antes de la línea crítica)",
+    check("θ(γ₁) ≈ −1.72 (negativo: N_W(γ₁)=θ/π+1 < 1 antes del primer cero)",
           theta_g1 < 0, f"{theta_g1:.4f}")
 
     print(f"\n  → Ψ_hilbert = {psi_h:.6f}")
@@ -238,7 +238,7 @@ def validacion_fase3_dispersion_weil() -> None:
           theta_g20 > 50.0, f"{theta_g20:.4f}")
 
     theta_g1 = disp.theta(_ZEROS_20[0])
-    check("θ(γ₁) < 0  (antes de la primera resonancia)",
+    check("θ(γ₁) < 0  (N_W(γ₁) < 1, el conteo Weyl no alcanza el primer cero)",
           theta_g1 < 0, f"{theta_g1:.4f}")
 
     theta_77 = disp.theta(77.0)

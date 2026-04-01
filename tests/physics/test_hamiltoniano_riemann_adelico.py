@@ -81,7 +81,7 @@ class TestModuleConstants(unittest.TestCase):
 
     def test_hbar_codata(self):
         """_HBAR debe estar cerca del valor CODATA 1.054571817e-34."""
-        self.assertAlmostEqual(_HBAR, 1.054571817e-34, places=44)
+        self.assertAlmostEqual(_HBAR, 1.054571817e-34, delta=1e-44)
 
     def test_psi_umbral(self):
         """_PSI_UMBRAL debe ser 0.888."""
@@ -222,7 +222,7 @@ class TestConstantesRiemannAdelico(unittest.TestCase):
         self.assertAlmostEqual(self.cte.omega0, 2 * math.pi * 141.7001, places=3)
 
     def test_hbar(self):
-        self.assertAlmostEqual(self.cte.hbar, 1.054571817e-34, places=44)
+        self.assertAlmostEqual(self.cte.hbar, 1.054571817e-34, delta=1e-44)
 
     def test_phi(self):
         self.assertAlmostEqual(self.cte.phi, 1.618033988, places=6)

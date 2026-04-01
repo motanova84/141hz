@@ -127,12 +127,14 @@ def _log_gamma_stirling(z: complex) -> complex:
         Aproximación compleja de ln Γ(z).
     """
     lnz = cmath.log(z)
+    z2 = z * z
+    z3 = z2 * z
     return (
         (z - 0.5) * lnz
         - z
         + 0.5 * math.log(2.0 * math.pi)
         + 1.0 / (12.0 * z)
-        - 1.0 / (360.0 * z ** 3)
+        - 1.0 / (360.0 * z3)
     )
 
 
@@ -438,7 +440,9 @@ class OperadorDilatacion:
         """
         if x <= 0:
             raise ValueError(f"x debe ser positivo, recibido: {x}")
-        return cmath.exp(complex(-0.5, E) * math.log(x))
+        lnx = math.log(x)
+        # x^{-1/2 + iE} = x^{-1/2} · exp(iE · ln x)
+        return x ** (-0.5) * cmath.exp(1j * E * lnx)
 
     # ------------------------------------------------------------------
     def aplicar_H(self, x: float, E: float) -> complex:
@@ -745,7 +749,10 @@ class FormulaTraza:
             δ_W = 1 / ρ(T_mid) = 2π / ln(T_mid / 2π)
 
         Returns:
-            Espaciado teórico de Weyl.
+            Espaciado teórico de Weyl, o ``float('inf')`` si T_mid ≤ 2π
+            (fuera del rango de validez de la fórmula de Weyl).
+            El llamador ``psi_traza()`` verifica este caso con
+            ``math.isinf(d_weyl)`` y retorna 0.0.
         """
         T_mid = 0.5 * (self.zeros[0] + self.zeros[-1])
         rho = self.densidad_weyl(T_mid)
