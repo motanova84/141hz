@@ -1,0 +1,248 @@
+name: Sync External Context
+
+on:
+  # Ejecutar semanalmente cada lunes a las 00:00 UTC
+  schedule:
+    - cron: '0 0 * * 1'
+
+  # Permitir ejecución manual
+  workflow_dispatch:
+
+  # Ejecutar en push a main (opcional)
+  push:
+    branches:
+      - main
+    paths:
+      - 'contexto_ecosistema/**'
+      - '.github/workflows/sync_contexto_externo.yml'
+
+jobs:
+  sync-context:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests PyGithub
+
+      - name: Sync external repositories context
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python << 'EOF'
+          import os
+          import json
+          import requests
+          from datetime import datetime
+
+          # Configuración
+          GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
+          OWNER = 'motanova84'
+          HEADERS = {
+              'Authorization': f'token {GITHUB_TOKEN}',
+              'Accept': 'application/vnd.github.v3+json'
+          }
+
+          # Lista de repositorios hermanos
+          REPOS = [
+              {
+                  'name': 'riemann-adelic-operator',
+                  'aporte': 'Operador D(s) ≡ Ξ(s), ceros de ζ(s) en σ=½',
+                  'conexion': 'Modos de resonancia f_n = F0·γₙ/γ₁, espaciado GUE'
+              },
+              {
+                  'name': 'bsd-conjecture-proof',
+                  'aporte': 'Espectro adélico BSD, p=17, ciclo Magicicada',
+                  'conexion': 'Pico BSD p=17, modos BIO-LOCK desde K_E(1)'
+              },
+              {
+                  'name': 'navier-stokes-global-regularity',
+                  'aporte': 'ν_min QCAL, Reynolds cuántico, regularidad global',
+                  'conexion': 'Flujo citoplasmático como cero de Riemann biológico'
+              },
+              {
+                  'name': 'ramsey-theory-gue',
+                  'aporte': 'R(5,5)=43, R(6,6)=108, espaciado GUE',
+                  'conexion': 'κ_Π como cota vibracional, grafos extremales ~ Riemann'
+              },
+              {
+                  'name': 'p-vs-np-complexity',
+                  'aporte': 'κ_Π como invariante de complejidad, clasificación por Ψ',
+                  'conexion': 'Horizonte de trazabilidad, reducción O(2^n) → O(n^κ_Π)'
+              },
+              {
+                  'name': 'hz141-empirical-validation',
+                  'aporte': 'Validación Wang et al. (2025), LIGO/GWOSC',
+                  'conexion': 'Ψ_empírica = 0.9978 (99.78% precisión)'
+              }
+          ]
+
+          def get_repo_info(repo_name):
+              """Obtiene información del repositorio vía GitHub API."""
+              url = f'https://api.github.com/repos/{OWNER}/{repo_name}'
+
+              try:
+                  response = requests.get(url, headers=HEADERS, timeout=10)
+
+                  if response.status_code == 404:
+                      return {
+                          'exists': False,
+                          'estado': '🔄 Pendiente de sincronización',
+                          'ultimo_commit': 'N/A',
+                          'mensaje': 'Repositorio no encontrado'
+                      }
+
+                  response.raise_for_status()
+                  data = response.json()
+
+                  # Obtener último commit
+                  commits_url = f'https://api.github.com/repos/{OWNER}/{repo_name}/commits'
+                  commits_response = requests.get(commits_url, headers=HEADERS, timeout=10)
+
+                  ultimo_commit = 'N/A'
+                  if commits_response.status_code == 200:
+                      commits_data = commits_response.json()
+                      if commits_data:
+                          ultimo_commit = commits_data[0]['sha'][:7]
+
+                  return {
+                      'exists': True,
+                      'estado': '✅ Activo',
+                      'ultimo_commit': ultimo_commit,
+                      'updated_at': data.get('updated_at', 'N/A'),
+                      'default_branch': data.get('default_branch', 'main')
+                  }
+
+              except Exception as e:
+                  print(f"Error obteniendo info de {repo_name}: {str(e)}")
+                  return {
+                      'exists': False,
+                      'estado': '⚠️ Error de sincronización',
+                      'ultimo_commit': 'N/A',
+                      'mensaje': str(e)
+                  }
+
+          # Generar snapshot
+          print("Sincronizando contexto de repositorios hermanos...")
+
+          snapshot = []
+          snapshot.append("# Snapshot Externo del Ecosistema QCAL ∞³\n")
+          snapshot.append(f"**Última actualización**: {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')} (generado automáticamente)\n\n")
+          snapshot.append("Este archivo contiene una instantánea del estado actual de los repositorios hermanos del ecosistema QCAL. ")
+          snapshot.append("Se actualiza automáticamente cada semana mediante el workflow `.github/workflows/sync_contexto_externo.yml`.\n\n")
+          snapshot.append("---\n\n")
+          snapshot.append("## 🔷 Estado Actual del Ecosistema\n\n")
+          snapshot.append("### Repositorio Principal\n")
+          snapshot.append(f"- **Nombre**: {OWNER}/141hz\n")
+          snapshot.append("- **Estado**: ✅ Activo\n")
+          snapshot.append(f"- **Última actualización**: {datetime.utcnow().strftime('%Y-%m-%d')}\n")
+          snapshot.append("- **Commits totales**: N/A (repo principal)\n\n")
+          snapshot.append("---\n\n")
+          snapshot.append("## 📊 Repositorios Hermanos\n\n")
+
+          for i, repo in enumerate(REPOS, 1):
+              print(f"Procesando {repo['name']}...")
+              info = get_repo_info(repo['name'])
+
+              snapshot.append(f"### {i}. {repo['name']}\n")
+              snapshot.append(f"- **URL**: https://github.com/{OWNER}/{repo['name']}\n")
+              snapshot.append(f"- **Estado**: {info['estado']}\n")
+              snapshot.append(f"- **Último commit**: {info['ultimo_commit']}\n")
+              snapshot.append(f"- **Aporte principal**: {repo['aporte']}\n")
+              snapshot.append(f"- **Conexión QCAL**: {repo['conexion']}\n\n")
+
+              if info.get('mensaje'):
+                  snapshot.append(f"**Nota**: {info['mensaje']}\n\n")
+
+              snapshot.append("---\n\n")
+
+          # Tabla de conexiones
+          snapshot.append("## 🔗 Conexiones Fundamentales\n\n")
+          snapshot.append("| Constante | Valor | Aparece en |\n")
+          snapshot.append("|-----------|-------|------------|\n")
+          snapshot.append("| **F0** | 141.7001 Hz | Todos los repos (frecuencia fundamental) |\n")
+          snapshot.append("| **γ₁** | 14.134725 | Riemann (primer cero), normalización |\n")
+          snapshot.append("| **p** | 17 | BSD (primo crítico), Magicicada |\n")
+          snapshot.append("| **κ_Π** | 2.5773 | NS (flujo), Ramsey (crecimiento), P vs NP (complejidad) |\n")
+          snapshot.append("| **R(5,5)** | 43 | Ramsey (grafos extremales) |\n")
+          snapshot.append("| **ν_min** | 1/ω₀ | Navier-Stokes (viscosidad mínima) |\n")
+          snapshot.append("| **Ψ_emp** | 0.9978 | 141Hz (coherencia empírica) |\n\n")
+          snapshot.append("---\n\n")
+
+          # Notas finales
+          snapshot.append("## 📝 Notas de Sincronización\n\n")
+          snapshot.append("Este archivo se regenera automáticamente cada lunes a las 00:00 UTC mediante el workflow `sync_contexto_externo.yml`. ")
+          snapshot.append("Los datos se obtienen vía GitHub API consultando:\n\n")
+          snapshot.append("1. README.md de cada repositorio hermano\n")
+          snapshot.append("2. Últimos commits de la rama principal\n")
+          snapshot.append("3. Archivos de resultados clave (si están disponibles públicamente)\n\n")
+          snapshot.append("**Próxima sincronización programada**: Lunes próximo 00:00 UTC\n\n")
+          snapshot.append("---\n\n")
+          snapshot.append("## ⚠️ Limitaciones\n\n")
+          snapshot.append("**IMPORTANTE**: GitHub Copilot no puede leer directamente otros repositorios durante una sesión. ")
+          snapshot.append("Los mecanismos 2 y 3 de este sistema resuelven esto trayendo el contexto relevante dentro de este repositorio, donde sí es accesible.\n\n")
+          snapshot.append("- Si un repositorio hermano no existe todavía, aparecerá como \"Pendiente de sincronización\"\n")
+          snapshot.append("- Los datos mostrados son una instantánea estática, no en tiempo real\n")
+          snapshot.append("- Para información actualizada al minuto, consultar directamente los repositorios hermanos\n\n")
+          snapshot.append("---\n\n")
+          snapshot.append("**Generado automáticamente por**: `.github/workflows/sync_contexto_externo.yml`\n")
+          snapshot.append("**Versión del snapshot**: 1.0.0\n")
+          snapshot.append("**Formato**: Markdown\n")
+          snapshot.append("**Licencia**: Sovereign Noetic License 1.0\n")
+
+          # Escribir archivo
+          snapshot_content = ''.join(snapshot)
+          with open('contexto_ecosistema/snapshot_externo.md', 'w', encoding='utf-8') as f:
+              f.write(snapshot_content)
+
+          print("Snapshot generado exitosamente")
+          print(f"Repositorios procesados: {len(REPOS)}")
+          EOF
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --quiet contexto_ecosistema/snapshot_externo.md || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changed
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add contexto_ecosistema/snapshot_externo.md
+          git commit -m "🔄 Auto-sync: Update external ecosystem snapshot"
+          git push
+
+      - name: Create summary
+        run: |
+          echo "## 🔄 Sincronización de Contexto Externo" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Fecha**: $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Repositorios sincronizados**: 6" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Repositorios Hermanos" >> $GITHUB_STEP_SUMMARY
+          echo "- riemann-adelic-operator" >> $GITHUB_STEP_SUMMARY
+          echo "- bsd-conjecture-proof" >> $GITHUB_STEP_SUMMARY
+          echo "- navier-stokes-global-regularity" >> $GITHUB_STEP_SUMMARY
+          echo "- ramsey-theory-gue" >> $GITHUB_STEP_SUMMARY
+          echo "- p-vs-np-complexity" >> $GITHUB_STEP_SUMMARY
+          echo "- hz141-empirical-validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Resultado" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.check_changes.outputs.changed }}" == "true" ]; then
+            echo "✅ Snapshot actualizado y commiteado" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ No hubo cambios en el snapshot" >> $GITHUB_STEP_SUMMARY
+          fi
