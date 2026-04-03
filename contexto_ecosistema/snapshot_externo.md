@@ -116,9 +116,9 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 
 Este archivo se regenera automáticamente cada lunes a las 00:00 UTC mediante el workflow `sync_contexto_externo.yml`. Los datos se obtienen vía GitHub API consultando:
 
-1. README.md de cada repositorio hermano
+1. Metadatos del repositorio (estado, fecha de actualización)
 2. Últimos commits de la rama principal
-3. Archivos de resultados clave (si están disponibles públicamente)
+3. Extracto del README.md de cada repositorio (primeras 5 líneas, si está disponible públicamente)
 
 **Próxima sincronización programada**: Lunes próximo 00:00 UTC
 

@@ -26,7 +26,7 @@ REFERENCIA:
 """
 
 import math
-from qcal.constants import F0_HZ, SNR_GW250114, SIGMA_DETECTION
+from qcal.constants import F0_HZ, SIGMA_DETECTION
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -206,12 +206,19 @@ def verify_universal_spectrum() -> dict:
         >>> print(spectrum['eventos_verificados'])
         12
     """
-    # Eventos donde F0 ha sido detectado
+    # Eventos donde F0 ha sido detectado (11 eventos GWTC-1 en total)
     eventos_gw = [
         'GW150914',  # LIGO, primer evento
         'GW151226',  # Segunda detección
         'GW170814',  # Virgo + LIGO
-        # ... (total 11 eventos GWTC-1)
+        'GW170817',  # BNS merger
+        'GW170104',  # O2
+        'GW170608',  # O2
+        'GW170729',  # O2
+        'GW170809',  # O2
+        'GW170818',  # O2
+        'GW170823',  # O2
+        'GW151012',  # O1/O2
     ]
 
     eventos_tde = [

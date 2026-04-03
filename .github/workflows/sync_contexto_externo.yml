@@ -44,11 +44,14 @@ jobs:
           python << 'EOF'
           import os
           import json
+          import base64
           import requests
           from datetime import datetime
 
           # Configuración
           GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
+          if not GITHUB_TOKEN:
+              raise RuntimeError("GITHUB_TOKEN is not set – cannot call GitHub API")
           OWNER = 'motanova84'
           HEADERS = {
               'Authorization': f'token {GITHUB_TOKEN}',
@@ -96,6 +99,7 @@ jobs:
                           'exists': False,
                           'estado': '🔄 Pendiente de sincronización',
                           'ultimo_commit': 'N/A',
+                          'readme_preview': None,
                           'mensaje': 'Repositorio no encontrado'
                       }
 
@@ -112,12 +116,24 @@ jobs:
                       if commits_data:
                           ultimo_commit = commits_data[0]['sha'][:7]
 
+                  # Obtener primeras líneas del README.md via contents API
+                  readme_preview = None
+                  readme_url = f'https://api.github.com/repos/{OWNER}/{repo_name}/readme'
+                  readme_response = requests.get(readme_url, headers=HEADERS, timeout=10)
+                  if readme_response.status_code == 200:
+                      readme_data = readme_response.json()
+                      raw_content = base64.b64decode(readme_data.get('content', '')).decode('utf-8', errors='replace')
+                      # Keep first 5 non-empty lines as a preview
+                      lines = [l for l in raw_content.splitlines() if l.strip()][:5]
+                      readme_preview = '\n'.join(lines)
+
                   return {
                       'exists': True,
                       'estado': '✅ Activo',
                       'ultimo_commit': ultimo_commit,
                       'updated_at': data.get('updated_at', 'N/A'),
-                      'default_branch': data.get('default_branch', 'main')
+                      'default_branch': data.get('default_branch', 'main'),
+                      'readme_preview': readme_preview,
                   }
 
               except Exception as e:
@@ -126,6 +142,7 @@ jobs:
                       'exists': False,
                       'estado': '⚠️ Error de sincronización',
                       'ultimo_commit': 'N/A',
+                      'readme_preview': None,
                       'mensaje': str(e)
                   }
 
@@ -158,6 +175,9 @@ jobs:
               snapshot.append(f"- **Aporte principal**: {repo['aporte']}\n")
               snapshot.append(f"- **Conexión QCAL**: {repo['conexion']}\n\n")
 
+              if info.get('readme_preview'):
+                  snapshot.append(f"**README (extracto)**:\n```\n{info['readme_preview']}\n```\n\n")
+
               if info.get('mensaje'):
                   snapshot.append(f"**Nota**: {info['mensaje']}\n\n")
 
@@ -180,9 +200,9 @@ jobs:
           snapshot.append("## 📝 Notas de Sincronización\n\n")
           snapshot.append("Este archivo se regenera automáticamente cada lunes a las 00:00 UTC mediante el workflow `sync_contexto_externo.yml`. ")
           snapshot.append("Los datos se obtienen vía GitHub API consultando:\n\n")
-          snapshot.append("1. README.md de cada repositorio hermano\n")
+          snapshot.append("1. Metadatos del repositorio (estado, fecha de actualización)\n")
           snapshot.append("2. Últimos commits de la rama principal\n")
-          snapshot.append("3. Archivos de resultados clave (si están disponibles públicamente)\n\n")
+          snapshot.append("3. Extracto del README.md de cada repositorio (primeras 5 líneas, si está disponible públicamente)\n\n")
           snapshot.append("**Próxima sincronización programada**: Lunes próximo 00:00 UTC\n\n")
           snapshot.append("---\n\n")
           snapshot.append("## ⚠️ Limitaciones\n\n")

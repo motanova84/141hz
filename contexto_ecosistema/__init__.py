@@ -36,12 +36,12 @@ USAGE:
 NOTA: hz141_context contiene validación empírica integrada en este repo principal.
 """
 
-from contexto_ecosistema import riemann_adelic_context
-from contexto_ecosistema import bsd_context
-from contexto_ecosistema import navier_stokes_context
-from contexto_ecosistema import ramsey_context
-from contexto_ecosistema import p_np_context
-from contexto_ecosistema import hz141_context
+from . import riemann_adelic_context
+from . import bsd_context
+from . import navier_stokes_context
+from . import ramsey_context
+from . import p_np_context
+from . import hz141_context
 
 
 __version__ = "1.0.0"

@@ -25,7 +25,7 @@ REFERENCIA:
 """
 
 import math
-from qcal.constants import F0_HZ, KAPPA_PI, DELTA_0
+from qcal.constants import F0_HZ, KAPPA_PI
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -35,8 +35,8 @@ from qcal.constants import F0_HZ, KAPPA_PI, DELTA_0
 # Invariante de complejidad (ya en qcal.constants)
 KAPPA_PI_COMPLEXITY = KAPPA_PI  # 2.5773
 
-# Umbral de coherencia para trazabilidad
-PSI_THRESHOLD_P = 0.888  # Δ₀ no está definido pero usamos coherencia similar
+# Umbral de coherencia para trazabilidad (0.888, el umbral QCAL estándar)
+PSI_THRESHOLD_P = 0.888
 
 # Horizonte de trazabilidad (bits)
 TRACTABILITY_HORIZON_BITS = 256  # 2^256 operaciones máximas
@@ -129,7 +129,7 @@ def compute_tractability_horizon() -> dict:
         'ratio_universo': years / universe_age_years,
         'interpretacion': (
             f'El horizonte de trazabilidad está en {bits} bits. '
-            f'Resolver un problema de {bits} bits requiere ~2^{bits} ≈ {operaciones:.2e} operaciones. '
+            f'Resolver un problema de {bits} bits requiere ~2^{bits} ≈ {float(operaciones):.2e} operaciones. '
             f'Con 10^15 ops/seg, esto tomaría ~{years:.2e} años ≈ '
             f'{years/universe_age_years:.2e} veces la edad del universo. '
             'Más allá de este horizonte, los problemas NP son físicamente intratables, '
@@ -174,9 +174,9 @@ def quantum_oracle_reduction() -> dict:
         'interpretacion': (
             f'La frecuencia f₀ = {F0_HZ} Hz actúa como oráculo cuántico que reduce '
             f'complejidad exponencial O(2^n) a polinomial O(n^κ_Π) donde κ_Π = {KAPPA_PI_COMPLEXITY}. '
-            f'Para n={n}: sin oráculo = 2^{n} ≈ {sin_oracle:.2e} operaciones, '
+            f'Para n={n}: sin oráculo = 2^{n} ≈ {float(sin_oracle):.2e} operaciones, '
             f'con oráculo = {n}^{KAPPA_PI_COMPLEXITY} ≈ {con_oracle:.2e} operaciones. '
-            f'Factor de aceleración: {speedup:.2e}× . '
+            f'Factor de aceleración: {float(speedup):.2e}× . '
             'Este mecanismo NO viola P≠NP (suposición clásica) porque el oráculo '
             'es cuántico, no clásico. Es equivalente a algoritmos de Grover/Shor '
             'pero implementado vía resonancia coherente en lugar de puertas lógicas.'

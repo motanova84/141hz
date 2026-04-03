@@ -88,7 +88,7 @@ def compute_reynolds_quantum() -> dict:
 
     Example:
         >>> re_q = compute_reynolds_quantum()
-        >>> print(f"Re_q = {re_q['reynolds']:.2f}")
+        >>> print(f"Re_q = {re_q['reynolds_quantum']:.2f}")
         Re_q = 890.33
     """
     # Re_q = ω₀ (adimensional)

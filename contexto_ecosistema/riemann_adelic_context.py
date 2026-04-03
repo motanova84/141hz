@@ -44,7 +44,11 @@ RIEMANN_ZEROS = [
 ]
 
 # Verificación: primer cero debe coincidir con RIEMANN_ZERO_1
-assert abs(RIEMANN_ZEROS[0] - RIEMANN_ZERO_1) < 1e-6, "Primer cero no coincide con qcal.constants"
+if abs(RIEMANN_ZEROS[0] - RIEMANN_ZERO_1) >= 1e-6:
+    raise ValueError(
+        f"Primer cero de Riemann ({RIEMANN_ZEROS[0]}) no coincide con "
+        f"RIEMANN_ZERO_1 ({RIEMANN_ZERO_1}) en qcal.constants"
+    )
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -167,24 +171,34 @@ def compute_gue_spacing_statistics() -> dict:
 
     mean_spacing = sum(spacings) / len(spacings)
 
-    # Normalizar espaciados
+    # Normalizar espaciados: sₙ = (γₙ₊₁ - γₙ) / ⟨s⟩
     normalized_spacings = [s / mean_spacing for s in spacings]
 
-    # Para GUE, el espaciado medio normalizado debe ser ≈ 1.0
-    gue_expected = 1.0
-    match_quality = abs(sum(normalized_spacings) / len(normalized_spacings) - gue_expected)
+    # Para GUE (Wigner surmise), la varianza de los espaciados normalizados
+    # debe ser ≈ 4/π - 1 (distribución de Wigner P(s) = π/2·s·exp(-πs²/4))
+    # Para distribución de Poisson (niveles sin correlación), varianza ≈ 1.0.
+    # Un valor de varianza cercano a 4/π - 1 indica buen acuerdo con GUE.
+    gue_variance_expected = 4.0 / math.pi - 1.0  # ≈ 0.273
+    mean_norm = sum(normalized_spacings) / len(normalized_spacings)
+    variance_norm = sum((s - mean_norm) ** 2 for s in normalized_spacings) / len(normalized_spacings)
+    match_quality = abs(variance_norm - gue_variance_expected)
 
     return {
         'spacings': spacings,
         'normalized_spacings': normalized_spacings,
         'mean_spacing': mean_spacing,
-        'gue_expected': gue_expected,
+        'variance_normalized': variance_norm,
+        'gue_variance_expected': gue_variance_expected,
         'match_quality': match_quality,
         'interpretation': (
             f'Los espaciados entre ceros de Riemann exhiben estadísticas GUE. '
-            f'Espaciado medio: {mean_spacing:.4f}. Esto confirma que el espectro '
-            'de ζ(s) tiene la misma estructura que los niveles de energía de '
-            'un sistema cuántico caótico (teoría de matrices aleatorias).'
+            f'Espaciado medio: {mean_spacing:.4f}. '
+            f'Varianza de espaciados normalizados: {variance_norm:.4f} '
+            f'(GUE esperado ≈ {gue_variance_expected:.3f}; Poisson = 1.0). '
+            f'Desviación del GUE ideal: {match_quality:.4f}. '
+            'Esto confirma que el espectro de ζ(s) tiene la misma estructura '
+            'que los niveles de energía de un sistema cuántico caótico '
+            '(teoría de matrices aleatorias).'
         )
     }
 
