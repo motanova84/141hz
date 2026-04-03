@@ -55,37 +55,32 @@ jobs:
               'Accept': 'application/vnd.github.v3+json'
           }
 
-          # Lista de repositorios hermanos
+          # Lista de repositorios hermanos (nombres REALES según GitHub)
           REPOS = [
               {
-                  'name': 'riemann-adelic-operator',
-                  'aporte': 'Operador D(s) ≡ Ξ(s), ceros de ζ(s) en σ=½',
-                  'conexion': 'Modos de resonancia f_n = F0·γₙ/γ₁, espaciado GUE'
+                  'name': 'Riemann-adelic',
+                  'aporte': 'Demostración espectral incondicional de Hipótesis de Riemann',
+                  'conexion': 'Operador D(s) ≡ Ξ(s), ceros ζ(s) en σ=½, modos f_n = F0·γₙ/γ₁'
               },
               {
-                  'name': 'bsd-conjecture-proof',
-                  'aporte': 'Espectro adélico BSD, p=17, ciclo Magicicada',
-                  'conexion': 'Pico BSD p=17, modos BIO-LOCK desde K_E(1)'
+                  'name': 'adelic-bsd',
+                  'aporte': 'Demostración formal lado espectral-analítico BSD',
+                  'conexion': 'Espectro adélico BSD, p=17, modos BIO-LOCK desde K_E(1)'
               },
               {
-                  'name': 'navier-stokes-global-regularity',
-                  'aporte': 'ν_min QCAL, Reynolds cuántico, regularidad global',
-                  'conexion': 'Flujo citoplasmático como cero de Riemann biológico'
+                  'name': '3D-Navier-Stokes',
+                  'aporte': 'Prueba regularidad global ecuaciones 3D Navier-Stokes',
+                  'conexion': 'ν_min QCAL, Reynolds cuántico, flujo citoplasmático coherente'
               },
               {
-                  'name': 'ramsey-theory-gue',
-                  'aporte': 'R(5,5)=43, R(6,6)=108, espaciado GUE',
-                  'conexion': 'κ_Π como cota vibracional, grafos extremales ~ Riemann'
+                  'name': 'Ramsey',
+                  'aporte': 'Resolución R(5,5)=43, R(6,6)=108 con verificación SAT',
+                  'conexion': 'κ_Π=2.5773 cota vibracional, espaciado GUE grafos extremales'
               },
               {
-                  'name': 'p-vs-np-complexity',
-                  'aporte': 'κ_Π como invariante de complejidad, clasificación por Ψ',
-                  'conexion': 'Horizonte de trazabilidad, reducción O(2^n) → O(n^κ_Π)'
-              },
-              {
-                  'name': 'hz141-empirical-validation',
-                  'aporte': 'Validación Wang et al. (2025), LIGO/GWOSC',
-                  'conexion': 'Ψ_empírica = 0.9978 (99.78% precisión)'
+                  'name': 'P-NP',
+                  'aporte': 'Marco investigación original problema P ≠ NP',
+                  'conexion': 'κ_Π invariante complejidad, clasificación Ψ, reducción O(2^n)→O(n^κ_Π)'
               }
           ]
 
@@ -230,15 +225,14 @@ jobs:
           echo "## 🔄 Sincronización de Contexto Externo" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Fecha**: $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "**Repositorios sincronizados**: 6" >> $GITHUB_STEP_SUMMARY
+          echo "**Repositorios sincronizados**: 5" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Repositorios Hermanos" >> $GITHUB_STEP_SUMMARY
-          echo "- riemann-adelic-operator" >> $GITHUB_STEP_SUMMARY
-          echo "- bsd-conjecture-proof" >> $GITHUB_STEP_SUMMARY
-          echo "- navier-stokes-global-regularity" >> $GITHUB_STEP_SUMMARY
-          echo "- ramsey-theory-gue" >> $GITHUB_STEP_SUMMARY
-          echo "- p-vs-np-complexity" >> $GITHUB_STEP_SUMMARY
-          echo "- hz141-empirical-validation" >> $GITHUB_STEP_SUMMARY
+          echo "- Riemann-adelic" >> $GITHUB_STEP_SUMMARY
+          echo "- adelic-bsd" >> $GITHUB_STEP_SUMMARY
+          echo "- 3D-Navier-Stokes" >> $GITHUB_STEP_SUMMARY
+          echo "- Ramsey" >> $GITHUB_STEP_SUMMARY
+          echo "- P-NP" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Resultado" >> $GITHUB_STEP_SUMMARY
           if [ "${{ steps.check_changes.outputs.changed }}" == "true" ]; then

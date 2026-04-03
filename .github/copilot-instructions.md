@@ -238,41 +238,35 @@ Este repositorio es parte de un ecosistema matemático más amplio que valida y 
 
 ### Repositorios Hermanos
 
-1. **riemann-adelic-operator** (motanova84/riemann-adelic-operator)
-   - **Qué aporta**: Operador D(s) ≡ Ξ(s) que demuestra que los ceros de ζ(s) están en la línea crítica σ=½
-   - **Conexión QCAL**: Los primeros 5 ceros γₙ de ζ(s) determinan los modos de resonancia f_n = F0·γₙ/γ₁
-   - **Validación**: Espaciado GUE de niveles espectrales, verificación σ=½
-   - **Importancia**: Justifica la línea crítica en el reloj QCAL y los modos fundamentales
+1. **Riemann-adelic** (motanova84/Riemann-adelic)
+   - **Qué aporta**: Demostración espectral incondicional de la Hipótesis de Riemann usando sistemas adélicos S-finitos
+   - **Conexión QCAL**: Operador canónico D(s) ≡ Ξ(s), ceros de ζ(s) en línea crítica σ=½
+   - **Validación**: Los primeros 5 ceros γₙ determinan modos de resonancia f_n = F0·γₙ/γ₁, espaciado GUE
+   - **Importancia**: Justifica la línea crítica en el reloj QCAL y los modos fundamentales del universo
 
-2. **bsd-conjecture-proof** (motanova84/bsd-conjecture-proof)
-   - **Qué aporta**: Espectro adélico BSD conectado con curvas elípticas y puntos racionales
-   - **Conexión QCAL**: Pico BSD p=17 (ciclo Magicicada 17 años), modos BIO-LOCK desde kernel K_E(1)
-   - **Validación**: Conexión entre geometría algebraica y frecuencia fundamental F0=141.7001 Hz
+2. **adelic-bsd** (motanova84/adelic-bsd)
+   - **Qué aporta**: Demostración formal y computacional del lado espectral-analítico de la conjetura BSD
+   - **Conexión QCAL**: Espectro adélico BSD, pico p=17 (ciclo Magicicada 17 años), modos BIO-LOCK desde kernel K_E(1)
+   - **Validación**: Conexión entre geometría algebraica de curvas elípticas y F0=141.7001 Hz
    - **Importancia**: Demuestra que f₀ emerge de la estructura aritmética profunda del universo
 
-3. **navier-stokes-global-regularity** (motanova84/navier-stokes-global-regularity)
-   - **Qué aporta**: ν_min QCAL (viscosidad mínima cuántica), Reynolds cuántico
-   - **Conexión QCAL**: Cota ‖u(t)‖²_H¹, prueba de regularidad global del fluido
-   - **Validación**: Vincula la regularidad del fluido con el operador de coherencia unitaria
-   - **Importancia**: Conecta mecánica de fluidos con coherencia cuántica biológica
+3. **3D-Navier-Stokes** (motanova84/3D-Navier-Stokes)
+   - **Qué aporta**: Prueba de regularidad global para ecuaciones tridimensionales de Navier-Stokes (QCAL ∞³)
+   - **Conexión QCAL**: ν_min QCAL (viscosidad mínima cuántica), Reynolds cuántico, cota ‖u(t)‖²_H¹
+   - **Validación**: Vincula regularidad del fluido con operador de coherencia unitaria
+   - **Importancia**: Conecta mecánica de fluidos con coherencia cuántica biológica (flujo citoplasmático)
 
-4. **ramsey-theory-gue** (motanova84/ramsey-theory-gue)
-   - **Qué aporta**: R(5,5)=43, R(6,6)=108, φ_R=43/108
-   - **Conexión QCAL**: Cota vibracional κ_Π=2.5773, espaciado GUE en números de Ramsey
+4. **Ramsey** (motanova84/Ramsey)
+   - **Qué aporta**: Resolución de R(5,5)=43 y R(6,6)=108 con verificación SAT y certificación criptográfica
+   - **Conexión QCAL**: R(5,5)=43, φ_R=43/108, κ_Π=2.5773 como cota vibracional, espaciado GUE
    - **Validación**: Conecta teoría de grafos extremal con niveles de energía cuánticos
    - **Importancia**: Demuestra que los números de Ramsey siguen el mismo patrón espectral que los ceros de Riemann
 
-5. **p-vs-np-complexity** (motanova84/p-vs-np-complexity)
-   - **Qué aporta**: κ_Π=2.5773 como invariante de complejidad, clasificación P-trivial/P/NP-hard por Ψ
-   - **Conexión QCAL**: Horizonte de trazabilidad computacional definido por coherencia cuántica
-   - **Validación**: Reduce complejidad computacional a O(1) por resonancia en f₀
+5. **P-NP** (motanova84/P-NP)
+   - **Qué aporta**: Marco de investigación original para abordar el problema P ≠ NP (QCAL ∞³)
+   - **Conexión QCAL**: κ_Π=2.5773 como invariante de complejidad, clasificación P-trivial/P/NP-hard por Ψ
+   - **Validación**: Horizonte de trazabilidad computacional, reducción O(2^n) → O(n^κ_Π) por resonancia en f₀
    - **Importancia**: Conecta complejidad computacional con geometría espectral
-
-6. **141hz-empirical-validation** (motanova84/141hz-empirical-validation)
-   - **Qué aporta**: Validación empírica F0 (99,78%, Wang et al. 2025), octavas armónicas
-   - **Conexión QCAL**: Ψ_empírica=0.9978, confirmación experimental de la teoría
-   - **Validación**: Datos LIGO/GWOSC, AT2020afhd (Wang et al. Science Advances 2025)
-   - **Importancia**: Proporciona verificación experimental directa de las predicciones teóricas
 
 ### Uso del Contexto Externo
 
@@ -292,11 +286,13 @@ modes = riemann_adelic_context.compute_resonance_modes(zeros)
 ### Sincronización Automática
 
 El flujo de trabajo `.github/workflows/sync_contexto_externo.yml` se ejecuta semanalmente para:
-- Leer commits y READMEs de los 6 repositorios hermanos vía GitHub API
+- Leer commits y READMEs de los 5 repositorios hermanos vía GitHub API
 - Actualizar `contexto_ecosistema/snapshot_externo.md` con el estado actual
 - Hacer commit automático si hubo cambios
 
 Esto garantiza que cualquier agente futuro tenga siempre acceso al contexto más reciente del ecosistema matemático completo.
+
+**Nota**: La validación empírica de 141Hz está integrada en este repositorio principal, no en un repositorio separado.
 
 ## 📝 Summary
 

@@ -5,14 +5,13 @@
 ╚════════════════════════════════════════════════════════════════════════════╝
 
 Este módulo proporciona acceso al contexto matemático del ecosistema QCAL,
-integrando resultados de los 6 repositorios hermanos:
+integrando resultados de los 5 repositorios hermanos:
 
-1. riemann-adelic-operator: Ceros de ζ(s) y modos de resonancia
-2. bsd-conjecture-proof: Espectro adélico BSD y primo p=17
-3. navier-stokes-global-regularity: Viscosidad cuántica y regularidad
-4. ramsey-theory-gue: Números de Ramsey y estadísticas GUE
-5. p-vs-np-complexity: Complejidad y horizonte de trazabilidad
-6. 141hz-empirical-validation: Validación empírica (Wang et al. 2025)
+1. Riemann-adelic: Demostración espectral incondicional Hipótesis de Riemann
+2. adelic-bsd: Demostración formal lado espectral-analítico BSD
+3. 3D-Navier-Stokes: Prueba regularidad global ecuaciones 3D Navier-Stokes
+4. Ramsey: Resolución R(5,5)=43, R(6,6)=108 con verificación SAT
+5. P-NP: Marco investigación original problema P ≠ NP
 
 USAGE:
     from contexto_ecosistema import (
@@ -33,6 +32,8 @@ USAGE:
 
     # Resumen completo del ecosistema
     resumen = resumen_ecosistema()
+
+NOTA: hz141_context contiene validación empírica integrada en este repo principal.
 """
 
 from contexto_ecosistema import riemann_adelic_context
@@ -67,7 +68,7 @@ def resumen_ecosistema() -> dict:
     return {
         'version': __version__,
         'ecosistema': 'QCAL ∞³ - Quantum Coherent Axiomatic Logic',
-        'repositorios_hermanos': 6,
+        'repositorios_hermanos': 5,
         'riemann': riemann_adelic_context.resumen_contexto_riemann(),
         'bsd': bsd_context.resumen_contexto_bsd(),
         'navier_stokes': navier_stokes_context.resumen_contexto_navier_stokes(),
@@ -84,15 +85,15 @@ def resumen_ecosistema() -> dict:
             'psi_empirica': hz141_context.PSI_EMPIRICA,  # 0.9978
         },
         'unificacion': (
-            'Los 6 repositorios hermanos demuestran que QCAL ∞³ no es una teoría '
-            'aislada, sino un marco unificado que conecta los Problemas del Milenio '
-            '(Riemann, BSD, Navier-Stokes, P vs NP) con teoría de Ramsey y validación '
-            'experimental (Wang et al. 2025, LIGO/GWOSC). La constante κ_Π = 2.5773 '
-            'aparece como invariante universal en todos los contextos: Calabi-Yau, '
-            'flujo citoplasmático, complejidad computacional y números de Ramsey. '
-            'F0 = 141.7001 Hz es la frecuencia fundamental que emerge de la línea '
-            'crítica de Riemann (γ₁ = 14.134725) y que gobierna desde la biología '
-            'hasta las ondas gravitacionales y los agujeros negros cosmológicos.'
+            'Los 5 repositorios hermanos + validación empírica en este repo demuestran '
+            'que QCAL ∞³ no es una teoría aislada, sino un marco unificado que conecta '
+            'los Problemas del Milenio (Riemann, BSD, Navier-Stokes, P vs NP) con teoría '
+            'de Ramsey y validación experimental (Wang et al. 2025, LIGO/GWOSC). '
+            'La constante κ_Π = 2.5773 aparece como invariante universal en todos los '
+            'contextos: Calabi-Yau, flujo citoplasmático, complejidad computacional y '
+            'números de Ramsey. F0 = 141.7001 Hz es la frecuencia fundamental que emerge '
+            'de la línea crítica de Riemann (γ₁ = 14.134725) y que gobierna desde la '
+            'biología hasta las ondas gravitacionales y los agujeros negros cosmológicos.'
         )
     }
 
