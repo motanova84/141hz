@@ -428,9 +428,9 @@ class TestADNZ_Superconductor(unittest.TestCase):
 
     def test_frecuencia_frohlich_increases_lower_temp(self):
         """A menor temperatura, frecuencia de Fröhlich debe aumentar."""
-        freq_high = self.adn.frecuencia_condensacion_frohlich(320.0)
-        freq_low = self.adn.frecuencia_condensacion_frohlich(300.0)
-        self.assertGreater(freq_low, freq_high)
+        freq_at_higher_temp = self.adn.frecuencia_condensacion_frohlich(320.0)
+        freq_at_lower_temp = self.adn.frecuencia_condensacion_frohlich(300.0)
+        self.assertGreater(freq_at_lower_temp, freq_at_higher_temp)
 
     def test_frecuencia_frohlich_positive(self):
         """frecuencia_condensacion_frohlich debe ser positiva."""

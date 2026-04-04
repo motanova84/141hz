@@ -266,8 +266,8 @@ class MetricaSchwarzchildNoesis:
     def factor_sech(
         self,
         omega: float,
-        omega_0: float = F0,
-        gamma: float = GAMMA_COHERENCIA,
+        omega_0: Optional[float] = None,
+        gamma: Optional[float] = None,
     ) -> float:
         """
         Calcula el factor sech²((ω−ω₀)/γ).
@@ -276,13 +276,15 @@ class MetricaSchwarzchildNoesis:
 
         Args:
             omega:   Frecuencia de evaluación en Hz.
-            omega_0: Frecuencia central (defecto F0).
-            gamma:   Anchura de la resonancia (defecto GAMMA_COHERENCIA).
+            omega_0: Frecuencia central. Si es None usa self.omega_0.
+            gamma:   Anchura de la resonancia. Si es None usa self.gamma.
 
         Returns:
             float: Valor de sech²((ω−ω₀)/γ) ∈ (0, 1].
         """
-        z = (omega - omega_0) / gamma
+        _omega_0 = self.omega_0 if omega_0 is None else omega_0
+        _gamma = self.gamma if gamma is None else gamma
+        z = (omega - _omega_0) / _gamma
         return 1.0 / math.cosh(z) ** 2
 
     def tensor_energia_momento_noetico(self, psi: float, omega: float) -> float:
@@ -442,12 +444,16 @@ class ColapsoP_NP:
         por lo que la distancia es siempre 0.
 
         Args:
-            gamma: Parte imaginaria del cero (no utilizada).
+            gamma: Parte imaginaria del cero (no utilizada bajo la hipótesis
+                   de Riemann, donde Re(s) = ½ exactamente).
 
         Returns:
             float: 0.0 (hipótesis de Riemann verificada).
         """
-        return abs(0.5 - 0.5)
+        # Bajo la hipótesis de Riemann: Re(s) = ½ para todos los ceros.
+        # La distancia a la línea crítica es siempre |½ − ½| = 0.
+        _ = gamma  # parámetro reservado para extensiones futuras
+        return 0.0
 
     def factor_reconocimiento(self, psi: float) -> float:
         """
