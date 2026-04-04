@@ -56,6 +56,17 @@ from .simetria_pt_resonancia import (
     simetria_pt_resonancia_activar,
     simular_resonancia_pt,
 )
+from .particula_coherencia_pc import (
+    ConstantesParticulaCoherencia,
+    OperadorBerryKeatingPC,
+    AcoplamientoHiggsPC,
+    MetricaSchwarzchildNoesis,
+    ADNZ_Superconductor,
+    ColapsoP_NP,
+    CoherenciaParticulaCoherencia,
+    SistemaParticulaCoherencia,
+    particula_coherencia_pc_activar,
+)
 
 __all__ = [
     "ConstantesPlanck",
@@ -103,4 +114,14 @@ __all__ = [
     "ResultadoPT",
     "simetria_pt_resonancia_activar",
     "simular_resonancia_pt",
+    # Partícula de Coherencia (PC) — ∴PCC∞³
+    "ConstantesParticulaCoherencia",
+    "OperadorBerryKeatingPC",
+    "AcoplamientoHiggsPC",
+    "MetricaSchwarzchildNoesis",
+    "ADNZ_Superconductor",
+    "ColapsoP_NP",
+    "CoherenciaParticulaCoherencia",
+    "SistemaParticulaCoherencia",
+    "particula_coherencia_pc_activar",
 ]
