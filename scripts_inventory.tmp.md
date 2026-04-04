@@ -67,8 +67,12 @@
   - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
+- `validate_hamiltoniano_riemann_adelico.py`
+  - Validación Completa: Hamiltoniano Riemann Adélico ∴HRA∞³
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_higgs_coherencia_lagrangiano.py`
+  - Validate Higgs-Coherencia Lagrangiano — ∴HCL∞³
 - `validate_higgs_pc_coupling.py`
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_jerarquia_sintonizaciones.py`
@@ -105,6 +109,8 @@
   - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_sintesis_tratado.py`
+  - ╔═══════════════════════════════════════════════════════════════════════════════╗
 - `validate_soul_coherence.py`
   - 
 - `validate_sovereignty.py`
@@ -149,8 +155,12 @@
   - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
+- `validate_hamiltoniano_riemann_adelico.py`
+  - Validación Completa: Hamiltoniano Riemann Adélico ∴HRA∞³
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_higgs_coherencia_lagrangiano.py`
+  - Validate Higgs-Coherencia Lagrangiano — ∴HCL∞³
 - `validate_higgs_pc_coupling.py`
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_jerarquia_sintonizaciones.py`
@@ -187,6 +197,8 @@
   - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_sintesis_tratado.py`
+  - ╔═══════════════════════════════════════════════════════════════════════════════╗
 - `validate_soul_coherence.py`
   - 
 - `validate_sovereignty.py`
@@ -442,4 +454,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-03-30 21:45:34 UTC*
+*Generado automáticamente por el bot de documentación - 2026-04-04 09:39:51 UTC*
