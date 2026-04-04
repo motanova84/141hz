@@ -11,12 +11,11 @@ BANDA_ANALISIS = (140.0, 143.0)  # Hz - Ventana de búsqueda
 UMBRAL_SNR = 5.0  # Relación señal-ruido mínima
 
 
-def detectar_pico_1417(series_tiempo, fase, fs):
+def detectar_pico_1417(fase, fs):
     """
     Detecta el pico espectral a 141.7001 Hz en datos de relojes atómicos
 
     Args:
-        series_tiempo: array de tiempos (s)
         fase: array de fase del batido (rad)
         fs: frecuencia de muestreo (Hz)
 
@@ -30,10 +29,10 @@ def detectar_pico_1417(series_tiempo, fase, fs):
     ventana = signal.windows.blackmanharris(len(fase_detrended))
     fase_ventaneada = fase_detrended * ventana
 
-    # 3. FFT de banda ancha
+    # 3. FFT real (señal de entrada real-valuada: rfft es suficiente)
     N = len(fase_ventaneada)
-    freqs = fft.fftfreq(N, 1 / fs)
-    espectro = np.abs(fft.fft(fase_ventaneada)) / N
+    freqs = fft.rfftfreq(N, 1 / fs)
+    espectro = np.abs(fft.rfft(fase_ventaneada)) / N
 
     # 4. Buscar en la banda de interés
     idx_banda = np.where((freqs >= BANDA_ANALISIS[0]) &
@@ -44,7 +43,7 @@ def detectar_pico_1417(series_tiempo, fase, fs):
 
     # 5. Encontrar el pico máximo en la banda
     idx_max = idx_banda[np.argmax(espectro[idx_banda])]
-    f_max = abs(freqs[idx_max])
+    f_max = freqs[idx_max]
     amp_max = espectro[idx_max]
 
     # 6. Calcular SNR (ruido como media fuera de la banda)
@@ -53,10 +52,10 @@ def detectar_pico_1417(series_tiempo, fase, fs):
     ruido_medio = np.mean(ruido_banda) if len(ruido_banda) > 0 else 1e-10
     snr = amp_max / (ruido_medio + 1e-12)
 
-    # 7. Verificar coincidencia con frecuencia esperada
-    # Tolerancia de error relativo 1e-6 ≈ 0.14 mHz a 141.7001 Hz
-    error_rel = abs(f_max - F0) / F0
-    coincide = error_rel < 1e-6
+    # 7. Verificar coincidencia con frecuencia esperada usando tolerancia de
+    # medio bin FFT (resolución real alcanzable = fs/N Hz por bin)
+    tolerancia_hz = 0.5 * fs / N
+    coincide = abs(f_max - F0) <= tolerancia_hz
 
     return {
         "detectado": coincide and snr > UMBRAL_SNR,
@@ -116,17 +115,21 @@ def pipeline_extraccion(archivo_Sr, archivo_Al, fs=1000):
     datos_Sr = pd.read_csv(archivo_Sr)
     datos_Al = pd.read_csv(archivo_Al)
 
-    # 2. Sincronizar series temporales
-    t = np.arange(len(datos_Sr)) / fs
+    # 2. Sincronizar series temporales — truncar al mínimo común para garantizar
+    # que ambos arrays tengan la misma longitud antes del análisis cruzado
     fase_Sr = datos_Sr['phase'].values
     fase_Al = datos_Al['phase'].values
+    min_len = min(len(fase_Sr), len(fase_Al))
+    fase_Sr = fase_Sr[:min_len]
+    fase_Al = fase_Al[:min_len]
+    t = np.arange(min_len) / fs
 
     print(f"   • Duración: {len(t)/fs:.1f} s")
     print(f"   • Muestras: {len(t)}")
 
     # 3. Detección de pico en Sr
     print("\n🔍 Analizando reloj de Estroncio...")
-    resultado_Sr = detectar_pico_1417(t, fase_Sr, fs)
+    resultado_Sr = detectar_pico_1417(fase_Sr, fs)
     if resultado_Sr["detectado"]:
         print(f"   ✓ PICO DETECTADO a {resultado_Sr['frecuencia_detectada']:.6f} Hz")
         print(f"     Error: {resultado_Sr['error_mhz']:.3f} mHz")
@@ -136,7 +139,7 @@ def pipeline_extraccion(archivo_Sr, archivo_Al, fs=1000):
 
     # 4. Detección de pico en Al
     print("\n🔍 Analizando reloj de Aluminio...")
-    resultado_Al = detectar_pico_1417(t, fase_Al, fs)
+    resultado_Al = detectar_pico_1417(fase_Al, fs)
     if resultado_Al["detectado"]:
         print(f"   ✓ PICO DETECTADO a {resultado_Al['frecuencia_detectada']:.6f} Hz")
         print(f"     Error: {resultado_Al['error_mhz']:.3f} mHz")
@@ -200,7 +203,7 @@ def generar_datos_simulados(duracion=3600, fs=1000, amplitud=0.01):
 if __name__ == "__main__":
     # Prueba con datos simulados
     t, fase = generar_datos_simulados(duracion=3600, fs=1000)
-    resultado = detectar_pico_1417(t, fase, 1000)
+    resultado = detectar_pico_1417(fase, 1000)
 
     print("Prueba con datos simulados:")
     print(f"  Detectado: {resultado['detectado']}")

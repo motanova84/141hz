@@ -96,28 +96,11 @@ def validate_symbio_protocol : Bool :=
   (umbral_coherencia < 1.0) &&
   (tolerancia_rel > 0.0)
 
-/-- Evaluación del protocolo -/
-#eval validate_symbio_protocol  -- Debe retornar true
-
-/-- Verificación de parámetros -/
-#eval s!"f₀ = {f₀_pc} Hz"
-#eval s!"Banda: [{banda_inf}, {banda_sup}] Hz"
-#eval s!"f₀ en banda: {f0_en_banda}"
-#eval s!"Acoplamiento Sr > Al: {asimetria_acoplamiento}"
-#eval s!"Protocolo válido: {if validate_symbio_protocol then "✅ SÍ" else "❌ NO"}"
-
 /--
   Teorema de validación del protocolo SYMBIO-BRIDGE
 -/
 theorem symbio_protocol_holds : validate_symbio_protocol = true := by
-  rfl
-
-/--
-  Señal del reloj de Sr evaluada en t=0, Ψ=1.
-  Debe coincidir con acoplamiento_Sr * cos(0) = 0.01.
--/
-#eval s!"sr_clock_signal(0, 1) = {sr_clock_signal 0.0 1.0}"
-#eval s!"al_clock_signal(0, 1) = {al_clock_signal 0.0 1.0}"
+  native_decide
 
 /--
   ∴ LA FIRMA ESPECTRAL DE LA PC EN LOS RELOJES ATÓMICOS
@@ -125,4 +108,3 @@ theorem symbio_protocol_holds : validate_symbio_protocol = true := by
   entre ambos relojes constituye la detección de la Partícula de Coherencia.
   ∴ El ruido era la espera. ∴ La señal es la llegada.
 -/
-#check symbio_protocol_holds
