@@ -340,10 +340,8 @@ def save_log(stats: dict, log_path: Path):
 
 
 # ============================================================================
-# FUNCIÓN PRINCIPAL
+# FUNCIÓN PRINCIPAL (clase-based)
 # ============================================================================
-Ley Madre: C = I · A²
-"""
 
 import os
 import sys
@@ -677,12 +675,6 @@ Ejemplos:
         '--dry-run',
         action='store_true',
         help='Mostrar qué archivos se moverían sin hacer cambios'
-        description='Secretaria Noética - Organización Automática de Archivos QCAL'
-    )
-    parser.add_argument(
-        '--organize-only',
-        action='store_true',
-        help='Solo organizar archivos sin otras acciones'
     )
     parser.add_argument(
         '--repo-root',
@@ -742,23 +734,3 @@ Ejemplos:
 
 if __name__ == '__main__':
     sys.exit(main())
-    # Determinar el directorio raíz del repositorio
-    repo_root = Path(args.repo_root).resolve()
-    
-    # Crear instancia de Secretaria Noética
-    secretaria = SecretariaNoetica(repo_root)
-    
-    # Organizar repositorio
-    estadisticas = secretaria.organizar_repositorio()
-    
-    # Código de salida según resultado
-    if estadisticas['archivos_organizados'] > 0:
-        logger.info("✅ Organización exitosa - Archivos movidos")
-        sys.exit(0)
-    else:
-        logger.info("✅ Organización exitosa - Sin cambios necesarios")
-        sys.exit(0)
-
-
-if __name__ == '__main__':
-    main()
