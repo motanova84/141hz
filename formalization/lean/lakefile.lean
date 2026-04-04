@@ -61,6 +61,8 @@ lean_lib TiempoNoetico where
   roots := #[`TiempoNoetico]
 
 lean_lib MicrotubuleCoherence where
+  -- Orch-OR theory: Quantum consciousness in microtubules
+  roots := #[`MicrotubuleCoherence]
   -- Teorema de la Carne Resonante: Biological consciousness at f₀
   roots := #[`MicrotubuleCoherence]
 lean_lib GoldbachCircle where
