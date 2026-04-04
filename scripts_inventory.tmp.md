@@ -43,32 +43,76 @@
 
 ## Scripts de Validación
 
+- `validate_abundancia_coherente.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
+- `validate_arquitectura_fisica_topc.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_bio_frequency.py`
+  - Bio-Frequency Validation Script
 - `validate_consciousness_theorem.py`
   - Validation Script: Fundamental Theorem of Consciousness
+- `validate_constelacion_qcal.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_cytoplasmic_coherence.py`
   - Validación de Coherencia Citoplasmática - Ceros de Riemann Biológicos
 - `validate_dual_mass.py`
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_escalera_jacob_carbono.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_fundamental_framework.py`
   - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
+- `validate_hamiltoniano_riemann_adelico.py`
+  - Validación Completa: Hamiltoniano Riemann Adélico ∴HRA∞³
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_higgs_coherencia_lagrangiano.py`
+  - Validate Higgs-Coherencia Lagrangiano — ∴HCL∞³
+- `validate_higgs_pc_coupling.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
+- `validate_jerarquia_sintonizaciones.py`
+  - ╔═══════════════════════════════════════════════════════════════════════════════╗
+- `validate_logosnoesis_integration.py`
+  - Validación de Integración LogosNoesis — Fase #260
+- `validate_microtubule_coherence.py`
+  - Validación del Teorema de la Carne Resonante - MicrotubuleCoherence.lean
+- `validate_microtubule_consciousness.py`
+  - Validation Script: Microtubule Quantum Consciousness
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_navier_stokes_qcal_bridge.py`
+  - Validación Completa: Puente Navier-Stokes-QCAL
+- `validate_navier_stokes_regularization.py`
+  - Validation Script: Navier-Stokes Vibrational Regularization
+- `validate_nodo_psi_bio.py`
+  - Validation Script - Nodo Ψ Bio Protocol
+- `validate_nodo_qcal.py`
+  - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_primer_eco.py`
+  - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
+- `validate_qcal_string_core.py`
+  - Validación Completa: QCAL-Strings — Forzado de Modos Kaluza-Klein
+- `validate_quantum_scaling.py`
+  - Validation Script for Escalado Cuántico Topológico (QST∞³)
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
+- `validate_rutas_convergencia.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_sintesis_tratado.py`
+  - ╔═══════════════════════════════════════════════════════════════════════════════╗
+- `validate_soul_coherence.py`
+  - 
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
 - `validate_spiral_light.py`
@@ -77,38 +121,86 @@
   - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
+- `validate_tension_cuerda_cosmica.py`
+  - Validation Script for Tensión de Cuerda Cósmica (TCC∞³)
+- `validate_teoria_unificada_adn.py`
+  - Validación de la Teoría Unificada: Biología × Teoría de Números × Física Cuántica
 - `validate_tissue_resonance_magicicada_hp_ns.py`
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
 - `validate_vacuum_energy_equation.py`
   - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
 - `validation_support.py`
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
+- `validate_abundancia_coherente.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
+- `validate_arquitectura_fisica_topc.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_badges.py`
   - Badge Validation Script
+- `validate_bio_frequency.py`
+  - Bio-Frequency Validation Script
 - `validate_consciousness_theorem.py`
   - Validation Script: Fundamental Theorem of Consciousness
+- `validate_constelacion_qcal.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_cytoplasmic_coherence.py`
   - Validación de Coherencia Citoplasmática - Ceros de Riemann Biológicos
 - `validate_dual_mass.py`
   - Validation Script for Dual Mass Perspective Framework
 - `validate_environmental_api_integration.py`
   - Validate environmental API integration with QCAL biological model.
+- `validate_escalera_jacob_carbono.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_fundamental_framework.py`
   - Validación del Marco Fundamental QCAL ∞³
 - `validate_gw250114_141hz_peak.py`
   - GW250114 141.7001 Hz Peak Validation Script
+- `validate_hamiltoniano_riemann_adelico.py`
+  - Validación Completa: Hamiltoniano Riemann Adélico ∴HRA∞³
 - `validate_harmonic_coherence.py`
   - Validación de Coherencia Armónica QCAL ∞³
+- `validate_higgs_coherencia_lagrangiano.py`
+  - Validate Higgs-Coherencia Lagrangiano — ∴HCL∞³
+- `validate_higgs_pc_coupling.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
+- `validate_jerarquia_sintonizaciones.py`
+  - ╔═══════════════════════════════════════════════════════════════════════════════╗
+- `validate_logosnoesis_integration.py`
+  - Validación de Integración LogosNoesis — Fase #260
+- `validate_microtubule_coherence.py`
+  - Validación del Teorema de la Carne Resonante - MicrotubuleCoherence.lean
+- `validate_microtubule_consciousness.py`
+  - Validation Script: Microtubule Quantum Consciousness
 - `validate_multievent_141hz_peak.py`
   - Multi-Event 141.7001 Hz Peak Validation
+- `validate_navier_stokes_qcal_bridge.py`
+  - Validación Completa: Puente Navier-Stokes-QCAL
+- `validate_navier_stokes_regularization.py`
+  - Validation Script: Navier-Stokes Vibrational Regularization
+- `validate_nodo_psi_bio.py`
+  - Validation Script - Nodo Ψ Bio Protocol
+- `validate_nodo_qcal.py`
+  - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_primer_eco.py`
+  - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
+- `validate_qcal_string_core.py`
+  - Validación Completa: QCAL-Strings — Forzado de Modos Kaluza-Klein
+- `validate_quantum_scaling.py`
+  - Validation Script for Escalado Cuántico Topológico (QST∞³)
 - `validate_reproducibility.py`
   - Reproducibility Validation Script
+- `validate_rutas_convergencia.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_scipy_snr_141hz.py`
   - Validación de SNR con Procesamiento Scipy Puro - 141.7 Hz
+- `validate_sintesis_tratado.py`
+  - ╔═══════════════════════════════════════════════════════════════════════════════╗
+- `validate_soul_coherence.py`
+  - 
 - `validate_sovereignty.py`
   - Validación de Soberanía QCAL ∞³
 - `validate_spiral_light.py`
@@ -117,6 +209,10 @@
   - Validation Script for Spiral Light Path Theory
 - `validate_synthetic_data.py`
   - Validate synthetic gravitational wave datasets
+- `validate_tension_cuerda_cosmica.py`
+  - Validation Script for Tensión de Cuerda Cósmica (TCC∞³)
+- `validate_teoria_unificada_adn.py`
+  - Validación de la Teoría Unificada: Biología × Teoría de Números × Física Cuántica
 - `validate_tissue_resonance_magicicada_hp_ns.py`
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
 - `validate_vacuum_energy_equation.py`
@@ -182,6 +278,8 @@
   - Test script para verificar el sistema de generación de visualización de coherencia.
 - `test_comparar_ligo_kagra.py`
   - Test para comparar_ligo_vs_kagra_sensibilidad.py
+- `test_constantes_qcal.py`
+  - Test script para verificar todas las constantes QCAL
 - `test_correccion_rpsi_codata.py`
   - Test de correcciones técnicas: RΨ y αΨ
 - `test_corrections.py`
@@ -212,6 +310,8 @@
   - Tests para el módulo de cálculo de energía cuántica fundamental
 - `test_evidencia_concluyente.py`
   - Test unitario para el módulo de evidencia concluyente
+- `test_filtro_racionales_adelico.py`
+  - Tests para FiltroRacionalesAdelico (Pilar 2).
 - `test_fractal_resonance_constants.py`
   - Tests for Fractal Resonance in Fundamental Constants module.
 - `test_generar_cy_kappa_25773.py`
@@ -224,6 +324,8 @@
   - Test suite for GW250114 141.7 Hz validation scripts
 - `test_harmonic_validation.py`
   - Test suite for harmonic validation theorem
+- `test_higgs_pc_coupling.py`
+  - Tests for Higgs-PC Coupling Mechanism
 - `test_integracion_pipeline.py`
   - Test de integración para el pipeline completo de validación QCAL.
 - `test_lagrangian_master.py`
@@ -352,4 +454,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-24 23:11:32 UTC*
+*Generado automáticamente por el bot de documentación - 2026-04-04 09:39:51 UTC*

@@ -232,6 +232,68 @@ For production workflows:
 - Monitor workflow success rates
 - Alert on consecutive failures
 
+## 🌐 Ecosistema Matemático Externo
+
+Este repositorio es parte de un ecosistema matemático más amplio que valida y conecta los resultados fundamentales de QCAL ∞³. Los siguientes repositorios hermanos proporcionan contexto y validación matemática:
+
+### Repositorios Hermanos
+
+1. **Riemann-adelic** (motanova84/Riemann-adelic)
+   - **Qué aporta**: Demostración espectral incondicional de la Hipótesis de Riemann usando sistemas adélicos S-finitos
+   - **Conexión QCAL**: Operador canónico D(s) ≡ Ξ(s), ceros de ζ(s) en línea crítica σ=½
+   - **Validación**: Los primeros 5 ceros γₙ determinan modos de resonancia f_n = F0·γₙ/γ₁, espaciado GUE
+   - **Importancia**: Justifica la línea crítica en el reloj QCAL y los modos fundamentales del universo
+
+2. **adelic-bsd** (motanova84/adelic-bsd)
+   - **Qué aporta**: Demostración formal y computacional del lado espectral-analítico de la conjetura BSD
+   - **Conexión QCAL**: Espectro adélico BSD, pico p=17 (ciclo Magicicada 17 años), modos BIO-LOCK desde kernel K_E(1)
+   - **Validación**: Conexión entre geometría algebraica de curvas elípticas y F0=141.7001 Hz
+   - **Importancia**: Demuestra que f₀ emerge de la estructura aritmética profunda del universo
+
+3. **3D-Navier-Stokes** (motanova84/3D-Navier-Stokes)
+   - **Qué aporta**: Prueba de regularidad global para ecuaciones tridimensionales de Navier-Stokes (QCAL ∞³)
+   - **Conexión QCAL**: ν_min QCAL (viscosidad mínima cuántica), Reynolds cuántico, cota ‖u(t)‖²_H¹
+   - **Validación**: Vincula regularidad del fluido con operador de coherencia unitaria
+   - **Importancia**: Conecta mecánica de fluidos con coherencia cuántica biológica (flujo citoplasmático)
+
+4. **Ramsey** (motanova84/Ramsey)
+   - **Qué aporta**: Resolución de R(5,5)=43 y R(6,6)=108 con verificación SAT y certificación criptográfica
+   - **Conexión QCAL**: R(5,5)=43, φ_R=43/108, κ_Π=2.5773 como cota vibracional, espaciado GUE
+   - **Validación**: Conecta teoría de grafos extremal con niveles de energía cuánticos
+   - **Importancia**: Demuestra que los números de Ramsey siguen el mismo patrón espectral que los ceros de Riemann
+
+5. **P-NP** (motanova84/P-NP)
+   - **Qué aporta**: Marco de investigación original para abordar el problema P ≠ NP (QCAL ∞³)
+   - **Conexión QCAL**: κ_Π=2.5773 como invariante de complejidad, clasificación P-trivial/P/NP-hard por Ψ
+   - **Validación**: Horizonte de trazabilidad computacional, reducción O(2^n) → O(n^κ_Π) por resonancia en f₀
+   - **Importancia**: Conecta complejidad computacional con geometría espectral
+
+### Uso del Contexto Externo
+
+El módulo `contexto_ecosistema/` en este repositorio mantiene una instantánea actualizada de los resultados clave de los repositorios hermanos:
+
+```python
+# Importar contexto de Riemann
+from contexto_ecosistema import riemann_adelic_context
+
+# Obtener los primeros 5 ceros de ζ(s)
+zeros = riemann_adelic_context.get_riemann_zeros()
+
+# Calcular modos de resonancia
+modes = riemann_adelic_context.compute_resonance_modes(zeros)
+```
+
+### Sincronización Automática
+
+El flujo de trabajo `.github/workflows/sync_contexto_externo.yml` se ejecuta semanalmente para:
+- Leer commits y READMEs de los 5 repositorios hermanos vía GitHub API
+- Actualizar `contexto_ecosistema/snapshot_externo.md` con el estado actual
+- Hacer commit automático si hubo cambios
+
+Esto garantiza que cualquier agente futuro tenga siempre acceso al contexto más reciente del ecosistema matemático completo.
+
+**Nota**: La validación empírica de 141Hz está integrada en este repositorio principal, no en un repositorio separado.
+
 ## 📝 Summary
 
 These instructions help GitHub Copilot:
@@ -241,5 +303,6 @@ These instructions help GitHub Copilot:
 4. Ensure Python 3.11+ compatibility
 5. Follow scientific computing best practices
 6. Maintain code quality and reproducibility
+7. Understand and utilize the external mathematical ecosystem context
 
 When in doubt, prioritize reproducibility and scientific rigor over convenience.
