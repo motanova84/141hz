@@ -4,7 +4,7 @@ Validate Sustrato PC-Vacío — ∴SPC∞³
 ===============================================================================
 
 Valida la implementación del módulo physics.sustrato_pc_vacio contra los
-criterios teóricos del Sustrato: Partícula de Coherencia y Vacío Superfluo:
+criterios teóricos del Sustrato: Partícula de Coherencia y Vacío Superfluido:
 
   Fase 1 — Constantes fundamentales y vacío superfluido
   Fase 2 — Red de Ramsey C₇ y frecuencia heterodina

@@ -102,9 +102,6 @@ _N_NODOS: int = 7
 # Fracción de masa-energía gobernada por la PC (materia + energía oscura)
 _FRACCION_PC: float = 0.95  # 95 %
 
-# Fracción bariónica (Higgs-Modelo Estándar)
-_FRACCION_BARIONICA: float = 0.05  # ~5 %
-
 # Acoplamiento efectivo Higgs-PC g_eff ≈ 0.053
 _G_EFF: float = 0.053
 
@@ -144,11 +141,8 @@ _PHI: float = (1.0 + math.sqrt(5.0)) / 2.0
 # Factor de expansión de sección eficaz por resonancia Dicke
 _EXPANSION_SECCION_EFICAZ: float = 1.0e6  # 6 órdenes de magnitud
 
-# Constante de Chern-Simons (contribución A_CS al ciclo)
-# A_CS contribuye de forma que el total ∮(A_Berry + A_CS)·dℓ = ω₀
-# Por construcción: A_CS_contribution = ω₀ - N·Φ_Berry·<p>
-# donde <p> = suma_primos / N_nodos
-_P_MEDIO: float = sum(_PRIMOS_P) / _N_NODOS  # ≈ 8.286
+# Conversión Joules → GeV: 1 GeV = EV_TO_J × 10⁹ J
+_J_PER_GEV: float = EV_TO_J * 1.0e9  # ≈ 1.602176634e-10 J/GeV
 
 
 # ============================================================================
@@ -712,7 +706,7 @@ class AcoplamientoHiggsPC:
         """
         # ℏω₀ en GeV
         hbar_omega_j = HBAR * _OMEGA_0
-        hbar_omega_gev = hbar_omega_j / 1.602176634e-10  # J → GeV
+        hbar_omega_gev = hbar_omega_j / _J_PER_GEV  # J → GeV
         delta = n * hbar_omega_gev
         return (self.m0_gev - delta, self.m0_gev + delta)
 
@@ -820,14 +814,19 @@ class FotonPaqueteFase:
     # ------------------------------------------------------------------
     def ganancia_superradiante(self) -> float:
         """
-        Calcula la ganancia superradiante (sincronización de Dicke).
+        Calcula la ganancia superradiante de los N_nodos del ciclo C₇.
 
-        Para N nodos emitiendo en fase: G = N² (superradiancia colectiva).
+        Los 7 nodos primos de la red emiten en fase (sincronización de Dicke).
+        La ganancia colectiva es G = N_nodos² = 7² = 49.
+
+        Nota: este N_nodos (=7) es distinto de n_emisores (=7243) que
+        se usa para R_symb. N_nodos es el tamaño del ciclo topológico;
+        n_emisores es la población total de osciladores superradiantes.
 
         Returns
         -------
         float
-            Ganancia superradiante G = N²_nodos.
+            Ganancia superradiante G = N_nodos² = 49.
         """
         return float(_N_NODOS ** 2)
 
@@ -935,7 +934,7 @@ class FirmaEspectral:
             Lista de (n, m_lower_GeV, m_upper_GeV).
         """
         hbar_omega_j = HBAR * 2.0 * math.pi * self.f0_hz
-        hbar_omega_gev = hbar_omega_j / 1.602176634e-10
+        hbar_omega_gev = hbar_omega_j / _J_PER_GEV
         resultado = []
         for n in range(1, n_ordenes + 1):
             delta = n * hbar_omega_gev
@@ -1189,6 +1188,21 @@ class SistemaSustratoPCVacio:
     transmision: FotonPaqueteFase = field(default_factory=FotonPaqueteFase)
     firma: FirmaEspectral = field(default_factory=FirmaEspectral)
     coherencia: CoherenciaSustrato = field(default_factory=CoherenciaSustrato)
+
+    # ------------------------------------------------------------------
+    def __post_init__(self) -> None:
+        """
+        Reconstruye ``coherencia`` con referencias a los subsistemas reales
+        de este orquestador, asegurando que ``psi_global`` y ``certificacion``
+        reflejen exactamente los mismos objetos usados en el resto del payload.
+        """
+        self.coherencia = CoherenciaSustrato(
+            vacio=self.vacio,
+            red=self.red,
+            acoplamiento=self.acoplamiento,
+            transmision=self.transmision,
+            firma=self.firma,
+        )
 
     # ------------------------------------------------------------------
     def activar(self) -> Dict[str, Any]:
