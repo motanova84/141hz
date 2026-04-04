@@ -47,3 +47,6 @@ gwpy>=3.0.0
 
 # EEG analysis dependencies (optional, for real EDF file support)
 # pyedflib>=0.1.30
+
+# Hardware communication dependencies
+pyserial>=3.5
