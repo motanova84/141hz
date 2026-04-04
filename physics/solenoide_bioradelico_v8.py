@@ -15,7 +15,7 @@
 ║    • 2.8000 Hz   (modulación HRV / baja frecuencia)                          ║
 ║    • 21.2000 Hz  (primer beat adélico)                                       ║
 ║    • 53.0000 Hz  (armónico intermedio)                                       ║
-║    • γₙ × f₀ / (2π) ∈ [319, 743] Hz (componentes escaladas)                ║
+║    • γₙ × f₀ / (2π) ∈ [319, 1122] Hz (componentes escaladas)               ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
 AUTOR/AUTHOR: José Manuel Mota Burruezo (JMMB Ψ✧)
@@ -110,7 +110,7 @@ _SELLO: str = "∴SBA∞³"
 
 # Rango de componentes escaladas γₙ × f₀ / (2π) [Hz]
 _F_SCALED_MIN: float = _GAMMAS[0] * _F0 / (2 * math.pi)  # ≈ 319.1 Hz
-_F_SCALED_MAX: float = _GAMMAS[-1] * _F0 / (2 * math.pi)  # ≈ 743.0 Hz → ~1121 Hz
+_F_SCALED_MAX: float = _GAMMAS[-1] * _F0 / (2 * math.pi)  # ≈ 1122 Hz
 
 
 # ============================================================================
