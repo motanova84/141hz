@@ -56,6 +56,17 @@ from .simetria_pt_resonancia import (
     simetria_pt_resonancia_activar,
     simular_resonancia_pt,
 )
+from .certificado_np_coherencia import (
+    ConstantesCertificadoNP,
+    EspacioHilbertAdelico,
+    MetricaCoherenciaEtaPlus,
+    DescomposicionEspectral,
+    CertificadoNP,
+    ProblemasTSP_SAT,
+    CoherenciaCertificado,
+    SistemaCertificadoNP,
+    certificado_np_activar,
+)
 
 __all__ = [
     "ConstantesPlanck",
@@ -103,4 +114,14 @@ __all__ = [
     "ResultadoPT",
     "simetria_pt_resonancia_activar",
     "simular_resonancia_pt",
+    # Certificado NP por Coherencia (P=NP via η⁺)
+    "ConstantesCertificadoNP",
+    "EspacioHilbertAdelico",
+    "MetricaCoherenciaEtaPlus",
+    "DescomposicionEspectral",
+    "CertificadoNP",
+    "ProblemasTSP_SAT",
+    "CoherenciaCertificado",
+    "SistemaCertificadoNP",
+    "certificado_np_activar",
 ]
