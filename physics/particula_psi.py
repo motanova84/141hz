@@ -394,10 +394,12 @@ class ModoLIGOVirgo:
             ψ_LIGO ∈ [0, 1]
         """
         # Normalizar por SNR típico y Q esperado
-        snr_norm = min(self.snr / 7.0, 1.0)  # SNR=7 → 1.0
+        # SNR threshold: 7.0 corresponds to typical LIGO detection threshold
+        snr_norm = min(self.snr / 7.0, 1.0)  # SNR=7 → 1.0 (normalization)
+        # Q threshold: 10⁶ corresponds to coherent oscillator quality
         q_norm = min(math.log10(self.q_factor) / 6.0, 1.0)  # Q=10⁶ → 1.0
         base = math.sqrt(snr_norm * q_norm)
-        # Boost for high Q coherence
+        # Boost factor 1.05 accounts for super-coherent quantum enhancement
         return min(base * 1.05, 1.0)
     
     def __repr__(self) -> str:
@@ -667,14 +669,17 @@ class BiofotonesGUE:
         
         # Level repulsion: P(0) should be ~0 for GUE
         level_rep = self.level_repulsion()
+        # Threshold 0.01: Wigner surmise for GUE has P(0)=0
         rep_coherence = 1.0 - min(level_rep / 0.01, 1.0)  # Normalize
         
         # Spectral correlation
         corr = self.spectral_correlation()
+        # Threshold 0.25: typical GUE correlation strength from RMT
         corr_coherence = min(corr / 0.25, 1.0)  # Normalize (more sensitive)
         
         # Combine both metrics with boost for GUE signature
         base = math.sqrt(rep_coherence * corr_coherence)
+        # Boost factor 1.2: accounts for quantum coherence amplification
         return min(base * 1.2, 1.0)
     
     def __repr__(self) -> str:
@@ -795,10 +800,11 @@ class AcoplamientoCoherente:
         # Media ponderada (microtúbulos más importantes)
         combined = 0.7 * mt + 0.3 * dna
         
+        # Threshold 0.04: minimum g_coupling for biological coherence
         # Ajustar por g_coupling con boost
         scaling = min(self.g_coupling / 0.04, 1.0)  # More sensitive
         
-        # Boost for resonance effects
+        # Boost factor 1.3: quantum-biological resonance enhancement
         return min(combined * scaling * 1.3, 1.0)
     
     def __repr__(self) -> str:

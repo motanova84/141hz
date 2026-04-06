@@ -148,8 +148,8 @@ class TestConstantesParticulaPsi(unittest.TestCase):
         self.assertGreater(wavelength, 1e15)
         self.assertLess(wavelength, 1e20)
 
-    def test_longitud_de_broglie_increases_with_velocity(self):
-        """longitud_de_broglie should increase as velocity increases."""
+    def test_longitud_de_broglie_decreases_with_velocity(self):
+        """longitud_de_broglie should decrease as velocity increases (λ ∝ 1/v)."""
         ldb_slow = self.constants.longitud_de_broglie(v=1.0)
         ldb_fast = self.constants.longitud_de_broglie(v=10.0)
         self.assertGreater(ldb_slow, ldb_fast)
