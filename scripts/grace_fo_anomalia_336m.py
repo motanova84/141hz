@@ -128,21 +128,22 @@ class GRACEFOAnalyzer:
                 # Nombres típicos: 'accelerometer_x', 'acc_x', 'linear_acceleration'
                 if 'accelerometer_x' in f:
                     self.accel_x = f['accelerometer_x'][:self.sample_limit]
-                    self.accel_y = f['accelerometer_y'][:self.sample_limit]
-                    self.accel_z = f['accelerometer_z'][:self.sample_limit]
+                    self.accel_y = f['accelerometer_y'][:self.sample_limit] if 'accelerometer_y' in f else None
+                    self.accel_z = f['accelerometer_z'][:self.sample_limit] if 'accelerometer_z' in f else None
                 elif 'acc_x' in f:
                     self.accel_x = f['acc_x'][:self.sample_limit]
-                    self.accel_y = f['acc_y'][:self.sample_limit]
-                    self.accel_z = f['acc_z'][:self.sample_limit]
+                    self.accel_y = f['acc_y'][:self.sample_limit] if 'acc_y' in f else None
+                    self.accel_z = f['acc_z'][:self.sample_limit] if 'acc_z' in f else None
                 else:
-                    # Fallback: usar primer dataset 3D
+                    # Fallback: usar primer dataset disponible
                     keys = list(f.keys())
-                    if len(keys) >= 3:
-                        self.accel_x = f[keys[0]][:self.sample_limit]
-                        self.accel_y = f[keys[1]][:self.sample_limit]
-                        self.accel_z = f[keys[2]][:self.sample_limit]
+                    data_keys = [k for k in keys if k not in ['time', 'timestamp']]
+                    if len(data_keys) >= 1:
+                        self.accel_x = f[data_keys[0]][:self.sample_limit]
+                        self.accel_y = f[data_keys[1]][:self.sample_limit] if len(data_keys) > 1 else None
+                        self.accel_z = f[data_keys[2]][:self.sample_limit] if len(data_keys) > 2 else None
                         if self.verbose:
-                            print(f"[WARN] Usando datasets: {keys[:3]}")
+                            print(f"[WARN] Usando datasets: {data_keys[:3]}")
                     else:
                         print(f"ERROR: No se encontraron datos de aceleración")
                         return False
@@ -193,8 +194,21 @@ class GRACEFOAnalyzer:
             Serie temporal filtrada
         """
         nyquist = self.fs / 2
+        
+        # Asegurar que frecuencias estén dentro del rango válido
+        lowcut = max(lowcut, 0.001)  # Evitar DC
+        highcut = min(highcut, nyquist * 0.99)  # Evitar Nyquist exacto
+        
         low = lowcut / nyquist
         high = highcut / nyquist
+        
+        # Verificar que 0 < Wn < 1
+        if low >= 1.0 or high >= 1.0 or low <= 0 or high <= 0 or low >= high:
+            if self.verbose:
+                print(f"[WARN] Frecuencias de filtro fuera de rango, usando datos sin filtrar")
+                print(f"      fs={self.fs} Hz, nyquist={nyquist} Hz")
+                print(f"      lowcut={lowcut} Hz, highcut={highcut} Hz")
+            return data
         
         b, a = butter(order, [low, high], btype='band')
         filtered = filtfilt(b, a, data)
