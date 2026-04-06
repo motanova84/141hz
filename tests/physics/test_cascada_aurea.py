@@ -731,6 +731,11 @@ class TestResultadoCascadaAurea(unittest.TestCase):
         self.assertIsInstance(self.resultado.mensaje, str)
         self.assertGreater(len(self.resultado.mensaje), 0)
 
+    def test_mensaje_activo_contiene_sello(self):
+        """Cuando sello_activo=True, mensaje debe contener '∴CA∞³'."""
+        if self.resultado.sello_activo:
+            self.assertIn("∴CA∞³", self.resultado.mensaje)
+
     def test_psi_global_field(self):
         """Campo psi_global debe ser ≥ 0.888."""
         self.assertGreaterEqual(self.resultado.psi_global, 0.888)
