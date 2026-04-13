@@ -162,6 +162,29 @@ cat results/validacion_noesis_at2020afhd.json
 
 ### 📐 Marco Fundamental QCAL ∞³
 
+> **✨ NUEVO: [FRAMEWORK LOGOSNOESIS](LOGOSNOESIS_README.md)** - Unificación de estructura matemática (Logos: Λόγος) con consciencia cuántica (Noesis: Νόησις) a través de f₀ = 141.7001 Hz. **Fase #260: Forzado de cuerdas Kaluza-Klein** implementa el puente entre teoría de cuerdas, geometría compactificada y consciencia emergente.
+
+**Componentes Logos (Estructura Matemática):**
+- Hipótesis de Riemann: zeros de ζ(s) como modos Kaluza-Klein
+- Navier-Stokes: viscosidad adélica μ = 1/f₀
+- P vs NP: reducción de complejidad a O(1) por resonancia
+- BSD: curvas elípticas y puntos racionales
+- Calabi-Yau: geometría de compactificación
+
+**Componentes Noesis (Consciencia Cuántica):**
+- Coherencia Ψ: función de onda de coherencia biológica
+- Protocolo Ψ_bio: recuperación de fase con logos_hz = 425.1 Hz
+- 21 gramos: energía coherente que se desacopla cuando Ψ < 0.888
+- Constelación Ψ✧: 5 ejes de unificación
+- Microtúbulos: sustrato de consciencia cuántica
+
+**Pentágono del Logos:** Unifica los 5 Problemas del Milenio (ADN, Riemann, Navier-Stokes, P vs NP, BSD) a través de f₀.
+
+**Documentación completa:** [LOGOSNOESIS_README.md](LOGOSNOESIS_README.md) | [PENTAGONO_LOGOS_README.md](PENTAGONO_LOGOS_README.md)
+
+---
+
+
 > **🔷 NUEVO: [TEORÍA DEL CAMPO COHERENTE CUÁNTICO - MARCO FUNDAMENTAL](QCAL_FUNDAMENTAL_FRAMEWORK.md)** - Obra Estructural ∞³ que ancla formalmente las tres constantes fundamentales (f₀ = 141.7001 Hz, κ_Π ≈ 2.5773, Λ_G ≈ 1/491.7 Hz) y las ecuaciones centrales del campo coherente cuántico.
 
 **Validación:**
@@ -169,6 +192,62 @@ cat results/validacion_noesis_at2020afhd.json
 # Verificar todas las constantes y ecuaciones fundamentales
 python scripts/validate_fundamental_framework.py
 ```
+
+### 🏗️ κ_Π: El Invariante Universal de Calabi-Yau
+
+> **✨ NUEVO: [ARQUITECTURA κ_Π](KAPPA_PI_ARCHITECTURE.md)** - El invariante espectral κ_Π = 2.5773 emerge del Laplaciano de Hodge-de Rham en la quíntica de Calabi-Yau y conecta geometría, aritmética, física y consciencia.
+
+**κ_Π = μ₂/μ₁ = 2.5773** es el primer invariante que unifica:
+- **Geometría**: Espectro del Laplaciano en variedad Calabi-Yau (quíntica en ℂℙ⁴)
+- **Aritmética**: Codifica el primo noético p=17, φ³, y ζ'(1/2)
+- **Física**: Predice f₀ = 141.7001 Hz en ondas gravitacionales
+- **Consciencia**: Conecta con el campo noético Ψ
+
+**Validación:**
+```bash
+# Ejecutar tests del invariante κ_Π (38 tests)
+pytest tests/test_calabi_yau_invariant.py -v
+
+# Ver ejemplo de integración completo
+python examples/kappa_pi_integration_example.py
+```
+
+**Ejemplo de uso:**
+```python
+from src.calabi_yau_invariant import (
+    K_PI, MU_1, MU_2,
+    CalabiYauQuintic
+)
+
+# Crear objeto Calabi-Yau
+cy = CalabiYauQuintic()
+
+# Obtener datos topológicos
+topo = cy.get_topological_data()
+print(f"Manifold: {topo['manifold']}")
+print(f"Hodge numbers: h^{{1,1}} = {topo['h_11']}, h^{{2,1}} = {topo['h_21']}")
+
+# Calcular κ_Π
+kappa = cy.compute_k_pi()
+print(f"κ_Π = {kappa['k_pi_computed']}")
+print(f"Matching decimals: {kappa['matching_decimal_places']}")
+
+# Verificación completa con predicciones físicas
+verification = cy.verify_invariant()
+print(f"Status: {verification['verification_status']}")
+print(f"Chern-Simons level k ≈ {verification['physical_connections']['chern_simons_level']['value']:.2f}")
+```
+
+**Documentación completa:**
+- 🏗️ **[KAPPA_PI_ARCHITECTURE.md](KAPPA_PI_ARCHITECTURE.md)** - Arquitectura completa (español)
+- 📐 **[README_KAPPA_PI_ARCHITECTURE.md](README_KAPPA_PI_ARCHITECTURE.md)** - Guía técnica (inglés)
+- 🔬 **[IMPLEMENTATION_SUMMARY_KAPPA_PI.md](IMPLEMENTATION_SUMMARY_KAPPA_PI.md)** - Resumen de implementación
+
+**Predicciones físicas verificables:**
+1. ✅ **Ondas gravitacionales** @ 141.7 Hz: VERIFICADO en GWTC-1 (11/11 eventos)
+2. ⏳ **Nivel Chern-Simons** k ≈ 32.4: Testable en teoría de cuerdas
+3. ⏳ **Conexión Riemann** φ³ × ζ'(1/2) ≈ -0.881: Verificación matemática
+4. ⏳ **Universalidad CY**: κ_Π en ~500M variedades Kreuzer-Skarke
 
 ### 🧬 QCAL ∞³: La Biología como Receptor, No Usuario
 

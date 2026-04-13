@@ -34,7 +34,7 @@ setup(
         "scipy>=1.7.0",
     ],
     extras_require={
-        "dev": ["pytest>=7.0", "black>=22.0", "flake8>=4.0"],
+        "dev": ["pytest>=7.0", "pytest-cov>=4.0", "black>=22.0", "flake8>=4.0"],
         "api": ["fastapi>=0.100.0", "uvicorn>=0.23.0"],
     },
     entry_points={

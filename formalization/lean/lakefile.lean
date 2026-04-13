@@ -59,3 +59,26 @@ lean_lib EmergentTime where
 lean_lib TiempoNoetico where
   -- RAM-XVIII: Temporal emergence as noetic structure
   roots := #[`TiempoNoetico]
+
+lean_lib MicrotubuleCoherence where
+  -- Orch-OR theory: Quantum consciousness in microtubules
+  roots := #[`MicrotubuleCoherence]
+  -- Teorema de la Carne Resonante: Biological consciousness at f₀
+  roots := #[`MicrotubuleCoherence]
+lean_lib GoldbachCircle where
+  -- Hardy-Littlewood Circle Method: Large Sieve + Vaughan + Minor Arcs
+  -- Main theorem: goldbach_existence_structural
+  roots := #[`GoldbachCircle]
+  globs := #[.submodules `GoldbachCircle]
+
+lean_lib PicodePT where
+  -- πCODE PT Non-Hermitian Operator: AdS/CFT + Riemann stabilizer
+  -- Proves spectral reality under γ < γ_c = 2.57 (Bender-Boettcher 1998)
+  srcDir := "../../physics"
+  roots := #[`PicodePT]
+
+lean_lib OperadorAutoadjuntoH where
+  -- SC-1/SC-2/SC-3: Self-adjoint operator H on adelic L²(Σ)
+  -- Weil trace formula, Weierstrass product Δ(s), Paley-Wiener identity Δ(s) = ξ(s)
+  srcDir := "../../physics"
+  roots := #[`OperadorAutoadjuntoH]

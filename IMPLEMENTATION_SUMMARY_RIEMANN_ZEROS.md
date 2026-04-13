@@ -6,8 +6,9 @@ Successfully implemented a comprehensive validation script for Riemann zeta func
 
 ## Files Added
 
-### 1. `validate_riemann_zeros.py` (Main Script)
+### 1. `core/validate_riemann_zeros.py` (Main Script)
 - **Lines of Code**: 457
+- **Location**: `core/validate_riemann_zeros.py`
 - **Features**:
   - High-precision constants (φ, γ, π) with 100 decimal places
   - Riemann zeros computation using 100 known zeros + asymptotic approximations
@@ -18,13 +19,14 @@ Successfully implemented a comprehensive validation script for Riemann zeta func
   - JSON output with comprehensive results
   - Command-line interface with argparse
 
-### 2. `test_riemann_zeros.py` (Test Suite)
+### 2. `tests/test_riemann_zeros.py` (Test Suite)
 - **Lines of Code**: 257
+- **Location**: `tests/test_riemann_zeros.py`
 - **Test Coverage**:
   - 13 unit tests covering all functions
   - 100% of critical functions tested
   - Integration tests for complete validation
-  - All tests passing
+  - All tests passing ✅
 
 ### 3. `RIEMANN_ZEROS_README.md` (Documentation)
 - **Content**:
@@ -94,22 +96,27 @@ Linting: No critical errors ✓
 
 ### Basic Validation
 ```bash
-python3 validate_riemann_zeros.py --precision 50
+python3 core/validate_riemann_zeros.py --precision 50
 ```
 
 ### Find Optimal Alpha
 ```bash
-python3 validate_riemann_zeros.py --find-alpha --precision 50
+python3 core/validate_riemann_zeros.py --find-alpha --precision 50
 ```
 
 ### Custom Parameters
 ```bash
-python3 validate_riemann_zeros.py --precision 100 --alpha 0.006695 --T 3967.986
+python3 core/validate_riemann_zeros.py --precision 100 --alpha 0.006695 --T 3967.986
 ```
 
 ### Save Results
 ```bash
-python3 validate_riemann_zeros.py --precision 50 --output results/my_validation.json
+python3 core/validate_riemann_zeros.py --precision 50 --output results/my_validation.json
+```
+
+### Run Tests
+```bash
+python3 tests/test_riemann_zeros.py -v
 ```
 
 ## Output Structure

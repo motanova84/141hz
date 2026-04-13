@@ -12,8 +12,9 @@ import sys
 import unittest
 from pathlib import Path
 
-# Add parent directory to path to import the module
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add core directory to path to import the module
+core_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'core')
+sys.path.insert(0, core_dir)
 import validate_riemann_zeros as vrz
 
 # Import mpmath

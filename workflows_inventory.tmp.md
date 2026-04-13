@@ -463,6 +463,14 @@
 - Trigger: schedule (`0 14 * * 6`)
 - Trigger: manual (workflow_dispatch)
 
+### Sync External Context
+
+**Archivo:** `sync_contexto_externo.yml`
+
+- Trigger: push
+- Trigger: schedule (`0 0 * * 1`)
+- Trigger: manual (workflow_dispatch)
+
 ### Tests - Python Matrix
 
 **Archivo:** `tests.yml`
@@ -512,4 +520,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-02-15 14:28:59 UTC*
+*Generado automáticamente por el bot de documentación - 2026-04-13 19:07:46 UTC*
