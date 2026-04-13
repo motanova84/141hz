@@ -164,7 +164,7 @@ jobs:
         uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: complete-3-pillars-py3.11-${{ github.run_number }}
+          name: complete-3-pillars-py${{ matrix.python-version }}-${{ github.run_number }}
           path: |
             output/
             results/
@@ -235,7 +235,7 @@ jobs:
         uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: discovery-standards-py3.11-${{ github.run_number }}
+          name: discovery-standards-py${{ matrix.python-version }}-${{ github.run_number }}
           path: |
             results/
             *.json
@@ -305,7 +305,7 @@ jobs:
         uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: falsification-py3.11-${{ github.run_number }}
+          name: falsification-py${{ matrix.python-version }}-${{ github.run_number }}
           path: |
             results/
             *.json
@@ -375,7 +375,7 @@ jobs:
         uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: experimental-py3.11-${{ github.run_number }}
+          name: experimental-py${{ matrix.python-version }}-${{ github.run_number }}
           path: |
             results/
             diagrams/
@@ -433,7 +433,7 @@ jobs:
       - name: Run Ψ-Q1 Protocol Tests
         id: run_tests
         run: |
-          python -m pytest test_q1.py -v --tb=short
+          python -m pytest tests/test_q1.py -v --tb=short
         env:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
@@ -466,7 +466,7 @@ jobs:
         uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: psi-q1-py3.11-${{ github.run_number }}
+          name: psi-q1-py${{ matrix.python-version }}-${{ github.run_number }}
           path: |
             test_q1_output.txt
             results/validation_v5.json
