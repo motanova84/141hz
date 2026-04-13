@@ -133,6 +133,8 @@
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
 - `validate_vacuum_energy_equation.py`
   - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
+- `validate_yukawa_gravedad_336m.py`
+  - Validación del módulo physics.yukawa_gravedad_336m
 - `validation_support.py`
   - 🔧 Validation Support Functions - Improved Convergence & Normalization
 - `validate_abundancia_coherente.py`
@@ -225,6 +227,8 @@
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
 - `validate_vacuum_energy_equation.py`
   - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
+- `validate_yukawa_gravedad_336m.py`
+  - Validación del módulo physics.yukawa_gravedad_336m
 
 ## Scripts de Test
 
@@ -464,4 +468,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-04-04 16:49:10 UTC*
+*Generado automáticamente por el bot de documentación - 2026-04-12 04:49:52 UTC*
