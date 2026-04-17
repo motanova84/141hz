@@ -3,6 +3,7 @@
 """Servidor MCP de prueba - network.checkResonance (Nivel B)."""
 
 import json
+import os
 import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
@@ -40,12 +41,19 @@ class MCPTestHandler(BaseHTTPRequestHandler):
 
         if request.get("method") == "network.checkResonance":
             node = request.get("params", {}).get("node")
-            result = check_node_resonance(node)
-            response = {
-                "jsonrpc": "2.0",
-                "id": request.get("id"),
-                "result": result,
-            }
+            try:
+                result = check_node_resonance(node)
+                response = {
+                    "jsonrpc": "2.0",
+                    "id": request.get("id"),
+                    "result": result,
+                }
+            except Exception:
+                response = {
+                    "jsonrpc": "2.0",
+                    "id": request.get("id"),
+                    "error": {"code": -32603, "message": "Internal error"},
+                }
         else:
             response = {
                 "jsonrpc": "2.0",
@@ -60,7 +68,7 @@ class MCPTestHandler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    port = 8506
+    port = int(os.getenv("MCP_TEST_PORT", "8506"))
     server = HTTPServer(("127.0.0.1", port), MCPTestHandler)
     print(f"🚀 MCP Test Server escuchando en http://127.0.0.1:{port}/jsonrpc")
     print("Método expuesto: network.checkResonance")

@@ -7,7 +7,17 @@ import os
 import pandas as pd
 import pytest
 
-from mcp_network.resonance import F0_REFERENCE, PSI_GATE, check_node_resonance
+from mcp_network.resonance import (
+    F0_REFERENCE,
+    LATENCY_WEIGHT,
+    MAX_LATENCY_MS,
+    PHASE_WEIGHT,
+    PSI_GATE,
+    check_node_resonance,
+)
+
+MS_PER_SECOND = 1000.0
+PHASE_WINDOW_SECONDS = 60.0
 
 
 pytestmark = pytest.mark.skipif(
@@ -26,8 +36,8 @@ class TestCheckNodeResonanceRealObservers:
     def test_biologia_cuantica_phase_calculation(self):
         df = pd.read_csv("tests/data/hrv_eeg_biologia_cuantica.csv")
         rr_mean = df["rr_interval_ms"].mean()
-        expected_rr = 1000 / (F0_REFERENCE / 2)
-        expected_phase = 2 * math.pi * ((rr_mean - expected_rr) / 1000) * 60.0
+        expected_rr = MS_PER_SECOND / (F0_REFERENCE / 2)
+        expected_phase = 2 * math.pi * ((rr_mean - expected_rr) / MS_PER_SECOND) * PHASE_WINDOW_SECONDS
 
         health = check_node_resonance("biologia-cuantica-noesica")
         assert health["phase_offset_rad"] == pytest.approx(expected_phase, abs=1e-12)
@@ -51,6 +61,13 @@ class TestCheckNodeResonanceRealObservers:
     def test_biologia_cuantica_resonance_coherent(self):
         health = check_node_resonance("biologia-cuantica-noesica")
         assert health["resonance"] == "coherent"
+
+    def test_biologia_cuantica_psi_formula(self):
+        health = check_node_resonance("biologia-cuantica-noesica")
+        phase_score = max(0.0, 1.0 - abs(health["phase_offset_rad"]) / math.pi)
+        latency_score = max(0.0, 1.0 - max(health["latency_ms"], 0.0) / MAX_LATENCY_MS)
+        expected = max(0.0, min(1.0, (PHASE_WEIGHT * phase_score) + (LATENCY_WEIGHT * latency_score)))
+        assert health["psi"] == pytest.approx(expected, abs=1e-6)
 
     def test_interferometro_psi_above_gate(self):
         health = check_node_resonance("interferometro-noesico")
@@ -84,3 +101,10 @@ class TestCheckNodeResonanceRealObservers:
     def test_interferometro_resonance_coherent(self):
         health = check_node_resonance("interferometro-noesico")
         assert health["resonance"] == "coherent"
+
+    def test_interferometro_psi_formula(self):
+        health = check_node_resonance("interferometro-noesico")
+        phase_score = max(0.0, 1.0 - abs(health["phase_offset_rad"]) / math.pi)
+        latency_score = max(0.0, 1.0 - max(health["latency_ms"], 0.0) / MAX_LATENCY_MS)
+        expected = max(0.0, min(1.0, (PHASE_WEIGHT * phase_score) + (LATENCY_WEIGHT * latency_score)))
+        assert health["psi"] == pytest.approx(expected, abs=1e-6)

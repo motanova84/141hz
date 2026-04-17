@@ -12,11 +12,35 @@ import pandas as pd
 
 F0_REFERENCE = 141.7001
 PSI_GATE = 0.888
+MS_PER_SECOND = 1000.0
+PHASE_WINDOW_SECONDS = 60.0
+MAX_LATENCY_MS = 250.0
+PHASE_WEIGHT = 0.7
+LATENCY_WEIGHT = 0.3
+
+BASELINE_BIO_LATENCY_MS = 18.0
+BASELINE_BIO_LATENCY_NOISE_STD = 2.0
+BASELINE_BIO_PHASE_OFFSET = 0.04
+
+BASELINE_VACUO_LATENCY_MS = 10.0
+BASELINE_VACUO_LATENCY_NOISE_STD = 2.0
+BASELINE_VACUO_PHASE_OFFSET = 0.01
+
+BIOLOGIA_FALLBACK_LATENCY_MS = 15.0
+BIOLOGIA_FALLBACK_PHASE_OFFSET = 0.012
+BIOLOGIA_BASE_LATENCY_MS = 25.0
+BIOLOGIA_LATENCY_NOISE_STD = 3.0
+
+INTERFEROMETER_FALLBACK_LATENCY_MS = 9.5
+INTERFEROMETER_FALLBACK_PHASE_OFFSET = 0.005
+INTERFEROMETER_BASE_LATENCY_MS = 8.0
+INTERFEROMETER_LATENCY_NOISE_STD = 2.0
 
 ObserverPayload = Tuple[float, float, bool, bool]
 ObserverFn = Callable[[], ObserverPayload]
 
 _REAL_OBSERVERS: Dict[str, ObserverFn] = {}
+_RNG = np.random.default_rng(1417001)
 _HARMONIC_FACTORS: Dict[str, float] = {
     "biosensores-cuanticos": 1.0,
     "vacuo-noesico": 1.0,
@@ -37,19 +61,34 @@ def _data_path(filename: str) -> Path:
 
 def _psi_from_measurements(latency_ms: float, phase_offset: float) -> float:
     phase_score = max(0.0, 1.0 - abs(phase_offset) / math.pi)
-    latency_score = max(0.0, 1.0 - max(latency_ms, 0.0) / 250.0)
-    psi = (0.7 * phase_score) + (0.3 * latency_score)
+    latency_score = max(0.0, 1.0 - max(latency_ms, 0.0) / MAX_LATENCY_MS)
+    psi = (PHASE_WEIGHT * phase_score) + (LATENCY_WEIGHT * latency_score)
     return max(0.0, min(1.0, psi))
+
+
+def _normal(mean: float, std_dev: float) -> float:
+    """Deterministic normal sample for reproducible test behavior."""
+    return float(_RNG.normal(mean, std_dev))
 
 
 def load_biosensores_cuanticos() -> ObserverPayload:
     """Baseline observer for existing biological channel."""
-    return 18.0 + np.random.normal(0, 2), 0.04, True, True
+    return (
+        _normal(BASELINE_BIO_LATENCY_MS, BASELINE_BIO_LATENCY_NOISE_STD),
+        BASELINE_BIO_PHASE_OFFSET,
+        True,
+        True,
+    )
 
 
 def load_vacuo_noesico() -> ObserverPayload:
     """Baseline observer for existing interferometric-vacuum channel."""
-    return 10.0 + np.random.normal(0, 2), 0.01, True, True
+    return (
+        _normal(BASELINE_VACUO_LATENCY_MS, BASELINE_VACUO_LATENCY_NOISE_STD),
+        BASELINE_VACUO_PHASE_OFFSET,
+        True,
+        True,
+    )
 
 
 def load_hrv_eeg_biologia() -> ObserverPayload:
@@ -59,15 +98,15 @@ def load_hrv_eeg_biologia() -> ObserverPayload:
     """
     path = _data_path("hrv_eeg_biologia_cuantica.csv")
     if not os.path.exists(path):
-        return 15.0, 0.012, True, True
+        return BIOLOGIA_FALLBACK_LATENCY_MS, BIOLOGIA_FALLBACK_PHASE_OFFSET, True, True
 
     df = pd.read_csv(path)
     rr_mean = df["rr_interval_ms"].mean()
-    expected_rr = 1000 / (F0_REFERENCE / 2)
+    expected_rr = MS_PER_SECOND / (F0_REFERENCE / 2)
     delta_rr = rr_mean - expected_rr
-    phase_offset = 2 * math.pi * (delta_rr / 1000) * 60.0
+    phase_offset = 2 * math.pi * (delta_rr / MS_PER_SECOND) * PHASE_WINDOW_SECONDS
 
-    latency_ms = 25.0 + np.random.normal(0, 3)
+    latency_ms = _normal(BIOLOGIA_BASE_LATENCY_MS, BIOLOGIA_LATENCY_NOISE_STD)
     return latency_ms, phase_offset, True, True
 
 
@@ -78,7 +117,7 @@ def load_magnetometer_interferometer() -> ObserverPayload:
     """
     path = _data_path("magnetometer_interferometer.csv")
     if not os.path.exists(path):
-        return 9.5, 0.005, True, True
+        return INTERFEROMETER_FALLBACK_LATENCY_MS, INTERFEROMETER_FALLBACK_PHASE_OFFSET, True, True
 
     df = pd.read_csv(path)
     peak_freq = df["frequency_hz"].mean()
@@ -86,7 +125,7 @@ def load_magnetometer_interferometer() -> ObserverPayload:
     delta_f = peak_freq - target
     phase_offset = 2 * math.pi * delta_f / target
 
-    latency_ms = 8.0 + np.random.normal(0, 2)
+    latency_ms = _normal(INTERFEROMETER_BASE_LATENCY_MS, INTERFEROMETER_LATENCY_NOISE_STD)
     return latency_ms, phase_offset, True, True
 
 
