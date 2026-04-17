@@ -5,6 +5,8 @@ __pycache__/
 
 # Data files
 data/
+!tests/data/
+!tests/data/*.csv
 *.hdf5
 # But allow Calabi-Yau varieties data
 !data/calabi_yau_varieties.csv
