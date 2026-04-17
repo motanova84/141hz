@@ -1351,7 +1351,7 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > ### Integración UI (Streamlit, puerto 8505)
 >
 > ```bash
-> streamlit run dashboard/app.py --server.port 8505
+> streamlit run app.py --server.port 8505
 > ```
 >
 > Alterna `QCAL_REAL_TESTS` desde el checkbox del sidebar y visualiza evolución temporal de Ψ con `line_chart`.

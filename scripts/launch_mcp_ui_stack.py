@@ -19,7 +19,7 @@ def main() -> int:
     ui_cmd = [
         "streamlit",
         "run",
-        str(repo_root / "dashboard" / "app.py"),
+        str(repo_root / "app.py"),
         "--server.port",
         "8505",
         "--server.address",

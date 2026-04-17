@@ -4,8 +4,13 @@
 from __future__ import annotations
 
 import json
+import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
 from typing import Any, Dict
+
+# Ensure repository root is importable when script is run directly.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from mcp_network.resonance import check_node_resonance
 

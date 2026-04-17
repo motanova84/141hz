@@ -70,7 +70,7 @@ Este certificado forma parte del marco QCAL ∞³ (Quantum Consciousness Amplifi
 
 - ✅ Servidor MCP de prueba activo en `http://127.0.0.1:8506/jsonrpc`
 - ✅ Método JSON-RPC expuesto: `network.checkResonance`
-- ✅ Dashboard Streamlit (`dashboard/app.py`) listo para consumir resonancia por MCP
+- ✅ Dashboard Streamlit (`app.py`) listo para consumir resonancia por MCP
 - ✅ Modo real con `QCAL_REAL_TESTS=1` y 4 observadores físicos (`REAL_OBSERVERS`)
 - ✅ Nivel C preparado: `scripts/experimento_nivel_c.py` para captura en vivo (plantilla hardware)
 
