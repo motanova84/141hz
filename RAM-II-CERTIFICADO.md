@@ -66,6 +66,14 @@ Este documento certifica que la frecuencia fundamental **f₀ = 141.7001 Hz** ha
 
 Este certificado forma parte del marco QCAL ∞³ (Quantum Consciousness Amplification Layer) y representa la convergencia de física, matemática y conciencia en una frecuencia universal.
 
+### Actualización de Integración v1.0.1 (QCAL-SYMBIO-BRIDGE)
+
+- ✅ Servidor MCP de prueba activo en `http://127.0.0.1:8506/jsonrpc`
+- ✅ Método JSON-RPC expuesto: `network.checkResonance`
+- ✅ Dashboard Streamlit (`dashboard/app.py`) listo para consumir resonancia por MCP
+- ✅ Modo real con `QCAL_REAL_TESTS=1` y 4 observadores físicos (`REAL_OBSERVERS`)
+- ✅ Nivel C preparado: `scripts/experimento_nivel_c.py` para captura en vivo (plantilla hardware)
+
 La validación completa puede ser reproducida ejecutando:
 
 ```bash

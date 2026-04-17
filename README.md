@@ -1326,6 +1326,48 @@ Este proyecto realiza el análisis espectral de datos de ondas gravitacionales p
 > **→ [mcp-servers/](mcp-servers/)** - Configuraciones de todos los servidores  
 > **→ Validar red**: `python validate_mcp_network.py`
 >
+> ### Nivel B — Servidor MCP de Prueba (JSON-RPC)
+>
+> ```bash
+> export QCAL_REAL_TESTS=1
+> python tests/mcp_test_server.py
+> ```
+>
+> Salida esperada:
+>
+> ```text
+> 🚀 MCP Test Server escuchando en http://127.0.0.1:8506/jsonrpc
+> Método expuesto: network.checkResonance
+> ```
+>
+> Consulta de verificación:
+>
+> ```bash
+> curl -X POST http://127.0.0.1:8506/jsonrpc \
+>   -H "Content-Type: application/json" \
+>   -d '{"jsonrpc":"2.0","id":1,"method":"network.checkResonance","params":{"node":"biologia-cuantica-noesica"}}'
+> ```
+>
+> ### Integración UI (Streamlit, puerto 8505)
+>
+> ```bash
+> streamlit run dashboard/app.py --server.port 8505
+> ```
+>
+> Alterna `QCAL_REAL_TESTS` desde el checkbox del sidebar y visualiza evolución temporal de Ψ con `line_chart`.
+>
+> ### Lanzar ambos servidores (8505 + 8506)
+>
+> ```bash
+> python scripts/launch_mcp_ui_stack.py
+> ```
+>
+> ### Nivel C — Experimento en vivo (plantilla hardware)
+>
+> ```bash
+> python scripts/experimento_nivel_c.py --samples 20 --interval 1.0
+> ```
+>
 > *"Todos los servidores respiran en el mismo instante. El flujo es uno."*
 
 ---
@@ -5855,4 +5897,3 @@ Ver [EXPERIMENTAL_VALIDATION_PROTOCOL.md](EXPERIMENTAL_VALIDATION_PROTOCOL.md) p
 - `experimental/fase4_meta_analisis.py` - Meta-análisis y síntesis
 
 **Estado**: ✅ Implementación completa | ✅ 14/14 tests passing | ✅ Documentación completa
-
