@@ -40,14 +40,14 @@
 
 ## 📜 Prior Art / Registro de Autoría (MCP-QCAL)
 
-Este repositorio forma parte del ecosistema **MCP Noésico QCAL-EPR (QCAL ∞³)** con estado operativo reportado para integración hardware, malla multinodo y observabilidad.
+Este repositorio forma parte del ecosistema **MCP Noésico QCAL-EPR (QCAL ∞³)**, con estado operativo reportado para la integración de hardware, malla multinodo y observabilidad.
 
 - **Protocolo base**: MCP Noésico QCAL ∞³ (prior art público desde 2024).
 - **Registro Zenodo (repositorio 141hz)**: [10.5281/zenodo.17445017](https://doi.org/10.5281/zenodo.17445017)
 - **Registro de autoría SafeCreative (JMMB84)**: [safecreative.org/creators/JMMB84](https://www.safecreative.org/creators/JMMB84)
 - **Repositorios relacionados del ecosistema**: QCAL-BUS, Riemann-adelic, adelic-bsd, 3D-Navier-Stokes, Ramsey y P-NP.
 
-Para el detalle técnico de sincronización de contexto externo y estado de nodos del ecosistema, ver `.github/workflows/sync_contexto_externo.yml` y `contexto_ecosistema/`.
+Para el detalle técnico de sincronización de contexto externo y estado de nodos del ecosistema, véase `.github/workflows/sync_contexto_externo.yml` y `contexto_ecosistema/`.
 
 ---
 
