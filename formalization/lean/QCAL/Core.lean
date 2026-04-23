@@ -78,10 +78,6 @@ structure Node where
   Ψ : Coherence
   /-- Estado dinámico del nodo -/
   state : NodeState
-  /-- Propiedad de soberanía: cuando Ψ alcanza el umbral de resonancia
-      4π el nodo se estabiliza. La demostración reside en la resonancia
-      del 4π (ver `estabilidad_nodo`). -/
-  soberania : state = Estacionario ∨ state = Activo := Or.inr rfl
 
 -- ═══════════════════════════════════════════════════════════════
 -- ESTRUCTURA MANTA
@@ -109,8 +105,11 @@ def manta_canonica : Manta := {}
 -- ═══════════════════════════════════════════════════════════════
 
 /-- Ceros no triviales de ζ(s) asociados a un nodo.
-    Se axiomatizan sus primeras aproximaciones numéricas conocidas. -/
-noncomputable def zeros_zeta (n : Node) : List ℝ :=
+    El parámetro `n` reserva extensibilidad para extraer ceros
+    específicos de la estructura espectral del nodo en versiones
+    futuras. En esta versión se devuelven los primeros cinco ceros
+    de Riemann conocidos (partes imaginarias γₙ). -/
+noncomputable def zeros_zeta (_n : Node) : List ℝ :=
   -- Los primeros ceros de Riemann: Im(ρₙ) ≈ γₙ
   [14.134725, 21.022040, 25.010858, 30.424876, 32.935062]
 
