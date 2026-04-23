@@ -82,3 +82,8 @@ lean_lib OperadorAutoadjuntoH where
   -- Weil trace formula, Weierstrass product Δ(s), Paley-Wiener identity Δ(s) = ξ(s)
   srcDir := "../../physics"
   roots := #[`OperadorAutoadjuntoH]
+
+lean_lib QCALCore where
+  -- QCAL.Core: Ontología Operativa — Manta, H_RH, estabilidad_nodo
+  -- Defines Manta structure, Riemann-Hubble operator H_RH, and sovereignty theorem
+  globs := #[.submodules `QCAL]
