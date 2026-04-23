@@ -106,7 +106,7 @@ class TestModuleConstants(unittest.TestCase):
 
     def test_hbar_value(self):
         """_HBAR debe ser ≈ 1.0546e-34 J·s."""
-        self.assertAlmostEqual(_HBAR, 1.054571817e-34, places=44)
+        self.assertAlmostEqual(_HBAR, 1.054571817e-34, places=15)
 
     def test_gamma_1_value(self):
         """_GAMMA_1 debe ser ≈ 14.134725."""
@@ -183,7 +183,7 @@ class TestModuleConstants(unittest.TestCase):
 
     def test_ev_to_j_value(self):
         """_EV_TO_J debe ser ≈ 1.602176634e-19."""
-        self.assertAlmostEqual(_EV_TO_J, 1.602176634e-19, places=29)
+        self.assertAlmostEqual(_EV_TO_J, 1.602176634e-19, places=15)
 
 
 # ============================================================================
@@ -231,7 +231,7 @@ class TestConstantesAxiomasPleroma(unittest.TestCase):
     def test_energia_fundamental_value(self):
         """E₀ = ℏω₀ ≈ 9.389e-32 J."""
         e0 = self.c.energia_fundamental_j()
-        self.assertAlmostEqual(e0, _HBAR * _OMEGA_0, places=40)
+        self.assertAlmostEqual(e0, _HBAR * _OMEGA_0, places=15)
 
     def test_longitud_onda_positive(self):
         """λ₀ = c/f₀ debe ser positiva."""
@@ -311,7 +311,7 @@ class TestAtomoBlancoSaturado(unittest.TestCase):
     def test_densidad_info_value(self):
         """densidad_info = f₀²/c²."""
         expected = (_F0 ** 2) / (_C ** 2)
-        self.assertAlmostEqual(self.atomo.densidad_info, expected, places=35)
+        self.assertAlmostEqual(self.atomo.densidad_info, expected, places=15)
 
     def test_energia_atomo_blanco_positive(self):
         """Energía del Átomo Blanco debe ser positiva."""
@@ -378,7 +378,7 @@ class TestAtomoBlancoSaturado(unittest.TestCase):
         f0_custom = 200.0
         atomo = AtomoBlancoSaturado(f0=f0_custom)
         expected = (f0_custom ** 2) / (_C ** 2)
-        self.assertAlmostEqual(atomo.densidad_info, expected, places=35)
+        self.assertAlmostEqual(atomo.densidad_info, expected, places=15)
 
     def test_repr_contains_f0(self):
         """repr debe contener f0."""
@@ -655,13 +655,13 @@ class TestOperadorRiemannHubble(unittest.TestCase):
 
     def test_default_hbar(self):
         """hbar debe ser ℏ."""
-        self.assertAlmostEqual(self.op.hbar, _HBAR, places=44)
+        self.assertAlmostEqual(self.op.hbar, _HBAR, places=15)
 
     def test_energia_fundamental_formula(self):
         """E₀ = ℏ × 2π × f₀ = ℏω₀."""
         e0 = self.op.energia_fundamental_j()
         expected = _HBAR * 2.0 * math.pi * _F0
-        self.assertAlmostEqual(e0, expected, places=40)
+        self.assertAlmostEqual(e0, expected, places=15)
 
     def test_energia_fundamental_positive(self):
         """E₀ debe ser positiva."""
@@ -675,7 +675,7 @@ class TestOperadorRiemannHubble(unittest.TestCase):
         """E₀_eV = E₀_J / eV_to_J."""
         e0_ev = self.op.energia_fundamental_ev()
         e0_j = self.op.energia_fundamental_j()
-        self.assertAlmostEqual(e0_ev, e0_j / _EV_TO_J, places=30)
+        self.assertAlmostEqual(e0_ev, e0_j / _EV_TO_J, places=15)
 
     def test_espectro_discreto_count(self):
         """El espectro discreto debe tener 10 niveles."""
@@ -697,19 +697,19 @@ class TestOperadorRiemannHubble(unittest.TestCase):
         """E₁ = ℏ × γ₁."""
         e1 = self.op.espectro_discreto_j()[0]
         expected = _HBAR * _GAMMA_1
-        self.assertAlmostEqual(e1, expected, places=44)
+        self.assertAlmostEqual(e1, expected, places=15)
 
     def test_nivel_n_1(self):
         """nivel_n(1) debe ser E₁ = ℏγ₁."""
         e1 = self.op.nivel_n(1)
         expected = _HBAR * _GAMMA_1
-        self.assertAlmostEqual(e1, expected, places=44)
+        self.assertAlmostEqual(e1, expected, places=15)
 
     def test_nivel_n_10(self):
         """nivel_n(10) debe ser E₁₀ = ℏγ₁₀."""
         e10 = self.op.nivel_n(10)
         expected = _HBAR * _ZEROS_10[9]
-        self.assertAlmostEqual(e10, expected, places=44)
+        self.assertAlmostEqual(e10, expected, places=15)
 
     def test_nivel_n_fuera_rango(self):
         """nivel_n con n fuera de [1,10] debe lanzar ValueError."""

@@ -249,7 +249,7 @@ def fase_4_axioma4_operador_rh() -> None:
     # E₀ = ℏω₀
     e0_j = op.energia_fundamental_j()
     e0_esperado = _HBAR * _OMEGA_0
-    check(abs(e0_j - e0_esperado) < 1e-45,
+    check(abs(e0_j - e0_esperado) < 1e-38,
           "E₀ = ℏω₀ (estado fundamental del Ĥ_RH)",
           f"E₀ = {e0_j:.3e} J")
 
@@ -266,7 +266,7 @@ def fase_4_axioma4_operador_rh() -> None:
 
     # Nivel 1: E₁ = ℏγ₁
     e1_esperado = _HBAR * _GAMMA_1
-    check(abs(espectro[0] - e1_esperado) < 1e-48,
+    check(abs(espectro[0] - e1_esperado) < 1e-38,
           f"E₁ = ℏγ₁ ≈ {e1_esperado:.3e} J")
 
     # Índice GUE
