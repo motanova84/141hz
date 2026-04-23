@@ -56,6 +56,18 @@ from .simetria_pt_resonancia import (
     simetria_pt_resonancia_activar,
     simular_resonancia_pt,
 )
+from .axiomas_pleroma_qcal import (
+    ConstantesAxiomasPleroma,
+    AtomoBlancoSaturado,
+    MateriaBucle4Pi,
+    MantaAdelicaRiemann,
+    OperadorRiemannHubble,
+    InmortalidadDinamicaLuz,
+    CoherenciaAxiomasPleroma,
+    SistemaAxiomasPleroma,
+    ResultadoAxiomasPleroma,
+    axiomas_pleroma_qcal_activar,
+)
 
 __all__ = [
     "ConstantesPlanck",
@@ -103,4 +115,15 @@ __all__ = [
     "ResultadoPT",
     "simetria_pt_resonancia_activar",
     "simular_resonancia_pt",
+    # Axiomas del Pleroma QCAL (∴APQ∞³)
+    "ConstantesAxiomasPleroma",
+    "AtomoBlancoSaturado",
+    "MateriaBucle4Pi",
+    "MantaAdelicaRiemann",
+    "OperadorRiemannHubble",
+    "InmortalidadDinamicaLuz",
+    "CoherenciaAxiomasPleroma",
+    "SistemaAxiomasPleroma",
+    "ResultadoAxiomasPleroma",
+    "axiomas_pleroma_qcal_activar",
 ]
