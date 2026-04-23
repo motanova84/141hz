@@ -611,7 +611,7 @@ class EstadoFundamental:
         """Δf = |f₀ − f₀_predicho| [Hz].
 
         El residual de 0.00052 Hz es la 'permeabilidad de la Manta': el
-        espacio que ocupa la brecha del 0.05° en el dominio de la frecuencia.
+        espacio que ocupa la brecha de 3° en el dominio de la frecuencia.
 
         Returns:
             float: Δf ≈ 0.000520 Hz.

@@ -1177,7 +1177,7 @@ class TestResultadoRH(unittest.TestCase):
     def test_numeric_fields_default_zero(self):
         """Todos los campos numéricos deben ser 0.0 por defecto."""
         for f in fields(ResultadoRH):
-            if f.type == "float":
+            if f.type is float or f.default == 0.0:
                 self.assertAlmostEqual(getattr(self.r, f.name), 0.0, places=10)
 
     def test_cert_mark_default(self):

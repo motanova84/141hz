@@ -200,7 +200,6 @@ def validacion_fase2_operador_estado() -> None:
     # 2b. EstadoFundamental
     ef = EstadoFundamental()
     E0_fis = ef.energia_fisico()
-    import sys as _sys
     check(E0_fis > 0,
           "E₀ = ℏ 2π f₀ > 0", f"{E0_fis:.4e} J")
     check(abs(E0_fis - 1.054571817e-34 * 2 * math.pi * 141.7001) < 1e-40,
