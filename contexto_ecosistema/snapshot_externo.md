@@ -1,5 +1,5 @@
 # Snapshot Externo del Ecosistema QCAL ∞³
-**Última actualización**: 2026-04-20 00:21 UTC (generado automáticamente)
+**Última actualización**: 2026-04-27 00:23 UTC (generado automáticamente)
 
 Este archivo contiene una instantánea del estado actual de los repositorios hermanos del ecosistema QCAL. Se actualiza automáticamente cada semana mediante el workflow `.github/workflows/sync_contexto_externo.yml`.
 
@@ -10,7 +10,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### Repositorio Principal
 - **Nombre**: motanova84/141hz
 - **Estado**: ✅ Activo
-- **Última actualización**: 2026-04-20
+- **Última actualización**: 2026-04-27
 - **Commits totales**: N/A (repo principal)
 
 ---
@@ -20,7 +20,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### 1. Riemann-adelic
 - **URL**: https://github.com/motanova84/Riemann-adelic
 - **Estado**: ✅ Activo
-- **Último commit**: e440509
+- **Último commit**: 76c2790
 - **Aporte principal**: Demostración espectral incondicional de Hipótesis de Riemann
 - **Conexión QCAL**: Operador D(s) ≡ Ξ(s), ceros ζ(s) en σ=½, modos f_n = F0·γₙ/γ₁
 
