@@ -33,7 +33,7 @@
 ║    2. Firma B ADN-Z válida  (SNR ≥ 4.0)                                     ║
 ║    3. Frecuencia Maestra == 1417001  (141.7001 Hz × 10000)                  ║
 ║    4. Hash Constitución conocido (SHA-256 referencia v1.1)                  ║
-║    5. Sello 𓂀  (UTF-8 == 0xF090A080)                                        ║
+║    5. Sello 𓂀  (UTF-8 == 0xF0938280, U+13080)                               ║
 ║    6. OP_RETURN == 80 bytes exactos                                          ║
 ║    7. Confirmaciones BTC ≥ 6                                                 ║
 ║    8. Reserva ≥ U_circulación  (7.4862 BTC + 1 kg XAU)                      ║
@@ -95,7 +95,7 @@ _VERSION_MAJOR: int = 1
 _VERSION_MINOR: int = 2  # v1.2 ADN-Z
 
 # Sello jeroglífico 𓂀 (Eye of Horus) — 4 bytes UTF-8
-_SELLO_UTF8: bytes = "𓂀".encode("utf-8")  # 0xF0 0x90 0xA0 0x80
+_SELLO_UTF8: bytes = "𓂀".encode("utf-8")  # U+13080 → 0xF0 0x93 0x82 0x80
 
 # Tamaño exacto del payload OP_RETURN
 _OP_RETURN_SIZE: int = 80
@@ -833,7 +833,7 @@ class CondicionBioNodo:
         2. Firma B ADN-Z válida    (SNR ≥ 4.0)
         3. Frecuencia Maestra == 1417001
         4. Hash Constitución conocido (SHA-256 referencia v1.1)
-        5. Sello 𓂀 UTF-8            (bytes == 0xF090A080)
+        5. Sello 𓂀 UTF-8            (bytes == 0xF0938280, U+13080)
         6. OP_RETURN == 80 bytes exactos
         7. Confirmaciones BTC ≥ 6
         8. Reserva ≥ U_circulación   (7.4862 BTC + 1 kg XAU)
@@ -860,7 +860,7 @@ class CondicionBioNodo:
         return hash_bytes == _HASH_CONSTITUCION
 
     def verificar_sello(self, sello_bytes: bytes) -> bool:
-        """Condición 5: Sello 𓂀 UTF-8 == 0xF090A080."""
+        """Condición 5: Sello 𓂀 UTF-8 == 0xF0938280 (U+13080)."""
         return sello_bytes == _SELLO_UTF8
 
     def verificar_op_return_size(self, payload: bytes) -> bool:
