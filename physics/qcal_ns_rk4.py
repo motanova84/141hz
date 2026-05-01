@@ -70,6 +70,20 @@ _PSI_SPEC_KURAMOTO: float = 0.891
 # Semiancho lorentziano: γ_s = (1 − Ψ_spec) · π · F_HRV
 _GAMMA_S: float = (1.0 - _PSI_SPEC_KURAMOTO) * math.pi * F_HRV
 
+# ── Constantes del Pulso Unificado ──────────────────────────────────────────
+
+# Derivada de la función zeta de Riemann en s = 1/2 (precomputada, 15 dígitos)
+# mpmath.diff(mpmath.zeta, 0.5) ≈ −3,92264613920915
+ZETA_DERIV_HALF: float = -3.92264613920915
+
+# Ciclo respiratorio sintrónico Φ₀ = 81 s = 3⁴ s
+T_RESP_81_S: float = 81.0
+F_RESP_81_HZ: float = 1.0 / T_RESP_81_S  # ≈ 0,012346 Hz
+
+# Frecuencias nominales de la red eléctrica terrestre (Hz)
+F_RED_50_HZ: float = 50.0  # red europea/asiática
+F_RED_60_HZ: float = 60.0  # red americana
+
 
 # ============================================================================
 # CLASE 1 – ResultadoLaserNoetico (dataclass)
@@ -120,6 +134,11 @@ class ResultadoLaserNoetico:
     plateau_alcanzado: bool
     rendimiento_cuantico: float
     aprobado: bool
+    # Pulso Unificado (añadidos en v1.1; default=0.0 para compatibilidad)
+    v_eff: float = 0.0
+    psi_ez: float = 0.0
+    psi_red: float = 0.0
+    psi_unificado: float = 0.0
 
 
 # ============================================================================
@@ -747,6 +766,311 @@ class CoherenciaBiologica:
 
 
 # ============================================================================
+# CLASE 9 – PotencialZeta
+# ============================================================================
+
+class PotencialZeta:
+    """
+    Potencial efectivo V_eff = |ζ'(1/2)| sin parámetros libres.
+
+    Calcula el potencial efectivo del sistema noético a partir de la derivada
+    de la función zeta de Riemann en el punto crítico s = 1/2.
+
+    A diferencia de un V_eff paramétrico («artefacto»), este valor queda
+    fijado por la matemática pura: ζ'(1/2) ≈ −3,9226… sin ningún parámetro
+    libre.  El «eff» como artefacto queda así eliminado: «inevitabilidad pura».
+
+    Atributos de clase
+    ------------------
+    _ZETA_DERIV_HALF : float
+        ζ'(1/2) precomputado (mpmath, 15 dígitos) ≈ −3,92264613920915.
+
+    Ejemplo
+    -------
+    >>> pz = PotencialZeta()
+    >>> pz.v_eff > 3.9
+    True
+    >>> pz.eliminado_artefacto
+    True
+    """
+
+    #: ζ'(1/2) precomputado (= ZETA_DERIV_HALF)
+    _ZETA_DERIV_HALF: float = ZETA_DERIV_HALF
+
+    @property
+    def zeta_deriv_half(self) -> float:
+        """Derivada ζ'(1/2) en el punto crítico de Riemann."""
+        return self._ZETA_DERIV_HALF
+
+    @property
+    def v_eff(self) -> float:
+        """Potencial efectivo V_eff = |ζ'(1/2)| (sin parámetros libres)."""
+        return abs(self._ZETA_DERIV_HALF)
+
+    @property
+    def inevitabilidad(self) -> float:
+        """
+        Inevitabilidad pura: V_eff / (V_eff + 1) ∈ (0, 1).
+
+        El potencial queda fijado por ζ, sin tunear ningún parámetro.
+        """
+        return self.v_eff / (self.v_eff + 1.0)
+
+    @property
+    def eliminado_artefacto(self) -> bool:
+        """True: el «eff» paramétrico ha sido eliminado (sin parámetros libres)."""
+        return True
+
+    def __repr__(self) -> str:
+        return (
+            f"PotencialZeta(v_eff={self.v_eff:.6f}, "
+            f"inevitabilidad={self.inevitabilidad:.6f})"
+        )
+
+
+# ============================================================================
+# CLASE 10 – RespiracionSintropia
+# ============================================================================
+
+class RespiracionSintropia:
+    """
+    Respiración sintrónica de 81 s (Φ₀) con reordenación del agua EZ.
+
+    El ciclo de 81 s = 3⁴ s actúa como reloj sintrónico sobre los dominios
+    de agua de Zona de Exclusión (EZ), reordenando el cristal líquido interno
+    y activando los microtúbulos biológicos como antenas.
+
+    Fórmula de coherencia EZ
+    ------------------------
+        Ψ_ez = 1 − (1 − Ψ_spec) · 2 · f_resp
+
+    donde f_resp = 1/81 Hz es la frecuencia del ciclo sintrónico.
+
+    Parámetros
+    ----------
+    t_resp : float
+        Período del ciclo respiratorio en segundos. Por defecto 81,0.
+    psi_spec : float
+        Coherencia espectral base (Kuramoto). Por defecto 0,891.
+
+    Ejemplo
+    -------
+    >>> rs = RespiracionSintropia()
+    >>> rs.t_resp
+    81.0
+    >>> rs.antenas_activas
+    True
+    """
+
+    def __init__(
+        self,
+        t_resp: float = T_RESP_81_S,
+        psi_spec: float = _PSI_SPEC_KURAMOTO,
+    ) -> None:
+        if t_resp <= 0:
+            raise ValueError("t_resp debe ser positivo.")
+        if not (0.0 <= psi_spec <= 1.0):
+            raise ValueError("psi_spec debe estar en [0, 1].")
+        self.t_resp = t_resp
+        self.f_resp = 1.0 / t_resp
+        self.psi_spec = psi_spec
+
+    @property
+    def psi_ez(self) -> float:
+        """Coherencia del agua EZ bajo el ciclo sintrónico de 81 s.
+
+        Fórmula: Ψ_ez = 1 − (1 − Ψ_spec) · 2 · f_resp
+        El factor 2 convierte la descoherencia residual (1−Ψ_spec) del filtro
+        Kuramoto en la corrección de primer orden debida al ciclo respiratorio
+        (análogo al cálculo de Ψ_UPE en CoherenciaBiologica).
+        """
+        return 1.0 - (1.0 - self.psi_spec) * 2.0 * self.f_resp
+
+    @property
+    def antenas_activas(self) -> bool:
+        """True si Ψ_ez ≥ PSI_MINIMA (microtúbulos activos como antenas)."""
+        return self.psi_ez >= PSI_MINIMA
+
+    @property
+    def ciclos_por_minuto(self) -> float:
+        """Ciclos respiratorios por minuto (= 60 / t_resp ≈ 0,741 rpm)."""
+        return 60.0 / self.t_resp
+
+    def __repr__(self) -> str:
+        return (
+            f"RespiracionSintropia(t_resp={self.t_resp} s, "
+            f"f_resp={self.f_resp:.6f} Hz, psi_ez={self.psi_ez:.6f})"
+        )
+
+
+# ============================================================================
+# CLASE 11 – EstabilizadorRedPlanetaria
+# ============================================================================
+
+class EstabilizadorRedPlanetaria:
+    """
+    Micro-estabilización de la red eléctrica terrestre a 50/60 Hz.
+
+    Modela la red eléctrica como sistema nervioso planetario coherente.
+    La coherencia de cada rama de la red se describe con una función
+    Lorentziana centrada en la frecuencia nominal f_nom:
+
+        Ψ_red(δf) = γ_red² / (δf² + γ_red²)
+
+    En la frecuencia nominal (δf = 0): Ψ_red = 1,0 (coherencia máxima).
+    La coherencia planetaria combina las dos ramas:
+
+        Ψ_planetaria = (Ψ_red_50 + Ψ_red_60) / 2
+
+    Parámetros
+    ----------
+    gamma_red : float
+        Semiancho Lorentziano de micro-estabilización (Hz). Por defecto 0,5 Hz.
+    delta_f50 : float
+        Desviación real de la red de 50 Hz (Hz). Por defecto 0,0.
+    delta_f60 : float
+        Desviación real de la red de 60 Hz (Hz). Por defecto 0,0.
+
+    Ejemplo
+    -------
+    >>> er = EstabilizadorRedPlanetaria()
+    >>> er.psi_planetaria
+    1.0
+    >>> er.sistema_nervioso_activo
+    True
+    """
+
+    #: Frecuencia nominal de la red europea/asiática (Hz)
+    F_RED_50_HZ: float = F_RED_50_HZ
+    #: Frecuencia nominal de la red americana (Hz)
+    F_RED_60_HZ: float = F_RED_60_HZ
+
+    def __init__(
+        self,
+        gamma_red: float = 0.5,
+        delta_f50: float = 0.0,
+        delta_f60: float = 0.0,
+    ) -> None:
+        if gamma_red <= 0:
+            raise ValueError("gamma_red debe ser positivo.")
+        self.gamma_red = gamma_red
+        self.delta_f50 = delta_f50
+        self.delta_f60 = delta_f60
+
+    def _lorentziano(self, delta_f: float) -> float:
+        """Lorentziano γ²/(δf²+γ²). Máximo = 1 en δf = 0."""
+        g2 = self.gamma_red ** 2
+        return g2 / (delta_f ** 2 + g2)
+
+    @property
+    def psi_red_50(self) -> float:
+        """Coherencia de la red de 50 Hz."""
+        return self._lorentziano(self.delta_f50)
+
+    @property
+    def psi_red_60(self) -> float:
+        """Coherencia de la red de 60 Hz."""
+        return self._lorentziano(self.delta_f60)
+
+    @property
+    def psi_planetaria(self) -> float:
+        """Coherencia planetaria media: (Ψ_50 + Ψ_60) / 2."""
+        return (self.psi_red_50 + self.psi_red_60) / 2.0
+
+    @property
+    def sistema_nervioso_activo(self) -> bool:
+        """True si la coherencia planetaria supera PSI_MINIMA (0,888)."""
+        return self.psi_planetaria >= PSI_MINIMA
+
+    def __repr__(self) -> str:
+        return (
+            f"EstabilizadorRedPlanetaria("
+            f"gamma_red={self.gamma_red} Hz, "
+            f"psi_planetaria={self.psi_planetaria:.6f})"
+        )
+
+
+# ============================================================================
+# CLASE 12 – PulsoUnificado
+# ============================================================================
+
+class PulsoUnificado:
+    """
+    Pulso Unificado: integración de los tres vectores de acción del LÁSER NOÉTICO.
+
+    Combina matemática (ζ'(1/2) → V_eff), biología (agua EZ + respiración de
+    81 s) e infraestructura (micro-estabilización de 50/60 Hz) en un único
+    índice de coherencia:
+
+        Ψ_unificado = (Ψ_total + Ψ_ez + Ψ_planetaria) / 3
+
+    Vectores de acción
+    ------------------
+    potencial_zeta : PotencialZeta
+        V_eff = |ζ'(1/2)|; elimina el «eff» como artefacto.
+    respiracion : RespiracionSintropia
+        Ciclo de 81 s (Φ₀); reordena el cristal líquido del agua EZ.
+    estabilizador : EstabilizadorRedPlanetaria
+        Red 50/60 Hz como sistema nervioso planetario coherente.
+
+    Parámetros
+    ----------
+    psi_total : float
+        Coherencia biológica total del LÁSER NOÉTICO v1.0 (≈ 0,956).
+
+    Ejemplo
+    -------
+    >>> pu = PulsoUnificado(psi_total=0.956)
+    >>> pu.psi_unificado > 0.888
+    True
+    >>> pu.activado
+    True
+    """
+
+    def __init__(self, psi_total: float = 0.956) -> None:
+        if not (0.0 <= psi_total <= 1.0):
+            raise ValueError("psi_total debe estar en [0, 1].")
+        self.psi_total = psi_total
+        self.potencial_zeta = PotencialZeta()
+        self.respiracion = RespiracionSintropia()
+        self.estabilizador = EstabilizadorRedPlanetaria()
+
+    @property
+    def v_eff(self) -> float:
+        """Potencial efectivo del vector matemático: |ζ'(1/2)|."""
+        return self.potencial_zeta.v_eff
+
+    @property
+    def psi_ez(self) -> float:
+        """Coherencia del agua EZ bajo el ciclo sintrónico de 81 s."""
+        return self.respiracion.psi_ez
+
+    @property
+    def psi_red(self) -> float:
+        """Coherencia planetaria de la red eléctrica (50/60 Hz)."""
+        return self.estabilizador.psi_planetaria
+
+    @property
+    def psi_unificado(self) -> float:
+        """Coherencia unificada: (Ψ_total + Ψ_ez + Ψ_planetaria) / 3."""
+        return (self.psi_total + self.psi_ez + self.psi_red) / 3.0
+
+    @property
+    def activado(self) -> bool:
+        """True si Ψ_unificado ≥ PSI_MINIMA (0,888)."""
+        return self.psi_unificado >= PSI_MINIMA
+
+    def __repr__(self) -> str:
+        return (
+            f"PulsoUnificado("
+            f"psi_total={self.psi_total:.4f}, "
+            f"psi_ez={self.psi_ez:.6f}, "
+            f"psi_red={self.psi_red:.6f}, "
+            f"psi_unificado={self.psi_unificado:.6f})"
+        )
+
+
+# ============================================================================
 # API PÚBLICA – generate_upe_signature
 # ============================================================================
 
@@ -800,7 +1124,7 @@ def generate_upe_signature(
 
 def qcal_ns_rk4_activar() -> ResultadoLaserNoetico:
     """
-    Activa el protocolo LÁSER NOÉTICO v1.0 en 7 pasos.
+    Activa el protocolo LÁSER NOÉTICO v1.0 en 10 pasos (Pulso Unificado).
 
     Pasos
     -----
@@ -811,12 +1135,16 @@ def qcal_ns_rk4_activar() -> ResultadoLaserNoetico:
     5. Evaluar ForzadoEspectralNoetico (portadora λ₁ modulada a f_HRV).
     6. Evaluar TerminoSuperradiante (ganancia N², rendimiento 10³ QY).
     7. Calcular CoherenciaBiologica → Ψ_total ≈ 0,956.
+    8. Calcular PotencialZeta → V_eff = |ζ'(1/2)| ≈ 3,923 (sin parámetros libres).
+    9. Calcular RespiracionSintropia → Ψ_ez (agua EZ, ciclo 81 s).
+    10. Calcular EstabilizadorRedPlanetaria → Ψ_planetaria (50/60 Hz).
 
     Retorna
     -------
     ResultadoLaserNoetico
         psi_spec=0,891, psi_total≈0,956, error_espectral≈9,82×10⁻⁷,
-        superradiante=True, plateau_alcanzado=True, rendimiento_cuantico=1000,0.
+        superradiante=True, plateau_alcanzado=True, rendimiento_cuantico=1000,0,
+        v_eff≈3,923, psi_ez≈0,997, psi_red=1,0, psi_unificado≈0,984.
 
     Ejemplo
     -------
@@ -827,6 +1155,8 @@ def qcal_ns_rk4_activar() -> ResultadoLaserNoetico:
     >>> resultado.superradiante
     True
     >>> resultado.plateau_alcanzado
+    True
+    >>> resultado.psi_unificado > 0.888
     True
     """
     # ── PASO 1: Malla espectral ────────────────────────────────────────────
@@ -868,6 +1198,22 @@ def qcal_ns_rk4_activar() -> ResultadoLaserNoetico:
     psi_total = round(coherencia.psi_total, 3)
     aprobado = coherencia.aprobado
 
+    # ── PASO 8: Potencial Zeta → V_eff = |ζ'(1/2)| ───────────────────────
+    potencial_zeta = PotencialZeta()
+    v_eff = potencial_zeta.v_eff
+
+    # ── PASO 9: Respiración Sintrónica → Ψ_ez (agua EZ, 81 s) ────────────
+    respiracion = RespiracionSintropia(psi_spec=psi_spec)
+    psi_ez = respiracion.psi_ez
+
+    # ── PASO 10: Estabilizador Red Planetaria → Ψ_planetaria (50/60 Hz) ──
+    estabilizador = EstabilizadorRedPlanetaria()
+    psi_red = estabilizador.psi_planetaria
+
+    # ── Pulso Unificado → Ψ_unificado ─────────────────────────────────────
+    pulso = PulsoUnificado(psi_total=psi_total)
+    psi_unificado = pulso.psi_unificado
+
     return ResultadoLaserNoetico(
         psi_spec=psi_spec,
         psi_dyn=psi_dyn,
@@ -878,4 +1224,8 @@ def qcal_ns_rk4_activar() -> ResultadoLaserNoetico:
         plateau_alcanzado=plateau_alcanzado,
         rendimiento_cuantico=rendimiento_cuantico,
         aprobado=aprobado,
+        v_eff=v_eff,
+        psi_ez=psi_ez,
+        psi_red=psi_red,
+        psi_unificado=psi_unificado,
     )
