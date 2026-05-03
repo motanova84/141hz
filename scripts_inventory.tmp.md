@@ -51,6 +51,8 @@
   - Badge Validation Script
 - `validate_bio_frequency.py`
   - Bio-Frequency Validation Script
+- `validate_bio_nodo_percepcion.py`
+  - Validación Completa: Bio-Nodo y Percepción como Invariante Geométrico ∴BNP∞³
 - `validate_consciousness_theorem.py`
   - Validation Script: Fundamental Theorem of Consciousness
 - `validate_constelacion_qcal.py`
@@ -95,6 +97,8 @@
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_operadores_maestros_qcal.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_primer_eco.py`
   - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
 - `validate_qcal_biology.py`
@@ -145,6 +149,8 @@
   - Badge Validation Script
 - `validate_bio_frequency.py`
   - Bio-Frequency Validation Script
+- `validate_bio_nodo_percepcion.py`
+  - Validación Completa: Bio-Nodo y Percepción como Invariante Geométrico ∴BNP∞³
 - `validate_consciousness_theorem.py`
   - Validation Script: Fundamental Theorem of Consciousness
 - `validate_constelacion_qcal.py`
@@ -189,6 +195,8 @@
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_operadores_maestros_qcal.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_primer_eco.py`
   - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
 - `validate_qcal_biology.py`
@@ -470,4 +478,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-05-03 03:15:00 UTC*
+*Generado automáticamente por el bot de documentación - 2026-05-03 11:18:39 UTC*
