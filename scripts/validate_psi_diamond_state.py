@@ -314,11 +314,11 @@ def validar_fase4_coherencia_global() -> None:
 
     print()
     print("  Desglose de métricas:")
-    print(f"    Ψ_inicial  = {psi_ini:.6f}  (peso 1.0)")
-    print(f"    Ψ_limite   = {psi_lim:.6f}  (peso 1.5)")
-    print(f"    Ψ_tau      = {psi_tau_m:.6f}  (peso 1.0)")
+    print(f"    Ψ_inicial  = {psi_ini:.6f}  (peso 2.0)")
+    print(f"    Ψ_limite   = {psi_lim:.6f}  (peso 2.0)")
+    print(f"    Ψ_tau      = {psi_tau_m:.6f}  (peso 0.5)")
     print(f"    Ψ_modos    = {psi_modos:.6f}  (peso 1.0)")
-    print(f"    Ψ_adélica  = {psi_adel:.6f}  (peso 1.5)")
+    print(f"    Ψ_adélica  = {psi_adel:.6f}  (peso 0.5)")
     print(f"    Ψ_global   = {psi_global:.6f}")
 
 

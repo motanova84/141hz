@@ -254,11 +254,17 @@ class RiemannZerosCache:
             return self._fallback()
 
     def _fallback(self) -> np.ndarray:
-        """Devuelve los 10 ceros precalculados (cicla para N > 10)."""
+        """Devuelve los 10 ceros precalculados; extiende linealmente para N > 10.
+
+        La extensión usa el paso constante promedio entre los dos últimos ceros
+        conocidos. Esto es una aproximación lineal; el espaciado real de los
+        ceros crece logarítmicamente, pero esta extensión sólo actúa cuando
+        mpmath no está disponible.
+        """
         base = np.array(_RIEMANN_ZEROS_10, dtype=float)
         if self.n <= len(base):
             return base[: self.n]
-        # Extend linearly (spacing ≈ 2π/log(γₙ/2π) — rough approximation)
+        # Extend linearly using the last known step (linear approximation)
         result = list(base)
         step = base[-1] - base[-2]
         for _ in range(self.n - len(base)):
@@ -317,17 +323,33 @@ class ModosAdelicos:
     def gamma_tilde(self) -> np.ndarray:
         """Ceros renormalizados γ̃ₙ = |γₙ·C_scale + f₀·sin(γₙ·θ)|.
 
-        La modulación sinusoidal puede producir valores negativos en ciertos
-        rangos de γₙ. Se toma el valor absoluto para garantizar que γ̃ₙ > 0,
-        preservando la escala de frecuencia renormalizada con signo correcto.
+        La fórmula base de renormalización adélica es:
+
+            γ̃ₙ_raw = γₙ · C_scale + f₀ · sin(γₙ · θ)
+
+        Para ciertos valores de γₙ, la corrección sinusoidal f₀·sin(γₙ·θ)
+        puede dominar sobre la escala adélica γₙ·C_scale, produciendo
+        γ̃ₙ_raw < 0. Físicamente, γ̃ₙ representa una escala de energía
+        renormalizada que debe ser positiva. Se toma el valor absoluto
+        |γ̃ₙ_raw| para garantizar la positividad de los pesos wₙ = 1/γ̃ₙ
+        y la validez de la correlación temporal C(t). Esta operación
+        preserva la magnitud espectral mientras asegura la coherencia del
+        espacio de Hilbert renormalizado. La fracción de modos con
+        γ̃ₙ_raw > 0 se utiliza como métrica ψ_modos en CoherenciaGlobal.
         """
         if self._gamma_tilde is None:
-            g = self.gamma
-            cs = self.c_scale
-            raw = g * cs + self.cst.f0 * np.sin(g * self.cst.theta)
-            # Garantizar positividad: |γ̃ₙ| evita pesos negativos
-            self._gamma_tilde = np.abs(raw)
+            self._gamma_tilde = np.abs(self._gamma_tilde_raw())
         return self._gamma_tilde
+
+    def _gamma_tilde_raw(self) -> np.ndarray:
+        """Renormalización adélica sin aplicar valor absoluto.
+
+        Devuelve γ̃ₙ_raw = γₙ · C_scale + f₀ · sin(γₙ · θ), que puede
+        contener valores negativos para ciertos rangos de γₙ.
+        """
+        g = self.gamma
+        cs = self.c_scale
+        return g * cs + self.cst.f0 * np.sin(g * self.cst.theta)
 
     @property
     def pesos(self) -> np.ndarray:
@@ -444,7 +466,11 @@ class CoherenciaGlobal:
         coherencia:  Instancia de CoherenciaTemporal.
     """
 
-    # Pesos relativos de las cinco métricas (suma = 6)
+    # Pesos relativos de las cinco métricas (suma = 6).
+    # Los pesos 2.0 para ψ_inicial y ψ_limite reflejan propiedades
+    # matemáticamente exactas (Ψ(0)=1 y Ψ(∞)=0.5), por lo que reciben
+    # el doble de importancia. Los pesos reducidos para ψ_tau y ψ_adelica
+    # reconocen que estas métricas dependen de N y pueden variar.
     _PESOS_METRICAS: List[float] = [2.0, 2.0, 0.5, 1.0, 0.5]
 
     def __init__(
@@ -484,16 +510,14 @@ class CoherenciaGlobal:
     def psi_modos(self) -> float:
         """Ψ_modos — fracción de modos con renormalización adélica positiva.
 
-        Calcula la fracción de ceros γ̃ₙ = γₙ·C_scale + f₀·sin(γₙ·θ)
+        Calcula la fracción de ceros γ̃ₙ_raw = γₙ·C_scale + f₀·sin(γₙ·θ)
         que son positivos antes de aplicar el valor absoluto. Esta fracción
         refleja la coherencia espectral del espacio de Hilbert renormalizado.
 
         Para N=100 (el valor convergido estándar), esta fracción es ≈ 0.88,
         en coincidencia con el umbral de coherencia QCAL Ψ_min = 0.888.
         """
-        g = self.modos.cache.obtener()
-        cs = self.modos.c_scale
-        raw = g * cs + self.cst.f0 * np.sin(g * self.cst.theta)
+        raw = self.modos._gamma_tilde_raw()
         return float(np.mean(raw > 0))
 
     def psi_adelica(self) -> float:

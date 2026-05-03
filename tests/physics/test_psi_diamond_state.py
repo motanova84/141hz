@@ -28,6 +28,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
+# Tolerancia numérica para verificar que Ψ(t) ∈ [0, 1] con N finito.
+# Las oscilaciones de C(t) para N pequeño pueden llevar Ψ ligeramente
+# fuera del intervalo teórico [0, 1] por errores de punto flotante.
+_PSI_TOLERANCE = 0.001
+
 from physics.psi_diamond_state import (
     # Constantes de módulo
     _F0,
@@ -451,8 +456,8 @@ class TestCoherenciaTemporal(unittest.TestCase):
         """Ψ(t) puede oscilar fuera de [0.5, 1.0] para N finito; siempre ∈ [0, 1]."""
         for t in [0, 10, 100, 1000, 3600, 36000]:
             p = self.ct.psi(float(t))
-            self.assertGreaterEqual(p, -0.001)  # bounded below by C(t) ≥ -1
-            self.assertLessEqual(p, 1.001)
+            self.assertGreaterEqual(p, -_PSI_TOLERANCE)  # bounded below by C(t) ≥ -1
+            self.assertLessEqual(p, 1.0 + _PSI_TOLERANCE)
 
     def test_psi_decreasing_tendency(self):
         """Ψ(t) debe tender a decrecer con el tiempo."""
@@ -532,8 +537,8 @@ class TestCoherenciaTemporal(unittest.TestCase):
     def test_psi_t10_reasonable(self):
         """Ψ(10) debe estar en [0, 1] (puede oscilar con N finito)."""
         p = self.ct.psi(10.0)
-        self.assertGreaterEqual(p, -0.001)
-        self.assertLessEqual(p, 1.001)
+        self.assertGreaterEqual(p, -_PSI_TOLERANCE)
+        self.assertLessEqual(p, 1.0 + _PSI_TOLERANCE)
 
     def test_psi_t3600_reasonable(self):
         """Ψ(3600) debe estar entre 0.5 y 0.6."""
@@ -567,8 +572,8 @@ class TestCoherenciaTemporal(unittest.TestCase):
         tiempos = [0.0, 10.0, 100.0, 1000.0, 3600.0]
         res = self.ct.tabla(tiempos)
         for t, p in res:
-            self.assertGreaterEqual(p, -0.001)
-            self.assertLessEqual(p, 1.001)
+            self.assertGreaterEqual(p, -_PSI_TOLERANCE)
+            self.assertLessEqual(p, 1.0 + _PSI_TOLERANCE)
 
 
 # ============================================================================
