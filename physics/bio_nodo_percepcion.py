@@ -657,14 +657,17 @@ class InvarianteFase:
         return self._densidad.tasa_decoherencia()
 
     # ------------------------------------------------------------------
-    def psi_en_t(self, t: float) -> float:
+    def psi_en_t(self, t: float) -> float:  # noqa: ARG002
         """Coherencia de fase en el instante t.
 
-        Modelo: Ψ(t) = 1 − ε_dec (constante, dado que el sistema es un
-        oscilador puro sin decoherencia dinámica adicional para |t| << τ_coh).
+        Modelo: Ψ(t) = 1 − ε_dec.  En el régimen |t| ≪ τ_coh (tiempo de
+        coherencia del Bio-Nodo), la decoherencia dinámica es despreciable
+        y la coherencia permanece constante e igual a Ψ_fase.  El parámetro
+        ``t`` se incluye para conservar la signatura de la ecuación temporal
+        pero no modifica el resultado en este régimen.
 
         Args:
-            t: Instante de tiempo [s] (no afecta al resultado para t << τ_coh).
+            t: Instante de tiempo [s]. No afecta al resultado para |t| ≪ τ_coh.
 
         Returns:
             Ψ(t) ∈ [0, 1].
@@ -751,18 +754,18 @@ class PuntoFijoSoberano:
         return self.alpha * psi + (1.0 - self.alpha) * psi_esp
 
     # ------------------------------------------------------------------
-    def iterar_punto_fijo(self, n_iter: int = 0) -> float:
+    def iterar_punto_fijo(self, n_iter: int = None) -> float:
         """Itera la contracción de Banach hasta convergencia.
 
         Partiendo de Ψ₀ = 0, aplica iterativamente g hasta n_iter pasos.
 
         Args:
-            n_iter: Número de iteraciones (0 → usa ``self.n_iter``).
+            n_iter: Número de iteraciones (``None`` → usa ``self.n_iter``).
 
         Returns:
             Ψ_n tras n_iter iteraciones.
         """
-        if n_iter <= 0:
+        if n_iter is None:
             n_iter = self.n_iter
         psi = 0.0
         for _ in range(n_iter):

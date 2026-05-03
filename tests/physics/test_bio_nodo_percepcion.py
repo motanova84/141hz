@@ -485,7 +485,7 @@ class TestMatrizDensidad(unittest.TestCase):
         self.assertAlmostEqual(self.md.elemento_diagonal(), 1.0 / 20, places=12)
 
     def test_normalizacion_diagonal(self):
-        """N · ρₙₙ = 1 (trazas normalizada)."""
+        """N · ρₙₙ = 1 (traza normalizada)."""
         self.assertAlmostEqual(self.md.n * self.md.elemento_diagonal(), 1.0, places=10)
 
     def test_psi_densidad_range(self):
