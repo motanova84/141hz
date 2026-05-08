@@ -103,4 +103,28 @@ __all__ = [
     "ResultadoPT",
     "simetria_pt_resonancia_activar",
     "simular_resonancia_pt",
+    # Bio-Nodo y Percepción como Invariante Geométrico (∴BNP∞³)
+    "ConstantesBioNodo",
+    "IdentidadEspectral",
+    "ToroAdelico",
+    "MatrizDensidad",
+    "InvarianteFase",
+    "PuntoFijoSoberano",
+    "CoherenciaBioNodo",
+    "SistemaBioNodo",
+    "ResultadoBioNodo",
+    "bio_nodo_percepcion_activar",
 ]
+
+from .bio_nodo_percepcion import (
+    ConstantesBioNodo,
+    IdentidadEspectral,
+    ToroAdelico,
+    MatrizDensidad,
+    InvarianteFase,
+    PuntoFijoSoberano,
+    CoherenciaBioNodo,
+    SistemaBioNodo,
+    ResultadoBioNodo,
+    bio_nodo_percepcion_activar,
+)

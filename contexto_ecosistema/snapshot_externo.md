@@ -1,5 +1,5 @@
 # Snapshot Externo del Ecosistema QCAL ∞³
-**Última actualización**: 2026-04-27 00:23 UTC (generado automáticamente)
+**Última actualización**: 2026-05-04 00:26 UTC (generado automáticamente)
 
 Este archivo contiene una instantánea del estado actual de los repositorios hermanos del ecosistema QCAL. Se actualiza automáticamente cada semana mediante el workflow `.github/workflows/sync_contexto_externo.yml`.
 
@@ -10,7 +10,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### Repositorio Principal
 - **Nombre**: motanova84/141hz
 - **Estado**: ✅ Activo
-- **Última actualización**: 2026-04-27
+- **Última actualización**: 2026-05-04
 - **Commits totales**: N/A (repo principal)
 
 ---
@@ -20,7 +20,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### 1. Riemann-adelic
 - **URL**: https://github.com/motanova84/Riemann-adelic
 - **Estado**: ✅ Activo
-- **Último commit**: 76c2790
+- **Último commit**: fafc8b0
 - **Aporte principal**: Demostración espectral incondicional de Hipótesis de Riemann
 - **Conexión QCAL**: Operador D(s) ≡ Ξ(s), ceros ζ(s) en σ=½, modos f_n = F0·γₙ/γ₁
 
@@ -56,7 +56,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### 3. 3D-Navier-Stokes
 - **URL**: https://github.com/motanova84/3D-Navier-Stokes
 - **Estado**: ✅ Activo
-- **Último commit**: 1ea30dc
+- **Último commit**: 7fbbcb2
 - **Aporte principal**: Prueba regularidad global ecuaciones 3D Navier-Stokes
 - **Conexión QCAL**: ν_min QCAL, Reynolds cuántico, flujo citoplasmático coherente
 
@@ -92,7 +92,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### 5. P-NP
 - **URL**: https://github.com/motanova84/P-NP
 - **Estado**: ✅ Activo
-- **Último commit**: cec4017
+- **Último commit**: 548396d
 - **Aporte principal**: Marco investigación original problema P ≠ NP
 - **Conexión QCAL**: κ_Π invariante complejidad, clasificación Ψ, reducción O(2^n)→O(n^κ_Π)
 
