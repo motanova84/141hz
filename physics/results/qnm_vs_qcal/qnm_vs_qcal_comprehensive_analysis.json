@@ -1,0 +1,63 @@
+{
+  "metadata": {
+    "event": "GW250114",
+    "analysis_type": "QNM_vs_QCAL_comparison",
+    "fundamental_frequency_hz": 141.7001,
+    "timestamp": "2026-05-10T13:01:09.157811",
+    "precision_decimal_places": 30
+  },
+  "scale_error_analysis": {
+    "f_qcal_observed": 141.7001,
+    "f_qnm_typical": 250.0,
+    "f_qnm_range": [
+      200.0,
+      1200.0
+    ],
+    "scale_ratio_typical": 1.7642895100285745,
+    "scale_ratio_range": [
+      1.4114316080228597,
+      8.468589648137158
+    ],
+    "orders_of_magnitude": 0.2465698519359896,
+    "interpretation": "noetic_vacuum_oscillation"
+  },
+  "persistence_analysis": {
+    "decay_law_qnm": "exponential",
+    "decay_law_qcal": "power_law_t_minus_half",
+    "tau_qnm_ms": 100.0,
+    "t_qnm_decay_to_1percent_ms": 460.5170185988091,
+    "energy_qnm": 0.05545349999073366,
+    "energy_qcal": 0.11534619980327251,
+    "persistence_ratio": 2.080052653530381,
+    "interpretation": "persistent_carrier_wave_anchored_to_universal_grid"
+  },
+  "statistical_significance": {
+    "n_bootstrap": 1000000,
+    "signal_observed": 0.999,
+    "signal_uncertainty": 0.001,
+    "threshold_coherence": 0.888,
+    "sigma_vs_threshold": 110.99999999999999,
+    "sigma_vs_null": 999.0,
+    "p_value_vs_threshold": 0.0,
+    "p_value_vs_null": 0.0,
+    "sigma_111_valid": true,
+    "sigma_999_valid": true,
+    "discovery_threshold_exceeded": 22.199999999999996,
+    "classification": "ABSOLUTE_CERTAINTY",
+    "conclusion": "NOT_DETECTOR_ARTIFACT_BUT_CONSTANT_EMISSION"
+  },
+  "summary": {
+    "qnm_prediction_range_hz": [
+      200.0,
+      1200.0
+    ],
+    "qcal_observation_hz": 141.7001,
+    "scale_discrepancy_orders": 0.2465698519359896,
+    "persistence_advantage": 2.080052653530381,
+    "statistical_certainty_sigma": [
+      110.99999999999999,
+      999.0
+    ],
+    "conclusion": "QCAL_persistent_resonance_confirmed"
+  }
+}

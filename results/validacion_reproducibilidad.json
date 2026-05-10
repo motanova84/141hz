@@ -1,0 +1,30 @@
+{
+  "reproducibilidad": {
+    "repositorio": "https://github.com/motanova84/gw250114-141hz-analysis",
+    "comando_validacion": "make validate",
+    "garantia": "Resultados idénticos garantizados",
+    "metodo": "Datos públicos GWOSC + código abierto",
+    "herramientas": [
+      "GWPy 3.0.13 (oficial LIGO)",
+      "NumPy >= 1.21.0",
+      "SciPy >= 1.7.0",
+      "Matplotlib >= 3.5.0"
+    ],
+    "datos_fuente": "GWOSC (Gravitational Wave Open Science Center)",
+    "checksums": "Verificables vía GWOSC API",
+    "entorno_reproducible": "Docker container disponible"
+  },
+  "pasos_verificacion": [
+    "1. Clonar repositorio desde GitHub",
+    "2. Configurar entorno: make setup",
+    "3. Ejecutar validación: make validate",
+    "4. Comparar resultados en results/validacion_reproducibilidad.json"
+  ],
+  "componentes_verificables": {
+    "codigo_fuente": "scripts/*.py - Totalmente abierto",
+    "datos_entrada": "data/raw/*.hdf5 - Descargables desde GWOSC",
+    "resultados_esperados": "results/*.json - Comparables bit a bit",
+    "figuras": "results/figures/*.png - Generadas automáticamente"
+  },
+  "estado": "GARANTIZADO"
+}

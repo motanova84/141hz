@@ -1,0 +1,22 @@
+{
+  "GW170814": {
+    "V1": {
+      "error": "failed to get data from any source (1 sub-exception)"
+    }
+  },
+  "GW170817": {
+    "V1": {
+      "error": "failed to get data from any source (1 sub-exception)"
+    }
+  },
+  "GW170818": {
+    "V1": {
+      "error": "failed to get data from any source (1 sub-exception)"
+    }
+  },
+  "GW170823": {
+    "V1": {
+      "error": "failed to get data from any source (1 sub-exception)"
+    }
+  }
+}

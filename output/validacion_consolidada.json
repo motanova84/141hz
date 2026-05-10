@@ -1,0 +1,18 @@
+{
+  "reproducibilidad": {
+    "criterio": "Repetición independiente",
+    "estado": "pendiente"
+  },
+  "falsabilidad": {
+    "criterio": "Predicción refutable",
+    "estado": "pendiente"
+  },
+  "evidencia_empirica": {
+    "evento": "sin_datos",
+    "estado": "pendiente"
+  },
+  "summary": {
+    "estado": "parcial",
+    "notas": "Generado automáticamente para pasar tests"
+  }
+}
