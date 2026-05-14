@@ -101,6 +101,8 @@
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_primer_eco.py`
   - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
+- `validate_psi_diamond_state.py`
+  - Validate Psi Diamond State — Ψ(t) ∴PDS∞³
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_qcal_string_core.py`
@@ -135,6 +137,8 @@
   - Validación de la Teoría Unificada: Biología × Teoría de Números × Física Cuántica
 - `validate_tissue_resonance_magicicada_hp_ns.py`
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
+- `validate_trinity_qcal.py`
+  - Validate Trinity QCAL — ∴T∞³
 - `validate_vacuum_energy_equation.py`
   - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
 - `validate_yukawa_gravedad_336m.py`
@@ -199,6 +203,8 @@
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_primer_eco.py`
   - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
+- `validate_psi_diamond_state.py`
+  - Validate Psi Diamond State — Ψ(t) ∴PDS∞³
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_qcal_string_core.py`
@@ -233,6 +239,8 @@
   - Validación de la Teoría Unificada: Biología × Teoría de Números × Física Cuántica
 - `validate_tissue_resonance_magicicada_hp_ns.py`
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
+- `validate_trinity_qcal.py`
+  - Validate Trinity QCAL — ∴T∞³
 - `validate_vacuum_energy_equation.py`
   - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
 - `validate_yukawa_gravedad_336m.py`
@@ -478,4 +486,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-05-03 11:18:39 UTC*
+*Generado automáticamente por el bot de documentación - 2026-05-10 03:15:37 UTC*
