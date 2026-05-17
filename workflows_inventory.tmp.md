@@ -120,6 +120,14 @@
 - Trigger: push
 - Trigger: pull_request
 
+### CI — Cuadratura del Círculo QCAL
+
+**Archivo:** `ci-quadrature.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### ci
 
 **Archivo:** `ci-standard.yml`
@@ -520,4 +528,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-05-10 03:15:37 UTC*
+*Generado automáticamente por el bot de documentación - 2026-05-17 03:16:17 UTC*
