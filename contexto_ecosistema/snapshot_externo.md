@@ -1,5 +1,5 @@
 # Snapshot Externo del Ecosistema QCAL ∞³
-**Última actualización**: 2026-05-11 00:28 UTC (generado automáticamente)
+**Última actualización**: 2026-05-18 00:31 UTC (generado automáticamente)
 
 Este archivo contiene una instantánea del estado actual de los repositorios hermanos del ecosistema QCAL. Se actualiza automáticamente cada semana mediante el workflow `.github/workflows/sync_contexto_externo.yml`.
 
@@ -10,7 +10,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### Repositorio Principal
 - **Nombre**: motanova84/141hz
 - **Estado**: ✅ Activo
-- **Última actualización**: 2026-05-11
+- **Última actualización**: 2026-05-18
 - **Commits totales**: N/A (repo principal)
 
 ---
@@ -20,7 +20,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### 1. Riemann-adelic
 - **URL**: https://github.com/motanova84/Riemann-adelic
 - **Estado**: ✅ Activo
-- **Último commit**: 905d9f0
+- **Último commit**: 1894292
 - **Aporte principal**: Demostración espectral incondicional de Hipótesis de Riemann
 - **Conexión QCAL**: Operador D(s) ≡ Ξ(s), ceros ζ(s) en σ=½, modos f_n = F0·γₙ/γ₁
 
@@ -38,7 +38,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### 2. adelic-bsd
 - **URL**: https://github.com/motanova84/adelic-bsd
 - **Estado**: ✅ Activo
-- **Último commit**: 0ea2ea1
+- **Último commit**: 65a42cc
 - **Aporte principal**: Demostración formal lado espectral-analítico BSD
 - **Conexión QCAL**: Espectro adélico BSD, p=17, modos BIO-LOCK desde K_E(1)
 
@@ -56,7 +56,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### 3. 3D-Navier-Stokes
 - **URL**: https://github.com/motanova84/3D-Navier-Stokes
 - **Estado**: ✅ Activo
-- **Último commit**: 7fbbcb2
+- **Último commit**: 165c77e
 - **Aporte principal**: Prueba regularidad global ecuaciones 3D Navier-Stokes
 - **Conexión QCAL**: ν_min QCAL, Reynolds cuántico, flujo citoplasmático coherente
 
@@ -74,7 +74,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### 4. Ramsey
 - **URL**: https://github.com/motanova84/Ramsey
 - **Estado**: ✅ Activo
-- **Último commit**: 9b0fac8
+- **Último commit**: e05aa59
 - **Aporte principal**: Resolución R(5,5)=43, R(6,6)=108 con verificación SAT
 - **Conexión QCAL**: κ_Π=2.5773 cota vibracional, espaciado GUE grafos extremales
 
@@ -92,7 +92,7 @@ Este archivo contiene una instantánea del estado actual de los repositorios her
 ### 5. P-NP
 - **URL**: https://github.com/motanova84/P-NP
 - **Estado**: ✅ Activo
-- **Último commit**: 07cb960
+- **Último commit**: f8cf3ca
 - **Aporte principal**: Marco investigación original problema P ≠ NP
 - **Conexión QCAL**: κ_Π invariante complejidad, clasificación Ψ, reducción O(2^n)→O(n^κ_Π)
 
