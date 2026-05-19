@@ -17,9 +17,8 @@
     "three": "^0.161.0"
   },
   "overrides": {
-    "picomatch": "^2.3.2"
+    "picomatch": "4.0.4",
     "flatted": "3.4.2"
-    "picomatch": "4.0.4"
   },
   "devDependencies": {
     "@types/node": "^24.9.1",
