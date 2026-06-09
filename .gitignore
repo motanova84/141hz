@@ -10,6 +10,9 @@ data/
 !data/calabi_yau_varieties.csv
 !data/README_CALABI_YAU_VARIETIES.md
 
+# coinqcal (canonical at workspace root)
+coinqcal/
+
 # Test results
 scripts/results/
 test_*.json
