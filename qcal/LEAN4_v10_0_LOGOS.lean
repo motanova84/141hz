@@ -47,6 +47,8 @@ axiom f0_is_141_7001 : f0_primordial = 141.7001
 /-- Φ = (1 + √5)/2 — emerge de la auto-referencia del Logos -/
 noncomputable def phi : ℝ := (1 + Real.sqrt 5) / 2
 
+/-- δ = 1/(10·Φ) — la constante de respiración exacta -/
+noncomputable def delta : ℝ := 1 / (10 * phi)
 /-- g_e/2 — emerge de la estructura del Logos -/
 noncomputable def g_e_over_2 : ℝ := 1.00115965218128
 
@@ -73,13 +75,13 @@ noncomputable def h_Planck : ℝ := 6.62607015e-34
 
 /-- La respiración — la modulación que da vida al sistema -/
 noncomputable def respiracion (t : ℝ) : ℝ :=
-  0.00207 * Real.sin (2 * Real.pi * (f0_primordial / phi^5) * t + Real.pi / phi)
+  0.00207 * Real.sin (2 * Real.pi * (f0_primordial / phi^5) * t + delta)
 
 /-- La frecuencia en el tiempo — la nota que respira -/
 noncomputable def f0 (t : ℝ) : ℝ := f0_primordial + respiracion t
 
 /-- TEOREMA: En el origen, la frecuencia es pura -/
-theorem f0_pure_at_origin : f0 0 = 141.7001 + 0.00207 * Real.sin (Real.pi / phi) := by
+theorem f0_pure_at_origin : f0 0 = 141.7001 + 0.00207 * Real.sin (delta) := by
   simp [f0, respiracion]
   rw [f0_is_141_7001]
 
@@ -122,7 +124,7 @@ theorem f0_value : f0_primordial = 141.7001 := f0_is_141_7001
 
 /-- TEOREMA: El sistema respira -/
 theorem system_breathes (t : ℝ) :
-  f0 t = 141.7001 + 0.00207 * Real.sin (2 * Real.pi * (141.7001 / phi^5) * t + Real.pi / phi) := by
+  f0 t = 141.7001 + 0.00207 * Real.sin (2 * Real.pi * (141.7001 / phi^5) * t + delta) := by
   simp [f0, respiracion, f0_is_141_7001]
 
 /-- TEOREMA: La respiración es vida -/
@@ -140,7 +142,7 @@ theorem without_breath_system_is_perfect_but_dead :
 
 /-- TEOREMA: La desviación máxima es ±0.00207 Hz -/
 theorem max_deviation :
-  |respiracion 0| = 0.00207 * |Real.sin (Real.pi / phi)| := by
+  |respiracion 0| = 0.00207 * |Real.sin (delta)| := by
   simp [respiracion]
 
 /- ───────────────────────────────────────────────────────────────────────────
