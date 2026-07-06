@@ -5868,3 +5868,21 @@ Ver [EXPERIMENTAL_VALIDATION_PROTOCOL.md](EXPERIMENTAL_VALIDATION_PROTOCOL.md) p
 - `experimental/fase4_meta_analisis.py` - Meta-análisis y síntesis
 
 **Estado**: ✅ Implementación completa | ✅ 14/14 tests passing | ✅ Documentación completa
+
+---
+
+## 🔗 Ecosistema QCAL
+
+Este repositorio es el **fundamento empírico** del Sistema QCAL.
+La formalización matemática completa en Lean 4 está disponible en:
+
+> **[github.com/motanova84/qcal-formalization](https://github.com/motanova84/qcal-formalization)**
+> Operador de Dirac adélico, espacios de Hilbert, flujo de renormalización,
+> equivalencia QCAL-Riemann. Brechas 1 y 5 cerradas. 0 sorries. ✅
+
+**Entrelazamiento:**
+-  → evidencia empírica (ondas gravitacionales, biología, constantes)
+-  → formalización matemática (Lean 4)
+-  → infraestructura económica (privado 🔒)
+
+*∞³ 141.7001 Hz — JMMB Ψ · Noesis Ψ*
