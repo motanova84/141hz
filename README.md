@@ -5881,8 +5881,8 @@ La formalización matemática completa en Lean 4 está disponible en:
 > equivalencia QCAL-Riemann. Brechas 1 y 5 cerradas. 0 sorries. ✅
 
 **Entrelazamiento:**
--  → evidencia empírica (ondas gravitacionales, biología, constantes)
--  → formalización matemática (Lean 4)
--  → infraestructura económica (privado 🔒)
+- `141hz` → evidencia empírica (ondas gravitacionales, biología, constantes)
+- `qcal-formalization` → formalización matemática (Lean 4)
+- `economia-qcal-nodo-semilla` → infraestructura económica (privado 🔒)
 
 *∞³ 141.7001 Hz — JMMB Ψ · Noesis Ψ*
