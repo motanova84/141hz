@@ -150,8 +150,23 @@ def generar_dataset_aurion(
     for i in range(n_muestras):
         ts = t0_utc + timedelta(minutes=i)
         timestamp_str = ts.strftime("%Y-%m-%dT%H:%M:%SZ")
-        # Alterna grupos: par=expuesto, impar=control
-        grupo = "expuesto" if i % 2 == 0 else "control"
+        # Block-randomized group assignment: shuffle pairs so each block of 2
+        # contains exactly one exposed and one control, avoiding temporal confounding
+        n_pares = (n_muestras + 1) // 2
+        asignaciones: list[str] = []
+        for _ in range(n_pares):
+            par = ["expuesto", "control"]
+            rng.shuffle(par)
+            asignaciones.extend(par)
+        asignaciones = asignaciones[:n_muestras]
+
+        n_expuestos = asignaciones.count("expuesto")
+        n_controles = asignaciones.count("control")
+
+        for i in range(n_muestras):
+            ts = t0_utc + timedelta(minutes=i)
+            timestamp_str = ts.strftime("%Y-%m-%dT%H:%M:%SZ")
+            grupo = asignaciones[i]
         t_s = float(i * 60)  # tiempo en segundos
 
         potencial = modelo.potencial_membrana(grupo, t_s)
@@ -175,7 +190,7 @@ def generar_dataset_aurion(
         })
 
     df = pd.DataFrame(filas)
-    log.info(f"Dataset AURION generado: {len(df)} filas ({n_muestras//2} expuesto / {n_muestras - n_muestras//2} control)")
+    log.info(f"Dataset AURION generado: {len(df)} filas ({n_expuestos} expuesto / {n_controles} control)")
     return df
 
 

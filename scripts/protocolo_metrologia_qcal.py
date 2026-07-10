@@ -217,14 +217,17 @@ class ProtocoloMedicion:
         n_samples = int(duracion_s * self.sample_rate_hz)
 
         log.info("Calculando S_max (línea de base de entropía)...")
-        s_max = self.calcular_s_max(n_muestras=min(120, n_samples))
-        log.info(f"  S_max = {s_max:.6f} nats  |  sample_rate = {self.sample_rate_hz} Hz")
+        # Use at least 5% of total samples for baseline, minimum 120
+        n_baseline = max(120, n_samples // 20)
+        s_max = self.calcular_s_max(n_muestras=n_baseline)
+        log.info(f"  S_max = {s_max:.6f} nats  |  sample_rate = {self.sample_rate_hz} Hz  |  baseline_n = {n_baseline}")
 
         filas = []
         for i in range(n_samples):
             t_s = i * dt
             ts = t0_utc + timedelta(seconds=t_s)
-            timestamp_str = ts.strftime("%Y-%m-%dT%H:%M:%S.") + f"{ts.microsecond // 1000:03d}Z"
+            # Use microsecond resolution to ensure unique timestamps at any sample rate
+            timestamp_str = ts.strftime("%Y-%m-%dT%H:%M:%S.") + f"{ts.microsecond:06d}Z"
 
             intensidad = self._intensidad_con_portadora(t_s)
 
@@ -376,8 +379,12 @@ def main(argv: list[str] | None = None) -> int:
 
     df = protocolo.generar_dataset(duracion_s=args.duration_s)
 
-    # Aplicar precisión solicitada
-    df["psi_emp_calc"] = df["psi_emp_calc"].round(args.precision)
+    # --precision controls the number of decimal places in the exported CSV.
+    # The generator always computes at full float64 precision internally; this
+    # only affects the output representation (min=1, max=8 to stay within
+    # the 8-decimal precision used during generation).
+    output_precision = max(1, min(args.precision, 8))
+    df["psi_emp_calc"] = df["psi_emp_calc"].round(output_precision)
 
     exportar_csv(df, ruta_salida)
 

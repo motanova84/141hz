@@ -105,11 +105,15 @@ def snr_en_objetivo(
     potencia_pico = float(potencia[idx_target])
     frecuencia_pico_real = float(frecuencias[idx_target])
 
-    # Banda de ruido: excluye ±1 bin alrededor del pico
+    # Exclusion zone: use bin width (frequency_resolution) to avoid removing
+    # too much or too little spectrum around the peak
+    bin_width = float(frecuencias[1] - frecuencias[0]) if len(frecuencias) > 1 else 1.0
+    exclusion_hz = max(bin_width, 1.0)  # at least 1 Hz, scales with resolution
+
     mask_banda = (
         (frecuencias >= f_target - banda_hz) &
         (frecuencias <= f_target + banda_hz) &
-        (np.abs(frecuencias - f_target) > 1.0)
+        (np.abs(frecuencias - f_target) > exclusion_hz)
     )
     if mask_banda.sum() == 0:
         ruido_fondo = float(np.median(potencia))
@@ -120,11 +124,15 @@ def snr_en_objetivo(
     snr_db = float(10.0 * np.log10(snr_lineal)) if snr_lineal > 0 else -np.inf
     fraccion = potencia_pico / max(float(potencia.sum()), 1e-30)
 
-    # El pico es dominante si su SNR supera 10 dB respecto al ruido lateral
-    # y es el máximo global del espectro (sin sesgo de selección)
+    # El pico es dominante si su SNR supera 10 dB y el máximo global del
+    # espectro cae dentro de ±1 bin (= resolución frecuencial) de f_target.
+    # Esto evita fallos cuando la portadora cae entre dos bins contiguos.
+    bin_width_snr = float(frecuencias[1] - frecuencias[0]) if len(frecuencias) > 1 else 1.0
     idx_global_max = int(np.argmax(potencia))
-    es_max_global = (idx_global_max == idx_target)
-    pico_es_dominante = bool(snr_db >= 10.0 and es_max_global)
+    freq_global_max = float(frecuencias[idx_global_max])
+    pico_es_dominante = bool(
+        snr_db >= 10.0 and abs(freq_global_max - f_target) <= bin_width_snr
+    )
 
     return {
         "f_target_hz": f_target,
@@ -288,9 +296,13 @@ def main(argv: list[str] | None = None) -> int:
     resultado_snr = snr_en_objetivo(frecuencias, potencia, args.f_target, args.banda_hz)
     pico_glob = pico_global(frecuencias, potencia)
 
-    # Detección de sesgo de selección:
-    # El pico máximo debería estar en f_target (o muy cerca)
-    sesgo_detectado = abs(pico_glob["frecuencia_hz"] - args.f_target) > args.banda_hz
+    # Detección de discordancia: el máximo global debería coincidir con f_target.
+    # Esto detecta si el pico más fuerte del espectro está lejos del objetivo,
+    # lo cual indica que f_target no es el modo dominante del sistema.
+    # Se usa la resolución frecuencial (bin width) como tolerancia mínima.
+    bin_width_check = float(frecuencias[1] - frecuencias[0]) if len(frecuencias) > 1 else 1.0
+    tolerancia_check = max(bin_width_check, args.banda_hz)
+    pico_fuera_de_objetivo = abs(pico_glob["frecuencia_hz"] - args.f_target) > tolerancia_check
 
     resumen = {
         "archivo_entrada": str(ruta_entrada),
@@ -301,7 +313,7 @@ def main(argv: list[str] | None = None) -> int:
         "banda_ruido_hz": args.banda_hz,
         "resultado_pico_objetivo": resultado_snr,
         "pico_global_espectro": pico_glob,
-        "sesgo_seleccion_detectado": sesgo_detectado,
+        "pico_global_fuera_de_objetivo": pico_fuera_de_objetivo,
         "veredicto": (
             "PICO CONFIRMADO en f₀"
             if resultado_snr["pico_es_dominante"]
@@ -323,16 +335,16 @@ def main(argv: list[str] | None = None) -> int:
 
     # Reporte en consola
     print("\n── Auditoría FFT QCAL ───────────────────────────────────────")
-    print(f"  Archivo           : {ruta_entrada.name}")
-    print(f"  Puntos analizados : {n_puntos}")
-    print(f"  f₀ objetivo       : {args.f_target} Hz")
-    print(f"  Pico real en      : {resultado_snr['frecuencia_pico_real_hz']:.6f} Hz")
-    print(f"  Desviación        : {resultado_snr['desviacion_hz']:.6e} Hz")
-    print(f"  SNR               : {resultado_snr['snr_db']:.2f} dB")
-    print(f"  Fracción potencia : {resultado_snr['fraccion_potencia_total']:.4f}")
-    print(f"  Pico dominante    : {resultado_snr['pico_es_dominante']}")
-    print(f"  Pico global en    : {pico_glob['frecuencia_hz']:.6f} Hz")
-    print(f"  Sesgo detectado   : {sesgo_detectado}")
+    print(f"  Archivo                : {ruta_entrada.name}")
+    print(f"  Puntos analizados      : {n_puntos}")
+    print(f"  f₀ objetivo            : {args.f_target} Hz")
+    print(f"  Pico real en           : {resultado_snr['frecuencia_pico_real_hz']:.6f} Hz")
+    print(f"  Desviación             : {resultado_snr['desviacion_hz']:.6e} Hz")
+    print(f"  SNR                    : {resultado_snr['snr_db']:.2f} dB")
+    print(f"  Fracción potencia      : {resultado_snr['fraccion_potencia_total']:.4f}")
+    print(f"  Pico dominante         : {resultado_snr['pico_es_dominante']}")
+    print(f"  Pico global en         : {pico_glob['frecuencia_hz']:.6f} Hz")
+    print(f"  Pico fuera de objetivo : {pico_fuera_de_objetivo}")
     print(f"\n  ▶ VEREDICTO: {resumen['veredicto']}")
     print("─────────────────────────────────────────────────────────────\n")
 
