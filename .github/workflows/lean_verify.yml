@@ -1,0 +1,73 @@
+name: QCAL Hilo A — Lean 4 Verification
+
+on:
+  push:
+    branches: [ main, 'claude/**' ]
+    paths:
+      - 'src/qcal_lean/**'
+      - 'scripts/install_lean_toolchain.sh'
+      - 'scripts/count_lean_sorries.py'
+      - '.github/workflows/lean_verify.yml'
+  pull_request:
+    paths:
+      - 'src/qcal_lean/**'
+      - '.github/workflows/lean_verify.yml'
+  workflow_dispatch:
+    inputs:
+      max_sorries:
+        description: 'Máximo de sorries tolerado'
+        default: '8'
+        required: false
+
+jobs:
+  sorry_counter:
+    name: Contador de sorries
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Contar sorries
+        run: |
+          MAX="${{ github.event.inputs.max_sorries }}"
+          MAX="${MAX:-8}"
+          python scripts/count_lean_sorries.py --max "$MAX"
+
+  lean_build:
+    name: lake build (Lean 4.7.0 + Mathlib)
+    runs-on: ubuntu-latest
+    # `continue-on-error` mientras el toolchain no esté totalmente
+    # cacheado en el runner (Mathlib pesa ~4 GB).
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache elan + lean
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.elan
+            ~/.cache/mathlib
+          key: lean-${{ runner.os }}-v4.7.0-${{ hashFiles('src/qcal_lean/lakefile.lean') }}
+          restore-keys: |
+            lean-${{ runner.os }}-v4.7.0-
+
+      - name: Instalar toolchain (elan + Lean 4.7.0)
+        run: bash scripts/install_lean_toolchain.sh
+
+      - name: lake build
+        working-directory: src/qcal_lean
+        run: |
+          source "${HOME}/.elan/env"
+          lake update || true
+          lake exe cache get || true
+          lake build 2>&1 | tee lake_build.log
+
+      - name: Publicar log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qcal-lean-build-log
+          path: src/qcal_lean/lake_build.log
+          retention-days: 14
