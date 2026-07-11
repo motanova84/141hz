@@ -7,6 +7,10 @@ on:
         description: 'ΔP/P_th ratio (e.g. 0.10 for +10%)'
         required: false
         default: '0.10'
+      chi:
+        description: 'Grid coupling coefficient χ (Ψ→red, default 1e-3)'
+        required: false
+        default: '1e-3'
   schedule:
     # Cada 6 horas (respeta escala temporal de Ψ en resonancia activa)
     - cron: '0 */6 * * *'
@@ -40,6 +44,7 @@ jobs:
         run: |
           python scripts/protocolo_perturbacion_dp.py \
             --delta-p ${{ github.event.inputs.delta_p || '0.10' }} \
+            --chi ${{ github.event.inputs.chi || '1e-3' }} \
             --f0 141.7001 \
             --p-th 1.0 \
             --seed 42 \

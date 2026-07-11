@@ -45,6 +45,22 @@ def QCAL_fixed (p : FieldParams) : ΨSpace :=
   (p.A_max, p.kappa * p.P_th / p.mu, p.P_th)
 
 -- ============================================================
+-- v1.1: Acoplamiento Ψ → red (grid observable)
+-- ============================================================
+
+-- Coeficiente de respuesta lineal Ψ → red electromagnética
+def chi_grid : ℝ := 1e-3
+
+-- Frecuencia intrínseca de oscilación del sistema linealizado
+-- (autovalor imaginario del Jacobiano bajo simetría μ=ν, ρ=κ)
+noncomputable def omega_Psi (p : FieldParams) : ℝ :=
+  2 * p.kappa * Real.sqrt p.lambda
+
+-- Desplazamiento observable en la red: Δf = χ · P_th · (ΔP / P_th)
+def delta_f_observable (p : FieldParams) (delta_P : ℝ) : ℝ :=
+  chi_grid * p.P_th * (delta_P / p.P_th)
+
+-- ============================================================
 -- TEOREMAS OBJETIVO (pendientes, con sorry)
 -- ============================================================
 
