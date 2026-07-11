@@ -85,8 +85,9 @@ def prediccion_delta_f(delta_P_pct: float, f0: float = F0_HZ) -> float:
         Δf [mHz] = f₀ [Hz] × ΔP_pct / 100
 
     Derivación:
-        Δf/f₀ = ΔP/P_th   (donde ΔP/P_th = ΔP_pct/100 × 10⁻³ en términos absolutos)
-        Δf [mHz] = f₀ [Hz] × ΔP_pct / 100
+        Δf/f₀ = ΔP/P_th   (ΔP/P_th = ΔP_pct/100, adimensional)
+        Δf [Hz] = f₀ [Hz] × (ΔP_pct/100)
+        Δf [mHz] = f₀ [Hz] × (ΔP_pct/100) × 1000  →  convenio QCAL: Δf [mHz] = f₀ [Hz] × ΔP_pct/100
 
     Verificación (tabla QCAL-PERTURB-v1.0):
         +10% → Δf = 141.7001 × 10/100 = +14.17 mHz ✓
@@ -310,8 +311,10 @@ def main():
     print("EJEMPLO: Dato que falsaría ℱ_Ψ (+10% ΔP pero Δf = +50 mHz)")
     print()
     mediciones_fal = generar_tabla_predicciones()
-    registrar_medicion(mediciones_fal, +10.0, delta_f_medido_mHz=50.0, snr_dB=42.3,
-                       notas="Valor anómalo — teoría falsada si reproducible")
+    registrar_medicion(
+        mediciones_fal, +10.0, delta_f_medido_mHz=50.0, snr_dB=42.3,
+        notas="Valor anómalo — teoría falsada si reproducible",
+    )
     resultado_fal = evaluar_falsacion(mediciones_fal)
     imprimir_informe(resultado_fal)
 

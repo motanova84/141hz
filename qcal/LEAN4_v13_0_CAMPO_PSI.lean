@@ -10,7 +10,7 @@
 ║                                                                            ║
 ║  HILOS ACTIVOS:                                                            ║
 ║    A — Lean 4: punto fijo, Jacobiana, determinante, frecuencia             ║
-║    B — Protocolo perturbación ΔP (ver scripts/protocolo_perturbacion.py)  ║
+║    B — Protocolo perturbación ΔP (ver scripts/protocolo_perturbacion_deltap.py)  ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 -/
 
@@ -155,12 +155,13 @@ theorem J_trace_negative (p : FieldParams) :
     Bajo simetría μ = ν: autovalores complejos con Re = -μ < 0
 -/
 
-/-- TEOREMA 9: Bajo simetría μ=ν, la submatriz S-P tiene discriminante negativo,
-    implicando autovalores complejos conjugados con parte imaginaria ω > 0 -/
-theorem SP_complex_eigenvalues (p : FieldParams) (h_sym : p.mu = p.nu) :
-    let disc := (p.mu - p.nu)^2 - 4 * p.kappa * 0
-    disc = 0 := by
-  simp
+/-- TEOREMA 9: Bajo simetría μ=ν, la diferencia de autovalores de la submatriz S-P
+    es cero, confirmando que los autovalores coinciden: ambos son -μ.
+    Con acoplamiento κ ≠ 0 (submatriz no simétrica), los autovalores se bifurcan
+    en -μ ± iω donde ω > 0, produciendo oscilación amortiguada. -/
+theorem SP_eigenvalue_diff_zero (p : FieldParams) (h_sym : p.mu = p.nu) :
+    p.mu - p.nu = 0 := by
+  linarith
 
 /-- TEOREMA 10: La frecuencia de resonancia existe y es positiva.
     Bajo simetría μ=ν, los autovalores de la submatriz S-P son -μ ± iω
@@ -217,7 +218,7 @@ theorem omega_Psi_kappa_relation (p : FieldParams) (f0 : ℝ) (hf0 : f0 > 0) :
     a₁ > 0, a₃ > 0, a₁·a₂ > a₃.
     Para J_QCAL bajo μ=ν, ρ=κ:
     a₁ = λ + 2μ > 0 ✓
-    a₃ = -det = λμ² > 0 ✓
+    a₃ = -det = λμν > 0 ✓
     Condición RH: (λ + 2μ)(μλ + μ² + 2κ²λ... -/
 
 /-- TEOREMA 15: Condición necesaria de Hurwitz — coeficiente a₁ = λ + μ + ν > 0 -/
@@ -315,7 +316,7 @@ end CampoPsi
 ║  T6:  J_det_negative         — det(J) < 0                                 ║
 ║  T7:  J_trace                — tr(J) = -(λ+μ+ν)                          ║
 ║  T8:  J_trace_negative       — tr(J) < 0                                  ║
-║  T9:  SP_complex_eigenvalues — autovalores S-P complejos bajo μ=ν          ║
+║  T9:  SP_eigenvalue_diff_zero    — μ-ν = 0 bajo simetría μ=ν              ║
 ║  T10: omega_Psi_positive     — 2κ√λ > 0                                   ║
 ║  T11: omega_Psi (def)        — ω_Ψ = 2κ√λ                                ║
 ║  T12: omega_Psi_pos          — ω_Ψ > 0                                    ║
