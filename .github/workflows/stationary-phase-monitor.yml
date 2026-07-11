@@ -48,6 +48,8 @@ jobs:
   unit-tests:
     name: Tests Unitarios
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       tests_passed: ${{ steps.run_tests.outputs.passed }}
 
@@ -97,6 +99,8 @@ jobs:
     name: Fase Estacionaria 24h
     runs-on: ubuntu-latest
     needs: unit-tests
+    permissions:
+      contents: read
     # En PRs solo ejecutamos los tests, no la monitorización completa
     if: github.event_name != 'pull_request'
     timeout-minutes: 120
@@ -134,7 +138,7 @@ jobs:
           echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
           echo "| Duración | ${DURATION} h |" >> $GITHUB_STEP_SUMMARY
           echo "| Intervalo | ${INTERVAL} min |" >> $GITHUB_STEP_SUMMARY
-          echo "| Inyección | +$(echo "$INJECTION * 100" | bc)% |" >> $GITHUB_STEP_SUMMARY
+          echo "| Inyección | +$(python3 -c "print(f'{float(\"$INJECTION\")*100:.0f}')") % |" >> $GITHUB_STEP_SUMMARY
           echo "| SNR base | ${SNR} |" >> $GITHUB_STEP_SUMMARY
           echo "| Semilla | ${SEED} |" >> $GITHUB_STEP_SUMMARY
 
@@ -234,5 +238,5 @@ jobs:
         if: steps.monitor.outputs.verdict == 'UNSTABLE'
         run: |
           echo "❌ El sistema no superó los criterios de fase estacionaria."
-          echo "   Ψ debe ser > $PSI_THRESHOLD y |Δf| < 0.05 mHz en todas las ventanas."
+          echo "   Ψ debe ser > 0.999990 y |Δf| < 0.05 mHz en todas las ventanas."
           exit 1
