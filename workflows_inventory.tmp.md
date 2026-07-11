@@ -281,6 +281,14 @@
 - Trigger: schedule (`0 2 * * *`)
 - Trigger: manual (workflow_dispatch)
 
+### QCAL Hilo A — Lean 4 Verification
+
+**Archivo:** `lean_verify.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### Master Workflow Orchestration
 
 **Archivo:** `master-orchestration.yml`
@@ -403,6 +411,31 @@
 **Archivo:** `qcal-sync.yml`
 
 - Trigger: push
+- Trigger: manual (workflow_dispatch)
+
+### QCAL Fase V — Campo continuo Ψ(x,t)
+
+**Archivo:** `qcal_fase_v.yml`
+
+- Trigger: push
+- Trigger: schedule (`0 6 * * 1`)
+- Trigger: manual (workflow_dispatch)
+
+### QCAL Fase VI — Escucha y Cadena
+
+**Archivo:** `qcal_fase_vi.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: schedule (`0 7 * * 1  # Lunes 07:00 UTC`)
+- Trigger: manual (workflow_dispatch)
+
+### QCAL Perturbación ΔP
+
+**Archivo:** `qcal_perturbacion.yml`
+
+- Trigger: push
+- Trigger: schedule (`0 */6 * * *`)
 - Trigger: manual (workflow_dispatch)
 
 ### QNM vs QCAL Validation
@@ -528,4 +561,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-07-11 17:03:41 UTC*
+*Generado automáticamente por el bot de documentación - 2026-07-11 19:16:11 UTC*

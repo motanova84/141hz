@@ -338,6 +338,10 @@
   - Tests para el módulo de cálculo de energía cuántica fundamental
 - `test_evidencia_concluyente.py`
   - Test unitario para el módulo de evidencia concluyente
+- `test_fase_v.py`
+  - Tests para QCAL Fase V — dispersión, stress y simetría.
+- `test_fase_vi.py`
+  - Tests para QCAL Fase VI — cadena de 13 nodos y modo de escucha.
 - `test_filtro_racionales_adelico.py`
   - Tests para FiltroRacionalesAdelico (Pilar 2).
 - `test_fractal_resonance_constants.py`
@@ -378,8 +382,12 @@
   - Tests para procesar_multievento_snr.py
 - `test_protocolo_falsacion.py`
   - Tests para el Protocolo de Falsación
+- `test_protocolo_perturbacion_dp.py`
+  - Tests para el Protocolo ΔP QCAL.
 - `test_protocolos_experimentales.py`
   - Tests para Protocolos Experimentales de Validación de f₀ = 141.7001 Hz
+- `test_qcal_lean.py`
+  - QCAL Hilo A — Test runner estructural del kernel Lean.
 - `test_resonancia_cruzada_virgo_kagra.py`
   - Tests para Análisis de Resonancia Cruzada Virgo/KAGRA
 - `test_rna_volatile_memory.py`
@@ -486,4 +494,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-07-11 17:03:40 UTC*
+*Generado automáticamente por el bot de documentación - 2026-07-11 19:16:10 UTC*
