@@ -44,8 +44,8 @@ def count_file(path: Path) -> int:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default="src/qcal_lean/QCAL")
-    ap.add_argument("--max", type=int, default=8,
-                    help="Máximo tolerado (default 8, objetivo 0)")
+    ap.add_argument("--max", type=int, default=1,
+                    help="Máximo tolerado (default 1, objetivo 0)")
     args = ap.parse_args()
 
     root = Path(args.root)

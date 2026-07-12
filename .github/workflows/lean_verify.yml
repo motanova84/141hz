@@ -16,7 +16,7 @@ on:
     inputs:
       max_sorries:
         description: 'Máximo de sorries tolerado'
-        default: '8'
+        default: '1'
         required: false
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
       - name: Contar sorries
         run: |
           MAX="${{ github.event.inputs.max_sorries }}"
-          MAX="${MAX:-8}"
+          MAX="${MAX:-1}"
           python scripts/count_lean_sorries.py --max "$MAX"
 
   lean_build:

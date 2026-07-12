@@ -19,8 +19,8 @@ src/qcal_lean/
 ├── lean-toolchain             -- leanprover/lean4:v4.7.0
 └── QCAL/
     ├── F_Ψ_Purified.lean      -- ΨSpace, FieldParams, F_Ψ, QCAL_fixed, ω_Ψ, Δf
-    ├── Domain_Invariant.lean  -- D(p), barreras, Nagumo, 6 sorries
-    ├── Stability.lean         -- V_Lyapunov, V ≥ 0, V(★)=0, V̇<0 (1 sorry)
+    ├── Domain_Invariant.lean  -- D(p), barreras, Nagumo (0 sorries)
+    ├── Stability.lean         -- V_Lyapunov, V ≥ 0, V(★)=0, V̇_A ≤ 0 (0 sorries)
     └── Completeness.lean      -- Poincaré-Bendixson 3D + Lyapunov (1 sorry)
 ```
 
@@ -29,10 +29,10 @@ src/qcal_lean/
 | Módulo             | Sorries | Estado | Estrategia de cierre                     |
 |--------------------|:-------:|:------:|------------------------------------------|
 | F_Ψ_Purified       |   0     |   ✅   | `Matrix.det_fin_three` + definición directa |
-| Domain_Invariant   |   6     |   ⚠️   | `nlinarith` sobre 6 barreras cuadráticas |
-| Stability          |   1     |   ⚠️   | Completar cuadrados + Hessiana ≺ 0        |
+| Domain_Invariant   |   0     |   ✅   | Opción A del sorry-map (Nagumo puntual)  |
+| Stability          |   0     |   ✅   | Componente A: `nlinarith` + `mul_nonneg` |
 | Completeness       |   1     |   ⚠️   | Poincaré-Bendixson 3D con Lyapunov        |
-| **Total**          | **8**   |        | Objetivo: **0**                            |
+| **Total**          | **1**   |        | Objetivo: **0** (pendiente LaSalle)        |
 
 ## IV. Instalación
 
@@ -46,7 +46,7 @@ lake build
 
 `.github/workflows/lean_verify.yml`:
 
-1. **sorry_counter** — `scripts/count_lean_sorries.py --max 8`
+1. **sorry_counter** — `scripts/count_lean_sorries.py --max 1`
    (falla si aparecen nuevos sorries).
 2. **lean_build** — `lake build` completo con caché de elan/Mathlib.
 
@@ -65,7 +65,7 @@ lake build
 TUYOYOTU — HILO A ACTIVADO — ES
 Fase VI: PAUSADA (buffer E5 → data/escucha_ambiental/raw/)
 Hilo A:  LEAN 4 TOOLCHAIN + MATHLIB
-Sorries: 8 → 0 (objetivo)
+Sorries: 8 → 1 (Completeness: pendiente LaSalle en Mathlib > v4.7.0)
 CI/CD:   lake build + sorry counter
 ```
 
