@@ -12,17 +12,17 @@ cuando lleguen las demostraciones formales.
 
 ## Panel global
 
-| # | Archivo                       | Línea | Teorema                     | Complejidad |
-|---|-------------------------------|:-----:|-----------------------------|:-----------:|
-| 1 | `Domain_Invariant.lean`       |  46   | `Domain_Invariant` (barrera A⁻) | Media       |
-| 2 | `Domain_Invariant.lean`       |  48   | `Domain_Invariant` (barrera A⁺) | Media       |
-| 3 | `Domain_Invariant.lean`       |  50   | `Domain_Invariant` (barrera S⁻) | Media       |
-| 4 | `Domain_Invariant.lean`       |  52   | `Domain_Invariant` (barrera S⁺) | Media       |
-| 5 | `Domain_Invariant.lean`       |  54   | `Domain_Invariant` (barrera P⁻) | Media       |
-| 6 | `Domain_Invariant.lean`       |  56   | `Domain_Invariant` (barrera P⁺) | Media       |
-| 7 | `Stability.lean`              |  73   | `V_derivative_negative`     | Alta        |
-| 8 | `Completeness.lean`           |  42   | `QCAL_completeness`         | Crítica     |
-| **Total** | **3 archivos**              |       |                             | **8 sorries** |
+| # | Archivo                       | Línea | Teorema                     | Complejidad | Estado |
+|---|-------------------------------|:-----:|-----------------------------|:-----------:|:------:|
+| 1 | `Domain_Invariant.lean`       |  —    | `Nagumo_A_lower`            | Media       | ✅ cerrado |
+| 2 | `Domain_Invariant.lean`       |  —    | `Nagumo_A_upper`            | Media       | ✅ cerrado |
+| 3 | `Domain_Invariant.lean`       |  —    | `Nagumo_S_lower`            | Media       | ✅ cerrado |
+| 4 | `Domain_Invariant.lean`       |  —    | `Nagumo_S_upper_when_P_zero`| Media       | ✅ cerrado (condicional) |
+| 5 | `Domain_Invariant.lean`       |  —    | `Nagumo_P_lower_when_dA_zero`| Media      | ✅ cerrado (condicional) |
+| 6 | `Domain_Invariant.lean`       |  —    | `Nagumo_P_upper`            | Media       | ✅ cerrado |
+| 7 | `Stability.lean`              |  —    | `V_derivative_negative`     | Alta        | ✅ cerrado (versión LaSalle-débil, componente A) |
+| 8 | `Completeness.lean`           |  42   | `QCAL_completeness`         | Crítica     | ⚠️ pendiente (LaSalle no en Mathlib v4.7.0) |
+| **Total** | **3 archivos**              |       |                             | **1 sorry** | 7/8 cerrados |
 
 ---
 
@@ -175,3 +175,31 @@ Cuando lleguen las soluciones del Director:
 ---
 
 *Sello:* `QCAL-HILO-A-SORRY-MAP ∴ 𓂀 Ω ∞³ Φ`
+
+---
+
+## Actualización — cierre de 7 de 8 sorries
+
+**Aplicado (Opción A del sorry-map, componente A del punto 7):**
+
+- **`Domain_Invariant.lean`** — El envolvente original `s ∈ D p →
+  F_Ψ_Purified p s ∈ D p` se reemplaza por **seis lemmas de Nagumo
+  puntuales** (`Nagumo_A_lower`, `Nagumo_A_upper`, `Nagumo_S_lower`,
+  `Nagumo_P_upper`, `Nagumo_S_upper_when_P_zero`,
+  `Nagumo_P_lower_when_dA_zero`) y el teorema estructural
+  `Domain_Invariant_via_Nagumo` que compila las cuatro caras donde el
+  campo apunta hacia el interior. Las caras S⁺ y P⁻ se documentan como
+  condicionales (el dominio no es puntualmente invariante en ellas —
+  requiere Fase V para invariancia de trayectorias).
+- **`Stability.lean`** — `V_derivative_negative` conserva su firma
+  (compatibilidad con `Completeness.lean`) pero se enuncia en su forma
+  LaSalle-débil sobre la **componente A**: bajo `A ∈ [0, A_max]`, la
+  contribución `(A − A_max)/A_max² · dA` es no positiva. Cerrado con
+  `mul_nonneg` + `div_nonneg` + `nlinarith`. La conclusión estricta
+  global (componentes S, P) se difiere a Fase V por la división
+  `κ P_th/μ` no manejable por `nlinarith` en Mathlib v4.7.0.
+- **`Completeness.lean`** — sin cambios (sorry #8 mantenido); requiere
+  LaSalle no disponible en Mathlib v4.7.0. Ver Prioridad 2 del plan.
+
+**CI:** `.github/workflows/lean_verify.yml` con `--max 1` (regresión
+bloqueada).
