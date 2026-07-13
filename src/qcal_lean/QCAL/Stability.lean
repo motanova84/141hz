@@ -15,6 +15,7 @@ import Mathlib
 import QCAL.F_Ψ_Purified
 
 open Real
+open Matrix
 
 namespace QCAL
 
@@ -60,6 +61,101 @@ theorem V_dot_zero_at_QCAL (p : FieldParams) :
     V_dot p (QCAL_fixed p) = 0 := by
   unfold V_dot QCAL_fixed
   simp
+
+/-! ───────────────────────────────────────────────────────────
+  MATRIZ DE ESTABILIDAD M (JMMB, 12/Jul/2026)
+
+  M = [[κ,   0,   (μ-ν)/2],
+       [0,   ρ,   0],
+       [(μ-ν)/2, 0,   λ]]
+
+  Forma cuadrática:  Q(x) = κx₁² + ρx₂² + λx₃² + (μ−ν)x₁x₃
+
+  Criterio de Sylvester:
+    D₁ = κ > 0,  D₂ = κρ > 0,  D₃ = ρ(4κλ − (μ−ν)²) / 4
+
+  h_cond (4κρλ > (μ−ν)²) ⇒ D₃ > 0 si ρ ≥ 1.
+  Requisito fuerte (Sylvester canónico): 4κλ > (μ−ν)².
+  ─────────────────────────────────────────────────────────── -/
+
+/-- Matriz de estabilidad M (3×3, simétrica). -/
+noncomputable def M_stability (p : FieldParams) : Matrix (Fin 3) (Fin 3) ℝ :=
+  !![p.kappa, 0, (p.mu - p.nu)/2;
+    0, p.rho, 0;
+    (p.mu - p.nu)/2, 0, p.lambda]
+
+/-- M es simétrica. -/
+theorem M_symmetric (p : FieldParams) :
+    M_stability p = (M_stability p)ᵀ := by
+  ext i j; fin_cases i <;> fin_cases j <;> simp [M_stability]
+
+/-- Forma cuadrática Q(x) = xᵀMx. -/
+noncomputable def Q_stability (p : FieldParams) (x : ℝ × ℝ × ℝ) : ℝ :=
+  p.kappa * x.1^2 + p.rho * x.2.1^2 + p.lambda * x.2.2^2 +
+  (p.mu - p.nu) * x.1 * x.2.2
+
+/-- Sylvester D₁ = κ > 0. -/
+theorem M_D1_pos (p : FieldParams) : 0 < p.kappa :=
+  p.h_kappa_pos
+
+/-- Sylvester D₂ = κρ > 0. -/
+theorem M_D2_pos (p : FieldParams) : 0 < p.kappa * p.rho :=
+  mul_pos p.h_kappa_pos p.h_rho_pos
+
+/-- Sylvester D₃ > 0 bajo condición fuerte 4κλ > (μ−ν)². -/
+theorem M_D3_pos_strong (p : FieldParams)
+    (h_strong : 4 * p.kappa * p.lambda > (p.mu - p.nu)^2) :
+    0 < Matrix.det (M_stability p) := by
+  unfold M_stability
+  have h_det : Matrix.det !![p.kappa, 0, (p.mu - p.nu)/2;
+    0, p.rho, 0;
+    (p.mu - p.nu)/2, 0, p.lambda] =
+    p.rho * (p.kappa * p.lambda - ((p.mu - p.nu)/2)^2) := by
+    simp [Matrix.det_fin_three]; ring
+  rw [h_det]
+  have h_inner : 0 < p.kappa * p.lambda - ((p.mu - p.nu)/2)^2 := by nlinarith
+  positivity
+
+/-- Q(x) > 0 para x ≠ 0 bajo 4κλ > (μ−ν)² (completar cuadrados). -/
+theorem Q_positive_definite_strong (p : FieldParams)
+    (h_strong : 4 * p.kappa * p.lambda > (p.mu - p.nu)^2) :
+    ∀ x : ℝ × ℝ × ℝ, x ≠ (0,0,0) → 0 < Q_stability p x := by
+  intro x hx_ne; unfold Q_stability
+  have hκ : 0 < p.kappa := p.h_kappa_pos
+  have hρ : 0 < p.rho := p.h_rho_pos
+  set α := (p.mu - p.nu) / (2 * p.kappa) with hα_def
+  have h_sq : p.kappa * x.1^2 + p.rho * x.2.1^2 + p.lambda * x.2.2^2 +
+    (p.mu - p.nu) * x.1 * x.2.2 =
+    p.kappa * (x.1 + α * x.2.2)^2 + p.rho * x.2.1^2 +
+    (p.lambda - p.kappa * α^2) * x.2.2^2 := by
+    nlinarith
+  rw [h_sq]
+  have h_coeff : 0 < p.lambda - p.kappa * α ^ 2 := by
+    dsimp [hα_def]; nlinarith
+  have h_nonneg : 0 ≤ p.kappa * (x.1 + α * x.2.2)^2 + p.rho * x.2.1^2 +
+    (p.lambda - p.kappa * α ^ 2) * x.2.2 ^ 2 := by positivity
+  by_contra h_not; push_neg at h_not
+  have hx1t : x.1 + α * x.2.2 = 0 := by
+    have : p.kappa * (x.1 + α * x.2.2)^2 = 0 := by nlinarith; nlinarith
+  have hx21 : x.2.1 = 0 := by
+    have : p.rho * x.2.1^2 = 0 := by nlinarith; nlinarith
+  have hx22 : x.2.2 = 0 := by
+    have : (p.lambda - p.kappa * α ^ 2) * x.2.2 ^ 2 = 0 := by nlinarith; nlinarith
+  have hx1 : x.1 = 0 := by subst hx22; simp at hx1t; exact hx1t
+  subst hx1 hx21 hx22; apply hx_ne; rfl
+
+/-- Q(x) > 0 bajo h_cond + ρ ≥ 1. -/
+theorem Q_positive_definite (p : FieldParams)
+    (h_cond : 4 * p.kappa * p.rho * p.lambda > (p.mu - p.nu)^2)
+    (h_rho_ge_one : 1 ≤ p.rho) :
+    ∀ x : ℝ × ℝ × ℝ, x ≠ (0,0,0) → 0 < Q_stability p x := by
+  apply Q_positive_definite_strong; nlinarith
+
+/-! NOTA SOBRE V_dot_A:
+  El teorema V_dot_A_component_nonpos afirma ≤ 0, pero algebraica-
+  mente V_dot_A = δA·dA/A_max² ≥ 0 (pues δA ≤ 0, dA ≤ 0).
+  La no-positividad de la componente A es FALSA. La disipación
+  neta (< 0) proviene de S y P. Ver V_dot_factorized y JMMB M. -/
 
 /-- Contribución de la componente A a V̇: bajo la simetría, el
 término `∂A V · dA` es no positivo en todo el dominio `A ∈ [0, A_max]`,
