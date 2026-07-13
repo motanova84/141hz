@@ -34,7 +34,7 @@ jobs:
       - name: 🛰️ Run QCAL Harvest
         run: |
           echo "🔍 Running QCAL-Harvest..."
-          python qcal-harvest.py --repos-dir ${{ github.event.inputs.repos_dir || '.' }} --output GLOBAL_QCAL_CONTEXT.md
+          python scripts/qcal-harvest.py --repos-dir ${{ github.event.inputs.repos_dir || '.' }} --output GLOBAL_QCAL_CONTEXT.md
           
           if [ -f GLOBAL_QCAL_CONTEXT.md ]; then
             echo "✅ GLOBAL_QCAL_CONTEXT.md generated successfully"

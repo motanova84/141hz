@@ -55,7 +55,7 @@ jobs:
           echo ""
           
           # Ejecutar organización
-          python3 secretaria_noetica.py --organize-only
+          python3 scripts/secretaria_noetica.py --organize-only
           
           echo ""
           echo "✅ Organización completada"

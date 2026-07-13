@@ -280,7 +280,7 @@ jobs:
           test -f VOLUMEN_I_AT2020afhd.md && echo "✓ Documentation found"
           test -f validate_at2020afhd.py && echo "✓ Validation script found"
           test -f analisis_de_periodicidad_datos_reales.ipynb && echo "✓ Notebook found"
-          test -f "Verificación Empírica del Modelo QCAL ∞³ en AT2020afhd.pdf" && echo "✓ PDF found" || echo "⚠ PDF not found (optional)"
+          test -f "media/Verificación Empírica del Modelo QCAL ∞³ en AT2020afhd.pdf" && echo "✓ PDF found" || echo "⚠ PDF not found (optional)"
           echo "File structure check complete"
       
       - name: Summary

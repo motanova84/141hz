@@ -109,7 +109,7 @@ jobs:
           name: gwtc1-results-py${{ matrix.python-version }}-${{ github.run_number }}
           path: |
             multi_event_final.json
-            multi_event_final.png
+            media/multi_event_final.png
           retention-days: 30
   
   at2020afhd-validation:
@@ -238,7 +238,7 @@ jobs:
           from gw_spectral_evidence import plot_gw_spectral_evidence
           
           print("Generating GW spectral evidence plot...")
-          plot_gw_spectral_evidence(save_path='gw_spectral_evidence.png', show=False)
+          plot_gw_spectral_evidence(save_path='media/gw_spectral_evidence.png', show=False)
           print("✅ Spectral evidence plot generated")
           EOF
       
@@ -248,7 +248,7 @@ jobs:
         with:
           name: spectral-evidence-py${{ matrix.python-version }}-${{ github.run_number }}
           path: |
-            gw_spectral_evidence.png
+            media/gw_spectral_evidence.png
           retention-days: 30
   
   qnm-qcal-comparison:
