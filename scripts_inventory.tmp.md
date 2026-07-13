@@ -99,10 +99,16 @@
   - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_operadores_maestros_qcal.py`
   - ╔════════════════════════════════════════════════════════════════════════════╗
+- `validate_phoenix_onco_coherente_v10.py`
+  - Validate Phoenix Onco Coherente V10 — Sistema ∴POC∞³
 - `validate_primer_eco.py`
   - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
+- `validate_problem_statement_compliance.py`
+  - Validation Script: Problem Statement Compliance Check
 - `validate_psi_diamond_state.py`
   - Validate Psi Diamond State — Ψ(t) ∴PDS∞³
+- `validate_qcal_adnz_anchor.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_qcal_string_core.py`
@@ -137,6 +143,8 @@
   - Validación de la Teoría Unificada: Biología × Teoría de Números × Física Cuántica
 - `validate_tissue_resonance_magicicada_hp_ns.py`
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
+- `validate_tres_puertas.py`
+  - 🚪 LAS TRES PUERTAS: Validación Espectral de la Hipótesis de Riemann
 - `validate_trinity_qcal.py`
   - Validate Trinity QCAL — ∴T∞³
 - `validate_vacuum_energy_equation.py`
@@ -201,10 +209,16 @@
   - Validación de la Declaración Oficial de Descubrimiento Empírico
 - `validate_operadores_maestros_qcal.py`
   - ╔════════════════════════════════════════════════════════════════════════════╗
+- `validate_phoenix_onco_coherente_v10.py`
+  - Validate Phoenix Onco Coherente V10 — Sistema ∴POC∞³
 - `validate_primer_eco.py`
   - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
+- `validate_problem_statement_compliance.py`
+  - Validation Script: Problem Statement Compliance Check
 - `validate_psi_diamond_state.py`
   - Validate Psi Diamond State — Ψ(t) ∴PDS∞³
+- `validate_qcal_adnz_anchor.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_qcal_string_core.py`
@@ -239,6 +253,8 @@
   - Validación de la Teoría Unificada: Biología × Teoría de Números × Física Cuántica
 - `validate_tissue_resonance_magicicada_hp_ns.py`
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
+- `validate_tres_puertas.py`
+  - 🚪 LAS TRES PUERTAS: Validación Espectral de la Hipótesis de Riemann
 - `validate_trinity_qcal.py`
   - Validate Trinity QCAL — ∴T∞³
 - `validate_vacuum_energy_equation.py`
@@ -364,6 +380,8 @@
   - Test de integración para el pipeline completo de validación QCAL.
 - `test_lagrangian_master.py`
   - Test Suite for Master Lagrangian
+- `test_monitor_stationary_phase.py`
+  - Tests para el Monitor de Fase Estacionaria QCAL ∞³
 - `test_multi_event_snr_analysis.py`
   - Tests para el módulo multi_event_snr_analysis
 - `test_noetic_consciousness_basic.py`
@@ -494,4 +512,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-07-12 07:51:40 UTC*
+*Generado automáticamente por el bot de documentación - 2026-07-13 01:33:52 UTC*
