@@ -13,11 +13,14 @@ Estado Hilo A (sorries en este módulo): 0.
 -/
 import Mathlib
 import QCAL.F_Ψ_Purified
+import QCAL.StabilityMatrix
 
 open Real
 open Matrix
 
 namespace QCAL
+
+open QCAL.StabilityMatrix
 
 /-- Función de Lyapunov cuadrática definida positiva. -/
 noncomputable def V_Lyapunov (p : FieldParams) (s : ΨSpace) : ℝ :=
@@ -65,6 +68,8 @@ theorem V_dot_zero_at_QCAL (p : FieldParams) :
 /-! ───────────────────────────────────────────────────────────
   MATRIZ DE ESTABILIDAD M (JMMB, 12/Jul/2026)
 
+  Módulo independiente: QCAL.StabilityMatrix.lean
+
   M = [[κ,   0,   (μ-ν)/2],
        [0,   ρ,   0],
        [(μ-ν)/2, 0,   λ]]
@@ -78,11 +83,10 @@ theorem V_dot_zero_at_QCAL (p : FieldParams) :
   Requisito fuerte (Sylvester canónico): 4κλ > (μ−ν)².
   ─────────────────────────────────────────────────────────── -/
 
-/-- Matriz de estabilidad M (3×3, simétrica). -/
+/-- Matriz de estabilidad M (3×3, simétrica) desde FieldParams.
+    Ver QCAL.StabilityMatrix.M para la versión escalar. -/
 noncomputable def M_stability (p : FieldParams) : Matrix (Fin 3) (Fin 3) ℝ :=
-  !![p.kappa, 0, (p.mu - p.nu)/2;
-    0, p.rho, 0;
-    (p.mu - p.nu)/2, 0, p.lambda]
+  M p.kappa p.rho p.lambda p.mu p.nu
 
 /-- M es simétrica. -/
 theorem M_symmetric (p : FieldParams) :
