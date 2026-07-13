@@ -18,5 +18,6 @@ lean_lib QCAL where
     `QCAL.F_Ψ_Purified,
     `QCAL.Domain_Invariant,
     `QCAL.Stability,
-    `QCAL.Completeness
+    `QCAL.Completeness,
+    `QCAL.StabilityMatrix
   ]
