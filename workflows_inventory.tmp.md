@@ -33,6 +33,7 @@
 
 - Trigger: push
 - Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
 
 ### Coherence Tensor Validation
 
@@ -56,7 +57,6 @@
 
 - Trigger: push
 - Trigger: pull_request
-- Trigger: schedule (`0 0 * * *`)
 - Trigger: manual (workflow_dispatch)
 
 ### QCAL Hilo A — Lean 4 Verification
@@ -106,4 +106,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-07-13 01:50:20 UTC*
+*Generado automáticamente por el bot de documentación - 2026-07-15 19:06:11 UTC*
