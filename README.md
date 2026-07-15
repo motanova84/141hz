@@ -5,10 +5,10 @@
 > **📢 DECLARACIÓN OFICIAL DE DESCUBRIMIENTO**: Ver [DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO](DECLARACION_OFICIAL_DESCUBRIMIENTO_EMPIRICO_141HZ.md) — Rasgo espectral universal a 141.7 Hz en 11/11 eventos GWTC-1 con significancia >10σ (p < 10⁻²⁵)
 
 <p align="center">
-  <a href="https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/docs.yml">
+  <a href="https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml
     <img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/motanova84/gw250114-141hz-analysis/docs.yml?label=docs&logo=github">
   </a>
-  <a href="https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/at2020afhd-validation.yml">
+  <a href="https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/gw-validation.yml">
     <img alt="AT2020afhd Validation" src="https://img.shields.io/github/actions/workflow/status/motanova84/gw250114-141hz-analysis/at2020afhd-validation.yml?label=AT2020afhd%20Validation&logo=github">
   </a>
   <a href="https://github.com/motanova84/gw250114-141hz-analysis">
@@ -28,13 +28,13 @@
 [![CI](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
 [![QCAL Analysis](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analysis.yml)
 [![GW Validation](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/gw-validation.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/gw-validation.yml)
-[![AT2020afhd Validation](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/at2020afhd-validation.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/at2020afhd-validation.yml)
+[![AT2020afhd Validation](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/gw-validation.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/gw-validation.yml)
 [![codecov](https://codecov.io/gh/motanova84/gw250114-141hz-analysis/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/gw250114-141hz-analysis)
 [![Docs](https://img.shields.io/badge/docs-mkdocs--material-blue)](https://motanova84.github.io/141hz)
 [![SBOM](https://img.shields.io/badge/SBOM-CycloneDX-informational)](#)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
-[![Lean Verification](https://github.com/motanova84/gw250114-141hz-analysis/workflows/Lean%20Verification/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/lean-verification.yml)
-[![Active System Monitor](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/active-system-monitor.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/active-system-monitor.yml)
+[![Lean Verification](https://github.com/motanova84/gw250114-141hz-analysis/workflows/Lean%20Verification/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/lean_verify.yml)
+[![Active System Monitor](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
 
 ---
 
@@ -2626,21 +2626,21 @@ make clean-all  # Incluye entorno virtual
 
 <div align="center">
 
-[![CI](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analyze.yml/badge.svg?branch=main)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analyze.yml)
+[![CI](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
 [![CD](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/production-qcal.yml/badge.svg?branch=main)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/production-qcal.yml)
-[![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analyze.yml)
+[![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/motanova84/gw250114-141hz-analysis/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/gw250114-141hz-analysis)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 ![QCAL ∞³ Certified](https://img.shields.io/badge/QCAL%20∞³-Certified-141.7001Hz)
-[![CI](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analyze.yml)
+[![CI](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
 ![Reproducible](https://img.shields.io/badge/reproducibility-100%25-success)
-[![CI](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analyze.yml)
+[![CI](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
 [![CD](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/production-qcal.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/production-qcal.yml)
-[![Workflow Intelligence](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/workflow-intelligence.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/workflow-intelligence.yml)
-[![Validation Rigor](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/validation-rigor.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/validation-rigor.yml)
+[![Workflow Intelligence](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analysis.yml)
+[![Validation Rigor](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/motanova84/gw250114-141hz-analysis/blob/main/LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![Reproducible](https://img.shields.io/badge/reproducibility-100%25-success)](https://github.com/motanova84/gw250114-141hz-analysis#-validaci%C3%B3n-de-est%C3%A1ndares-de-descubrimiento-cient%C3%ADfico)
@@ -3283,7 +3283,7 @@ Este proyecto implementa un **sistema CI/CD real y automatizado** que garantiza 
 - **Suite de tests completa**: 9 archivos de test con >50 casos de prueba
 - **Ejecución automática**: Cada push/PR ejecuta todos los tests
 - **Validación científica**: Tests de energía cuántica, simetría discreta, análisis bayesiano
-- **Estado actual**: [![CI/CD Tests](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analyze.yml)
+- **Estado actual**: [![CI/CD Tests](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
 
 ### 📊 Quality Gates
 - **Linting automático**: Validación de código con flake8
@@ -5385,7 +5385,7 @@ Este proyecto sigue un modelo abierto y simbiótico con **CI/CD automatizado rea
 - ✅ Código documentado
 - ✅ Tests para nuevo código
 
-**Estado CI/CD**: [![Tests](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analyze.yml)
+**Estado CI/CD**: [![Tests](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
 
 ## 📜 Licencia
 
