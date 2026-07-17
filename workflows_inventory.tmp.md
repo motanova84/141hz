@@ -51,6 +51,13 @@
 - Trigger: push
 - Trigger: manual (workflow_dispatch)
 
+### Deploy GitHub Pages
+
+**Archivo:** `deploy-pages.yml`
+
+- Trigger: push
+- Trigger: manual (workflow_dispatch)
+
 ### GW Validation - 141.7 Hz
 
 **Archivo:** `gw-validation.yml`
@@ -106,4 +113,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-07-15 19:06:11 UTC*
+*Generado automáticamente por el bot de documentación - 2026-07-17 14:27:32 UTC*
