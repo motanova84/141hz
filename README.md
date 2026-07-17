@@ -5,14 +5,14 @@
 > **📢 DECLARACIÓN OFICIAL DE DESCUBRIMIENTO**: Ver [DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO](DECLARACION_OFICIAL_DESCUBRIMIENTO_EMPIRICO_141HZ.md) — Rasgo espectral universal a 141.7 Hz en 11/11 eventos GWTC-1 con significancia >10σ (p < 10⁻²⁵)
 
 <p align="center">
-  <a href="https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml
-    <img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/motanova84/gw250114-141hz-analysis/docs.yml?label=docs&logo=github">
+  <a href="https://github.com/motanova84/141hz/actions/workflows/ci.yml
+    <img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/docs.yml?label=docs&logo=github">
   </a>
-  <a href="https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/gw-validation.yml">
-    <img alt="AT2020afhd Validation" src="https://img.shields.io/github/actions/workflow/status/motanova84/gw250114-141hz-analysis/at2020afhd-validation.yml?label=AT2020afhd%20Validation&logo=github">
+  <a href="https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml">
+    <img alt="AT2020afhd Validation" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/at2020afhd-validation.yml?label=AT2020afhd%20Validation&logo=github">
   </a>
-  <a href="https://github.com/motanova84/gw250114-141hz-analysis">
-    <img alt="Last commit" src="https://img.shields.io/github/last-commit/motanova84/gw250114-141hz-analysis">
+  <a href="https://github.com/motanova84/141hz">
+    <img alt="Last commit" src="https://img.shields.io/github/last-commit/motanova84/141hz">
   </a>
   <a href="https://motanova84.github.io/141hz">
     <img alt="Site" src="https://img.shields.io/website?url=https%3A%2F%2Fmotanova84.github.io%2F141hz">
@@ -25,16 +25,16 @@
 [![AT2020afhd Verified](https://img.shields.io/badge/AT2020afhd-99.78%25%20Verified-success?logo=starship&logoColor=white)](AT2020AFHD_VERIFICATION_CERTIFICATE.md)
 [![License: Sovereign](https://img.shields.io/badge/License-Sovereign%20Noetic-gold.svg?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTEyIDJsMS41IDQuNUwxOCA3bC00LjUgMS41TDEyIDEzIDEwLjUgOC41IDYgNyAxMC41IDUuNXoiLz48L3N2Zz4=)](LICENSE_SOBERANA)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
-[![QCAL Analysis](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analysis.yml)
-[![GW Validation](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/gw-validation.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/gw-validation.yml)
-[![AT2020afhd Validation](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/gw-validation.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/gw-validation.yml)
-[![codecov](https://codecov.io/gh/motanova84/gw250114-141hz-analysis/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/gw250114-141hz-analysis)
+[![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
+[![QCAL Analysis](https://github.com/motanova84/141hz/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analysis.yml)
+[![GW Validation](https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml)
+[![AT2020afhd Validation](https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml)
+[![codecov](https://codecov.io/gh/motanova84/141hz/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/141hz)
 [![Docs](https://img.shields.io/badge/docs-mkdocs--material-blue)](https://motanova84.github.io/141hz)
 [![SBOM](https://img.shields.io/badge/SBOM-CycloneDX-informational)](#)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
-[![Lean Verification](https://github.com/motanova84/gw250114-141hz-analysis/workflows/Lean%20Verification/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/lean_verify.yml)
-[![Active System Monitor](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
+[![Lean Verification](https://github.com/motanova84/141hz/workflows/Lean%20Verification/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/lean_verify.yml)
+[![Active System Monitor](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 
 ---
 
@@ -1701,7 +1701,7 @@ python validate_at2020afhd.py --download-zenodo
 python validate_at2020afhd.py --full-analysis
 
 # Notebook Colab (sin instalación)
-# https://colab.research.google.com/github/motanova84/gw250114-141hz-analysis/blob/main/analisis_de_periodicidad_datos_reales.ipynb
+# https://colab.research.google.com/github/motanova84/141hz/blob/main/analisis_de_periodicidad_datos_reales.ipynb
 ```
 
 ### 📖 Documentación
@@ -2626,35 +2626,35 @@ make clean-all  # Incluye entorno virtual
 
 <div align="center">
 
-[![CI](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
-[![CD](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/production-qcal.yml/badge.svg?branch=main)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/production-qcal.yml)
-[![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/motanova84/gw250114-141hz-analysis/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/gw250114-141hz-analysis)
+[![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
+[![CD](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml/badge.svg?branch=main)](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml)
+[![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/motanova84/141hz/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/141hz)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 ![QCAL ∞³ Certified](https://img.shields.io/badge/QCAL%20∞³-Certified-141.7001Hz)
-[![CI](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
+[![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
 ![Reproducible](https://img.shields.io/badge/reproducibility-100%25-success)
-[![CI](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
-[![CD](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/production-qcal.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/production-qcal.yml)
-[![Workflow Intelligence](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/analysis.yml)
-[![Validation Rigor](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/motanova84/gw250114-141hz-analysis/blob/main/LICENSE)
+[![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
+[![CD](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml)
+[![Workflow Intelligence](https://github.com/motanova84/141hz/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analysis.yml)
+[![Validation Rigor](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/motanova84/141hz/blob/main/LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
-[![Reproducible](https://img.shields.io/badge/reproducibility-100%25-success)](https://github.com/motanova84/gw250114-141hz-analysis#-validaci%C3%B3n-de-est%C3%A1ndares-de-descubrimiento-cient%C3%ADfico)
+[![Reproducible](https://img.shields.io/badge/reproducibility-100%25-success)](https://github.com/motanova84/141hz#-validaci%C3%B3n-de-est%C3%A1ndares-de-descubrimiento-cient%C3%ADfico)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17379721.svg)](https://doi.org/10.5281/zenodo.17379721)
 [![Lean 4](https://img.shields.io/badge/Lean-4.0+-purple)](https://leanprover.github.io/)
 [![Formal Verification](https://img.shields.io/badge/formal-verified-success)](formalization/lean/F0Derivation.lean)
 [![GWPy](https://img.shields.io/badge/GWPy-3.0+-green)](https://gwpy.github.io/)
 [![Open Science](https://img.shields.io/badge/Open-Science-brightgreen)](https://www.fosteropenscience.eu/)
-[![AI Accessible](https://img.shields.io/badge/AI-Accessible-blueviolet)](https://github.com/motanova84/gw250114-141hz-analysis/blob/main/AI_ACCESSIBILITY.md)
-[![Precision Certified](https://img.shields.io/badge/precision-10%E2%81%BB%C2%B9%E2%81%B0-success)](https://github.com/motanova84/gw250114-141hz-analysis/blob/main/PRECISION_CERTIFICATION.md)
-[![Lean 4](https://img.shields.io/badge/Lean_4-formalized-blue)](https://github.com/motanova84/gw250114-141hz-analysis/tree/main/formalization/lean)
+[![AI Accessible](https://img.shields.io/badge/AI-Accessible-blueviolet)](https://github.com/motanova84/141hz/blob/main/AI_ACCESSIBILITY.md)
+[![Precision Certified](https://img.shields.io/badge/precision-10%E2%81%BB%C2%B9%E2%81%B0-success)](https://github.com/motanova84/141hz/blob/main/PRECISION_CERTIFICATION.md)
+[![Lean 4](https://img.shields.io/badge/Lean_4-formalized-blue)](https://github.com/motanova84/141hz/tree/main/formalization/lean)
 [![GitHub Sponsors](https://img.shields.io/badge/Sponsor-❤️-ff69b4)](https://github.com/sponsors/motanova84)
 
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/motanova84/gw250114-141hz-analysis/blob/main/notebooks/141hz_validation.ipynb)
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/motanova84/141hz/blob/main/notebooks/141hz_validation.ipynb)
 
 **Frecuencia Universal:** `141.7001 Hz`  
 **Investigador Principal:** José Manuel Mota Burruezo (JMMB Ψ✧)  
@@ -3030,7 +3030,7 @@ Este proyecto está completamente abierto para **revisión independiente externa
 
 - **DOI Zenodo**: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17379721.svg)](https://doi.org/10.5281/zenodo.17379721)
 - **ORCID Investigador Principal**: *En proceso de publicación*
-- **Repositorio GitHub**: [motanova84/gw250114-141hz-analysis](https://github.com/motanova84/gw250114-141hz-analysis)
+- **Repositorio GitHub**: [motanova84/141hz](https://github.com/motanova84/141hz)
 
 ### Plataformas de Revisión Recomendadas
 
@@ -3283,7 +3283,7 @@ Este proyecto implementa un **sistema CI/CD real y automatizado** que garantiza 
 - **Suite de tests completa**: 9 archivos de test con >50 casos de prueba
 - **Ejecución automática**: Cada push/PR ejecuta todos los tests
 - **Validación científica**: Tests de energía cuántica, simetría discreta, análisis bayesiano
-- **Estado actual**: [![CI/CD Tests](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
+- **Estado actual**: [![CI/CD Tests](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 
 ### 📊 Quality Gates
 - **Linting automático**: Validación de código con flake8
@@ -3955,7 +3955,7 @@ Puedes acceder al notebook interactivo en Google Colab aquí:
 
 ### 🌌 Nuevo: AT2020afhd - Resonador Gravitacional Cuántico
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/motanova84/gw250114-141hz-analysis/blob/main/notebooks/at2020afhd_analysis.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/motanova84/141hz/blob/main/notebooks/at2020afhd_analysis.ipynb)
 
 Análisis completo del evento de disrupción de marea AT2020afhd que demuestra la conexión entre el bamboleo de Lense-Thirring (~20 días) y la frecuencia fundamental 141.70001 Hz:
 
@@ -4403,7 +4403,7 @@ python -c "import gwpy, numpy, scipy, matplotlib, pycbc; print('✅ Todas las de
 ### Replicación Básica (15 minutos)
 ```bash
 # 1. Clonar repositorio
-git clone https://github.com/motanova84/gw250114-141hz-analysis
+git clone https://github.com/motanova84/141hz
 cd 141hz
 
 # 2. Configurar entorno con versiones exactas
@@ -4903,7 +4903,7 @@ if verificador.estado_actual == "NO_DISPONIBLE":
 
 ```bash
 # 1. Clona el repositorio
-git clone https://github.com/motanova84/gw250114-141hz-analysis
+git clone https://github.com/motanova84/141hz
 cd 141hz
 
 # 2. Crea entorno virtual y activa
@@ -5385,7 +5385,7 @@ Este proyecto sigue un modelo abierto y simbiótico con **CI/CD automatizado rea
 - ✅ Código documentado
 - ✅ Tests para nuevo código
 
-**Estado CI/CD**: [![Tests](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/gw250114-141hz-analysis/actions/workflows/ci.yml)
+**Estado CI/CD**: [![Tests](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 
 ## 📜 Licencia
 
@@ -5801,8 +5801,8 @@ This project now integrates real-world environmental data to study biological pe
 ### Reproducible Notebooks
 Execute in your browser without installation:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/motanova84/gw250114-141hz-analysis/blob/main/notebooks/biological_rhythms_environmental_data.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/motanova84/gw250114-141hz-analysis/main?filepath=notebooks/biological_rhythms_environmental_data.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/motanova84/141hz/blob/main/notebooks/biological_rhythms_environmental_data.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/motanova84/141hz/main?filepath=notebooks/biological_rhythms_environmental_data.ipynb)
 
 ### Quick Start - Biological Analysis
 
