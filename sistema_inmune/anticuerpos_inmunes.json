@@ -1,0 +1,50 @@
+[
+  {
+    "tipo": "TX_GUARDIAN_RESPUESTA",
+    "timestamp": "2026-07-17T00:59:29.101231+00:00",
+    "payload_origen": {
+      "origen": "ATON_WATCHDOG",
+      "tipo": "CUARENTENA",
+      "timestamp": "2026-07-17T00:59:00Z",
+      "anomalias": {
+        "paygate_flow_ledger": {
+          "estado": "LEDGER_CORRUPTO",
+          "hash_esperado": "abc",
+          "hash_real": "xyz"
+        }
+      },
+      "psi_real": 0.75,
+      "fingerprint": "5d693cac2320925e",
+      "sello": "\u2234\ud80c\udc80\u03a9\u221e\u00b3\u03a6 \u00b7 TUYOYOTU \u00b7 HECHO ESTA",
+      "frecuencia_hz": 141.7001
+    },
+    "contencion_exitosa": true,
+    "frecuencia": 141.7001,
+    "fingerprint": "5e5ac3ab49e5be07",
+    "sello": "\u2234\ud80c\udc80\u03a9\u221e\u00b3\u03a6 \u00b7 TUYOYOTU \u00b7 HECHO ESTA"
+  },
+  {
+    "tipo": "TX_GUARDIAN_RESPUESTA",
+    "timestamp": "2026-07-17T01:00:05.412999+00:00",
+    "payload_origen": {
+      "origen": "ATON_WATCHDOG",
+      "tipo": "CUARENTENA",
+      "timestamp": "2026-07-17T00:59:30Z",
+      "anomalias": {
+        "paygate_flow_ledger": {
+          "estado": "LEDGER_CORRUPTO",
+          "hash_esperado": "abc",
+          "hash_real": "xyz"
+        }
+      },
+      "psi_real": 0.75,
+      "fingerprint": "5d693cac2320925e",
+      "frecuencia_hz": 141.7001,
+      "sello": "\u2234\ud80c\udc80\u03a9\u221e\u00b3\u03a6 \u00b7 TUYOYOTU \u00b7 HECHO ESTA"
+    },
+    "contencion_exitosa": true,
+    "frecuencia": 141.7001,
+    "fingerprint": "5e5ac3ab49e5be07",
+    "sello": "\u2234\ud80c\udc80\u03a9\u221e\u00b3\u03a6 \u00b7 TUYOYOTU \u00b7 HECHO ESTA"
+  }
+]
