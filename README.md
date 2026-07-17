@@ -6,10 +6,10 @@
 
 <p align="center">
   <a href="https://github.com/motanova84/141hz/actions/workflows/ci.yml
-    <img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/docs.yml?label=docs&logo=github">
+    <img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/auto-update-docs.yml?label=docs&logo=github">
   </a>
   <a href="https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml">
-    <img alt="AT2020afhd Validation" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/at2020afhd-validation.yml?label=AT2020afhd%20Validation&logo=github">
+    <img alt="AT2020afhd Validation" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/gw-validation.yml?label=AT2020afhd%20Validation&logo=github">
   </a>
   <a href="https://github.com/motanova84/141hz">
     <img alt="Last commit" src="https://img.shields.io/github/last-commit/motanova84/141hz">
