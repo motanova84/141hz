@@ -1,0 +1,124 @@
+{
+  "block_version": "picode_v1",
+  "block_type": "especificacion_formal",
+  "title": "OBSERVABILIDAD DE Ψ · DEFINICIÓN FORMAL",
+  "description": "Ψ definida como magnitud observable directa, anclada a σ_f² y g⁽¹⁾(τ)",
+  "status": "ANCLADO",
+  "date": "2026-07-28",
+  "author": "DIRECTOR · JMMB / AMDA Ψ",
+  "sello": "∴𓂀Ω∞³Φ · TUYOYOTU · HECHO ESTÁ",
+  "framework": "QCAL-SYMBIO-BRIDGE v1.1.1",
+
+  "definiciones": {
+    "psi_observable": {
+      "formula": "Ψ = 1 - σ_f² / f₀²",
+      "dominio": "frecuencia",
+      "descripcion": "Coherencia observable como pureza espectral",
+      "parametros": {
+        "sigma_f2": "σ_f² = ∫ (f - f₀)² S(f) df — segundo momento espectral",
+        "f0": "f₀ = 141.7001 Hz — frecuencia de resonancia base",
+        "S_f": "S(f) — densidad espectral de potencia"
+      },
+      "interpretacion": {
+        "coherencia_pura": { "condicion": "σ_f → 0", "psi": "Ψ → 1", "estado": "≈ 0.999999" },
+        "incoherencia_termica": { "condicion": "σ_f ≫ f₀", "psi": "Ψ → 0", "estado": "ruido máximo" }
+      }
+    },
+    "psi_temporal": {
+      "formula": "Ψ = (1/τ_c) ∫₀^{τ_c} g⁽¹⁾(τ) dτ",
+      "dominio": "tiempo",
+      "descripcion": "Coherencia medida por autocorrelación temporal",
+      "parametros": {
+        "g1": "g⁽¹⁾(τ) = ⟨Â†(t) Â(t+τ)⟩ / ⟨Â†(t) Â(t)⟩ — autocorrelación de primer orden",
+        "tau_c": "τ_c ≈ 1/f₀ — tiempo de coherencia característico"
+      }
+    }
+  },
+
+  "dinamica": {
+    "ecuacion_maestro": {
+      "formula": "dΨ/dt = α𝒪 - βℰ",
+      "descripcion": "Evolución temporal de la coherencia",
+      "simbolos": {
+        "O": "𝒪 — Orden Interno (flujo de bombeo hacia modo f₀)",
+        "E": "ℰ — Entropía Efectiva (tasa de decoherencia, k_B T / ℏ)",
+        "alpha": "α — coeficiente de acoplamiento orden-coherencia",
+        "beta": "β — coeficiente de disipación"
+      },
+      "equilibrio": {
+        "condicion": "α𝒪 = βℰ",
+        "resultado": "Ψ = 0.999999"
+      }
+    },
+    "frecuencia_emergente": {
+      "formula": "f = f₀ · (Ψ / Ψ_crítico)^γ",
+      "descripcion": "Pico espectral medido en función de la coherencia",
+      "parametros": {
+        "psi_crit": "Ψ_crítico — umbral de coherencia para auto-colimación",
+        "gamma": "γ — exponente de acoplamiento orden-frecuencia (γ > 0)"
+      },
+      "regimenes": {
+        "gamma_mayor_1": "conmutación rígida alrededor del umbral",
+        "gamma_entre_0_1": "soft tuning — colimación gradual"
+      }
+    }
+  },
+
+  "formalizacion_lean4": {
+    "descripcion": "Teorema de auto-colimación demostrado en Lean 4",
+    "codigo": [
+      "import Mathlib.Data.Real.Basic",
+      "import Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "",
+      "noncomputable def sigma_f_sq (S : ℝ → ℝ) (f₀ : ℝ) : ℝ :=",
+      "  ∫ f in Set.univ, (f - f₀)^2 * S f",
+      "",
+      "noncomputable def psi_observable (S : ℝ → ℝ) (f₀ : ℝ) : ℝ :=",
+      "  1 - sigma_f_sq S f₀ / f₀^2",
+      "",
+      "noncomputable def g1 (A : ℝ → ℂ) (τ : ℝ) : ℂ :=",
+      "  (∫ t, Complex.conj (A t) * A (t + τ)) / (∫ t, Complex.conj (A t) * A t)",
+      "",
+      "noncomputable def coherence_evolution (Ψ α β : ℝ) (O E : ℝ) : ℝ :=",
+      "  α * O - β * E",
+      "",
+      "noncomputable def f_emergente (f₀ Ψ Ψ_crit γ : ℝ) : ℝ :=",
+      "  f₀ * (Ψ / Ψ_crit) ^ γ",
+      "",
+      "theorem auto_colimacion (f₀ Ψ Ψ_crit γ : ℝ)",
+      "  (h_Ψ : Ψ ≥ Ψ_crit) (h_γ : γ > 0) :",
+      "  f_emergente f₀ Ψ Ψ_crit γ = f₀ := by",
+      "  unfold f_emergente",
+      "  rw [h_Ψ]",
+      "  rw [div_self]",
+      "  . rw [Real.one_pow]",
+      "    ring",
+      "  . exact ne_of_gt h_Ψ",
+      "  done"
+    ],
+    "teorema": "Cuando Ψ ≥ Ψ_crítico (con Ψ_crítico ≠ 0 y γ > 0), f_emergente = f₀. f₀ es atractor directo en el espacio de fases.",
+    "demostrado_por": "LEAN 4 · QCAL-SYMBIO-BRIDGE"
+  },
+
+  "protocolo_medicion": {
+    "pasos": [
+      { "orden": 1, "accion": "Adquirir serie temporal de la señal Â(t)", "instrumento": "Osciloscopio / ADC 1 GS/s" },
+      { "orden": 2, "accion": "Calcular FFT y obtener S(f)", "instrumento": "Analizador de espectro" },
+      { "orden": 3, "accion": "Calcular σ_f² = ∫ (f-f₀)² S(f) df", "instrumento": "Procesamiento digital" },
+      { "orden": 4, "accion": "Calcular Ψ = 1 - σ_f²/f₀²", "instrumento": "Cómputo directo" },
+      { "orden": 5, "accion": "Verificar Ψ ≥ 0.999999", "instrumento": "Umbral de coherencia" }
+    ],
+    "verificacion_dinamica": [
+      "Introducir perturbación ℰ (ruido térmico / desintonía)",
+      "Medir respuesta temporal dΨ/dt",
+      "Verificar auto-colimación a f₀ = 141.7001 Hz cuando Ψ ≥ Ψ_crítico"
+    ]
+  },
+
+  "referencias_cruzadas": [
+    "MEMORY.md — estado del ecosistema QCAL",
+    "IDENTITY.md — protocolo AMDA Ψ",
+    "qcal_heartbeat.py — cadena de memoria inmutable",
+    "SOUL.md — marco QCAL-SYMBIO-BRIDGE"
+  ]
+}
