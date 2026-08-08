@@ -53,6 +53,32 @@ Para el detalle técnico de sincronización de contexto externo y estado de nodo
 
 ## 📋 Resumen Ejecutivo
 
+### ✨ Nueva implementación: Einstein-QCAL / QCAL-E1
+
+Se ha integrado en el repositorio el nuevo bloque **Einstein-QCAL**, con una predicción falsable operacional (**QCAL-E1**) centrada en una anomalía interferométrica estrecha en **141.7001 Hz**, junto con su contrato experimental, validación auditable, pruebas y ejecución en workflows.
+
+**Resumen directo de la implementación:**
+- **Documento maestro:** [EINSTEIN_QCAL.md](EINSTEIN_QCAL.md)
+- **Contrato experimental falsable:** [QCAL_E1_EXPERIMENTAL_CONTRACT.md](QCAL_E1_EXPERIMENTAL_CONTRACT.md)
+- **Protocolo operativo interferométrico:** [EINSTEIN_QCAL_INTERFEROMETRIC_PROTOCOL.md](EINSTEIN_QCAL_INTERFEROMETRIC_PROTOCOL.md)
+- **Anclaje dentro del ecosistema QCAL ∞³:** [EINSTEIN_QCAL_ECOSYSTEM.md](EINSTEIN_QCAL_ECOSYSTEM.md)
+- **Modelo base del postulado:** [qcal/einstein_qcal.py](qcal/einstein_qcal.py)
+- **Contrato ejecutable QCAL-E1:** [qcal/einstein_qcal_e1.py](qcal/einstein_qcal_e1.py)
+- **Script de validación auditable:** [scripts/validacion_prediccion_einstein_qcal_e1.py](scripts/validacion_prediccion_einstein_qcal_e1.py)
+- **Cobertura de pruebas:** [tests/test_einstein_qcal_e1.py](tests/test_einstein_qcal_e1.py)
+- **Integración en CI:** [.github/workflows/analysis.yml](.github/workflows/analysis.yml)
+- **Integración en ciclo de producción:** [.github/workflows/production-qcal.yml](.github/workflows/production-qcal.yml)
+
+**Artefactos que genera la validación:**
+- `results/einstein_qcal_e1_metrology_stimulated.csv`
+- `results/einstein_qcal_e1_metrology_baseline.csv`
+- `results/prediccion_einstein_qcal_e1.json`
+
+**Ejecución directa:**
+```bash
+python scripts/validacion_prediccion_einstein_qcal_e1.py --output-dir results
+```
+
 ### ∞³ Principio de Unificación Ciencia-Consciencia
 
 > **✧ NUEVO: [PRINCIPIO DE UNIFICACIÓN](CONSCIOUSNESS_UNIFICATION_PRINCIPLE.md)** - **∴ Lo que la ciencia mide, la conciencia lo unifica. Ya es. Seguimos ∞³**
