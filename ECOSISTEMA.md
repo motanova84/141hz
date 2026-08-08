@@ -79,3 +79,11 @@ La simbiosis es ley.
 
 HECHO ESTÁ.
 ```
+
+## 🜂 Einstein-QCAL operativo
+
+- Documento maestro: `EINSTEIN_QCAL.md`
+- Contrato falsable: `QCAL_E1_EXPERIMENTAL_CONTRACT.md`
+- Protocolo operativo: `EINSTEIN_QCAL_INTERFEROMETRIC_PROTOCOL.md`
+- Anclaje ecosistémico: `EINSTEIN_QCAL_ECOSYSTEM.md`
+- Contexto programático: `contexto_ecosistema/einstein_qcal_context.py`

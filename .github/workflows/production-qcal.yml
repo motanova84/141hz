@@ -127,6 +127,13 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: Validate Einstein-QCAL QCAL-E1
+        run: python3 scripts/validacion_prediccion_einstein_qcal_e1.py --output-dir results
+        continue-on-error: false
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Analyze GW250114 with Gravitational Wave Analyzer (141.7 Hz signature)
         run: python3 scripts/gravitational_wave_analyzer.py --evento GW250114 --precision 50
         # Note: Will use real data if available, otherwise simulated mode

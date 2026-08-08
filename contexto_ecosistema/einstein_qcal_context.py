@@ -48,6 +48,7 @@ from qcal.einstein_qcal import (
     KAPPA_GR,
     G_NEWTON,
 )
+from qcal.einstein_qcal_e1 import build_qcal_e1_contract
 
 # ═══════════════════════════════════════════════════════════════════════════
 # RE-EXPORTACIONES PARA EL ECOSISTEMA
@@ -75,6 +76,7 @@ __all__ = [
     "get_incoherent_field",
     "compute_c_eff_at_psi",
     "riemann_mode_coherence",
+    "resumen_contexto_einstein_qcal",
 ]
 
 
@@ -186,3 +188,20 @@ ECOSYSTEM_SUMMARY = {
         "motanova84/P-NP            →  κ_Π clasifica costo de incoherencia",
     ],
 }
+
+
+def resumen_contexto_einstein_qcal() -> dict:
+    """Resumen compacto del anclaje Einstein-QCAL dentro del ecosistema."""
+
+    contract = build_qcal_e1_contract()
+    return {
+        **ECOSYSTEM_SUMMARY,
+        "qcal_e1_contract": contract.to_dict(),
+        "artifacts": {
+            "master_doc": "EINSTEIN_QCAL.md",
+            "experimental_contract_doc": "QCAL_E1_EXPERIMENTAL_CONTRACT.md",
+            "operational_protocol_doc": "EINSTEIN_QCAL_INTERFEROMETRIC_PROTOCOL.md",
+            "ecosystem_doc": "EINSTEIN_QCAL_ECOSYSTEM.md",
+            "validation_script": "scripts/validacion_prediccion_einstein_qcal_e1.py",
+        },
+    }
