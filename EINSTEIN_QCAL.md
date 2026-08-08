@@ -12,10 +12,10 @@ Documento maestro canónico del marco Einstein-QCAL.
 
 ## Implementación canónica en el repositorio
 
-- Modelo gravitatorio/coherente: `/home/runner/work/141hz/141hz/qcal/einstein_qcal.py`
-- Contrato experimental QCAL-E1: `/home/runner/work/141hz/141hz/qcal/einstein_qcal_e1.py`
-- Contexto ecosistémico: `/home/runner/work/141hz/141hz/contexto_ecosistema/einstein_qcal_context.py`
-- Validación operativa: `/home/runner/work/141hz/141hz/scripts/validacion_prediccion_einstein_qcal_e1.py`
+- Modelo gravitatorio/coherente: `qcal/einstein_qcal.py`
+- Contrato experimental QCAL-E1: `qcal/einstein_qcal_e1.py`
+- Contexto ecosistémico: `contexto_ecosistema/einstein_qcal_context.py`
+- Validación operativa: `scripts/validacion_prediccion_einstein_qcal_e1.py`
 
 ## Dominio de validez
 
@@ -26,6 +26,6 @@ Documento maestro canónico del marco Einstein-QCAL.
 ## Jerarquía documental
 
 1. Maestro teórico: este archivo.
-2. Contrato falsable: `/home/runner/work/141hz/141hz/QCAL_E1_EXPERIMENTAL_CONTRACT.md`
-3. Protocolo operativo: `/home/runner/work/141hz/141hz/EINSTEIN_QCAL_INTERFEROMETRIC_PROTOCOL.md`
-4. Relación ecosistémica: `/home/runner/work/141hz/141hz/EINSTEIN_QCAL_ECOSYSTEM.md`
+2. Contrato falsable: `QCAL_E1_EXPERIMENTAL_CONTRACT.md`
+3. Protocolo operativo: `EINSTEIN_QCAL_INTERFEROMETRIC_PROTOCOL.md`
+4. Relación ecosistémica: `EINSTEIN_QCAL_ECOSYSTEM.md`

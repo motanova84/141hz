@@ -202,7 +202,7 @@ def evaluate_qcal_e1(
     state = CoherenceState(psi=measurement.psi_obs, f_observer=measurement.f_observer_hz)
 
     operational_delta_n = _operational_delta_n(state)
-    omega = omega_coupling(state)
+    omega = min(max(omega_coupling(state), 1e-12), 1.0)
     exact_n = 1.0 / omega
     predicted_peak_phase = predicted_phase_shift_rad(
         state=state,
@@ -223,7 +223,8 @@ def evaluate_qcal_e1(
     )
     incoherent_regime = measurement.psi_obs < contract.resonance_threshold_psi
     sensitivity_adequate = measurement.detector_sensitivity_hz_sqrt <= contract.minimum_detector_sensitivity_hz_sqrt
-    c_eff_sensitive_to_psi = measurement.phase_velocity_sensitive and operational_delta_n > 0.0
+    phase_velocity_sensitive = measurement.phase_velocity_sensitive
+    c_eff_sensitive_to_psi = phase_velocity_sensitive and operational_delta_n > 0.0
     scaling_r2 = measurement.scale_linearity_r2 if measurement.scale_linearity_r2 is not None else scaling["linear_fit_r2"]
     scaling_slope = measurement.scale_slope if measurement.scale_slope is not None else scaling["linear_fit_slope"]
     scaling_consistent = scaling_r2 >= 0.99 and scaling_slope > 0.0
@@ -240,15 +241,15 @@ def evaluate_qcal_e1(
     reasons: list[str] = []
     verdict = QCALE1Verdict.INCONCLUSIVE
 
-    if incoherent_regime and sensitivity_adequate and not peak_present:
-        verdict = QCALE1Verdict.FALSIFIED
-        reasons.append("No peak detected at 141.7001 Hz under controlled incoherence and adequate sensitivity.")
-    elif peak_present and not frequency_match:
+    if peak_present and not frequency_match:
         verdict = QCALE1Verdict.FALSIFIED
         reasons.append("Detected peak falls outside the ±0.0001 Hz anchoring tolerance.")
-    elif (1.0 - measurement.psi_obs) > 0.0 and not c_eff_sensitive_to_psi:
+    elif incoherent_regime and not phase_velocity_sensitive:
         verdict = QCALE1Verdict.FALSIFIED
         reasons.append("Phase velocity remains insensitive to coherence despite ΔΨ > 0.")
+    elif incoherent_regime and sensitivity_adequate and not peak_present:
+        verdict = QCALE1Verdict.FALSIFIED
+        reasons.append("No peak detected at 141.7001 Hz under controlled incoherence and adequate sensitivity.")
     elif peak_present and frequency_match and c_eff_sensitive_to_psi and scaling_consistent:
         verdict = QCALE1Verdict.SUPPORTED
         reasons.append("Exact-frequency line, coherence-sensitive phase delay, and linear gap scaling all hold.")

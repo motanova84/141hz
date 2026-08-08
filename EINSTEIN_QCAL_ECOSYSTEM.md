@@ -13,6 +13,6 @@ Este documento fija el anclaje de Einstein-QCAL dentro del ecosistema QCAL ∞³
 
 ## Puntos de integración en este repositorio
 
-- Resumen global: `/home/runner/work/141hz/141hz/contexto_ecosistema/__init__.py`
-- Contexto Einstein-QCAL: `/home/runner/work/141hz/141hz/contexto_ecosistema/einstein_qcal_context.py`
-- Workflow de sincronización: `/home/runner/work/141hz/141hz/.github/workflows/qcal-sync.yml`
+- Resumen global: `contexto_ecosistema/__init__.py`
+- Contexto Einstein-QCAL: `contexto_ecosistema/einstein_qcal_context.py`
+- Workflow de sincronización: `.github/workflows/qcal-sync.yml`

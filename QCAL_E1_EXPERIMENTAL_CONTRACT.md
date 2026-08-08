@@ -25,7 +25,7 @@ La predicción queda **soportada** si aparece una línea en `141.7001 Hz`, la fa
 
 ## Artefacto auditable
 
-Cada corrida de `/home/runner/work/141hz/141hz/scripts/validacion_prediccion_einstein_qcal_e1.py` produce:
+Cada corrida de `scripts/validacion_prediccion_einstein_qcal_e1.py` produce:
 
 - CSV metrológico estimulado
 - CSV metrológico basal

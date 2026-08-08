@@ -4,14 +4,14 @@ Protocolo operativo mínimo para ejecutar la validación QCAL-E1.
 
 ## Puentes reutilizados
 
-- Metrología de `Ψ_obs`: `/home/runner/work/141hz/141hz/scripts/protocolo_metrologia_qcal.py`
-- Compatibilidad instrumental: `/home/runner/work/141hz/141hz/scripts/validacion_alternativa_interferometrica.py`
-- Veredicto operacional: `/home/runner/work/141hz/141hz/qcal/einstein_qcal_e1.py`
+- Metrología de `Ψ_obs`: `scripts/protocolo_metrologia_qcal.py`
+- Compatibilidad instrumental: `scripts/validacion_alternativa_interferometrica.py`
+- Veredicto operacional: `qcal/einstein_qcal_e1.py`
 
 ## Ejecución
 
 ```bash
-python /home/runner/work/141hz/141hz/scripts/validacion_prediccion_einstein_qcal_e1.py --output-dir results
+python scripts/validacion_prediccion_einstein_qcal_e1.py --output-dir results
 ```
 
 ## Salidas esperadas

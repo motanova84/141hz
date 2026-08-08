@@ -29,7 +29,7 @@ class TestEinsteinQCALE1(unittest.TestCase):
         contract = build_qcal_e1_contract()
         scaling = compute_scaling_metrics(cavity_length_m=4000.0, contract=contract)
         measurement = QCALE1Measurement(
-            psi_obs=0.999998,
+            psi_obs=0.9999,
             cavity_length_m=4000.0,
             detected_peak_frequency_hz=F0_HZ,
             detected_peak_power=1.0,
@@ -44,7 +44,7 @@ class TestEinsteinQCALE1(unittest.TestCase):
     def test_falsified_without_peak_under_incoherence(self):
         contract = build_qcal_e1_contract()
         measurement = QCALE1Measurement(
-            psi_obs=0.999998,
+            psi_obs=0.9999,
             cavity_length_m=4000.0,
             detector_sensitivity_hz_sqrt=1e-24,
             detected_peak_frequency_hz=None,
@@ -56,7 +56,7 @@ class TestEinsteinQCALE1(unittest.TestCase):
     def test_falsified_if_peak_is_off_frequency(self):
         contract = build_qcal_e1_contract()
         measurement = QCALE1Measurement(
-            psi_obs=0.999998,
+            psi_obs=0.9999,
             cavity_length_m=4000.0,
             detected_peak_frequency_hz=141.9,
             detected_peak_power=1.0,

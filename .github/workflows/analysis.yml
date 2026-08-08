@@ -136,5 +136,4 @@ jobs:
           *.png
           *.jpg
           *.pdf
-          *.json
-        retention-days: 30
+      retention-days: 30
