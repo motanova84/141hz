@@ -113,4 +113,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-08-08 01:59:29 UTC*
+*Generado automáticamente por el bot de documentación - 2026-08-09 02:47:17 UTC*
