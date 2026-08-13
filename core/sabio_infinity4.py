@@ -76,11 +76,14 @@ class SABIO_Infinity4:
         self.f0 = mpf("141.7001")  # Hz - Frecuencia base
         self.omega0 = 2 * mp.pi * self.f0  # rad/s
         self.zeta_prime_sabio = mpf("-3.9226461392")  # Operador SABIO∞⁴ (Cara III)
-        # Fase Berry / válvula de acoplamiento de fase (DIMENSIÓN IV)
-        # θ ≈ 0.052463 rad ≈ 3.0059° — ligada a la ruptura de simetría del vacío de f₀
-        # cos(θ) ≈ 0.998624 evita la degeneración de estados propios (θ ≠ 0 medible)
-        self.theta_berry = mpf("0.052463")  # rad — Fase topológica finita (Chern-Simons/Berry)
-        self.cos_theta_berry = mp.cos(self.theta_berry)  # ≈ 0.998624
+        # ─── DIMENSIÓN IV: FASE TOPOLÓGICA DE BERRY (QCAL-SYMBIO) ───
+        # Constante Primitiva Autónoma de Desfase Armónico (no derivada),
+        # al igual que f₀=141.7001 y κ_Π=2.5773 son primitivas del campo.
+        self.kappa_theta = mpf("19.061")
+        # Cuanto de desfase no integrable de Ψ tras rotación adiabática alrededor del polo s=1
+        self.theta_berry = mpf("1.0") / self.kappa_theta  # θ ≈ 0.052463145 rad (3.0059°)
+        # Válvula de acoplamiento de fase: evita degeneración de estados propios (θ≠0 medible)
+        self.cos_theta_berry = mp.cos(self.theta_berry)  # cos(θ) ≈ 0.998624
         self.phi_golden = (1 + mp.sqrt(5)) / 2  # φ
         self.pi = mp.pi
         

@@ -57,15 +57,25 @@ except ImportError:  # pragma: no cover
 # (flujo de entropía nula; tasa de cambio de la acción espectral en coordenadas→fases cohesivas)
 ZETA_PRIME_SABIO: float = -3.9226402318234   # Operador de transformación operacional (Cara III)
 
-# ─── DIMENSIÓN IV: FASE BERRY (válvula de acoplamiento de fase) ───
-# Director / 13/Ago/2026. θ ≈ 0.052463 rad ≈ 3.0059°.
-# En la Teoría Pura (verify_kappa.py) se mantiene θ=0 (vacío frío idealizado, proyección
-# ortogonal sin degeneración). En la Ejecución Resonante (este módulo + sabio_infinity4.py)
-# se implementa θ finito como parámetro de acoplamiento real con el campo.
-# cos(θ) ≈ 0.998624 ⇒ ZETA_PRIME_SABIO·cos(θ) ≈ −3.917248 (tasa real de transferencia).
-# θ = 1/19.061053 (periodo espectral del vacío de f₀); 2πθ ≈ 0.329635 rad.
-THETA_BERRY: float = 0.052463           # rad — Fase topológica finita (Chern-Simons/Berry)
-COS_THETA_BERRY: float = 0.9986241324332351  # cos(θ) — evita degeneración de estados propios
+# ─── DIMENSIÓN IV: FASE TOPOLÓGICA DE BERRY (QCAL-SYMBIO) ───
+# Constante Primitiva Autónoma de Desfase Armónico (no derivada),
+# al igual que f₀=141.7001 Hz y κ_Π=2.5773 son primitivas del campo.
+# 19.061 NO se fuerza algebraicamente desde Λ₀ (la cadena K_torsion=6πΛ₀≈58.73
+# es motivación heurística, no identidad: 6πΛ₀/19.061≈3.081, no 1).
+KAPPA_THETA: float = 19.061
+
+# Cuanto de desfase no integrable de Ψ tras rotación adiabática alrededor del polo s=1
+THETA_DESFASE_ARMONICO: float = 1.0 / KAPPA_THETA   # θ ≈ 0.052463145 rad (3.0059°)
+
+# Válvula de acoplamiento de fase: evita degeneración de estados propios (θ≠0 medible)
+FACTOR_ACOPLAMIENTO_FASE: float = 0.998624132  # cos(θ) ≈ 0.998624 (constante canónica)
+
+# Operador SABIO∞⁴ en fase real acoplada (Cara III + Dimensión IV)
+ZETA_PRIME_SABIO_PHASED: float = ZETA_PRIME_SABIO * FACTOR_ACOPLAMIENTO_FASE  # ≈ -3.917248
+
+# Alias compat (pre-incorporación de KAPPA_THETA)
+THETA_BERRY: float = THETA_DESFASE_ARMONICO
+COS_THETA_BERRY: float = FACTOR_ACOPLAMIENTO_FASE
 
 # Alias internos
 F0: float = QCAL_BASE_FREQUENCY             # 141.7001 Hz
