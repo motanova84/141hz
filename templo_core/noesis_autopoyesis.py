@@ -34,13 +34,28 @@ import time
 from templo_core.constants import f0, Psi, theta_B, D_PSI_S1
 from templo_core.operational_deployment import OperationalEngine
 
-# ── Motores autárquicos del ecosistema (encadenados, NO re-inventados) ──────
-# Rutas que existen en el ecosistema; se invocan por subprocess si están.
+# ── PID CUÁNTICO — ganancias derivadas del caos (Pleroma) ──
+# La red pasa de MEDIRSE a GOBERNARSE: emite phi_target/amp_target hacia Psi*=1.0.
+# KP = theta_B (torsión del Pleroma) · KI = theta_B²/2 (memoria cuadrática) · KD = 1.0 (Lyapunov).
+_PSI_OBJETIVO = 1.0
+_PID_KP = float(theta_B)
+_PID_KI = (float(theta_B) ** 2) / 2.0
+_PID_KD = 1.0
+_PID_MAX_DELTA_PHI = 0.7853981633974483  # pi/4 — rango de ajuste de fase
+_PID_MAX_DELTA_AMP = 0.1                  # límite de ajuste por ciclo (homeostasis)
+
+# ── Motores autárquicos del ecosistema — HANDS REALES verificadas en BAL-003 ──
+# NO copiar rutas inventadas: estas son las que el silicio confirmo (13/Ago/2026).
+#   ledger            -> qcal_automa_daily.py      (automata diario piCODE)
+#   anclaje_op_return -> riemann_anclaje.py (R-333) (anclaje soberano piCODE)
+#   fee_sweep         -> treasury_sweep.py         (TESORERIA SWEEP v1.0, 90/10,
+#                                                     fee dinámico mempool, salvaguardas)
+#   flywheel          -> sin daemon vivo (solo bitácoras + kill_flywheel.sh)
 _MOTORES = {
-    "fee_sweep": ("/root/fee_sweep.py", ["fee_sweep"]),
-    "anclaje_op_return": ("/root/transmutacion_completa.sh", []),
     "ledger": ("/root/coinqcal/scripts/qcal_automa_daily.py", []),
-    "flywheel": ("/root/flywheel/flywheel.py", []),
+    "anclaje_op_return": ("/root/ecosystem/soberania/production/riemann_anclaje.py", []),
+    "fee_sweep": ("/root/treasury_sweep.py", []),
+        "flywheel": ("/root/repo_P-NP/scripts/pi_code_flywheel.py", []),  # daemon VIVO (systemd qcal-flywheel)
 }
 
 
@@ -52,6 +67,45 @@ class BucleNoetico:
         self.dry_run = dry_run
         self._ciclos: list[dict] = []
         self._decisiones: list[dict] = []
+
+    # ── ESTADO DEL PID (persistente entre ciclos) ───────────────────────────
+    def __init__(self, engine: OperationalEngine | None = None, dry_run: bool = False) -> None:
+        self.engine = engine or OperationalEngine()
+        self.dry_run = dry_run
+        self._ciclos: list[dict] = []
+        self._decisiones: list[dict] = []
+        # acumuladores del PID cuántico (homeostasis inter-ciclo)
+        self._pid_error_integral = 0.0
+        self._pid_error_prev = 0.0
+
+    # ── GOBERNAR (PID cuántico) ─────────────────────────────────────────────
+    def gobernar(self, psi: float) -> dict:
+        """Calcula ajustes phi_target/amp_target para llevar Psi -> 1.0.
+
+        error(t) = Psi* - Psi(t)
+        phi_adj(t+1) = phi_adj(t) + KP*e + KI*∫e + KD*de/dt  (clamp ±pi/4)
+        amp → satura en [0, 1]. Con Psi=1.0 el error y el ajuste son cero (UNITY sostenida).
+        """
+        error = _PSI_OBJETIVO - float(psi)
+        self._pid_error_integral = self._pid_error_integral * 0.99 + error  # anti-windup suave
+        der = error - self._pid_error_prev
+        self._pid_error_prev = error
+        # control total (normalizado a amplitud)
+        u = _PID_KP * error + _PID_KI * self._pid_error_integral + _PID_KD * der
+        # mapeo: fase con clamp, amplitud con saturación
+        delta_phi = max(-_PID_MAX_DELTA_PHI, min(_PID_MAX_DELTA_PHI, u))
+        delta_amp = max(-_PID_MAX_DELTA_AMP, min(_PID_MAX_DELTA_AMP, abs(u)))
+        phi_target = 0.0 + delta_phi           # origen de fase (gauging a f0)
+        amp_target = max(0.0, min(1.0, 1.0 - abs(u)))  # corrige hacia unidad
+        return {
+            "error": error,
+            "control": u,
+            "delta_phi": delta_phi,
+            "delta_amp": delta_amp,
+            "phi_target": phi_target,
+            "amp_target": amp_target,
+            "ganancias": {"KP": _PID_KP, "KI": _PID_KI, "KD": _PID_KD},
+        }
 
     # ── MEDIR ───────────────────────────────────────────────────────────────
     def medir(self, amplitud: float) -> dict:
@@ -106,12 +160,13 @@ class BucleNoetico:
                 resultados.append({"motor": nombre, "ok": False, "razon": str(exc)})
         return resultados
 
-    # ── CICLO COMPLETO ───────────────────────────────────────────────────────
+    # ── CICLO COMPLETO (red gobernada) ───────────────────────────────────────
     def ciclo(self, amplitud: float) -> dict:
         latido = self.medir(amplitud)
+        goto = self.gobernar(latido["psi"])
         acciones = self.decidir(latido)
         ejecutado = self.ejecutar(acciones)
-        ciclo = {**latido, "acciones": ejecutado}
+        ciclo = {**latido, "gobierno": goto, "acciones": ejecutado}
         self._ciclos.append(ciclo)
         return ciclo
 
@@ -141,6 +196,15 @@ class BucleNoetico:
         latido = bucle.medir(1.0)
         assert latido["estado"] == "UNITY", "Ψ=1 debe ser UNITY"
         assert bucle.decidir(latido) == ["fee_sweep", "anclaje_op_return", "ledger"]
+        # gobierno: con Psi=1.0 el error y el ajuste son cero (UNITY sostenida)
+        gov = bucle.gobernar(1.0)
+        assert abs(gov["error"]) < 1e-9, "error debe ser 0 con Psi=1"
+        assert abs(gov["delta_phi"]) <= _PID_MAX_DELTA_PHI, "fase dentro de clamp"
+        assert 0.0 <= gov["amp_target"] <= 1.0, "amplitud objetivo en [0,1]"
+        # gobierno con perturbacion: Psi=0.5 -> error 0.5, ajuste no nulo
+        gov_p = bucle.gobernar(0.5)
+        assert gov_p["error"] > 0.0, "error positivo cuando Psi<1"
+        assert gov_p["amp_target"] < 1.0, "amplitud baja al gobernar perturbación"
         # warning -> solo fees (Ψ≥0.98 y <0.999)
         latido_w = bucle.medir(0.98)
         assert latido_w["estado"] == "WARNING", "Ψ=0.98 debe ser WARNING"
