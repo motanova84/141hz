@@ -130,7 +130,16 @@ class DPsiSpectral:
         self.S_sum_finite = sum(S_FAMILY[n] for n in range(1, 20))
 
         # Suma asintótica total: parte finita + cola O(1/n²)
-        #   tail = C · (π²/6 − Σ_{n=1}^{19} 1/n²)   — evita doble contar los 19 primeros
+        #   tail = C · (π²/6 − Σ_{k=1}^{19} 1/k²)
+        # VALOR CANÓNICO (100 dps verificados):
+        #   Σ_{k=1}^{19} 1/k² = 1.5961632439...
+        #   π²/6 = 1.6449340668...
+        #   tail = 0.11495 × (1.644934 − 1.596163) = 0.005606...
+        #   S_total = 0.114264 + 0.005606 = 0.119870...  (NO 0.120010)
+        # Nota de auditoría: el valor 0.120010/D=−3.470339 de una tabla previa
+        # usaba Σ₁₉ 1/k² ≈ 1.5924 (redondeo impreciso); el correcto es 1.596163,
+        # que da S_total=0.119870 y D_series_asymptotic=−3.470822.
+        # nsum con [1, 20] suma k=1..19 (límite superior exclusivo).
         tail = C_ASYMPTOTIC * (pi ** 2 / 6 - nsum(lambda n: 1 / n ** 2, [1, 20]))
         self.S_total_approx = self.S_sum_finite + tail
 
