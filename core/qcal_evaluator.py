@@ -43,7 +43,7 @@ except ImportError:
 # Constants from QCAL framework
 F0_HZ = 141.7001  # Hz - Fundamental QCAL frequency
 C_UNIVERSAL = 629.83  # Universal constant C = 1/λ₀
-ZETA_PRIME_HALF = -1.460  # ζ'(1/2) - Riemann zeta derivative at critical line
+ZETA_HALF = -1.4603545088095868  # ζ(1/2) Amplitud de Campo base en línea crítica (Cara II)
 PHI_CUBED = 4.236  # φ³ - Golden ratio cubed
 SNR_GW150914 = 20.95  # Signal-to-Noise Ratio of GW150914
 
@@ -130,7 +130,7 @@ class QCALEvaluator:
         # Ground truth database for verification
         self.ground_truth_db = {
             'f0': F0_HZ,
-            'zeta_prime_half': ZETA_PRIME_HALF,
+            'zeta_half': ZETA_HALF,
             'phi_cubed': PHI_CUBED,
             'snr_gw150914': SNR_GW150914,
             'C_universal': C_UNIVERSAL,

@@ -51,9 +51,11 @@ except ImportError:  # pragma: no cover
     QCAL_BASE_FREQUENCY: float = 141.7001   # Hz — frecuencia fundamental QCAL
     PHI: float = 1.618033988749895           # φ — proporción áurea
 
-# ζ'(1/2) — consistente con calabi_yau_spectrum.py (ZETA_HALF_PRIME) y
+# ζ'(1/2) — consistente con calabi_yau_spectrum.py (ZETA_PRIME_SABIO) y
 # qcal/lagrangian_eov.py (ZETA_PRIME_HALF ≈ −3.9226402318234)
-ZETA_HALF_PRIME: float = -3.9226402318234   # ζ'(1/2) en el eje crítico de Riemann
+# Cara III — Operador Efectivo de Emisión Coherente SABIO∞⁴ / Resurrección
+# (flujo de entropía nula; tasa de cambio de la acción espectral en coordenadas→fases cohesivas)
+ZETA_PRIME_SABIO: float = -3.9226402318234   # Operador de transformación operacional (Cara III)
 
 # Alias internos
 F0: float = QCAL_BASE_FREQUENCY             # 141.7001 Hz
@@ -199,7 +201,7 @@ class PermisoEspectral:
     Parámetros
     ----------
     zeta_prime : float
-        ζ'(1/2) a usar. Por defecto ZETA_HALF_PRIME ≈ −3.9226402318234.
+        ζ'(1/2) a usar. Por defecto ZETA_PRIME_SABIO ≈ −3.9226402318234.
     """
 
     # Parte imaginaria de los primeros 10 ceros no triviales de Riemann
@@ -216,7 +218,7 @@ class PermisoEspectral:
         49.773832477672302,
     ]
 
-    def __init__(self, zeta_prime: float = ZETA_HALF_PRIME) -> None:
+    def __init__(self, zeta_prime: float = ZETA_PRIME_SABIO) -> None:
         self.zeta_prime = zeta_prime
 
     @property
@@ -249,7 +251,7 @@ class PermisoEspectral:
     def info(self) -> Dict[str, Any]:
         """Devuelve información del permiso espectral."""
         return {
-            "zeta_prime_half": self.zeta_prime,
+            "zeta_prime_sabio": self.zeta_prime,
             "eje_critico": self.eje_critico,
             "permiso_espectral": self.permiso_espectral,
             "n_ceros_riemann": len(self.CEROS_RIEMANN),
@@ -652,7 +654,7 @@ def verificar_resurreccion() -> Dict[str, Any]:
     # 3. PermisoEspectral
     pe = PermisoEspectral()
     resultados["permiso_espectral"] = {
-        "zeta_prime_half": pe.zeta_prime,
+        "zeta_prime_sabio": pe.zeta_prime,
         "eje_critico": pe.eje_critico,
         "permiso_activo": pe.permiso_espectral,
         "verificado": pe.permiso_espectral,

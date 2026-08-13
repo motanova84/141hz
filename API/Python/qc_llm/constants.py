@@ -13,7 +13,13 @@ DOI = "10.5281/zenodo.17379721"
 # Mathematical constants used in derivation
 GOLDEN_RATIO = 1.618033988749895  # φ
 EULER_MASCHERONI = 0.5772156649015329  # γ
-ZETA_PRIME_HALF = -1.4603545088095868  # ζ'(1/2)
+# — Refactorización Semántica (13/Ago/2026) · Tres caras de ζ —
+# Cara I  — Canónica Analítica (Teorema QCAL-π, κ_π): ζ′(1/2) = −0.207886
+ZETA_PRIME_HALF = -0.20788622497735456  # ζ′(1/2) Analítico Canónico
+# Cara II — Amplitud de Campo (Core/LLM Evaluator): ζ(1/2) = −1.460354
+ZETA_HALF = -1.4603545088095868  # ζ(1/2) Amplitud en línea crítica
+# Cara III— Operador SABIO∞⁴ (Resurrección/Emisión): −3.9226
+ZETA_PRIME_SABIO = -3.922646  # Operador efectivo de emisión coherente SABIO∞⁴
 SQRT_TWO = 1.41421356237  # √2
 SCALE_FACTOR = 16.195  # k
 
