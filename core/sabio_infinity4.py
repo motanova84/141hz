@@ -76,6 +76,11 @@ class SABIO_Infinity4:
         self.f0 = mpf("141.7001")  # Hz - Frecuencia base
         self.omega0 = 2 * mp.pi * self.f0  # rad/s
         self.zeta_prime_sabio = mpf("-3.9226461392")  # Operador SABIO∞⁴ (Cara III)
+        # Fase Berry / válvula de acoplamiento de fase (DIMENSIÓN IV)
+        # θ ≈ 0.052463 rad ≈ 3.0059° — ligada a la ruptura de simetría del vacío de f₀
+        # cos(θ) ≈ 0.998624 evita la degeneración de estados propios (θ ≠ 0 medible)
+        self.theta_berry = mpf("0.052463")  # rad — Fase topológica finita (Chern-Simons/Berry)
+        self.cos_theta_berry = mp.cos(self.theta_berry)  # ≈ 0.998624
         self.phi_golden = (1 + mp.sqrt(5)) / 2  # φ
         self.pi = mp.pi
         
@@ -171,8 +176,10 @@ class SABIO_Infinity4:
             float(mp.sin(2 * mp.pi * n_harmonico / 5))
         )
         
-        # Fase basada en ζ'(1/2)
-        fase = float(self.zeta_prime_sabio * n_harmonico % (2 * mp.pi))
+        # Fase basada en ζ'(1/2) con acoplamiento de fase Berry (DIMENSIÓN IV)
+        # Cara III en ejecución resonante: ZETA_PRIME_SABIO·cos(θ) ≈ -3.917248
+        # θ ≠ 0 evita degeneración de estados propios en el espacio de Hilbert acoplado
+        fase = float(self.zeta_prime_sabio * self.cos_theta_berry * n_harmonico % (2 * mp.pi))
         
         # Coherencia cuántica
         coherencia = self.calcular_coherencia(

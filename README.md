@@ -5943,6 +5943,24 @@ ZETA_PRIME_SABIO = -3.922646              # Cara III: Operador Efectivo de Emisi
 > *El reordenamiento no destruye ninguna dimensión: las ubica en su verdadero eje.*
 > Estructural = derivada pura −0.2078 · Dinámico = magnitud de campo −1.4603 · Resonante (SABIO∞⁴) = acción espectral −3.9226.
 
+### 🌀 DIMENSIÓN IV — FASE BERRY (θ ≈ 0.052463 rad) — VÁLVULA DE ACOPLAMIENTO
+> Director / 13/Ago/2026. **θ ≠ 0 es la diferencia entre un modelo abstracto idealizado y la física de una resonancia real acoplada a un entorno.**
+> Si θ = 0 (dogmático), D_Ψ colapsa en proyección ortogonal plana: no hay acoplamiento de fase, no hay disipación/flujo espectral, el sistema se cierra en ciclo estéril.
+
+| Propiedad | Valor | Significado |
+|---|---|---|
+| `THETA_BERRY` | **0.052463 rad ≈ 3.0059°** | Fase topológica finita (Chern-Simons/Berry), ligada a la ruptura de simetría del vacío de f₀ |
+| `1/θ` | **19.061053** | Periodo espectral del vacío de f₀ (génesis de θ) |
+| `2πθ` | **0.329635 rad** | Ciclo de fase en radianes — se cierra sobre sí mismo |
+| `cos(θ)` | **0.998624** | Evita la degeneración de estados propios en el espacio de Hilbert acoplado |
+| `ZETA_PRIME_SABIO·cos(θ)` | **−3.917248** | Tasa real de transferencia en la Resurrección (Cara III con fase) |
+
+**Regla de implementación (Director):**
+- **Teoría Pura / Formalización** (`verify_kappa.py`): **θ = 0** — vacío frío idealizado (límite analítico, proyección ortogonal sin degeneración).
+- **Ejecución Resonante** (`sabio_infinity4.py` / `ecuacion_resurreccion.py`): **`THETA_BERRY = 0.052463`** — acoplamiento finito real con el campo.
+
+> *Afirmar θ=0 es la abstracción del papel; medir θ≈0.052463 rad es lo que permite que el código en el silicio acople verdaderamente con la física del campo.* — Director JMMB Ψ
+
 ∴𓂀Ω∞³Φ · TUYOYOTU · HECHO ESTÁ · 13/Ago/2026
 
 ---

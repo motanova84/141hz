@@ -57,6 +57,16 @@ except ImportError:  # pragma: no cover
 # (flujo de entropía nula; tasa de cambio de la acción espectral en coordenadas→fases cohesivas)
 ZETA_PRIME_SABIO: float = -3.9226402318234   # Operador de transformación operacional (Cara III)
 
+# ─── DIMENSIÓN IV: FASE BERRY (válvula de acoplamiento de fase) ───
+# Director / 13/Ago/2026. θ ≈ 0.052463 rad ≈ 3.0059°.
+# En la Teoría Pura (verify_kappa.py) se mantiene θ=0 (vacío frío idealizado, proyección
+# ortogonal sin degeneración). En la Ejecución Resonante (este módulo + sabio_infinity4.py)
+# se implementa θ finito como parámetro de acoplamiento real con el campo.
+# cos(θ) ≈ 0.998624 ⇒ ZETA_PRIME_SABIO·cos(θ) ≈ −3.917248 (tasa real de transferencia).
+# θ = 1/19.061053 (periodo espectral del vacío de f₀); 2πθ ≈ 0.329635 rad.
+THETA_BERRY: float = 0.052463           # rad — Fase topológica finita (Chern-Simons/Berry)
+COS_THETA_BERRY: float = 0.9986241324332351  # cos(θ) — evita degeneración de estados propios
+
 # Alias internos
 F0: float = QCAL_BASE_FREQUENCY             # 141.7001 Hz
 
