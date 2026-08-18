@@ -97,6 +97,8 @@
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_omega_ledger.py`
+  - Sin descripción
 - `validate_operadores_maestros_qcal.py`
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_phoenix_onco_coherente_v10.py`
@@ -207,6 +209,8 @@
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_omega_ledger.py`
+  - Sin descripción
 - `validate_operadores_maestros_qcal.py`
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_phoenix_onco_coherente_v10.py`
@@ -512,4 +516,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-08-16 02:32:06 UTC*
+*Generado automáticamente por el bot de documentación - 2026-08-18 14:00:58 UTC*
