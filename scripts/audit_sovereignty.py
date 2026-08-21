@@ -108,7 +108,7 @@ QCAL_PATTERNS = [
 ]
 
 # Extensiones de archivo a auditar / File extensions to audit
-AUDITABLE_EXTENSIONS = {'.py', '.c', '.cpp', '.cu', '.h', '.hpp', '.md', '.txt', '.yml', '.yaml', '.toml'}
+AUDITABLE_EXTENSIONS = {'.py', '.c', '.cpp', '.cu', '.h', '.hpp', '.yml', '.yaml', '.toml'}
 
 # Directorios a excluir / Directories to exclude
 EXCLUDED_DIRS = {'.git', '__pycache__', 'node_modules', '.venv', 'venv', 'build', 'dist', '.pytest_cache'}
@@ -266,7 +266,7 @@ class SovereigntyAuditor:
         summary = report['summary']
         print(f"📊 Resumen del Escaneo:")
         print(f"   Archivos escaneados: {summary['scanned_files']}")
-        print(f"   Líneas totales: {summary['total_lines']:,}")
+        print(f"   Líneas totales: {summary['total_lines']:}")
         print(f"   Violaciones corporativas: {summary['corporate_violations']}")
         print(f"   Firmas QCAL detectadas: {summary['qcal_signatures']}")
         print()

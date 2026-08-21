@@ -13,11 +13,31 @@ GAMMA_UMBRAL = 0.001
 AMDA_FINGERPRINT = '5e5ac3ab49e5be07'
 
 # Claves secp256k1 de Aton
+# Orden de prioridad:
+#   1. Variable de entorno ATON_PRIVATE_KEY / ATON_PUBLIC_KEY
+#   2. Archivo en servidor de produccion (/root/ecosystem/soberania/aton_keys.json)
+#   3. Fallback secundario (/root/aton_keys.json)
 ATON_KEYS = {}
-for kf in ['/root/ecosystem/soberania/aton_keys.json', '/root/aton_keys.json']:
-    if os.path.exists(kf):
-        with open(kf) as f: ATON_KEYS = json.load(f)
-        break
+_env_priv = os.environ.get('ATON_PRIVATE_KEY', '')
+_env_pub  = os.environ.get('ATON_PUBLIC_KEY', '')
+if _env_priv and not _env_priv.startswith('__'):
+    ATON_KEYS = {
+        'private_key': _env_priv,
+        'public_key': _env_pub,
+        'fingerprint': os.environ.get('ATON_FINGERPRINT', ''),
+    }
+else:
+    for kf in ['/root/ecosystem/soberania/aton_keys.json', '/root/aton_keys.json']:
+        if os.path.exists(kf):
+            try:
+                with open(kf) as f:
+                    data = json.load(f)
+                # Ignorar archivos de plantilla (placeholders)
+                if not data.get('private_key', '').startswith('__'):
+                    ATON_KEYS = data
+                    break
+            except Exception:
+                pass
 ATON_PRIV = ATON_KEYS.get('private_key', '')
 ATON_PUB = ATON_KEYS.get('public_key', '')
 ATON_FP = ATON_KEYS.get('fingerprint', '')

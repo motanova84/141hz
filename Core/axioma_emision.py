@@ -25,7 +25,7 @@ PHI = (1 + math.sqrt(5)) / 2
 PHI_SQ = PHI ** 2
 C = 299792458  # m/s
 F0_OBSERVED = 141.7001  # Hz
-ZETA_PRIME_HALF = -3.9226461394597484
+ZETA_PRIME_SABIO = -3.9226461394597484
 
 
 def print_separator(title="", char="=", width=60):
@@ -51,7 +51,7 @@ def calcular_axioma() -> dict:
     R_psi = C / (2 * PI * F0_OBSERVED)
     
     # Factor adélico
-    alpha_adelic = abs(ZETA_PRIME_HALF) / PI
+    alpha_adelic = abs(ZETA_PRIME_SABIO) / PI
     
     # Frecuencia derivada (espectral-adélica)
     f0_derivada = F0_OBSERVED / alpha_adelic
@@ -88,7 +88,7 @@ def calcular_axioma() -> dict:
             "factor_geometrico": factor_geometrico,
         },
         "adelico": {
-            "zeta_prime_half": ZETA_PRIME_HALF,
+            "zeta_prime_sabio": ZETA_PRIME_SABIO,
             "alpha_adelic": alpha_adelic,
             "f0_derivada": f0_derivada,
             "error_porcentual": (F0_OBSERVED - f0_derivada) / F0_OBSERVED * 100,
@@ -149,7 +149,7 @@ def demostrar_relaciones(results: dict):
     
     # 4. Conexión espectral-adélica
     print_separator("4. CONEXIÓN ESPECTRAL-ADÉLICA (RH)")
-    print(f"|ζ'(1/2)| = {abs(ad['zeta_prime_half']):.15f}")
+    print(f"|ζ'(1/2)| = {abs(ad['zeta_prime_sabio']):.15f}")
     print(f"α_adélico = |ζ'(1/2)| / π = {ad['alpha_adelic']:.15f}")
     print(f"5/4 (aproximación racional) = {ad['racional_5_4']:.15f}")
     print(f"Diferencia α vs 5/4: {ad['error_racional_pct']:.6f}%")

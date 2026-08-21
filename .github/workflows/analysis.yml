@@ -1,5 +1,9 @@
 name: QCAL Analysis
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ main ]
@@ -97,6 +101,13 @@ jobs:
       env:
         NUMEXPR_MAX_THREADS: 4
         NUMEXPR_NUM_THREADS: 2
+
+    - name: Run Einstein-QCAL QCAL-E1 validation
+      run: |
+        python scripts/validacion_prediccion_einstein_qcal_e1.py --output-dir results
+      env:
+        NUMEXPR_MAX_THREADS: 4
+        NUMEXPR_NUM_THREADS: 2
     
     - name: Run AT2020afhd QCAL verification
       run: |
@@ -125,4 +136,4 @@ jobs:
           *.png
           *.jpg
           *.pdf
-        retention-days: 30
+      retention-days: 30
