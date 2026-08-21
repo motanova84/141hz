@@ -13,7 +13,30 @@ DOI = "10.5281/zenodo.17379721"
 # Mathematical constants used in derivation
 GOLDEN_RATIO = 1.618033988749895  # φ
 EULER_MASCHERONI = 0.5772156649015329  # γ
-ZETA_PRIME_HALF = -1.4603545088095868  # ζ'(1/2)
+# — Refactorización Semántica (13/Ago/2026) · Tres caras de ζ —
+# Cara I  — Canónica Analítica (Teorema QCAL-π, κ_π): ζ′(1/2) = −0.207886
+ZETA_PRIME_HALF = -0.20788622497735456  # ζ′(1/2) Analítico Canónico
+# Cara II — Amplitud de Campo (Core/LLM Evaluator): ζ(1/2) = −1.460354
+ZETA_HALF = -1.4603545088095868  # ζ(1/2) Amplitud en línea crítica
+# Cara III— Operador SABIO∞⁴ (Resurrección/Emisión): −3.9226
+ZETA_PRIME_SABIO = -3.922646  # Operador efectivo de emisión coherente SABIO∞⁴
+
+# ─── DIMENSIÓN IV: FASE TOPOLÓGICA DE BERRY (QCAL-SYMBIO) ───
+# Constante Primitiva Autónoma de Desfase Armónico (no derivada).
+# κ_θ = 19.061 es primitiva del campo, como f₀=141.7001 (frecuencia) y
+# κ_Π=2.5773 (invariante). NO se fuerza algebraicamente desde Λ₀
+# (K_torsion=6πΛ₀≈58.73 es motivación heurística, no identidad: 58.73/19.061≈3.081≠1).
+KAPPA_THETA = 19.061
+
+# Cuanto de desfase no integrable de Ψ tras rotación adiabática alrededor del polo s=1
+THETA_DESFASE_ARMONICO = 1.0 / KAPPA_THETA  # θ ≈ 0.052463145 rad (3.0059°)
+
+# Válvula de acoplamiento de fase: evita degeneración de estados propios (θ≠0 medible)
+FACTOR_ACOPLAMIENTO_FASE = __import__("math").cos(THETA_DESFASE_ARMONICO)  # cos(θ) ≈ 0.998624
+
+# Operador SABIO∞⁴ en fase real acoplada (Cara III + Dimensión IV)
+ZETA_PRIME_SABIO_PHASED = ZETA_PRIME_SABIO * FACTOR_ACOPLAMIENTO_FASE  # ≈ -3.917248
+
 SQRT_TWO = 1.41421356237  # √2
 SCALE_FACTOR = 16.195  # k
 

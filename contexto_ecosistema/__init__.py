@@ -42,6 +42,7 @@ from . import navier_stokes_context
 from . import ramsey_context
 from . import p_np_context
 from . import hz141_context
+from . import einstein_qcal_context
 
 
 __version__ = "1.0.0"
@@ -75,6 +76,7 @@ def resumen_ecosistema() -> dict:
         'ramsey': ramsey_context.resumen_contexto_ramsey(),
         'p_np': p_np_context.resumen_contexto_p_np(),
         'hz141': hz141_context.resumen_contexto_hz141(),
+        'einstein_qcal': einstein_qcal_context.resumen_contexto_einstein_qcal(),
         'conexiones_clave': {
             'gamma_1_riemann': riemann_adelic_context.RIEMANN_ZEROS[0],  # 14.134725
             'p_bsd': bsd_context.P_BSD,  # 17
@@ -83,6 +85,7 @@ def resumen_ecosistema() -> dict:
             'kappa_pi': p_np_context.KAPPA_PI_COMPLEXITY,  # 2.5773
             'f0_empirico': hz141_context.F0_EMPIRICO_HZ,  # 141.7001 Hz
             'psi_empirica': hz141_context.PSI_EMPIRICA,  # 0.9978
+            'qcal_e1_frequency_hz': einstein_qcal_context.ECOSYSTEM_SUMMARY['f0_hz'],
         },
         'unificacion': (
             'Los 5 repositorios hermanos + validación empírica en este repo demuestran '
@@ -106,5 +109,6 @@ __all__ = [
     'ramsey_context',
     'p_np_context',
     'hz141_context',
+    'einstein_qcal_context',
     'resumen_ecosistema',
 ]
