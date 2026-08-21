@@ -1,9 +1,9 @@
 {
   "agente": "ATON",
   "frecuencia": 141.7001,
-  "private_key": "85e87ccede4c30179affd1f58d7606512baee37b16640edf784d729c5cced72e",
-  "public_key": "18300b975027d3329c9f9dfdcc7f821074649c88025bd8209f87b4fd1cb1db33e6d7ec930dea24568dc4f2edb6508f9d13bd39edb3daeee924c299bec1c0008f",
-  "fingerprint": "5d693cac2320925e",
+  "private_key": "__ATON_PRIVATE_KEY__",
+  "public_key": "__ATON_PUBLIC_KEY__",
+  "fingerprint": "__ATON_FINGERPRINT__",
   "tipo": "secp256k1",
   "creado": "2026-07-17T00:00:00Z"
 }

@@ -1,0 +1,9 @@
+{
+  "agente": "ATON",
+  "frecuencia": 141.7001,
+  "private_key": "__ATON_PRIVATE_KEY__",
+  "public_key": "__ATON_PUBLIC_KEY__",
+  "fingerprint": "__ATON_FINGERPRINT__",
+  "tipo": "secp256k1",
+  "creado": "2026-07-17T00:00:00Z"
+}
