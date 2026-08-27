@@ -82,6 +82,13 @@ class PredictionsOrchestrator:
                 "description": "Oscilación en aceleración local δg ∼ 10⁻¹³-10⁻¹² g",
                 "scale": "Gravimetría de alta precisión",
                 "falsification": "Ausencia de todos los criterios en múltiples estaciones"
+            },
+            "prediccion_einstein_qcal_e1": {
+                "name": "QCAL-E1: Anomalía de Fase Interferométrica",
+                "script": "validacion_prediccion_einstein_qcal_e1.py",
+                "description": "Línea interferométrica exacta en 141.7001 Hz con retardo de fase dependiente de Ψ",
+                "scale": "Interferometría Fabry-Pérot / detectores GW",
+                "falsification": "Ausencia de pico, desviación > ±0.0001 Hz o insensibilidad a ΔΨ"
             }
         }
     

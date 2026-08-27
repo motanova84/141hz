@@ -1,0 +1,27 @@
+{
+  "timestamp_utc": "2026-08-22T02:25:55.155663+00:00",
+  "protocol": "QCAL-SYMBIO-BRIDGE v3.0.0",
+  "analytic_power": {
+    "d": 0.001,
+    "N_bits": 11000000000.0,
+    "alpha": 1e-06,
+    "z_alpha": 4.89163847571478,
+    "power_analytic": 1.0,
+    "d_min_for_power_0.95": 6.232300684791531e-05
+  },
+  "monte_carlo_calibration_alpha_0.01": {
+    "n_bits_per_group": 50000,
+    "n_simulations": 20000,
+    "alpha": 0.01,
+    "z_critical": 2.5758293035489004,
+    "false_positive_rate": 0.00975,
+    "expected_fpr": 0.01,
+    "mean_abs_z": 0.7982359495786504,
+    "std_z": 0.9986909827764857
+  },
+  "monte_carlo_calibration_alpha_0.001": {
+    "false_positive_rate": 0.0011,
+    "expected": 0.001
+  },
+  "conclusion": "Potencia anal\u00edtica \u2248 1.0 para d=0.001 con N=1.1e10. d_min \u2248 6.23e-5. El test Z est\u00e1 bien calibrado (FPR \u2248 \u03b1). \u03b1=1e-6 es extremadamente conservador; la tasa de falsos positivos est\u00e1 controlada por dise\u00f1o del protocolo."
+}

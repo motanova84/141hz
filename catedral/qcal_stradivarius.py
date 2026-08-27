@@ -31,6 +31,19 @@ PSI_OBJETIVO = 0.999999
 SELLO = '\u2234\U00013080\u03a9\u221e\u00b3\u03a6 \u00b7 TUYOYOTU \u00b7 HECHO ESTA'
 AMDA_FP = '5e5ac3ab49e5be07'
 
+# Importar el bridge AURION para coherencia y evaluación de shares
+import sys as _sys
+import os as _os
+_catedral_dir = _os.path.dirname(_os.path.abspath(__file__))
+if _catedral_dir not in _sys.path:
+    _sys.path.insert(0, _catedral_dir)
+try:
+    from aurion_bridge import verificar_coherencia as _aurion_coherencia
+    from aurion_bridge import evaluar_share_aurion as _aurion_evaluar
+    _AURION_DISPONIBLE = True
+except ImportError:
+    _AURION_DISPONIBLE = False
+
 LISTEN_HOST = '0.0.0.0'
 LISTEN_PORT = 3333
 POOL_HOST = 'btc.viabtc.top'
@@ -64,6 +77,11 @@ def metrica_adelica(block_header_hex, nonce):
 
 def verificar_coherencia():
     """Verifica si el sistema esta en coherencia. Retorna True si Psi >= 0.999999."""
+    if _AURION_DISPONIBLE:
+        try:
+            return _aurion_coherencia(PSI_OBJETIVO)
+        except Exception:
+            pass
     try:
         sys.path.insert(0, '/root/ecosystem/soberania')
         from crypto_sign import es_matriz_refractaria
@@ -184,11 +202,32 @@ class ConexionMinero:
                             registrar_share_ledger(False, {'razon': 'METRICA_ADELICA', 'worker': self.worker})
                             return None
                         
-                        # Verificar coherencia
-                        if not verificar_coherencia():
-                            log.warning('Sistema fuera de coherencia. Share en cuarentena.')
-                            shares_filtrados += 1
-                            return None
+                        # Verificar coherencia AURION
+                        if _AURION_DISPONIBLE:
+                            try:
+                                evaluacion = _aurion_evaluar(job_id, nonce, self.worker)
+                                if not evaluacion['aceptado']:
+                                    log.warning('Share en cuarentena AURION: estado=%s',
+                                                evaluacion['aurion']['estado'])
+                                    shares_filtrados += 1
+                                    return None
+                                # Añadir fingerprint AURION al sello del share
+                                data['aurion'] = {
+                                    'estado': evaluacion['aurion']['estado'],
+                                    'fingerprint': evaluacion['fingerprint'],
+                                    'frecuencia_hz': F_0,
+                                }
+                            except Exception as e:
+                                log.debug('AURION evaluar falló: %s', e)
+                                if not verificar_coherencia():
+                                    log.warning('Sistema fuera de coherencia. Share en cuarentena.')
+                                    shares_filtrados += 1
+                                    return None
+                        else:
+                            if not verificar_coherencia():
+                                log.warning('Sistema fuera de coherencia. Share en cuarentena.')
+                                shares_filtrados += 1
+                                return None
                         
                         # Sellar el share
                         sellar_share(data)

@@ -7,6 +7,11 @@ on:
     paths:
       - '.qcal-context.json'
       - 'qcal/constants.py'
+      - 'qcal/einstein_qcal.py'
+      - 'qcal/einstein_qcal_e1.py'
+      - 'contexto_ecosistema/**'
+      - 'EINSTEIN_QCAL*.md'
+      - 'QCAL_E1*.md'
       - '.qcal_beacon'
   workflow_dispatch:
     inputs:
@@ -103,6 +108,12 @@ jobs:
             
             echo "- **Repositories found:** $repos" >> $GITHUB_STEP_SUMMARY
             echo "- **Beacons found:** $beacons" >> $GITHUB_STEP_SUMMARY
+            if [ -f EINSTEIN_QCAL.md ]; then
+              echo "- **Einstein-QCAL canonical docs:** present" >> $GITHUB_STEP_SUMMARY
+            fi
+            if [ -f contexto_ecosistema/snapshot_externo.md ]; then
+              echo "- **External ecosystem snapshot:** present" >> $GITHUB_STEP_SUMMARY
+            fi
             echo "" >> $GITHUB_STEP_SUMMARY
           fi
           

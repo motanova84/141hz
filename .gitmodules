@@ -1,0 +1,3 @@
+[submodule "quantum_internet"]
+	path = quantum_internet
+	url = git@github.com:motanova84/quantum-internet-qcal.git
