@@ -199,9 +199,8 @@ class SimuladorWheelerDeWittAdelico:
                     H_base[x, x] += val_p**(-2.0)
 
         H_vlad = (H_base + H_base.conj().T) / 2.0
-        gap = np.max(np.linalg.eigvalsh(H_vlad)) - np.min(
-            np.linalg.eigvalsh(H_vlad)
-        )
+        eigvals = np.linalg.eigvalsh(H_vlad)
+        gap = eigvals[-1] - eigvals[0]
         return H_vlad * (H_PLANCK_SI * F0_OBJETIVO / (gap + 1e-35))
 
     def trazo_parcial_horizonte(self, rho_global: np.ndarray) -> np.ndarray:
