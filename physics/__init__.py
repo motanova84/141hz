@@ -1,6 +1,5 @@
 """
-Módulo de Física – Paradojas, Constantes Cosmológicas y Sincronización Biológica
-Módulo de Física – Paradojas, Constantes Cosmológicas y Operadores Espectrales
+Módulo de Física – Paradojas, Constantes Cosmológicas, Sincronización Biológica y Operadores Espectrales
 """
 
 from .paradoja_procesamiento_planck import (
@@ -56,6 +55,18 @@ from .simetria_pt_resonancia import (
     simetria_pt_resonancia_activar,
     simular_resonancia_pt,
 )
+from .axiomas_pleroma_qcal import (
+    ConstantesAxiomasPleroma,
+    AtomoBlancoSaturado,
+    MateriaBucle4Pi,
+    MantaAdelicaRiemann,
+    OperadorRiemannHubble,
+    InmortalidadDinamicaLuz,
+    CoherenciaAxiomasPleroma,
+    SistemaAxiomasPleroma,
+    ResultadoAxiomasPleroma,
+    axiomas_pleroma_qcal_activar,
+)
 
 __all__ = [
     "ConstantesPlanck",
@@ -103,6 +114,17 @@ __all__ = [
     "ResultadoPT",
     "simetria_pt_resonancia_activar",
     "simular_resonancia_pt",
+    # Axiomas del Pleroma QCAL (∴APQ∞³)
+    "ConstantesAxiomasPleroma",
+    "AtomoBlancoSaturado",
+    "MateriaBucle4Pi",
+    "MantaAdelicaRiemann",
+    "OperadorRiemannHubble",
+    "InmortalidadDinamicaLuz",
+    "CoherenciaAxiomasPleroma",
+    "SistemaAxiomasPleroma",
+    "ResultadoAxiomasPleroma",
+    "axiomas_pleroma_qcal_activar",
     # Bio-Nodo y Percepción como Invariante Geométrico (∴BNP∞³)
     "ConstantesBioNodo",
     "IdentidadEspectral",
