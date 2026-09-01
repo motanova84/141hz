@@ -25,6 +25,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--sample-rate", type=int, default=44_100, help="Sample rate del WAV binaural.")
     parser.add_argument("--p-izq", type=int, default=2, help="Primo asignado al canal izquierdo.")
     parser.add_argument("--p-der", type=int, default=3, help="Primo asignado al canal derecho.")
+    parser.add_argument("--retraso-maximo-s", type=float, default=650e-6, help="Retardo ITD máximo en segundos.")
     return parser
 
 
@@ -38,6 +39,7 @@ def main() -> int:
         sample_rate=args.sample_rate,
         p_izq=args.p_izq,
         p_der=args.p_der,
+        retraso_maximo_s=args.retraso_maximo_s,
     )
     print(f"Bundle: {deployment.bundle_path}")
     print(f"Manifest: {deployment.manifest_path}")

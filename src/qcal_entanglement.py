@@ -285,7 +285,9 @@ def aplicar_itd_padica(
     if muestras_retraso <= 0:
         return audio_l.copy(), audio_r.copy(), 0
     if muestras_retraso >= audio_r.shape[0]:
-        raise ValueError("El retraso ITD no puede ser mayor o igual que la longitud del audio.")
+        raise ValueError(
+            f"El retraso ITD no puede ser mayor o igual que la longitud del audio: retraso={muestras_retraso}, longitud={audio_r.shape[0]}."
+        )
 
     delayed_r = np.concatenate(
         [np.zeros(muestras_retraso, dtype=np.float32), audio_r[:-muestras_retraso]]
@@ -302,6 +304,7 @@ def sintetizar_audio_binaural_qcal(
     p_izq: int = 2,
     p_der: int = 3,
     headroom: float = 0.89,
+    retraso_maximo_s: float = 650e-6,
 ) -> tuple[np.ndarray, int, int]:
     """Sintetiza audio estéreo float32 modulando amplitud e ITD desde la telemetría."""
     tiempos = np.asarray(tiempos, dtype=float)
@@ -343,6 +346,7 @@ def sintetizar_audio_binaural_qcal(
         sample_rate=sample_rate,
         p_izq=p_izq,
         p_der=p_der,
+        retraso_maximo_s=retraso_maximo_s,
     )
 
     stereo = np.stack([audio_l, audio_r], axis=1).astype(np.float32)
@@ -424,6 +428,7 @@ def renderizar_binaural_qcal(
     sample_rate: int = 44_100,
     p_izq: int = 2,
     p_der: int = 3,
+    retraso_maximo_s: float = 650e-6,
 ) -> QCALBinauralRenderResult:
     """Renderiza audio binaural y diagnóstico a partir de la telemetría."""
     stereo_audio, rendered_sr, itd_samples = sintetizar_audio_binaural_qcal(
@@ -434,6 +439,7 @@ def renderizar_binaural_qcal(
         carrier_hz=telemetry.frecuencia_efectiva_hz,
         p_izq=p_izq,
         p_der=p_der,
+        retraso_maximo_s=retraso_maximo_s,
     )
     audio_path = exporter.guardar_audio_binaural(stereo_audio, rendered_sr)
     diagnostic_path = exporter.guardar_diagnostico_binaural(
@@ -478,6 +484,7 @@ def empaquetar_despliegue_qcal(
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
     bundle_path = output_dir / bundle_filename
+    temp_bundle_path = bundle_path.with_suffix(bundle_path.suffix + ".tmp")
     files_to_include = [
         telemetry.log_path,
         telemetry.csv_path,
@@ -487,16 +494,21 @@ def empaquetar_despliegue_qcal(
         manifest_path,
         *telemetry.state_paths,
     ]
-    with zipfile.ZipFile(bundle_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-        seen_names: set[str] = set()
-        for path in files_to_include:
-            if path is None:
-                continue
-            arcname = path.name
-            if arcname in seen_names:
-                raise ValueError(f"Nombre de artefacto duplicado en el bundle: {arcname}")
-            archive.write(path, arcname=arcname)
-            seen_names.add(arcname)
+    try:
+        with zipfile.ZipFile(temp_bundle_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            seen_names: set[str] = set()
+            for path in files_to_include:
+                if path is None:
+                    continue
+                arcname = path.name
+                if arcname in seen_names:
+                    raise ValueError(f"Nombre de artefacto duplicado en el bundle: {arcname}")
+                archive.write(path, arcname=arcname)
+                seen_names.add(arcname)
+        temp_bundle_path.replace(bundle_path)
+    finally:
+        if temp_bundle_path.exists():
+            temp_bundle_path.unlink()
 
     return manifest_path, bundle_path
 
@@ -649,6 +661,7 @@ def ejecutar_despliegue_dinamico_qcal(
     sample_rate: int = 44_100,
     p_izq: int = 2,
     p_der: int = 3,
+    retraso_maximo_s: float = 650e-6,
 ) -> QCALDeploymentBundle:
     """Ejecuta anclaje dinámico, renderizado binaural y empaquetado final."""
     exporter = QCALTelemetryExporter(output_dir=output_dir)
@@ -668,6 +681,7 @@ def ejecutar_despliegue_dinamico_qcal(
         sample_rate=sample_rate,
         p_izq=p_izq,
         p_der=p_der,
+        retraso_maximo_s=retraso_maximo_s,
     )
     manifest_path, bundle_path = empaquetar_despliegue_qcal(telemetry, binaural, output_dir=output_dir)
     return QCALDeploymentBundle(

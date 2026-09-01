@@ -202,6 +202,7 @@ def test_sintesis_binaural_y_wav_float32(tmp_path):
         entropias,
         purezas,
         sample_rate=8_000,
+        retraso_maximo_s=650e-6,
     )
 
     assert sample_rate == 8_000
