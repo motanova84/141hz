@@ -1,0 +1,16 @@
+{
+  "f0_hz": 141.7001,
+  "omega_0_rad_s": 890.3269658,
+  "nyquist_min_fs_hz": 283.4002,
+  "psi_coherence_threshold": 0.999999,
+  "delta_f_tolerance_hz": 1e-6,
+  "coupling_constant_kappa": 1.0,
+  "description": {
+    "f0_hz": "Fundamental autopoietic resonance frequency (Hz)",
+    "omega_0_rad_s": "Angular frequency 2*pi*f0 (rad/s)",
+    "nyquist_min_fs_hz": "Minimum sampling rate satisfying Nyquist criterion for f0",
+    "psi_coherence_threshold": "Global coherence parameter target Psi >= 0.999999",
+    "delta_f_tolerance_hz": "Maximum allowed central frequency deviation |f_measured - f0|",
+    "coupling_constant_kappa": "Spectral-informational coupling constant kappa (J/m^3, normalised to 1)"
+  }
+}
