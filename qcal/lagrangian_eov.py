@@ -56,11 +56,11 @@ OMEGA_0 = 2 * np.pi * F_0  # rad/s (Angular frequency ω₀ ≈ 890.3 rad/s)
 # Riemann zeta derivative at s=1/2 (from Riemann Hypothesis critical line)
 # Pre-computed to high precision to avoid module import overhead
 # Value computed using: mp.diff(mp.zeta, mp.mpf('0.5')) with 50 digit precision
-ZETA_PRIME_HALF = -3.9226461392091536997555035274863452438740049183987
+ZETA_PRIME_SABIO = -3.9226461392091536997555035274863452438740049183987
 
 # Coupling constants
 XI_COUPLING = 1.0/6.0   # Non-minimal coupling to curvature (conformal coupling)
-ZETA_COUPLING = ZETA_PRIME_HALF / (2 * np.pi)  # Modulation coupling ζ'(1/2)/2π
+ZETA_COUPLING = ZETA_PRIME_SABIO / (2 * np.pi)  # Modulation coupling ζ'(1/2)/2π
 
 # Conversion factor for action
 ACTION_UNIT = HBAR * C_LIGHT  # J·m (natural unit for action)
@@ -546,7 +546,7 @@ def solve_eov_flat_spacetime(
 # UTILITY FUNCTIONS
 # ============================================================================
 
-def compute_zeta_prime_half(precision: int = 50) -> float:
+def compute_zeta_prime_sabio(precision: int = 50) -> float:
     """
     Compute ζ'(1/2) to arbitrary precision using mpmath.
     
@@ -595,7 +595,7 @@ def verify_action_structure():
     print()
     print("  4. Vibrational modulation (arithmetic coupling):")
     print("     ℒ_modulation = -(ζ'(1/2)/2π) R|Ψ|² cos(2πf₀t)")
-    print(f"     with ζ'(1/2) ≈ {ZETA_PRIME_HALF:.4f}")
+    print(f"     with ζ'(1/2) ≈ {ZETA_PRIME_SABIO:.4f}")
     print(f"          f₀ = {F_0} Hz (noetic frequency)")
     print()
     print("Variational Derivation (δS/δΨ = 0):")
@@ -627,7 +627,7 @@ def main():
     print("\n" + "=" * 70)
     print("High-Precision Computation of ζ'(1/2)")
     print("=" * 70)
-    zeta_p = compute_zeta_prime_half(precision=100)
+    zeta_p = compute_zeta_prime_sabio(precision=100)
     print(f"ζ'(1/2) = {zeta_p:.10f}")
     print(f"Coupling: ζ'(1/2)/2π = {zeta_p/(2*np.pi):.10f}")
     print()

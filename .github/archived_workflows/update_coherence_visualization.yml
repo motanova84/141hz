@@ -1,0 +1,102 @@
+name: Auto-Update Coherence Visualization
+
+on:
+  # Ejecutar al hacer push a main
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/generar_coherencia_escalas.py'
+      - '.github/workflows/update_coherence_visualization.yml'
+  
+  # Ejecutar manualmente desde GitHub Actions UI
+  workflow_dispatch:
+  
+  # Ejecutar automáticamente cada día a las 00:00 UTC
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  update-visualization:
+    name: Generar y Actualizar Visualización
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v5
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-viz-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-viz-
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install numpy matplotlib scipy
+    
+    - name: Generate coherence visualization
+      run: |
+        python scripts/generar_coherencia_escalas.py
+        echo "✅ Visualización generada"
+    
+    - name: Check if image was updated
+      id: check_changes
+      run: |
+        git add media/coherence_f0_scales.png results/figures/media/coherence_f0_scales.png
+        if git diff --cached --quiet; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "No hay cambios en la visualización"
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "La visualización ha sido actualizada"
+        fi
+    
+    - name: Commit and push if changed
+      if: steps.check_changes.outputs.changed == 'true'
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -m "🌈 Auto-update: Regenerar visualización de coherencia f₀ [skip ci]"
+        git push
+    
+    - name: Upload visualization as artifact
+      uses: actions/upload-artifact@v5
+      with:
+        name: coherence-visualization-${{ github.run_number }}
+        path: |
+          media/coherence_f0_scales.png
+          results/figures/media/coherence_f0_scales.png
+        retention-days: 90
+    
+    - name: Summary
+      run: |
+        echo "## 🌈 Visualización de Coherencia Multi-escala" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Visualización generada exitosamente" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Frecuencia objetivo:** 141.7001 Hz" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Escalas analizadas:**" >> $GITHUB_STEP_SUMMARY
+        echo "- Escala de Planck (10⁻⁴⁴ a 10⁻³⁵ m)" >> $GITHUB_STEP_SUMMARY
+        echo "- Escala LIGO (10¹ a 10³ Hz)" >> $GITHUB_STEP_SUMMARY
+        echo "- Escala CMB (10⁻³ a 10¹)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [ "${{ steps.check_changes.outputs.changed }}" == "true" ]; then
+          echo "🔄 **Estado:** Visualización actualizada y committeada" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "✓ **Estado:** Sin cambios desde la última ejecución" >> $GITHUB_STEP_SUMMARY
+        fi

@@ -1,0 +1,31 @@
+import numpy as np
+
+def calculate_qcal_allan_signature():
+    """
+    Simula la firma esperada del ruido QCAL en la Desviación de Allan Modificada
+    para un tiempo de integración en torno a tau_0 = 1 / 141.7001 s.
+    """
+    f_zero = 141.7001
+    psi_invariant = 0.999999
+    amplitude_factor = 1.0 - psi_invariant  # 1e-6
+    
+    # Tiempos de integración (tau) centrados en el periodo de la frecuencia fundamental (~7.057 ms)
+    tau_0 = 1.0 / f_zero
+    tau_values = np.logspace(-4, -1, 500) # De 0.1 ms a 100 ms
+    
+    # Modelo analítico de la contribución de la modulación adélica a Mod-sigma_y(tau)
+    # Presenta un realce resonante exactamente cuando tau es múltiplo impar de medio periodo o en tau_0
+    mod_sigma_qcal = amplitude_factor * np.sinc(f_zero * tau_values)
+    
+    print("=== MANIFIESTO DE CALIBRACIÓN INSTRUMENTAL QCAL ===")
+    print(f"Frecuencia fundamental de calibración (f_0): {f_zero} Hz")
+    print(f"Tiempo de ciclo característico (tau_0): {tau_0 * 1000:.3f} ms")
+    print(f"Amplitud nominal esperada (1 - Psi): {amplitude_factor:.2e}")
+    print("\n[PUNTOS DE CONTROL PARA LA DESVIACIÓN DE ALLAN MODIFICADA]")
+    
+    for tau in [tau_0 * 0.5, tau_0, tau_0 * 2.0]:
+        val = amplitude_factor * np.abs(np.sinc(f_zero * tau))
+        print(f"  tau = {tau*1000:6.3f} ms -> Mod-sigma_y ~ {val:.2e}")
+
+if __name__ == "__main__":
+    calculate_qcal_allan_signature()

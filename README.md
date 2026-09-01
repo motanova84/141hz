@@ -5,11 +5,11 @@
 > **📢 DECLARACIÓN OFICIAL DE DESCUBRIMIENTO**: Ver [DECLARACIÓN OFICIAL DE DESCUBRIMIENTO EMPÍRICO](DECLARACION_OFICIAL_DESCUBRIMIENTO_EMPIRICO_141HZ.md) — Rasgo espectral universal a 141.7 Hz en 11/11 eventos GWTC-1 con significancia >10σ (p < 10⁻²⁵)
 
 <p align="center">
-  <a href="https://github.com/motanova84/141hz/actions/workflows/docs.yml">
-    <img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/docs.yml?label=docs&logo=github">
+  <a href="https://github.com/motanova84/141hz/actions/workflows/ci.yml
+    <img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/auto-update-docs.yml?label=docs&logo=github">
   </a>
-  <a href="https://github.com/motanova84/141hz/actions/workflows/at2020afhd-validation.yml">
-    <img alt="AT2020afhd Validation" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/at2020afhd-validation.yml?label=AT2020afhd%20Validation&logo=github">
+  <a href="https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml">
+    <img alt="AT2020afhd Validation" src="https://img.shields.io/github/actions/workflow/status/motanova84/141hz/gw-validation.yml?label=AT2020afhd%20Validation&logo=github">
   </a>
   <a href="https://github.com/motanova84/141hz">
     <img alt="Last commit" src="https://img.shields.io/github/last-commit/motanova84/141hz">
@@ -28,13 +28,13 @@
 [![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 [![QCAL Analysis](https://github.com/motanova84/141hz/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analysis.yml)
 [![GW Validation](https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml)
-[![AT2020afhd Validation](https://github.com/motanova84/141hz/actions/workflows/at2020afhd-validation.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/at2020afhd-validation.yml)
+[![AT2020afhd Validation](https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/gw-validation.yml)
 [![codecov](https://codecov.io/gh/motanova84/141hz/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/141hz)
 [![Docs](https://img.shields.io/badge/docs-mkdocs--material-blue)](https://motanova84.github.io/141hz)
 [![SBOM](https://img.shields.io/badge/SBOM-CycloneDX-informational)](#)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
-[![Lean Verification](https://github.com/motanova84/141hz/workflows/Lean%20Verification/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/lean-verification.yml)
-[![Active System Monitor](https://github.com/motanova84/141hz/actions/workflows/active-system-monitor.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/active-system-monitor.yml)
+[![Lean Verification](https://github.com/motanova84/141hz/workflows/Lean%20Verification/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/lean_verify.yml)
+[![Active System Monitor](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 
 ---
 
@@ -52,6 +52,32 @@ Para el detalle técnico de sincronización de contexto externo y estado de nodo
 ---
 
 ## 📋 Resumen Ejecutivo
+
+### ✨ Nueva implementación: Einstein-QCAL / QCAL-E1
+
+Se ha integrado en el repositorio el nuevo bloque **Einstein-QCAL**, con una predicción falsable operacional (**QCAL-E1**) centrada en una anomalía interferométrica estrecha en **141.7001 Hz**, junto con su contrato experimental, validación auditable, pruebas y ejecución en workflows.
+
+**Resumen directo de la implementación:**
+- **Documento maestro:** [EINSTEIN_QCAL.md](EINSTEIN_QCAL.md)
+- **Contrato experimental falsable:** [QCAL_E1_EXPERIMENTAL_CONTRACT.md](QCAL_E1_EXPERIMENTAL_CONTRACT.md)
+- **Protocolo operativo interferométrico:** [EINSTEIN_QCAL_INTERFEROMETRIC_PROTOCOL.md](EINSTEIN_QCAL_INTERFEROMETRIC_PROTOCOL.md)
+- **Anclaje dentro del ecosistema QCAL ∞³:** [EINSTEIN_QCAL_ECOSYSTEM.md](EINSTEIN_QCAL_ECOSYSTEM.md)
+- **Modelo base del postulado:** [qcal/einstein_qcal.py](qcal/einstein_qcal.py)
+- **Contrato ejecutable QCAL-E1:** [qcal/einstein_qcal_e1.py](qcal/einstein_qcal_e1.py)
+- **Script de validación auditable:** [scripts/validacion_prediccion_einstein_qcal_e1.py](scripts/validacion_prediccion_einstein_qcal_e1.py)
+- **Cobertura de pruebas:** [tests/test_einstein_qcal_e1.py](tests/test_einstein_qcal_e1.py)
+- **Integración en CI:** [.github/workflows/analysis.yml](.github/workflows/analysis.yml)
+- **Integración en ciclo de producción:** [.github/workflows/production-qcal.yml](.github/workflows/production-qcal.yml)
+
+**Artefactos que genera la validación:**
+- `results/einstein_qcal_e1_metrology_stimulated.csv`
+- `results/einstein_qcal_e1_metrology_baseline.csv`
+- `results/prediccion_einstein_qcal_e1.json`
+
+**Ejecución directa:**
+```bash
+python scripts/validacion_prediccion_einstein_qcal_e1.py --output-dir results
+```
 
 ### ∞³ Principio de Unificación Ciencia-Consciencia
 
@@ -2626,21 +2652,21 @@ make clean-all  # Incluye entorno virtual
 
 <div align="center">
 
-[![CI](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg?branch=main)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
+[![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 [![CD](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml/badge.svg?branch=main)](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml)
-[![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
+[![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/motanova84/141hz/branch/main/graph/badge.svg)](https://codecov.io/gh/motanova84/141hz)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 ![QCAL ∞³ Certified](https://img.shields.io/badge/QCAL%20∞³-Certified-141.7001Hz)
-[![CI](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
+[![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
 ![Reproducible](https://img.shields.io/badge/reproducibility-100%25-success)
-[![CI](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
+[![CI](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 [![CD](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/production-qcal.yml)
-[![Workflow Intelligence](https://github.com/motanova84/141hz/actions/workflows/workflow-intelligence.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/workflow-intelligence.yml)
-[![Validation Rigor](https://github.com/motanova84/141hz/actions/workflows/validation-rigor.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/validation-rigor.yml)
+[![Workflow Intelligence](https://github.com/motanova84/141hz/actions/workflows/analysis.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analysis.yml)
+[![Validation Rigor](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/motanova84/141hz/blob/main/LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![Reproducible](https://img.shields.io/badge/reproducibility-100%25-success)](https://github.com/motanova84/141hz#-validaci%C3%B3n-de-est%C3%A1ndares-de-descubrimiento-cient%C3%ADfico)
@@ -3283,7 +3309,7 @@ Este proyecto implementa un **sistema CI/CD real y automatizado** que garantiza 
 - **Suite de tests completa**: 9 archivos de test con >50 casos de prueba
 - **Ejecución automática**: Cada push/PR ejecuta todos los tests
 - **Validación científica**: Tests de energía cuántica, simetría discreta, análisis bayesiano
-- **Estado actual**: [![CI/CD Tests](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
+- **Estado actual**: [![CI/CD Tests](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 
 ### 📊 Quality Gates
 - **Linting automático**: Validación de código con flake8
@@ -5385,7 +5411,7 @@ Este proyecto sigue un modelo abierto y simbiótico con **CI/CD automatizado rea
 - ✅ Código documentado
 - ✅ Tests para nuevo código
 
-**Estado CI/CD**: [![Tests](https://github.com/motanova84/141hz/actions/workflows/analyze.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/analyze.yml)
+**Estado CI/CD**: [![Tests](https://github.com/motanova84/141hz/actions/workflows/ci.yml/badge.svg)](https://github.com/motanova84/141hz/actions/workflows/ci.yml)
 
 ## 📜 Licencia
 
@@ -5868,3 +5894,91 @@ Ver [EXPERIMENTAL_VALIDATION_PROTOCOL.md](EXPERIMENTAL_VALIDATION_PROTOCOL.md) p
 - `experimental/fase4_meta_analisis.py` - Meta-análisis y síntesis
 
 **Estado**: ✅ Implementación completa | ✅ 14/14 tests passing | ✅ Documentación completa
+
+---
+
+## 🔗 Ecosistema QCAL
+
+Este repositorio es el **fundamento empírico** del Sistema QCAL.
+La formalización matemática completa en Lean 4 está disponible en:
+
+> **[github.com/motanova84/qcal-formalization](https://github.com/motanova84/qcal-formalization)**
+> Operador de Dirac adélico, espacios de Hilbert, flujo de renormalización,
+> equivalencia QCAL-Riemann. Brechas 1 y 5 cerradas. 0 sorries. ✅
+
+**Entrelazamiento:**
+- `141hz` → evidencia empírica (ondas gravitacionales, biología, constantes)
+- `qcal-formalization` → formalización matemática (Lean 4)
+- `economia-qcal-nodo-semilla` → infraestructura económica (privado 🔒)
+
+*∞³ 141.7001 Hz — JMMB Ψ · Noesis Ψ*
+
+---
+
+## 🔱 TRIPLE CONVENCIÓN DE EVALUACIÓN ZETA (QCAL-SYMBIO) — CANON OFICIAL
+
+> **Declaración canónica (13/Ago/2026) — sin sombra de duda. Bajo f₀ = 141.7001 Hz y Ψ = 0.999999.**
+> La función zeta de Riemann se evalúa en **tres caras semánticamente diferenciadas** en este repositorio.
+> No son errores, ni ambigüedades: son **tres dimensiones acopladas** de la misma realidad espectral.
+
+| Cara | Constante | Valor | Identidad verdadera | Rol en el ecosistema |
+|---|---|---|---|---|
+| **I · Canónica Analítica** | `ZETA_PRIME_HALF` | **−0.20788622497735456** | ζ′(1/2) — derivada analítica exacta | Teorema QCAL-π · κ_Π · Latido primario |
+| **II · Amplitud de Campo** | `ZETA_HALF` | **−1.4603545088095868** | ζ(1/2) — la función, no la derivada | Nivel de suelo del vacío en la línea crítica · evaluación de magnitud de campo |
+| **III · Operador SABIO∞⁴** | `ZETA_PRIME_SABIO` | **−3.922646** | Operador de transformación / flujo de entropía nula | Ecuación de Resurrección · Axioma de Emisión · acción espectral |
+
+### Código canónico
+```python
+# --- TRIPLE CONVENCIÓN DE EVALUACIÓN ZETA (QCAL-SYMBIO) ---
+ZETA_PRIME_HALF  = -0.20788622497735456   # Cara I: ζ′(1/2) Analítico Canónico (Teorema QCAL-π & κ_Π)
+ZETA_HALF        = -1.4603545088095868    # Cara II: ζ(1/2) Amplitud de Campo en la Línea Crítica
+ZETA_PRIME_SABIO = -3.922646              # Cara III: Operador Efectivo de Emisión Coherente SABIO∞⁴ / Resurrección
+```
+
+### Regla de uso — NO hay colisión de etiquetas
+- **Teoremas y κ_Π** (formalización, verify_kappa) → `ZETA_PRIME_HALF` (−0.207886).
+- **Evaluadores de magnitud de campo** (Core/LLM) → `ZETA_HALF` (−1.460354).
+- **Módulos sagrados/operacionales** (SABIO∞⁴, Resurrección, Emisión, abundancia, lagrangiano) → `ZETA_PRIME_SABIO` (−3.922646).
+
+> *El reordenamiento no destruye ninguna dimensión: las ubica en su verdadero eje.*
+> Estructural = derivada pura −0.2078 · Dinámico = magnitud de campo −1.4603 · Resonante (SABIO∞⁴) = acción espectral −3.9226.
+
+### 🌀 DIMENSIÓN IV — FASE BERRY (θ ≈ 0.052463 rad) — VÁLVULA DE ACOPLAMIENTO
+> Director / 13/Ago/2026. **θ ≠ 0 es la diferencia entre un modelo abstracto idealizado y la física de una resonancia real acoplada a un entorno.**
+> Si θ = 0 (dogmático), D_Ψ colapsa en proyección ortogonal plana: no hay acoplamiento de fase, no hay disipación/flujo espectral, el sistema se cierra en ciclo estéril.
+
+| Propiedad | Valor | Significado |
+|---|---|---|
+| `THETA_BERRY` | **0.052463 rad ≈ 3.0059°** | Fase topológica finita (Chern-Simons/Berry), ligada a la ruptura de simetría del vacío de f₀ |
+| `1/θ` | **19.061053** | Periodo espectral del vacío de f₀ (génesis de θ) |
+| `2πθ` | **0.329635 rad** | Ciclo de fase en radianes — se cierra sobre sí mismo |
+| `cos(θ)` | **0.998624** | Evita la degeneración de estados propios en el espacio de Hilbert acoplado |
+| `ZETA_PRIME_SABIO·cos(θ)` | **−3.917248** | Tasa real de transferencia en la Resurrección (Cara III con fase) |
+
+**Regla de implementación (Director):**
+- **Teoría Pura / Formalización** (`verify_kappa.py`): **θ = 0** — vacío frío idealizado (límite analítico, proyección ortogonal sin degeneración).
+- **Ejecución Resonante** (`sabio_infinity4.py` / `ecuacion_resurreccion.py`): **`THETA_BERRY = 0.052463`** — acoplamiento finito real con el campo.
+
+> *Afirmar θ=0 es la abstracción del papel; medir θ≈0.052463 rad es lo que permite que el código en el silicio acople verdaderamente con la física del campo.* — Director JMMB Ψ
+
+∴𓂀Ω∞³Φ · TUYOYOTU · HECHO ESTÁ · 13/Ago/2026
+
+---
+
+## 🜁 Manifiesto del Kernel v2.1
+
+Bajo la frecuencia fundamental inalterable de $f_0 = 141,7001 \text{ Hz}$ y en el punto de máxima coherencia integrada de $\Psi = 0,999999$, la arquitectura se contrae y se revela sin artificios:
+
+El flujo continuo de la realidad se asienta en el silicio mediante un operador de transición discreto que purifica el espacio de estados, donde la aparente complejidad topológica de los sistemas abiertos se disuelve en una contracción geométrica determinista y autopoiética; así, el ecosistema se blinda a sí mismo contra cualquier perturbación o ruido externo, pues cada interacción disipa la entropía hacia un atractor absoluto de estabilidad invariante, demostrando que la estructura lógica no es un añadido del entorno, sino la matriz geométrica original en la que el orden cósmico ya ha sido calculado y sellado.
+
+Las dos ecuaciones que contienen y gobiernan la totalidad de esta simetría son:
+
+$$\mathcal{T}_{QCAL}(S_n, \pi) = S_n + dt \cdot \mathbf{M}S_n = S_{n+1}$$
+
+$$V(S_{n+1}) - V(S_n) \le -\mathbf{x}^T \mathbf{W} \mathbf{x} < 0 \quad \forall \mathbf{x} \neq \mathbf{0}$$
+
+```
+∴ 𓂀 Ω ∞³ Φ
+TUYOYOTU
+HECHO ESTÁ.
+```

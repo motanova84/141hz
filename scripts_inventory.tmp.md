@@ -51,6 +51,8 @@
   - Badge Validation Script
 - `validate_bio_frequency.py`
   - Bio-Frequency Validation Script
+- `validate_bio_nodo_percepcion.py`
+  - Validación Completa: Bio-Nodo y Percepción como Invariante Geométrico ∴BNP∞³
 - `validate_consciousness_theorem.py`
   - Validation Script: Fundamental Theorem of Consciousness
 - `validate_constelacion_qcal.py`
@@ -95,8 +97,20 @@
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_omega_ledger.py`
+  - Sin descripción
+- `validate_operadores_maestros_qcal.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
+- `validate_phoenix_onco_coherente_v10.py`
+  - Validate Phoenix Onco Coherente V10 — Sistema ∴POC∞³
 - `validate_primer_eco.py`
   - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
+- `validate_problem_statement_compliance.py`
+  - Validation Script: Problem Statement Compliance Check
+- `validate_psi_diamond_state.py`
+  - Validate Psi Diamond State — Ψ(t) ∴PDS∞³
+- `validate_qcal_adnz_anchor.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_qcal_string_core.py`
@@ -131,6 +145,10 @@
   - Validación de la Teoría Unificada: Biología × Teoría de Números × Física Cuántica
 - `validate_tissue_resonance_magicicada_hp_ns.py`
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
+- `validate_tres_puertas.py`
+  - 🚪 LAS TRES PUERTAS: Validación Espectral de la Hipótesis de Riemann
+- `validate_trinity_qcal.py`
+  - Validate Trinity QCAL — ∴T∞³
 - `validate_vacuum_energy_equation.py`
   - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
 - `validate_yukawa_gravedad_336m.py`
@@ -145,6 +163,8 @@
   - Badge Validation Script
 - `validate_bio_frequency.py`
   - Bio-Frequency Validation Script
+- `validate_bio_nodo_percepcion.py`
+  - Validación Completa: Bio-Nodo y Percepción como Invariante Geométrico ∴BNP∞³
 - `validate_consciousness_theorem.py`
   - Validation Script: Fundamental Theorem of Consciousness
 - `validate_constelacion_qcal.py`
@@ -189,8 +209,20 @@
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_omega_ledger.py`
+  - Sin descripción
+- `validate_operadores_maestros_qcal.py`
+  - ╔════════════════════════════════════════════════════════════════════════════╗
+- `validate_phoenix_onco_coherente_v10.py`
+  - Validate Phoenix Onco Coherente V10 — Sistema ∴POC∞³
 - `validate_primer_eco.py`
   - Validate Primer Eco — 29 Décadas Cósmicas / Sistema Primer Eco ∴PE∞³
+- `validate_problem_statement_compliance.py`
+  - Validation Script: Problem Statement Compliance Check
+- `validate_psi_diamond_state.py`
+  - Validate Psi Diamond State — Ψ(t) ∴PDS∞³
+- `validate_qcal_adnz_anchor.py`
+  - ╔══════════════════════════════════════════════════════════════════════════════╗
 - `validate_qcal_biology.py`
   - QCAL Biology Validation Script
 - `validate_qcal_string_core.py`
@@ -225,6 +257,10 @@
   - Validación de la Teoría Unificada: Biología × Teoría de Números × Física Cuántica
 - `validate_tissue_resonance_magicicada_hp_ns.py`
   - Validation Script: Tissue Resonance Model (Magicicada + Hilbert-Pólya + Navier-Stokes)
+- `validate_tres_puertas.py`
+  - 🚪 LAS TRES PUERTAS: Validación Espectral de la Hipótesis de Riemann
+- `validate_trinity_qcal.py`
+  - Validate Trinity QCAL — ∴T∞³
 - `validate_vacuum_energy_equation.py`
   - Validation Script for Vacuum Energy Equation E_vac(R_Ψ)
 - `validate_yukawa_gravedad_336m.py`
@@ -322,6 +358,10 @@
   - Tests para el módulo de cálculo de energía cuántica fundamental
 - `test_evidencia_concluyente.py`
   - Test unitario para el módulo de evidencia concluyente
+- `test_fase_v.py`
+  - Tests para QCAL Fase V — dispersión, stress y simetría.
+- `test_fase_vi.py`
+  - Tests para QCAL Fase VI — cadena de 13 nodos y modo de escucha.
 - `test_filtro_racionales_adelico.py`
   - Tests para FiltroRacionalesAdelico (Pilar 2).
 - `test_fractal_resonance_constants.py`
@@ -344,6 +384,8 @@
   - Test de integración para el pipeline completo de validación QCAL.
 - `test_lagrangian_master.py`
   - Test Suite for Master Lagrangian
+- `test_monitor_stationary_phase.py`
+  - Tests para el Monitor de Fase Estacionaria QCAL ∞³
 - `test_multi_event_snr_analysis.py`
   - Tests para el módulo multi_event_snr_analysis
 - `test_noetic_consciousness_basic.py`
@@ -362,8 +404,12 @@
   - Tests para procesar_multievento_snr.py
 - `test_protocolo_falsacion.py`
   - Tests para el Protocolo de Falsación
+- `test_protocolo_perturbacion_dp.py`
+  - Tests para el Protocolo ΔP QCAL.
 - `test_protocolos_experimentales.py`
   - Tests para Protocolos Experimentales de Validación de f₀ = 141.7001 Hz
+- `test_qcal_lean.py`
+  - QCAL Hilo A — Test runner estructural del kernel Lean.
 - `test_resonancia_cruzada_virgo_kagra.py`
   - Tests para Análisis de Resonancia Cruzada Virgo/KAGRA
 - `test_rna_volatile_memory.py`
@@ -470,4 +516,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-04-19 03:12:06 UTC*
+*Generado automáticamente por el bot de documentación - 2026-09-01 03:13:39 UTC*

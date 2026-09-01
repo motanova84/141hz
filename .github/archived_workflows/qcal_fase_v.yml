@@ -1,0 +1,138 @@
+name: QCAL Fase V — Campo continuo Ψ(x,t)
+
+on:
+  workflow_dispatch:
+    inputs:
+      chi:
+        description: 'Grid coupling coefficient χ (default 1e-3)'
+        required: false
+        default: '1e-3'
+      N_list:
+        description: 'Fibonacci N list for dispersion sweep (space-separated)'
+        required: false
+        default: '7 13 21 55'
+  schedule:
+    # Semanal (lunes 06:00 UTC) — validación de invariancia de escala
+    - cron: '0 6 * * 1'
+  push:
+    paths:
+      - 'scripts/fase_v_dispersion.py'
+      - 'scripts/stress_test_dp.py'
+      - 'scripts/test_fase_v.py'
+      - 'src/qcal_kernel/F_Ψ_FaseV.lean'
+      - 'docs/QCAL_FASE_V.md'
+      - '.github/workflows/qcal_fase_v.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  dispersion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy pytest matplotlib
+
+      - name: Run dispersion sweep (Fibonacci)
+        run: |
+          python scripts/fase_v_dispersion.py \
+            --N-list ${{ github.event.inputs.N_list || '7 13 21 55' }} \
+            --plot \
+            --output artifact_fase_v.json
+
+      - name: Validate scale invariance
+        run: |
+          python -c "
+          import json, sys
+          with open('artifact_fase_v.json') as f:
+              a = json.load(f)
+          v = a['validation']
+          print(f\"|ω₁| mean = {v['omega1_abs_mean_rad_s']:.4f} rad/s\")
+          print(f\"|ω₁| dispersion = {v['omega1_dispersion_rad_s']:.6e} rad/s\")
+          if not v['invariance_scale_ok']:
+              print('::error::Scale invariance broken')
+              sys.exit(1)
+          print('✅ Invariance OK')
+          "
+
+      - name: Upload dispersion artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qcal-fase-v-dispersion-${{ github.run_id }}
+          path: |
+            artifact_fase_v.json
+            artifact_fase_v_dispersion.png
+          retention-days: 30
+
+  stress_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy pytest matplotlib
+
+      - name: Run stress + symmetry test
+        run: |
+          python scripts/stress_test_dp.py \
+            --chi ${{ github.event.inputs.chi || '1e-3' }} \
+            --output stress_report.json
+
+      - name: Validate global status
+        run: |
+          python -c "
+          import json, sys
+          with open('stress_report.json') as f:
+              r = json.load(f)
+          a = r['analysis']
+          print(f\"R² = {a['linearity_r_squared']:.9f}\")
+          print(f\"Ψ_min = {a['psi_min']:.6f}\")
+          print(f\"Δ simetría = {a['symmetry_deviation_mhz']} mHz\")
+          if r['status'] != 'VALIDATED':
+              print(f\"::error::Stress test status = {r['status']}\")
+              sys.exit(1)
+          print('✅ VALIDATED')
+          "
+
+      - name: Upload stress artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qcal-fase-v-stress-${{ github.run_id }}
+          path: stress_report.json
+          retention-days: 30
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy pytest matplotlib
+
+      - name: Run Fase V tests
+        run: pytest scripts/test_fase_v.py -v

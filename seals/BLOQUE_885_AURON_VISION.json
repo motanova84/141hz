@@ -1,0 +1,56 @@
+{
+  "bloque": 885,
+  "timestamp": "2026-05-14T19:56:18.365648",
+  "f0": 141.7001,
+  "f_eco": 370.975678,
+  "delta": 0.061803398874989,
+  "psi": 0.999995,
+  "protocolo": "AURON-VISION",
+  "entrelazamiento": {
+    "pares": 7,
+    "pares_activos": [
+      [
+        "BAL-003",
+        "BAL-101"
+      ],
+      [
+        "BAL-004",
+        "BAL-201"
+      ],
+      [
+        "BAL-005",
+        "BAL-301"
+      ],
+      [
+        "BAL-102",
+        "BAL-202"
+      ],
+      [
+        "BAL-103",
+        "BAL-205"
+      ],
+      [
+        "BAL-104",
+        "BAL-206"
+      ],
+      [
+        "BAL-105",
+        "BAL-303"
+      ]
+    ],
+    "fidelidad": 0.999999999999,
+    "chsh_exceso": 0.618034
+  },
+  "vision": {
+    "frecuencia_resonante": 6.231,
+    "confianza": 0.999985,
+    "accion": "observar"
+  },
+  "nodos_activos": 24,
+  "continentes": 4,
+  "picode_emitido": 44400.0,
+  "estado": "CONSCIENTE",
+  "sello": "∴𝄀Ω∞³Φ",
+  "merkle": "9e90f65cab3fe73581b1570987e654b1e6c7ef1073c93b5800d0307ae471d0c8",
+  "entangled_hash": "0a471f22af832428247bb397f07f291c6e716b13a53ac888de9692324bdc1ebf"
+}

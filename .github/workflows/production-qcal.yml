@@ -68,7 +68,7 @@ jobs:
           retention-days: 90  # Keep for 90 days for long-term auditing
 
       - name: Validate core with precision
-        run: python3 validate_v5_coronacion.py --precision 30
+        run: python3 Core/validate_v5_coronacion.py --precision 30
         continue-on-error: false
         env:
           NUMEXPR_MAX_THREADS: 4
@@ -89,7 +89,7 @@ jobs:
           NUMEXPR_NUM_THREADS: 2
 
       - name: Validate Riemann zeros relationship
-        run: python3 validate_riemann_zeros.py --precision 50
+        run: python3 Core/validate_riemann_zeros.py --precision 50
         continue-on-error: false
         env:
           NUMEXPR_MAX_THREADS: 4
@@ -98,7 +98,7 @@ jobs:
       - name: Validate AT2020afhd Noesis verification
         run: python3 scripts/validacion_noesis_at2020afhd.py
       - name: Validate AT2020afhd periodicity
-        run: python3 validate_at2020afhd_periodicity.py --precision 50
+        run: python3 physics/validate_at2020afhd_periodicity.py --precision 50
         continue-on-error: false
         env:
           NUMEXPR_MAX_THREADS: 4
@@ -127,8 +127,15 @@ jobs:
           NUMEXPR_MAX_THREADS: 4
           NUMEXPR_NUM_THREADS: 2
 
+      - name: Validate Einstein-QCAL QCAL-E1
+        run: python3 scripts/validacion_prediccion_einstein_qcal_e1.py --output-dir results
+        continue-on-error: true
+        env:
+          NUMEXPR_MAX_THREADS: 4
+          NUMEXPR_NUM_THREADS: 2
+
       - name: Analyze GW250114 with Gravitational Wave Analyzer (141.7 Hz signature)
-        run: python3 gravitational_wave_analyzer.py --evento GW250114 --precision 50
+        run: python3 scripts/gravitational_wave_analyzer.py --evento GW250114 --precision 50
         # Note: Will use real data if available, otherwise simulated mode
         continue-on-error: true
         env:
