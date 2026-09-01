@@ -14,6 +14,8 @@ from scipy.linalg import expm
 HBAR_SI = 1.054571817e-34
 F0_REFERENCIA_HZ = 141.7001
 H_PLANCK_SI = 2.0 * np.pi * HBAR_SI
+SPIN_DIMENSION = 3
+TAU_ARGUMENTO_QCAL = 0.4082  # Parámetro base del sector torsional usado en el ansatz QCAL.
 
 
 @dataclass(frozen=True)
@@ -43,19 +45,19 @@ class QCALEntanglementEngine:
             raise ValueError("N_spec debe ser un entero positivo.")
 
         psi_spec = np.ones(N_spec, dtype=np.complex128) / np.sqrt(N_spec)
-        psi_spin = np.ones(3, dtype=np.complex128) / np.sqrt(3.0)
+        psi_spin = np.ones(SPIN_DIMENSION, dtype=np.complex128) / np.sqrt(float(SPIN_DIMENSION))
         psi_global = np.kron(psi_spec, psi_spin)
         return np.outer(psi_global, psi_global.conj())
 
     def traza_parcial_spin(self, rho_global: np.ndarray, N_spec: int) -> np.ndarray:
         """Calcula ρ_spin = Tr_spec(ρ_global)."""
         rho_global = np.asarray(rho_global, dtype=np.complex128)
-        expected_dim = N_spec * 3
+        expected_dim = N_spec * SPIN_DIMENSION
 
         if rho_global.shape != (expected_dim, expected_dim):
             raise ValueError(f"rho_global debe tener forma {(expected_dim, expected_dim)}.")
 
-        rho_tensor = rho_global.reshape(N_spec, 3, N_spec, 3)
+        rho_tensor = rho_global.reshape(N_spec, SPIN_DIMENSION, N_spec, SPIN_DIMENSION)
         return np.trace(rho_tensor, axis1=0, axis2=2)
 
     def entropia_von_neumann(self, rho_sub: np.ndarray) -> float:
@@ -65,8 +67,14 @@ class QCALEntanglementEngine:
             raise ValueError("rho_sub debe ser una matriz cuadrada.")
 
         rho_hermitica = 0.5 * (rho_sub + rho_sub.conj().T)
+        trace = float(np.real(np.trace(rho_hermitica)))
+        if trace <= self.tolerancia:
+            raise ValueError("rho_sub debe tener traza positiva.")
+        if not np.isclose(trace, 1.0, atol=max(self.tolerancia, 1e-8)):
+            rho_hermitica = rho_hermitica / trace
+
         autovals = np.real(np.linalg.eigvalsh(rho_hermitica))
-        autovals = np.clip(autovals, 0.0, 1.0)
+        autovals = np.clip(autovals, 0.0, None)
         autovals = autovals[autovals > self.tolerancia]
 
         if autovals.size == 0:
@@ -102,10 +110,13 @@ class QCALTelemetryExporter:
 
     def __init__(self, output_dir: str | Path = "qcal_out"):
         self.output_dir = Path(output_dir)
+
+    def _ensure_output_dir(self) -> None:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def guardar_estado_binario(self, rho_spin: np.ndarray, paso_temporal: int) -> Path:
         """Exporta ρ_spin a un archivo binario .npy."""
+        self._ensure_output_dir()
         file_path = self.output_dir / f"rho_spin_t{paso_temporal:06d}.npy"
         np.save(file_path, np.asarray(rho_spin, dtype=np.complex128))
         return file_path
@@ -122,8 +133,11 @@ class QCALTelemetryExporter:
         series = [np.asarray(arr, dtype=float) for arr in (tiempos, purezas, entropias, frecuencias)]
         lengths = {arr.shape[0] for arr in series}
         if len(lengths) != 1:
-            raise ValueError("Todas las series de telemetría deben tener la misma longitud.")
+            raise ValueError(
+                f"Todas las series de telemetría deben tener la misma longitud; longitudes encontradas: {sorted(lengths)}."
+            )
 
+        self._ensure_output_dir()
         file_path = self.output_dir / filename
         np.savez_compressed(file_path, t=series[0], gamma=series[1], S=series[2], f0=series[3])
         return file_path
@@ -135,17 +149,18 @@ def construir_hamiltoniano_qcal(
     tau: float | None = None,
     g_int: float = 0.5,
 ) -> np.ndarray:
-    """Construye el Hamiltoniano total con calibración espectral QCAL."""
+    """Construye el Hamiltoniano total con sector de spin/torsión fijo de dimensión 3."""
     autovals_base = np.asarray(autovals_base, dtype=float)
     n_spec = autovals_base.size
     autovals_joules = engine.ajustar_escala_espectral_qcal(autovals_base)
     h_psi = np.diag(autovals_joules).astype(np.complex128)
 
-    tau = float(np.tanh(0.4082) if tau is None else tau)
+    tau = float(np.tanh(TAU_ARGUMENTO_QCAL) if tau is None else tau)
     t_nu = np.diag([1.0, tau, tau]).astype(np.complex128)
-    t_tilde = t_nu - (np.trace(t_nu) / 3.0) * np.eye(3, dtype=np.complex128)
+    # La interacción usa la parte sin traza para aislar el intercambio no separable.
+    t_tilde = t_nu - (np.trace(t_nu) / float(SPIN_DIMENSION)) * np.eye(SPIN_DIMENSION, dtype=np.complex128)
 
-    h_spec_g = np.kron(h_psi, np.eye(3, dtype=np.complex128))
+    h_spec_g = np.kron(h_psi, np.eye(SPIN_DIMENSION, dtype=np.complex128))
     h_tors_g = np.kron(np.eye(n_spec, dtype=np.complex128), H_PLANCK_SI * engine.f0_ref * t_nu)
     h_int = float(g_int) * np.kron(h_psi, t_tilde)
     return h_spec_g + h_tors_g + h_int

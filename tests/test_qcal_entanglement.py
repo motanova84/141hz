@@ -11,6 +11,7 @@ from src.qcal_entanglement import (
     H_PLANCK_SI,
     QCALEntanglementEngine,
     QCALTelemetryExporter,
+    SPIN_DIMENSION,
     construir_hamiltoniano_qcal,
     ejecutar_barrido_temporal,
 )
@@ -41,9 +42,9 @@ def test_ajuste_espectral_calibra_gap_fundamental():
 def test_construir_hamiltoniano_genera_gap_positivo():
     """The composed Hamiltonian should remain Hermitian and have a positive gap."""
     engine = QCALEntanglementEngine()
-    h_total = construir_hamiltoniano_qcal(engine, np.array([1.0, 1.5, 2.0]))
+    h_total = construir_hamiltoniano_qcal(engine, np.array([1.0, 1.5, 2.0, 2.5]))
 
-    assert h_total.shape == (9, 9)
+    assert h_total.shape == (12, 12)
     assert np.allclose(h_total, h_total.conj().T)
 
     energias = np.linalg.eigvalsh(h_total)
@@ -66,13 +67,17 @@ def test_barrido_temporal_persiste_telemetria_y_estados(tmp_path):
     assert result.log_path.exists()
     assert len(result.state_paths) == 4
     assert all(path.exists() for path in result.state_paths)
-    assert np.allclose(result.frecuencias, result.frecuencia_efectiva_hz)
+    h_total = construir_hamiltoniano_qcal(engine, np.array([1.0, 1.5, 2.0]))
+    energias = np.linalg.eigvalsh(h_total)
+    expected_frequency = (energias[-1] - energias[0]) / H_PLANCK_SI
+    assert np.isclose(result.frecuencia_efectiva_hz, expected_frequency)
+    assert np.allclose(result.frecuencias, np.full_like(result.frecuencias, result.frecuencia_efectiva_hz))
     assert np.all(result.purezas <= 1.0 + 1e-12)
     assert np.all(result.purezas >= (1.0 / 3.0) - 1e-12)
     assert result.entropias[0] <= result.entropias[-1]
 
     persisted_state = np.load(result.state_paths[0])
-    assert persisted_state.shape == (3, 3)
+    assert persisted_state.shape == (SPIN_DIMENSION, SPIN_DIMENSION)
     assert persisted_state.dtype == np.complex128
 
     trajectory = np.load(result.log_path)

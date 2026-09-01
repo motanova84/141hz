@@ -44,6 +44,7 @@ _EXPORT_MAP = {
     "HBAR_SI": ".qcal_entanglement",
     "F0_REFERENCIA_HZ": ".qcal_entanglement",
     "H_PLANCK_SI": ".qcal_entanglement",
+    "SPIN_DIMENSION": ".qcal_entanglement",
     "QCALEntanglementEngine": ".qcal_entanglement",
     "QCALTelemetryExporter": ".qcal_entanglement",
     "QCALTemporalSweepResult": ".qcal_entanglement",
@@ -83,7 +84,7 @@ def __getattr__(name: str):
 
 
 def __dir__() -> list[str]:
-    return sorted(set(globals()) | set(__all__))
+    return sorted(set(globals()) | set(_EXPORT_MAP))
 
 __all__ = [
     # Constants
@@ -121,6 +122,7 @@ __all__ = [
     'HBAR_SI',
     'F0_REFERENCIA_HZ',
     'H_PLANCK_SI',
+    'SPIN_DIMENSION',
     'QCALEntanglementEngine',
     'QCALTelemetryExporter',
     'QCALTemporalSweepResult',
