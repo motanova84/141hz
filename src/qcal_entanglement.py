@@ -6,10 +6,13 @@ QCAL dynamic entanglement and telemetry utilities.
 from __future__ import annotations
 
 import csv
+import json
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
+from scipy.io import wavfile
 from scipy.linalg import expm
 
 HBAR_SI = 1.054571817e-34
@@ -32,6 +35,27 @@ class QCALTemporalSweepResult:
     state_paths: tuple[Path, ...]
     csv_path: Path | None = None
     figure_path: Path | None = None
+
+
+@dataclass(frozen=True)
+class QCALBinauralRenderResult:
+    """Container for rendered stereo artifacts."""
+
+    sample_rate: int
+    stereo_audio: np.ndarray
+    audio_path: Path
+    diagnostic_path: Path
+    itd_samples: int
+
+
+@dataclass(frozen=True)
+class QCALDeploymentBundle:
+    """Container for the generated deployment artifact set."""
+
+    telemetry: QCALTemporalSweepResult
+    binaural: QCALBinauralRenderResult
+    manifest_path: Path
+    bundle_path: Path
 
 
 class QCALEntanglementEngine:
@@ -185,6 +209,39 @@ class QCALTelemetryExporter:
         file_path = self.output_dir / filename
         return graficar_telemetria_qcal(tiempos, entropias, purezas, output_path=file_path, show=show)
 
+    def guardar_audio_binaural(
+        self,
+        stereo_audio: np.ndarray,
+        sample_rate: int,
+        filename: str = "qcal_binaural_141Hz.wav",
+    ) -> Path:
+        """Guarda audio estéreo float32 en formato WAV."""
+        self._ensure_output_dir()
+        file_path = self.output_dir / filename
+        return guardar_audio_binaural_wav(stereo_audio, sample_rate, file_path)
+
+    def guardar_diagnostico_binaural(
+        self,
+        tiempos: np.ndarray,
+        entropias: np.ndarray,
+        purezas: np.ndarray,
+        stereo_audio: np.ndarray,
+        sample_rate: int,
+        filename: str = "qcal_binaural_diagnostic.png",
+    ) -> Path:
+        """Guarda el panel diagnóstico del audio binaural."""
+        self._ensure_output_dir()
+        file_path = self.output_dir / filename
+        return graficar_diagnostico_binaural_qcal(
+            tiempos,
+            entropias,
+            purezas,
+            stereo_audio,
+            sample_rate,
+            output_path=file_path,
+            show=False,
+        )
+
 
 def calcular_gap_frecuencia_hz(h_total: np.ndarray) -> float:
     """Convierte el gap espectral del Hamiltoniano en frecuencia lineal."""
@@ -201,6 +258,238 @@ def anclar_resonancia_global(h_total: np.ndarray, frecuencia_objetivo_hz: float 
     gap_actual_hz = calcular_gap_frecuencia_hz(h_total)
     escala = float(frecuencia_objetivo_hz) / gap_actual_hz
     return h_total * escala
+
+
+def aplicar_itd_padica(
+    audio_l: np.ndarray,
+    audio_r: np.ndarray,
+    sample_rate: int = 44_100,
+    p_izq: int = 2,
+    p_der: int = 3,
+    retraso_maximo_s: float = 650e-6,
+) -> tuple[np.ndarray, np.ndarray, int]:
+    """Aplica una diferencia de tiempo interaural basada en disparidad p-ádica."""
+    audio_l = np.asarray(audio_l, dtype=np.float32)
+    audio_r = np.asarray(audio_r, dtype=np.float32)
+    if audio_l.shape != audio_r.shape:
+        raise ValueError("audio_l y audio_r deben tener la misma forma.")
+    if sample_rate <= 0:
+        raise ValueError("sample_rate debe ser positivo.")
+
+    distancia_adelica = 1.0 / float(abs(int(p_izq) - int(p_der)) + 1)
+    retraso_segundos = float(retraso_maximo_s) * distancia_adelica
+    muestras_retraso = int(np.round(retraso_segundos * sample_rate))
+
+    if muestras_retraso <= 0:
+        return audio_l.copy(), audio_r.copy(), 0
+
+    delayed_r = np.concatenate(
+        [np.zeros(muestras_retraso, dtype=np.float32), audio_r[:-muestras_retraso]]
+    )
+    return audio_l.copy(), delayed_r, muestras_retraso
+
+
+def sintetizar_audio_binaural_qcal(
+    tiempos: np.ndarray,
+    entropias: np.ndarray,
+    purezas: np.ndarray,
+    sample_rate: int = 44_100,
+    carrier_hz: float = F0_REFERENCIA_HZ,
+    p_izq: int = 2,
+    p_der: int = 3,
+    headroom: float = 0.89,
+) -> tuple[np.ndarray, int, int]:
+    """Sintetiza audio estéreo float32 modulando amplitud e ITD desde la telemetría."""
+    tiempos = np.asarray(tiempos, dtype=float)
+    entropias = np.asarray(entropias, dtype=float)
+    purezas = np.asarray(purezas, dtype=float)
+    lengths = {arr.shape[0] for arr in (tiempos, entropias, purezas)}
+    if len(lengths) != 1:
+        raise ValueError(
+            f"Las series de audio deben tener la misma longitud; longitudes encontradas: {sorted(lengths)}."
+        )
+    if tiempos.ndim != 1 or tiempos.size < 2:
+        raise ValueError("Se requieren al menos dos muestras temporales para sintetizar audio.")
+    if sample_rate <= 0:
+        raise ValueError("sample_rate debe ser positivo.")
+
+    duration = float(tiempos[-1] - tiempos[0])
+    if duration <= 0.0:
+        raise ValueError("La duración temporal debe ser positiva.")
+
+    num_samples = max(2, int(np.round(duration * sample_rate)))
+    timeline = np.linspace(float(tiempos[0]), float(tiempos[-1]), num_samples, endpoint=True)
+    entropy_interp = np.interp(timeline, tiempos, entropias)
+    purity_interp = np.interp(timeline, tiempos, purezas)
+
+    gamma_loss = np.clip(1.0 - purity_interp, 0.0, 1.0)
+    entropy_norm = entropy_interp - np.min(entropy_interp)
+    max_entropy = float(np.max(entropy_norm))
+    if max_entropy > 0.0:
+        entropy_norm = entropy_norm / max_entropy
+
+    amp_l = 0.2 + 0.8 * gamma_loss
+    amp_r = 0.2 + 0.8 * entropy_norm
+    phase = 2.0 * np.pi * float(carrier_hz) * timeline
+    audio_l = amp_l * np.sin(phase)
+    audio_r = amp_r * np.sin(phase)
+    audio_l, audio_r, itd_samples = aplicar_itd_padica(
+        audio_l,
+        audio_r,
+        sample_rate=sample_rate,
+        p_izq=p_izq,
+        p_der=p_der,
+    )
+
+    stereo = np.stack([audio_l, audio_r], axis=1).astype(np.float32)
+    peak = float(np.max(np.abs(stereo)))
+    if peak > 0.0:
+        stereo = (stereo / peak * float(headroom)).astype(np.float32)
+
+    return stereo, sample_rate, itd_samples
+
+
+def guardar_audio_binaural_wav(stereo_audio: np.ndarray, sample_rate: int, output_path: str | Path) -> Path:
+    """Guarda audio estéreo float32 en WAV."""
+    stereo_audio = np.asarray(stereo_audio, dtype=np.float32)
+    if stereo_audio.ndim != 2 or stereo_audio.shape[1] != 2:
+        raise ValueError("stereo_audio debe tener forma (N, 2).")
+
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    wavfile.write(output_path, int(sample_rate), stereo_audio)
+    return output_path
+
+
+def graficar_diagnostico_binaural_qcal(
+    tiempos: np.ndarray,
+    entropias: np.ndarray,
+    purezas: np.ndarray,
+    stereo_audio: np.ndarray,
+    sample_rate: int,
+    output_path: str | Path | None = None,
+    show: bool = False,
+) -> Path | None:
+    """Genera un panel diagnóstico con telemetría y forma de onda estéreo."""
+    import matplotlib.pyplot as plt
+
+    tiempos = np.asarray(tiempos, dtype=float)
+    entropias = np.asarray(entropias, dtype=float)
+    purezas = np.asarray(purezas, dtype=float)
+    stereo_audio = np.asarray(stereo_audio, dtype=np.float32)
+    if stereo_audio.ndim != 2 or stereo_audio.shape[1] != 2:
+        raise ValueError("stereo_audio debe tener forma (N, 2).")
+
+    fig, axes = plt.subplots(3, 1, figsize=(12, 9))
+    axes[0].plot(tiempos, entropias, color="tab:red", linewidth=2)
+    axes[0].set_ylabel("S(t) bits")
+    axes[0].grid(True, alpha=0.3)
+    axes[0].set_title("Telemetría QCAL")
+
+    axes[1].plot(tiempos, purezas, color="tab:blue", linewidth=2)
+    axes[1].set_ylabel(r"$\gamma(t)$")
+    axes[1].grid(True, alpha=0.3)
+
+    window = min(stereo_audio.shape[0], max(512, sample_rate // 10))
+    audio_time_ms = np.arange(window) / float(sample_rate) * 1_000.0
+    axes[2].plot(audio_time_ms, stereo_audio[:window, 0], label="L", color="tab:green", linewidth=1.2)
+    axes[2].plot(audio_time_ms, stereo_audio[:window, 1], label="R", color="tab:purple", linewidth=1.2, alpha=0.8)
+    axes[2].set_xlabel("Tiempo audio (ms)")
+    axes[2].set_ylabel("Amplitud")
+    axes[2].grid(True, alpha=0.3)
+    axes[2].legend(loc="upper right")
+
+    fig.suptitle(f"Diagnóstico binaural QCAL @ {F0_REFERENCIA_HZ} Hz")
+    fig.tight_layout()
+
+    saved_path: Path | None = None
+    if output_path is not None:
+        saved_path = Path(output_path)
+        saved_path.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(saved_path, dpi=300, bbox_inches="tight")
+
+    if show:
+        plt.show()
+    plt.close(fig)
+    return saved_path
+
+
+def renderizar_binaural_qcal(
+    telemetry: QCALTemporalSweepResult,
+    exporter: QCALTelemetryExporter,
+    sample_rate: int = 44_100,
+    p_izq: int = 2,
+    p_der: int = 3,
+) -> QCALBinauralRenderResult:
+    """Renderiza audio binaural y diagnóstico a partir de la telemetría."""
+    stereo_audio, rendered_sr, itd_samples = sintetizar_audio_binaural_qcal(
+        telemetry.tiempos,
+        telemetry.entropias,
+        telemetry.purezas,
+        sample_rate=sample_rate,
+        carrier_hz=telemetry.frecuencia_efectiva_hz,
+        p_izq=p_izq,
+        p_der=p_der,
+    )
+    audio_path = exporter.guardar_audio_binaural(stereo_audio, rendered_sr)
+    diagnostic_path = exporter.guardar_diagnostico_binaural(
+        telemetry.tiempos,
+        telemetry.entropias,
+        telemetry.purezas,
+        stereo_audio,
+        rendered_sr,
+    )
+    return QCALBinauralRenderResult(
+        sample_rate=rendered_sr,
+        stereo_audio=stereo_audio,
+        audio_path=audio_path,
+        diagnostic_path=diagnostic_path,
+        itd_samples=itd_samples,
+    )
+
+
+def empaquetar_despliegue_qcal(
+    telemetry: QCALTemporalSweepResult,
+    binaural: QCALBinauralRenderResult,
+    output_dir: str | Path,
+    bundle_filename: str = "qcal_dynamic_bundle.zip",
+) -> tuple[Path, Path]:
+    """Empaqueta telemetría y audio en un bundle portable."""
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    manifest_path = output_dir / "qcal_dynamic_manifest.json"
+    manifest = {
+        "f0_hz": telemetry.frecuencia_efectiva_hz,
+        "sample_rate_hz": binaural.sample_rate,
+        "itd_samples": binaural.itd_samples,
+        "artifacts": {
+            "telemetry_npz": telemetry.log_path.name,
+            "telemetry_csv": telemetry.csv_path.name if telemetry.csv_path else None,
+            "telemetry_plot": telemetry.figure_path.name if telemetry.figure_path else None,
+            "audio_wav": binaural.audio_path.name,
+            "audio_diagnostic": binaural.diagnostic_path.name,
+        },
+    }
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+    bundle_path = output_dir / bundle_filename
+    files_to_include = [
+        telemetry.log_path,
+        telemetry.csv_path,
+        telemetry.figure_path,
+        binaural.audio_path,
+        binaural.diagnostic_path,
+        manifest_path,
+        *telemetry.state_paths,
+    ]
+    with zipfile.ZipFile(bundle_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for path in files_to_include:
+            if path is None:
+                continue
+            archive.write(path, arcname=path.name)
+
+    return manifest_path, bundle_path
 
 
 def construir_hamiltoniano_qcal(
@@ -342,14 +631,56 @@ def ejecutar_barrido_temporal(
     )
 
 
+def ejecutar_despliegue_dinamico_qcal(
+    output_dir: str | Path = "qcal_out",
+    autovals_base: np.ndarray | None = None,
+    num_pasos: int = 600,
+    dt: float = 1e-5,
+    guardar_cada: int = 200,
+    sample_rate: int = 44_100,
+    p_izq: int = 2,
+    p_der: int = 3,
+) -> QCALDeploymentBundle:
+    """Ejecuta anclaje dinámico, renderizado binaural y empaquetado final."""
+    exporter = QCALTelemetryExporter(output_dir=output_dir)
+    telemetry = ejecutar_barrido_temporal(
+        exporter=exporter,
+        autovals_base=autovals_base,
+        num_pasos=num_pasos,
+        dt=dt,
+        guardar_cada=guardar_cada,
+        anclar_frecuencia=True,
+        generar_csv=True,
+        generar_figura=True,
+    )
+    binaural = renderizar_binaural_qcal(
+        telemetry,
+        exporter,
+        sample_rate=sample_rate,
+        p_izq=p_izq,
+        p_der=p_der,
+    )
+    manifest_path, bundle_path = empaquetar_despliegue_qcal(telemetry, binaural, output_dir=output_dir)
+    return QCALDeploymentBundle(
+        telemetry=telemetry,
+        binaural=binaural,
+        manifest_path=manifest_path,
+        bundle_path=bundle_path,
+    )
+
+
 if __name__ == "__main__":
-    result = ejecutar_barrido_temporal(anclar_frecuencia=True, generar_csv=True, generar_figura=True)
-    print("--- RESUMEN DE PERSISTENCIA ---")
+    deployment = ejecutar_despliegue_dinamico_qcal()
+    result = deployment.telemetry
+    print("--- RESUMEN DE DESPLIEGUE ---")
     print(f"Trayectoria comprimida guardada en: {result.log_path}")
     if result.csv_path is not None:
         print(f"Telemetría CSV guardada en: {result.csv_path}")
     if result.figure_path is not None:
-        print(f"Figura guardada en: {result.figure_path}")
+        print(f"Figura de telemetría guardada en: {result.figure_path}")
+    print(f"Audio binaural guardado en: {deployment.binaural.audio_path}")
+    print(f"Diagnóstico binaural guardado en: {deployment.binaural.diagnostic_path}")
+    print(f"Bundle final guardado en: {deployment.bundle_path}")
     print(f"Pureza inicial γ(0): {result.purezas[0]:.6f} | Pureza final γ(T): {result.purezas[-1]:.6f}")
     print(f"Entropía inicial S(0): {result.entropias[0]:.6f} bits | Entropía final S(T): {result.entropias[-1]:.6f} bits")
     print(f"Coherencia de resonancia f_0: {result.frecuencia_efectiva_hz:.4f} Hz")

@@ -3,20 +3,28 @@
 Tests for QCAL entanglement dynamics and telemetry persistence.
 """
 
+import zipfile
+
 import numpy as np
 import pytest
+from scipy.io import wavfile
 
 from src.qcal_entanglement import (
     F0_REFERENCIA_HZ,
     H_PLANCK_SI,
+    QCALDeploymentBundle,
     QCALEntanglementEngine,
     QCALTelemetryExporter,
     SPIN_DIMENSION,
+    aplicar_itd_padica,
     anclar_resonancia_global,
     calcular_gap_frecuencia_hz,
     construir_hamiltoniano_qcal,
+    ejecutar_despliegue_dinamico_qcal,
     ejecutar_barrido_temporal,
+    guardar_audio_binaural_wav,
     graficar_telemetria_qcal,
+    sintetizar_audio_binaural_qcal,
 )
 
 
@@ -144,3 +152,72 @@ def test_graficar_telemetria_qcal_guarda_png(tmp_path):
     assert saved_path == output_path
     assert output_path.exists()
     assert output_path.stat().st_size > 0
+
+
+def test_aplicar_itd_padica_retrasa_canal_derecho():
+    """The right channel should be delayed by the expected number of samples."""
+    audio_l = np.array([1.0, 0.0, 0.0, 0.0], dtype=np.float32)
+    audio_r = np.array([1.0, 2.0, 3.0, 4.0], dtype=np.float32)
+
+    delayed_l, delayed_r, delay_samples = aplicar_itd_padica(
+        audio_l,
+        audio_r,
+        sample_rate=4_000,
+        p_izq=2,
+        p_der=3,
+        retraso_maximo_s=1e-3,
+    )
+
+    assert delay_samples == 2
+    assert np.array_equal(delayed_l, audio_l)
+    assert np.array_equal(delayed_r, np.array([0.0, 0.0, 1.0, 2.0], dtype=np.float32))
+
+
+def test_sintesis_binaural_y_wav_float32(tmp_path):
+    """The binaural renderer should emit float32 stereo audio and a readable WAV."""
+    tiempos = np.array([0.0, 0.25, 0.5], dtype=float)
+    entropias = np.array([0.0, 0.4, 0.8], dtype=float)
+    purezas = np.array([1.0, 0.85, 0.7], dtype=float)
+
+    stereo, sample_rate, itd_samples = sintetizar_audio_binaural_qcal(
+        tiempos,
+        entropias,
+        purezas,
+        sample_rate=8_000,
+    )
+
+    assert sample_rate == 8_000
+    assert stereo.dtype == np.float32
+    assert stereo.ndim == 2 and stereo.shape[1] == 2
+    assert itd_samples > 0
+
+    wav_path = guardar_audio_binaural_wav(stereo, sample_rate, tmp_path / "binaural.wav")
+    read_sr, read_data = wavfile.read(wav_path)
+    assert read_sr == sample_rate
+    assert read_data.dtype == np.float32
+    assert read_data.shape == stereo.shape
+
+
+def test_ejecutar_despliegue_dinamico_qcal_empaqueta_bundle(tmp_path):
+    """Full deployment should generate telemetry, binaural audio, and a zip bundle."""
+    deployment = ejecutar_despliegue_dinamico_qcal(
+        output_dir=tmp_path,
+        num_pasos=12,
+        dt=1e-4,
+        guardar_cada=4,
+        sample_rate=8_000,
+    )
+
+    assert isinstance(deployment, QCALDeploymentBundle)
+    assert deployment.telemetry.log_path.exists()
+    assert deployment.telemetry.csv_path is not None and deployment.telemetry.csv_path.exists()
+    assert deployment.binaural.audio_path.exists()
+    assert deployment.binaural.diagnostic_path.exists()
+    assert deployment.manifest_path.exists()
+    assert deployment.bundle_path.exists()
+
+    with zipfile.ZipFile(deployment.bundle_path) as archive:
+        names = set(archive.namelist())
+    assert "qcal_dynamic_manifest.json" in names
+    assert "qcal_binaural_141Hz.wav" in names
+    assert "telemetria_qcal.csv" in names
