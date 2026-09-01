@@ -173,6 +173,16 @@ def test_aplicar_itd_padica_retrasa_canal_derecho():
     assert np.array_equal(delayed_r, np.array([0.0, 0.0, 1.0, 2.0], dtype=np.float32))
 
 
+def test_aplicar_itd_padica_sin_retraso_para_mismo_primo():
+    """Equal p-adic branches should not introduce interaural delay."""
+    audio = np.array([0.0, 1.0, 0.0], dtype=np.float32)
+    delayed_l, delayed_r, delay_samples = aplicar_itd_padica(audio, audio, p_izq=3, p_der=3)
+
+    assert delay_samples == 0
+    assert np.array_equal(delayed_l, audio)
+    assert np.array_equal(delayed_r, audio)
+
+
 def test_sintesis_binaural_y_wav_float32(tmp_path):
     """The binaural renderer should emit float32 stereo audio and a readable WAV."""
     tiempos = np.array([0.0, 0.25, 0.5], dtype=float)

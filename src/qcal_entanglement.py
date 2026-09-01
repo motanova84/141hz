@@ -17,7 +17,7 @@ from scipy.linalg import expm
 
 HBAR_SI = 1.054571817e-34
 F0_REFERENCIA_HZ = 141.7001
-H_PLANCK_SI = 2.0 * np.pi * HBAR_SI
+H_PLANCK_SI = 2.0 * np.pi * HBAR_SI  # h = 2π·ħ
 SPIN_DIMENSION = 3
 TAU_ARGUMENTO_QCAL = 0.4082  # Parámetro base del sector torsional usado en el ansatz QCAL.
 
@@ -275,6 +275,8 @@ def aplicar_itd_padica(
         raise ValueError("audio_l y audio_r deben tener la misma forma.")
     if sample_rate <= 0:
         raise ValueError("sample_rate debe ser positivo.")
+    if int(p_izq) == int(p_der):
+        return audio_l.copy(), audio_r.copy(), 0
 
     distancia_adelica = 1.0 / float(abs(int(p_izq) - int(p_der)) + 1)
     retraso_segundos = float(retraso_maximo_s) * distancia_adelica
@@ -484,10 +486,15 @@ def empaquetar_despliegue_qcal(
         *telemetry.state_paths,
     ]
     with zipfile.ZipFile(bundle_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        seen_names: set[str] = set()
         for path in files_to_include:
             if path is None:
                 continue
-            archive.write(path, arcname=path.name)
+            arcname = path.name
+            if arcname in seen_names:
+                raise ValueError(f"Nombre de artefacto duplicado en el bundle: {arcname}")
+            archive.write(path, arcname=arcname)
+            seen_names.add(arcname)
 
     return manifest_path, bundle_path
 
