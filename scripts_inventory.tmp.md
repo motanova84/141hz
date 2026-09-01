@@ -47,6 +47,8 @@
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_arquitectura_fisica_topc.py`
   - ╔══════════════════════════════════════════════════════════════════════════════╗
+- `validate_axiomas_pleroma_qcal.py`
+  - Validate Axiomas del Pleroma QCAL — ∴APQ∞³
 - `validate_badges.py`
   - Badge Validation Script
 - `validate_bio_frequency.py`
@@ -159,6 +161,8 @@
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_arquitectura_fisica_topc.py`
   - ╔══════════════════════════════════════════════════════════════════════════════╗
+- `validate_axiomas_pleroma_qcal.py`
+  - Validate Axiomas del Pleroma QCAL — ∴APQ∞³
 - `validate_badges.py`
   - Badge Validation Script
 - `validate_bio_frequency.py`
@@ -516,4 +520,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-09-01 03:13:39 UTC*
+*Generado automáticamente por el bot de documentación - 2026-09-01 03:21:33 UTC*
