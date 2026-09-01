@@ -41,7 +41,7 @@ pillow>=10.0.0
 cairosvg>=2.9.0
 # Omega ∞³ dependencies for GPU acceleration and GW data
 jax>=0.4.20
-jaxlib>=0.4.20
+jaxlib>=0.6.2
 gwosc>=0.7.1
 gwpy>=3.0.0
 
