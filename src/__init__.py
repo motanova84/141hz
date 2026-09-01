@@ -53,6 +53,17 @@ from .spectral_origin import (
     get_spectral_constants,
 )
 
+from .qcal_entanglement import (
+    HBAR_SI,
+    F0_REFERENCIA_HZ,
+    H_PLANCK_SI,
+    QCALEntanglementEngine,
+    QCALTelemetryExporter,
+    QCALTemporalSweepResult,
+    construir_hamiltoniano_qcal,
+    ejecutar_barrido_temporal,
+)
+
 from .calabi_yau_invariant import (
     CalabiYauQuintic,
     LaplacianSpectrum,
@@ -108,6 +119,14 @@ __all__ = [
     'SpectralOrigin',
     'derive_f0_from_spectral',
     'get_spectral_constants',
+    'HBAR_SI',
+    'F0_REFERENCIA_HZ',
+    'H_PLANCK_SI',
+    'QCALEntanglementEngine',
+    'QCALTelemetryExporter',
+    'QCALTemporalSweepResult',
+    'construir_hamiltoniano_qcal',
+    'ejecutar_barrido_temporal',
     # Calabi-Yau Invariant k_Π
     'CalabiYauQuintic',
     'LaplacianSpectrum',
