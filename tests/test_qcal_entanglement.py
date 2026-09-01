@@ -68,13 +68,15 @@ def test_barrido_temporal_persiste_telemetria_y_estados(tmp_path):
     """Temporal sweeps should emit binary snapshots and compressed telemetry."""
     engine = QCALEntanglementEngine()
     exporter = QCALTelemetryExporter(output_dir=tmp_path)
+    num_pasos = 10
+    guardar_cada = 3
 
     result = ejecutar_barrido_temporal(
         engine=engine,
         exporter=exporter,
-        num_pasos=10,
+        num_pasos=num_pasos,
         dt=1e-4,
-        guardar_cada=3,
+        guardar_cada=guardar_cada,
         anclar_frecuencia=True,
         generar_csv=True,
         generar_figura=True,
@@ -83,7 +85,7 @@ def test_barrido_temporal_persiste_telemetria_y_estados(tmp_path):
     assert result.log_path.exists()
     assert result.csv_path is not None and result.csv_path.exists()
     assert result.figure_path is not None and result.figure_path.exists()
-    assert len(result.state_paths) == 4
+    assert len(result.state_paths) == len(range(0, num_pasos + 1, guardar_cada))
     assert all(path.exists() for path in result.state_paths)
     h_total = construir_hamiltoniano_qcal(engine, np.array([1.0, 1.5, 2.0]))
     assert calcular_gap_frecuencia_hz(h_total) != F0_REFERENCIA_HZ
@@ -99,12 +101,12 @@ def test_barrido_temporal_persiste_telemetria_y_estados(tmp_path):
 
     trajectory = np.load(result.log_path)
     assert set(trajectory.files) == {"t", "gamma", "S", "f0"}
-    assert trajectory["t"].shape == (11,)
+    assert trajectory["t"].shape == (num_pasos + 1,)
     assert np.allclose(trajectory["gamma"], result.purezas)
 
     csv_lines = result.csv_path.read_text(encoding="utf-8").strip().splitlines()
     assert csv_lines[0] == "t_s,S_bits,pureza_gamma"
-    assert len(csv_lines) == 12
+    assert len(csv_lines) == num_pasos + 2
 
 
 def test_registro_telemetria_valida_longitudes(tmp_path):

@@ -181,6 +181,7 @@ class QCALTelemetryExporter:
         show: bool = False,
     ) -> Path:
         """Renderiza y guarda la dinámica de entropía y pureza."""
+        self._ensure_output_dir()
         file_path = self.output_dir / filename
         return graficar_telemetria_qcal(tiempos, entropias, purezas, output_path=file_path, show=show)
 
