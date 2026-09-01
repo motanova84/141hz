@@ -284,6 +284,8 @@ def aplicar_itd_padica(
 
     if muestras_retraso <= 0:
         return audio_l.copy(), audio_r.copy(), 0
+    if muestras_retraso >= audio_r.shape[0]:
+        raise ValueError("El retraso ITD no puede ser mayor o igual que la longitud del audio.")
 
     delayed_r = np.concatenate(
         [np.zeros(muestras_retraso, dtype=np.float32), audio_r[:-muestras_retraso]]

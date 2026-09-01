@@ -183,6 +183,14 @@ def test_aplicar_itd_padica_sin_retraso_para_mismo_primo():
     assert np.array_equal(delayed_r, audio)
 
 
+def test_aplicar_itd_padica_rechaza_retraso_excesivo():
+    """ITD should reject delays that would erase the right channel."""
+    audio = np.array([1.0, 0.0], dtype=np.float32)
+
+    with pytest.raises(ValueError, match="longitud del audio"):
+        aplicar_itd_padica(audio, audio, sample_rate=10_000, p_izq=2, p_der=3, retraso_maximo_s=1.0)
+
+
 def test_sintesis_binaural_y_wav_float32(tmp_path):
     """The binaural renderer should emit float32 stereo audio and a readable WAV."""
     tiempos = np.array([0.0, 0.25, 0.5], dtype=float)
