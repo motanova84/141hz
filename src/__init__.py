@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from importlib import import_module
 
+_PACKAGE_NAME = __spec__.parent if __spec__ is not None else __name__
+
 _EXPORT_MAP = {
     "UniversalConstants": ".constants",
     "CONSTANTS": ".constants",
@@ -89,7 +91,7 @@ def __getattr__(name: str):
     if module_name is None:
         raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
-    module = import_module(module_name, __name__)
+    module = import_module(module_name, _PACKAGE_NAME)
     value = getattr(module, name)
     globals()[name] = value
     return value

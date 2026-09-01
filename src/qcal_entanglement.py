@@ -268,7 +268,7 @@ def aplicar_itd_padica(
     p_der: int = 3,
     retraso_maximo_s: float = 650e-6,
 ) -> tuple[np.ndarray, np.ndarray, int]:
-    """Aplica una diferencia de tiempo interaural basada en disparidad p-ádica."""
+    """Aplica una diferencia interaural basada en un factor de disparidad entre primos."""
     audio_l = np.asarray(audio_l, dtype=np.float32)
     audio_r = np.asarray(audio_r, dtype=np.float32)
     if audio_l.shape != audio_r.shape:
@@ -278,8 +278,8 @@ def aplicar_itd_padica(
     if int(p_izq) == int(p_der):
         return audio_l.copy(), audio_r.copy(), 0
 
-    distancia_adelica = 1.0 / float(abs(int(p_izq) - int(p_der)) + 1)
-    retraso_segundos = float(retraso_maximo_s) * distancia_adelica
+    factor_disparidad = 1.0 / float(abs(int(p_izq) - int(p_der)) + 1)
+    retraso_segundos = float(retraso_maximo_s) * factor_disparidad
     muestras_retraso = int(np.round(retraso_segundos * sample_rate))
 
     if muestras_retraso <= 0:
