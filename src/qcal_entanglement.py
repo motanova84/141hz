@@ -136,6 +136,8 @@ def construir_hamiltoniano_qcal(
     g_int: float = 0.5,
 ) -> np.ndarray:
     """Construye el Hamiltoniano total con calibración espectral QCAL."""
+    autovals_base = np.asarray(autovals_base, dtype=float)
+    n_spec = autovals_base.size
     autovals_joules = engine.ajustar_escala_espectral_qcal(autovals_base)
     h_psi = np.diag(autovals_joules).astype(np.complex128)
 
@@ -144,7 +146,7 @@ def construir_hamiltoniano_qcal(
     t_tilde = t_nu - (np.trace(t_nu) / 3.0) * np.eye(3, dtype=np.complex128)
 
     h_spec_g = np.kron(h_psi, np.eye(3, dtype=np.complex128))
-    h_tors_g = np.kron(np.eye(3, dtype=np.complex128), H_PLANCK_SI * engine.f0_ref * t_nu)
+    h_tors_g = np.kron(np.eye(n_spec, dtype=np.complex128), H_PLANCK_SI * engine.f0_ref * t_nu)
     h_int = float(g_int) * np.kron(h_psi, t_tilde)
     return h_spec_g + h_tors_g + h_int
 
@@ -157,7 +159,7 @@ def ejecutar_barrido_temporal(
     dt: float = 1e-4,
     guardar_cada: int = 25,
 ) -> QCALTemporalSweepResult:
-    """Ejecuta el barrido temporal y persiste estados/telería en disco."""
+    """Ejecuta el barrido temporal y persiste estados/telemetría en disco."""
     if num_pasos <= 0:
         raise ValueError("num_pasos debe ser positivo.")
     if dt <= 0.0:
