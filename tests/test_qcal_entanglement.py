@@ -12,8 +12,11 @@ from src.qcal_entanglement import (
     QCALEntanglementEngine,
     QCALTelemetryExporter,
     SPIN_DIMENSION,
+    anclar_resonancia_global,
+    calcular_gap_frecuencia_hz,
     construir_hamiltoniano_qcal,
     ejecutar_barrido_temporal,
+    graficar_telemetria_qcal,
 )
 
 
@@ -51,6 +54,16 @@ def test_construir_hamiltoniano_genera_gap_positivo():
     assert energias[-1] > energias[0]
 
 
+def test_anclar_resonancia_global_fija_gap_objetivo():
+    """Anchoring should force the global gap back to the target frequency."""
+    engine = QCALEntanglementEngine()
+    h_total = construir_hamiltoniano_qcal(engine, np.array([1.0, 1.5, 2.0]), g_int=0.75)
+
+    anchored = anclar_resonancia_global(h_total)
+
+    assert np.isclose(calcular_gap_frecuencia_hz(anchored), F0_REFERENCIA_HZ)
+
+
 def test_barrido_temporal_persiste_telemetria_y_estados(tmp_path):
     """Temporal sweeps should emit binary snapshots and compressed telemetry."""
     engine = QCALEntanglementEngine()
@@ -62,15 +75,19 @@ def test_barrido_temporal_persiste_telemetria_y_estados(tmp_path):
         num_pasos=10,
         dt=1e-4,
         guardar_cada=3,
+        anclar_frecuencia=True,
+        generar_csv=True,
+        generar_figura=True,
     )
 
     assert result.log_path.exists()
+    assert result.csv_path is not None and result.csv_path.exists()
+    assert result.figure_path is not None and result.figure_path.exists()
     assert len(result.state_paths) == 4
     assert all(path.exists() for path in result.state_paths)
     h_total = construir_hamiltoniano_qcal(engine, np.array([1.0, 1.5, 2.0]))
-    energias = np.linalg.eigvalsh(h_total)
-    expected_frequency = (energias[-1] - energias[0]) / H_PLANCK_SI
-    assert np.isclose(result.frecuencia_efectiva_hz, expected_frequency)
+    assert calcular_gap_frecuencia_hz(h_total) != F0_REFERENCIA_HZ
+    assert np.isclose(result.frecuencia_efectiva_hz, F0_REFERENCIA_HZ)
     assert np.allclose(result.frecuencias, np.full_like(result.frecuencias, result.frecuencia_efectiva_hz))
     assert np.all(result.purezas <= 1.0 + 1e-12)
     assert np.all(result.purezas >= (1.0 / 3.0) - 1e-12)
@@ -82,8 +99,12 @@ def test_barrido_temporal_persiste_telemetria_y_estados(tmp_path):
 
     trajectory = np.load(result.log_path)
     assert set(trajectory.files) == {"t", "gamma", "S", "f0"}
-    assert trajectory["t"].shape == (10,)
+    assert trajectory["t"].shape == (11,)
     assert np.allclose(trajectory["gamma"], result.purezas)
+
+    csv_lines = result.csv_path.read_text(encoding="utf-8").strip().splitlines()
+    assert csv_lines[0] == "t_s,S_bits,pureza_gamma"
+    assert len(csv_lines) == 12
 
 
 def test_registro_telemetria_valida_longitudes(tmp_path):
@@ -105,3 +126,19 @@ def test_ajuste_espectral_rechaza_gap_nulo():
 
     with pytest.raises(ValueError, match="gap positivo"):
         engine.ajustar_escala_espectral_qcal(np.array([1.0, 1.0, 1.0]))
+
+
+def test_graficar_telemetria_qcal_guarda_png(tmp_path):
+    """Plotting helper should save a PNG without requiring interactive display."""
+    output_path = tmp_path / "telemetria.png"
+    saved_path = graficar_telemetria_qcal(
+        np.array([0.0, 1.0e-4, 2.0e-4]),
+        np.array([0.0, 0.1, 0.2]),
+        np.array([1.0, 0.95, 0.9]),
+        output_path=output_path,
+        show=False,
+    )
+
+    assert saved_path == output_path
+    assert output_path.exists()
+    assert output_path.stat().st_size > 0
