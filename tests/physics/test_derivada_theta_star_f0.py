@@ -92,6 +92,11 @@ class TestDerivarThetaStarF0(unittest.TestCase):
             self.resultado.zeta_chi0_sobre_mpl2_critico, esperado, delta=1.0
         )
 
+    def test_veredicto_refleja_umbral_parametrico(self):
+        threshold_personalizado = 12.34
+        resultado = derivar_theta_star_f0(threshold=threshold_personalizado)
+        self.assertIn(f">= {threshold_personalizado:.2f}", resultado.veredicto)
+
 
 class TestAOscYDeltaPhi(unittest.TestCase):
     def test_a_osc_positivo_y_pequeno(self):
