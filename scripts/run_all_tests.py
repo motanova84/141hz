@@ -7,7 +7,6 @@ Autor: José Manuel Mota Burruezo (JMMB Ψ✧)
 """
 
 import sys
-import os
 import subprocess
 from pathlib import Path
 
@@ -49,9 +48,18 @@ def main():
     print("SUITE DE TESTS - GW250114 141Hz Analysis")
     print("="*70)
     
-    # Buscar todos los archivos test_*.py en scripts/
+    # Buscar tests en scripts/ y añadir regresiones críticas bajo tests/
     scripts_dir = Path(__file__).parent
     test_files = sorted(scripts_dir.glob('test_*.py'))
+    supplemental_tests = [
+        scripts_dir.parent / "tests" / "physics" / "test_derivada_theta_star_f0.py",
+        scripts_dir.parent / "tests" / "test_validate_weil_spectral_bridge.py",
+    ]
+    for supplemental_test in supplemental_tests:
+        if supplemental_test.exists():
+            test_files.append(supplemental_test)
+    # Evitar duplicados preservando orden
+    test_files = list(dict.fromkeys(test_files))
     
     if not test_files:
         print("❌ No se encontraron archivos de test")
@@ -86,4 +94,4 @@ def main():
         return 1
 
 if __name__ == '__main__':
-    sys.exit(0)
+    sys.exit(main())
