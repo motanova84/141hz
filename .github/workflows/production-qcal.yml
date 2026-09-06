@@ -52,6 +52,8 @@ jobs:
       
       - name: Validate reproducibility (strict mode for production)
         run: |
+          mkdir -p results
+          find results/ -type f -name "*.json" -exec sha256sum {} \; > results/checksums.txt || echo "Sin resultados aún"
           python scripts/validate_reproducibility.py --strict
         continue-on-error: false  # Fail workflow if environment doesn't match
 
