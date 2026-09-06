@@ -53,7 +53,7 @@ jobs:
       - name: Validate reproducibility (strict mode for production)
         run: |
           mkdir -p results
-          find results/ -type f -name "*.json" -exec sha256sum {} \; > results/checksums.txt || echo "Sin resultados aún"
+          (cd results && find . -type f -name "*.json" -exec sha256sum {} \; > checksums.txt) || echo "Sin resultados aún"
           python scripts/validate_reproducibility.py --strict
         continue-on-error: false  # Fail workflow if environment doesn't match
 
@@ -259,7 +259,7 @@ jobs:
         run: |
           mkdir -p results
           if [ -d "results" ] && [ -r "results" ]; then
-            find results/ -type f -name "*.json" -exec sha256sum {} \; > results/checksums.txt || echo "No results to checksum"
+            (cd results && find . -type f -name "*.json" -exec sha256sum {} \; > checksums.txt) || echo "No results to checksum"
             if [ -f "results/checksums.txt" ]; then
               echo "Generated checksums for $(wc -l < results/checksums.txt) files"
             fi
