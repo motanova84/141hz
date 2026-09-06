@@ -13,10 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Set up Python 3.11
+      - name: Set up Python 3.12
         uses: actions/setup-python@v6
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       
       - name: Install system dependencies
         run: |
@@ -48,7 +48,7 @@ jobs:
         run: |
           python scripts/validate_reproducibility.py --generate-snapshot --output results/environment_snapshot_${{ github.run_number }}.json
           # Also save ENV.lock metadata for this run
-          cp ENV.lock.json results/env_lock_metadata_${{ github.run_number }}.json
+          [ -f ENV.lock.json ] && cp ENV.lock.json results/env_lock_metadata_${{ github.run_number }}.json || echo "ENV.lock.json no presente (opcional)"
       
       - name: Validate reproducibility (strict mode for production)
         run: |
