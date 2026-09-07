@@ -19,7 +19,7 @@ weasyprint>=60.0
 jinja2>=3.1.6
 healpy>=1.16.0
 torch>=2.6.0
-transformers>=4.48.0
+transformers>=5.16.1
 
 # QCAL-LLM dependencies
 accelerate>=1.14.0
