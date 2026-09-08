@@ -1,10 +1,8 @@
 import sys
 from pathlib import Path
 
-import matplotlib
 import numpy as np
-
-matplotlib.use("Agg")
+import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS_DIR = ROOT / "scripts"
@@ -81,6 +79,8 @@ def test_classify_noise_uses_thresholds():
 
 
 def test_visualize_results_builds_six_axes():
+    if not oracle_module.MATPLOTLIB_AVAILABLE:
+        pytest.skip("matplotlib no disponible")
     oracle = GravitationalOracle(verbose=False)
     synthetic = oracle._generate_synthetic_data(4, 4096, ifo="H1")
     oracle.results["raw_data"] = {"H1": synthetic}

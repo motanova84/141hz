@@ -10,9 +10,15 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Dict, Iterable, Optional
 
-import matplotlib.pyplot as plt
 import numpy as np
 from scipy import signal
+
+try:
+    import matplotlib.pyplot as plt
+    MATPLOTLIB_AVAILABLE = True
+except ImportError:  # pragma: no cover - depends on environment
+    plt = None
+    MATPLOTLIB_AVAILABLE = False
 
 try:
     from gwpy.timeseries import TimeSeries as GWpyTimeSeries
@@ -256,7 +262,9 @@ class GravitationalOracle:
             },
         }
 
-    def visualize_results(self, metrics: Dict[str, Any], noise_classification: Dict[str, Any], evento: str) -> plt.Figure:
+    def visualize_results(self, metrics: Dict[str, Any], noise_classification: Dict[str, Any], evento: str) -> Any:
+        if not MATPLOTLIB_AVAILABLE:
+            raise RuntimeError("matplotlib no está disponible; use plot=False o instale matplotlib")
         fig, axes = plt.subplots(3, 2, figsize=(15, 12))
         fig.suptitle(f"Análisis Espectral - {evento} - f₀ = {self.f_target:.4f} Hz", fontsize=14)
         ax = axes[0, 0]
