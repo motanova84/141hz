@@ -92,7 +92,10 @@ class GravitationalOracle:
         name: str = "synthetic",
     ) -> Any:
         if GWpyTimeSeries is not None:
-            return GWpyTimeSeries(data, dt=1.0 / sample_rate, t0=t0, name=name)
+            try:
+                return GWpyTimeSeries(data, dt=1.0 / sample_rate, t0=t0, name=name)
+            except Exception:
+                pass
         return SimpleTimeSeries(data, sample_rate=sample_rate, t0=t0, name=name)
 
     def _validate_series(self, ts: Any, ifo: str) -> None:
@@ -192,7 +195,7 @@ class GravitationalOracle:
             band_idx = np.where(np.abs(f_h1 - self.f_target) <= fwhm / 2.0)[0]
         else:
             band_idx = np.array([idx_target])
-        signal_power = float(np.trapz(psd_h1[band_idx], f_h1[band_idx])) if len(band_idx) > 1 else float(psd_h1[idx_target])
+        signal_power = float(np.trapezoid(psd_h1[band_idx], f_h1[band_idx])) if len(band_idx) > 1 else float(psd_h1[idx_target])
         noise_power = self._background_noise_level(psd_h1, f_h1, idx_target, fwhm)
         ratio = max(signal_power / noise_power, np.finfo(float).eps)
         snr_integrated = 10.0 * np.log10(ratio)
