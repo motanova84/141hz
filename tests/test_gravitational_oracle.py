@@ -106,7 +106,6 @@ class TestIntegrationGravitationalOracle(unittest.TestCase):
     def setUp(self):
         self.oracle = GravitationalOracle(verbose=False)
 
-    @pytest.mark.slow
     def test_real_data_analysis(self):
         try:
             results = self.oracle.analyze(

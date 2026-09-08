@@ -238,7 +238,7 @@ class GravitationalOracle:
             return 0.0
         left_neighbor = psd[idx_peak - 1] if idx_peak > 0 else -np.inf
         right_neighbor = psd[idx_peak + 1] if idx_peak < len(psd) - 1 else -np.inf
-        if peak_value <= max(left_neighbor, right_neighbor):
+        if np.isclose(peak_value, left_neighbor) and np.isclose(peak_value, right_neighbor):
             return 0.0
         half_max = peak_value / 2.0
         left_idx = idx_peak
