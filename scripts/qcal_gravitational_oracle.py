@@ -355,6 +355,7 @@ class GravitationalOracle:
         print(f"[FREQ TARGET]: {self.f_target} Hz")
         print("=" * 60)
 
+        self.results["evento"] = evento
         data = self.fetch_ligo_data(t_gps, duracion, ifos)
         self.results["raw_data"] = data
 
