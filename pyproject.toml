@@ -52,6 +52,9 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+markers = [
+    "slow: tests de integración o rutas dependientes de red",
+]
 
 [tool.black]
 line-length = 120
