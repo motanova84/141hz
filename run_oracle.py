@@ -45,6 +45,15 @@ def _to_serializable(value: Any) -> Any:
         return {str(key): _to_serializable(subvalue) for key, subvalue in value.items()}
     if isinstance(value, (list, tuple)):
         return [_to_serializable(item) for item in value]
+    if hasattr(value, "unit") and hasattr(value, "value"):
+        return _to_serializable(value.value)
+    if hasattr(value, "value") and hasattr(value, "sample_rate"):
+        return {
+            "name": getattr(value, "name", "timeseries"),
+            "sample_rate": float(getattr(getattr(value, "sample_rate", 0.0), "value", 0.0)),
+            "t0": float(getattr(getattr(value, "t0", 0.0), "value", 0.0)),
+            "values": _to_serializable(getattr(value, "value", [])),
+        }
     if isinstance(value, np.ndarray):
         return value.tolist()
     if isinstance(value, (np.float16, np.float32, np.float64)):
@@ -53,13 +62,6 @@ def _to_serializable(value: Any) -> Any:
         return int(value)
     if isinstance(value, np.bool_):
         return bool(value)
-    if hasattr(value, "value") and hasattr(value, "sample_rate"):
-        return {
-            "name": getattr(value, "name", "timeseries"),
-            "sample_rate": float(getattr(getattr(value, "sample_rate", 0.0), "value", 0.0)),
-            "t0": float(getattr(getattr(value, "t0", 0.0), "value", 0.0)),
-            "values": np.asarray(getattr(value, "value", []), dtype=float).tolist(),
-        }
     return value
 
 
