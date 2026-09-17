@@ -1,0 +1,475 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+QCAL-ICQ — Banco de Prueba Celda Heptagonal §17 — Pipeline de Análisis
+=====================================================================
+Ingiere series temporales (CSV) o corre ensayo sintético y emite VEREDICTO.
+
+Uso
+  python qcal_banco_s17.py                  # ensayo en seco (sintético)
+  python qcal_banco_s17.py datos.csv        # laboratorio
+  python qcal_banco_s17.py --scan           # barrido de resolución / ventana
+
+Canales CSV (con o sin cabecera): vin, h1, h2, acc
+
+Notas de diseño (no negociables para un notch de Q ≳ 600)
+  * Flat-Top tiene ENBW ≈ 3.77 bins y lóbulo principal ~5 bins.
+    A df = 0.05 Hz el lóbulo (~0.25 Hz) es 25× más ancho que el notch
+    de Q = 3000 (BW = f0/Q ≈ 0.0097 Hz). La profundidad se destruye
+    (8 dB reales → < 1 dB medidos). Flat-Top sirve para amplitud de
+    tonos, no para valles estrechos.
+  * Ventana de análisis por defecto: Hann (ENBW ≈ 1.50 bins).
+  * df ≤ BW/4 ≈ 0.002 Hz para Q ~ 3000 en 29 Hz.
+  * 16 bloques Hann a df = 0.002 Hz = 16 × 500 s. Con solape 50 %
+    bastan ~ 1.2 h, no 8.9 h.
+"""
+
+from __future__ import annotations
+
+import argparse
+import sys
+import time
+
+import numpy as np
+from scipy.signal import windows
+
+# ----------------------------- CONFIG §17 --------------------------------
+CFG = {
+    "fs": 2048.0,
+    "window_A": (20.0, 40.0),
+    "f_target_A": 29.026,
+    "tol_A": 0.050,
+    "depth_min_db": 6.0,
+    "window_B": (240.0, 275.0),
+    "f_target_B": 258.300,
+    "tol_B": 0.50,
+    "df": 0.002,
+    "nblocks": 16,
+    "overlap": 0.5,
+    "taper": "hann",  # hann | flattop | hammming | kaiser
+    "coh_min_hyd": 0.80,
+    "chassis_guard_db": 3.0,
+    "baseline_guard_hz": 0.15,  # excluir el lóbulo del valle al estimar suelo
+    "baseline_half_hz": 2.0,
+}
+
+
+def _taper(name: str, n: int) -> np.ndarray:
+    name = name.lower()
+    if name == "hann":
+        return windows.hann(n, sym=False)
+    if name == "hamming":
+        return windows.hamming(n, sym=False)
+    if name == "flattop":
+        return windows.flattop(n, sym=False)
+    if name == "kaiser":
+        return windows.kaiser(n, beta=8.6, sym=False)
+    raise ValueError(f"ventana desconocida: {name}")
+
+
+def synthetic_bench(
+    fs: float,
+    dur: float,
+    f0: float = 29.026,
+    depth_db: float = 8.0,
+    q: float = 3000.0,
+    fB: float = 258.3,
+    gain_B_db: float = 0.0,
+    seed: int = 7,
+):
+    """Banco sintético: H(f) con notch gaussiano de profundidad exacta en dB.
+
+    El notch se aplica en el dominio de Fourier de la serie completa, de modo
+    que la profundidad inyectada no depende de la ventana de análisis.
+    """
+    rng = np.random.default_rng(seed)
+    n = int(round(fs * dur))
+    x = rng.standard_normal(n)
+    X = np.fft.rfft(x)
+    fk = np.fft.rfftfreq(n, 1.0 / fs)
+    Hs = np.ones(fk.size, dtype=complex)
+    if depth_db > 0:
+        # 20 log10(|H|) = -depth_db  ⇒  |H| = 10^(-depth_db/20) en el centro
+        h_min = 10.0 ** (-depth_db / 20.0)
+        depth_lin = 1.0 - h_min
+        bw = f0 / q
+        sigma = bw / (2.0 * np.sqrt(2.0 * np.log(2.0)))  # FWHM = bw
+        Hs -= depth_lin * np.exp(-0.5 * ((fk - f0) / sigma) ** 2)
+    if gain_B_db != 0.0:
+        amp = 10.0 ** (gain_B_db / 20.0) - 1.0
+        bwB = max(fB / max(q, 1.0), 0.3)
+        Hs += amp * np.exp(-0.5 * ((fk - fB) / (bwB / 2.35)) ** 2)
+    y = np.fft.irfft(X * Hs, n=n)
+    y2 = 0.9 * y + 0.1 * rng.standard_normal(n)
+    acc = 0.02 * rng.standard_normal(n)
+    return x, y, y2, acc
+
+
+def load_real_csv(path: str):
+    """Carga vin, h1, h2, acc desde CSV, NPY (N×4) o paquete del grabador (.npz / _meta.json)."""
+    import json
+    from pathlib import Path
+
+    p = Path(path)
+    if p.suffix.lower() == ".npz":
+        z = np.load(p)
+        return z["vin"], z["h1"], z["h2"], z["acc"]
+    if p.suffix.lower() == ".npy":
+        raw = np.load(p)
+        if raw.ndim != 2 or raw.shape[1] < 4:
+            raise ValueError("NPY debe ser (N, 4)")
+        return raw[:, 0], raw[:, 1], raw[:, 2], raw[:, 3]
+    candidates = []
+    if p.suffix.lower() == ".json":
+        candidates.append(p)
+    candidates.append(p.with_name(p.stem + "_meta.json"))
+    if p.name.endswith("_meta.json"):
+        candidates.append(p)
+    candidates.append(Path(str(p) + "_meta.json"))
+    meta_path = next((c for c in candidates if c.exists()), None)
+    if meta_path is not None:
+        with open(meta_path) as fh:
+            meta = json.load(fh)
+        if "nch" in meta or "bin" in meta or "channels" in meta:
+            bpath = Path(meta["bin"]) if meta.get("bin") else None
+            if bpath is None or not bpath.exists():
+                stem = meta_path.name.replace("_meta.json", "")
+                bpath = meta_path.with_name(stem + ".bin")
+            if not bpath.exists():
+                raise FileNotFoundError(f"binario del grabador no hallado: {bpath}")
+            if meta.get("cable_test"):
+                print("AVISO: este archivo es un cable-test, no un ensayo de la celda.")
+            nch = int(meta.get("nch", 4))
+            raw = np.fromfile(bpath, dtype=np.float32).reshape(-1, nch)
+            return raw[:, 0], raw[:, 1], raw[:, 2], raw[:, 3]
+    raw = np.genfromtxt(p, delimiter=",", names=None, dtype=float, invalid_raise=False)
+    if raw.ndim != 2:
+        raise ValueError("CSV ilegible")
+    if raw.shape[1] < 4:
+        raise ValueError("CSV debe tener ≥4 columnas: vin, h1, h2, acc")
+    if raw.size and not np.isfinite(raw[0]).all():
+        raw = raw[1:]
+    if raw.size == 0:
+        raise ValueError("CSV vacío")
+    return raw[:, 0], raw[:, 1], raw[:, 2], raw[:, 3]
+
+
+def required_duration(cfg: dict) -> float:
+    """Segundos de registro para nblocks con el solape pedido."""
+    block = 1.0 / cfg["df"]
+    hop = block * (1.0 - cfg["overlap"])
+    return block + (cfg["nblocks"] - 1) * hop
+
+
+def averaged_transfer(x, y, y2, fs, df, nblocks, taper="hann", overlap=0.5):
+    """H = Sxy/Sxx y coherencia γ²(Y,Y2), Welch con solape."""
+    n = min(x.size, y.size, y2.size)
+    N = int(round(fs / df))
+    if N < 16:
+        raise ValueError("bloque demasiado corto")
+    hop = max(int(N * (1.0 - overlap)), 1)
+    need = N + (nblocks - 1) * hop
+    if n < need:
+        raise ValueError(
+            f"serie demasiado corta: {n/fs:.1f} s, se necesitan {need/fs:.1f} s "
+            f"(df={df} Hz, {nblocks} bloques, overlap={overlap})"
+        )
+    w = _taper(taper, N)
+    W = float(np.sum(w * w))
+    acc_H = None
+    acc_C = None
+    freqs = np.fft.rfftfreq(N, 1.0 / fs)
+    used = 0
+    for k in range(nblocks):
+        s = k * hop
+        sl = slice(s, s + N)
+        X = np.fft.rfft(x[sl] * w)
+        Y = np.fft.rfft(y[sl] * w)
+        Y2 = np.fft.rfft(y2[sl] * w)
+        Sxx = (np.abs(X) ** 2) / W
+        Sxy = (X * np.conj(Y)) / W
+        Syy = (np.abs(Y) ** 2) / W
+        S12 = (Y * np.conj(Y2)) / W
+        S22 = (np.abs(Y2) ** 2) / W
+        Hk = Sxy / np.where(Sxx == 0.0, 1.0, Sxx)
+        Ck = (np.abs(S12) ** 2) / np.where((Syy * S22) == 0.0, 1.0, Syy * S22)
+        acc_H = Hk if acc_H is None else acc_H + Hk
+        acc_C = Ck if acc_C is None else acc_C + Ck
+        used += 1
+    return freqs, acc_H / used, np.clip(acc_C / used, 0.0, 1.0)
+
+
+def _band(f, lo, hi):
+    return (f >= lo) & (f <= hi)
+
+
+def evaluate(freqs, H, coh, acc_psd_peak_db, cfg=None):
+    cfg = dict(CFG if cfg is None else cfg)
+    Hdb = 20.0 * np.log10(np.abs(H) + 1e-30)
+    lo, hi = cfg["window_A"]
+    loB, hiB = cfg["window_B"]
+    mA = _band(freqs, lo, hi)
+    mB = _band(freqs, loB, hiB)
+    taper = cfg.get("taper", "hann")
+    rep = [
+        f"--- VEREDICTO BANCO §17 "
+        f"(df={cfg['df']} Hz, {cfg['nblocks']} bloques, {taper}, "
+        f"overlap={cfg.get('overlap', 0)}) ---"
+    ]
+
+    fa, Ha = freqs[mA], Hdb[mA]
+    tA, tol = cfg["f_target_A"], cfg["tol_A"]
+    mb = (fa >= tA - tol) & (fa <= tA + tol)
+    if not np.any(mb):
+        rep.append(
+            f"[A] BANDA OBJETIVO {tA}±{tol} Hz FUERA DE VENTANA — ERROR DE CONFIGURACIÓN"
+        )
+        return "\n".join(rep), False, False
+
+    idx = int(np.argmin(Ha[mb]))
+    f_valle = float(fa[mb][idx])
+    valle = float(Ha[mb][idx])
+    guard = cfg.get("baseline_guard_hz", 0.15)
+    half = cfg.get("baseline_half_hz", 2.0)
+    side = np.concatenate(
+        [
+            Ha[(fa >= tA - half) & (fa < tA - guard)],
+            Ha[(fa > tA + guard) & (fa <= tA + half)],
+        ]
+    )
+    if side.size == 0:
+        base = float(np.median(Ha))
+    else:
+        base = float(np.median(side))
+    depth = base - valle
+    coh_v = float(np.mean(coh[mA][mb]))
+    chasis = bool(acc_psd_peak_db >= cfg["chassis_guard_db"])
+    A_ok = (
+        (depth >= cfg["depth_min_db"])
+        and (abs(f_valle - tA) <= tol)
+        and (coh_v >= cfg["coh_min_hyd"])
+        and (not chasis)
+    )
+    rep.append(
+        f"[A] valle @ {f_valle:.4f} Hz | profundidad {depth:.2f} dB "
+        f"(suelo {base:.2f} dB, umbral {cfg['depth_min_db']} dB)"
+    )
+    rep.append(
+        f"[A] coherencia H1-H2 en banda: {coh_v:.3f} "
+        f"(acústico genuino requiere >= {cfg['coh_min_hyd']})"
+    )
+    rep.append(
+        f"[A] guardia chasis: {'PIQUE SOSPECHOSO' if chasis else 'limpio'} "
+        f"({acc_psd_peak_db:.2f} dB)"
+    )
+    rep.append(f"[A] criterio A: {'PASA' if A_ok else 'NO PASA'}")
+
+    fb, Hb = freqs[mB], Hdb[mB]
+    i_pk = int(np.argmax(Hb))
+    f_pk = float(fb[i_pk])
+    tB, tolB = cfg["f_target_B"], cfg["tol_B"]
+    B_near = abs(f_pk - tB) <= tolB
+    rep.append(
+        f"[B] máximo en ventana: {f_pk:.3f} Hz "
+        f"(objetivo ~{tB} Hz, tol {tolB} Hz), nivel {Hb[i_pk]:.1f} dB"
+        f" — {'cerca del blanco' if B_near else 'desplazado / no específico'}"
+    )
+
+    if A_ok:
+        rep.append(
+            ">>> VALIDACIÓN PRELIMINAR: acoplamiento con M7 NO DESCARTADO "
+            "— valle real acústico."
+        )
+    else:
+        rep.append(
+            ">>> FALSACIÓN OPERATIVA: sin valle acústico atribuible a M7 "
+            "bajo los umbrales del protocolo."
+        )
+        if depth < cfg["depth_min_db"]:
+            rep.append(
+                f"    (si el valle es más estrecho que ~{3*cfg['df']:.4f} Hz "
+                f"la profundidad está subestimada: bajar df o no usar Flat-Top)"
+            )
+    return "\n".join(rep), A_ok, B_near
+
+
+def expected_depth_db(df, taper, f0=29.026, depth_db=8.0, q=3000.0):
+    """Profundidad sesgada: H_true convolucionado con el lóbulo |W(f)|².
+
+    Solo depende de la duración del bloque T=1/df y de la forma de la ventana.
+    """
+    T = 1.0 / df
+    N = 4096
+    fs = N / T
+    w = _taper(taper, N)
+    pad = 16
+    spec = np.abs(np.fft.rfft(w, n=N * pad)) ** 2
+    freq = np.fft.rfftfreq(N * pad, 1.0 / fs)
+    f_off = np.linspace(-0.6, 0.6, 1201)
+    ps = np.interp(f_off, freq, spec, left=0.0, right=0.0)
+    ps_sum = ps.sum()
+    if ps_sum <= 0:
+        return 0.0
+    ps /= ps_sum
+    h_min = 10.0 ** (-depth_db / 20.0)
+    sigma = (f0 / q) / (2.0 * np.sqrt(2.0 * np.log(2.0)))
+
+    def Htrue(f):
+        return 1.0 - (1.0 - h_min) * np.exp(-0.5 * ((f - f0) / sigma) ** 2)
+
+    f_eval = f0 + np.linspace(-0.25, 0.25, 501)
+    Hm = np.array([np.dot(Htrue(fe - f_off), ps) for fe in f_eval])
+    return float(-20.0 * np.log10(np.min(np.abs(Hm)) + 1e-30))
+
+
+def welch_psd(sig, fs, df, nblocks, taper="hann", overlap=0.5):
+    n = sig.size
+    N = int(round(fs / df))
+    hop = max(int(N * (1.0 - overlap)), 1)
+    w = _taper(taper, N)
+    W = float(np.sum(w * w))
+    acc = None
+    freqs = np.fft.rfftfreq(N, 1.0 / fs)
+    used = 0
+    for k in range(nblocks):
+        s = k * hop
+        if s + N > n:
+            break
+        X = np.fft.rfft(sig[s:s + N] * w)
+        P = (np.abs(X) ** 2) / W
+        acc = P if acc is None else acc + P
+        used += 1
+    if used == 0:
+        raise ValueError("sin bloques para PSD")
+    return freqs, acc / used
+
+
+def acc_peak_db(x, acc, fs, cfg):
+    """Exceso de PSD del chasis en la banda A respecto del suelo local.
+
+    No usar H(vin→acc): si vin y acc son incoherentes, 20log|H| es suelo
+    de ruido y el máximo de ~50 bins supera 3 dB sin que haya modo alguno.
+    """
+    f, P = welch_psd(
+        acc, fs, cfg["df"], cfg["nblocks"],
+        taper=cfg.get("taper", "hann"), overlap=cfg.get("overlap", 0.5),
+    )
+    Adb = 10.0 * np.log10(P + 1e-30)
+    tA, tol = cfg["f_target_A"], cfg["tol_A"]
+    mb = _band(f, tA - tol, tA + tol)
+    side = Adb[_band(f, tA - 2.0, tA + 2.0) & ~_band(f, tA - 0.15, tA + 0.15)]
+    if not np.any(mb) or side.size == 0:
+        return 0.0
+    # mediana in-banda (un tono de chasis la eleva; un solo bin caliente no)
+    return float(np.median(Adb[mb]) - np.median(side))
+
+
+def run_dry():
+    # 512 Hz cubre la ventana A (20–40 Hz). Evita series de 8.7e6 muestras.
+    fs = 512.0
+    cases = [
+        ("CASO 1: valle inyectado (−8 dB @ 29.026 Hz, Q=3000)", 8.0),
+        ("CASO 2: espectro plano (hipótesis ausente)", 0.0),
+    ]
+    cfg = dict(CFG)
+    cfg.update({
+        "fs": fs,
+        "df": 0.002,
+        "nblocks": 8,
+        "taper": "hann",
+        "overlap": 0.5,
+        "window_B": (80.0, 120.0),
+        "f_target_B": 100.0,
+    })
+    dur = required_duration(cfg) + 1.0
+    print("MODO ENSAYO EN SECO (datos sintéticos).")
+    print("Uso real: python qcal_banco_s17.py datos.csv")
+    print(
+        f"Registro sintético: {dur:.0f} s @ {fs} Hz | df={cfg['df']} Hz | "
+        f"{cfg['nblocks']} bloques {cfg['taper']} | solape {cfg['overlap']}"
+    )
+    verdicts = []
+    for title, depth in cases:
+        print(f"\n== {title} ==")
+        t0 = time.time()
+        x, y, y2, acc = synthetic_bench(fs, dur, depth_db=depth, q=3000.0)
+        f, H, coh = averaged_transfer(
+            x, y, y2, fs, cfg["df"], cfg["nblocks"],
+            taper=cfg["taper"], overlap=cfg["overlap"],
+        )
+        apk = acc_peak_db(x, acc, fs, cfg)
+        rep, ok, _ = evaluate(f, H, coh, apk, cfg=cfg)
+        print(rep)
+        print(f"[tiempo {time.time()-t0:.1f} s]")
+        verdicts.append(ok)
+    print("\n--- control interno del ensayo ---")
+    print(f"CASO 1 (valle real) debe PASAR:   {'OK' if verdicts[0] else 'FALLO DE PIPELINE'}")
+    print(f"CASO 2 (plano)      debe NO PASAR: {'OK' if not verdicts[1] else 'FALSO POSITIVO'}")
+    return 0 if (verdicts[0] and not verdicts[1]) else 2
+
+
+def run_scan():
+    """Sesgo de profundidad = convolución de H_true con |W|². Sin series largas."""
+    print("Barrido ANALÍTICO de sesgo (inyectado = 8.00 dB @ 29.026 Hz, Q=3000)")
+    print("H_medido = H_true convolucionado con el lóbulo de la ventana.\n")
+    print(f"{'df':>8} {'taper':>8} {'ENBW_Hz':>10} {'prof_dB':>8}  nota")
+    enbw = {"hann": 1.50, "flattop": 3.77, "hamming": 1.36, "kaiser": 1.80}
+    rows = [
+        (0.050, "flattop"),
+        (0.050, "hann"),
+        (0.010, "hann"),
+        (0.005, "hann"),
+        (0.005, "flattop"),
+        (0.002, "hann"),
+        (0.002, "flattop"),
+        (0.001, "hann"),
+    ]
+    for df_t, tap in rows:
+        # fs ficticio alto y N = fs/df; usamos fs=200 Hz * k para N manejable
+        depth = expected_depth_db(df_t, tap)
+        bw_w = enbw.get(tap, 2.0) * df_t
+        note = "OK (≥6 dB)" if depth >= 6 else "SUBESTIMA — falso negativo"
+        print(f"{df_t:8.3f} {tap:>8} {bw_w:10.4f} {depth:8.2f}  {note}")
+    print("\nBW del notch Q=3000: f0/Q = 0.0097 Hz.")
+    print("Regla: ENBW de la ventana ≪ BW del valle, si no el banco 'falsifica' un valle real.")
+
+
+def run_real(path: str):
+    x, y, y2, acc = load_real_csv(path)
+    cfg = dict(CFG)
+    need = required_duration(cfg)
+    have = x.size / cfg["fs"]
+    print(
+        f"Registro: {have:.1f} s | requeridos {need:.1f} s "
+        f"(df={cfg['df']} Hz, {cfg['nblocks']} bloques {cfg['taper']})"
+    )
+    if have < need:
+        print("AVISO: serie más corta que el protocolo; se reduce nblocks.")
+        block = 1.0 / cfg["df"]
+        hop = block * (1.0 - cfg["overlap"])
+        cfg["nblocks"] = max(int(1 + (have - block) / hop) - 1, 2)
+        print(f"         nblocks efectivo = {cfg['nblocks']}")
+    f, H, coh = averaged_transfer(
+        x, y, y2, cfg["fs"], cfg["df"], cfg["nblocks"],
+        taper=cfg["taper"], overlap=cfg["overlap"],
+    )
+    apk = acc_peak_db(x, acc, cfg["fs"], cfg)
+    rep, _, _ = evaluate(f, H, coh, apk, cfg=cfg)
+    print(rep)
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(description="Banco §17 QCAL-ICQ")
+    p.add_argument("csv", nargs="?", help="CSV vin,h1,h2,acc")
+    p.add_argument("--scan", action="store_true", help="barrido de sesgo df/ventana")
+    args = p.parse_args(argv)
+    if args.scan:
+        return run_scan() or 0
+    if args.csv:
+        run_real(args.csv)
+        return 0
+    return run_dry()
+
+
+if __name__ == "__main__":
+    sys.exit(main())
