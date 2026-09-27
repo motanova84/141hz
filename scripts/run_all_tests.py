@@ -56,8 +56,10 @@ def main():
         scripts_dir.parent / "tests" / "test_validate_weil_spectral_bridge.py",
     ]
     for supplemental_test in supplemental_tests:
-        if supplemental_test.exists():
-            test_files.append(supplemental_test)
+        if not supplemental_test.exists():
+            print(f"❌ Supplemental test missing: {supplemental_test}")
+            return 1
+        test_files.append(supplemental_test)
     # Evitar duplicados preservando orden
     test_files = list(dict.fromkeys(test_files))
     
