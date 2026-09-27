@@ -139,7 +139,8 @@ def derivar_theta_star_f0(
 
     veredicto = (
         "INVIABLE EN REGIMEN PERTURBATIVO: se requiere zeta*chi0^2/Mpl^2 ~ "
-        f"{zeta_critico:.3e} (>= 10^10), descartado por BBN y anisotropias CMB. "
+        f"{zeta_critico:.3e} para alcanzar |d ln theta*/d ln f0| >= {threshold:.2f}, "
+        "descartado por BBN y anisotropias CMB. "
         "El pliegue, si existe, debe formularse como resonancia no adiabatica "
         "de modos discretos (denominador divergente), no como perturbacion "
         "suave del fondo de Friedmann (dTheta*/df0 vía r_s, eta*)."
