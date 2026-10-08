@@ -1,0 +1,112 @@
+name: Trinity and Sintesis Validation
+
+'on':
+  workflow_call:
+  workflow_dispatch:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'physics/**'
+      - 'qcal/**'
+      - 'contexto_ecosistema/**'
+      - 'tests/physics/test_trinity_qcal.py'
+      - 'tests/physics/test_sintesis_tratado.py'
+      - 'scripts/validate_trinity_qcal.py'
+      - 'scripts/validate_sintesis_tratado.py'
+      - 'ENV.lock'
+      - 'requirements*.txt'
+      - 'pyproject.toml'
+      - '.github/workflows/trinity-sintesis-validation.yml'
+      - '.github/workflows/production-qcal.yml'
+  push:
+    branches: [main, develop]
+    paths:
+      - 'physics/**'
+      - 'qcal/**'
+      - 'contexto_ecosistema/**'
+      - 'tests/physics/test_trinity_qcal.py'
+      - 'tests/physics/test_sintesis_tratado.py'
+      - 'scripts/validate_trinity_qcal.py'
+      - 'scripts/validate_sintesis_tratado.py'
+      - 'ENV.lock'
+      - 'requirements*.txt'
+      - 'pyproject.toml'
+      - '.github/workflows/trinity-sintesis-validation.yml'
+      - '.github/workflows/production-qcal.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: ENV.lock
+
+      - name: Install locked validation dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p results/trinity-sintesis
+          python -m pip install -r <(grep -E '^(numpy|scipy|mpmath|pytest)==' ENV.lock)
+
+      - name: Record provenance
+        run: |
+          set -euo pipefail
+          python -m pip freeze > results/trinity-sintesis/pip-freeze.txt
+          python --version > results/trinity-sintesis/python-version.txt
+          git rev-parse HEAD > results/trinity-sintesis/commit.txt
+
+      - name: Run existing Trinity and Sintesis tests
+        run: |
+          set -euo pipefail
+          python -m pytest tests/physics/test_trinity_qcal.py tests/physics/test_sintesis_tratado.py \
+            --junitxml=results/trinity-sintesis/pytest.xml 2>&1 | tee results/trinity-sintesis/pytest.log
+
+      - name: Validate Trinity QCAL
+        run: |
+          set -euo pipefail
+          python scripts/validate_trinity_qcal.py 2>&1 | tee results/trinity-sintesis/trinity.log
+
+      - name: Validate Sintesis Tratado
+        run: |
+          set -euo pipefail
+          python scripts/validate_sintesis_tratado.py 2>&1 | tee results/trinity-sintesis/sintesis.log
+
+      - name: Upload validation reports and provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trinity-sintesis-python-${{ matrix.python-version }}-${{ github.run_number }}
+          path: results/trinity-sintesis/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Summarize validation scope
+        if: always()
+        env:
+          VALIDATION_STATUS: ${{ job.status }}
+          PYTHON_VERSION: ${{ matrix.python-version }}
+        run: |
+          {
+            echo "## Trinity / Sintesis software validation"
+            echo "- Python: $PYTHON_VERSION; status: $VALIDATION_STATUS"
+            echo "- Existing unit tests and validators; logs, JUnit report and provenance are uploaded when available."
+            echo "- Finite software checks only: not an unconditional proof of RH or a structural derivation of 108."
+            echo "- External ecosystem snapshots are context, not current independent verification."
+          } >> "$GITHUB_STEP_SUMMARY"

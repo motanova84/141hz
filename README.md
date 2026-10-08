@@ -49,6 +49,34 @@ Este repositorio forma parte del ecosistema **MCP Noésico QCAL-EPR (QCAL ∞³)
 
 Para el detalle técnico de sincronización de contexto externo y estado de nodos del ecosistema, véase `.github/workflows/sync_contexto_externo.yml` y `contexto_ecosistema/`.
 
+### Validación reproducible de Trinity y Síntesis
+
+El workflow reutilizable [trinity-sintesis-validation.yml](.github/workflows/trinity-sintesis-validation.yml)
+ejecuta las pruebas y validadores existentes de [Trinity QCAL](physics/trinity_qcal.py) y
+[Síntesis del Tratado](physics/sintesis_tratado.py) en Python 3.11 y 3.12, con dependencias mínimas fijadas en
+`ENV.lock`. Se activa manualmente y en PR/push a `main`/`develop` que afecten sus módulos, dependencias,
+contexto o workflows. El [ciclo de producción](.github/workflows/production-qcal.yml) depende del éxito de
+ambas versiones antes de iniciar su job de construcción, validación y despliegue; sus destinos y secretos
+no cambian. Esta integración no afirma que se haya realizado un despliegue remoto.
+
+Reproducción local desde la raíz del repositorio (Bash; repetir con Python 3.11 y 3.12):
+
+```bash
+python3.12 -m venv .venv-trinity
+source .venv-trinity/bin/activate
+python -m pip install -r <(grep -E '^(numpy|scipy|mpmath|pytest)==' ENV.lock)
+python -m pytest tests/physics/test_trinity_qcal.py tests/physics/test_sintesis_tratado.py
+python scripts/validate_trinity_qcal.py
+python scripts/validate_sintesis_tratado.py
+```
+
+CI conserva logs, reporte JUnit, `pip freeze`, versión de Python y commit durante 30 días por versión y
+número de ejecución; un fallo bloquea la producción. Son comprobaciones finitas del software, no una
+demostración incondicional de RH ni una derivación estructural de 108. La
+[instantánea externa](contexto_ecosistema/snapshot_externo.md) y los módulos de contexto
+[Riemann](contexto_ecosistema/riemann_adelic_context.py) y [Ramsey](contexto_ecosistema/ramsey_context.py)
+aportan referencias existentes, no verificación actual de los repositorios externos.
+
 ---
 
 ## 📋 Resumen Ejecutivo

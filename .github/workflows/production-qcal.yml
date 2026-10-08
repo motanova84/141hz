@@ -6,7 +6,13 @@ name: QCAL Production Cycle
   workflow_dispatch:            # Allow manual triggers
 
 jobs:
+  trinity-sintesis-validation:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/trinity-sintesis-validation.yml
+
   build-validate-deploy:
+    needs: trinity-sintesis-validation
     runs-on: ubuntu-latest
     
     steps:
