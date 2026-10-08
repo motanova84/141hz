@@ -12,6 +12,8 @@ jobs:
     uses: ./.github/workflows/trinity-sintesis-validation.yml
 
   build-validate-deploy:
+    permissions:
+      contents: read
     needs: trinity-sintesis-validation
     runs-on: ubuntu-latest
     
