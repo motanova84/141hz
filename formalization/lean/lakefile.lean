@@ -48,6 +48,9 @@ lean_lib QCAL_SYNC_BRIDGE where
   -- Harmonic validation: f_base → f₀ → f_high
   roots := #[`QCAL_SYNC_BRIDGE]
 
+lean_lib QCAL.LiberXIV where
+  roots := #[`QCAL.LiberXIV]
+
 lean_lib Noesis88 where
   -- Deductive chains and asymptotic stability
   roots := #[`Noesis88]
