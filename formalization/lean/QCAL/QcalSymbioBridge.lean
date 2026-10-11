@@ -3,7 +3,9 @@ import Mathlib.Data.Real.Sqrt
 import Mathlib.Data.Rat.Defs
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import Mathlib.Tactic
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Ring
 
 namespace QCAL
 
