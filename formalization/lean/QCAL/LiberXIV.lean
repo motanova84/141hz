@@ -13,11 +13,11 @@ def e_aprox : ℚ := 2718281828 / 1000000000
 -- Collector parameters and derived constants.
 def f₀ : ℚ := 1417001 / 10000
 def Ψ : ℚ := 999999 / 1000000
-def κ_Π : ℚ := 25773 / 10000
+def kappa_Pi : ℚ := 25773 / 10000
 def κ7 : ℚ := 1266208 / 1000000
 def c : ℚ := 299792458
 def R_dS : ℚ := 13758 * 10 ^ 22
-def λ_p : ℚ := 1321409858 / 10 ^ 24
+def lambda_p : ℚ := 1321409858 / 10 ^ 24
 def h_bar : ℚ := 10545718 / 10 ^ 41
 
 def Λ_G : ℚ := 1 / (pi_aprox ^ 2 * 49 + 8)
@@ -26,12 +26,14 @@ def ε : ℚ := Λ_G ^ 2 / 4
 theorem Λ_G_valor :
     |Λ_G - 20341 / 10000000| < 1 / 10 ^ 6 := by
   unfold Λ_G pi_aprox
-  norm_num
+  rw [abs_lt]
+  constructor <;> norm_num
 
 theorem ε_valor :
     |ε - 103 / 100000000| < 1 / 10 ^ 8 := by
   unfold ε Λ_G pi_aprox
-  norm_num
+  rw [abs_lt]
+  constructor <;> norm_num
 
 def m_H : ℚ := 12525 / 100
 def v_exp : ℚ := 24622 / 100
@@ -39,8 +41,10 @@ def v_calc : ℚ := m_H * pi_aprox / phi_aprox * (1 + 2 * pi_aprox * Λ_G)
 
 theorem higgs_vacuum_tolerance :
     |v_calc - v_exp| / v_exp < 1 / 1000 := by
-  unfold v_calc m_H v_exp pi_aprox phi_aprox sqrt5_aprox Λ_G
-  norm_num
+  unfold v_calc m_H v_exp phi_aprox sqrt5_aprox Λ_G pi_aprox
+  rw [div_lt_iff (by norm_num)]
+  rw [abs_lt]
+  constructor <;> norm_num
 
 def dim_fase : ℕ := 3
 def Λ_QCD_calc : ℚ := h_bar * f₀ * 231 ^ (dim_fase ^ 2)
@@ -67,19 +71,23 @@ def α_3 : ℚ := 3
 theorem muon_masa :
     |RVB_4 / RVB_2 - 42371 / 10000| < 1 / 100 := by
   unfold RVB_4 RVB_2
-  norm_num
+  rw [abs_lt]
+  constructor <;> norm_num
 
 theorem tau_masa :
     |RVB_5 / RVB_2 - 68521 / 10000| < 1 / 100 := by
   unfold RVB_5 RVB_2
-  norm_num
+  rw [abs_lt]
+  constructor <;> norm_num
 
 def m_u_calc : ℚ := 3 * sqrt2_aprox
 
 theorem up_masa :
     |m_u_calc - 431 / 100| / (431 / 100) < 1 / 50 := by
   unfold m_u_calc sqrt2_aprox
-  norm_num
+  rw [div_lt_iff (by norm_num)]
+  rw [abs_lt]
+  constructor <;> norm_num
 
 def m_ν_calc : ℚ := (RVB_1 / RVB_3) ^ 10
 
@@ -89,13 +97,15 @@ theorem neutrino_masa :
   norm_num
 
 def phi_11 : ℚ := 199010 / 1000
-def kappa_7 : ℚ := κ_Π ^ 7
+def kappa_7 : ℚ := kappa_Pi ^ 7
 def m_W_calc : ℚ := phi_11 * kappa_7
 
 theorem W_masa :
     |m_W_calc - 157300| / 157300 < 1 / 10 := by
-  unfold m_W_calc phi_11 kappa_7 κ_Π
-  norm_num
+  unfold m_W_calc phi_11 kappa_7 kappa_Pi
+  rw [div_lt_iff (by norm_num)]
+  rw [abs_lt]
+  constructor <;> norm_num
 
 def H₀_calc : ℚ := (1 - 11 * Λ_G) * c / R_dS
 
@@ -111,7 +121,8 @@ def T_propio_calc : ℚ := 1 / (ε * f₀)
 theorem T_propio_horas :
     |T_propio_calc / 3600 - 2| < 11 / 100 := by
   unfold T_propio_calc ε Λ_G pi_aprox f₀
-  norm_num
+  rw [abs_lt]
+  constructor <;> norm_num
 
 theorem T_propio_segundos :
     T_propio_calc > 5000 ∧ T_propio_calc < 7500 := by
@@ -133,7 +144,9 @@ theorem fase_identidad : (7 : ℚ) - 4 = 3 := by
 
 theorem pi_phi_relacion :
     |(pi_aprox + 1) - phi_aprox ^ 3 * (1 - 11 * Λ_G)| < 1 / 100 := by
-  unfold pi_aprox phi_aprox sqrt5_aprox Λ_G
-  norm_num
+  unfold phi_aprox sqrt5_aprox Λ_G
+  unfold pi_aprox
+  rw [abs_lt]
+  constructor <;> norm_num
 
 end QCAL.LiberXIV

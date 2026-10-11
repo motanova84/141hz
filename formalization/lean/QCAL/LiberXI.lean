@@ -18,9 +18,9 @@ def T_H_calc : ℚ := R_as / c
 def H₀_calc : ℚ := (1 - 11 * Λ_G) * c / R_as
 def H₀_inverse_calc : ℚ := 1 / H₀_calc
 def T_mas_uno_calc : ℚ := (1 / H₀_calc) * (1 - 11 * Λ_G)
-def segundos_por_año : ℚ := 31557600
-def T_H_Gyr_calc : ℚ := T_H_calc / (segundos_por_año * 10 ^ 9)
-def H₀_inverse_Gyr_calc : ℚ := H₀_inverse_calc / (segundos_por_año * 10 ^ 9)
+def seconds_per_year : ℚ := 31557600
+def T_H_Gyr_calc : ℚ := T_H_calc / (seconds_per_year * 10 ^ 9)
+def H₀_inverse_Gyr_calc : ℚ := H₀_inverse_calc / (seconds_per_year * 10 ^ 9)
 
 theorem H0_rango :
     H₀_calc > 21 / 10 ^ 19 ∧ H₀_calc < 22 / 10 ^ 19 := by
@@ -34,13 +34,13 @@ theorem T_H_segundos :
 
 theorem T_H_edad_universo :
     T_H_Gyr_calc > 145 / 10 ∧ T_H_Gyr_calc < 146 / 10 := by
-  unfold T_H_Gyr_calc T_H_calc R_as R_dS c segundos_por_año
+  unfold T_H_Gyr_calc T_H_calc R_as R_dS c seconds_per_year
   norm_num
 
 theorem H₀_inverse_edad_universo :
     H₀_inverse_Gyr_calc > 148 / 10 ∧ H₀_inverse_Gyr_calc < 149 / 10 := by
   unfold H₀_inverse_Gyr_calc H₀_inverse_calc H₀_calc R_as R_dS
-  unfold Λ_G pi_aprox c segundos_por_año
+  unfold Λ_G pi_aprox c seconds_per_year
   norm_num
 
 theorem H₀_inverse_vs_T_H :
@@ -87,7 +87,9 @@ theorem factor_conversion_error :
       factor_conversion_LiberXI < 1 / 1000 := by
   unfold T_H_calc R_as R_dS c I_propio_LiberXI ε_LiberXI f₀
   unfold factor_conversion_LiberXI
-  norm_num
+  rw [div_lt_iff (by norm_num)]
+  rw [abs_lt]
+  constructor <;> norm_num
 
 -- LIBER XIV's refined epsilon yields a distinct time of about 6822 seconds.
 def I_propio_LiberXIV : ℚ := T_propio_calc
@@ -110,8 +112,15 @@ def pi_phi_error_relativo : ℚ :=
 theorem pi_phi_error_relativo_rango :
     7 / 100000 < pi_phi_error_relativo ∧
       pi_phi_error_relativo < 3 / 40000 := by
-  unfold pi_phi_error_relativo pi_aprox phi_aprox sqrt5_aprox Λ_G
-  norm_num
+  unfold pi_phi_error_relativo phi_aprox sqrt5_aprox Λ_G
+  unfold pi_aprox
+  constructor
+  · rw [lt_div_iff (by norm_num)]
+    rw [abs_of_nonneg (by norm_num)]
+    norm_num
+  · rw [div_lt_iff (by norm_num)]
+    rw [abs_of_nonneg (by norm_num)]
+    norm_num
 
 theorem tiempo_local_menor_que_hubble :
     I_propio_LiberXI < T_H_calc := by
