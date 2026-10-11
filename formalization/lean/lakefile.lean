@@ -51,6 +51,9 @@ lean_lib QCAL_SYNC_BRIDGE where
 lean_lib QCAL.LiberXIV where
   roots := #[`QCAL.LiberXIV]
 
+lean_lib QCAL.LiberXI where
+  roots := #[`QCAL.LiberXI]
+
 lean_lib Noesis88 where
   -- Deductive chains and asymptotic stability
   roots := #[`Noesis88]
