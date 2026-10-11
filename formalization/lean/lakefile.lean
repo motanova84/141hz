@@ -48,6 +48,10 @@ lean_lib QCAL_SYNC_BRIDGE where
   -- Harmonic validation: f_base → f₀ → f_high
   roots := #[`QCAL_SYNC_BRIDGE]
 
+lean_lib QCAL where
+  -- QCAL-Symbio-Bridge and phase collector formalization
+  roots := #[`QCAL.QcalSymbioBridge]
+
 lean_lib Noesis88 where
   -- Deductive chains and asymptotic stability
   roots := #[`Noesis88]
