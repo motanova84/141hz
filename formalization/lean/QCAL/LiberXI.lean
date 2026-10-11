@@ -1,4 +1,6 @@
 import QCAL.LiberXIV
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.Ring
 
 /-!
 # LIBER XI: time-scale closure

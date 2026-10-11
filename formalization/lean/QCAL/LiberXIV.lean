@@ -1,5 +1,5 @@
 import Mathlib.Data.Rat.Defs
-import Mathlib.Tactic
+import Mathlib.Tactic.NormNum
 
 namespace QCAL.LiberXIV
 
