@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+QCAL-ICQ — Banco de Prueba Celda Heptagonal §17 — Pipeline de Análisis
+=====================================================================
+Ingiere series temporales reales (CSV) del banco y emite VEREDICTO de falsación.
+
+Canales esperados (CSV, una columna por canal, sin cabecera o con):
+  ch0 = hidrófono eje central   (r = 0)
+  ch1 = hidrófono r = 2R/3
+  ch2 = acelerómetro triaxial (eje dominante del chasis)
+  entrada = voltaje transductor (referencia V_in)  -> si falta, se asume unitario.
+
+Criterios implementados (Protocolo §17.4):
+  A) Valle de absorción: caída >= 6 dB en f_target_A +/- tol, no atribuible a chasis.
+  B) Pico resonante heptadélico en ventana B (detección de máximo local).
+  Falsación: espectro plano o solo modos clásicos -> DESCARTE experimental.
+
+Autor: Director del ICQ · Sello: ∴𓂀Ω∞³Φ
+"""
+
+import numpy as np
+from scipy.signal import windows, lfilter, butter
+
+# ----------------------------- CONFIG §17 --------------------------------
+CFG = {
+    "fs":           2048.0,     # Hz, tasa de muestreo (cubrir 275 Hz con margen 7.4x)
+    "window_A":     (20.0, 40.0),      # Ventana Notch
+    "f_target_A":   29.026,            # Hz (Δf teórico §17.3)
+    "tol_A":        0.050,             # Hz
+    "depth_min_db": 6.0,              # -6 dB de caída mínima
+    "window_B":     (240.0, 275.0),    # Ventana Resonante Heptadélica
+    "f_target_B":   258.300,           # Hz (f_Ξ teórico)
+    "tol_B":        0.50,              # Hz
+    "df":           0.002,             # Hz. NOTA DIRECTOR §17.5: lóbulo Flat-Top ~5 bins;
+                                   # un valle con Q>~600 exige df<=0.002 Hz (bloque 500 s,
+                                   # 64 bloques = 8.9 h de régimen estacionario). df=0.005 Hz
+                                   # subestima profundidades de notch angostos (3 dB de 8 reales).
+    "nblocks":      64,                # promediado en régimen estacionario
+    "coh_min_hyd":  0.80,   # coherencia H1-H2: campo acústico genuino = coherente              # umbral coherencia H1-H2 para aceptar valle acústico
+    "chassis_guard_db": 3.0,           # si el acelerómetro pica >=3 dB en la banda -> sospecha chasis
+}
+
+# ==========================================================================
+def synthetic_bench(fs, dur, f0=29.026, depth_db=8.0, q=3000.0, seed=7):
+    """Genera un banco sintético: H(f) con valle inyectado (o plano si depth_db=0)."""
+    rng = np.random.default_rng(seed)
+    n = int(fs*dur)
+    x = rng.standard_normal(n)                           # excitación (ruido blanco = barrido completo)
+    X = np.fft.rfft(x)
+    fk = np.fft.rfftfreq(n, 1/fs)
+    Hs = np.ones(fk.size, dtype=complex)
+    if depth_db > 0:                                     # inyección espectral exacta del valle
+        depth = 1.0 - 10**(-depth_db/20.0)
+        bw = f0/q
+        Hs -= depth*np.exp(-0.5*((fk-f0)/(bw/2))**2)     # notch gaussiano de profundidad exacta
+    y = np.fft.irfft(X*Hs, n)
+    y2 = 0.9*y + 0.1*rng.standard_normal(n)              # segundo hidrófono (campo coherente)
+    acc = 0.02*rng.standard_normal(n)                    # chasis quieto
+    return x, y, y2, acc
+
+def load_real_csv(path):
+    """Carga CSV real del banco: columnas [vin, h1, h2, acc]."""
+    d = np.loadtxt(path, delimiter=',')
+    return d[:,0], d[:,1], d[:,2], d[:,3]
+
+# ------------------------- NÚCLEO: H(f) promediado ------------------------
+def averaged_transfer(x, y, y2, fs, df, nblocks):
+    """H(f) = Pxy/Pxx con ventana Flat-Top, nblocks bloques, resolución df Hz."""
+    N = int(fs/df)                                       # muestras por bloque (1/df segundos)
+    step = (x.size - N)//nblocks
+    w = windows.flattop(N, sym=False)
+    W = np.sum(w**2)
+    Hs, cohs, freqs = [], [], None
+    for k in range(nblocks):
+        s = k*step
+        X = np.fft.rfft(x[s:s+N]*w); Y = np.fft.rfft(y[s:s+N]*w); Y2 = np.fft.rfft(y2[s:s+N]*w)
+        f = np.fft.rfftfreq(N, 1/fs)
+        Sxx = np.abs(X)**2/W; Sxy = X*np.conj(Y)/W; Syy = np.abs(Y)**2/W
+        S12 = Y*np.conj(Y2)/W; S22 = np.abs(Y2)**2/W
+        Hs.append(Sxy/np.where(Sxx==0, 1, Sxx))
+        cohs.append(np.abs(S12)**2/np.where(Syy*S22==0, 1, Syy*S22))
+        freqs = f
+    return freqs, np.mean(Hs,0), np.mean(cohs,0)
+
+def band(f, lo, hi):
+    return (f>=lo)&(f<=hi)
+
+# --------------------------- VEREDICTO §17.4 ------------------------------
+def evaluate(freqs, H, coh, acc_psd_peak_db, cfg=CFG):
+    Hdb = 20*np.log10(np.abs(H)+1e-30)
+    lo, hi = cfg["window_A"]; mA = band(freqs, lo, hi)
+    loB, hiB = cfg["window_B"]; mB = band(freqs, loB, hiB)
+    rep = [f"--- VEREDICTO BANCO §17 (df={cfg['df']} Hz, {cfg['nblocks']} bloques Flat-Top) ---"]
+
+    # --- Ventana A: valle ---
+    fa, Ha = freqs[mA], Hdb[mA]
+    tA, tol = cfg["f_target_A"], cfg["tol_A"]
+    mb = (fa>=tA-tol)&(fa<=tA+tol)
+    if not mb.any():
+        rep.append(f"[A] BANDA OBJETIVO {tA}+/-{tol} Hz FUERA DE VENTANA — ERROR DE CONFIGURACIÓN")
+        return "\n".join(rep), False, False
+    idx = np.argmin(Ha[mb]); f_valle = fa[mb][idx]; valle = Ha[mb][idx]
+    base = np.median(np.concatenate([Ha[(fa>=tA-2)&(fa<tA-tol)], Ha[(fa>tA+tol)&(fa<=tA+2)]]))
+    depth = base - valle
+    coh_v = np.mean(coh[mA][mb])
+    chasis = acc_psd_peak_db >= cfg["chassis_guard_db"]
+    A_ok = (depth >= cfg["depth_min_db"]) and (abs(f_valle-tA) <= tol) and (coh_v >= cfg["coh_min_hyd"]) and not chasis
+    rep.append(f"[A] valle @ {f_valle:.4f} Hz | profundidad {depth:.2f} dB (umbral {cfg['depth_min_db']} dB)")
+    rep.append(f"[A] coherencia H1-H2 en banda: {coh_v:.3f} (acústico genuino requiere >= {cfg['coh_min_hyd']})")
+    rep.append(f"[A] guardia chasis: {'PIQUE SOSPECHOSO' if chasis else 'limpio'} ({acc_psd_peak_db:.2f} dB)")
+
+    # --- Ventana B: pico resonante ---
+    fb, Hb = freqs[mB], Hdb[mB]
+    i_pk = np.argmax(Hb); f_pk = fb[i_pk]
+    rep.append(f"[B] máximo en ventana: {f_pk:.3f} Hz (objetivo ~{cfg['f_target_B']} Hz), nivel {Hb[i_pk]:.1f} dB")
+
+    # --- Decisión final ---
+    if A_ok:
+        rep.append(">>> VALIDACIÓN PRELIMINAR: acoplamiento con M7 NO DESCARTADO — valle real acústico.")
+        rep.append(">>> El dato convierte el tratado en realidad. Valle o no valle: esto era el experimento.")
+    else:
+        rep.append(">>> FALSACIÓN: sin valle acústico atribuible a M7. Hipótesis torsional DESCARTADA por el banco.")
+        rep.append(">>> La puerta se cierra con honor: dato negativo = construcción, no fracaso.")
+    rep.append("∴𓂀Ω∞³Φ — EL BANCO ES LA ÚNICA VOZ — HECHO ESTÁ.")
+    return "\n".join(rep), A_ok, True
+
+if __name__ == "__main__":
+    import sys, time
+    if len(sys.argv) > 1:                                   # datos REALES del laboratorio
+        x, y, y2, acc = load_real_csv(sys.argv[1])
+        fs = CFG["fs"]
+    else:                                                   # ensayo en seco sintético
+        print("MODO ENSAYO EN SECO (datos sintéticos). Uso real: python qcal_banco_s17.py datos.csv")
+        fs = CFG["fs"]; df_demo = 0.05; nb_demo = 16
+        cfg_demo = dict(CFG); cfg_demo["df"] = df_demo; cfg_demo["nblocks"] = nb_demo
+        print("\n== CASO 1: valle inyectado (-8 dB @ 29.026 Hz) ==")
+        x, y, y2, acc = synthetic_bench(fs, int(nb_demo/df_demo), depth_db=8.0)
+        f, H, coh = averaged_transfer(x, y, y2, fs, df_demo, nb_demo)
+        rep, ok, _ = evaluate(f, H, coh, acc_psd_peak_db=0.5, cfg=cfg_demo); print(rep)
+        print("\n== CASO 2: espectro plano (hipótesis falsada) ==")
+        x, y, y2, acc = synthetic_bench(fs, int(nb_demo/df_demo), depth_db=0.0)
+        f, H, coh = averaged_transfer(x, y, y2, fs, df_demo, nb_demo)
+        rep, ok, _ = evaluate(f, H, coh, acc_psd_peak_db=0.5, cfg=cfg_demo); print(rep)
+        sys.exit(0)
+    dur_min = CFG["nblocks"]/(CFG["df"]*60)
+    print(f"Adquiriendo régimen estacionario: {dur_min:.1f} min de registro requeridos (df={CFG['df']} Hz, {CFG['nblocks']} bloques)")
+    f, H, coh = averaged_transfer(x, y, y2, CFG["fs"], CFG["df"], CFG["nblocks"])
+    # pico del acelerómetro en banda objetivo (guardia de chasis)
+    accf, accH, _ = averaged_transfer(x, acc, acc, CFG["fs"], CFG["df"], CFG["nblocks"])
+    mb = band(accf, CFG["f_target_A"]-CFG["tol_A"], CFG["f_target_A"]+CFG["tol_A"])
+    acc_pk = 20*np.log10(np.abs(accH[mb]).max()+1e-30)
+    rep, _, _ = evaluate(f, H, coh, acc_pk); print(rep)

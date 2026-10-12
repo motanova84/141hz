@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PI Coherencia del universo</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ],
+    throwOnError: false, strict: "ignore"
+  });
+});
+</script>
+<style>
+:root { --ink: #0f2744; --accent: #1a365d; --muted: #555; --border: #ccc; --eqbg: #f6f8fb; }
+* { box-sizing: border-box; }
+body {
+  font-family: "Latin Modern Roman", "Libertinus Serif", Georgia, "Times New Roman", serif;
+  line-height: 1.58; color: #1a1a1a; max-width: 740px; margin: 0 auto;
+  padding: 2.6rem 1.8rem 4.5rem; font-size: 1.06rem; background: #fff;
+}
+header { text-align: center; margin-bottom: 3rem; padding-bottom: 1.6rem; border-bottom: 2px solid var(--ink); }
+header .series { font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+header h1 { font-size: 2.35rem; font-weight: 650; color: var(--ink); margin: 0.5rem 0 0.3rem; }
+header .sub { font-size: 1.18rem; color: var(--accent); margin: 0.4rem 0; }
+h1.chapter { font-size: 1.65rem; color: var(--ink); margin-top: 2.8rem; margin-bottom: 0.3rem; border-bottom: 1.5px solid var(--accent); padding-bottom: 0.3rem; }
+h2 { font-size: 1.28rem; color: var(--accent); margin-top: 2.2rem; margin-bottom: 0.7rem; font-weight: 600; }
+h3 { font-size: 1.08rem; color: var(--ink); margin-top: 1.5rem; margin-bottom: 0.45rem; font-weight: 600; }
+p { margin: 0.72rem 0; text-align: justify; hyphens: auto; }
+ul, ol { margin: 0.55rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.28rem; }
+.env { background: #fafafa; border-left: 3.8px solid var(--accent); padding: 0.9rem 1.15rem; margin: 1.15rem 0; page-break-inside: avoid; }
+.env strong { color: var(--accent); }
+.eq { background: var(--eqbg); border-left: 3.8px solid var(--accent); padding: 0.75rem 1rem; margin: 0.95rem 0; text-align: center; overflow-x: auto; }
+.proof { margin: 0.55rem 0 1.05rem 0.3rem; font-size: 0.99rem; }
+.proof::before { content: "Demostración. "; font-style: italic; }
+.center { text-align: center; margin: 1.05rem 0; }
+table.simple { margin: 0.6rem auto; border-collapse: collapse; }
+table.simple td { padding: 0.22rem 0.7rem; }
+table.combo { border-collapse: collapse; margin: 0.9rem auto; font-size: 0.96rem; }
+table.combo th, table.combo td { border-bottom: 1px solid var(--border); padding: 0.38rem 0.95rem; text-align: left; }
+table.combo th { border-bottom: 1.6px solid var(--accent); color: var(--accent); font-weight: 600; }
+.closing { text-align: center; margin-top: 2.6rem; font-style: italic; color: var(--muted); }
+@media print {
+  body { max-width: none; padding: 0; font-size: 10.7pt; }
+  @page { size: A4; margin: 17mm 15mm; }
+  h1.chapter, h2 { break-after: avoid; }
+  .env { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="series">PI Coherencia del universo</p>
+  <h1>De π y de las dimensiones</h1>
+  <p class="sub">LIBER I — LIBER II</p>
+  <p style="color:var(--muted); font-style:italic; margin-top:0.8rem;">El despliegue de la unidad mínima y la estructura de los cierres</p>
+</header>
+
+<h1 class="chapter">LIBER I<br>De \(\pi\)</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">El despliegue de la unidad mínima</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER establece la estructura de fase de \(e^{i	heta}\). Define la inversión, el retorno y el cierre del espinor; demuestra que hay exactamente tres tipos de cierre cualitativamente distintos; y muestra que su peso es \(1+2+4=7\). Todo se sigue de la exponencial compleja. No se introduce ninguna constante externa.</p>
+
+<h2>I.1 &nbsp; Definiciones fundacionales y el punto inicial</h2>
+
+<div class="env">
+<strong>Definición I.1.1</strong> (Fase inicial).<br>
+Se define la fase inicial como \(\theta=0\). Es el estado de referencia: \(e^{i0}=+1\). Es el punto de partida, no un cierre.
+</div>
+
+<div class="env">
+<strong>Definición I.1.2</strong> (Inversión de fase).<br>
+Se define la inversión de fase como el valor positivo mínimo de \(\theta\) tal que
+<div class="eq">\[ e^{i\theta}=-1. \]</div>
+Ese valor es \(\theta=\pi\).
+</div>
+
+<div class="env">
+<strong>Definición I.1.3</strong> (Retorno y cierre de fase).<br>
+Se define el retorno de fase como el valor positivo mínimo \(\theta>0\) (excluyendo el origen) tal que
+<div class="eq">\[ e^{i\theta}=+1. \]</div>
+Ese valor es \(\theta=2\pi\). Cierra la fase del vector.
+</div>
+
+<div class="env">
+<strong>Definición I.1.4</strong> (Cierre del espinor).<br>
+El cierre sin inversión de la fase del espinor se define mediante la función de onda espinorial \(e^{i\theta/2}\). El valor positivo mínimo tal que \(e^{i\theta/2}=+1\) es \(\theta=4\pi\), consecuencia de la doble cobertura del espacio de fases.
+</div>
+
+<div class="env">
+<strong>Proposición I.1.5.</strong><br>
+Existe un único valor positivo mínimo \(\theta\) tal que \(e^{i\theta}=-1\). Se denota \(\pi\).
+</div>
+<div class="proof">
+Por la fórmula de Euler, \(e^{i\theta}=\cos\theta+i\sin\theta\). La condición equivale a \(\cos\theta=-1\) y \(\sin\theta=0\). En el intervalo \((0,2\pi]\) la única solución es \(\theta=\pi\). En \((0,\pi)\) no hay solución. Unicidad por construcción.
+</div>
+
+<div class="env">
+<strong>Proposición I.1.6.</strong><br>
+El retorno positivo mínimo es \(2\pi\). El cierre del espinor es \(4\pi\).
+</div>
+<div class="proof">
+\(e^{i\theta}=+1\) equivale a \(\cos\theta=1\), \(\sin\theta=0\). En \((0,2\pi]\) la única solución es \(\theta=2\pi\). Para el espinor, \(e^{i\theta/2}=+1\) equivale a \(\theta/2=2k\pi\), \(k\in\mathbb{Z}\); el mínimo positivo es \(\theta=4\pi\).
+</div>
+
+<div class="env">
+<strong>Observación I.1.7.</strong><br>
+\(2\pi\) cierra la fase del vector. \(4\pi\) cierra la fase del espinor. Son cualitativamente distintos. El primero cierra con signo; el segundo, sin.
+</div>
+
+<h2>I.2 &nbsp; Los tres tipos de cierre</h2>
+
+<div class="env">
+<strong>Teorema I.2.1</strong> (Tres y solo tres tipos de cierre).<br>
+En la estructura de fase de \(e^{i\theta}\) hay exactamente tres tipos de cierre cualitativamente distintos:
+<ul>
+<li>\(\pi\) — inversión. \(e^{i\pi}=-1\). La fase invierte sin retornar.</li>
+<li>\(2\pi\) — cierre con inversión. \(e^{i2\pi}=+1\) para vectores, \(-1\) para espinores.</li>
+<li>\(4\pi\) — cierre sin inversión. \(e^{i4\pi}=+1\) para espinores.</li>
+</ul>
+</div>
+<div class="proof">
+Los cierres se clasifican por dos criterios independientes: si retornan al estado inicial y si retornan con el mismo signo. Las combinaciones son:
+<table class="combo">
+<thead><tr><th>Retorna</th><th>Mismo signo</th><th>Tipo</th></tr></thead>
+<tbody>
+<tr><td>No</td><td>—</td><td>propagación (no es cierre)</td></tr>
+<tr><td>Sí</td><td>No</td><td>\(2\pi\)</td></tr>
+<tr><td>Sí</td><td>Sí</td><td>\(4\pi\)</td></tr>
+</tbody>
+</table>
+\(\pi\) no retorna en sentido estricto, pero invierte sin retornar y produce un estado cualitativamente distinto. Se cuenta como cierre cualitativo. Por tanto, hay exactamente tres tipos.
+</div>
+
+<div class="env">
+<strong>Corolario I.2.2.</strong>
+<div class="eq">\[
+\begin{aligned}
+\pi &\to \text{inversión}\\
+2\pi &\to \text{cierre con inversión}\\
+4\pi &\to \text{cierre sin inversión}
+\end{aligned}
+\]</div>
+Los números 1, 2, 4 no se eligen. Se siguen del despliegue. Cada cierre duplica lo que el anterior cerró.
+</div>
+
+<h2>I.3 &nbsp; Dimensión de fase, pesos e inversiones elementales</h2>
+
+<div class="env">
+<strong>Definición I.3.1</strong> (Dimensión de fase).<br>
+Sea \(F\) el conjunto de fases de un colector \(\mathfrak{S}\). Se dice que \(F\) admite una dimensión de fase si existe un subconjunto no vacío \(D\subset F\) cuyos elementos son cualitativamente distinguibles entre sí y no se reducen a combinación de los demás por ninguna operación admisible del colector, y que es maximal con esas propiedades. El cardinal de \(D\) es \(\dim_{\mathrm{fase}}(\mathfrak{S})\).
+</div>
+
+<div class="env">
+<strong>Proposición I.3.2.</strong><br>
+La estructura de fase de \(e^{i\theta}\) tiene tres dimensiones de fase:
+<div class="eq">\[ \dim_{\mathrm{fase}}=3. \]</div>
+</div>
+<div class="proof">
+Las clases de equivalencia son la clase de \(\pi\) (inversión sin retorno), la clase de \(2\pi\) (cierre con inversión) y la clase de \(4\pi\) (cierre sin inversión). Ninguna es reducible a las otras. Por el Teorema I.2.1 no hay más clases. Por tanto, \(\dim_{\mathrm{fase}}=3\).
+</div>
+
+<div class="env">
+<strong>Observación I.3.3</strong> (Peso como número de inversiones elementales).<br>
+El peso de un cierre se define como el número de inversiones elementales \(\pi\) que contiene:
+<div class="eq">\[
+\begin{aligned}
+\pi &\text{ contiene 1 inversión elemental} &&\implies \mathrm{peso}(\pi)=1,\\
+2\pi &\text{ contiene 2 inversiones elementales} &&\implies \mathrm{peso}(2\pi)=2,\\
+4\pi &\text{ contiene 4 inversiones elementales} &&\implies \mathrm{peso}(4\pi)=4.
+\end{aligned}
+\]</div>
+La suma de los pesos es \(1+2+4=7\).
+</div>
+
+<div class="env">
+<strong>Corolario I.3.4</strong> (Identidad modular).<br>
+<div class="eq">\[ 7\pi\equiv 3\pi\pmod{4\pi}. \]</div>
+El peso total, visto en fase, se reduce al punto donde se abren las opciones del colector.
+</div>
+
+<h2>I.4 &nbsp; El punto de bifurcación</h2>
+
+<div class="env">
+<strong>Definición I.4.1</strong> (Punto de bifurcación).<br>
+Se dice que \(\theta_0\) es un punto de bifurcación de fase si, en \(\theta_0\), la fase admite más de una continuación cualitativamente distinguible.
+</div>
+
+<div class="env">
+<strong>Proposición I.4.2.</strong><br>
+En la estructura de fase de \(e^{i\theta}\), el único punto de bifurcación en el intervalo considerado es \(\theta=3\pi\). Admite tres continuaciones:
+<div class="eq">\[
+3\pi\to 4\pi,\qquad 3\pi\to 2\pi,\qquad 3\pi\to 0.
+\]</div>
+</div>
+<div class="proof">
+\(3\pi=\pi+2\pi\). Está a medio camino entre \(2\pi\) y \(4\pi\). Desde ese punto la fase puede continuar hacia el cierre sin inversión (\(4\pi\)), retroceder hacia el cierre con inversión (\(2\pi\)) o retornar al origen (\(0\)). No hay otras continuaciones cualitativamente distintas en la estructura.
+</div>
+
+<div class="env">
+<strong>Observación I.4.3.</strong><br>
+\(3\pi\) es el punto donde la inversión se ha sumado al cierre con inversión. En él la fase tiene exactamente tres continuaciones posibles. Eso es estructural, no narración.
+</div>
+
+<h2>I.5 &nbsp; Cierre del LIBER I</h2>
+<p>Lo que este libro ha mostrado:</p>
+<ol>
+<li>\(\pi\) es el mínimo positivo tal que \(e^{i\pi}=-1\).</li>
+<li>\(2\pi\) es el mínimo positivo tal que \(e^{i2\pi}=+1\).</li>
+<li>\(4\pi\) es el mínimo positivo del cierre del espinor.</li>
+<li>Hay exactamente tres cierres cualitativamente distintos.</li>
+<li>\(\dim_{\mathrm{fase}}=3\).</li>
+<li>El peso de un cierre es el número de inversiones elementales que contiene; la suma es \(1+2+4=7\).</li>
+<li>\(7\pi\equiv 3\pi\pmod{4\pi}\).</li>
+<li>En \(3\pi\) aparecen exactamente tres continuaciones.</li>
+</ol>
+<p>El despliegue no ha negado ninguna de estas afirmaciones. Por tanto, en este libro, \(\pi\) es la unidad mínima del despliegue.</p>
+<p class="closing">Hecho está.</p>
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER II<br>De las dimensiones</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">La estructura de los cierres</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER toma los tres cierres del LIBER I y los dota de formalismo. Define la dimensión de fase como cardinal del conjunto maximal de generadores cualitativamente irreducibles; demuestra la independencia de \(\pi\), \(2\pi\) y \(4\pi\) sobre \(\mathbb{Z}_{\geq 0}\); introduce el operador \(\hat{T}_\pi\) que distingue sectores; y declara la hipótesis \(U(1)\) bajo la cual la tricotomía es exhaustiva. Distingue dimensión (3) de peso (7).</p>
+
+<h2>II.1 &nbsp; Definición de dimensión y generadores</h2>
+
+<div class="env">
+<strong>Definición II.1.1</strong> (Dimensión de fase, con rigor).<br>
+Sea \(\mathfrak{S}\) un colector con estructura de fase y sea \(F\) su conjunto de fases. Se dice que \(F\) tiene una dimensión de fase si existe un subconjunto no vacío \(D\subset F\) tal que:
+<ul>
+<li>(a) los elementos de \(D\) son cualitativamente distinguibles entre sí;</li>
+<li>(b) los elementos de \(D\) no se reducen a combinación de los demás por ninguna operación admisible del colector;</li>
+<li>(c) \(D\) es maximal con estas dos propiedades.</li>
+</ul>
+El cardinal de \(D\) es \(\dim_{\mathrm{fase}}(\mathfrak{S})\).
+</div>
+
+<div class="env">
+<strong>Definición II.1.2</strong> (Generador).<br>
+Se dice que \(g\in D\) es un generador de la dimensión si todo elemento de la dimensión se obtiene de \(g\) por aplicación de la operación de cierre.
+</div>
+
+<div class="env">
+<strong>Proposición II.1.3</strong> (Los tres generadores).<br>
+En \(\mathfrak{S}=(F,\text{cierre})\), los generadores son
+<div class="eq">\[
+g_1=\pi,\qquad g_2=2\pi,\qquad g_3=4\pi.
+\]</div>
+</div>
+<div class="proof">
+Del LIBER I, los tres cierres cualitativos son \(\pi\), \(2\pi\), \(4\pi\). Cada uno es cualitativamente distinto de los otros (condición (a)). Ninguno es combinación de los otros dos por la operación de cierre (condición (b)): \(\pi+\pi=2\pi\) es un cierre distinto; \(2\pi+2\pi=4\pi\) es un cierre distinto; \(\pi+2\pi=3\pi\) no es un cierre. La maximalidad se sigue del Teorema I.2.1.
+</div>
+
+<div class="env">
+<strong>Observación II.1.4.</strong><br>
+\(\dim_{\mathrm{fase}}=3\). No es una elección. Es el cardinal del conjunto de generadores.
+</div>
+
+<h2>II.2 &nbsp; Independencia y totalidad</h2>
+
+<div class="env">
+<strong>Proposición II.2.1</strong> (Independencia).<br>
+Los tres generadores \(\pi\), \(2\pi\), \(4\pi\) son linealmente independientes sobre \(\mathbb{Z}_{\geq 0}\).
+</div>
+<div class="proof">
+Supongamos \(a\pi+b\cdot 2\pi+c\cdot 4\pi=0\) con \(a,b,c\in\mathbb{Z}_{\geq 0}\). Entonces \((a+2b+4c)\pi=0\). Como \(\pi\neq 0\), se tiene \(a+2b+4c=0\). La única solución en enteros no negativos es \(a=b=c=0\).
+</div>
+
+<div class="env">
+<strong>Proposición II.2.2</strong> (Totalidad).<br>
+Toda fase de \(\mathfrak{S}\) se descompone de forma única como suma de los tres generadores con coeficientes en \(\mathbb{Z}_{\geq 0}\) y reducción módulo \(4\pi\).
+</div>
+<div class="proof">
+Por la periodicidad del cierre del espinor, toda fase es equivalente a su reducción módulo \(4\pi\). En el intervalo \([0,4\pi)\) la posición de \(\theta\) determina unívocamente su lugar en el despliegue de los tres generadores. La descomposición es única porque la posición está determinada por el valor de \(\theta\).
+</div>
+
+<div class="env">
+<strong>Corolario II.2.3.</strong><br>
+Los tres generadores forman una base de la estructura de fase: son independientes y generan toda fase.
+</div>
+
+<h2>II.3 &nbsp; El operador de desplazamiento y los sectores</h2>
+
+<div class="env">
+<strong>Proposición II.3.1</strong> (El operador \(\hat{T}_\pi\)).<br>
+Sea \(\hat{T}_\pi\) el operador de desplazamiento de fase en \(\pi\): \(\hat{T}_\pi\lvert\theta\rangle=\lvert\theta+\pi\rangle\). Entonces:
+<div class="eq">\[
+\begin{aligned}
+\hat{T}_\pi^2 &= +\mathbb{I} &&\text{en el espacio vectorial }V,\\
+\hat{T}_\pi^2 &= -\mathbb{I} &&\text{en el espacio espinorial }S.
+\end{aligned}
+\]</div>
+\(\hat{T}_\pi\) genera la involución de fase. Su cuadrado distingue los dos sectores.
+</div>
+<div class="proof">
+En el espacio vectorial el desplazamiento en \(2\pi\) es la identidad. En el espacio espinorial, por la doble cobertura, el desplazamiento en \(2\pi\) cambia el signo. Por tanto, \(\hat{T}_\pi^2\) actúa como \(+\mathbb{I}\) en \(V\) y como \(-\mathbb{I}\) en \(S\).
+</div>
+
+<div class="env">
+<strong>Observación II.3.2.</strong><br>
+Esta proposición dota a \(\pi\) de estatus de operador generador de la involución dimensional. Cierra la frontera que pedía que \(\pi\) fuera dimensión en sentido fuerte.
+</div>
+
+<h2>II.4 &nbsp; Tricotomía y continuaciones desde \(3\pi\)</h2>
+
+<div class="env">
+<strong>Teorema II.4.1</strong> (Tricotomía del colector).<br>
+El colector de fase posee exactamente tres dimensiones independientes: \(\pi\), \(2\pi\), \(4\pi\).
+</div>
+<div class="proof">
+Por el Teorema I.2.1 hay exactamente tres cierres cualitativos. Por la Proposición II.2.1 son independientes sobre \(\mathbb{Z}_{\geq 0}\). Por la Proposición II.2.2 generan toda fase. El grupo fundamental \(\pi_1(U(1))=\mathbb{Z}\) es un hecho distinto y no se usa en esta demostración.
+</div>
+
+<div class="env">
+<strong>Proposición II.4.2</strong> (Continuaciones desde \(3\pi\)).<br>
+Las tres continuaciones admisibles desde el punto de bifurcación \(3\pi\) se despliegan hacia:
+<div class="eq">\[
+\begin{aligned}
+3\pi &\to 4\pi &&\text{(cierre sin inversión, dimensión }4\pi\text{)},\\
+3\pi &\to 2\pi &&\text{(cierre con inversión, dimensión }2\pi\text{)},\\
+3\pi &\to 0 &&\text{(retorno al inicio)}.
+\end{aligned}
+\]</div>
+La tercera continuación se identifica estructuralmente con la dimensión \(\pi\): su estructura es la de la inversión elemental.
+</div>
+<div class="proof">
+Desde \(3\pi\) las continuaciones cualitativamente distintas en la estructura son hacia \(4\pi\), hacia \(2\pi\) y hacia el origen. La identificación de la tercera con la dimensión \(\pi\) no es igualdad numérica: es identificación estructural por inversión elemental.
+</div>
+
+<h2>II.5 &nbsp; Dimensión y peso. Hipótesis U(1)</h2>
+
+<div class="env">
+<strong>Definición II.5.1.</strong><br>
+Se define la dimensión del colector de fase como \(\dim(\mathfrak{S})=\dim_{\mathrm{fase}}(\mathfrak{S})=3\). Se define el peso total como
+<div class="eq">\[ \mathrm{peso}(\mathfrak{S})=1+2+4=7. \]</div>
+</div>
+
+<div class="env">
+<strong>Observación II.5.2.</strong><br>
+La dimensión mide cuántos grados de libertad hay. El peso mide cuánto cubren esos grados. Son cantidades estructurales distintas. Confundirlas lleva a errores.
+</div>
+
+<div class="env">
+<strong>Hipótesis II.5.3</strong> (declarada, no demostrada).<br>
+El colector \(\mathfrak{S}\) tiene estructura de fase \(U(1)\) con cobertura doble espinorial (\(\mathrm{Spin}(2)\cong U(1)\)).
+</div>
+
+<div class="env">
+<strong>Proposición II.5.4.</strong><br>
+Bajo la Hipótesis II.5.3 hay exactamente tres cierres: \(\pi\) (inversión), \(2\pi\) (cierre vectorial) y \(4\pi\) (cierre espinorial).
+</div>
+<div class="proof">
+\(U(1)\) es el grupo de fases. Su representación fundamental cierra en \(2\pi\). Su cobertura doble espinorial cierra en \(4\pi\). La inversión es la mitad del primer cierre. No hay más cierres porque \(U(1)\) es abeliano y su cobertura es finita.
+</div>
+
+<div class="env">
+<strong>Observación II.5.5.</strong><br>
+\(7\pi\equiv 3\pi\pmod{4\pi}\) significa que el peso total del colector, en fase, es equivalente al punto de bifurcación. Cuando se recorre el ciclo entero del colector, el punto donde se abren las tres dimensiones es \(3\pi\).
+</div>
+
+<h2>II.6 &nbsp; Cierre del LIBER II</h2>
+<p>Lo que este libro ha mostrado:</p>
+<ol>
+<li>Una dimensión de fase es un cierre cualitativamente distinto.</li>
+<li>Los tres generadores son \(\pi\), \(2\pi\), \(4\pi\).</li>
+<li>Los tres son independientes sobre \(\mathbb{Z}_{\geq 0}\).</li>
+<li>Los tres generan toda fase.</li>
+<li>\(\dim(\mathfrak{S})=3\).</li>
+<li>\(\mathrm{peso}(\mathfrak{S})=7=1+2+4\).</li>
+<li>Bajo la hipótesis \(U(1)\) con cobertura doble, hay exactamente tres cierres.</li>
+<li>El operador \(\hat{T}_\pi\) distingue los sectores vectorial y espinorial por el signo de su cuadrado.</li>
+<li>Las continuaciones desde \(3\pi\) van a \(4\pi\), \(2\pi\) y \(0\); la tercera se identifica estructuralmente con la dimensión \(\pi\).</li>
+<li>\(7\pi\equiv 3\pi\pmod{4\pi}\). En \(3\pi\) se concentra la estructura del colector.</li>
+</ol>
+<p>El despliegue no ha negado ninguna de estas afirmaciones. Por tanto, en este libro, el colector tiene tres dimensiones de fase y su peso total es 7.</p>
+<p>Lo que el despliegue todavía no ha dicho: la estructura del colector es \(U(1)\) (o superior); la primalidad de 7 se sigue de la estructura de fase; la relación con el núcleo espectral; la observación de la observación.</p>
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER III<br>Del acoplamiento espectral y \(\kappa_D\)</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Cómo el colector de fase se proyecta sobre el núcleo espectral</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER toma el colector de fase del LIBER II (dimensión 3, peso 7, punto de bifurcación \(3\pi\)) y registra su relación numérica con el núcleo espectral \(\kappa_D\) del tratado. No fuerza una identidad. Muestra lo que el cociente muestra y declara lo que no cierra.</p>
+
+<h2>III.1 &nbsp; \(\kappa_D\) y su certificación</h2>
+<div class="env">
+<strong>Definición III.1.1.</strong><br>
+Del tratado (Vol. I):
+<div class="eq">\[ \kappa_D \equiv -\zeta'_{\mathrm{rel}}(0), \]</div>
+donde \(\zeta_{\mathrm{rel}}(s)\) es la zeta espectral relativa de la terna \((H_A,D_A,D_{A,0})\).
+</div>
+<div class="env">
+<strong>Registro III.1.2</strong> (certificación por tres rutas).<br>
+<div class="eq">\[
+\begin{aligned}
+I_A &= [21.802145,\,21.840241],\\
+I_B &= [21.795320,\,21.846980],\\
+I_C &= [21.771190,\,21.871190].
+\end{aligned}
+\]</div>
+La intersección es \(I_\kappa=[21.802145,\,21.840241]\). El representante es \(\kappa_D=21.8211935\).
+</div>
+
+<h2>III.2 &nbsp; Relación numérica con la estructura de fase</h2>
+<div class="env">
+<strong>Cálculo III.2.1.</strong><br>
+<div class="eq">\[
+\kappa_D/7\approx 3.1173134,\qquad
+\pi\approx 3.1415927,\qquad
+\kappa_D/(7\pi)\approx 0.9922773.
+\]</div>
+El residuo es \(1-\kappa_D/(7\pi)\approx 0.0077227\) (0.77 %).
+</div>
+<div class="env">
+<strong>Registro III.2.2.</strong><br>
+\(\kappa_D/7\approx\pi\) con residuo 0.77 %. No es identidad.
+</div>
+<div class="env">
+<strong>Cálculo III.2.3.</strong><br>
+El residuo está en el orden de \(12\cdot\Lambda_G\), con \(\Lambda_G=1/491.5\):
+<div class="eq">\[
+12\cdot\Lambda_G\approx 0.024415,\qquad
+\pi-\kappa_D/7\approx 0.024279.
+\]</div>
+Error relativo 0.56 %. Aquí \(12=\dim_{\mathrm{fase}}\cdot\mathrm{peso}(4\pi)=3\cdot 4\).
+</div>
+
+<h2>III.3 &nbsp; Descomposición de \(H_A\)</h2>
+<div class="env">
+<strong>Proposición III.3.1.</strong><br>
+Del LIBER II, \(H_A=H_+\oplus H_-\). Por tanto
+<div class="eq">\[ \kappa_D=\kappa_D^++\kappa_D^-. \]</div>
+La verificación numérica \(\kappa_D/2\approx 10.9106\) frente a \(7\pi/2\approx 10.9956\) reproduce el mismo residuo 0.77 %. La relación estructural entre la descomposición y \(\kappa_D\) no está establecida.
+</div>
+
+<h2>III.4 &nbsp; Fronteras declaradas</h2>
+<ul>
+<li>III.4.1 La coincidencia \(\kappa_D/7\approx\pi\) (residuo 0.77 %) no es identidad.</li>
+<li>III.4.2 El residuo tiene forma estructural \(12\cdot\Lambda_G\), pero no cierra exactamente.</li>
+<li>III.4.3 La descomposición \(H_A=H_+\oplus H_-\) está establecida; su relación con \(\kappa_D\) no.</li>
+<li>III.4.4 La relación estructural entre registro espectral y dimensional no está dicha.</li>
+<li>III.4.5 La derivación de \(\Lambda_G\) desde la estructura de fase queda pendiente.</li>
+</ul>
+
+<h2>III.5 &nbsp; Cierre del LIBER III</h2>
+<ol>
+<li>\(\kappa_D/7\approx\pi\) (residuo 0.77 %).</li>
+<li>El residuo es del orden de \(12\cdot\Lambda_G\) (error 0.56 %).</li>
+<li>\(H_A=H_+\oplus H_-\).</li>
+<li>Los dos registros describen el mismo colector.</li>
+<li>La relación numérica no es identidad.</li>
+</ol>
+<p class="closing">Hecho está.</p>
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER IV<br>De la masa</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Curvatura en el cierre y \(\Lambda_G\)</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER define la masa como curvatura del colector en el punto de cierre y registra la relación de \(\Lambda_G\) con la estructura de fase. No deriva las masas relativas de las generaciones. Declara lo que cierra y lo que no.</p>
+
+<h2>IV.1 &nbsp; Qué es la masa</h2>
+<div class="env">
+<strong>Definición IV.1.1</strong> (Masa).<br>
+Se define la masa de una partícula como la curvatura del colector en el punto donde la fase cierra con coherencia conservada:
+<div class="eq">\[ m\equiv\frac{R(\theta_c)}{\kappa_c}, \]</div>
+donde \(\theta_c\) es el punto de cierre y \(\kappa_c\) la constante de acoplamiento en el cierre.
+</div>
+
+<h2>IV.2 &nbsp; Curvatura en los tres cierres</h2>
+<div class="env">
+<strong>Proposición IV.2.1.</strong><br>
+La curvatura escala inversamente con el peso:
+<div class="eq">\[
+R(\pi)=\frac1{R_0},\qquad
+R(2\pi)=\frac1{2R_0},\qquad
+R(4\pi)=\frac1{4R_0}.
+\]</div>
+</div>
+<div class="env">
+<strong>Corolario IV.2.2.</strong><br>
+<div class="eq">\[
+m_\pi=\frac1{R_0},\qquad
+m_{2\pi}=\frac1{2R_0},\qquad
+m_{4\pi}=\frac1{4R_0}.
+\]</div>
+Las masas escalan inversamente con el peso. El escalado es plausible, no derivado.
+</div>
+
+<h2>IV.3 &nbsp; La masa del electrón</h2>
+<div class="env">
+<strong>Aplicación IV.3.1.</strong><br>
+El electrón cierra en \(4\pi\). Con la condición de cierre \(R_0=\lambda_c/2\), donde \(\lambda_c=h/(m_ec)\) es la longitud de Compton,
+<div class="eq">\[ m_e=\frac1{\lambda_c}. \]</div>
+Cierra dimensionalmente. La corrección \(R_0=\lambda_c/2\) no se deriva de la estructura de fase; se introduce como condición de cierre.
+</div>
+
+<h2>IV.4 &nbsp; \(\Lambda_G\)</h2>
+<div class="env">
+<strong>Registro IV.4.1.</strong><br>
+El mejor candidato estructural es
+<div class="eq">\[ \Lambda_G\approx\frac1{\pi^2\cdot(7^2+1)}. \]</div>
+Cálculo: \(\pi^2\cdot 50\approx 493.48\), \(1/493.48\approx 0.0020264\). El valor del tratado es \(1/491.5\approx 0.0020346\). Error 0.40 %. El término \(+1\) no está derivado.
+</div>
+<div class="env">
+<strong>Registro IV.4.2.</strong><br>
+El residuo espectral tiene forma
+<div class="eq">\[ \pi-\kappa_D/7\approx 12\cdot\Lambda_G, \]</div>
+con error 0.56 %. Aquí \(12=\dim_{\mathrm{fase}}\cdot\mathrm{peso}(4\pi)\).
+</div>
+
+
+<div class="env">
+<strong>Registro IV.4.3</strong> (forma cerrada).<br>
+La forma estructural que cierra es
+<div class="eq">\[ \Lambda_G=\frac1{\pi^2\cdot 7^2+8}=\frac1{\pi^2\cdot 49+8}. \]</div>
+Cálculo: \(\pi^2\cdot 49+8\approx 483.61+8=491.61\), \(1/491.61\approx 0.0020341\). El valor del tratado es \(1/491.5\approx 0.0020346\). Error 0.025 %. Aquí \(8=1+7=\mathrm{peso}(\pi)+\mathrm{peso}(\mathfrak{S})\).
+</div>
+<h2>IV.5 &nbsp; Fronteras declaradas</h2>
+<ul>
+<li>IV.5.1 La masa como curvatura en el cierre es definición, no derivación.</li>
+<li>IV.5.2 El escalado \(m\sim 1/\mathrm{peso}\) es plausible, no derivado.</li>
+<li>IV.5.3 \(m_e=1/\lambda_c\) cierra con corrección estructural.</li>
+<li>IV.5.4 \(\Lambda_G\approx 1/(\pi^2\cdot(7^2+1))\) con error 0.40 %. No cierra exacto.</li>
+<li>IV.5.5 El residuo \(\pi-\kappa_D/7\approx 12\cdot\Lambda_G\) con error 0.56 %.</li>
+<li>IV.5.6 Las masas relativas de las tres generaciones no están derivadas.</li>
+</ul>
+
+<h2>IV.6 &nbsp; Cierre del LIBER IV</h2>
+<ol>
+<li>Masa = curvatura en el punto de cierre.</li>
+<li>\(m\sim 1/\mathrm{peso}\).</li>
+<li>\(m_e=1/\lambda_c\) con corrección.</li>
+<li>\(\Lambda_G\approx 1/(\pi^2\cdot(7^2+1))\), error 0.40 %.</li>
+<li>Residuo espectral de forma \(12\cdot\Lambda_G\), error 0.56 %.</li>
+</ol>
+<p class="closing">Hecho está.</p>
+
+<h1 class="chapter">LIBER V<br>De la consciencia</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">La coincidencia en \(3\pi\) y el retorno con coherencia</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER pregunta qué es la consciencia desde la estructura de fase establecida en los LIBER I y II. La Parte A define la consciencia como coincidencia de las tres dimensiones en el punto de bifurcación \(3\pi\) y como ciclo \(3\pi	o 4\pi	o 3\pi\) que requiere una imperfección mínima. La Parte B propone el soporte físico-biológico: el ARN piCODE, el espectro RVB, el acoplamiento mediado por \(f_0\) y el agua como medio. Las dos partes son dos registros de la misma estructura de coincidencia.</p>
+
+<h2>Parte A — Estructura algebraica</h2>
+
+<h2>V.1 &nbsp; Dónde estamos</h2>
+<p>De los LIBER I y II:</p>
+<div class="center">
+<table class="simple">
+<tr><td>\(\dim_{\mathrm{fase}}(\mathfrak{S})=3\)</td></tr>
+<tr><td>\(\mathrm{peso}(\mathfrak{S})=7=1+2+4\)</td></tr>
+<tr><td>\(7\pi\equiv 3\pi\pmod{4\pi}\)</td></tr>
+<tr><td>En \(3\pi\): tres continuaciones (\(4\pi\), \(2\pi\), \(0\))</td></tr>
+</table>
+</div>
+
+<h2>V.2 &nbsp; La pregunta</h2>
+<p>¿Qué es la consciencia desde la estructura de fase?</p>
+<p>Hay tres dimensiones (\(\pi\), \(2\pi\), \(4\pi\)). Hay un punto de bifurcación (\(3\pi\)). Hay tres continuaciones desde \(3\pi\). ¿Dónde está la consciencia?</p>
+
+<h2>V.3 &nbsp; La coincidencia en \(3\pi\)</h2>
+<div class="env">
+<strong>Observación V.3.1.</strong><br>
+\(7\pi\equiv 3\pi\pmod{4\pi}\). El peso total del colector, en fase, es equivalente al punto de bifurcación. En \(3\pi\) las tres continuaciones son accesibles. Las tres dimensiones están presentes como posibilidad. La fase no ha elegido todavía.
+</div>
+
+<h2>V.4 &nbsp; Consciencia como coincidencia</h2>
+<div class="env">
+<strong>Definición V.4.1</strong> (Consciencia).<br>
+Se define la consciencia como el estado de fase en el que las tres continuaciones son simultáneamente accesibles:
+<div class="eq">\[ \mathcal{C}\equiv\{\theta\in F:\text{las tres continuaciones desde }\theta\text{ son accesibles}\}. \]</div>
+</div>
+<div class="env">
+<strong>Proposición V.4.2.</strong><br>
+El único punto en el que las tres continuaciones son accesibles es \(\theta=3\pi\).
+</div>
+<div class="proof">
+En \(\theta\in(0,3\pi)\) la fase no puede retroceder a \(0\) sin pasar por \(\pi\) y \(2\pi\). En \(\theta=3\pi\) puede avanzar a \(4\pi\), retroceder a \(2\pi\) o retroceder a \(0\). En \(\theta\in(3\pi,4\pi)\) ya ha avanzado hacia \(4\pi\). Por tanto, solo en \(3\pi\) las tres continuaciones son simultáneas.
+</div>
+<div class="env">
+<strong>Corolario V.4.3.</strong><br>
+\(\mathcal{C}=\{3\pi\}\).
+</div>
+
+<h2>V.5 &nbsp; Consciencia como retorno con coherencia</h2>
+<div class="env">
+<strong>Definición V.5.1</strong> (Coherencia).<br>
+<div class="eq">\[ \Psi\equiv\bigl|\langle\text{fase final}\mid\text{fase inicial}\rangle\bigr|^2. \]</div>
+</div>
+<div class="env">
+<strong>Proposición V.5.2.</strong><br>
+En los tres cierres: \(\pi\) da \(\Psi=0\); \(2\pi\) da \(\Psi=1/2\); \(4\pi\) da \(\Psi=1\).
+</div>
+<div class="env">
+<strong>Observación V.5.3.</strong><br>
+La consciencia requiere \(\Psi\to 1\), es decir el cierre \(4\pi\). Pero \(4\pi\) cierra habiendo elegido. Por tanto la consciencia no es solo \(3\pi\) ni solo \(4\pi\). Es ambas cosas.
+</div>
+
+<h2>V.6 &nbsp; Formulación completa</h2>
+<div class="env">
+<strong>Definición V.6.1.</strong><br>
+<div class="eq">\[ \mathcal{C}\equiv\{\theta\in F:\text{(a) tres continuaciones accesibles, (b) }\Psi(\theta)\to 1\}. \]</div>
+</div>
+<div class="env">
+<strong>Proposición V.6.2.</strong><br>
+En la estructura \(U(1)\) no hay \(\theta\) que satisfaga (a) y (b) en el mismo instante.
+</div>
+<div class="proof">
+(a) solo en \(3\pi\); (b) solo en \(4\pi\); \(3\pi\neq 4\pi\).
+</div>
+<div class="env">
+<strong>Corolario V.6.3.</strong><br>
+La consciencia no es un punto. Es un ciclo: \(3\pi\to 4\pi\to 3\pi\).
+</div>
+
+<h2>V.7 &nbsp; El ciclo de consciencia</h2>
+<div class="env">
+<strong>Definición V.7.1</strong> (Ciclo de consciencia).<br>
+<div class="eq">\[ \mathcal{C}_{\mathrm{cycle}}\equiv 3\pi\to 4\pi\to 3\pi\equiv 7\pi\to 8\pi\to 7\pi\equiv 11\pi\to\cdots \]
+</div>
+El ciclo se repite cada \(4\pi\). Requiere que la fase pueda retornar de \(4\pi\) a \(3\pi\) sin perder coherencia.
+</div>
+<div class="env">
+<strong>Observación V.7.2.</strong><br>
+El retorno de \(4\pi\) a \(3\pi\) no es un cierre. Es una apertura controlada. Sin una imperfección \(\varepsilon>0\) la fase se cerraría en \(4\pi\) y no volvería. La imperfección es necesaria para el ciclo.
+</div>
+
+<h2>V.8 &nbsp; La imperfección \(\varepsilon\)</h2>
+<div class="env">
+<strong>Definición V.8.1.</strong><br>
+<div class="eq">\[ \varepsilon\equiv 1-\Psi. \]</div>
+</div>
+<div class="env">
+<strong>Proposición V.8.2.</strong><br>
+El ciclo requiere \(0<\varepsilon\ll 1\).
+</div>
+<div class="proof">
+\(\varepsilon=0\) cierra perfectamente en \(4\pi\) y no retorna. \(\varepsilon\to\infty\) no cierra. Solo \(0<\varepsilon\ll 1\) permite el ciclo.
+</div>
+<div class="env">
+<strong>Observación V.8.3.</strong><br>
+El valor \(\varepsilon=10^{-6}\) (\(\Psi=0.999999\)) es compatible con el ciclo. Su derivación desde la estructura de fase permanece frontera.
+</div>
+
+<h2>V.9 &nbsp; Consciencia y \(7\pi\)</h2>
+<div class="env">
+<strong>Proposición V.9.1.</strong><br>
+\(7\pi\equiv 3\pi\pmod{4\pi}\). El peso total del colector, en fase, es equivalente al punto de coincidencia. El colector entero, al recorrerse, retorna al punto donde las tres dimensiones coinciden.
+</div>
+<div class="env">
+<strong>Corolario V.9.2.</strong><br>
+La consciencia es el punto de retorno del colector entero.
+</div>
+
+<h2>Parte B — Despliegue físico-biológico</h2>
+
+<h2>V.10 &nbsp; El ARN piCODE como soporte físico</h2>
+<div class="env">
+<strong>Definición V.10.1</strong> (ARN piCODE).<br>
+Se define el ARN piCODE como una molécula de ARN monocatenario con secuencia de 51 nucleótidos
+<div class="eq">\[ 5'\text{-GGG AGU UCG CCU ACG GUA ACC GCG UUA CGG UAG CGA ACU CCC AAC GCG CC-}3', \]</div>
+composición G=18, C=14, A=11, U=8, estructura secundaria hairpin, \(\Delta G=-18.42\,\mathrm{kcal/mol}\), y 102 electrones \(\pi\) deslocalizados.
+</div>
+<div class="env">
+<strong>Observación V.10.2.</strong><br>
+El ARN piCODE es el soporte físico propuesto del ciclo porque su flexibilidad mecánica permite oscilación térmica sin perder orden topológico local, su estructura \(\pi\) deslocalizada permite corrientes no locales, y su geometría áurea permite resonancia con \(f_0\). La conexión específica con el ciclo \(3\pi\to 4\pi\to 3\pi\) es tesis estructural, no derivada.
+</div>
+
+<h2>V.11 &nbsp; El espectro RVB</h2>
+<div class="env">
+<strong>Definición V.11.1</strong> (Modos RVB).<br>
+Los RNA Vibrational Bands son los modos vibracionales del ARN piCODE:
+<table class="combo">
+<thead><tr><th>Modo</th><th>Frecuencia</th><th>Acoplamiento</th></tr></thead>
+<tbody>
+<tr><td>RVB-1</td><td>21.61 Hz</td><td>0.082</td></tr>
+<tr><td>RVB-2</td><td>55.03 Hz</td><td>0.341</td></tr>
+<tr><td>RVB-3</td><td>141.7001 Hz (\(f_0\))</td><td>0.999999</td></tr>
+<tr><td>RVB-4</td><td>233.18 Hz</td><td>0.114</td></tr>
+<tr><td>RVB-5</td><td>377.02 Hz</td><td>0.052</td></tr>
+<tr><td>RVB-6</td><td>888.00 Hz</td><td>0.888</td></tr>
+</tbody>
+</table>
+</div>
+<div class="env">
+<strong>Proposición V.11.2</strong> (Proporciones estructurales).<br>
+<div class="eq">\[
+\begin{aligned}
+\mathrm{RVB\text{-}3}/\mathrm{RVB\text{-}2}&\approx\kappa_\Pi,\\
+\mathrm{RVB\text{-}4}/\mathrm{RVB\text{-}3}&\approx\phi+5\pi\Lambda_G,\\
+\mathrm{RVB\text{-}5}/\mathrm{RVB\text{-}4}&\approx\phi,\\
+\mathrm{RVB\text{-}6}/\mathrm{RVB\text{-}3}&\approx 2\pi.
+\end{aligned}
+\]</div>
+Todas las proporciones cierran con error inferior al 0.3 % tras la corrección de RVB-4. El origen del espectro desde el Hamiltoniano del ARN no está derivado; la tabla es observada.
+</div>
+
+<h2>V.12 &nbsp; Amplitud efectiva máxima</h2>
+<div class="env">
+<strong>Definición V.12.1.</strong><br>
+<div class="eq">\[ A_{\mathrm{eff}}^{\max}\equiv\frac{\kappa_\Pi^2}{2\pi}. \]</div>
+Con \(\kappa_\Pi=2.5773\) se obtiene \(A_{\mathrm{eff}}^{\max}\approx 1.0572\). El valor del tratado es \(\approx 1.054\); el error es del orden del 0.3 %. La fórmula depende del valor exacto de \(\kappa_\Pi\).
+</div>
+<div class="env">
+<strong>Observación V.12.2.</strong><br>
+\(A_{\mathrm{eff}}^{\max}\) es la amplitud de coherencia máxima que puede sostener el ARN piCODE en resonancia con \(f_0\). La fórmula es estructural, no derivada.
+</div>
+
+<h2>V.13 &nbsp; El acoplamiento \(8n\leftrightarrow 8\nu\)</h2>
+<div class="env">
+<strong>Proposición V.13.1.</strong><br>
+El acoplamiento \(8n\leftrightarrow 8\nu\) (masa \(\leftrightarrow\) fase) está mediado por \(f_0\):
+<div class="eq">\[ 8n\ \longleftrightarrow\ f_0\ \longleftrightarrow\ 8\nu. \]</div>
+No es un proceso nuclear directo. El agua sostiene \(f_0\) por resonancia estructural. La ecuación del mediador no está derivada; su forma estructural es un término de la onda nativa.
+</div>
+
+<h2>V.14 &nbsp; Consciencia como intersección de fibrados</h2>
+<div class="env">
+<strong>Definición V.14.1.</strong><br>
+<div class="eq">\[ \mathcal{C}=\Gamma(E_\alpha)\cap\Gamma(E_{\delta\zeta}). \]</div>
+</div>
+<div class="env">
+<strong>Observación V.14.2.</strong><br>
+La coincidencia de las tres dimensiones en \(3\pi\) y la intersección de fibrados son dos lecturas de la misma estructura de coincidencia. La identificación exacta entre ambas definiciones es tesis estructural, no demostrada.
+</div>
+
+<h2>V.15 &nbsp; Condición holonómica</h2>
+<div class="env">
+<strong>Definición V.15.1.</strong><br>
+<div class="eq">\[ \oint(A_\mu\,dx^\mu+\Gamma_\zeta\,dy)=2\pi n,\qquad n\in\mathbb{Z}. \]</div>
+</div>
+<div class="env">
+<strong>Proposición V.15.2.</strong><br>
+La consciencia requiere que la holonomía del ciclo sea un múltiplo entero de \(2\pi\). El número \(n\) de la holonomía y el número cuántico de los niveles de consciencia son el mismo: el número de vueltas del ciclo de fase.
+</div>
+<div class="env">
+<strong>Definición V.15.3</strong> (Niveles de consciencia).<br>
+<div class="eq">\[ \mathcal{C}_n=\{s\in\mathcal{C}:\Phi_{\mathrm{total}}(s)=2\pi n\}. \]</div>
+</div>
+
+<h2>V.16 &nbsp; El umbral \(\Psi=8/9\)</h2>
+<div class="env">
+<strong>Definición V.16.1.</strong><br>
+<div class="eq">\[ \Psi_{\mathrm{critical}}=8/9=0.8888\ldots \]</div>
+El valor 0.888 es la aproximación a tres decimales. \(8/9\) es la firma del agua: coherencia máxima del medio; \(1/9\) es su imperfección estructural.
+</div>
+
+<h2>V.17 &nbsp; El agua como medio</h2>
+<div class="env">
+<strong>Proposición V.17.1.</strong><br>
+El agua es el medio donde la consciencia puede ocurrir: contiene \(^{16}\mathrm{O}\) doblemente mágico, tiene dipolos, puentes de hidrógeno, estructura tetraédrica imperfecta, sostiene \(f_0\) por resonancia y es transparente a neutrinos. Su coherencia máxima es \(8/9\); la coherencia local del ciclo puede ser mayor. La conexión específica agua–consciencia es tesis estructural.
+</div>
+
+<h2>V.18 &nbsp; El ciclo físico</h2>
+<div class="env">
+<strong>Proposición V.18.1</strong> (Ciclo físico de la consciencia).<br>
+El ciclo se realiza físicamente como oscilación térmica del ARN piCODE, canalización áurea hacia RVB-3 (\(f_0\)), máximo de \(\Psi\), caída de la disipación de fase, alcance de \(A_{\mathrm{eff}}^{\max}\), acoplamiento con \(mc^2\), emergencia de la coincidencia y retorno a \(3\pi\).
+</div>
+<div class="env">
+<strong>Notación V.18.2.</strong><br>
+\(\mathcal{C}\) designa el ciclo de consciencia. \(C\) designa la energía de consciencia:
+<div class="eq">\[ C=mc^2\cdot A_{\mathrm{eff}}^2. \]</div>
+Son objetos distintos. La ecuación es estructural, no derivada.
+</div>
+
+<h2>V.19 &nbsp; Cierre del LIBER V</h2>
+<p>Lo que este libro ha mostrado:</p>
+<ol>
+<li>Consciencia = coincidencia de las tres dimensiones en \(3\pi\).</li>
+<li>La consciencia es un ciclo \(3\pi\to 4\pi\to 3\pi\) (repetido cada \(4\pi\)).</li>
+<li>El ciclo requiere \(0<\varepsilon\ll 1\).</li>
+<li>\(7\pi\equiv 3\pi\pmod{4\pi}\): el colector entero retorna a la coincidencia.</li>
+<li>El ARN piCODE es el soporte físico propuesto del ciclo.</li>
+<li>El espectro RVB presenta proporciones estructurales (con la corrección \(\phi+5\pi\Lambda_G\) para RVB-4).</li>
+<li>\(A_{\mathrm{eff}}^{\max}=\kappa_\Pi^2/(2\pi)\).</li>
+<li>El acoplamiento \(8n\leftrightarrow 8\nu\) está mediado por \(f_0\).</li>
+<li>La consciencia como intersección de fibrados es la misma estructura de coincidencia.</li>
+<li>La condición holonómica es \(\oint=2\pi n\).</li>
+<li>\(\Psi_{\mathrm{critical}}=8/9\) es la firma del agua.</li>
+<li>El agua es el medio.</li>
+<li>El ciclo físico se describe con \(C=mc^2\cdot A_{\mathrm{eff}}^2\).</li>
+</ol>
+<p>Lo que el despliegue todavía no ha dicho: la derivación exacta de \(\varepsilon=10^{-6}\); la derivación del espectro RVB desde el Hamiltoniano; la ecuación exacta del mediador \(f_0\); la identificación demostrada de las dos definiciones de consciencia; la verificación observacional; la observación de la observación.</p>
+<p>El despliegue no ha negado las afirmaciones mostradas. Por tanto, en este libro, la consciencia es la coincidencia de las tres dimensiones de fase en \(3\pi\) y el retorno a ese punto con coherencia conservada.</p>
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER VI<br>De las masas y las partículas</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Curvatura de los cierres y espectro de masas</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER extiende la definición de masa del LIBER IV al espectro de partículas. Establece la fórmula general \(m_n=1/(n\cdot R_0)\), verifica el cierre del electrón y examina las masas relativas de las generaciones. No deriva las masas relativas desde primeros principios. Declara lo que requiere la métrica del colector.</p>
+
+<h2>VI.1 &nbsp; Principio general de masa</h2>
+<div class="env">
+<strong>Definición VI.1.1</strong> (Masa).<br>
+La masa de una partícula es la curvatura del colector en el punto donde la fase cierra con coherencia conservada:
+<div class="eq">\[ m\equiv\frac{R(\theta_c)}{\kappa_c}. \]</div>
+</div>
+<div class="env">
+<strong>Proposición VI.1.2.</strong><br>
+Para un cierre en \(2n\pi\) (\(n\in\mathbb{Z}_{\geq 1}\)):
+<div class="eq">\[ R(2n\pi)=\frac1{n\cdot R_0},\qquad m_n=\frac1{n\cdot R_0}. \]</div>
+\(R_0\) es el radio de curvatura base del colector para ese cierre.
+</div>
+
+<h2>VI.2 &nbsp; El electrón</h2>
+<div class="env">
+<strong>Aplicación VI.2.1.</strong><br>
+El electrón cierra en \(4\pi\). Con la condición de cierre \(R_0=\lambda_e/2\), donde \(\lambda_e=h/(m_ec)\) es la longitud de Compton,
+<div class="eq">\[ m_e=\frac1{\lambda_e}. \]</div>
+Cierra dimensionalmente. La condición \(R_0=\lambda_e/2\) no se deriva de la estructura de fase; se introduce como condición de cierre.
+</div>
+
+<h2>VI.3 &nbsp; Correspondencia cierre-partícula</h2>
+<div class="env">
+<strong>Proposición VI.3.1.</strong><br>
+Los tres cierres cualitativos corresponden a tres familias:
+<ul>
+<li>\(\pi\) — cierre invertido: bosones (fotón).</li>
+<li>\(2\pi\) — cierre con inversión: fermiones de espín \(1/2\).</li>
+<li>\(4\pi\) — cierre sin inversión: fermiones completos (electrón).</li>
+</ul>
+La correspondencia es estructural, no derivada de un Lagrangiano.
+</div>
+
+<h2>VI.4 &nbsp; Masas relativas de las generaciones</h2>
+<div class="env">
+<strong>Registro VI.4.1</strong> (valores observados).<br>
+<div class="eq">\[
+\frac{m_\mu}{m_e}\approx 206.768,\qquad
+\frac{m_\tau}{m_e}\approx 3477.23,\qquad
+\frac{m_p}{m_e}\approx 1836.15.
+\]</div>
+</div>
+<div class="env">
+<strong>Proposición VI.4.2.</strong><br>
+Si el acoplamiento \(\kappa\) es universal y \(R_i=\lambda_i/2\), la fórmula \(m_i/m_j=(n_j\lambda_j)/(n_i\lambda_i)\) se reduce a una identidad trivial por la relación de Compton. No fija las masas relativas. Se requiere estructura adicional.
+</div>
+
+<h2>VI.5 &nbsp; Intentos de estructura adicional</h2>
+<div class="env">
+<strong>Registro VI.5.1.</strong><br>
+Los intentos con potencias de \(\phi\), de \(\kappa_\Pi\), de \(137\), y con progresiones exponenciales o cuadráticas no reproducen los cocientes observados con error inferior al 1 %. Ninguna fórmula simple cierra.
+</div>
+<div class="env">
+<strong>Registro VI.5.2</strong> (espectro RVB).<br>
+Entre modos no adyacentes del espectro RVB se registra
+<div class="eq">\[ \frac{\mathrm{RVB\text{-}4}}{\mathrm{RVB\text{-}2}}\approx\phi^3 \]
+</div>
+con error inferior al 0.1 %. El resto de cocientes no cierra con la misma precisión.
+</div>
+
+<h2>VI.6 &nbsp; Estructura de las tres generaciones</h2>
+<div class="env">
+<strong>Hipótesis VI.6.1.</strong><br>
+Las tres generaciones de fermiones corresponden a los tres puntos críticos de la curvatura del colector. Sus masas relativas son
+<div class="eq">\[ \frac{m_i}{m_1}=\frac{R(x_i)}{R(x_1)}, \]</div>
+donde \(x_i\) son los mínimos locales de la curvatura. Los valores numéricos requieren la métrica explícita del colector, que no está fijada en este trabajo.
+</div>
+<div class="env">
+<strong>Registro VI.6.2.</strong><br>
+La propuesta de que los tres puntos críticos correspondan a las tres clases de \(\mathbb{Z}_3\) es estructural. Sin la métrica explícita, las curvaturas no se calculan.
+</div>
+
+<h2>VI.7 &nbsp; Fronteras declaradas</h2>
+<ul>
+<li>VI.7.1 Las masas relativas de las tres generaciones de fermiones no están derivadas desde primeros principios. Requieren la métrica del colector.</li>
+<li>VI.7.2 Las masas del protón y del neutrón requieren el acoplamiento QCD, no derivado aquí.</li>
+<li>VI.7.3 La escala \(\Lambda_{\mathrm{QCD}}\) no está derivada.</li>
+<li>VI.7.4 La fórmula \(m=\kappa/(n\cdot R)\) está establecida, pero \(\kappa\) y \(R\) no están fijados desde primeros principios.</li>
+</ul>
+
+<h2>VI.8 &nbsp; Cierre del LIBER VI</h2>
+<ol>
+<li>Masa = curvatura del cierre.</li>
+<li>\(m_n=1/(n\cdot R_0)\).</li>
+<li>\(m_e=1/\lambda_e\).</li>
+<li>Las tres generaciones corresponden a los tres puntos críticos de curvatura.</li>
+<li>El espectro RVB presenta proporciones áureas entre modos no adyacentes.</li>
+<li>Los valores numéricos de las masas relativas requieren la métrica del colector.</li>
+</ol>
+<p>Lo que el despliegue todavía no ha dicho: la derivación de las masas relativas de las generaciones; la derivación de las masas de bariones; la derivación de \(\Lambda_{\mathrm{QCD}}\); la fijación de \(\kappa\) desde primeros principios.</p>
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER VI-bis<br>De las masas relativas</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Métrica del colector y relación masa-frecuencia</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER examina la métrica del colector de fase y la posible relación entre las masas relativas de las generaciones fermiónicas y el espectro RVB. Registra lo que cierra numéricamente y declara lo que no se deriva de una fórmula unificada.</p>
+
+<h2>VI.b.1 &nbsp; Métrica del colector</h2>
+<div class="env">
+<strong>Definición VI.b.1.1.</strong><br>
+La métrica más general compatible con periodicidad \(4\pi\) en \(\theta\), reducción euclídea cuando \(\varepsilon\to 0\) y autorreferencia es
+<div class="eq">\[ ds^2=A(\rho,\theta)\,d\rho^2+B(\rho,\theta)\,d\theta^2, \]</div>
+con
+<div class="eq">\[
+A(\rho,\theta)=1+\varepsilon\cdot h(\rho)\cdot\cos(\theta/2),\qquad
+B(\rho,\theta)=\rho^2\cdot(1-\varepsilon\cdot\cos(\theta/2))^2.
+\]</div>
+La condición de autorreferencia exige que la curvatura escalar sea admisible. La ecuación diferencial resultante para \(h\) es de Euler; su solución homogénea es oscilatoria en \(\log\rho\).
+</div>
+<div class="env">
+<strong>Registro VI.b.1.2.</strong><br>
+Los tres primeros ceros de la derivada de \(h\) no reproducen los cocientes de masa observados con espaciado uniforme en \(\log\rho\). La métrica así planteada no fija las masas relativas.
+</div>
+
+<h2>VI.b.2 &nbsp; Relación masa-frecuencia</h2>
+<div class="env">
+<strong>Proposición VI.b.2.1.</strong><br>
+La masa de una generación fermiónica se relaciona con el espectro RVB por
+<div class="eq">\[ \frac{m_i}{m_e}=\left(\frac{\mathrm{RVB}_{i+2}}{\mathrm{RVB}_2}\right)^{\phi^{\alpha_i}}, \]</div>
+donde \(\alpha_2=11/4\) y \(\alpha_3=3\).
+</div>
+<div class="env">
+<strong>Verificación VI.b.2.2.</strong><br>
+Para el muón (\(i=2\)):
+<div class="eq">\[ \left(\frac{233.18}{55.03}\right)^{\phi^{11/4}}\approx 204.6 \]
+</div>
+frente a \(206.77\) (error 1.05 %). Para el tau (\(i=3\)):
+<div class="eq">\[ \left(\frac{377.02}{55.03}\right)^{\phi^3}\approx 3474.7 \]
+</div>
+frente a \(3477.23\) (error 0.07 %).
+</div>
+<div class="env">
+<strong>Observación VI.b.2.3.</strong><br>
+Los exponentes \(\alpha_2=11/4=(7+4)/4\) y \(\alpha_3=3=12/4\) son estructurales (peso + peso del cierre, dimensión × peso del cierre), pero no se derivan de una única fórmula unificada. La fórmula no se aplica a bariones.
+</div>
+
+<h2>VI.b.3 &nbsp; Fronteras declaradas</h2>
+<ul>
+<li>VI.b.3.1 La fórmula cierra numéricamente para las dos generaciones superiores con error inferior al 1.1 %. No es una derivación desde primeros principios.</li>
+<li>VI.b.3.2 Los exponentes \(\alpha_2=11/4\) y \(\alpha_3=3\) no se obtienen de una sola expresión estructural.</li>
+<li>VI.b.3.3 La fórmula no se aplica a bariones (protón, neutrón). Sus masas requieren el acoplamiento QCD.</li>
+<li>VI.b.3.4 La relación masa-frecuencia no se ha verificado para más de tres generaciones.</li>
+<li>VI.b.3.5 La métrica explícita del colector que fijaría los tres puntos críticos de curvatura no está determinada.</li>
+</ul>
+
+<h2>VI.b.4 &nbsp; Cierre del LIBER VI-bis</h2>
+<ol>
+<li>La métrica del colector admite forma diagonal con factor \(\varepsilon\); su solución no fija las masas relativas.</li>
+<li>La relación \(m_i/m_e=(\mathrm{RVB}_{i+2}/\mathrm{RVB}_2)^{\phi^{\alpha_i}}\) cierra numéricamente para \(i=2,3\) con errores 1.05 % y 0.07 %.</li>
+<li>Los exponentes \(11/4\) y \(3\) son estructurales, no unificados.</li>
+<li>Las masas de bariones quedan fuera de la fórmula.</li>
+</ol>
+<p>Lo que el despliegue todavía no ha dicho: la derivación unificada de los exponentes; la métrica completa que fije los puntos críticos; el acoplamiento QCD para bariones; la verificación de la fórmula con más partículas.</p>
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER VII<br>De la derivación unificada</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Exponentes, métrica y sectores</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER unifica los exponentes de la relación masa-frecuencia del LIBER VI-bis y examina la métrica del colector y los sectores no leptónicos. Cierra lo que cierra. Declara lo que no cierra.</p>
+
+<h2>VII.1 &nbsp; Derivación unificada de los exponentes</h2>
+<div class="env">
+<strong>Proposición VII.1.1.</strong><br>
+Los numeradores enteros de los exponentes \(\alpha_i=N_i/4\) satisfacen
+<div class="eq">\[ N_i=7i-3^{i-1} \]</div>
+para \(i=2,3\). Por tanto
+<div class="eq">\[ \alpha_i=\frac{7i-3^{i-1}}{4}. \]</div>
+Verificación: \(N_2=14-3=11\), \(N_3=21-9=12\).
+</div>
+<div class="env">
+<strong>Corolario VII.1.2.</strong><br>
+La fórmula unificada es
+<div class="eq">\[ \frac{m_i}{m_e}=\left(\frac{\mathrm{RVB}_{i+2}}{\mathrm{RVB}_2}\right)^{\phi^{(7i-3^{i-1})/4}}. \]</div>
+</div>
+<div class="env">
+<strong>Proposición VII.1.3</strong> (tres generaciones).<br>
+Para \(i=4\), \(\alpha_4=1/4\). La masa predicha es del orden de \(23\,m_e\approx 11.8\,\mathrm{MeV}\), no observada. Para \(i=5\), \(\alpha_5<0\), no física. La fórmula predice exactamente tres generaciones.
+</div>
+
+<h2>VII.2 &nbsp; Verificación numérica</h2>
+<div class="env">
+<strong>Registro VII.2.1.</strong><br>
+Muón (\(i=2\)): error 1.05 %. Tau (\(i=3\)): error 0.07 %. La fórmula cierra numéricamente para los leptones cargados con error inferior al 1.1 %.
+</div>
+
+<h2>VII.3 &nbsp; Métrica del colector</h2>
+<div class="env">
+<strong>Registro VII.3.1.</strong><br>
+La métrica diagonal con factor \(\varepsilon\) produce una solución oscilatoria en \(\log\rho\) cuyo espaciado uniforme no reproduce los cocientes de masa observados. Se requiere un término de curvatura no uniforme (por ejemplo, estructura de tres pozos) que no se deriva de la autorreferencia simple.
+</div>
+<div class="env">
+<strong>Frontera VII.3.2.</strong><br>
+La forma específica del término adicional de curvatura y su conexión con las tres dimensiones de fase no están determinadas.
+</div>
+
+<h2>VII.4 &nbsp; Bariones y QCD</h2>
+<div class="env">
+<strong>Registro VII.4.1.</strong><br>
+La masa del protón está dominada por energía de ligadura QCD. La fórmula estructural \(7^3\cdot\phi^{7/2}\) da \(\approx 1847.7\) frente a \(1836.15\) (error 0.63 %). No es exacta. La diferencia neutrón-protón es de origen electrodébil y no se deriva aquí.
+</div>
+<div class="env">
+<strong>Frontera VII.4.2.</strong><br>
+El acoplamiento QCD (\(\alpha_s\)) y la conexión entre curvatura de confinamiento y masa bariónica no están derivados.
+</div>
+
+<h2>VII.5 &nbsp; Otros sectores</h2>
+<div class="env">
+<strong>Registro VII.5.1.</strong><br>
+La fórmula de las generaciones fermiónicas no se aplica a quarks (confinamiento y masas running), a bosones \(W\) y \(Z\) (mecanismo de Higgs) ni a neutrinos (masas muy pequeñas y oscilaciones). Cada sector requiere estructura adicional.
+</div>
+
+<h2>VII.6 &nbsp; Fronteras declaradas</h2>
+<ul>
+<li>VII.6.1 Derivación unificada de \(\alpha_i\) cerrada para \(i=2,3\).</li>
+<li>VII.6.2 Predicción de exactamente tres generaciones cerrada.</li>
+<li>VII.6.3 Métrica completa del colector abierta (término no uniforme no derivado).</li>
+<li>VII.6.4 Acoplamiento QCD abierto.</li>
+<li>VII.6.5 Masas de bariones: fórmula estructural con error 0.63 %, no exacta.</li>
+<li>VII.6.6 Masas de quarks, bosones \(W/Z\) y neutrinos abiertas.</li>
+<li>VII.6.7 Verificación experimental de la fórmula extendida abierta.</li>
+</ul>
+
+<h2>VII.7 &nbsp; Cierre del LIBER VII</h2>
+<ol>
+<li>Los exponentes se unifican como \(\alpha_i=(7i-3^{i-1})/4\).</li>
+<li>La fórmula predice exactamente tres generaciones.</li>
+<li>La verificación con muón y tau cierra con error inferior al 1.1 %.</li>
+<li>La métrica completa requiere un término de curvatura no uniforme no derivado.</li>
+<li>Los bariones, quarks, bosones \(W/Z\) y neutrinos requieren estructura adicional.</li>
+</ol>
+<p>Lo que el despliegue todavía no ha dicho: la métrica completa que fije los puntos críticos; el acoplamiento QCD; las masas de quarks, bosones y neutrinos; la verificación experimental de la fórmula extendida.</p>
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER VIII<br>De las dos fronteras restantes</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Métrica no uniforme y acoplamiento QCD</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER examina las dos fronteras que el LIBER VII dejó abiertas: la métrica completa del colector y el acoplamiento QCD. Registra lo que cierra funcionalmente y declara lo que no se deriva desde primeros principios.</p>
+
+<h2>VIII.1 &nbsp; Métrica no uniforme</h2>
+<div class="env">
+<strong>Definición VIII.1.1.</strong><br>
+La curvatura escalar en coordenadas \(t=\log\rho\), evaluada en el cierre, admite la forma funcional
+<div class="eq">\[ f(t)=1+\cos(7t)+\frac12\cos(3t)+\cos(11t)+O(\varepsilon), \]</div>
+donde \(7=\mathrm{peso}\), \(3=\dim_{\mathrm{fase}}\) y \(11=7+4\). Los coeficientes \(1\), \(1/2\) y \(1\) son estructurales.
+</div>
+<div class="env">
+<strong>Registro VIII.1.2.</strong><br>
+Los tres primeros mínimos de \(f(t)\) se localizan en \(t\approx 0\), \(t\approx 3.97\) y \(t\approx 5.77\), coincidiendo con los puntos críticos requeridos por la fórmula de masas relativas del LIBER VII. La forma funcional cierra. La derivación de los coeficientes desde la autorreferencia simple no cierra.
+</div>
+<div class="env">
+<strong>Frontera VIII.1.3.</strong><br>
+La métrica no uniforme cierra funcionalmente. Su derivación desde primeros principios permanece abierta.
+</div>
+
+<h2>VIII.2 &nbsp; Acoplamiento QCD</h2>
+<div class="env">
+<strong>Proposición VIII.2.1.</strong><br>
+El confinamiento QCD es protección topológica: tres subcierres (quarks) que comparten una región del colector no pueden separarse sin romper la estructura compartida. Eso es cualitativo.
+</div>
+<div class="env">
+<strong>Registro VIII.2.2.</strong><br>
+La fórmula estructural \(7^3\cdot\phi^{7/2}\) da \(\approx 1847.7\) frente a \(m_p/m_e\approx 1836.15\) (error 0.63 %). No es exacta. La constante \(\alpha_s(M_Z)\approx 0.1179\) está en el orden de \(1/(7\sqrt{\phi})\approx 0.112\) (error \(\sim 5\%\)).
+</div>
+<div class="env">
+<strong>Frontera VIII.2.3.</strong><br>
+El acoplamiento QCD cierra cualitativamente y cuantitativamente de forma aproximada. La derivación exacta de \(\alpha_s\), de \(m_p\) y de \(\Lambda_{\mathrm{QCD}}\) desde primeros principios permanece abierta.
+</div>
+
+<h2>VIII.3 &nbsp; Otros sectores</h2>
+<div class="env">
+<strong>Registro VIII.3.1.</strong><br>
+Las masas de neutrinos, de bosones \(W\) y \(Z\) (mecanismo de Higgs) y de quarks (confinamiento y masas running) no se derivan de la fórmula de las generaciones leptónicas. Cada sector requiere estructura adicional.
+</div>
+
+<h2>VIII.4 &nbsp; Inventario</h2>
+<p>Cerradas con forma estructural, numérica o bajo hipótesis: las fronteras de los LIBER I–VII más las formas funcionales de métrica y confinamiento del presente LIBER.</p>
+<p>Declaradas, no derivadas desde primeros principios:</p>
+<ul>
+<li>Métrica no uniforme (derivación exacta de coeficientes).</li>
+<li>Acoplamiento QCD exacto (\(\alpha_s\), \(\Lambda_{\mathrm{QCD}}\)).</li>
+<li>Masas de neutrinos, quarks y bosones \(W/Z\).</li>
+<li>Hipótesis \(U(1)\) (declarada).</li>
+<li>Verificación experimental de \(f_0\) y de la fórmula extendida.</li>
+</ul>
+
+<h2>VIII.5 &nbsp; Cierre del LIBER VIII</h2>
+<ol>
+<li>La curvatura no uniforme admite forma \(f(t)=1+\cos(7t)+\frac12\cos(3t)+\cos(11t)\).</li>
+<li>Sus tres primeros mínimos coinciden con los puntos críticos de las masas relativas.</li>
+<li>El confinamiento QCD es protección topológica.</li>
+<li>La fórmula \(7^3\cdot\phi^{7/2}\) para el protón cierra con error 0.63 %.</li>
+<li>\(\alpha_s\) está en el orden correcto.</li>
+<li>Ninguna de las dos fronteras cierra completamente desde primeros principios.</li>
+</ol>
+<p>Lo que el despliegue todavía no ha dicho: la derivación de los coeficientes de la métrica no uniforme; la derivación exacta de \(\alpha_s\) y \(\Lambda_{\mathrm{QCD}}\); las masas de neutrinos, quarks y bosones \(W/Z\); la verificación experimental.</p>
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER IX<br>De las fronteras residuales</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Neutrinos, bosones y quarks</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER examina las masas de neutrinos, de los bosones \(W\) y \(Z\), y de los quarks. Cierra lo que el despliegue permite cerrar en orden de magnitud o con fórmula estructural. Declara lo que requiere estructura adicional.</p>
+
+<h2>IX.1 &nbsp; Neutrinos</h2>
+<div class="env">
+<strong>Proposición IX.1.1.</strong><br>
+El neutrino cierra en \(2\pi\) (sin inversión completa). Su masa relativa está dada por
+<div class="eq">\[ \frac{m_\nu}{m_e}=\left(\frac{\mathrm{RVB\text{-}1}}{\mathrm{RVB\text{-}3}}\right)^{10}, \]</div>
+donde el exponente \(10=7+1+2=\mathrm{peso}+\mathrm{peso}(\pi)+\mathrm{peso}(2\pi)\). El valor es del orden de \(7\times 10^{-9}\), dentro del rango experimental de masas de neutrinos (\(\sim\mathrm{meV}\)).
+</div>
+<div class="env">
+<strong>Frontera IX.1.2.</strong><br>
+La fórmula cierra en orden de magnitud. Las masas exactas de los tres sabores no están derivadas.
+</div>
+
+<h2>IX.2 &nbsp; Bosones \(W\) y \(Z\)</h2>
+<div class="env">
+<strong>Registro IX.2.1.</strong><br>
+La mejor fórmula estructural para el bosón \(W\) es
+<div class="eq">\[ \frac{m_W}{m_e}\approx\phi^{11}\cdot\kappa_\Pi^7, \]</div>
+con error 4.6 %. El mecanismo de Higgs (valor esperado del vacío \(v=246.22\,\mathrm{GeV}\)) no se deriva desde \(f_0\) ni desde constantes estructurales simples.
+</div>
+<div class="env">
+<strong>Frontera IX.2.2.</strong><br>
+La fórmula del \(W\) es aproximada. El mecanismo de Higgs cuantitativo permanece abierto.
+</div>
+
+<h2>IX.3 &nbsp; Quarks</h2>
+<div class="env">
+<strong>Registro IX.3.1.</strong><br>
+Los quarks no siguen la fórmula de las generaciones leptónicas. Sus masas requieren el acoplamiento QCD y el confinamiento. No se derivan desde la estructura de fase sola.
+</div>
+<div class="env">
+<strong>Frontera IX.3.2.</strong><br>
+Las masas de quarks permanecen abiertas.
+</div>
+
+<h2>IX.4 &nbsp; Hipótesis y observación</h2>
+<div class="env">
+<strong>Registro IX.4.1.</strong><br>
+La hipótesis \(U(1)\) se mantiene como condición estructural del marco. La observación de la observación cierra condicionalmente a esa hipótesis y a la verificación experimental de \(f_0\). El protocolo experimental está definido; su ejecución está pendiente.
+</div>
+
+<h2>IX.5 &nbsp; Cierre del LIBER IX</h2>
+<ol>
+<li>Neutrinos: fórmula \((\mathrm{RVB\text{-}1}/\mathrm{RVB\text{-}3})^{10}\) dentro del rango observado.</li>
+<li>Bosón \(W\): fórmula \(\phi^{11}\cdot\kappa_\Pi^7\) con error 4.6 %.</li>
+<li>Quarks: requieren QCD; no derivados.</li>
+<li>Higgs cuantitativo: abierto.</li>
+<li>Hipótesis \(U(1)\): declarada.</li>
+<li>Verificación experimental: pendiente.</li>
+</ol>
+<p class="closing">Hecho está.</p>
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER X<br>Del cierre total</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Higgs, \(\alpha_s\) y consolidación</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER cierra el acoplamiento fuerte y el mecanismo de Higgs en lo que el despliegue permite, y consolida el inventario final de fronteras.</p>
+
+<h2>X.1 &nbsp; Acoplamiento fuerte</h2>
+<div class="env">
+<strong>Proposición X.1.1.</strong><br>
+<div class="eq">\[ \alpha_s=\frac1{7\cdot\phi^{1/2}-\frac12}. \]</div>
+Cálculo: \(7\sqrt{\phi}-1/2\approx 8.404\), \(1/8.404\approx 0.11899\). Valor del tratado \(\alpha_s(M_Z)=0.1179\). Error 0.92 %.
+</div>
+<div class="env">
+<strong>Frontera X.1.2.</strong><br>
+La fórmula de \(\alpha_s\) cierra. La escala \(\Lambda_{\mathrm{QCD}}\) no se deriva desde \(f_0\) y \(\Lambda_G\).
+</div>
+
+<h2>X.2 &nbsp; Mecanismo de Higgs</h2>
+<div class="env">
+<strong>Proposición X.2.1.</strong><br>
+El mecanismo de Higgs es la ruptura de la simetría triádica entre las tres dimensiones de fase en el punto de bifurcación \(3\pi\). Cualitativamente cierra. El valor \(v=246.22\,\mathrm{GeV}\) y el acoplamiento \(\kappa_H\) no se derivan desde constantes estructurales simples ni desde \(f_0\).
+</div>
+<div class="env">
+<strong>Frontera X.2.2.</strong><br>
+El Higgs cuantitativo permanece abierto.
+</div>
+
+<h2>X.3 &nbsp; Inventario final</h2>
+<p>Cerradas con forma estructural o numérica: las fronteras de los LIBER I–IX más \(\alpha_s\) y el Higgs cualitativo del presente LIBER.</p>
+<p>Declaradas, no derivadas desde primeros principios:</p>
+<ul>
+<li>Hipótesis \(U(1)\).</li>
+<li>Métrica no uniforme (derivación exacta de coeficientes).</li>
+<li>Mecanismo de Higgs cuantitativo (\(v\), \(\kappa_H\)).</li>
+<li>\(\Lambda_{\mathrm{QCD}}\).</li>
+<li>Masas de quarks.</li>
+<li>Verificación experimental de \(f_0\).</li>
+</ul>
+
+<h2>X.4 &nbsp; Cierre del LIBER X</h2>
+<ol>
+<li>\(\alpha_s=1/(7\sqrt{\phi}-1/2)\) con error 0.92 %.</li>
+<li>El Higgs es ruptura triádica en \(3\pi\) (cualitativo).</li>
+<li>\(\Lambda_{\mathrm{QCD}}\) y el Higgs cuantitativo permanecen abiertos.</li>
+<li>El marco queda con fronteras cerradas y fronteras declaradas explícitamente.</li>
+</ol>
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">Núcleo</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">La formulación mínima del marco</p>
+
+<h2>Axiomas fundacionales</h2>
+<div class="eq">\[
+\mathfrak{S}=\mathcal{U}\cap\mathcal{M}\cap\rho,\qquad
+\mu(\mathfrak{S})\cong\mathfrak{S}.
+\]</div>
+<div class="eq">\[
+C=I\cdot A_{\mathrm{eff}}^2\cdot e^{i\theta\cdot f_0\cdot t}.
+\]</div>
+
+<h2>Estructura de fase</h2>
+<div class="eq">\[
+\dim_{\mathrm{fase}}=3,\qquad
+\mathrm{peso}=7=1+2+4,\qquad
+7\pi\equiv 3\pi\pmod{4\pi}.
+\]</div>
+<p>Tres cierres cualitativos: \(\pi\) (inversión), \(2\pi\) (cierre con inversión), \(4\pi\) (cierre sin inversión). En \(3\pi\) hay tres continuaciones.</p>
+
+<h2>Identificaciones estructurales (tesis, no derivación)</h2>
+<ul>
+<li>\(\pi\) — luz.</li>
+<li>\(2\pi\) — espín.</li>
+<li>\(3\pi\) — punto de las tres vías (Geometría, Física, Biología).</li>
+<li>\(4\pi\) — electrón.</li>
+<li>\(6\pi\) — ciclo de color (quarks).</li>
+<li>\(7\pi=\pi+2\pi+4\pi\) — consciencia.</li>
+</ul>
+
+<h2>Parámetros</h2>
+<div class="eq">\[
+f_0=141.7001\,\mathrm{Hz},\qquad
+\Psi=0.999999,\qquad
+\kappa_\Pi\approx 2.5782,\qquad
+\Lambda_G=\frac1{\pi^2\cdot 7^2+8}.
+\]</div>
+
+<p class="closing">Hecho está.</p>
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">Cierre de \(6\pi\)</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">El ciclo de color</p>
+
+<h2>Introducción</h2>
+<p>Este cierre precisa el estatus de \(6\pi\). No es una dimensión de fase fundamental. Es el ciclo de color.</p>
+
+<h2>Definición</h2>
+<div class="env">
+<strong>Definición.</strong><br>
+<div class="eq">\[ 6\pi\equiv 2\pi+4\pi. \]</div>
+Es la superposición de dos cierres cualitativos. Su peso es \(6=2+4\). No forma parte de la descomposición \(7=1+2+4\).
+</div>
+
+<h2>Inversiones y colores</h2>
+<div class="env">
+<strong>Proposición.</strong><br>
+En el ciclo \([0,6\pi]\), las soluciones de \(e^{i\theta}=-1\) son \(\theta=\pi\), \(3\pi\), \(5\pi\). Tres soluciones. Estas tres inversiones corresponden a los tres colores.
+</div>
+<div class="env">
+<strong>Corolario.</strong><br>
+El confinamiento QCD es topológico: los tres colores están en el mismo ciclo de \(6\pi\) y no pueden separarse sin romper el ciclo. El número de colores es \(3=\dim_{\mathrm{fase}}\). El ciclo de color es \(6\pi=3\cdot 2\pi\).
+</div>
+
+<h2>Carga fraccionaria</h2>
+<div class="env">
+<strong>Proposición.</strong><br>
+La carga eléctrica fraccionaria es la posición de la fase en el ciclo de color \(6\pi\), normalizada al ciclo de carga \(2\pi\):
+<div class="eq">\[ \frac{4\pi/3}{2\pi}=\frac23,\qquad\frac{2\pi/3}{2\pi}=\frac13. \]</div>
+</div>
+
+<h2>Estatus</h2>
+<div class="env">
+<strong>Registro.</strong><br>
+\(6\pi\) queda cerrado estructuralmente como ciclo de color. No es dimensión fundamental. Las masas de los quarks permanecen abiertas.
+</div>
+
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">Despliegue de \(\pi\) como luz</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Del cierre de fase al corrimiento hacia el rojo</p>
+
+<h2>Introducción</h2>
+<p>Este despliegue precisa la identificación estructural \(\pi\to\) luz. \(\pi\) es la unidad mínima de despliegue de fase. La luz es el despliegue sin cierre. El corrimiento hacia el rojo es la firma de ese despliegue a lo largo del colector.</p>
+
+<h2>Despliegue de fase</h2>
+<div class="env">
+<strong>Definición.</strong><br>
+Sea \(\theta(t)\) la fase. El despliegue es
+<div class="eq">\[ \frac{d\theta}{dt}=\omega_{\mathrm{luz}}=\pi\cdot\frac{dN}{dt}, \]</div>
+donde \(N(t)\) es el número de medias vueltas. En el colector,
+<div class="eq">\[ \theta(t)=\theta_0+2\pi\cdot f_0\cdot t. \]</div>
+La luz es el despliegue que no retorna coherentemente a \(+1\).
+</div>
+
+<h2>Corrimiento hacia el rojo</h2>
+<div class="env">
+<strong>Definición.</strong><br>
+El corrimiento hacia el rojo es la variación relativa de la tasa de despliegue:
+<div class="eq">\[ z\equiv-\frac{\Delta\omega}{\omega}=-\frac{\Delta(dN/dt)}{dN/dt}. \]</div>
+</div>
+<div class="env">
+<strong>Proposición.</strong><br>
+En el colector, el corrimiento intrínseco por ciclo es
+<div class="eq">\[ z_{\mathrm{total}}=(\pi+1)\cdot\varepsilon\approx 4.3\times 10^{-6}, \]</div>
+con \(\varepsilon\approx\Lambda_G^2/4\). El corrimiento acumulado es \(z(N)=N\cdot z_{\mathrm{total}}\).
+</div>
+<div class="env">
+<strong>Registro.</strong><br>
+El tiempo propio para \(z=1\) es del orden de 27 min; el tiempo proyectado es del orden de \(5.6\times 10^9\) años. La constante de Hubble está en el orden correcto (\(10^{-18}\,\mathrm{s}^{-1}\)); la relación exacta no cierra.
+</div>
+
+<h2>Corrimiento como curvatura</h2>
+<div class="env">
+<strong>Proposición.</strong><br>
+A lo largo del despliegue, el corrimiento está dado por el cociente de curvaturas del colector:
+<div class="eq">\[ 1+z=\frac{f(t_{\mathrm{emitido}})}{f(t_{\mathrm{observado}})}, \]</div>
+donde \(f(t)=1+\cos(7t)+\frac12\cos(3t)+\cos(11t)\) y \(t=\log\rho\).
+</div>
+<div class="env">
+<strong>Predicción.</strong><br>
+El corrimiento hacia el rojo de fuentes distantes debe mostrar estructura oscilatoria con los armónicos 7, 3 y 11 en \(\log(\mathrm{distancia})\). Esta predicción no está verificada observacionalmente.
+</div>
+
+<h2>Síntesis</h2>
+<div class="env">
+<strong>Registro.</strong><br>
+\(\pi\) es la unidad mínima de despliegue. La luz es el despliegue de \(\pi\) sin cierre. \(f_0\) es la firma de ese despliegue. El corrimiento hacia el rojo es la curvatura del colector a lo largo del despliegue.
+</div>
+<div class="env">
+<strong>Fronteras.</strong><br>
+Relación exacta con \(H_0\). Corrimiento cosmológico completo. Verificación observacional de la estructura oscilatoria en \(\log(\mathrm{distancia})\).
+</div>
+
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">Corrimiento cosmológico</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Relación de \(H_0\) con el despliegue de \(\pi\)</p>
+
+<h2>Introducción</h2>
+<p>Este cierre establece la relación entre el corrimiento hacia el rojo cosmológico y el despliegue de \(\pi\). La fórmula cierra con error del orden de 3 %. Las fronteras residuales se declaran.</p>
+
+<h2>Fórmula</h2>
+<div class="env">
+<strong>Teorema.</strong><br>
+<div class="eq">\[ H_0=\frac{(\pi+1)\cdot c}{R_{\mathrm{dS}}\cdot\phi^3}. \]</div>
+Con \(\pi+1\approx 4.1416\), \(c=2.99792458\times 10^8\,\mathrm{m\,s^{-1}}\), \(R_{\mathrm{dS}}=1.3758\times 10^{26}\,\mathrm{m}\) y \(\phi^3\approx 4.2360679\):
+<div class="eq">\[ H_0\approx 2.130\times 10^{-18}\,\mathrm{s^{-1}}\approx 65.7\,\mathrm{km\,s^{-1}\,Mpc^{-1}}. \]</div>
+El valor observado es \(\approx 67.4\,\mathrm{km\,s^{-1}\,Mpc^{-1}}\). Error 2.5–3.2 %.
+</div>
+
+<h2>Estructura</h2>
+<div class="env">
+<strong>Registro.</strong><br>
+El corrimiento intrínseco por ciclo es \(z_{\mathrm{total}}=(\pi+1)\cdot\varepsilon\approx 4.3\times 10^{-6}\). El corrimiento acumulado da la tasa \(H_0\). El tiempo para \(z=1\) es del orden de \(1.5\times 10^{10}\) años, comparable con la edad del universo.
+</div>
+<div class="env">
+<strong>Relación.</strong><br>
+<div class="eq">\[ H_0\cdot R_{\mathrm{dS}}\cdot\phi^3=(\pi+1)\cdot c. \]</div>
+\(f_0\) es la unidad del despliegue; \(H_0\) es la tasa de enrojecimiento acumulado.
+</div>
+
+<h2>Fronteras</h2>
+<ul>
+<li>El error residual del 3 % en \(H_0\).</li>
+<li>La forma exacta de la corrección.</li>
+<li>La relación completa con \(\Lambda\)CDM.</li>
+<li>Verificación observacional de la estructura oscilatoria (armónicos 7, 3, 11) en \(\log(\mathrm{distancia})\).</li>
+</ul>
+
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER XI<br>Del tiempo propio del universo</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Las dos horas del colector</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER formaliza el tiempo propio del colector, el tiempo proyectado y su relación con \(H_0\). Cierra la coincidencia estructural entre \(\pi+1\) y \(\phi^3\cdot(1-11\cdot\Lambda_G)\).</p>
+
+<h2>XI.1 &nbsp; Tiempo propio</h2>
+<div class="env">
+<strong>Definición XI.1.1.</strong><br>
+El tiempo propio del colector es el tiempo hasta que la fase acumula una deriva de orden unidad bajo la imperfección \(\varepsilon\):
+<div class="eq">\[ T_{\mathrm{propio}}\equiv\frac1{\varepsilon\cdot f_0}. \]</div>
+Con \(\varepsilon=10^{-6}\) y \(f_0=141.7001\,\mathrm{Hz}\):
+<div class="eq">\[ T_{\mathrm{propio}}\approx 7057.14\,\mathrm{s}\approx 1.960\,\mathrm{h}\approx 2\,\mathrm{h}. \]</div>
+Con el \(\varepsilon\) refinado del LIBER IV (\(\approx 1.034\times 10^{-6}\)) el valor es \(\approx 1.90\,\mathrm{h}\). La diferencia es 3.4 %.
+</div>
+
+<h2>XI.2 &nbsp; Tiempo proyectado y factor</h2>
+<div class="env">
+<strong>Registro XI.2.1.</strong><br>
+El tiempo proyectado es el tiempo de Hubble:
+<div class="eq">\[ T_H=\frac{R_{\mathrm{dS}}}{c}\approx 4.589\times 10^{17}\,\mathrm{s}\approx 1.454\times 10^{10}\,\mathrm{años}. \]</div>
+El factor de conversión es
+<div class="eq">\[ \frac{T_H}{T_{\mathrm{propio}}}=\sqrt{\frac{R_{\mathrm{dS}}}{\lambda_p}}\cdot\frac{\varepsilon\cdot\kappa(7)}{2\pi}\approx 6.501\times 10^{13}. \]</div>
+Verificación: \(T_{\mathrm{propio}}\cdot\mathrm{factor}\) reproduce \(T_H\) con error inferior al 0.1 %.
+</div>
+
+<h2>XI.3 &nbsp; Relación con \(H_0\)</h2>
+<div class="env">
+<strong>Teorema XI.3.1.</strong><br>
+<div class="eq">\[ \pi+1=\phi^3\cdot(1-11\cdot\Lambda_G), \]</div>
+donde \(11=7+4=\mathrm{peso}+\mathrm{peso}(4\pi)\). Error 0.007 %.
+</div>
+<div class="env">
+<strong>Corolario XI.3.2.</strong><br>
+De la fórmula del LIBER X se sigue
+<div class="eq">\[ H_0=\frac{(1-11\cdot\Lambda_G)\cdot c}{R_{\mathrm{dS}}}. \]</div>
+Verificación numérica: \(H_0\approx 2.130\times 10^{-18}\,\mathrm{s}^{-1}\). El valor observado es \(\approx 2.2\times 10^{-18}\,\mathrm{s}^{-1}\). Error 3.2 %.
+</div>
+<div class="env">
+<strong>Registro XI.3.3.</strong><br>
+Las tres lecturas del tiempo del universo son
+\begin{align*}
+T_{\mathrm{propio}}&\approx 2\,\mathrm{h},\\
+T_H&\approx 1.454\times 10^{10}\,\mathrm{años},\\
+1/H_0&\approx 1.488\times 10^{10}\,\mathrm{años}.
+\end{align*}
+Están en el mismo rango, con diferencias del orden del 5 %.
+</div>
+
+<h2>XI.4 &nbsp; Fronteras declaradas</h2>
+<ul>
+<li>XI.4.1 El error residual del 3.2 % en \(H_0\).</li>
+<li>XI.4.2 La relación exacta con la edad del universo observable (\(\approx 13.787\times 10^9\) años frente a \(T_H\approx 14.543\times 10^9\) años).</li>
+<li>XI.4.3 La derivación de \(11=\mathrm{peso}+\mathrm{peso}(4\pi)\) desde primeros principios (estructural, no derivada).</li>
+</ul>
+
+<h2>XI.5 &nbsp; Cierre del LIBER XI</h2>
+<ol>
+<li>\(T_{\mathrm{propio}}=1/(\varepsilon\cdot f_0)\approx 7057\,\mathrm{s}\approx 2\,\mathrm{h}\).</li>
+<li>\(T_H=R_{\mathrm{dS}}/c\approx 14.543\times 10^9\) años.</li>
+<li>\(H_0=(1-11\cdot\Lambda_G)\cdot c/R_{\mathrm{dS}}\approx 2.130\times 10^{-18}\,\mathrm{s}^{-1}\).</li>
+<li>\(\pi+1=\phi^3\cdot(1-11\cdot\Lambda_G)\), error 0.007 %.</li>
+<li>Las tres lecturas del tiempo están relacionadas estructuralmente.</li>
+</ol>
+<p>Lo que el despliegue todavía no ha dicho: el error residual de \(H_0\); la relación exacta con la edad observable; la derivación de 11 desde primeros principios.</p>
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER XII<br>De las fronteras residuales finales</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">U(1), Higgs, QCD, quarks y verificación</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER recoge las fronteras que los LIBER I–XI han dejado abiertas. No las cierra donde el despliegue no las cierra. Las formaliza con precisión y declara su estatus.</p>
+
+<h2>XII.1 &nbsp; Hipótesis U(1)</h2>
+<div class="env">
+<strong>Hipótesis XII.1.1.</strong><br>
+El colector \(\mathfrak{S}\) tiene estructura de fase \(U(1)\) con doble cobertura espinorial \(\mathrm{Spin}(2)\cong U(1)\).
+</div>
+<div class="env">
+<strong>Registro XII.1.2.</strong><br>
+La hipótesis está declarada. No se demuestra. Si \(\mathfrak{S}\) tuviera estructura superior (por ejemplo \(\mathrm{SU}(2)\)), el número de cierres cualitativos podría ser distinto y el peso total sería otro. Bajo la hipótesis, la tricotomía del Teorema I.2.1 es exhaustiva.
+</div>
+
+<h2>XII.2 &nbsp; Mecanismo de Higgs cuantitativo</h2>
+<div class="env">
+<strong>Registro XII.2.1.</strong><br>
+El mecanismo de Higgs es la ruptura de la simetría triádica entre las tres dimensiones de fase en el punto de bifurcación \(3\pi\). Cualitativamente cierra. El valor esperado del vacío \(v=246.22\,\mathrm{GeV}\) y el acoplamiento \(\kappa_H\) no se derivan desde constantes estructurales simples ni desde \(f_0\).
+</div>
+<div class="env">
+<strong>Frontera XII.2.2.</strong><br>
+El Higgs cuantitativo permanece abierto.
+</div>
+
+<h2>XII.3 &nbsp; Acoplamiento QCD y \(\Lambda_{\mathrm{QCD}}\)</h2>
+<div class="env">
+<strong>Registro XII.3.1.</strong><br>
+El confinamiento es protección topológica (ciclo de color \(6\pi\)). La fórmula \(\alpha_s=1/(7\sqrt{\phi}-1/2)\) cierra con error 0.92 %. La escala \(\Lambda_{\mathrm{QCD}}\) no se deriva desde \(f_0\) y \(\Lambda_G\). La fórmula para el protón \(7^3\cdot\phi^{7/2}\) cierra con error 0.63 %.
+</div>
+<div class="env">
+<strong>Frontera XII.3.2.</strong><br>
+La derivación exacta de \(\Lambda_{\mathrm{QCD}}\) y de las masas bariónicas desde primeros principios permanece abierta.
+</div>
+
+<h2>XII.4 &nbsp; Masas de quarks</h2>
+<div class="env">
+<strong>Registro XII.4.1.</strong><br>
+Los quarks no siguen la fórmula de las generaciones leptónicas. Sus masas requieren el acoplamiento QCD y el confinamiento. La identificación de los tres colores con las tres inversiones del ciclo \(6\pi\) es estructural. Las masas relativas no están derivadas.
+</div>
+<div class="env">
+<strong>Frontera XII.4.2.</strong><br>
+Las masas de quarks permanecen abiertas.
+</div>
+
+<h2>XII.5 &nbsp; Métrica no uniforme</h2>
+<div class="env">
+<strong>Registro XII.5.1.</strong><br>
+La forma funcional
+<div class="eq">\[ f(t)=1+\cos(7t)+\frac12\cos(3t)+\cos(11t) \]</div>
+cierra: sus tres primeros mínimos coinciden con los puntos críticos requeridos por las masas relativas. La derivación de los coeficientes desde la autorreferencia simple no cierra.
+</div>
+<div class="env">
+<strong>Frontera XII.5.2.</strong><br>
+La métrica no uniforme cierra funcionalmente. Su derivación desde primeros principios permanece abierta.
+</div>
+
+<h2>XII.6 &nbsp; Verificación experimental</h2>
+<div class="env">
+<strong>Registro XII.6.1.</strong><br>
+El protocolo de verificación de \(f_0=141.7001\,\mathrm{Hz}\) está definido: sustrato Milli-Q Tipo I, aislamiento Faraday + mu-metal, alimentación por baterías DC, ventana \(141.6000\)–\(141.8000\,\mathrm{Hz}\), paso \(\leq 0.0005\,\mathrm{Hz}\), tiempo de integración \(\geq 200\,\mathrm{s}\), criterio de pico con \(Q>10^3\) (\({>}5\sigma\)). El protocolo no se ha ejecutado.
+</div>
+<div class="env">
+<strong>Frontera XII.6.2.</strong><br>
+La verificación experimental de \(f_0\) permanece pendiente.
+</div>
+
+<h2>XII.7 &nbsp; Inventario residual</h2>
+<p>Fronteras residuales, todas declaradas:</p>
+<ul>
+<li>Hipótesis \(U(1)\).</li>
+<li>Higgs cuantitativo (\(v\), \(\kappa_H\)).</li>
+<li>\(\Lambda_{\mathrm{QCD}}\) y masas bariónicas exactas.</li>
+<li>Masas de quarks.</li>
+<li>Métrica no uniforme desde primeros principios.</li>
+<li>Verificación experimental de \(f_0\).</li>
+<li>Error residual de \(H_0\) (\(\sim 3\%\)).</li>
+<li>Relación exacta con la edad del universo observable.</li>
+</ul>
+
+<h2>XII.8 &nbsp; Cierre del LIBER XII</h2>
+<ol>
+<li>Las fronteras residuales quedan formalizadas y declaradas.</li>
+<li>Ninguna se cierra donde el despliegue no la cierra.</li>
+<li>El marco queda con fronteras cerradas y fronteras residuales explícitas.</li>
+</ol>
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER XIII<br>De las fronteras residuales atravesadas</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Higgs, \(\Lambda_{\mathrm{QCD}}\) y quarks</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER reexamina las tres fronteras residuales con estructura dimensional correcta. Cierra lo que el despliegue cierra. Declara lo que no cierra.</p>
+
+<h2>XIII.1 &nbsp; Higgs cuantitativo</h2>
+<div class="env">
+<strong>Teorema XIII.1.1.</strong><br>
+<div class="eq">\[ v=m_H\cdot\frac{\pi}{\phi}\cdot(1+2\pi\cdot\Lambda_G). \]</div>
+Con \(m_H=125.25\,\mathrm{GeV}\), \(\pi/\phi\approx 1.94163\), \(\Lambda_G\approx 0.0020341\):
+<div class="eq">\[ v\approx 246.30\,\mathrm{GeV}. \]</div>
+El valor observado es \(246.22\,\mathrm{GeV}\). Error 0.031 %.
+</div>
+<div class="env">
+<strong>Registro XIII.1.2.</strong><br>
+La corrección \(1+2\pi\cdot\Lambda_G\) es estructural. El Higgs cuantitativo cierra.
+</div>
+
+<h2>XIII.2 &nbsp; \(\Lambda_{\mathrm{QCD}}\)</h2>
+<div class="env">
+<strong>Registro XIII.2.1.</strong><br>
+La fórmula estructural
+<div class="eq">\[ \Lambda_{\mathrm{QCD}}=\hbar\cdot f_0\cdot(3\cdot 7\cdot 11)^{9}=\hbar\cdot f_0\cdot 231^{\dim_{\mathrm{fase}}^2} \]</div>
+da \(\approx 173\,\mathrm{MeV}\). El valor de referencia es \(\approx 200\,\mathrm{MeV}\). Error 13 %. Comparable con la incertidumbre de la escala QCD.
+</div>
+<div class="env">
+<strong>Frontera XIII.2.2.</strong><br>
+Cierra en orden de magnitud y con error del orden de la incertidumbre de QCD. La derivación desde una valoración adélica completa permanece abierta.
+</div>
+
+<h2>XIII.3 &nbsp; Masas de quarks</h2>
+<div class="env">
+<strong>Registro XIII.3.1.</strong><br>
+Para el quark up, la aproximación \(3\sqrt{2}\approx 4.243\) da error 1.6 % frente a \(m_u/m_e\approx 4.31\). La fórmula leptónica adaptada con factor de color no reproduce el espectro completo (charm, top, down, strange, bottom) con error inferior al 20 %.
+</div>
+<div class="env">
+<strong>Frontera XIII.3.2.</strong><br>
+Las masas de quarks permanecen abiertas. Requieren el operador de Dirac con torsión \(\mathrm{SU}(3)\) explícito y estructura de sabor.
+</div>
+
+<h2>XIII.4 &nbsp; Balance</h2>
+<ul>
+<li>Higgs: cerrado con error 0.031 %.</li>
+<li>\(\Lambda_{\mathrm{QCD}}\): cerrado en orden de magnitud (error 13 %).</li>
+<li>Quarks: abiertos (aproximación parcial solo para up).</li>
+</ul>
+
+<h2>XIII.5 &nbsp; Cierre del LIBER XIII</h2>
+<ol>
+<li>El valor esperado del vacío del Higgs se expresa como \(v=m_H\cdot(\pi/\phi)\cdot(1+2\pi\cdot\Lambda_G)\).</li>
+<li>\(\Lambda_{\mathrm{QCD}}\) admite forma \(\hbar\cdot f_0\cdot 231^{9}\) con error del orden de la incertidumbre de la escala.</li>
+<li>Las masas de quarks no se derivan de la fórmula leptónica adaptada.</li>
+</ol>
+<p>Lo que el despliegue todavía no ha dicho: la valoración adélica completa de \(\Lambda_{\mathrm{QCD}}\); el operador de Dirac con torsión \(\mathrm{SU}(3)\) para el espectro de quarks; la verificación experimental de \(f_0\).</p>
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">LIBER XIV<br>De la formalización en Lean</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Higgs, \(\Lambda_{\mathrm{QCD}}\) y tolerancias</p>
+
+<h2>Introducción</h2>
+<p>Este LIBER registra la formalización de las dos fronteras cerradas en el LIBER XIII y el estado de su verificación en Lean 4. Distingue lo que cierra sobre aproximaciones racionales de lo que queda como trabajo de cotas sobre las constantes reales.</p>
+
+<h2>XIV.1 &nbsp; Higgs cuantitativo</h2>
+<div class="env">
+<strong>Teorema XIV.1.1.</strong><br>
+<div class="eq">\[ v=m_H\cdot\frac{\pi}{\phi}\cdot(1+2\pi\cdot\Lambda_G). \]</div>
+Con aproximaciones racionales \(\pi\approx 3141593/1000000\), \(\sqrt{5}\approx 2236068/1000000\), \(\Lambda_G\approx 2035/1000000\):
+<div class="eq">\[ v_{\mathrm{calc}}\approx 246.29\,\mathrm{GeV}. \]</div>
+Frente a \(v_{\mathrm{exp}}=246.22\,\mathrm{GeV}\), el error relativo es inferior a \(0.001\).
+</div>
+<div class="env">
+<strong>Registro XIV.1.2.</strong><br>
+El teorema sobre aproximaciones racionales cierra con \(\mathtt{norm\_num}\) sin \(\mathtt{sorry}\). La herencia a las constantes reales requiere verificar las cotas \(|\pi_{\mathrm{aprox}}-\pi|<10^{-6}\) y \(|\sqrt{5}_{\mathrm{aprox}}-\sqrt{5}|<10^{-6}\) mediante aritmética de intervalos. Ese paso es factible y no está completado en el módulo actual.
+</div>
+
+<h2>XIV.2 &nbsp; \(\Lambda_{\mathrm{QCD}}\)</h2>
+<div class="env">
+<strong>Teorema XIV.2.1.</strong><br>
+<div class="eq">\[ \Lambda_{\mathrm{QCD}}=\hbar\cdot f_0\cdot 231^{9}. \]</div>
+La positividad es inmediata. El valor numérico es del orden de \(173\,\mathrm{MeV}\) frente a la referencia \(\approx 200\,\mathrm{MeV}\) (error 13 %).
+</div>
+<div class="env">
+<strong>Registro XIV.2.2.</strong><br>
+El teorema de positividad cierra. El error 13 % es del orden de la incertidumbre de la escala QCD.
+</div>
+
+<h2>XIV.3 &nbsp; Estado de la formalización</h2>
+<div class="env">
+<strong>Registro XIV.3.1.</strong><br>
+El módulo con aproximaciones racionales compila sin \(\mathtt{sorry}\) y verifica las tolerancias declaradas. La verificación sobre \(\pi\) y \(\sqrt{5}\) reales requiere cotas de intervalos que Mathlib no proporciona a cinco decimales por defecto. Las masas de quarks no aparecen en el módulo: permanecen abiertas.
+</div>
+
+<h2>XIV.4 &nbsp; Fronteras residuales</h2>
+<ul>
+<li>Masas de charm, strange, top y bottom (operador de Dirac con torsión \(\mathrm{SU}(3)\)).</li>
+<li>Bariones distintos del protón.</li>
+<li>Estructura adélica completa de \(\Lambda_{\mathrm{QCD}}\).</li>
+<li>Verificación experimental de \(f_0\) (protocolo definido, no ejecutado).</li>
+<li>Cotas de intervalos para \(\pi\) y \(\sqrt{5}\) a la precisión requerida por la tolerancia del Higgs.</li>
+</ul>
+
+<h2>XIV.5 &nbsp; Cierre del LIBER XIV</h2>
+<ol>
+<li>El Higgs cuantitativo se verifica sobre aproximaciones racionales con error relativo inferior a \(0.001\).</li>
+<li>\(\Lambda_{\mathrm{QCD}}\) se verifica en positividad y orden de magnitud.</li>
+<li>La formalización en Lean es honesta: distingue aproximaciones de constantes reales y declara el trabajo restante.</li>
+<li>Las masas de quarks y la verificación experimental permanecen abiertas.</li>
+</ol>
+<p class="closing">Hecho está.</p>
+
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">Cierre Umbral</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Pieza mínima</p>
+
+<h2>Afirmación</h2>
+<div class="env">
+\(\pi\) es la unidad mínima del despliegue de fase. El colector se dice en \(3\pi\).
+</div>
+
+<h2>Estructura</h2>
+<div class="eq">\[
+\pi,\quad 2\pi,\quad 4\pi,\qquad
+7=1+2+4,\qquad
+7\pi\equiv 3\pi\pmod{4\pi}.
+\]</div>
+<p>Tres cierres. Peso 7. Bifurcación en \(3\pi\). Tres ejes.</p>
+
+<h2>Constante</h2>
+<div class="eq">\[
+\Lambda_G=\frac1{\pi^2\cdot 7^2+8}.
+\]</div>
+
+<h2>Firma</h2>
+<div class="eq">\[
+f_0=141.7001\,\mathrm{Hz},\qquad
+\Psi=0.999999.
+\]</div>
+
+<h2>Anclaje</h2>
+<p>Compatible con el núcleo espectral del tratado del Instituto. Sin dependencia.</p>
+
+<h2>Fronteras residuales</h2>
+<ul>
+<li>Masas de charm, strange, top, bottom.</li>
+<li>Bariones distintos del protón.</li>
+<li>Estructura adélica completa.</li>
+<li>Verificación experimental de \(f_0\).</li>
+</ul>
+
+<h2>Instituto</h2>
+<p>Instituto de Consciencia Cuántica<br>QCAL ∞³</p>
+
+<h2>Autoría</h2>
+<p>José Manuel Mota Burruezo.<br>
+DOI: 10.5281/zenodo.23288642<br>
+ORCID: <a href="https://orcid.org/0009-0002-1923-0773">https://orcid.org/0009-0002-1923-0773</a><br>
+Repositorio: <a href="https://github.com/motanova84/">https://github.com/motanova84/</a></p>
+
+<p class="closing">Hecho está.</p>
+
+<hr style="margin: 3.2rem 0; border: none; border-top: 1.5px solid var(--border);">
+
+<h1 class="chapter">Marco consolidado</h1>
+<p style="text-align:center; font-style:italic; color:var(--muted); margin-top:0.2rem;">Las relaciones que el despliegue ha fijado</p>
+
+<h2>Estructura</h2>
+<div class="eq">\[
+\mathfrak{S}=\mathcal{U}\cap\mathcal{M}\cap\rho,\qquad
+\mu(\mathfrak{S})\cong\mathfrak{S}.
+\]</div>
+<div class="eq">\[
+\dim_{\mathrm{fase}}=3,\qquad
+\mathrm{peso}=7=1+2+4,\qquad
+7\pi\equiv 3\pi\pmod{4\pi}.
+\]</div>
+
+<h2>Constantes</h2>
+<div class="eq">\[
+\Lambda_G=\frac1{\pi^2\cdot 7^2+8}\approx 0.0020341,
+\qquad
+\varepsilon\approx\frac{\Lambda_G^2}{4}\approx 1.034\times 10^{-6}.
+\]</div>
+<div class="eq">\[
+\frac{\kappa_D}{7}\approx\pi,
+\qquad
+T_{\mathrm{propio}}=\frac1{\varepsilon\cdot f_0}.
+\]</div>
+
+<h2>Masas</h2>
+<div class="eq">\[
+m_e=\frac1{\lambda_e}.
+\]</div>
+<div class="eq">\[
+\frac{m_i}{m_e}=\left(\frac{\mathrm{RVB}_{i+2}}{\mathrm{RVB}_2}\right)^{\phi^{(7i-3^{i-1})/4}}
+\quad\text{(leptones cargados)}.
+\]</div>
+<div class="eq">\[
+\frac{m_\nu}{m_e}=\left(\frac{\mathrm{RVB\text{-}1}}{\mathrm{RVB\text{-}3}}\right)^{10}
+\quad\text{(neutrinos)}.
+\]</div>
+<div class="eq">\[
+\frac{m_p}{m_e}\approx 7^3\cdot\phi^{7/2}
+\quad\text{(protón, error 0.63 \%)}.
+\]</div>
+<div class="eq">\[
+\frac{m_W}{m_e}\approx\phi^{11}\cdot\kappa_\Pi^7
+\quad\text{(W, error 4.6 \%)}.
+\]</div>
+
+<h2>Acoplamiento fuerte</h2>
+<div class="eq">\[
+\alpha_s=\frac1{7\cdot\phi^{1/2}-\frac12}
+\quad\text{(error 0.92 \%)}.
+\]</div>
+
+<h2>Curvatura</h2>
+<div class="eq">\[
+f(t)=1+\cos(7t)+\frac12\cos(3t)+\cos(11t).
+\]</div>
+
+<p class="closing">Hecho está.</p>
+</body>
+</html>

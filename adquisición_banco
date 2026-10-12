@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+QCAL-ICQ — Grabador de Adquisición Banco §17 (§17.6)
+====================================================
+Ejecutar EN EL LABORATORIO, junto a la celda. Produce datos_reales.csv
+con el formato exacto que ingiere qcal_banco_s17.py:
+
+  columna 0: V_in        (voltaje transductor, referencia)
+  columna 1: H_eje       (hidrofono r = 0)
+  columna 2: H_pared    (hidrofono r = 2R/3)
+  columna 3: Acel_chasis(acelerometro triaxial, eje dominante)
+
+Requisitos de banco (memoria de §17):
+  * fs = 2048 Hz constante (reloj comun a los 4 canales, jitter < 1 ppm)
+  * Duracion: 8.9 h = 32000 s (64 bloques de 500 s) -> ~262M muestras/canal
+  * Temperatura del agua estabilizada +/- 0.1 C durante TODA la corrida
+    (c_s varia ~2.5 m/s por grado; una deriva de 0.5 C desplaza el notch
+     ~0.07 Hz fuera de tolerancia +/- 0.050 Hz)
+  * Transductor en regimen sinusoidal continuo, THD < 0.1 %
+  * Régimen estacionario: NO mover, NO tocar, NO hablar cerca de la celda.
+
+Uso:
+  python3 qcal_banco_s17_record.py --out datos_reales.csv --hours 8.9
+
+El driver DAQ es un stub: adapte acquire_chunk() a su hardware
+(NI-DAQmx, sounddevice, LabJack, ADC USB...) manteniendo el contrato
+de 4 canales float32 a fs = 2048 Hz.
+"""
+
+import numpy as np, time, sys, argparse, csv, os
+
+FS = 2048.0
+CHUNK_S = 60.0                      # 60 s por chunk -> RAM modesta, progreso visible
+NCH = 4
+
+def acquire_chunk(n, dev):
+    """STUB DE HARDWARE. Devuelve array (n, 4) float32 con los 4 canales.
+    Sustituir por su driver real. NUNCA devolver datos simulados en una
+    corrida real: el pipeline no lo detectaria y el veredicto quedaria
+    contaminado."""
+    raise NotImplementedError("Conecte aqui su DAQ real (NI-DAQmx/sounddevice/LabJack)")
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default="datos_reales.csv")
+    ap.add_argument("--hours", type=float, default=8.9)
+    ap.add_argument("--dev", default="daq0")
+    a = ap.parse_args()
+
+    total_s = a.hours*3600.0
+    n_chunks = int(np.ceil(total_s/CHUNK_S))
+    t0 = time.time()
+    with open(a.out, "w", newline="") as fh:
+        w = csv.writer(fh)
+        w.writerow(["V_in","H_eje","H_pared","Acel_chasis"])   # cabecera
+        for k in range(n_chunks):
+            n = int(FS*min(CHUNK_S, total_s - k*CHUNK_S))
+            block = acquire_chunk(n, a.dev)                    # <- hardware real
+            assert block.shape == (n, NCH)
+            np.savetxt(fh, block, delimiter=",", fmt="%.6e")
+            fh.flush(); os.fsync(fh.fileno())                  # sobrevive a cortes
+            el = time.time()-t0
+            print(f"[{k+1}/{n_chunks}] {el/3600:.2f} h transcurridas | "
+                  f"temperatura agua: REGISTRE MANUALMENTE cada hora | ETA {(el/(k+1))*(n_chunks-k-1)/3600:.2f} h", flush=True)
+    print(f"ADQUISICION COMPLETA -> {a.out}")
+    print("Siguiente y unico paso: python3 qcal_banco_s17.py datos_reales.csv")
+
+if __name__ == "__main__":
+    main()

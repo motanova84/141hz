@@ -7,6 +7,9 @@ import json
 import os
 import sys
 import unittest
+import time
+import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 import numpy as np
@@ -20,6 +23,12 @@ if _SCRIPTS_DIR not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
 from qcal_gravitational_oracle import GravitationalOracle  # noqa: E402
+ROOT = Path(__file__).resolve().parent.parent
+SCRIPTS_DIR = ROOT / "scripts"
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+
+from qcal_gravitational_oracle import GravitationalOracle
 
 
 class TestGravitationalOracle(unittest.TestCase):
@@ -63,6 +72,21 @@ class TestGravitationalOracle(unittest.TestCase):
         self.assertAlmostEqual(fwhm, 2 * 10 * np.sqrt(2 * np.log(2)), delta=1)
 
         # Caso límite: sin pico
+        fs = 4096
+        duration = 2
+        data = self.oracle._generate_synthetic_data(duration, fs)
+        expected_length = int(duration * fs)
+        self.assertEqual(len(data), expected_length)
+        self.assertIsInstance(data, TimeSeries)
+        self.assertTrue(np.std(data.value) > 0)
+        self.assertTrue(abs(np.mean(data.value)) < 0.5)
+
+    def test_calculate_fwhm(self):
+        x = np.linspace(0, 100, 1000)
+        psd = np.exp(-((x - 50) ** 2) / (2 * 10 ** 2))
+        idx_peak = 500
+        fwhm = self.oracle._calculate_fwhm(psd, x, idx_peak)
+        self.assertAlmostEqual(fwhm, 2 * 10 * np.sqrt(2 * np.log(2)), delta=1)
         psd_flat = np.ones_like(x)
         fwhm_flat = self.oracle._calculate_fwhm(psd_flat, x, idx_peak)
         self.assertEqual(fwhm_flat, 0)
@@ -78,6 +102,7 @@ class TestGravitationalOracle(unittest.TestCase):
 
         classification = self.oracle.classify_noise(metrics)
 
+        classification = self.oracle.classify_noise(metrics)
         self.assertIn("status", classification)
         self.assertIn("confidence", classification)
         self.assertIn("coherence", classification)
@@ -107,6 +132,28 @@ class TestGravitationalOracle(unittest.TestCase):
         for key in expected_keys:
             self.assertIn(key, metrics)
 
+        fs = 4096
+        duration = 4
+        data = {
+            "H1": self.oracle._generate_synthetic_data(duration, fs, ifo="H1"),
+            "L1": self.oracle._generate_synthetic_data(duration, fs, ifo="L1"),
+        }
+        metrics = self.oracle.calculate_spectral_metrics(data, fs)
+        expected_keys = [
+            "frequency",
+            "psd_h1",
+            "psd_l1",
+            "coherence",
+            "csd",
+            "phase_deg",
+            "phase_rad",
+            "idx_target",
+            "snr_integrated",
+            "fwhm",
+            "fs",
+        ]
+        for key in expected_keys:
+            self.assertIn(key, metrics)
         self.assertEqual(len(metrics["frequency"]), len(metrics["psd_h1"]))
         self.assertEqual(len(metrics["frequency"]), len(metrics["coherence"]))
 
@@ -142,6 +189,17 @@ class TestIntegrationGravitationalOracle(unittest.TestCase):
 
     def test_synthetic_data_analysis(self):
         """Test de análisis con datos sintéticos"""
+            self.assertIsNotNone(results)
+            self.assertIn("metrics", results)
+            self.assertIn("noise_classification", results)
+            metrics = results["metrics"]
+            idx = metrics["idx_target"]
+            self.assertTrue(0 <= idx < len(metrics["coherence"]))
+        except Exception as exc:  # pragma: no cover - network dependent
+            print(f"Test de integración omitido: {exc}")
+            pytest.skip("Datos de LIGO no disponibles")
+
+    def test_synthetic_data_analysis(self):
         results = self.oracle.analyze(
             evento="TEST_SYNTHETIC",
             t_gps=1234567890,
@@ -151,6 +209,8 @@ class TestIntegrationGravitationalOracle(unittest.TestCase):
 
         self.assertIsNotNone(results)
         self.assertGreaterEqual(results["metrics"]["snr_integrated"], 0)
+        self.assertIsNotNone(results)
+        self.assertGreater(results["metrics"]["snr_integrated"], 0)
 
 
 class TestDataLoading(unittest.TestCase):
@@ -163,6 +223,9 @@ class TestDataLoading(unittest.TestCase):
         with patch("gwpy.timeseries.TimeSeries.fetch_open_data") as mock_fetch:
             mock_fetch.side_effect = TimeoutError("Timeout")
 
+        oracle = GravitationalOracle(verbose=False)
+        with patch("gwpy.timeseries.TimeSeries.fetch_open_data") as mock_fetch:
+            mock_fetch.side_effect = TimeoutError("Timeout")
             data = oracle.fetch_ligo_data(1126259462.4, 4)
             self.assertIn("H1", data)
             self.assertIn("L1", data)
@@ -173,6 +236,8 @@ class TestDataLoading(unittest.TestCase):
 
         data = oracle.fetch_ligo_data(9999999999.0, 4)
 
+        oracle = GravitationalOracle(verbose=False)
+        data = oracle.fetch_ligo_data(9999999999.0, 4)
         self.assertIsNotNone(data)
         self.assertIn("H1", data)
 
@@ -209,6 +274,12 @@ class TestPerformance(unittest.TestCase):
         process = psutil.Process(os.getpid())
         mem_before = process.memory_info().rss / 1024 / 1024  # MB
 
+        self.assertLess(elapsed, 5.0)
+
+    def test_memory_usage(self):
+        psutil = pytest.importorskip("psutil")
+        process = psutil.Process(os.getpid())
+        mem_before = process.memory_info().rss / 1024 / 1024
         self.oracle.analyze(
             evento="MEM_TEST",
             t_gps=1126259462.4,
@@ -221,6 +292,9 @@ class TestPerformance(unittest.TestCase):
 
         # No debería usar más de 500 MB adicionales
         self.assertLess(mem_increase, 500)
+        mem_after = process.memory_info().rss / 1024 / 1024
+        mem_increase = mem_after - mem_before
+        self.assertLess(mem_increase, 100)
 
 
 class TestSerialization(unittest.TestCase):
@@ -253,6 +327,8 @@ class TestSerialization(unittest.TestCase):
         json_str = json.dumps(serializable_results, default=str)
         self.assertIsInstance(json_str, str)
 
+        json_str = json.dumps(serializable_results, default=str)
+        self.assertIsInstance(json_str, str)
         loaded = json.loads(json_str)
         self.assertEqual(loaded["evento"], "SERIAL_TEST")
 

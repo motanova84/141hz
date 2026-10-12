@@ -45,6 +45,7 @@
 
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.Complex.Basic
+import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.Topology.Basic
 
 open Complex Filter Topology
