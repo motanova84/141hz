@@ -2,10 +2,6 @@ import Lake
 open Lake DSL
 
 package «f0derivation» where
-  -- add package configuration options here
-
-lean_lib «F0Derivation» where
-  -- add library configuration options here
 
 @[default_target]
 lean_exe «f0derivation» where
@@ -14,17 +10,9 @@ lean_exe «f0derivation» where
   -- `runFrontend`) at the expense of increased binary size on Linux.
   -- Remove this line if you do not need such functionality.
   supportInterpreter := true
-package f0derivation where
-  -- Project metadata
-  version := v!"0.1.0"
-  keywords := #["mathematics", "physics", "zeta-function", "golden-ratio"]
-  leanOptions := #[
-    ⟨`pp.unicode.fun, true⟩,
-    ⟨`autoImplicit, false⟩
-  ]
 
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4.git"
+  "https://github.com/leanprover-community/mathlib4.git" @ "v4.3.0"
 
 @[default_target]
 lean_lib F0Derivation where
@@ -48,6 +36,12 @@ lean_lib QCAL_SYNC_BRIDGE where
   -- Harmonic validation: f_base → f₀ → f_high
   roots := #[`QCAL_SYNC_BRIDGE]
 
+lean_lib QCAL.LiberXIV where
+  roots := #[`QCAL.LiberXIV]
+
+lean_lib QCAL.LiberXI where
+  roots := #[`QCAL.LiberXI]
+
 lean_lib Noesis88 where
   -- Deductive chains and asymptotic stability
   roots := #[`Noesis88]
@@ -62,8 +56,6 @@ lean_lib TiempoNoetico where
 
 lean_lib MicrotubuleCoherence where
   -- Orch-OR theory: Quantum consciousness in microtubules
-  roots := #[`MicrotubuleCoherence]
-  -- Teorema de la Carne Resonante: Biological consciousness at f₀
   roots := #[`MicrotubuleCoherence]
 lean_lib GoldbachCircle where
   -- Hardy-Littlewood Circle Method: Large Sieve + Vaughan + Minor Arcs

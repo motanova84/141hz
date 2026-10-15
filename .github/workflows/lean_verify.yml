@@ -2,12 +2,16 @@ name: QCAL Hilo A — Lean 4 Verification
 
 on:
   push:
-    branches: [ main ]
     paths:
       - 'Core/**/*.lean'
+      - 'formalization/lean/**'
       - '.github/workflows/lean_verify.yml'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'Core/**/*.lean'
+      - 'formalization/lean/**'
+      - '.github/workflows/lean_verify.yml'
   workflow_dispatch:
 
 permissions:
@@ -15,11 +19,25 @@ permissions:
 
 jobs:
   lean-compile:
-    name: Lean 4 Core Compilation
+    name: Lean 4 Formalization Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check Lean files
+      - name: Install elan
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Install Lean toolchain and Mathlib
+        working-directory: formalization/lean
+        run: |
+          elan toolchain install "$(cat lean-toolchain)"
+          lake update
+          lake exe cache get
+      - name: Build LIBER XI and XIV
+        working-directory: formalization/lean
+        run: lake build QCAL.LiberXI QCAL.LiberXIV
+      - name: List Core Lean files
         run: |
           echo "✅ Lean 4 — QCAL Core 141Hz"
           echo "   Archivos Lean encontrados:"
