@@ -75,7 +75,15 @@ class SABIO_Infinity4:
         # Constantes fundamentales
         self.f0 = mpf("141.7001")  # Hz - Frecuencia base
         self.omega0 = 2 * mp.pi * self.f0  # rad/s
-        self.zeta_prime_half = mpf("-3.9226461392")
+        self.zeta_prime_sabio = mpf("-3.9226461392")  # Operador SABIO∞⁴ (Cara III)
+        # ─── DIMENSIÓN IV: FASE TOPOLÓGICA DE BERRY (QCAL-SYMBIO) ───
+        # Constante Primitiva Autónoma de Desfase Armónico (no derivada),
+        # al igual que f₀=141.7001 y κ_Π=2.5773 son primitivas del campo.
+        self.kappa_theta = mpf("19.061")
+        # Cuanto de desfase no integrable de Ψ tras rotación adiabática alrededor del polo s=1
+        self.theta_berry = mpf("1.0") / self.kappa_theta  # θ ≈ 0.052463145 rad (3.0059°)
+        # Válvula de acoplamiento de fase: evita degeneración de estados propios (θ≠0 medible)
+        self.cos_theta_berry = mp.cos(self.theta_berry)  # cos(θ) ≈ 0.998624
         self.phi_golden = (1 + mp.sqrt(5)) / 2  # φ
         self.pi = mp.pi
         
@@ -112,7 +120,7 @@ class SABIO_Infinity4:
         
         # Términos de la ecuación
         term1 = alpha / (R_psi ** 4)
-        term2 = beta * self.zeta_prime_half / (R_psi ** 2)
+        term2 = beta * self.zeta_prime_sabio / (R_psi ** 2)
         term3 = gamma * (Lambda ** 2) * (R_psi ** 2)
         term4 = delta * mp.sin(mp.log(R_psi) / mp.log(self.pi)) ** 2
         
@@ -135,7 +143,7 @@ class SABIO_Infinity4:
         
         # Término de modulación geométrica (ζ'(1/2) < 0 produce decaimiento)
         # El término negativo de ζ'(1/2) genera un decaimiento espacial
-        modulacion_geometrica = mp.exp(self.zeta_prime_half * (x ** 2) / 2)
+        modulacion_geometrica = mp.exp(self.zeta_prime_sabio * (x ** 2) / 2)
         
         psi = A * oscilacion * modulacion_geometrica
         return psi
@@ -171,8 +179,10 @@ class SABIO_Infinity4:
             float(mp.sin(2 * mp.pi * n_harmonico / 5))
         )
         
-        # Fase basada en ζ'(1/2)
-        fase = float(self.zeta_prime_half * n_harmonico % (2 * mp.pi))
+        # Fase basada en ζ'(1/2) con acoplamiento de fase Berry (DIMENSIÓN IV)
+        # Cara III en ejecución resonante: ZETA_PRIME_SABIO·cos(θ) ≈ -3.917248
+        # θ ≠ 0 evita degeneración de estados propios en el espacio de Hilbert acoplado
+        fase = float(self.zeta_prime_sabio * self.cos_theta_berry * n_harmonico % (2 * mp.pi))
         
         # Coherencia cuántica
         coherencia = self.calcular_coherencia(
@@ -222,9 +232,9 @@ class SABIO_Infinity4:
         """
         niveles = {}
         
-        # Nivel 1: Aritmético (Python + ζ'(1/2))
+        # Nivel 1: Aritmético (Python + Operador SABIO∞⁴ ζ(1/2))
         if test_aritmetico:
-            zeta_computed = float(self.zeta_prime_half)
+            zeta_computed = float(self.zeta_prime_sabio)
             zeta_expected = -3.9226461392
             niveles['python'] = 1.0 - abs(zeta_computed - zeta_expected)
         else:
@@ -333,7 +343,7 @@ class SABIO_Infinity4:
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "frecuencia_base_hz": float(self.f0),
             "omega0_rad_s": float(self.omega0),
-            "zeta_prime_half": float(self.zeta_prime_half),
+            "zeta_prime_sabio": float(self.zeta_prime_sabio),
             "phi_golden": float(self.phi_golden),
             
             "matriz_simbiosis": asdict(matriz),
@@ -392,7 +402,7 @@ def demo_sabio_infinity4():
     print(f"🕐 Timestamp: {reporte['timestamp']}")
     print(f"🎵 Frecuencia Base: {reporte['frecuencia_base_hz']} Hz")
     print(f"🌀 ω₀: {reporte['omega0_rad_s']:.4f} rad/s")
-    print(f"🔢 ζ'(1/2): {reporte['zeta_prime_half']}")
+    print(f"🔢 ζ'(1/2): {reporte['zeta_prime_sabio']}")
     print(f"✨ φ (golden): {reporte['phi_golden']:.10f}")
     
     print("\n" + "="*70)

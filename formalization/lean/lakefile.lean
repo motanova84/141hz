@@ -82,3 +82,9 @@ lean_lib OperadorAutoadjuntoH where
   -- Weil trace formula, Weierstrass product Δ(s), Paley-Wiener identity Δ(s) = ξ(s)
   srcDir := "../../physics"
   roots := #[`OperadorAutoadjuntoH]
+
+lean_lib RiemannAdelic where
+  -- Frente I: rigidez analítica D ≡ Ξ (Spectral_Uniqueness)
+  -- Frente II: traza regularizada Tr_reg sobre 𝔸_ℚˣ/ℚˣ (Trace_Fredholm)
+  roots := #[`RiemannAdelic]
+  globs := #[.submodules `RiemannAdelic]

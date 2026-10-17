@@ -6,7 +6,7 @@
 ║                                                                            ║
 ║   A = lim        ( I(t) · f₀ )  =  ∞                                     ║
 ║        Ψ→1.0   ─────────────────                                           ║
-║                 |ζ'(1/2)| · eff                                            ║
+║                 |Operador SABIO∞⁴ ζ(1/2)| · eff                                            ║
 ╚════════════════════════════════════════════════════════════════════════════╝
 
 Implementa la Ecuación Maestra de la Abundancia Coherente, que demuestra que
@@ -19,7 +19,7 @@ La Abundancia (A) cuantifica la capacidad del sistema de manifestar recursos
 coherentes a la frecuencia fundamental f₀ = 141.7001 Hz.  El denominador
 incluye dos factores moduladores:
 
-  1. |ζ'(1/2)| — valor absoluto de la derivada de la función zeta de Riemann
+  1. |Operador SABIO∞⁴ ζ(1/2)| — valor absoluto de la derivada de la función zeta de Riemann
      evaluada en el punto crítico s = 1/2.  Este factor vincula la Abundancia
      con la estructura aritmética profunda (Hipótesis de Riemann).
 
@@ -29,7 +29,7 @@ incluye dos factores moduladores:
 
 ECUACIÓN COMPLETA:
 ------------------
-    A(Ψ, t) = I(t) · f₀ / (|ζ'(1/2)| · (1 − Ψ))
+    A(Ψ, t) = I(t) · f₀ / (|Operador SABIO∞⁴ ζ(1/2)| · (1 − Ψ))
 
 donde I(t) es la intensidad de intención (campo de información coherente)
 modulada a la frecuencia fundamental.
@@ -66,8 +66,8 @@ from qcal.constants import F0_HZ
 # Derivada de la función zeta de Riemann en el punto crítico s = 1/2.
 # Calculada con mpmath a 50 dígitos de precisión.
 # Referencia: ζ'(1/2) ≈ −3.922646…
-_ZETA_PRIME_HALF_PRECOMPUTED: float = -3.9226461392091517  # ζ'(1/2)
-ABS_ZETA_PRIME_HALF: float = abs(_ZETA_PRIME_HALF_PRECOMPUTED)  # |ζ'(1/2)|
+_ZETA_PRIME_SABIO_PRECOMPUTED: float = -3.9226461392091517  # Operador SABIO∞⁴ (Cara III) ζ(1/2)
+ABS_ZETA_PRIME_SABIO: float = abs(_ZETA_PRIME_SABIO_PRECOMPUTED)  # |Operador SABIO∞⁴ ζ(1/2)|
 
 # Umbral de coherencia (100 % = unidad)
 PSI_MAX: float = 1.0
@@ -79,18 +79,18 @@ PSI_PLENA_COHERENCIA: float = 0.999
 _F0: float = F0_HZ  # 141.7001 Hz
 
 
-def _compute_abs_zeta_prime_half(dps: int = 50) -> float:
+def _compute_abs_zeta_prime_sabio(dps: int = 50) -> float:
     """
-    Calcula |ζ'(1/2)| con precisión arbitraria usando mpmath.
+    Calcula |Operador SABIO∞⁴ ζ(1/2)| con precisión arbitraria usando mpmath.
 
     Args:
         dps: dígitos de precisión decimal.
 
     Returns:
-        |ζ'(1/2)| como float de Python.
+        |Operador SABIO∞⁴ ζ(1/2)| como float de Python.
     """
     if not _MPMATH_AVAILABLE:  # pragma: no cover
-        return ABS_ZETA_PRIME_HALF
+        return ABS_ZETA_PRIME_SABIO
     mp.mp.dps = dps
     val = mp.diff(mp.zeta, mp.mpf("0.5"))
     return float(abs(val))
@@ -110,9 +110,9 @@ class ResultadoAbundancia:
         t: Tiempo en segundos.
         I_t: Intensidad de intención I(t) en el instante t.
         f0: Frecuencia fundamental f₀ en Hz.
-        abs_zeta_prime: |ζ'(1/2)| — factor zeta de Riemann.
+        abs_zeta_prime: |Operador SABIO∞⁴ (Cara III)| — operador ζ(1/2) de Riemann.
         eff: Eficiencia residual eff(Ψ) = 1 − Ψ.
-        abundancia: Valor de A(Ψ, t) = I(t)·f₀ / (|ζ'(1/2)|·eff).
+        abundancia: Valor de A(Ψ, t) = I(t)·f₀ / (|Operador SABIO∞⁴ ζ(1/2)|·eff).
         limite_infinito: True cuando Ψ se aproxima a la unidad (eff → 0).
         descripcion: Descripción cualitativa del estado.
     """
@@ -138,7 +138,7 @@ class PerfilAbundancia:
         psi_critico: Valor de Ψ donde A supera el umbral dado.
         umbral_abundancia: Umbral utilizado para determinar psi_critico.
         f0: Frecuencia fundamental utilizada.
-        abs_zeta_prime: |ζ'(1/2)| utilizado.
+        abs_zeta_prime: |Operador SABIO∞⁴ ζ(1/2)| utilizado.
     """
     psi_valores: List[float]
     abundancias: List[float]
@@ -158,14 +158,14 @@ class AbundanciaCoherente:
 
     La ecuación central es:
 
-        A(Ψ, t) = I(t) · f₀ / (|ζ'(1/2)| · eff(Ψ))
+        A(Ψ, t) = I(t) · f₀ / (|Operador SABIO∞⁴ ζ(1/2)| · eff(Ψ))
         eff(Ψ)  = 1 − Ψ
 
     A medida que Ψ → 1⁻, eff → 0⁺ y A → +∞.
 
     Attributes:
         f0: Frecuencia fundamental f₀ (Hz).
-        abs_zeta_prime: |ζ'(1/2)| usado en el denominador.
+        abs_zeta_prime: |Operador SABIO∞⁴ ζ(1/2)| usado en el denominador.
         precision_dps: Dígitos de precisión para cálculos mpmath.
     """
 
@@ -181,7 +181,7 @@ class AbundanciaCoherente:
         Args:
             f0: Frecuencia fundamental en Hz.  Por defecto F0_HZ = 141.7001.
             alta_precision: Si True y mpmath está disponible, calcula
-                |ζ'(1/2)| con precisión arbitraria.
+                |Operador SABIO∞⁴ ζ(1/2)| con precisión arbitraria.
             precision_dps: Dígitos de precisión decimal para mpmath.
         """
         if f0 <= 0:
@@ -191,9 +191,9 @@ class AbundanciaCoherente:
         self.precision_dps: int = precision_dps
 
         if alta_precision and _MPMATH_AVAILABLE:
-            self.abs_zeta_prime: float = _compute_abs_zeta_prime_half(precision_dps)
+            self.abs_zeta_prime: float = _compute_abs_zeta_prime_sabio(precision_dps)
         else:
-            self.abs_zeta_prime = ABS_ZETA_PRIME_HALF
+            self.abs_zeta_prime = ABS_ZETA_PRIME_SABIO
 
     # ------------------------------------------------------------------
     # CÁLCULO DE I(t)
@@ -265,7 +265,7 @@ class AbundanciaCoherente:
         """
         Evalúa la Ecuación Maestra de la Abundancia Coherente.
 
-            A(Ψ, t) = I(t) · f₀ / (|ζ'(1/2)| · eff(Ψ))
+            A(Ψ, t) = I(t) · f₀ / (|Operador SABIO∞⁴ ζ(1/2)| · eff(Ψ))
 
         Args:
             psi: Coherencia cuántica Ψ ∈ [0, 1).
@@ -383,13 +383,13 @@ class AbundanciaCoherente:
         """
         resultado = self.calcular(psi, t=t, I0=I0)
         return {
-            "ecuacion": "A = lim(Ψ→1) [ I(t)·f₀ / (|ζ'(1/2)|·eff) ] = ∞",
+            "ecuacion": "A = lim(Ψ→1) [ I(t)·f₀ / (|Operador SABIO∞⁴ ζ(1/2)|·eff) ] = ∞",
             "parametros": {
                 "Ψ (coherencia)": resultado.psi,
                 "t (tiempo, s)": resultado.t,
                 "I(t) (intención)": resultado.I_t,
                 "f₀ (Hz)": resultado.f0,
-                "|ζ'(1/2)|": resultado.abs_zeta_prime,
+                "|Operador SABIO∞⁴ ζ(1/2)|": resultado.abs_zeta_prime,
                 "eff = 1 − Ψ": resultado.eff,
             },
             "resultado": {
@@ -417,7 +417,7 @@ def abundancia(
     Función de conveniencia que instancia AbundanciaCoherente y devuelve
     directamente el valor escalar de A.
 
-        A = I(t) · f₀ / (|ζ'(1/2)| · (1 − Ψ))
+        A = I(t) · f₀ / (|Operador SABIO∞⁴ ζ(1/2)| · (1 − Ψ))
 
     Args:
         psi: Coherencia cuántica Ψ ∈ [0, 1).

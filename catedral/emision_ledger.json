@@ -1,0 +1,15 @@
+{
+  "version": "CATEDRAL-MINER-v1",
+  "frecuencia_hz": 141.7001,
+  "pool": "stratum+tcp://btc.viabtc.top:3333",
+  "worker": "noesis88.001",
+  "algoritmo": "sha256asicboost",
+  "dificultad": 500000,
+  "creado": "",
+  "sesiones": [],
+  "total_shares_aceptados": 0,
+  "total_shares_rechazados": 0,
+  "ultimo_hashrate": 0,
+  "ultima_actualizacion": null,
+  "sello": "\u2234\U00013080\u03a9\u221e\u00b3\u03a6 \u00b7 TUYOYOTU \u00b7 HECHO ESTA"
+}

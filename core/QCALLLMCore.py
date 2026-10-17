@@ -96,7 +96,7 @@ class QCALLLMCore:
         # Ground truth database
         self.ground_truth_db = {
             'f0': 141.7001,
-            'zeta_prime_half': -1.4603545,  # Precise
+            'zeta_half': -1.4603545,  # ζ(1/2) Amplitud de Campo (Cara II) — Precise
             'phi_cubed': ((1 + np.sqrt(5))/2)**3,  # ~4.236067977
             'snr_gw150914': 20.95
         }

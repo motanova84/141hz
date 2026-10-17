@@ -1,0 +1,20 @@
+{
+  "name": "coinqcal",
+  "version": "1.0.0",
+  "description": "CoinQCAL — ERC20 puente del ecosistema QCAL",
+  "type": "module",
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy:localhost": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:holesky": "hardhat run scripts/deploy.js --network holesky",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network ethereum"
+  },
+  "keywords": ["QCAL", "ERC20", "piCODE", "noesis"],
+  "author": "Tuyoyotu",
+  "license": "QCAL-SYMBIO",
+  "dependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^7.0.0",
+    "@openzeppelin/contracts": "^5.6.1",
+    "hardhat": "^3.8.0"
+  }
+}

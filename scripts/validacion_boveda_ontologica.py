@@ -107,7 +107,7 @@ def validar_octavas_hidrogeno_f0(precision: int = 100) -> Dict[str, Any]:
     print("=" * 80)
     print()
     
-    mp.dps = precision
+    mp.mp.dps = precision
     
     # Calcular ratio
     f_h = mp.mpf(F_HYDROGEN_HZ)

@@ -1,0 +1,35 @@
+import numpy as np
+
+def calculate_qcal_rigorous_allan():
+    """
+    Simula la firma del ruido QCAL con apantallamiento camaleónico activo
+    y la función de transferencia exacta para la Desviación de Allan Modificada.
+    """
+    f_zero = 141.7001
+    psi_invariant = 0.999999
+    
+    # Amplitud desnuda vs. Amplitud efectiva apantallada en laboratorio (Efecto Camaleón)
+    naked_amplitude = 1.0 - psi_invariant  # 1e-6
+    screening_factor = 1e-14              # Supresión por densidad de masa terrestre
+    a_eff = naked_amplitude * screening_factor  # 1e-20
+    
+    # Rango de tiempos de integración (tau) en torno a tau_0 = 1 / f_0 (~7.057 ms)
+    tau_0 = 1.0 / f_zero
+    tau_values = np.logspace(-4, -1, 500)
+    
+    # Función de transferencia exacta para Mod-sigma_y(tau) bajo modulación sinusoidal
+    # Mod-sigma_y(tau) = (A_eff / sqrt(2)) * | (sin^2(pi * f_0 * tau)) / (pi * f_0 * tau) |
+    mod_sigma_qcal = (a_eff / np.sqrt(2)) * np.abs(np.sin(np.pi * f_zero * tau_values)**2 / (np.pi * f_zero * tau_values))
+    
+    print("=== MANIFIESTO METROLÓGICO CORREGIDO (QCAL v3.0) ===" )
+    print(f"Frecuencia base (f_0): {f_zero} Hz")
+    print(f"Factor de apantallamiento camaleónico: {screening_factor:.1e}")
+    print(f"Amplitud efectiva en laboratorio (A_eff): {a_eff:.2e}")
+    print("\n[PUNTOS DE CONTROL RIGUROSOS DE MOD-SIGMA]")
+    
+    for tau in [tau_0 * 0.5, tau_0, tau_0 * 2.0]:
+        val = (a_eff / np.sqrt(2)) * np.abs(np.sin(np.pi * f_zero * tau)**2 / (np.pi * f_zero * tau))
+        print(f"  tau = {tau*1000:6.3f} ms -> Mod-sigma_y ~ {val:.2e}")
+
+if __name__ == "__main__":
+    calculate_qcal_rigorous_allan()

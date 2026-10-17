@@ -63,6 +63,19 @@ def criterios_falsacion():
             'metodo_verificacion': 'EEG de alta resolución (n>100) con protocolo doble ciego',
             'umbral_falsacion': 'p-value > 0.05 en todos los grupos experimentales',
             'estado': 'PENDIENTE EXPERIMENTAL'
+        },
+        'interferometria_qcal_e1': {
+            'criterio': 'Ausencia o desplazamiento del pico en 141.7001 Hz',
+            'descripcion': (
+                'Si un interferómetro con S_h(f) <= 10^-24 Hz^-1/2 operando con Ψ < 0.999999 '
+                'no muestra línea en 141.7001 Hz ± 0.0001 Hz o si la fase no depende de ΔΨ'
+            ),
+            'metodo_verificacion': (
+                'Ejecutar scripts/validacion_prediccion_einstein_qcal_e1.py con metrología Ψ y '
+                'validación instrumental desacoplada'
+            ),
+            'umbral_falsacion': 'No detección, frecuencia fuera de tolerancia o n(Ψ)=1 para ΔΨ>0',
+            'estado': 'OPERATIVO'
         }
     }
     

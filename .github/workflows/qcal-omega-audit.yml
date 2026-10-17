@@ -1,0 +1,28 @@
+name: QCAL Ω Audit
+on:
+  push:
+    paths: ['ledger/**','scripts/validate_omega_ledger.py']
+  pull_request:
+    paths: ['ledger/**','scripts/validate_omega_ledger.py']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Validate ledger schema and inheritance
+        run: python scripts/validate_omega_ledger.py ledger/omega.json
+      - name: Run QCAL-E1 unit tests when available
+        shell: bash
+        run: |
+          if [ -f tests/test_einstein_qcal_e1.py ]; then
+            python -m pip install --upgrade pip
+            if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+            python -m pytest tests/test_einstein_qcal_e1.py -q
+          else
+            echo 'No QCAL-E1 test module found; ledger gate remains mandatory.'
+          fi

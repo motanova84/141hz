@@ -321,6 +321,48 @@ except SyntaxError as _compton_err:
 if COMPTON_CLOCK_AVAILABLE:
     __all__.extend(["compton_clock"])
 
+# Einstein-QCAL modules
+try:
+    from .einstein_qcal import (
+        CoherenceState,
+        EinsteinQCALField,
+        EinsteinQCALMetric,
+        CoherenceTensor,
+        c_eff,
+        lambda_emergent,
+        omega_coupling,
+        quantum_refractive_index,
+    )
+    from .einstein_qcal_e1 import (
+        QCALE1Contract,
+        QCALE1Evaluation,
+        QCALE1Measurement,
+        QCALE1Verdict,
+        build_qcal_e1_contract,
+        evaluate_qcal_e1,
+    )
+    EINSTEIN_QCAL_AVAILABLE = True
+except ImportError:
+    EINSTEIN_QCAL_AVAILABLE = False
+
+if EINSTEIN_QCAL_AVAILABLE:
+    __all__.extend([
+        "CoherenceState",
+        "EinsteinQCALField",
+        "EinsteinQCALMetric",
+        "CoherenceTensor",
+        "c_eff",
+        "lambda_emergent",
+        "omega_coupling",
+        "quantum_refractive_index",
+        "QCALE1Contract",
+        "QCALE1Evaluation",
+        "QCALE1Measurement",
+        "QCALE1Verdict",
+        "build_qcal_e1_contract",
+        "evaluate_qcal_e1",
+    ])
+
 # Fundamental constants
 F0 = 141.7001  # Hz - Universal frequency
 PHI = 1.618033988749895  # Golden ratio

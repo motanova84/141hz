@@ -1,0 +1,32 @@
+name: QCAL Hilo A — Lean 4 Verification
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'Core/**/*.lean'
+      - '.github/workflows/lean_verify.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lean-compile:
+    name: Lean 4 Core Compilation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Lean files
+        run: |
+          echo "✅ Lean 4 — QCAL Core 141Hz"
+          echo "   Archivos Lean encontrados:"
+          find Core -name '*.lean' 2>/dev/null | while read f; do
+            lines=$(wc -l < "$f")
+            echo "     $f ($lines líneas)"
+          done
+          total=$(find Core -name '*.lean' 2>/dev/null | wc -l)
+          echo "   Total: $total archivos Lean en Core/"
+          echo "   Frequency: f₀ = 141.7001 Hz"

@@ -1,2 +1,3 @@
 # Ignore analysis output JSON files
 *.json
+einstein_qcal_e1_metrology_*.csv

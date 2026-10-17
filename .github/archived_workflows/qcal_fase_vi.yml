@@ -1,0 +1,127 @@
+name: QCAL Fase VI — Escucha y Cadena
+
+on:
+  push:
+    branches: [ main, 'claude/**' ]
+    paths:
+      - 'scripts/experimento_cadena_13.py'
+      - 'scripts/fase_vi_escucha_ambiental.py'
+      - 'scripts/test_fase_vi.py'
+      - 'src/qcal_kernel/F_Ψ_FaseVI.lean'
+      - '.github/workflows/qcal_fase_vi.yml'
+  pull_request:
+    paths:
+      - 'scripts/experimento_cadena_13.py'
+      - 'scripts/fase_vi_escucha_ambiental.py'
+      - 'scripts/test_fase_vi.py'
+      - '.github/workflows/qcal_fase_vi.yml'
+  workflow_dispatch:
+    inputs:
+      hours:
+        description: 'Horas de escucha (E5)'
+        default: '4'
+        required: false
+      delta_p:
+        description: 'ΔP cadena (fracción, +10% = 0.10)'
+        default: '0.10'
+        required: false
+  schedule:
+    - cron: '0 7 * * 1'  # Lunes 07:00 UTC
+
+jobs:
+  chain_experiment:
+    name: E1–E4 Cadena de 13 nodos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install --quiet numpy scipy matplotlib
+      - name: Ejecutar cadena de 13 nodos
+        run: |
+          DP="${{ github.event.inputs.delta_p }}"
+          DP="${DP:-0.10}"
+          python scripts/experimento_cadena_13.py \
+              --delta-p "$DP" \
+              --output artifact_cadena13.json \
+              --plot --plot-path artifact_cadena13.png
+      - name: Resumen ξ / k₀ / RMSE
+        run: |
+          python - <<'PY'
+          import json
+          d = json.load(open("artifact_cadena13.json"))
+          f = d["fit"]; v = d["validation"]
+          print(f"ξ  = {f['xi_fit_m']:.4f} m   (Δ={v['xi_deviation_m']:.4f}) "
+                f"{'OK' if v['xi_ok'] else 'FAIL'}")
+          print(f"k₀ = {f['k0_fit_rad_per_m']:.4f} rad/m "
+                f"(Δ={v['k0_deviation_rad_per_m']:.4f}) "
+                f"{'OK' if v['k0_ok'] else 'FAIL'}")
+          print(f"RMSE = {f['rmse_mhz']:.4f} mHz "
+                f"{'OK' if v['rmse_ok'] else 'FAIL'}")
+          print(f"STATUS = {d['status']}")
+          PY
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qcal-fase-vi-cadena13
+          path: |
+            artifact_cadena13.json
+            artifact_cadena13.png
+          retention-days: 30
+
+  listening:
+    name: E5 Modo de Escucha (${{ matrix.coupling }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        coupling: [closed, open]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install --quiet numpy
+      - name: Ejecutar escucha (${{ matrix.coupling }})
+        run: |
+          HOURS="${{ github.event.inputs.hours }}"
+          HOURS="${HOURS:-4}"
+          python scripts/fase_vi_escucha_ambiental.py \
+              --hours "$HOURS" \
+              --coupling ${{ matrix.coupling }} \
+              --output artifact_listen_${{ matrix.coupling }}.json
+      - name: Verdict
+        run: |
+          python - <<'PY'
+          import json, sys
+          scenario = "${{ matrix.coupling }}"
+          r = json.load(open(f"artifact_listen_{scenario}.json"))
+          expected = "CLOSED_SYSTEM" if scenario == "closed" else "OPEN_TRANSDUCER"
+          print(f"Escenario: {scenario}  →  veredicto {r['verdict']} "
+                f"(esperado {expected})")
+          print(f"|ρ| máx: {r['global_max_correlation']:.3f}   "
+                f"bandas HIGH: {r['open_hits']}")
+          sys.exit(0 if r["verdict"] == expected else 1)
+          PY
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qcal-fase-vi-listen-${{ matrix.coupling }}
+          path: artifact_listen_${{ matrix.coupling }}.json
+          retention-days: 30
+
+  tests:
+    name: pytest Fase VI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install --quiet numpy scipy matplotlib pytest
+      - name: Run tests
+        run: pytest scripts/test_fase_vi.py -v

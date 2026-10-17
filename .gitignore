@@ -3,12 +3,22 @@ venv/
 __pycache__/
 *.pyc
 
+# ─── Claves y secretos — NUNCA commitear ───────────────────────
+# Copiar aton_keys.json.example → aton_keys.json y rellenar con claves reales
+sistema_inmune/aton_keys.json
+# Otros archivos de claves locales
+*.keys.json
+aton_keys_real.json
+
 # Data files
 data/
 *.hdf5
 # But allow Calabi-Yau varieties data
 !data/calabi_yau_varieties.csv
 !data/README_CALABI_YAU_VARIETIES.md
+
+# coinqcal (canonical at workspace root)
+coinqcal/
 
 # Test results
 scripts/results/

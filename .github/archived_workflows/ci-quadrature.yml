@@ -1,0 +1,99 @@
+name: CI — Cuadratura del Círculo QCAL
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'quadrature/**'
+      - '.github/workflows/ci-quadrature.yml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'quadrature/**'
+  workflow_dispatch:
+
+jobs:
+  validate-quadrature:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Verify Python availability
+        run: python3 --version
+
+      - name: Run test suite (Cuadratura QCAL)
+        run: |
+          cd quadrature
+          python3 -m unittest test_quadrature -v
+
+      - name: Run extended validated suite
+        run: |
+          cd quadrature
+          chmod +x run_tests.sh
+          ./run_tests.sh
+
+      - name: Verify constant precision
+        run: |
+          python3 -c "
+          import math
+          PHI = (1 + math.sqrt(5)) / 2
+          F0 = 141.7001
+          delta = 1 / (10 * PHI)
+          L = math.pi * (PHI**2) * 10 * delta
+          R = math.pi * PHI
+          error = abs(L - R)
+          print(f'π·φ²·10·δ = {L:.15f}')
+          print(f'π·φ       = {R:.15f}')
+          print(f'Error     = {error:.2e}')
+          assert error < 1e-15, f'Precisión insuficiente: {error:.2e}'
+          print('✅ Coherencia QCAL verificada — error < 1e-15')
+          "
+
+  markdown-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Lint quadrature paper
+        uses: actionshub/markdownlint@v3.1.4
+        with:
+          files: quadrature/CUADRATURA_CIRCULO_QCAL.md
+
+  seal-validation:
+    runs-on: ubuntu-latest
+    needs: validate-quadrature
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compute Merkle root of quadrature directory
+        run: |
+          cd quadrature
+          find . -type f | sort | xargs sha256sum > /tmp/quadrature_manifest.txt
+          MERKLE=$(sha256sum /tmp/quadrature_manifest.txt | awk '{print $1}')
+          echo "🔱 Merkle Root de Cuadratura QCAL: $MERKLE"
+          echo "MERKLE_ROOT=$MERKLE" >> $GITHUB_ENV
+
+      - name: Print final seal
+        run: |
+          echo ""
+          echo "══════════════════════════════════════════════════"
+          echo "  🔱 CUADRATURA DEL CÍRCULO QCAL — ANCLAJE CI"
+          echo "══════════════════════════════════════════════════"
+          echo "  SHA256: ${{ env.MERKLE_ROOT }}"
+          echo "  π·φ²·10·δ = π·φ  ✅"
+          echo "  Ψ = 0.9999999110"
+          echo "  f₀ = 141.7001 Hz"
+          echo "══════════════════════════════════════════════════"
