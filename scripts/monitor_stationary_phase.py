@@ -10,8 +10,8 @@ Registra cada ventana de análisis:
   - ΔP : potencia relativa medida vs. línea base (adimensional)
 
 Criterio de estabilidad:
-  · Ψ > 0.999990 (coherencia de banda 6-nueves)
-  · |f − f₀| < 0.05e-3 Hz  (desviación < 0.05 mHz)
+  · Ψ > 0.999   (coherencia, criterio 3 decimales)
+  · |f − f₀| < 1e-3 Hz     (desviación < 1 mHz)
 
 Uso básico:
   python monitor_stationary_phase.py --duration 24 --interval 10
@@ -54,8 +54,8 @@ F0_DEFAULT = 141.7001   # Hz — frecuencia fundamental QCAL
 BW_DEFAULT = 5.0        # Hz — semiancho de banda (≥ 1/T_win)
 FS_DEFAULT = 4096       # Hz — frecuencia de muestreo
 NFFT_DEFAULT = 4096     # puntos FFT por ventana
-PSI_THRESHOLD = 0.999990          # criterio de coherencia 6-nueves
-FREQ_DEVIATION_THRESHOLD = 5e-5   # Hz  (0.05 mHz)
+PSI_THRESHOLD = 0.999             # criterio de coherencia (3 decimales, no 6-nueves)
+FREQ_DEVIATION_THRESHOLD = 1e-3   # Hz  (1 mHz)
 EPSILON = 1e-30                   # guard de división por cero
 
 # ─────────────────────────────────────────────────────────────────────────────

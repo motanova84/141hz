@@ -89,6 +89,14 @@
 - Trigger: pull_request
 - Trigger: manual (workflow_dispatch)
 
+### QCAL Ω Audit
+
+**Archivo:** `qcal-omega-audit.yml`
+
+- Trigger: push
+- Trigger: pull_request
+- Trigger: manual (workflow_dispatch)
+
 ### "QCAL-Sync: Update Global Context"
 
 **Archivo:** `qcal-sync.yml`
@@ -113,4 +121,4 @@
 - Trigger: manual (workflow_dispatch)
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-08-02 03:11:33 UTC*
+*Generado automáticamente por el bot de documentación - 2026-10-11 02:32:42 UTC*

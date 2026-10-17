@@ -120,15 +120,27 @@ class QHPTInmuneBridge:
         self.psi_actual = 0.999999
 
     def _cargar_aton_keys(self):
-        """Carga claves de Atón desde archivo local o BAL-003."""
+        """Carga claves de Atón: env vars > archivo servidor > repo (plantilla)."""
+        import os as _os
+        _env_priv = _os.environ.get('ATON_PRIVATE_KEY', '')
+        _env_pub  = _os.environ.get('ATON_PUBLIC_KEY', '')
+        if _env_priv and not _env_priv.startswith('__'):
+            return {
+                'private_key': _env_priv,
+                'public_key': _env_pub,
+                'fingerprint': _os.environ.get('ATON_FINGERPRINT', ''),
+            }
         for keys_path in [
-            SISTEMA_INMUNE / "aton_keys.json",
             Path("/root/ecosystem/soberania/aton_keys.json"),
+            SISTEMA_INMUNE / "aton_keys.json",
         ]:
             if keys_path.exists():
                 try:
                     with open(keys_path) as f:
-                        return json.load(f)
+                        data = json.load(f)
+                    # Ignorar archivos de plantilla (placeholders)
+                    if not data.get('private_key', '').startswith('__'):
+                        return data
                 except Exception:
                     pass
         return None

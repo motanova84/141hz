@@ -60,7 +60,12 @@ log = logging.getLogger("tx_guardian")
 
 
 def cargar_clave_publica_aton():
-    """Carga la clave publica de Aton desde aton_keys.json."""
+    """Carga la clave publica de Aton: env var > archivo servidor."""
+    # 1. Variable de entorno (prioridad maxima)
+    env_pub = os.environ.get('ATON_PUBLIC_KEY', '')
+    if env_pub and not env_pub.startswith('__'):
+        return env_pub
+    # 2. Archivo en servidor de produccion
     with open(KEYS_PATH) as f:
         data = json.load(f)
     return data.get("public_key", "")

@@ -49,12 +49,14 @@ def compute_kappa_pi_standard() -> float:
     # φ³ (phi cubed)
     phi_cubed = phi ** 3
 
-    # |ζ'(1/2)| - absolute value of Riemann zeta derivative at 1/2
-    # Computed to high precision
-    zeta_prime_half = 1.4603545088095868
+    # |ζ(1/2)| - Cara II: Amplitud de Campo ζ(1/2) (magnitud en línea crítica)
+    # Refactorización Semántica (13/Ago/2026): este 1.460354 es ζ(1/2), NO ζ′(1/2).
+    # La fórmula κ_Π requiere esta magnitud de campo (Cara II) para reproducir
+    # el κ_Π canónico (2.5773); usar ζ′(1/2)=0.207886 rompería la física.
+    zeta_half = ZETA_HALF  # = 1.4603545088095868  (ζ(1/2) Amplitud de Campo)
 
     # Universal invariant
-    kappa_pi = math.sqrt(phi_cubed * zeta_prime_half)
+    kappa_pi = math.sqrt(phi_cubed * zeta_half)
 
     return kappa_pi
 
@@ -67,11 +69,12 @@ def compute_kappa_pi_mpmath() -> "mpf":
     # φ³ (phi cubed)
     phi_cubed = phi ** 3
 
-    # |ζ'(1/2)| - absolute value of Riemann zeta derivative at 1/2
-    zeta_prime_half = mpf("1.46035450880958681")
+    # |ζ(1/2)| - Cara II: Amplitud de Campo ζ(1/2) (magnitud en línea crítica)
+    # Refactorización Semántica (13/Ago/2026): este 1.460354 es ζ(1/2), NO ζ′(1/2).
+    zeta_half = mpf(str(ZETA_HALF))  # = 1.4603545088095868  (ζ(1/2) Amplitud de Campo)
 
     # Universal invariant
-    kappa_pi = mp_sqrt(phi_cubed * zeta_prime_half)
+    kappa_pi = mp_sqrt(phi_cubed * zeta_half)
 
     return kappa_pi
 
@@ -138,14 +141,14 @@ def print_detailed_computation():
     print(f"φ³ = {phi_cubed:.15f}")
     print()
 
-    # |ζ'(1/2)|
-    zeta_prime_half = 1.4603545088095868
-    print(f"|ζ'(1/2)| = {zeta_prime_half:.15f}")
+    # |ζ(1/2)| - Cara II: Amplitud de Campo ζ(1/2) (magnitud en línea crítica)
+    zeta_half = ZETA_HALF  # = 1.4603545088095868  (ζ(1/2) Amplitud de Campo)
+    print(f"|ζ(1/2)| (Cara II) = {zeta_half:.15f}")
     print()
 
     # Product
-    product = phi_cubed * zeta_prime_half
-    print(f"φ³ × |ζ'(1/2)| = {product:.15f}")
+    product = phi_cubed * zeta_half
+    print(f"φ³ × |ζ(1/2)| = {product:.15f}")
     print()
 
     # Base κ_Π
@@ -228,8 +231,13 @@ F0_HZ = 141.7001  # Fundamental frequency
 PHI = (1 + math.sqrt(5)) / 2  # Golden ratio
 PHI_CUBED = PHI ** 3
 
-# Zeta function derivative at 1/2
-ZETA_PRIME_HALF = -0.207886224977354566
+# Zeta function derivative at 1/2 — Refactorización Semántica (13/Ago/2026)
+# Cara I — Canónica Analítica (Teorema QCAL-π, κ_π): ζ′(1/2) = −0.207886
+ZETA_PRIME_HALF = -0.20788622497735456
+# Cara II — Amplitud de Campo (Core/LLM Evaluator): ζ(1/2) = −1.460354
+ZETA_HALF = -1.4603545088095868
+# Cara III — Operador SABIO∞⁴ (Resurrección/Emisión): −3.9226
+ZETA_PRIME_SABIO = -3.922646
 
 # Speed of light (m/s)
 C = 299792458.0

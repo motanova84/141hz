@@ -1,0 +1,36 @@
+import Mathlib.Analysis.InnerProductSpace.Adjoint
+import Mathlib.Topology.Instances.Real
+import Mathlib.Order.Filter.AtTopBot
+import Mathlib.Algebra.Order.Ring.Defs
+
+namespace QCAL.InfraredBehavior
+
+/-- Declaración explícita de las constantes constitutivas del ecosistema QCAL --/
+def f_zero : ℝ := 141.7001
+def psi_invariant : ℝ := 0.999999
+
+/-- Demostración formal de consistencia de la cota inferior en el infinito 
+    utilizando la teoría de filtros de Mathlib (Filter.atTop) sin admisiones pendientes. -/
+theorem infrared_bound_stability 
+    (V_QCAL : ℝ → ℝ)
+    (h_barrier_infinity : ∀ᶠ x in Filter.atTop, V_QCAL x ≥ f_zero * psi_invariant * x) :
+    ∀ ε > 0, ∃ M > 0, ∀ x ≥ M, V_QCAL x > 0 := by
+  intro ε hε
+  -- El filtro atTop en Mathlib se caracteriza por la propiedad de que la proposición
+  -- se cumple para todo x mayor que cierto umbral N.
+  rcases Filter.forall_atTop.mp h_barrier_infinity with ⟨N, hN⟩
+  -- Definimos un umbral M que garantice tanto el dominio del filtro como la positividad estricta
+  have h_pos_prod : f_zero * psi_invariant > 0 := by
+    unfold f_zero psi_invariant
+    positivity
+  use max N 1
+  intro x hx
+  have hxN : x ≥ N := le_of_max_le_left hx
+  have hx1 : x ≥ 1 := le_of_max_le_right hx
+  have h_ineq : V_QCAL x ≥ f_zero * psi_invariant * x := hN x hxN
+  have h_mul_pos : f_zero * psi_invariant * x > 0 := by
+    apply mul_pos h_pos_prod
+    linarith [hx1]
+  linarith [h_ineq, h_mul_pos]
+
+end QCAL.InfraredBehavior

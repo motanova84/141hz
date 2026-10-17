@@ -47,6 +47,8 @@
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_arquitectura_fisica_topc.py`
   - ╔══════════════════════════════════════════════════════════════════════════════╗
+- `validate_axiomas_pleroma_qcal.py`
+  - Validate Axiomas del Pleroma QCAL — ∴APQ∞³
 - `validate_badges.py`
   - Badge Validation Script
 - `validate_bio_frequency.py`
@@ -97,6 +99,8 @@
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_omega_ledger.py`
+  - Sin descripción
 - `validate_operadores_maestros_qcal.py`
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_phoenix_onco_coherente_v10.py`
@@ -157,6 +161,8 @@
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_arquitectura_fisica_topc.py`
   - ╔══════════════════════════════════════════════════════════════════════════════╗
+- `validate_axiomas_pleroma_qcal.py`
+  - Validate Axiomas del Pleroma QCAL — ∴APQ∞³
 - `validate_badges.py`
   - Badge Validation Script
 - `validate_bio_frequency.py`
@@ -207,6 +213,8 @@
   - Validación del Nodo QCAL Pragmático
 - `validate_official_discovery_declaration.py`
   - Validación de la Declaración Oficial de Descubrimiento Empírico
+- `validate_omega_ledger.py`
+  - Sin descripción
 - `validate_operadores_maestros_qcal.py`
   - ╔════════════════════════════════════════════════════════════════════════════╗
 - `validate_phoenix_onco_coherente_v10.py`
@@ -512,4 +520,4 @@
   - Test/Demo for Virgo Independent Validation
 
 ---
-*Generado automáticamente por el bot de documentación - 2026-08-02 03:11:33 UTC*
+*Generado automáticamente por el bot de documentación - 2026-10-11 02:32:42 UTC*

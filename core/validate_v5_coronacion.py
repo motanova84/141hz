@@ -42,7 +42,7 @@ import argparse
 from pathlib import Path
 
 # Add src to path for compatibility with direct script execution
-sys.path.insert(0, str(Path(__file__).parent / 'src'))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'src'))
 
 # Import from src modules - works both as script and as package
 try:
